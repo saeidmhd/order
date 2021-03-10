@@ -1108,7 +1108,7 @@ public class PeopleListActivity extends BaseActivity {
         loginBody.setUserName(user.getUsername());
         loginBody.setPassword(user.getPassword());
 
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
         Call<LoginResult> call = apiService.Login(loginBody);
         pd = new FontProgressDialog(mContext);
         pd.setMessage(getString(R.string.reviewing_user_info));
@@ -1184,7 +1184,7 @@ public class PeopleListActivity extends BaseActivity {
 
             final String[] mMsg = {""};
 
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
             Call<GetDataResult> getDataResultCall;
             getDataResultCall = apiService.GetAllData(getAllDataBody);
             pd.setMessage(getString(R.string.recieiving_info));

@@ -19,7 +19,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -79,7 +79,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.annotations.NonNull;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -271,7 +270,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
         loginBody.setUserName(user.getUsername());
         loginBody.setPassword(user.getPassword());
 
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
         Call<LoginResult> call = apiService.Login(loginBody);
         pd = new FontProgressDialog(mContext);
         pd.setMessage(getString(R.string.reviewing_user_info));
@@ -636,7 +635,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
             final String[] mMsg = {""};
 
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
 
             SetAllDataBody setAllDataBody = new SetAllDataBody();
             setAllDataBody.setUserToken(mUserToken);
@@ -767,6 +766,88 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         pbLoading.setVisibility(View.GONE);
                         db.close();
 
+                        new SendSignInfoAsyncTask(mUserToken).execute();
+
+
+                    } else if (response.body() != null) {
+                        // mMsg[0] = response.body().getData().getObjects().getOrders().getResults().get(0).getErrors().get(0).getError();
+                        pd.dismiss();
+                        mMsg[0] = getString(R.string.send_error);
+                        showDialog(response.body().getMessage());
+                        setTextSendErrorResult();
+                        pbLoading.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
+                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                    FirebaseCrashlytics.getInstance().log(t.getMessage());
+                    pd.dismiss();
+                    mMsg[0] = t.toString();
+                    showDialog(mMsg[0]);
+                    pbLoading.setVisibility(View.GONE);
+                    setTextSendErrorResult();
+                }
+            });
+
+
+        }
+    }
+
+    class SendSignInfoAsyncTask extends AsyncTask<String, String, Integer> {
+
+        List<PicturesProduct> picturesProducts = new ArrayList<>();
+        String mUserToken;
+
+        SendSignInfoAsyncTask(String UserToken) {
+            mUserToken = UserToken;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pbLoading.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Integer doInBackground(String... arg0) {
+            db.open();
+            picturesProducts = db.getAllSignWithoutUrl();
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+
+            pbLoading.setVisibility(View.GONE);
+            pbLoading.setVisibility(View.VISIBLE);
+
+            final String[] mMsg = {""};
+
+            ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
+            SetAllDataBody setAllDataBody = new SetAllDataBody();
+            setAllDataBody.setUserToken(mUserToken);
+            setAllDataBody.setPictures(picturesProducts);
+            Call<SaveAllDataResult> saveAllDataResultCall = apiService.SaveAllData(setAllDataBody);
+
+            pd.setMessage(getString(R.string.sending_image));
+            pd.setCancelable(false);
+            pd.show();
+            saveAllDataResultCall.enqueue(new Callback<SaveAllDataResult>() {
+                @Override
+                public void onResponse(@NonNull Call<SaveAllDataResult> call, @NonNull Response<SaveAllDataResult> response) {
+                    pd.dismiss();
+                    if (response.body() != null && response.body().isResult()) {
+                        db.open();
+                        if (picturesProducts.size() > 0) {
+                            for (int i = 0; i < picturesProducts.size(); i++) {
+                                picturesProducts.get(i).setPictureId(response.body().getData().getObjects().getPictures().getResults().get(i).getEntityID());
+                                db.UpdatePicturesProductWithClientId(picturesProducts.get(i));
+                            }
+                        }
+                        pbLoading.setVisibility(View.GONE);
+                        db.close();
                         new ReceiveAsyncTask(mUserToken).execute();
 
 
@@ -953,7 +1034,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
             final String[] mMsg = {""};
 
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
             Call<GetDataResult> getDataResultCall;
             getDataResultCall = apiService.GetAllData(getAllDataBody);
             pbLoading.setVisibility(View.VISIBLE);
@@ -1323,92 +1404,11 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         break;
                 }
             }
-
-            new SendSignInfoAsyncTask(mUserToken).execute();
-
+            new SendSignImageAsyncTask(mUserToken).execute();
             pbLoading.setVisibility(View.GONE);
-            dismissProgressDialog();
+            pd.dismiss();
         }
 
-    }
-
-    class SendSignInfoAsyncTask extends AsyncTask<String, String, Integer> {
-
-        List<PicturesProduct> picturesProducts = new ArrayList<>();
-        String mUserToken;
-
-        SendSignInfoAsyncTask(String UserToken) {
-            mUserToken = UserToken;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pbLoading.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Integer doInBackground(String... arg0) {
-            db.open();
-            picturesProducts = db.getAllSignWithoutUrl();
-            return 0;
-        }
-
-        @Override
-        protected void onPostExecute(Integer result) {
-
-            pbLoading.setVisibility(View.GONE);
-            pbLoading.setVisibility(View.VISIBLE);
-
-            final String[] mMsg = {""};
-
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-            SetAllDataBody setAllDataBody = new SetAllDataBody();
-            setAllDataBody.setUserToken(mUserToken);
-            setAllDataBody.setPictures(picturesProducts);
-            Call<SaveAllDataResult> saveAllDataResultCall = apiService.SaveAllData(setAllDataBody);
-
-            pd.setMessage(getString(R.string.sending_image));
-            pd.setCancelable(false);
-            pd.show();
-            saveAllDataResultCall.enqueue(new Callback<SaveAllDataResult>() {
-                @Override
-                public void onResponse(@NonNull Call<SaveAllDataResult> call, @NonNull Response<SaveAllDataResult> response) {
-                    dismissProgressDialog();
-                    if (response.body() != null && response.body().isResult()) {
-                        db.open();
-                        if (picturesProducts.size() > 0) {
-                            for (int i = 0; i < picturesProducts.size(); i++) {
-                                picturesProducts.get(i).setPictureId(response.body().getData().getObjects().getPictures().getResults().get(i).getEntityID());
-                                db.UpdatePicturesProductWithClientId(picturesProducts.get(i));
-                            }
-                        }
-                        pbLoading.setVisibility(View.GONE);
-                        db.close();
-
-                        new SendSignImageAsyncTask(mUserToken).execute();
-
-                    } else if (response.body() != null) {
-                        mMsg[0] = getString(R.string.send_error);
-                        //showDialog(response.body().getMessage());
-                        pbLoading.setVisibility(View.GONE);
-
-                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                        FirebaseCrashlytics.getInstance().log(response.body().getMessage());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                    FirebaseCrashlytics.getInstance().log(t.getMessage());
-                    dismissProgressDialog();
-                    mMsg[0] = t.toString();
-                    //showDialog(mMsg[0]);
-                    pbLoading.setVisibility(View.GONE);
-                }
-            });
-        }
     }
 
     class SendSignImageAsyncTask extends AsyncTask<String, String, Integer> {
@@ -1434,7 +1434,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         long pictureId = db.getPictureIdWithFileName(mFile.getName());
                         RequestBody filePart = RequestBody.create(MediaType.parse("multipart/form-data"), mFile);
                         MultipartBody.Part mpfile = MultipartBody.Part.createFormData("file", mFile.getName(), filePart);
-                        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+                        ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
 
                         Call<setSignImage> mSetSignImageResult = apiService.uploadSignImage(mpfile, pictureId, mFile.getName(), mUserToken);
                         pd.setMessage(getString(R.string.send_image) + mFile.getName());

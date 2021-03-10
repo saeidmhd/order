@@ -673,7 +673,7 @@ public class OrdersListActivity extends BaseActivity {
         Call<SaveAllDataResult> saveAllDataResultCall;
 
         setAllDataBody.setUserToken(user.getUserToken());
-        apiService = ApiClient.getClient().create(ApiInterface.class);
+        apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
 
         final List<ReceivedTransfers> transferStores = new ArrayList<>();
         receivedTransfers.setIsAccepted(TYPE);
@@ -1139,7 +1139,7 @@ public class OrdersListActivity extends BaseActivity {
         loginBody.setUserName(user.getUsername());
         loginBody.setPassword(user.getPassword());
 
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
         Call<LoginResult> call = apiService.Login(loginBody);
 
         pd.setMessage(getString(R.string.reviewing_user_info));
@@ -1250,7 +1250,7 @@ public class OrdersListActivity extends BaseActivity {
             sendpd.setCancelable(false);
             sendpd.show();
 
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
 
             SetAllDataBody setAllDataBody = new SetAllDataBody();
             setAllDataBody.setUserToken(mUserToken);
@@ -1515,7 +1515,7 @@ public class OrdersListActivity extends BaseActivity {
         final GetAllDataBody getAllDataBody;
         getAllDataBody = new GetAllDataBody();
         getAllDataBody.setUserToken(user.getUserToken());
-        apiService = ApiClient.getClient().create(ApiInterface.class);
+        apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
         getAllDataBody.setFromTransferStoreVersion(db.getMaxRowVersion(DbSchema.ReceivedTransfersschema.TABLE_NAME));
         getDataResultCall = apiService.GetAllData(getAllDataBody);
         getDataResultCall.enqueue(new Callback<GetDataResult>() {
@@ -1593,7 +1593,7 @@ public class OrdersListActivity extends BaseActivity {
         List<OrderDetailProperty> orderDetailProperties;
 
         setAllDataBody.setUserToken(user.getUserToken());
-        apiService = ApiClient.getClient().create(ApiInterface.class);
+        apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
 
         final List<Order> arrayInvoice;
         final List<OrderDetail> arrayInvoiceDetail;
@@ -1707,7 +1707,7 @@ public class OrdersListActivity extends BaseActivity {
         final GetAllDataBody getAllDataBody;
         getAllDataBody = new GetAllDataBody();
         getAllDataBody.setUserToken(user.getUserToken());
-        apiService = ApiClient.getClient().create(ApiInterface.class);
+        apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
 
         getAllDataBody.setFromTransferStoreVersion(db.getMaxRowVersion(DbSchema.ReceivedTransfersschema.TABLE_NAME));
         getAllDataBody.setFromTransferStoreDetailVersion(db.getMaxRowVersion(DbSchema.ReceivedTransferProductsschema.TABLE_NAME));

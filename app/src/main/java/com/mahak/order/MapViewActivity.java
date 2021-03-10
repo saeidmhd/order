@@ -1,5 +1,6 @@
 package com.mahak.order;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -19,9 +20,11 @@ import com.mahak.order.common.Customer;
 import com.mahak.order.common.GPSTracker;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
-import com.mahak.order.gpsTracking.ClusterPoint;
-import com.mahak.order.gpsTracking.GpsTracking;
+import com.mahak.order.tracking.ClusterPoint;
+import com.mahak.order.tracking.LocationService;
 import com.mahak.order.storage.DbAdapter;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +42,15 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
     private DbAdapter db;
     private ArrayList<Customer> customers = new ArrayList<>();
     private ClusterManager<ClusterPoint> clusterManager;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_view);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
+        context = this;
 
         db = new DbAdapter(this);
 
@@ -72,57 +78,63 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
                 // Set listener for map click event.  See the bottom of this class for its behavior.
                 mMap.setOnMapClickListener(MapViewActivity.this);
 
+                if(getLastPoint()!=null)
+                    showMarkerOnMap(getLastPoint());
+
                 // Override the default content description on the view, for accessibility mode.
                 // Ideally this string would be localized.
                 googleMap.setContentDescription("");
 
-                GPSTracker gpsTracker = new GPSTracker(mContext);
+                GPSTracker gpsTracker = new GPSTracker(context);
                 double _Latitude, _Longitude;
                 for (int i = 0; i < positions.size(); i++) {
                     mMap.addMarker(new MarkerOptions().position(positions.get(i)));
                 }
                 if (positions.size() > 0) {
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(positions.get(0), 10));
-                } else if (gpsTracker.canGetLocation()) {
-                    _Latitude = gpsTracker.getLatitude();
-                    _Longitude = gpsTracker.getLongitude();
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(_Latitude, _Longitude), 10));
-                } else {
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(ProjectInfo.DEFAULT_LATITUDE, ProjectInfo.DEFAULT_LONGITUDE), 8));
                 }
                 initMap();
-                mMap.getUiSettings().setZoomControlsEnabled(true);
 
-                GpsTracking.addEventLocation(MapViewActivity.this.getLocalClassName(), new GpsTracking.EventLocation() {
+                LocationService.addEventLocation(this.getLocalClassName(), new LocationService.EventLocation() {
                     @Override
-                    public void onReceivePoint(final Location location) {
+                    public void onReceivePoint(final Location location, boolean saveInDb) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (location == null) {
-                                    return;
+                                if(location != null){
+                                    LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+                                    if(saveInDb)
+                                        drawLineBetweenPoints(position);
+                                    showMarkerOnMap(position);
                                 }
-                                LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
-                                if (polyline != null) {
-                                    List<LatLng> points = polyline.getPoints();
-                                    points.add(position);
-                                    polyline.setPoints(points);
-                                }
-                                if (marker != null) {
-                                    marker.remove();
-                                }
-                                marker = googleMap.addMarker(new MarkerOptions().position(position));
-                                marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_visitor_3));
-                                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, googleMap.getCameraPosition().zoom));
                             }
                         });
                     }
                 });
-                // setUpClusterer();
+
+                //setUpClusterer();
             });
         }
 
+    }
 
+    private void showMarkerOnMap(LatLng position) {
+        if (marker != null) {
+            marker.remove();
+        }
+        if (mMap != null) {
+            marker = mMap.addMarker(new MarkerOptions().position(position));
+            marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_visitor_3));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(position.latitude, position.longitude), 15));
+        }
+    }
+
+    private void drawLineBetweenPoints(LatLng position) {
+        if (polyline != null) {
+            List<LatLng> points = polyline.getPoints();
+            points.add(position);
+            polyline.setPoints(points);
+        }
     }
 
     private void setUpClusterer() {
@@ -131,7 +143,7 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
 
         // Initialize the manager with the context and the map.
         // (Activity extends context, so we can pass 'this' in the constructor.)
-        clusterManager = new ClusterManager<ClusterPoint>(mContext, mMap);
+        clusterManager = new ClusterManager<ClusterPoint>(context, mMap);
 
         // Point the map's listeners at the listeners implemented by the cluster
         // manager.
@@ -181,19 +193,10 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
 
     @Override
     protected void onDestroy() {
-        GpsTracking.removeEventLocation(this.getLocalClassName());
+        LocationService.removeEventLocation(this.getLocalClassName());
         super.onDestroy();
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
     }
@@ -206,7 +209,8 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
         polylineOptions.color(Color.RED);
         polylineOptions.visible(true);
         polyline = mMap.addPolyline(polylineOptions);
-        marker = new GpsTracking(getBaseContext()).drawGoogleMap(mMap, marker, polyline);
+        if(polyline != null)
+            polyline.setPoints(DashboardActivity.latLngpoints);
     }
 
     @Override
@@ -247,6 +251,18 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
 
     @Override
     public void onInfoWindowClick(Marker marker) {
+    }
 
+    private LatLng getLastPoint(){
+        LatLng latLng = null;
+        LocationService locationService = new LocationService();
+        JSONObject obj = locationService.getLastLocationJson(context);
+        if (obj != null) {
+            Location lastLocation = new Location("");
+            lastLocation.setLatitude(obj.optDouble(ProjectInfo._json_key_latitude));
+            lastLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_longitude));
+            latLng = new LatLng(lastLocation.getLatitude(),lastLocation.getLongitude());
+        }
+        return latLng;
     }
 }
