@@ -1,0 +1,699 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:drawingCacheQuality="high">
+
+    <LinearLayout
+        android:layout_width="@dimen/print_width80mm"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/box_title_height"
+                android:gravity="left|center_vertical"
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/NormalSize">
+
+                <com.mahak.order.widget.FontTextView
+                    style="@style/forms_page_title_label_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_factor_report"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="18dp"
+                android:layout_margin="@dimen/ThinSize"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_sale"
+                    android:textSize="12sp"
+                    android:textColor="@color/black" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailySale"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/sample_number"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:background="@color/forms_alter_row"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_discount"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailyDiscount"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/sample_number"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_net_sale"
+                    android:textSize="12sp"
+                    android:textColor="@color/black" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailyNetSale"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColor="@color/black"
+                    android:text="@string/sample_number"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:background="@color/forms_alter_row"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_tax_charge"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailyTaxCharge"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/sample_number"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_final_sum"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailyFinalSum"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/sample_number"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:background="@color/forms_alter_row"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_count_of_products"
+                    android:textSize="12sp"
+                    android:textColor="@color/black" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailyCountOfProduct"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/sample_number"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+        <!-- PreOrders -->
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/box_title_height"
+                android:gravity="left|center_vertical"
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/NormalSize">
+
+                <com.mahak.order.widget.FontTextView
+                    style="@style/forms_page_title_label_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_pre_factor_report"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_sale"
+                    android:textSize="12sp"
+                    android:textColor="@color/black" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailyPreSale"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColor="@color/black"
+                    android:text="@string/sample_number"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:background="@color/forms_alter_row"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_discount"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailyPreDiscount"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColor="@color/black"
+                    android:text="@string/sample_number"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_net_sale"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailyPreNetSale"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/sample_number"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:background="@color/forms_alter_row"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_tax_charge"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailyPreTaxCharge"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/sample_number"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_final_sum"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailyPreFinalSum"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/sample_number"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:background="@color/forms_alter_row"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_count_of_products"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailyPreCountOfProduct"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/sample_number"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/box_title_height"
+                android:gravity="left|center_vertical"
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/NormalSize">
+
+                <com.mahak.order.widget.FontTextView
+                    style="@style/forms_page_title_label_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/str_daily_receipts_report"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_cash_amount"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailyCashAmount"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/sample_number"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:background="@color/forms_alter_row"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_cheque_amount"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailyChequeAmount"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/sample_number"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_cash_receipt_amount"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailyCashReceiptAmount"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/sample_number"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:background="@color/forms_alter_row"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_sum_of_receipts_amount"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailySumOfReceipts"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/sample_number"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/box_title_height"
+                android:gravity="left|center_vertical"
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/NormalSize">
+
+                <com.mahak.order.widget.FontTextView
+                    style="@style/forms_page_title_label_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/str_daily_payments_report"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bank"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailyBank"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/sample_number"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:background="@color/forms_alter_row"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cost"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailyExpense"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/sample_number"
+                    android:textColor="@color/black" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_daily_sum_of_payments"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvSumOfPayment"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/sample_number"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/box_title_height"
+                android:gravity="left|center_vertical"
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/NormalSize">
+
+                <com.mahak.order.widget.FontTextView
+                    style="@style/forms_page_title_label_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/str_daily_remained"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_margin="@dimen/ThinSize"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvDailyRemained"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/sample_number"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

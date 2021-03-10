@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="column_number_orders_dialog">2</integer>
+    <integer name="column_number_orders_list">2</integer>
+</resources>

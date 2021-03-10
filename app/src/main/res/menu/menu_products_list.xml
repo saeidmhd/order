@@ -1,0 +1,54 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.mahak.order.ProductsListActivity">
+
+    <item
+        android:id="@+id/mnuListview"
+        android:orderInCategory="100"
+        android:name="@string/str_modeList"
+        app:showAsAction="never"
+        android:title="@string/str_modeList" />
+    <item
+        android:id="@+id/mnuGridview"
+        android:orderInCategory="101"
+        android:name="@string/str_modeGrid"
+        app:showAsAction="never"
+        android:title="@string/str_modeGrid" />
+
+    <item
+        android:id="@+id/mnuGalleryView"
+        android:orderInCategory="102"
+        android:name="@string/str_modeLargeList"
+        app:showAsAction="never"
+        android:title="@string/str_modeLargeList" />
+
+    <!--<item
+        android:id="@+id/mnuGalleryGridView"
+        android:orderInCategory="101"
+        android:name="@string/str_modeTable"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/mnuGalleryPageView"
+        android:orderInCategory="101"
+        android:name="@string/str_modeGallery"
+        app:showAsAction="never" />-->
+
+    <!--<item
+        android:id="@+id/mnuBarcode"
+        android:orderInCategory="101"
+        android:icon="@drawable/ic_barcode_scan_white_48dp"
+        android:name="@string/str_Barcode"
+        android:title="@string/str_Barcode"
+        app:showAsAction="always" />-->
+
+    <item
+        android:id="@+id/mnuSort"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_sort"
+        app:showAsAction="always"
+        android:text="@string/sort"
+        android:title="@string/sort" />
+
+</menu>

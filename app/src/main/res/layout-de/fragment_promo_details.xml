@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PromoFragments.PromoDetails"
+    android:background="@color/gray">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|end"
+            android:padding="16dp"
+            android:orientation="horizontal">
+
+            <com.mahak.order.widget.FontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/will_be_applied"
+                android:textSize="14sp" />
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/stair_linear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/stairs"
+                android:layout_marginRight="6dp"
+                android:layout_marginLeft="6dp"
+                android:background="@color/green_promo"
+                android:textColor="@color/white"
+                android:padding="8dp"
+                android:textSize="14sp" />
+
+            <com.mahak.order.widget.FontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/set_promotion"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="16dp"
+            android:weightSum="4"
+            android:orientation="horizontal"
+            android:background="@color/blue_promo">
+
+            <com.mahak.order.widget.FontTextView
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:text="@string/product" />
+
+            <com.mahak.order.widget.FontTextView
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:text="@string/value_3" />
+
+            <com.mahak.order.widget.FontTextView
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:text="@string/promotion_type" />
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/promotion_type"
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:text="@string/total_invoice_than" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/promotionDetailRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</FrameLayout>

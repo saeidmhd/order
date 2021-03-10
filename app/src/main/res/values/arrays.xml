@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="array_week_name">
+        <item>شنبه</item>
+        <item>یکشنبه</item>
+        <item>دوشنبه</item>
+        <item>سه شنبه</item>
+        <item>چهار شنبه</item>
+        <item>پنج شنبه</item>
+        <item>جمعه</item>
+    </string-array>
+    <string-array name="array_customer_status">
+        <item>بی حساب</item>
+        <item>بدهکار</item>
+        <item>بستانکار</item>
+    </string-array>
+    <string-array name="array_asset_product">
+        <item>همه کالاها</item>
+        <item>کالاهای موجود</item>
+        <item>کالاهای موجودی صفر</item>
+        <item>کالاهای موجودی منفی</item>
+    </string-array>
+    <string-array name="array_sum_invoice_order">
+        <item>مبلغ کل بدون عوارض و مالیات</item>
+        <item>تخفیف</item>
+        <item>عوارض و مالیات</item>
+        <item>مبلغ خالص با عوارض و مالیات</item>
+    </string-array>
+
+    <string-array name="array_sum_receipt">
+        <item>جمع نقدی</item>
+        <item>جمع چک</item>
+        <item>جمع حواله</item>
+    </string-array>
+
+    <string-array name="array_departments">
+        <item>واحد مدیریت</item>
+        <item>واحد تولید و توسعه</item>
+        <item>واحد بازرگانی</item>
+    </string-array>
+
+    <string-array name="array_report_color">
+        <item>#33ffbc3b</item>
+        <item>#33ffbc3b</item>
+        <item>#33ffbc3b</item>
+        <item>#33ffbc3b</item>
+    </string-array>
+    <string-array name="array_iran_states">
+        <item>تهران</item>
+        <item>خراسان جنوبی</item>
+        <item>خراسان رضوی</item>
+        <item>خراسان شمالی</item>
+    </string-array>
+
+    <string-array name="array_cities_state">
+        <item>array_city_state_tehran</item>
+        <item>array_city_state_khorasan_shomali</item>
+        <item>array_city_state_khorasan_razavi</item>
+        <item>array_city_state_khorasan_jonobi</item>
+    </string-array>
+
+    <string-array name="array_germany_states">
+        <item>Bavaria</item>
+        <item>Lower Saxony</item>
+        <item>Baden-Württemberg</item>
+        <item>North Rhine-Westphalia</item>
+        <item>Brandenburg</item>
+        <item>Mecklenburg-Vorpommern</item>
+        <item>Hesse</item>
+        <item>Saxony-Anhalt</item>
+        <item>Rhineland-Palatinate</item>
+        <item>Saxony</item>
+        <item>Thuringia</item>
+        <item>Schleswig-Holstein</item>
+        <item>Saarland</item>
+        <item>Berlin</item>
+        <item>Hamburg</item>
+        <item>Bremen</item>
+    </string-array>
+
+    <string-array name="array_german_cities_state">
+        <item>array_city_state_Bavaria</item>
+        <item>array_city_state_Lower_Saxony</item>
+        <item>array_city_state_Baden_Wurttemberg</item>
+        <item>array_city_state_North_Rhine_Westphalia</item>
+        <item>array_city_state_Brandenburg</item>
+        <item>array_city_state_Mecklenburg_Western_Pomerania</item>
+        <item>array_city_state_Hesse</item>
+        <item>array_city_state_Saxony_Anhalt</item>
+        <item>array_city_state_Rhineland_Palatinate</item>
+        <item>array_city_state_Saxony</item>
+        <item>array_city_state_Thuringia</item>
+        <item>array_city_state_Schleswig_Holstein</item>
+        <item>array_city_state_Saarland</item>
+        <item>array_city_state_Berlin</item>
+        <item>array_city_state_Hamburg</item>
+        <item>array_city_state_Bremen</item>
+    </string-array>
+
+    <string-array name="array_city_state_Bavaria">
+        <item>Munich </item>
+        <item>Abenberg </item>
+        <item>Abensberg </item>
+    </string-array>
+    <string-array name="array_city_state_Lower_Saxony">
+        <item>Achim </item>
+        <item>Alfeld </item>
+        <item>Aurich </item>
+    </string-array>
+    <string-array name="array_city_state_Baden_Wurttemberg">
+        <item>Adelsheim </item>
+        <item>Achern </item>
+        <item>Adelsheim </item>
+    </string-array>
+    <string-array name="array_city_state_North_Rhine_Westphalia">
+        <item>Aachen </item>
+        <item>Bedburg </item>
+        <item>Bergkamen </item>
+    </string-array>
+    <string-array name="array_city_state_Brandenburg">
+        <item>Altlandsberg </item>
+        <item>Angermünde </item>
+        <item>Bad Belzig </item>
+    </string-array>
+    <string-array name="array_city_state_Mecklenburg_Western_Pomerania">
+        <item>Altentreptow </item>
+        <item>Barth </item>
+        <item>Brüel </item>
+
+    </string-array>
+    <string-array name="array_city_state_Hesse">
+        <item>Aßlar </item>
+        <item>Bebra </item>
+        <item>Borken </item>
+    </string-array>
+    <string-array name="array_city_state_Saxony_Anhalt">
+        <item>Aßlar </item>
+        <item>Bebra </item>
+        <item>Borken </item>
+    </string-array>
+    <string-array name="array_city_state_Rhineland_Palatinate">
+        <item>Andernach </item>
+        <item>Boppard </item>
+        <item>Daun </item>
+    </string-array>
+    <string-array name="array_city_state_Saxony">
+        <item>Adorf </item>
+        <item>Altenberg </item>
+        <item>Bautzen </item>
+    </string-array>
+    <string-array name="array_city_state_Thuringia">
+        <item>Altenburg </item>
+        <item>Clingen </item>
+        <item>Eisenberg </item>
+
+    </string-array>
+    <string-array name="array_city_state_Schleswig_Holstein">
+        <item>Eutin </item>
+        <item>Garding </item>
+        <item>Glückstadt </item>
+    </string-array>
+    <string-array name="array_city_state_Saarland">
+        <item>Bexbach </item>
+        <item>Völklingen </item>
+        <item>Saarbrücken </item>
+    </string-array>
+    <string-array name="array_city_state_Berlin">
+        <item>Berlin </item>
+
+    </string-array>
+    <string-array name="array_city_state_Hamburg">
+        <item>Hamburg </item>
+
+    </string-array>
+    <string-array name="array_city_state_Bremen">
+        <item> Bremerhaven </item>
+        <item> Bremen </item>
+    </string-array>
+
+
+    <string-array name="array_city_state_khorasan_jonobi">
+        <item>آرین‌شهر </item>
+        <item>ارسک </item>
+        <item>اسدیه </item>
+        <item>اسفدن </item>
+        <item>اسلامیه </item>
+        <item>آیسک </item>
+        <item>بشرویه </item>
+        <item>بیرجند </item>
+        <item>حاجی‌آباد </item>
+    </string-array>
+    <string-array name="array_city_state_khorasan_shomali">
+        <item>آشخانه </item>
+        <item>اسفراین </item>
+        <item>بجنورد</item>
+        <item>پیش‌قلعه </item>
+        <item>جاجرم </item>
+        <item>حصار گرم‌خان</item>
+        <item>درق </item>
+        <item>راز </item>
+        <item>سنخواست </item>
+        <item>شوقان </item>
+        <item>شیروان </item>
+        <item>صفی‌آباد </item>
+        <item>فاروج </item>
+        <item>قاضی </item>
+        <item>گرمه </item>
+        <item>لوجلی</item>
+    </string-array>
+    <string-array name="array_city_state_khorasan_razavi">
+        <item>مشهد </item>
+        <item>انابد </item>
+        <item>باجگیران </item>
+        <item>بار </item>
+        <item>باخرز </item>
+        <item>بایگ </item>
+        <item>بجستان </item>
+        <item>بردسکن </item>
+        <item>بیدخت</item>
+        <item>تایباد  </item>
+        <item> تربت جام</item>
+        <item> تربت حیدریه</item>
+    </string-array>
+    <string-array name="array_city_state_tehran">
+        <item>آبسرد </item>
+        <item>آبعلی </item>
+        <item>ارجمند </item>
+        <item>اسلام‌شهر </item>
+        <item>اندیشه </item>
+        <item>باغستان </item>
+        <item>باقرشهر </item>
+        <item>بومهن </item>
+        <item>پاکدشت </item>
+        <item>تهران</item>
+    </string-array>
+    <string-array name="array_city_state_azarbayejan_sharqi">
+        <item>آبش‌احمد</item>
+        <item>آذرشهر </item>
+        <item>آقکند </item>
+        <item>اسکو </item>
+        <item>اهر </item>
+        <item>ایلخچی </item>
+        <item>باسمنج </item>
+        <item>بخشایش </item>
+        <item>بستان‌آباد </item>
+        <item>بناب </item>
+        <item> بناب جدید</item>
+        <item>تبریز </item>
+        <item>ترک </item>
+        <item>ترکمانچایتسوج </item>
+    </string-array>
+    <string-array name="array_city_state_azarbayejan_gharbi" />
+    <string-array name="array_city_state_ardbil" />
+    <string-array name="array_city_state_esfahan" />
+    <string-array name="array_city_state_elam" />
+    <string-array name="array_city_state_alborz" />
+    <string-array name="array_city_state_boshehr" />
+    <string-array name="array_city_state_Chaharmahallvabakhtiari" />
+    <string-array name="array_city_state_khuzestan" />
+    <string-array name="array_city_state_zanjan" />
+    <string-array name="array_city_state_semnan" />
+    <string-array name="array_city_state_sistanvabaluchestan" />
+    <string-array name="array_city_state_fars" />
+    <string-array name="array_city_state_ghazvin" />
+    <string-array name="array_city_state_ghom" />
+    <string-array name="array_city_state_kordestan" />
+    <string-array name="array_city_state_kerman" />
+    <string-array name="array_city_state_kermanshah" />
+    <string-array name="array_city_state_gilan" />
+    <string-array name="array_city_state_lorestan" />
+    <string-array name="array_city_state_mazandaran" />
+    <string-array name="array_city_state_markazi" />
+    <string-array name="array_city_state_hormozgan" />
+    <string-array name="array_city_state_hamamdan" />
+    <string-array name="array_city_state_yazd" />
+    <string-array name="array_contact_titles">
+        <item>روابط عمومی</item>
+        <item>پشتیبانی فنی</item>
+    </string-array>
+    <string-array name="array_settlement_type">
+        <item>نقدی</item>
+        <item>چک</item>
+        <item>نقدی و چک</item>
+        <item>نسیه</item>
+    </string-array>
+    <string-array name="array_price_level">
+        <item>سطح یک</item>
+        <item>سطح دو</item>
+        <item>سطح سه</item>
+        <item>سطح چهار</item>
+        <item>سطح پنج</item>
+        <item>سطح شش</item>
+        <item>سطح هفت</item>
+        <item>سطح هشت</item>
+        <item>سطح نه</item>
+        <item>سطح ده</item>
+    </string-array>
+    <string-array name="array_cheque_type">
+        <item>چک</item>
+        <item>حواله</item>
+    </string-array>
+    <string-array name="array_banks_name">
+        <item>بانک ملی</item>
+        <item>بانک کشاورزی</item>
+        <item>بانک ملت</item>
+        <item>بانک صادرات</item>
+        <item>بانک رفاه</item>
+        <item>بانک تجارت</item>
+        <item>بانک مسکن</item>
+        <item>بانک اقتصاد نوین</item>
+        <item>بانک پاسارگاد</item>
+        <item>بانک پارسیان</item>
+        <item>بانک سامان</item>
+        <item>بانک صنعت و معدن</item>
+    </string-array>
+    <string-array name="array_type_order">
+        <item>پیش فاکتور</item>
+        <item>فاکتور</item>
+    </string-array>
+
+    <string-array name="array_printer_brand">
+        <item>BIXOLON-SPP-R200-II</item>
+        <item>HPRT-MPT-II</item>
+        <item>BABY-380-A</item>
+        <item>BABY-380-KOOHII</item>
+        <item>OSCAR-POS88MW</item>
+        <item>BIXOLON-SPP-R310</item>
+        <item>DELTA-380-A</item>
+        <item>BABY-280-A</item>
+        <item>Rongta-RPP200</item>
+        <item>SZZT_KS8223</item>
+        <item>UROVO_K319</item>
+        <item>Woosim_WSP_R341</item>
+        <item>Centerm_K9</item>
+        <item>SMART_POS_UROVO_i9000s</item>
+    </string-array>
+
+    <string-array name="reports_list_title">
+        <item>گزارش اشخاص(فاکتور)</item>
+        <item>گزارش اشخاص(پیش فاکتور)</item>
+        <item>گزارش کالاها(فاکتور)</item>
+        <item>گزارش کالاها(پیش فاکتور)</item>
+        <item>خلاصه گزارش روزانه</item>
+        <item>گزارش گیری اطلاعات</item>
+        <item>گزارش اشخاص(برگشت از فروش)</item>
+    </string-array>
+
+    <string-array name="reports_list_thumbs">
+        <item>@drawable/finance</item>
+        <item>@drawable/finance</item>
+        <item>@drawable/full_cart</item>
+        <item>@drawable/full_cart</item>
+        <item>@drawable/icon_image</item>
+        <item>@drawable/chart_arc</item>
+        <item>@drawable/finance</item>
+    </string-array>
+
+    <string-array name="array_hour">
+        <item>ساعت</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+    </string-array>
+
+    <string-array name="array_minute">
+        <item>دقیقه</item>
+        <item>0</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+        <item>35</item>
+        <item>40</item>
+        <item>45</item>
+        <item>50</item>
+        <item>55</item>
+    </string-array>
+</resources>

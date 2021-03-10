@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parentPanel"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="9dip"
+    android:paddingBottom="3dip"
+    android:paddingStart="3dip"
+    android:paddingEnd="1dip"
+    android:paddingLeft="3dip"
+    android:paddingRight="1dip">
+
+    <LinearLayout
+        android:id="@+id/topPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="54dip"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/title_template"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="6dip"
+            android:layout_marginBottom="9dip"
+            android:layout_marginStart="10dip"
+            android:layout_marginEnd="10dip">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:paddingTop="6dip"
+                android:paddingEnd="10dip"
+                android:paddingRight="10dip" />
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/alertTitle"
+                style="?android:attr/textAppearanceLarge"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:text="@string/message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="viewStart"
+                android:gravity="start" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/titleDivider"
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:background="@color/gray"
+            android:gravity="fill_horizontal"
+            android:orientation="horizontal"
+            android:scaleType="fitXY"
+            android:visibility="visible" />
+        <!-- If the client uses a customTitle, it will be added here. -->
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/contentPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="2dip"
+            android:paddingBottom="12dip"
+            android:paddingStart="14dip"
+            android:paddingEnd="10dip"
+            android:overScrollMode="ifContentScrolls"
+            android:paddingLeft="14dip"
+            android:paddingRight="10dip">
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/message"
+                style="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dip" />
+        </ScrollView>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/customPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray"
+            android:paddingBottom="2dip" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="54dip"
+        android:orientation="vertical">
+
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="4dip"
+            android:paddingStart="2dip"
+            android:paddingEnd="2dip"
+            android:measureWithLargestChild="true">
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/negative"
+                android:layout_width="0dip"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                style="?android:attr/buttonBarButtonStyle"
+                android:maxLines="2"
+                android:layout_height="wrap_content"
+                android:text="@string/str_cancel" />
+
+            <FrameLayout
+                android:layout_width="2dp"
+                android:layout_height="match_parent">
+
+                <FrameLayout
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/gray" />
+            </FrameLayout>
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/positive"
+                android:layout_width="0dip"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                style="?android:attr/buttonBarButtonStyle"
+                android:maxLines="2"
+                android:layout_height="wrap_content"
+                android:text="@string/str_ok" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

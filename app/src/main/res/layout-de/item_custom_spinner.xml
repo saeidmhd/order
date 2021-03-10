@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/transparent">
+
+    <com.mahak.order.widget.FontTextView
+        style="?android:attr/spinnersShown"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/marginSize"
+        android:text="@string/sample_text"
+        android:singleLine="true"
+        android:id="@+id/tvName" />
+</LinearLayout>

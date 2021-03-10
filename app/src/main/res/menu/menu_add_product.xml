@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/mnuAddProduct"
+        android:icon="@drawable/ic_add_inverse"
+        android:orderInCategory="101"
+        android:name="@string/str_add_Product"
+        app:showAsAction="always"
+        android:title="@string/str_add_Product" />
+    <item
+        android:id="@+id/mnuBarcode"
+        android:icon="@drawable/ic_barcode_scan_white_48dp"
+        android:name="@string/str_Barcode"
+        android:title="@string/str_Barcode"
+        app:showAsAction="always" />
+
+</menu>

@@ -1,0 +1,7 @@
+<resources>
+    <dimen name="drawer_menu_width">330dp</dimen>
+    <dimen name="drawer_menu_item_holder_size">120dp</dimen>
+
+    <!--Products Gallery View -->
+    <dimen name="product_gallery_image_height">380dp</dimen>
+</resources>

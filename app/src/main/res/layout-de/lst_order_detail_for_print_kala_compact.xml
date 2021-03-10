@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/llitem"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/report_item_min_height_compact"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/report_item_min_height"
+        android:orientation="horizontal">
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/tvCount"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="@string/quantity"
+            android:paddingLeft="@dimen/SmallSize"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/txtSizeNormal" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/black" />
+
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/tvProductSpec"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/sample_product"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/txtSizelarge" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/black" />
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/tvKalaCode"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/product_code"
+            android:paddingRight="@dimen/SmallSize"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/txtSizeNormal" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/black" />
+</LinearLayout>

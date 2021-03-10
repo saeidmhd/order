@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="1dp">
+
+    <com.mahak.order.widget.FontTextView
+        android:id="@+id/textView3"
+        style="@style/forms_label_default"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_margin="16dp"
+        android:text="@string/sort_base"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/sort_base"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left">
+
+        <com.mahak.order.widget.FontRadioButton
+            android:id="@+id/NameRB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:checked="true"
+            android:gravity="start|center"
+            android:padding="8dp"
+            android:text="@string/str_name"
+            android:textSize="16sp" />
+
+        <com.mahak.order.widget.FontRadioButton
+            android:id="@+id/CodeRB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:gravity="start|center"
+            android:padding="8dp"
+            android:text="@string/code"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dark_gray"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp" />
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/dark_gray"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp" />
+
+    <com.mahak.order.widget.FontTextView
+        style="@style/forms_label_default"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:textStyle="bold"
+        android:text="@string/order"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_gravity="end" />
+
+    <RadioGroup
+        android:id="@+id/sort_direction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end">
+
+        <com.mahak.order.widget.FontRadioButton
+            android:id="@+id/ascRB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:gravity="start|center"
+            android:checked="true"
+            android:text="@string/ascending" />
+
+        <com.mahak.order.widget.FontRadioButton
+            android:id="@+id/descRB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:gravity="start|center"
+            android:text="@string/descending" />
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right">
+
+        <com.mahak.order.widget.FontButtonView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_cancel"
+            style="@style/forms_btn_default"
+            android:onClick="cancel"
+            android:layout_margin="@dimen/LargeSize" />
+
+        <com.mahak.order.widget.FontButtonView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/execute"
+            style="@style/forms_btn_default"
+            android:onClick="sort_done"
+            android:layout_margin="@dimen/LargeSize" />
+    </LinearLayout>
+
+</LinearLayout>

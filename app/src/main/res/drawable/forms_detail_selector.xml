@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_focused="true">
+        <shape>
+            <corners android:radius="@dimen/edittext_corner_raius" />
+            <stroke android:width="2dip" android:color="@color/forms_edittext_border_focused" />
+            <solid android:color="@color/forms_edittext_pressed" />
+            <!--             <size android:height="@dimen/edittext_height" /> -->
+        </shape>
+    </item>
+    <item android:state_pressed="true">
+        <shape>
+            <corners android:radius="@dimen/edittext_corner_raius" />
+            <stroke android:width="1dip" android:color="@color/forms_edittext_border_normal" />
+            <solid android:color="@color/forms_edittext_border_normal" />
+            <!--             <size android:height="@dimen/edittext_height" /> -->
+        </shape>
+    </item>
+    <item android:state_enabled="false">
+        <shape>
+            <corners android:radius="@dimen/edittext_corner_raius" />
+            <stroke android:width="1dip" android:color="@color/forms_edittext_border_normal" />
+            <solid android:color="@color/forms_edittext_disabled" />
+            <!--             <size android:height="@dimen/edittext_height" /> -->
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <corners android:radius="@dimen/edittext_corner_raius" />
+            <stroke android:width="1dip" android:color="@color/forms_edittext_border_normal" />
+            <solid android:color="@color/forms_edittext_normal" />
+            <!--             <size android:height="@dimen/edittext_height" /> -->
+        </shape>
+    </item>
+
+</selector>

@@ -1,0 +1,95 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/default_light_form_bg"
+    android:orientation="vertical"
+    tools:context="com.mahak.order.ReportMonthlyActivity">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="?android:attr/listPreferredItemHeight"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btnPrev"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/img_btn_arrow_left" />
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/tvMonth"
+                style="@style/forms_label_default"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/farvardin"
+                android:textSize="16sp" />
+
+            <ImageButton
+                android:id="@+id/btnNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/img_btn_arrow_right" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@color/forms_seprator_line" />
+
+        <ListView
+            android:id="@+id/lstReportMonthly"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"></ListView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="right"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@color/forms_seprator_line" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right|center_vertical"
+            android:minHeight="?android:attr/listPreferredItemHeight"
+            android:orientation="horizontal"
+            android:padding="@dimen/SmallSize">
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/tvFinalPrice"
+                style="@style/forms_label_default"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/NormalSize"
+                android:text="@string/sample_number"
+                android:textSize="16sp" />
+
+            <com.mahak.order.widget.FontTextView
+                style="@style/forms_label_default"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_total_sum"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

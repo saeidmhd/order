@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/_llPrint"
+        android:layout_width="@dimen/print_width80mm"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/llTitle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="15dp"
+            android:background="@android:color/black"
+            android:orientation="vertical"
+            android:padding="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@android:color/black"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/NormalSize">
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/_tvType"
+                    style="@style/forms_page_title_label_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/invoice"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.mahak.order.widget.FontTextView
+                style="@style/forms_page_title_label_default380"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="@string/str_date"
+                android:textColor="@android:color/black" />
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/_tvOrderDate"
+                style="@style/forms_page_title_label_default380"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/LargeSize"
+                android:gravity="right"
+                android:textColor="@android:color/black" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.mahak.order.widget.FontTextView
+                style="@style/forms_page_title_label_default380"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="@string/str_tracking_code"
+                android:textColor="@android:color/black" />
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/_tvInvocieNumber"
+                style="@style/forms_page_title_label_default380"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/LargeSize"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textColor="@android:color/black" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_tvCustomerName"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/tvCustomerName"
+                style="@style/forms_page_title_label_default380"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="@string/str_customer_name"
+                android:textColor="@android:color/black" />
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/_tvCustomerName"
+                style="@style/forms_page_title_label_default380"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/LargeSize"
+                android:gravity="right"
+                android:textColor="@android:color/black" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.mahak.order.widget.FontTextView
+                style="@style/forms_page_title_label_default380"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="@string/str_username"
+                android:textColor="@android:color/black" />
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/_tvUsername"
+                style="@style/forms_page_title_label_default380"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/LargeSize"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/black" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="@android:color/white"
+            android:gravity="left"
+            android:orientation="vertical">
+
+            <com.mahak.order.widget.FontTextView
+                style="@style/forms_page_title_label_default380"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/str_returnOfSale_cause"
+                android:textColor="@android:color/black" />
+
+            <com.mahak.order.widget.FontTextView
+                style="@style/forms_page_title_label_default380"
+                android:id="@+id/_tvReason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textColor="@android:color/black"
+                android:text="@string/str_total_items" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/black"
+            android:orientation="vertical"
+            android:padding="2dp">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:background="@color/print_white_box"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.mahak.order.widget.FontTextView
+                    style="@style/forms_page_title_label_default380"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/str_count"
+                    android:textColor="@android:color/black" />
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/black" />
+
+                <com.mahak.order.widget.FontTextView
+                    style="@style/forms_page_title_label_default380"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:text="@string/str_product_name"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/black" />
+
+            <ListView
+                android:id="@+id/_lstProduct"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dip"
+                android:background="@android:color/white"
+                android:divider="@android:color/black"
+                android:dividerHeight="0dp"
+                android:listSelector="@android:color/transparent"
+                android:padding="0dip" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/black"
+            android:orientation="vertical"
+            android:padding="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/print_white_box"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/black" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/_tvTotalCount"
+                    style="@style/forms_page_title_label_default380"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/str_count"
+                    android:textColor="@android:color/black" />
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/black" />
+
+                <com.mahak.order.widget.FontTextView
+                    style="@style/forms_page_title_label_default380"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/str_total_count"
+                    android:layout_marginLeft="@dimen/marginSize"
+                    android:textColor="@android:color/black"
+                    android:layout_marginRight="@dimen/marginSize" />
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/black" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/_tvTotalItems"
+                    style="@style/forms_page_title_label_default380"
+                    android:layout_width="64dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/SmallSize"
+                    android:text="@string/sample_number"
+                    android:textColor="@android:color/black" />
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/black" />
+
+                <com.mahak.order.widget.FontTextView
+                    style="@style/forms_page_title_label_default380"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/str_total_items"
+                    android:layout_marginLeft="@dimen/marginSize"
+                    android:textColor="@android:color/black"
+                    android:layout_marginRight="@dimen/marginSize" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

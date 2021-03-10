@@ -1,0 +1,134 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+
+buildscript {
+    repositories {
+        maven {
+            url "https://jitpack.io"
+        }
+    }
+}
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.mahak.order"
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 3230
+        versionName '3.230'
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        def secureProps = new Properties()
+        if (file("secure.properties").exists()) {
+            file("secure.properties")?.withInputStream { secureProps.load(it) }
+        }
+        manifestPlaceholders = [mapsApiKey: secureProps.getProperty("MAPS_API_KEY") ?: ""]
+
+    }
+    dexOptions {
+        javaMaxHeapSize "4g" //specify the heap size for the dex process
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/LGPL2.1'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/notice.txt'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    lintOptions {
+        abortOnError false
+    }
+    productFlavors {
+    }
+}
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+    maven { url 'https://oss.sonatype.org/content/repositories/ksoap2-android-releases/' }
+    maven { url "https://jitpack.io" }
+}
+
+
+dependencies {
+
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.android.gms:play-services-analytics:17.0.0'
+    implementation 'com.google.android.gms:play-services-gcm:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.guava:guava:24.1-jre'
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'com.google.maps.android:android-maps-utils:2.2.0'
+
+    implementation 'com.google.firebase:firebase-analytics:18.0.2'
+    implementation 'com.google.firebase:firebase-crashlytics:17.3.1'
+
+
+    implementation 'androidx.recyclerview:recyclerview:1.2.0-beta02'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0-beta01'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.annotation:annotation:1.2.0-rc01'
+
+    implementation 'com.mikepenz:iconics-core:3.0.4@aar'
+    implementation 'com.mikepenz:iconics-views:3.0.4@aar'
+    implementation 'com.mikepenz:google-material-typeface:3.0.1.2.original@aar'
+    implementation 'com.mikepenz:material-design-iconic-typeface:2.2.0.4@aar'
+    implementation 'com.mikepenz:fontawesome-typeface:5.0.13.0@aar'
+    implementation 'com.mikepenz:ionicons-typeface:2.0.1.4@aar'
+
+    implementation 'com.squareup:otto:1.3.8'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.9.0'
+
+    implementation 'com.github.gcacace:signature-pad:1.2.1'
+    implementation 'com.github.YarikSOffice:lingver:1.3.0'
+    implementation 'com.itextpdf:itextg:5.5.10'
+    implementation 'com.orhanobut:hawk:2.0.1'
+    implementation 'com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1'
+    implementation 'com.muditsen.multilevelrecyclerview:multilevelview:1.0.0'
+    implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
+    implementation 'joda-time:joda-time:2.10.6'
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation(name: 'viewpagerindicator-library-2.4.1', ext: 'aar')
+    implementation(name: 'photoViewer_library', ext: 'aar')
+    implementation(name: 'FolderChooser-library', ext: 'aar')
+    implementation files('libs/WoosimLib260.jar')
+    implementation files('libs/SmartPosLib_V3.1.2_20180205.jar')
+    implementation files('libs/printersdkv1.jar')
+    implementation files('libs/platform_sdk_v4.1.0326.jar')
+    implementation project(path: ':Rahyab_Hybrid_CPSDK_1.0.15')
+
+    implementation 'com.microsoft.signalr:signalr:3.0.0'
+
+
+
+}

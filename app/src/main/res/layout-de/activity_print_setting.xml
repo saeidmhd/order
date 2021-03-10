@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="com.mahak.order.PrintSettingActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/setting_line_separator" />
+
+        <com.mahak.order.widget.FontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/setting_title_bar_bg"
+            android:padding="@dimen/NormalSize"
+            android:text="@string/str_setting_logo_title" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/setting_line_separator" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/NormalSize">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/NormalSize"
+                android:background="@color/forms_seprator_line"
+                android:padding="1dp">
+
+                <ImageView
+                    android:id="@+id/imgLogo"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@color/forms_alter_row" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="vertical">
+
+                <com.mahak.order.widget.FontButtonView
+                    android:id="@+id/btnBrowse"
+                    style="@style/forms_btn_default"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_choose_logo" />
+
+                <com.mahak.order.widget.FontButtonView
+                    android:id="@+id/btnDelete"
+                    style="@style/forms_btn_default"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_delete_logo" />
+            </LinearLayout>
+
+            <com.mahak.order.widget.FontCheckBox
+                android:id="@+id/chkShowLogo"
+                style="@style/forms_checkbox_default"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="@string/str_show_logo" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/setting_line_separator" />
+
+        <com.mahak.order.widget.FontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/setting_title_bar_bg"
+            android:padding="@dimen/NormalSize"
+            android:text="@string/str_setting_other_setting_title" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/setting_line_separator" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="@dimen/NormalSize">
+
+            <com.mahak.order.widget.FontCheckBox
+                android:id="@+id/chkShowDescription"
+                style="@style/forms_checkbox_default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/str_setting_under_text_title" />
+
+            <com.mahak.order.widget.FontEditText
+                android:id="@+id/txtDescription"
+                style="@style/forms_edittext_default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:selectAllOnFocus="true"
+                android:singleLine="true" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="@dimen/NormalSize">
+
+            <CheckBox
+                android:id="@+id/chkShowTitle"
+                style="@style/forms_checkbox_default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/str_setting_title" />
+
+            <EditText
+                android:id="@+id/txtTitle"
+                style="@style/forms_edittext_default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:maxLength="1000"
+                android:selectAllOnFocus="true"
+                android:singleLine="true" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

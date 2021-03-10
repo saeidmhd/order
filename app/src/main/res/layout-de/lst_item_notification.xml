@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/lst_row_notification_bg_style"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/LargeSize"
+        android:paddingLeft="@dimen/LargeSize"
+        android:paddingRight="@dimen/LargeSize">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/imgNotification"
+                android:layout_width="10dip"
+                android:layout_height="10dip"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/LargeSize"
+                android:src="@drawable/shape_not_read_notification" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/imgNotification"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.mahak.order.widget.FontTextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:gravity="left"
+                        android:minHeight="@dimen/NormalSize"
+                        android:text="@string/desc"
+                        android:textColor="#000"
+                        android:textSize="16sp" />
+
+                    <com.mahak.order.widget.FontTextView
+                        android:id="@+id/tvDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="left"
+                        android:minHeight="@dimen/NormalSize"
+                        android:text="@string/one_hour_before"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="10sp" />
+                </RelativeLayout>
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvMessage"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:minHeight="@dimen/NormalSize"
+                    android:paddingTop="@dimen/SmallSize"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/LargeSize"
+            android:background="@color/gray" />
+
+    </LinearLayout>
+
+</FrameLayout>

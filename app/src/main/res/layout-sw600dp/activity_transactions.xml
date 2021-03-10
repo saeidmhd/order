@@ -1,0 +1,88 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/default_light_form_bg"
+    android:orientation="vertical"
+    tools:context="com.mahak.order.ProductsListActivity">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="@dimen/LargeSize"
+        android:layout_marginLeft="@dimen/LargeSize"
+        android:layout_marginRight="@dimen/LargeSize"
+        android:layout_marginTop="@dimen/LargeSize"
+        android:background="@color/forms_item_border_color"
+        android:orientation="vertical"
+        android:padding="1dp">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:padding="@dimen/NormalSize">
+
+            <com.mahak.order.widget.FontTextView
+                style="@style/forms_label_default"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                android:text="@string/status" />
+
+            <com.mahak.order.widget.FontTextView
+                style="@style/forms_label_default"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                android:text="@string/balance" />
+
+            <com.mahak.order.widget.FontTextView
+                style="@style/forms_label_default"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                android:text="@string/creditor_amount" />
+
+            <com.mahak.order.widget.FontTextView
+                style="@style/forms_label_default"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                android:text="@string/debt_amount" />
+
+            <com.mahak.order.widget.FontTextView
+                style="@style/forms_label_default"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                android:text="@string/date_str" />
+
+            <com.mahak.order.widget.FontTextView
+                style="@style/forms_label_default"
+                android:layout_width="20dp"
+                android:layout_height="fill_parent"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@color/forms_seprator_line" />
+
+        <ListView
+            android:id="@+id/lstTransactions"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@android:color/white"
+            android:listSelector="@android:color/transparent"></ListView>
+    </LinearLayout>
+
+</LinearLayout>

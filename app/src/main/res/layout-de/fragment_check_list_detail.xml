@@ -1,0 +1,263 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/NormalSize">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="1dp"
+        android:background="@color/forms_item_border_color">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:orientation="vertical">
+
+
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="0dip"
+                android:layout_weight="3"
+                tools:context="com.mahak.order.MapViewActivity" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2.5"
+                android:orientation="vertical">
+
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0dip"-->
+                <!--android:layout_weight="3"></LinearLayout>-->
+
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0dip"-->
+                <!--android:layout_weight="2"-->
+                <!--android:background="@drawable/img_light_form_panel_top_bg"-->
+                <!--android:orientation="vertical"-->
+                <!--android:paddingBottom="@dimen/LargeSize">-->
+
+                <!-- content here -->
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="top|right"
+                    android:orientation="vertical"
+                    android:padding="@dimen/NormalSize">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="110dp"
+                        android:layout_marginBottom="@dimen/SmallSize"
+                        android:gravity="left|center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/NormalSize"
+                            android:src="@drawable/ic_contact_default" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="fill_parent"
+                            android:gravity="left"
+                            android:orientation="vertical">
+
+                            <com.mahak.order.widget.FontCheckBox
+                                android:id="@+id/chkCheckListChecked"
+                                style="@style/forms_checkbox_default"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="left"
+                                android:layout_gravity="left"
+                                android:checked="false"
+                                android:text="@string/done" />
+
+                            <com.mahak.order.widget.FontTextView
+                                android:id="@+id/tvMarketName"
+                                style="@style/forms_label_default"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/SmallSize"
+                                android:gravity="left"
+                                android:text="@string/shop"
+                                android:textSize="18sp" />
+
+                            <com.mahak.order.widget.FontTextView
+                                android:id="@+id/tvName"
+                                style="@style/forms_label_default"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="left"
+                                android:text="@string/sample_name"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <com.mahak.order.widget.FontTextView
+                        android:id="@+id/tvAddress"
+                        style="@style/forms_label_default"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/SmallSize"
+                        android:gravity="left"
+                        android:text="@string/sample_address"
+                        android:textSize="17sp" />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="40dp"
+                        android:gravity="left|center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvShift"
+                            style="@style/forms_label_default"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/morning"
+                            android:paddingRight="@dimen/NormalSize"
+                            android:textSize="16sp" />
+
+                        <com.mahak.order.widget.FontTextView
+                            style="@style/forms_label_default"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/str_shift1"
+                            android:gravity="left"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="40dp"
+                        android:gravity="left|center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvStatus"
+                            style="@style/forms_label_default"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/NormalSize"
+                            android:text="@string/debtor"
+                            android:textSize="17sp" />
+
+                        <com.mahak.order.widget.FontTextView
+                            style="@style/forms_label_default"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/LargeSize"
+                            android:text="@string/str_status"
+                            android:textSize="17sp" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvRemained"
+                            style="@style/forms_label_default"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/NormalSize"
+                            android:text="@string/sample_price"
+                            android:textSize="17sp" />
+
+                        <com.mahak.order.widget.FontTextView
+                            style="@style/forms_label_default"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/str_remained"
+                            android:textSize="17sp" />
+                    </LinearLayout>
+                </LinearLayout>
+                <!-- footer buttons -->
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontButtonView
+                            android:id="@+id/btnAddReceipt"
+                            style="@style/forms_btn_default"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/str_add_receipt" />
+
+                        <com.mahak.order.widget.FontButtonView
+                            android:id="@+id/btnAddInvoice"
+                            style="@style/forms_btn_default"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/str_add_invoice" />
+
+                        <com.mahak.order.widget.FontButtonView
+                            android:id="@+id/btnAddOrder"
+                            style="@style/forms_btn_default"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/str_add_pre_invoice" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left|center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontButtonView
+                            android:id="@+id/btnTransaction"
+                            style="@style/forms_btn_default"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/str_transactionlog" />
+
+                        <com.mahak.order.widget.FontButtonView
+                            android:id="@+id/btnDeliveryOrder"
+                            style="@style/forms_btn_default"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/str_delivery_order" />
+
+
+                        <com.mahak.order.widget.FontButtonView
+                            android:id="@+id/btnCall"
+                            style="@style/forms_btn_default"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="@dimen/NormalSize"
+                            android:text="@string/str_call" />
+                    </LinearLayout>
+                </LinearLayout>
+                <!--</LinearLayout>-->
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

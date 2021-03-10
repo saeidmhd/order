@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="top"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:weightSum="7">
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/tvNumber"
+            android:layout_width="8dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left|center"
+            android:text="@string/sample_number"
+            android:textSize="14sp" />
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/tvProductSpec"
+            style="@style/forms_label_default"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:gravity="center"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="@string/sample_text" />
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/tv_asset1"
+            android:layout_width="32dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@string/sample_number" />
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/tv_asset2"
+            android:layout_width="32dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@string/sample_number" />
+
+        <com.mahak.order.widget.CountEditText
+            android:id="@+id/txtCount1"
+            style="@style/forms_edittext_default2"
+            android:layout_width="54dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:digits="0123456789.,"
+            android:gravity="center"
+            android:imeOptions="actionNext"
+            android:inputType="numberDecimal"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:text="@string/sample_number" />
+
+        <com.mahak.order.widget.CountEditText
+            android:id="@+id/txtCount2"
+            style="@style/forms_edittext_default2"
+            android:layout_width="54dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:digits="0123456789.,"
+            android:gravity="center"
+            android:imeOptions="actionNext"
+            android:inputType="numberDecimal"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:text="@string/sample_number" />
+
+        <LinearLayout
+            android:id="@+id/btnDelete"
+            android:layout_width="32dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/NormalSize"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/item_number_placeholder"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.mikepenz.iconics.view.IconicsImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:scaleType="centerInside"
+                    app:iiv_color="@android:color/white"
+                    app:iiv_icon="gmd-close" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

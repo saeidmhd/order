@@ -1,0 +1,56 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="NullSize">0dip</dimen>
+    <dimen name="ThinSize">2dip</dimen>
+    <dimen name="NormalSize">10dip</dimen>
+    <dimen name="LargeSize">16dip</dimen>
+    <dimen name="VeryLargeSize">25dip</dimen>
+    <dimen name="VeryVeryLargeSize">32dp</dimen>
+    <dimen name="SmallSize">5dip</dimen>
+    <dimen name="marginSize">8dip</dimen>
+    <dimen name="txtSize">10sp</dimen>
+
+    <dimen name="txtSizelarge">18sp</dimen>
+    <dimen name="txtSizeNormal">14sp</dimen>
+    <dimen name="txtSizeSmall">12sp</dimen>
+
+
+    <dimen name="navigation_drawer_item_height">55dp</dimen>
+
+    <dimen name="default_radius">3dp</dimen>
+    <dimen name="panel_bg_corner_raius">2dp</dimen>
+    <dimen name="button_corner_raius">@dimen/default_radius</dimen>
+    <dimen name="button_height">45dp</dimen>
+    <dimen name="edittext_corner_raius">@dimen/default_radius</dimen>
+    <dimen name="edittext_height">45dp</dimen>
+    <dimen name="spinner_corner_raius">@dimen/default_radius</dimen>
+    <dimen name="spinner_height">45dp</dimen>
+    <dimen name="spinner_dropdown_offset">1dp</dimen>
+
+    <!--Products Gallery View -->
+    <dimen name="product_gallery_image_height">240dp</dimen>
+    <dimen name="product_gallery_other_image_height">60dp</dimen>
+    <dimen name="product_gallery_other_image_size">40dp</dimen>
+
+    <!-- printer -->
+    <dimen name="print_text_size">13sp</dimen>
+    <dimen name="print_number_size">14sp</dimen>
+    <dimen name="report_item_min_height">52dp</dimen>
+    <dimen name="report_item_min_height_compact">18dp</dimen>
+    <dimen name="box_title_height">26dp</dimen>
+    <dimen name="print_width">280dp</dimen>
+    <dimen name="print_width80mm">350dp</dimen>
+    <dimen name="print_width88mm">385dp</dimen>
+    <dimen name="print_width50mm">32dp</dimen>
+    <dimen name="item_number_placeholder_size">30dp</dimen>
+    <dimen name="small_text_size">12sp</dimen>
+    <dimen name="smaller_text_size">10sp</dimen>
+
+
+    <dimen name="dialog_width">300dp</dimen>
+    <dimen name="text_font_size_medium">16sp</dimen>
+</resources>

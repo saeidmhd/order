@@ -1,0 +1,242 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+         Base application theme, dependent on API level. This theme is replaced
+         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+
+
+     -->
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+
+
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+    <!-- <item name="android:dropDownListViewStyle">@style/MySpinnerStyle</item> -->
+    <!-- <style name="MySpinnerStyle" parent="android:style/Widget.ListView.DropDown"> -->
+    <!-- <item name="android:divider">#FFEEEEEE</item> -->
+    <!-- <item name="android:dividerHeight">1dp</item> -->
+    <!-- </style> -->
+
+
+    <!-- **************** Forms Style ********************* -->
+    <style name="forms_btn_default" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/forms_btn_selector</item>
+        <item name="android:textColor">@color/forms_btn_text_color_selector</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:minHeight">@dimen/button_height</item>
+        <item name="android:height">@dimen/button_height</item>
+        <item name="android:layout_margin">@dimen/SmallSize</item>
+    </style>
+
+    <style name="forms_btn" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/forms_btn_selector</item>
+        <item name="android:textColor">@color/forms_btn_text_color_selector</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:minHeight">@dimen/button_height</item>
+        <item name="android:layout_margin">@dimen/SmallSize</item>
+    </style>
+
+    <style name="forms_btn_highlight" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/button_highlight_selector</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:minHeight">@dimen/button_height</item>
+        <item name="android:height">@dimen/button_height</item>
+        <item name="android:layout_margin">@dimen/SmallSize</item>
+    </style>
+
+    <style name="forms_btn_large_default" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/forms_btn_large_selector</item>
+        <item name="android:textColor">@color/forms_btn_text_color_selector</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="forms_edittext_default" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/forms_edittext_selector</item>
+        <item name="android:textColor">@color/forms_edittext_text_color_selector</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:minHeight">@dimen/edittext_height</item>
+        <item name="android:height">@dimen/edittext_height</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingRight">@dimen/NormalSize</item>
+        <item name="android:paddingLeft">@dimen/NormalSize</item>
+        <item name="android:layout_margin">@dimen/SmallSize</item>
+        <item name="android:drawablePadding">@dimen/NormalSize</item>
+    </style>
+
+    <style name="forms_detail_default" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/forms_edittext_selector</item>
+        <item name="android:textColor">@color/forms_edittext_text_color_selector</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:minHeight">@dimen/edittext_height</item>
+        <item name="android:height">@dimen/edittext_height</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_margin">@dimen/SmallSize</item>
+        <item name="android:drawablePadding">@dimen/NormalSize</item>
+    </style>
+
+    <style name="forms_edittext_default2" parent="@android:style/Widget.TextView">
+        <item name="android:background">@drawable/forms_edittext_selector</item>
+        <item name="android:textColor">@color/forms_edittext_text_color_selector</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:minHeight">@dimen/edittext_height</item>
+        <item name="android:height">@dimen/edittext_height</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingRight">@dimen/NormalSize</item>
+        <item name="android:paddingLeft">@dimen/NormalSize</item>
+        <item name="android:layout_margin">@dimen/SmallSize</item>
+        <item name="android:drawablePadding">@dimen/NormalSize</item>
+    </style>
+
+    <style name="forms_Layout_default" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/forms_edittext_selector</item>
+        <item name="android:textColor">@color/forms_edittext_text_color_selector</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:minHeight">65dp</item>
+        <item name="android:height">65dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingRight">@dimen/NormalSize</item>
+        <item name="android:paddingLeft">@dimen/NormalSize</item>
+        <item name="android:layout_margin">@dimen/SmallSize</item>
+        <item name="android:drawablePadding">@dimen/NormalSize</item>
+    </style>
+
+    <style name="forms_label_default" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/forms_label_default</item>
+        <item name="android:gravity">right</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="forms_sub_label_default" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/forms_sub_label_default</item>
+        <item name="android:gravity">right</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="forms_page_title_label_default" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/forms_page_title_label_default</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">19sp</item>
+    </style>
+
+    <style name="forms_page_title_label_default380" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/forms_page_title_label_default380</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="forms_checkbox_default" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:drawableRight">@drawable/forms_checkbox_selector</item>
+        <item name="android:textColor">@color/forms_label_default</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:button">@null</item>
+    </style>
+
+    <style name="forms_checkbox_default2" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:drawableRight">@drawable/forms_checkbox_selector</item>
+        <item name="android:textColor">@color/forms_label_default</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:button">@null</item>
+    </style>
+
+    <style name="forms_checkbox_large_default" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:drawableRight">@drawable/forms_checkbox_large_selector</item>
+        <item name="android:textColor">@color/forms_label_default</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:button">@null</item>
+    </style>
+
+    <style name="forms_spinner_default" parent="@android:style/Widget.Spinner">
+        <item name="android:background">@drawable/forms_spinner_selector</item>
+        <item name="android:textColor">@color/forms_spinner_text_color_selector</item>
+        <item name="android:spinnerItemStyle">@style/forms_checkbox_default_item</item>
+        <item name="android:layout_margin">@dimen/SmallSize</item>
+        <item name="android:minHeight">@dimen/spinner_height</item>
+        <item name="android:height">@dimen/spinner_height</item>
+        <item name="android:paddingRight">@dimen/NormalSize</item>
+        <item name="android:paddingLeft">@dimen/VeryLargeSize</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+
+    <style name="MyDialogStyle">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="SortDialogStyle" parent="Base.Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="@android:windowBackground">@android:color/white</item>
+    </style>
+
+    <style name="forms_checkbox_default_item" parent="android:Widget.TextView.SpinnerItem">
+        <item name="android:textAppearance">@style/forms_checkbox_spinner_item</item>
+        <item name="android:gravity">right|center_vertical</item>
+    </style>
+
+    <style name="forms_checkbox_spinner_item" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/forms_spinner_text_color_selector</item>
+        <item name="android:gravity">right|center_vertical</item>
+    </style>
+
+    <!-- ******************** nav styles ********************* -->
+    <style name="nav_item_default" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/nav_item_selector</item>
+        <item name="android:paddingRight">@dimen/LargeSize</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:drawablePadding">@dimen/NormalSize</item>
+        <item name="android:gravity">right|center_vertical</item>
+    </style>
+
+    <style name="DialogTheme" parent="android:Theme.Dialog">
+        <item name="@android:windowBackground">@android:color/white</item>
+        <item name="@android:textColor">@android:color/holo_blue_light</item>
+    </style>
+
+    <style name="FilePickerTheme" parent="NNF_BaseTheme.Light">
+        <!-- Set these to match your theme -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+
+        <!-- Setting a divider is entirely optional -->
+        <item name="nnf_list_item_divider">?android:attr/listDivider</item>
+
+        <!-- Need to set this also to style create folder dialog -->
+        <item name="alertDialogTheme">@style/FilePickerAlertDialogTheme</item>
+
+        <!-- If you want to set a specific toolbar theme, do it here -->
+        <!-- <item name="nnf_toolbarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item> -->
+    </style>
+
+    <style name="FilePickerAlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+    </style>
+
+</resources>

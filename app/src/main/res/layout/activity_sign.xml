@@ -1,0 +1,71 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".SignActivity">
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/buttons_container"
+        android:id="@+id/signature_pad_container">
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginBottom="8dp"
+            android:layout_above="@+id/signature_pad_description" />
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/signature_pad_description"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginBottom="16dp"
+            android:layout_alignParentBottom="true"
+            android:text="@string/agree" />
+
+        <com.github.gcacace.signaturepad.views.SignaturePad
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:penMaxWidth="8dp"
+            app:penMinWidth="7dp"
+            android:id="@+id/signature_pad" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/buttons_container"
+        android:paddingTop="16dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <com.mahak.order.widget.FontButtonView
+            android:id="@+id/clear_button"
+            android:layout_width="0dp"
+            style="@style/forms_btn"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/clear"
+            android:enabled="false" />
+
+        <com.mahak.order.widget.FontButtonView
+            android:id="@+id/save_button"
+            style="@style/forms_btn"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/register"
+            android:enabled="false" />
+    </LinearLayout>
+
+</RelativeLayout>

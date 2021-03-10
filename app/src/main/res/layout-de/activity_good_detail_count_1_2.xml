@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_good_detail_select"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:background="#f4f4f4">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/NormalSize">
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/productName"
+            style="@style/forms_label_default"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ellipsize="marquee"
+            android:gravity="center"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="@string/str_product_name"
+            android:textColor="#818181"
+            android:textSize="22sp" />
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/detail_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="8dp"
+        android:background="#ffffff">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/llPriceLevel"
+                    android:layout_width="match_parent"
+                    android:layout_height="96dp"
+                    android:gravity="left|center_vertical"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <com.mahak.order.widget.FontTextView
+                            style="@style/forms_label_default"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:layout_marginRight="@dimen/NormalSize"
+                            android:text="@string/str_price_level"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:orientation="vertical">
+
+                        <Spinner
+                            android:id="@+id/spnPriceLevel"
+                            style="@style/forms_spinner_default"
+                            android:layout_width="match_parent"
+                            android:layout_height="64dp"
+                            android:dropDownVerticalOffset="@dimen/spinner_dropdown_offset"
+                            android:spinnerMode="dropdown" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="96dp"
+                    android:gravity="left|center_vertical"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <com.mahak.order.widget.FontTextView
+                            style="@style/forms_label_default"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:layout_marginRight="@dimen/NormalSize"
+                            android:layout_weight="0.5"
+                            android:text="@string/str_price"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:gravity="left"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_margin="@dimen/SmallSize"
+                            android:weightSum="2">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <com.mahak.order.widget.FontTextView
+                                    android:id="@+id/txtAveragePrice"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:selectAllOnFocus="true"
+                                    android:singleLine="true"
+                                    android:gravity="left"
+                                    android:layout_gravity="right"
+                                    android:text="@string/average_price"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_gravity="right">
+
+                                <com.mahak.order.widget.FontTextView
+                                    android:id="@+id/txtLastBuyPrice"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:selectAllOnFocus="true"
+                                    android:singleLine="true"
+                                    android:layout_gravity="right"
+                                    android:gravity="left"
+                                    android:text="@string/last_price_buy"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+
+                        <com.mahak.order.widget.MoneyEditText
+                            android:id="@+id/txtPrice"
+                            style="@style/forms_edittext_default"
+                            android:layout_width="match_parent"
+                            android:layout_height="64dp"
+                            android:layout_weight="0.75"
+                            android:digits="0123456789.,"
+                            android:inputType="numberDecimal"
+                            android:selectAllOnFocus="true"
+                            android:singleLine="true" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_count_1_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:gravity="left|center_vertical"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            android:orientation="horizontal">
+
+                            <com.mahak.order.widget.FontTextView
+                                android:id="@+id/unitName"
+                                style="@style/forms_label_default"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:layout_marginRight="@dimen/NormalSize"
+                                android:text="@string/unit_name"
+                                android:textSize="18sp" />
+
+                            <com.mahak.order.widget.FontTextView
+                                android:id="@+id/txtValue"
+                                style="@style/forms_label_default"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:layout_marginRight="@dimen/NormalSize"
+                                android:text="@string/value_1"
+                                android:textSize="18sp" />
+
+                            <ImageView
+                                android:id="@+id/image_detail"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:text="@string/details"
+                                android:layout_weight="0.25"
+                                android:onClick="joziat"
+                                app:srcCompat="@drawable/ic_playlist_add_black_24dp" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:gravity="left"
+                            android:orientation="vertical">
+
+                            <com.mahak.order.widget.FontTextView
+                                android:id="@+id/txtRetailCountExist"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="6dp"
+                                android:selectAllOnFocus="true"
+                                android:singleLine="true"
+                                android:text="@string/asset"
+                                android:textSize="12sp" />
+
+                            <com.mahak.order.widget.CountEditText
+                                android:id="@+id/txtCount1"
+                                style="@style/forms_edittext_default"
+                                android:layout_width="match_parent"
+                                android:layout_height="64dp"
+                                android:layout_weight="0.75"
+                                android:digits="0123456789.,"
+                                android:imeOptions="actionDone"
+                                android:inputType="numberDecimal"
+                                android:selectAllOnFocus="true"
+                                android:singleLine="true" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_count2"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:gravity="left|center_vertical"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="right|center"
+                            android:gravity="left"
+                            android:orientation="horizontal">
+
+                            <com.mahak.order.widget.FontTextView
+                                android:id="@+id/unitName2"
+                                style="@style/forms_label_default"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:layout_marginRight="@dimen/NormalSize"
+                                android:text="@string/unit_name_2"
+                                android:textSize="18sp" />
+
+                            <com.mahak.order.widget.FontTextView
+                                style="@style/forms_label_default"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:layout_marginRight="@dimen/NormalSize"
+                                android:text="@string/value_2"
+                                android:textSize="18sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:gravity="left"
+                            android:orientation="vertical">
+
+                            <com.mahak.order.widget.FontTextView
+                                android:id="@+id/txtRetailCount2Exist"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="6dp"
+                                android:selectAllOnFocus="true"
+                                android:singleLine="true"
+                                android:text="@string/asset"
+                                android:textSize="12sp" />
+
+                            <com.mahak.order.widget.CountEditText
+                                android:id="@+id/txtCount2"
+                                style="@style/forms_edittext_default"
+                                android:layout_width="match_parent"
+                                android:layout_height="64dp"
+                                android:layout_weight="0.75"
+                                android:digits="0123456789.,"
+                                android:imeOptions="actionDone"
+                                android:inputType="numberDecimal"
+                                android:selectAllOnFocus="true"
+                                android:singleLine="true" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llOff"
+                    android:layout_width="match_parent"
+                    android:layout_height="96dp"
+                    android:gravity="left|center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:id="@+id/ll_rowDiscount"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2.1"
+                        android:gravity="left|center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/NormalSize">
+
+                        <com.mahak.order.widget.FontTextView
+                            style="@style/forms_label_default"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="8dp"
+                            android:textSize="18sp"
+                            android:text="@string/str_discount" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_percentDiscount"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2.2"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/NormalSize">
+
+
+
+                        <com.mahak.order.widget.FontEditText
+                            android:id="@+id/txtOffPercent"
+                            style="@style/forms_edittext_default"
+                            android:layout_width="match_parent"
+                            android:layout_height="54dp"
+                            android:inputType="numberDecimal"
+                            android:selectAllOnFocus="true"
+                            android:singleLine="true" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/percent"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_Discount"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2.5"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/NormalSize">
+
+
+                        <com.mahak.order.widget.MoneyEditText
+                            android:id="@+id/txtOff"
+                            style="@style/forms_edittext_default"
+                            android:layout_width="match_parent"
+                            android:layout_height="54dp"
+                            android:inputType="numberDecimal"
+                            android:selectAllOnFocus="true"
+                            android:singleLine="true" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llTaxCharge"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:gravity="left|center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="visible"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:id="@+id/ll_chkTax"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="left|center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/NormalSize">
+
+                        <com.mahak.order.widget.FontTextView
+                            style="@style/forms_label_default"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/str_tax" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/txtTax"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/sample_price"
+                            android:layout_marginLeft="8dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_chkCharge"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="left|center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/NormalSize">
+
+                        <com.mahak.order.widget.FontTextView
+                            style="@style/forms_label_default"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/NormalSize"
+                            android:text="@string/str_charge" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/txtCharge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/sample_price"
+                            android:layout_marginRight="8dp" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:gravity="left|center_vertical"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:layout_gravity="right|center"
+                        android:gravity="left"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            style="@style/forms_label_default"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_marginRight="@dimen/NormalSize"
+                            android:text="@string/str_description"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:gravity="left"
+                        android:orientation="vertical">
+
+                        <com.mahak.order.widget.FontEditText
+                            android:id="@+id/txtDescription"
+                            style="@style/forms_edittext_default"
+                            android:layout_width="match_parent"
+                            android:layout_height="64dp"
+                            android:layout_weight="0.75"
+                            android:inputType="text" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.mahak.order.widget.FontButtonView
+            android:id="@+id/btnSave"
+            style="@style/forms_btn_default"
+            android:layout_width="fill_parent"
+            android:layout_height="54dp"
+            android:layout_weight="1"
+            android:text="@string/str_add_product" />
+    </LinearLayout>
+
+</LinearLayout>

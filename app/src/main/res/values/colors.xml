@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!-- colored -->
+
+    <color name="accent">#396264</color>
+
+    <color name="default_light_form_bg">#f4f4f4</color>
+    <color name="forms_label_default">#575757</color>
+    <color name="forms_sub_label_default">#868686</color>
+    <color name="forms_page_title_label_default">#ffffff</color>
+    <color name="forms_page_footer_line_dark">#a2a2a2</color>
+    <color name="forms_page_footer_line_light">#fafafa</color>
+    <color name="forms_page_footer_text">#a2a2a2</color>
+    <color name="forms_spinner_text_pressed">#fafafa</color>
+    <color name="forms_spinner_text_normal">#494949</color>
+    <color name="forms_edittext_text_pressed">#494949</color>
+    <color name="forms_edittext_text_normal">#787878</color>
+    <color name="forms_btn_text_pressed">#ffffff</color>
+    <color name="forms_btn_text_normal">#ffffff</color>
+    <color name="nav_item_text_pressed">#fafafa</color>
+    <color name="nav_item_text_normal">#494949</color>
+    <color name="nav_item_bg_pressed">#df5a0f</color>
+    <color name="nav_bg">#eae9e9</color>
+    <color name="nav_item_line_dark">#36ffffff</color>
+    <color name="forms_item_border_color">#9f9f9f</color>
+    <color name="forms_base_default">#fd5816</color>
+    <color name="forms_alter_row">#f2f2f2</color>
+    <color name="forms_seprator_line">#ababab</color>
+    <color name="yellow">#ffb411</color>
+    <color name="orange">#f88734</color>
+    <color name="green">#c5f23c</color>
+    <color name="red">#DC143C</color>
+    <color name="blue">#5bbde6</color>
+    <color name="blue_promo">#4381a7</color>
+    <color name="blue_info">#56a1d0</color>
+    <color name="green_blue">#3cf296</color>
+    <color name="green_promo">#40b58a</color>
+    <color name="gray">#eceaeb</color>
+    <color name="dark_gray">#BBBBBB</color>
+    <color name="darker_gray">#787878</color>
+    <color name="white">#ffffff</color>
+    <color name="print_gray_box">#dadada</color>
+    <color name="print_white_box">#ffffff</color>
+    <color name="forms_page_title_label_default380">#000000</color>
+    <color name="reject">#f43e35</color>
+    <color name="accept2">#40b58a</color>
+    <color name="detail">#edf8ff</color>
+
+
+    <!-- colored -->
+    <color name="primary">#40b58a</color>
+    <color name="primary_dark">#369a75</color>
+    <color name="secondary">#56a1d0</color>
+    <color name="secondary_dark">#4381a7</color>
+    <color name="page_header_bg">#396264</color>
+
+    <color name="panel_border">#c3c3c3</color>
+    <color name="forms_button_highlight_normal">@color/primary</color>
+    <color name="forms_button_highlight_pressed">@color/primary_dark</color>
+    <color name="forms_button_highlight_disabled">#e9e9e9</color>
+    <color name="forms_edittext_normal">#fdfdfd</color>
+    <color name="forms_edittext_pressed">#fdfdfd</color>
+    <color name="forms_edittext_disabled">#e9e9e9</color>
+    <color name="forms_edittext_border_normal">#cdcdcd</color>
+    <color name="forms_edittext_border_focused">@color/primary</color>
+    <color name="forms_spinner_border_normal">#cdcdcd</color>
+    <color name="forms_spinner_border_pressed">@color/primary</color>
+    <color name="forms_spinner_normal">#fdfdfd</color>
+    <color name="forms_spinner_pressed">#fdfdfd</color>
+    <color name="forms_spinner_disabled">#e9e9e9</color>
+
+
+    <color name="setting_title_bar_bg">#efeff3</color>
+    <color name="setting_line_separator">#d5d5d5</color>
+    <color name="disabled_content">#ADADAD</color>
+    <color name="stripColor">#56a1d0</color>
+
+    <color name="btn_clickable">#1C1C1C</color>
+    <color name="sp_bg">#EEEEEE</color>
+    <color name="notification_color">#ffa00a</color>
+</resources>

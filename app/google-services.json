@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "181085492969",
+    "firebase_url": "https://newmahakorder.firebaseio.com",
+    "project_id": "newmahakorder",
+    "storage_bucket": "newmahakorder.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181085492969:android:ec2c87368077d9b70d8278",
+        "android_client_info": {
+          "package_name": "com.mahak.order"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "181085492969-36ko06f7ne4ci0llh8ri0r2iar2n3hj7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mahak.order",
+            "certificate_hash": "8882721fee2efec366861898919da715e9cda255"
+          }
+        },
+        {
+          "client_id": "181085492969-3g0i8tb682f3ok2303ichr0bboun3rnh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDAGOBDikUyJM3xq_nydyYEnF5geVOduY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "181085492969-3g0i8tb682f3ok2303ichr0bboun3rnh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

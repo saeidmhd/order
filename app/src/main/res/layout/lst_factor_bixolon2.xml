@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/llitem"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/report_item_min_height"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/report_item_min_height"
+        android:orientation="horizontal">
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/tvPrice"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.1"
+            android:gravity="left"
+            android:text="123,123,123,12"
+            android:textColor="@android:color/black"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/tvfii"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/SmallSize"
+            android:text="123,234,567,56"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/black" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/tvCount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="0"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+
+            <!--<View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/black" />
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/tvCount2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="0"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />-->
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/black" />
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/tvProductSpec"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:gravity="right"
+            android:maxLines="3"
+            android:text="﻿مخابراتي طوسي 0.6*2*2"
+            android:paddingRight="@dimen/SmallSize"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/black" />
+
+    <LinearLayout
+        android:id="@+id/llprop_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/report_item_min_height"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/black" />
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/tvProductPropSpec"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:paddingRight="@dimen/SmallSize"
+            android:text="جزییات"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:visibility="gone"
+        android:background="@android:color/black" />
+</LinearLayout>

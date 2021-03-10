@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="@color/forms_spinner_pressed"></solid>
+                    <corners android:radius="@dimen/spinner_corner_raius" />
+                    <stroke android:width="2dp" android:color="@color/forms_spinner_border_pressed"></stroke>
+                </shape>
+            </item>
+            <item android:left="@dimen/NormalSize">
+                <bitmap android:gravity="left|center_vertical" android:src="@drawable/ic_spinner_arrow" />
+            </item>
+        </layer-list>
+    </item>
+    <item android:state_enabled="true">
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="@color/forms_spinner_normal"></solid>
+                    <corners android:radius="@dimen/spinner_corner_raius" />
+                    <stroke android:width="1dp" android:color="@color/forms_spinner_border_normal"></stroke>
+                </shape>
+            </item>
+            <item android:left="@dimen/NormalSize">
+                <bitmap android:gravity="left|center_vertical" android:src="@drawable/ic_spinner_arrow" />
+            </item>
+        </layer-list>
+    </item>
+    <item android:state_enabled="false">
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="@color/forms_spinner_disabled"></solid>
+                    <corners android:radius="@dimen/spinner_corner_raius" />
+                    <stroke android:width="1dp" android:color="@color/forms_spinner_border_normal"></stroke>
+                </shape>
+            </item>
+            <item android:left="@dimen/NormalSize">
+                <bitmap android:gravity="left|center_vertical" android:src="@drawable/ic_spinner_arrow" />
+            </item>
+        </layer-list>
+    </item>
+</selector>

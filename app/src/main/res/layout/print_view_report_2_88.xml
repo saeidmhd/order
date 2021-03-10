@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:drawingCacheQuality="high"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/_llPrint"
+        android:layout_width="@dimen/print_width88mm"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/NormalSize"
+            android:background="@android:color/black"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical"
+            android:padding="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/box_title_height"
+                    android:gravity="right|center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingRight="@dimen/NormalSize">
+
+                    <com.mahak.order.widget.FontTextView
+                        android:id="@+id/tvTitle"
+                        android:textColor="@android:color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/str_daily_customer_report"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@android:color/black" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/box_title_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.mahak.order.widget.FontTextView
+                        android:id="@+id/tvDate"
+                        style="@style/forms_page_title_label_default"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:paddingLeft="@dimen/NormalSize"
+                        android:text="@string/date"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <com.mahak.order.widget.FontTextView
+                        style="@style/forms_page_title_label_default"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="@dimen/NormalSize"
+                        android:text="@string/str_date"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/box_title_height"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.mahak.order.widget.FontTextView
+                        android:id="@+id/tvUsername"
+                        style="@style/forms_page_title_label_default"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:paddingLeft="@dimen/NormalSize"
+                        android:text="@string/sample_customer"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <com.mahak.order.widget.FontTextView
+                        style="@style/forms_page_title_label_default"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="@dimen/NormalSize"
+                        android:text="@string/str_username"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@android:color/black" />-->
+
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/box_title_height"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<com.mahak.order.widget.FontTextView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:gravity="center_horizontal"-->
+                <!--android:text="@string/str_sum_receipt_f"-->
+                <!--android:textColor="@android:color/black"-->
+                <!--android:textSize="14sp"-->
+                <!--android:textStyle="bold" />-->
+
+                <!--<View-->
+                <!--android:layout_width="1dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:background="@android:color/black" />-->
+
+                <!--<com.mahak.order.widget.FontTextView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:gravity="center_horizontal"-->
+                <!--android:text="@string/str_sum_sale_f"-->
+                <!--android:textColor="@android:color/black"-->
+                <!--android:textSize="14sp"-->
+                <!--android:textStyle="bold" />-->
+                <!--</LinearLayout>-->
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@android:color/black" />
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:fadingEdge="none">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ListView
+                            android:id="@+id/list"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:dividerHeight="0dp"
+                            android:listSelector="@android:color/transparent"
+                            android:scrollbars="none" />
+                    </LinearLayout>
+
+                </ScrollView>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:background="@android:color/white" />-->
+    </LinearLayout>
+</LinearLayout>

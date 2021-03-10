@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:context="com.mahak.order.OrdersListActivity"
+    tools:ignore="MergeRootFrame">
+
+    <com.mahak.order.widget.FontEditText
+        android:id="@+id/txtSearch"
+        style="@style/forms_edittext_default"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/NormalSize"
+        android:drawableRight="@drawable/ic_search_set_nav"
+        android:gravity="left|center_vertical"
+        android:hint="@string/str_name_code_filter"
+        android:singleLine="true" />
+
+    <ListView
+        android:id="@+id/lstDeliveryOrders"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:divider="@android:color/transparent"
+        android:listSelector="@android:color/transparent"></ListView>
+
+</LinearLayout>

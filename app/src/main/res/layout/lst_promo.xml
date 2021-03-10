@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/ThinSize"
+    android:paddingLeft="@dimen/NormalSize"
+    android:paddingRight="@dimen/NormalSize"
+    android:paddingTop="@dimen/ThinSize">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/card_ui_bg_selector"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_weight="1.5"
+            android:gravity="center">
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/to_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_weight="1.5"
+            android:gravity="center">
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/from_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_weight="1"
+            android:gravity="right|center"
+            android:padding="@dimen/LargeSize">
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/promotion_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_gift" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

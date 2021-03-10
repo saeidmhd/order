@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:gravity="left|bottom"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/NormalSize"
+    android:paddingTop="@dimen/NormalSize">
+
+    <LinearLayout
+        android:id="@+id/_llPrint"
+        android:layout_width="@dimen/print_width88mm"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/NormalSize"
+        android:paddingTop="@dimen/NormalSize">
+
+        <com.mahak.order.widget.FontTextView
+            style="@style/forms_page_title_label_default380"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:gravity="left"
+            android:text="@string/print_sign"
+            android:layout_marginLeft="8dp"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+</LinearLayout>

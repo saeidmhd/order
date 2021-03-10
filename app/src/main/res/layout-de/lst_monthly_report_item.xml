@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="@dimen/NormalSize"
+    android:paddingLeft="@dimen/NormalSize"
+    android:paddingRight="@dimen/NormalSize">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/SmallSize"
+        android:paddingTop="@dimen/SmallSize">
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/tvDayName"
+            style="@style/forms_label_default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/sample_date" />
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/tvPercent"
+            style="@style/forms_label_default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/sample_number" />
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/tvstrPercent"
+            style="@style/forms_label_default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/LargeSize"
+            android:layout_toLeftOf="@id/tvPercent"
+            android:text="@string/percent" />
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/tvPrice"
+            style="@style/forms_label_default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/tvstrPercent"
+            android:text="@string/sample_number" />
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/pbPrice"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_marginBottom="@dimen/NormalSize"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:max="100"
+        android:progress="0" />
+
+    <LinearLayout
+        android:id="@+id/llReceipt"
+        android:layout_width="fill_parent"
+        android:layout_height="90dip"
+        android:layout_marginBottom="-90dip"
+        android:background="@color/gray"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.mahak.order.widget.FontTextView
+                style="@style/forms_label_default"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/NormalSize"
+                android:text="@string/str_type_past_transfer"
+                android:gravity="center"
+                android:background="@color/dark_gray" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:layout_marginBottom="@dimen/NormalSize"
+                android:background="@color/white" />
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/tvCashReceipt"
+                style="@style/forms_label_default"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/NormalSize"
+                android:text="@string/sample_number"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dip"
+            android:layout_height="fill_parent"
+            android:background="@color/white" />
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.mahak.order.widget.FontTextView
+                style="@style/forms_label_default"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/NormalSize"
+                android:text="@string/str_cheque_amount"
+                android:gravity="center"
+                android:background="@color/dark_gray" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:layout_marginBottom="@dimen/NormalSize"
+                android:background="@color/white" />
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/tvCheque"
+                style="@style/forms_label_default"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/NormalSize"
+                android:text="@string/sample_number"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dip"
+            android:layout_height="fill_parent"
+            android:background="@color/white" />
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.mahak.order.widget.FontTextView
+                style="@style/forms_label_default"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/NormalSize"
+                android:text="@string/str_sum_of_cash"
+                android:gravity="center"
+                android:background="@color/dark_gray" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:layout_marginBottom="@dimen/NormalSize"
+                android:background="@color/white" />
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/tvCash"
+                style="@style/forms_label_default"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/NormalSize"
+                android:text="@string/sample_number" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,721 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:gravity="right"
+    android:orientation="vertical">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusableInTouchMode="true"
+            android:gravity="right"
+            android:orientation="vertical">
+
+            <com.mahak.order.widget.FontTextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bar_bg"
+                android:padding="@dimen/NormalSize"
+                android:text="@string/str_setting_order" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <RelativeLayout
+                android:id="@+id/rvReduceAsset"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:padding="@dimen/SmallSize">
+
+                <com.mahak.order.widget.FontCheckBox
+                    android:id="@+id/chkReduceAsset"
+                    style="@style/forms_checkbox_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:checked="false" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvReduceAsset"
+                    style="@style/forms_label_default"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/chkReduceAsset"
+                    android:gravity="right"
+                    android:text="@string/str_reduce_asset"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <RelativeLayout
+                android:id="@+id/rvShowBelowPrice‌"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:padding="@dimen/SmallSize">
+
+                <com.mahak.order.widget.FontCheckBox
+                    android:id="@+id/chkBelowPrice"
+                    style="@style/forms_checkbox_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:checked="false" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvBelowPrice"
+                    style="@style/forms_label_default"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/chkBelowPrice"
+                    android:gravity="right"
+                    android:text="@string/str_message_show_below"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <RelativeLayout
+                android:id="@+id/rvShowField"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:padding="@dimen/SmallSize">
+
+                <com.mahak.order.widget.FontCheckBox
+                    android:id="@+id/chkShowField"
+                    style="@style/forms_checkbox_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:checked="false" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvShowField"
+                    style="@style/forms_label_default"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/chkShowField"
+                    android:gravity="right"
+                    android:text="@string/str_message_show_filde"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <RelativeLayout
+                android:id="@+id/rvCompactPrint"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:visibility="gone"
+                android:padding="@dimen/SmallSize">
+
+                <com.mahak.order.widget.FontCheckBox
+                    android:id="@+id/chkPrintCompact"
+                    style="@style/forms_checkbox_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:checked="true"
+                    android:enabled="false" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvPrintCompact"
+                    style="@style/forms_label_default"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/chkPrintCompact"
+                    android:gravity="right"
+                    android:text="@string/str_message_print_compact"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <com.mahak.order.widget.FontTextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bar_bg"
+                android:padding="@dimen/NormalSize"
+                android:text="@string/str_setting_tax_charge" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:padding="@dimen/LargeSize">
+
+                <com.mahak.order.widget.FontTextView
+                    style="@style/forms_label_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="right|center_vertical"
+                    android:text="@string/str_charge"
+                    android:textColor="@android:color/black" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvChargePercent"
+                    style="@style/forms_label_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="right|center_vertical"
+                    android:text="@string/percent"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+
+                <com.mahak.order.widget.FontEditText
+                    android:id="@+id/txtChargePercent"
+                    style="@style/forms_edittext_default"
+                    android:layout_width="200dip"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/tvChargePercent"
+                    android:enabled="false"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/sample_number" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:padding="@dimen/LargeSize">
+
+                <com.mahak.order.widget.FontTextView
+                    style="@style/forms_label_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="right|center_vertical"
+                    android:text="@string/str_tax"
+                    android:textColor="@android:color/black" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvTaxPercent"
+                    style="@style/forms_label_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="right|center_vertical"
+                    android:text="@string/percent"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+
+                <com.mahak.order.widget.FontEditText
+                    android:id="@+id/txtTaxPercent"
+                    style="@style/forms_edittext_default"
+                    android:layout_width="200dip"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/tvTaxPercent"
+                    android:enabled="false"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/sample_number" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <com.mahak.order.widget.FontTextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bar_bg"
+                android:padding="@dimen/NormalSize"
+                android:text="@string/str_tracking" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/LargeSize">
+
+                <Spinner
+                    android:id="@+id/spinnerFromHour"
+                    style="@style/forms_spinner_default"
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:entries="@array/array_hour"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/sample_number"
+                    android:textAlignment="center" />
+
+                <com.mahak.order.widget.FontTextView
+                    style="@style/forms_label_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right|center_vertical"
+                    android:text="@string/colon"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerFromMinute"
+                    style="@style/forms_spinner_default"
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:entries="@array/array_minute"
+                    android:gravity="center|right"
+                    android:singleLine="true"
+                    android:text="@string/sample_number"
+                    android:textAlignment="center" />
+
+                <com.mahak.order.widget.FontTextView
+                    style="@style/forms_label_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical"
+                    android:text="@string/str_from_time"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/LargeSize">
+
+                <Spinner
+                    android:id="@+id/spinnerToHour"
+                    style="@style/forms_spinner_default"
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/array_hour"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/sample_number"
+                    android:textAlignment="center" />
+
+                <com.mahak.order.widget.FontTextView
+                    style="@style/forms_label_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right|center_vertical"
+                    android:text="@string/colon"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerToMinute"
+                    style="@style/forms_spinner_default"
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:entries="@array/array_minute"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/sample_number"
+                    android:textAlignment="center" />
+
+                <com.mahak.order.widget.FontTextView
+                    style="@style/forms_label_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical"
+                    android:text="@string/str_to_time"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <com.mahak.order.widget.FontTextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bar_bg"
+                android:padding="@dimen/NormalSize"
+                android:text="@string/str_setting_bank_pos" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/LargeSize"
+                android:paddingLeft="@dimen/LargeSize"
+                android:paddingRight="@dimen/LargeSize"
+                android:paddingTop="@dimen/NormalSize">
+
+                <Spinner
+                    android:id="@+id/spnPosBank"
+                    style="@style/forms_spinner_default"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:dropDownVerticalOffset="@dimen/spinner_dropdown_offset"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <com.mahak.order.widget.FontTextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bar_bg"
+                android:padding="@dimen/NormalSize"
+                android:text="@string/str_setting_printer_option" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/LargeSize"
+                android:paddingLeft="@dimen/LargeSize"
+                android:paddingRight="@dimen/LargeSize"
+                android:paddingTop="@dimen/NormalSize">
+
+                <Spinner
+                    android:id="@+id/spnPrinterBrand"
+                    style="@style/forms_spinner_default"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:dropDownVerticalOffset="@dimen/spinner_dropdown_offset"
+                    android:entries="@array/array_printer_brand"
+                    android:spinnerMode="dropdown" />
+
+                <com.mahak.order.widget.FontCheckBox
+                    android:id="@+id/chkTemplate2"
+                    style="@style/forms_checkbox_default"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/str_setting_template2" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llPrinterSize"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/setting_line_separator" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/setting_title_bar_bg"
+                    android:padding="@dimen/NormalSize"
+                    android:text="@string/str_setting_printer_width_size" />
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/setting_line_separator" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/LargeSize"
+                    android:paddingLeft="@dimen/LargeSize"
+                    android:paddingRight="@dimen/LargeSize"
+                    android:paddingTop="@dimen/NormalSize">
+
+                    <com.mahak.order.widget.FontTextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/mm"
+                        android:layout_weight="1" />
+
+                    <com.mahak.order.widget.FontEditText
+                        android:id="@+id/PrinterSize"
+                        style="@style/forms_edittext_default"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:digits="0123456789"
+                        android:hint="@string/print_width"
+                        android:inputType="number"
+                        android:layout_weight="1" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <com.mahak.order.widget.FontTextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bar_bg"
+                android:padding="@dimen/NormalSize"
+                android:text="@string/select_language" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/LargeSize"
+                android:paddingLeft="@dimen/LargeSize"
+                android:paddingRight="@dimen/LargeSize"
+                android:paddingTop="@dimen/NormalSize">
+
+                <RadioButton
+                    android:id="@+id/persian"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/persian"
+                    android:textSize="11sp"
+                    android:layout_margin="@dimen/SmallSize" />
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="fill_parent"
+                    android:background="@color/setting_line_separator" />
+
+                <RadioButton
+                    android:id="@+id/deutsch"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/deutsch"
+                    android:textSize="12sp"
+                    android:layout_margin="@dimen/SmallSize" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <com.mahak.order.widget.FontTextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bar_bg"
+                android:padding="@dimen/NormalSize"
+                android:text="@string/str_setting_printer_font_size" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/LargeSize"
+                android:paddingLeft="@dimen/LargeSize"
+                android:paddingRight="@dimen/LargeSize"
+                android:paddingTop="@dimen/NormalSize">
+
+                <RadioButton
+                    android:id="@+id/small"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/small"
+                    android:textSize="11sp"
+                    android:layout_margin="@dimen/SmallSize" />
+
+                <RadioButton
+                    android:id="@+id/medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/medium"
+                    android:textSize="12sp"
+                    android:layout_margin="@dimen/SmallSize" />
+
+                <RadioButton
+                    android:id="@+id/large"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/large"
+                    android:textSize="13sp"
+                    android:layout_margin="@dimen/SmallSize" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <com.mahak.order.widget.FontTextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bar_bg"
+                android:padding="@dimen/NormalSize"
+                android:text="@string/str_setting_factor_detail" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/NormalSize">
+
+                <com.mahak.order.widget.FontCheckBox
+                    android:id="@+id/chkShowSign"
+                    style="@style/forms_checkbox_default"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="@string/str_setting_sign" />
+
+                <com.mahak.order.widget.FontCheckBox
+                    android:id="@+id/chkShowBelow"
+                    android:layout_weight="1"
+                    style="@style/forms_checkbox_default"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/str_setting_under_sum" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+
+            <com.mahak.order.widget.FontTextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bar_bg"
+                android:padding="@dimen/NormalSize"
+                android:text="@string/str_setting_folder_picture" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/LargeSize"
+                android:paddingLeft="@dimen/LargeSize"
+                android:paddingRight="@dimen/LargeSize"
+                android:paddingTop="@dimen/NormalSize">
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tvFolderPictures"
+                    style="@style/forms_edittext_default"
+                    android:layout_width="match_parent"
+                    android:text="@string/str_select_folder"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

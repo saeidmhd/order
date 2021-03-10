@@ -1,0 +1,124 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/default_light_form_bg"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="com.mahak.order.LoginActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:paddingTop="@dimen/VeryVeryLargeSize">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/LargeSize"
+                android:src="@drawable/img_navigation_drawer_logo" />
+
+            <LinearLayout
+                android:layout_width="340dip"
+                android:layout_height="wrap_content"
+                android:background="@drawable/panel_bg"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/primary"
+                    android:gravity="center|center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingRight="@dimen/NormalSize">
+
+                    <com.mahak.order.widget.FontTextView
+                        style="@style/forms_page_title_label_default"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/str_login_to_system"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/LargeSize">
+
+                    <com.mahak.order.widget.FontTextView
+                        android:id="@+id/tvUsername"
+                        style="@style/forms_label_default"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/SmallSize"
+                        android:gravity="left"
+                        android:text="@string/str_username_fa" />
+
+                    <com.mahak.order.widget.FontEditText
+                        android:id="@+id/txtUsername"
+                        style="@style/forms_edittext_default"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits="abcdefghijklmnopqrstuvwxyz1234567890._-@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:drawableRight="@drawable/ic_user_set_forms"
+                        android:gravity="center"
+                        android:singleLine="true" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/NormalSize" />
+
+                    <com.mahak.order.widget.FontTextView
+                        android:id="@+id/tvPassword"
+                        style="@style/forms_label_default"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/SmallSize"
+                        android:gravity="left"
+                        android:text="@string/str_password_fa" />
+
+                    <com.mahak.order.widget.FontEditText
+                        android:id="@+id/txtPassword"
+                        style="@style/forms_edittext_default"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits="abcdefghijklmnopqrstuvwxyz1234567890._-@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:drawableRight="@drawable/ic_unlock_set_forms"
+                        android:gravity="center"
+                        android:inputType="textPassword"
+                        android:singleLine="true" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/LargeSize" />
+
+                    <com.mahak.order.widget.FontButtonView
+                        android:id="@+id/btnLogin"
+                        style="@style/forms_btn_highlight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/NormalSize"
+                        android:text="@string/str_login" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <include
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/footer_mahak" />
+
+</LinearLayout>

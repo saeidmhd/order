@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/llitem"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/NormalSize"
+        android:orientation="horizontal">
+
+        <com.mahak.order.widget.FontTextView
+            style="@style/forms_label_default"
+            android:id="@+id/tvTaxValue"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="left|center"
+            android:maxLines="2"
+            android:text="@string/sample_product" />
+
+        <com.mahak.order.widget.FontTextView
+            style="@style/forms_label_default"
+            android:id="@+id/tvPriceValue"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="right|center"
+            android:text="@string/sample_number" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

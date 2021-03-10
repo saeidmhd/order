@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_dark">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/llVersion"
+        android:fadingEdge="none"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/NormalSize"
+                android:layout_marginTop="@dimen/NormalSize"
+                android:src="@drawable/img_page_title_mahak_en" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark" />
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/btnNavProductList"
+                style="@style/nav_item_default"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
+                android:text="@string/str_nav_product_list" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark" />
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/btnNavCustomerList"
+                style="@style/nav_item_default"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
+                android:text="@string/str_nav_customer_list" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark" />
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/btnNavReceiptList"
+                style="@style/nav_item_default"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
+                android:text="@string/str_nav_receipt_list" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark"
+                android:visibility="visible" />
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/btnNavPayableList"
+                style="@style/nav_item_default"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
+                android:text="@string/str_nav_payable_list"
+                android:visibility="visible" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark"
+                android:visibility="visible" />
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/btnNavTransferList"
+                style="@style/nav_item_default"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
+                android:text="@string/str_transfer_list"
+                android:visibility="visible" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark" />
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/btnNavOrderList"
+                style="@style/nav_item_default"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
+                android:text="@string/str_nav_order_list" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark" />
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/btnNavInvoiceList"
+                style="@style/nav_item_default"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
+                android:text="@string/str_nav_invoice_list" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark" />
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/btnNavReturnOfSale"
+                style="@style/nav_item_default"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
+                android:text="@string/str_nav_returnOfSale_list" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark" />
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/btnNavDeliveryOrderList"
+                style="@style/nav_item_default"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
+                android:text="@string/str_nav_delivery_list" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark" />
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/btnNavPromotionList"
+                style="@style/nav_item_default"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
+                android:text="@string/str_nav_promotion_list" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark" />
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/btnNavNonRegister"
+                style="@style/nav_item_default"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
+                android:text="@string/str_nav_Non_register" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark" />
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/btnNavDataSync"
+                style="@style/nav_item_default"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
+                android:text="@string/str_nav_data_sync" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark" />
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/btnNavReportsList"
+                style="@style/nav_item_default"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
+                android:text="@string/str_nav_reports_list" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark" />
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/btn‌Backup"
+                style="@style/nav_item_default"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
+                android:text="@string/str_backup" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark" />
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/btnWhatsNew‌"
+                style="@style/nav_item_default"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
+                android:text="@string/recent_changes" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark" />
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/btnNavContact"
+                style="@style/nav_item_default"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
+                android:text="@string/str_nav_contact" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark" />
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/btnNavAbout"
+                style="@style/nav_item_default"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
+                android:text="@string/str_nav_about" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/llVersion"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/tvVersion"
+            style="@style/forms_label_default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/NormalSize"
+            android:textColor="@android:color/white" />
+
+        <com.mahak.order.widget.FontTextView
+            style="@style/forms_label_default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_nav_version"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+</RelativeLayout>
