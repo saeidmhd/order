@@ -303,7 +303,7 @@ public class OrderDetailActivity extends BaseActivity {
         long TransferStoreDetailClientId = ServiceTools.toLong(ServiceTools.getGenerationCode());
 
         setAllDataBody.setUserToken(user.getUserToken());
-        apiService = ApiClient.getClient().create(ApiInterface.class);
+        apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
 
         final List<Order> arrayInvoice;
         final List<OrderDetail> arrayInvoiceDetail;

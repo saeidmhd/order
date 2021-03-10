@@ -11,7 +11,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="com.mahak.order.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -43,7 +42,6 @@
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.hardware.usb.host" />
 
@@ -216,7 +214,6 @@
         <!-- android:screenOrientation="portrait" -->
         <!-- android:windowSoftInputMode="stateHidden" > -->
         <!-- </activity> -->
-
         <activity
             android:name=".DeliveryOrdersListActivity"
             android:screenOrientation="portrait"
@@ -349,25 +346,6 @@
         <activity
             android:name=".MapViewActivity"
             android:label="@string/title_activity_map_view" />
-
-        <!-- Gps Awake Service -->
-        <receiver android:name=".gpsTracking.OnBootReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".gpsTracking.OnAlarmReceiver" />
-
-        <service android:name=".gpsTracking.GpsTrackingService" />
-
-        <receiver android:name=".gpsTracking.NotificationReceiver">
-            <intent-filter>
-                <action android:name="actionYes" />
-                <action android:name="actionNo" />
-                <action android:name="actionStop" />
-                <action android:name="actionPause" />
-            </intent-filter>
-        </receiver>
 
         <activity
             android:name=".baby380_koohii_printer.PrintDemo"
@@ -536,6 +514,12 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${mapsApiKey}" />
+
+        <service
+            android:name=".tracking.LocationService"
+            android:enabled="true"
+            android:exported="true"
+            android:foregroundServiceType="location"/>
 
     </application>
 

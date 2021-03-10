@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -79,8 +78,6 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -1491,7 +1488,7 @@ public class ProductsListActivity extends BaseActivity {
         loginBody.setUserName(user.getUsername());
         loginBody.setPassword(user.getPassword());
 
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
         Call<LoginResult> call = apiService.Login(loginBody);
         pd = new FontProgressDialog(mContext);
         pd.setMessage(getString(R.string.reviewing_user_info));
@@ -1576,7 +1573,7 @@ public class ProductsListActivity extends BaseActivity {
 
             final String[] mMsg = {""};
 
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
             Call<GetDataResult> getDataResultCall;
             getDataResultCall = apiService.GetAllData(getAllDataBody);
             pd.setMessage(getString(R.string.recieiving_info));

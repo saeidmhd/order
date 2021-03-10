@@ -24,11 +24,10 @@ import com.mahak.order.common.Category;
 import com.mahak.order.common.CheckList;
 import com.mahak.order.common.Cheque;
 import com.mahak.order.common.CityZone_Extra_Data;
-import com.mahak.order.common.Config;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.CustomerGroup;
 import com.mahak.order.common.ExtraData;
-import com.mahak.order.common.GpsPoint;
+import com.mahak.order.common.VisitorLocation;
 import com.mahak.order.common.GroupedTax;
 import com.mahak.order.common.NonRegister;
 import com.mahak.order.common.Notification;
@@ -42,7 +41,6 @@ import com.mahak.order.common.Product;
 import com.mahak.order.common.ProductCategory;
 import com.mahak.order.common.ProductDetail;
 import com.mahak.order.common.ProductGroup;
-import com.mahak.order.common.ProductInDeliveryOrder;
 import com.mahak.order.common.ProductPriceLevelName;
 import com.mahak.order.common.Product_Extra_Data;
 import com.mahak.order.common.ProjectInfo;
@@ -68,7 +66,6 @@ import com.mahak.order.common.User;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.common.VisitorPeople;
 import com.mahak.order.common.VisitorProduct;
-import com.mahak.order.fragment.RecyclerProductAdapter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -1184,15 +1181,27 @@ public class DbAdapter {
         }
     }
 
-    public long AddGpsTracking(GpsPoint gpsPoint) {
-
-        ContentValues initialvalue = new ContentValues();
-        initialvalue.put(DbSchema.GpsTrackingSchema.COLUMN_DATE, gpsPoint.getDate());
-        initialvalue.put(DbSchema.GpsTrackingSchema.COLUMN_LATITUDE, gpsPoint.getLatitude());
-        initialvalue.put(DbSchema.GpsTrackingSchema.COLUMN_LONGITUDE, gpsPoint.getLongitude());
-        initialvalue.put(DbSchema.GpsTrackingSchema.COLUMN_IS_SEND, gpsPoint.isSend() ? 1 : 0);
-        initialvalue.put(DbSchema.GpsTrackingSchema.COLUMN_USER_ID, gpsPoint.getVisitorId());
-        return mDb.insert(DbSchema.GpsTrackingSchema.TABLE_NAME, null, initialvalue);
+    public boolean AddGpsTracking(List<VisitorLocation> VisitorLocations) {
+        boolean result = false;
+        mDb.beginTransaction();
+        try {
+            ContentValues initialvalue = new ContentValues();
+            for (VisitorLocation visitorLocation : VisitorLocations) {
+                initialvalue.put(DbSchema.VisitorLocationSchema.COLUMN_Create_DATE, visitorLocation.getCreateDate());
+                initialvalue.put(DbSchema.VisitorLocationSchema.COLUMN_DATE, visitorLocation.getDate());
+                initialvalue.put(DbSchema.VisitorLocationSchema.COLUMN_LATITUDE, visitorLocation.getLatitude());
+                initialvalue.put(DbSchema.VisitorLocationSchema.COLUMN_uniqueID, visitorLocation.getUniqueID());
+                initialvalue.put(DbSchema.VisitorLocationSchema.COLUMN_VisitorLocationId, visitorLocation.getVisitorLocationId());
+                initialvalue.put(DbSchema.VisitorLocationSchema.COLUMN_RowVersion, visitorLocation.getRowVersion());
+                initialvalue.put(DbSchema.VisitorLocationSchema.COLUMN_LONGITUDE, visitorLocation.getLongitude());
+                initialvalue.put(DbSchema.VisitorLocationSchema.COLUMN_VISITOR_ID, visitorLocation.getVisitorId());
+                result =  mDb.insert(DbSchema.VisitorLocationSchema.TABLE_NAME, null, initialvalue) > 0;
+            }
+            mDb.setTransactionSuccessful();
+        } finally {
+            mDb.endTransaction();
+        }
+        return result;
     }
 
     public long AddNotification(Notification notification) {
@@ -4059,16 +4068,18 @@ public class DbAdapter {
         return picturesProduct;
     }
 
-    private GpsPoint getGpsPointFromCursor(Cursor cursor) {
-        GpsPoint gpsPoint = new GpsPoint();
-        gpsPoint.setDate(cursor.getLong(cursor.getColumnIndex(DbSchema.GpsTrackingSchema.COLUMN_DATE)));
-        gpsPoint.setLatitude(cursor.getString(cursor.getColumnIndex(DbSchema.GpsTrackingSchema.COLUMN_LATITUDE)));
-        gpsPoint.setLongitude(cursor.getString(cursor.getColumnIndex(DbSchema.GpsTrackingSchema.COLUMN_LONGITUDE)));
-        gpsPoint.setSend(cursor.getInt(cursor.getColumnIndex(DbSchema.GpsTrackingSchema.COLUMN_IS_SEND)) == 1);
-        gpsPoint.setVisitorId(cursor.getLong(cursor.getColumnIndex(DbSchema.GpsTrackingSchema.COLUMN_USER_ID)));
-        return gpsPoint;
+    private VisitorLocation getGpsPointFromCursor(Cursor cursor) {
+        VisitorLocation visitorLocation = new VisitorLocation();
+        visitorLocation.setCreateDate(cursor.getLong(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_Create_DATE)));
+        visitorLocation.setDate(cursor.getLong(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_DATE)));
+        visitorLocation.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_LATITUDE)));
+        visitorLocation.setUniqueID(cursor.getString(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_uniqueID)));
+        visitorLocation.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_LONGITUDE)));
+        visitorLocation.setVisitorLocationId(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_VisitorLocationId)));
+        visitorLocation.setRowVersion(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_RowVersion)));
+        visitorLocation.setVisitorId(cursor.getLong(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_VISITOR_ID)));
+        return visitorLocation;
     }
-
     public int getMax(String tablename, String column) {
         Cursor cursor;
         int Maxid = 0;
@@ -7537,17 +7548,39 @@ public class DbAdapter {
         return array;
     }
 
-    public List<LatLng> getAllLatLngPointsFromDate(long date, long userId) {
+
+    public List<VisitorLocation> getAllGpsPointsWithLimit(int index, int limit) {
         Cursor cursor;
-        ArrayList<LatLng> array = new ArrayList<>();
+        ArrayList<VisitorLocation> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("Select * from " + DbSchema.GpsTrackingSchema.TABLE_NAME + " Where date >=? and userId=?", new String[]{String.valueOf(date), String.valueOf(userId)});
+            cursor = mDb.rawQuery("Select * from " + DbSchema.VisitorLocationSchema.TABLE_NAME + " Where " + DbSchema.VisitorLocationSchema.COLUMN_VisitorLocationId + "= 0 order by Date Limit " + index + "," + limit, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    GpsPoint gpsPoint = getGpsPointFromCursor(cursor);
-                    if (gpsPoint != null)
-                        array.add(new LatLng(ServiceTools.RegulartoDouble(gpsPoint.getLatitude()), ServiceTools.RegulartoDouble(gpsPoint.getLongitude())));
+                    VisitorLocation visitorLocation = getGpsPointFromCursor(cursor);
+                    array.add(visitorLocation);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            Log.e("ErrAllGpsPoisLimi", e.getMessage());
+        }
+        return array;
+    }
+
+    public List<LatLng> getAllLatLngPointsFromDate(long date, long visitorId) {
+        Cursor cursor;
+        ArrayList<LatLng> array = new ArrayList<>();
+        try {
+            cursor = mDb.rawQuery("Select * from " + DbSchema.VisitorLocationSchema.TABLE_NAME + " Where Date >=? and VisitorId=?", new String[]{String.valueOf(date), String.valueOf(visitorId)});
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    VisitorLocation visitorLocation = getGpsPointFromCursor(cursor);
+                    if (visitorLocation != null)
+                        array.add(new LatLng(visitorLocation.getLatitude(), visitorLocation.getLongitude()));
                     cursor.moveToNext();
                 }
                 cursor.close();
@@ -7559,51 +7592,23 @@ public class DbAdapter {
 
         return array;
     }
-
-    public List<GpsPoint> getAllGpsPointsWithLimit(int index, int limit) {
+    public List<VisitorLocation> getAllGpsPointsForSending() {
         Cursor cursor;
-        ArrayList<GpsPoint> array = new ArrayList<>();
+        ArrayList<VisitorLocation> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("Select * from " + DbSchema.GpsTrackingSchema.TABLE_NAME + " Where " + DbSchema.GpsTrackingSchema.COLUMN_IS_SEND + "=0 order by date Limit " + index + "," + limit, null);
+            cursor = mDb.rawQuery("Select * from " + DbSchema.VisitorLocationSchema.TABLE_NAME + " Where VisitorId =? and VisitorLocationId =?", new String[]{String.valueOf(BaseActivity.getPrefUserMasterId()), String.valueOf(0)});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    GpsPoint gpsPoint = getGpsPointFromCursor(cursor);
-                    if (gpsPoint != null)
-                        array.add(gpsPoint);
+                    VisitorLocation visitorLocation = getGpsPointFromCursor(cursor);
+                    if (visitorLocation != null)
+                        array.add(visitorLocation);
                     cursor.moveToNext();
                 }
                 cursor.close();
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrAllGpsPoisLimi", e.getMessage());
-        }
-
-        return array;
-    }
-
-    public List<GpsPoint> getAllGpsPointsFromDate(long date, long userId) {
-        Cursor cursor;
-        ArrayList<GpsPoint> array = new ArrayList<>();
-        try {
-            cursor = mDb.rawQuery("Select * from " + DbSchema.GpsTrackingSchema.TABLE_NAME + " Where date >=? and userId=?", new String[]{String.valueOf(date), String.valueOf(userId)});
-            if (cursor != null) {
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    GpsPoint gpsPoint = getGpsPointFromCursor(cursor);
-                    if (gpsPoint != null)
-                        array.add(gpsPoint);
-                    cursor.moveToNext();
-                }
-                cursor.close();
-            }
-
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-            FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAlGpsPoinFroDate", e.getMessage());
         }
 
@@ -9472,13 +9477,18 @@ public class DbAdapter {
         return result;
     }
 
-    public void updateGpsTrackingForSending(long date) {
+    public void updateGpsTrackingForSending(VisitorLocation visitorLocation) {
         ContentValues values = new ContentValues();
-        values.put(DbSchema.GpsTrackingSchema.COLUMN_IS_SEND, 1);
-        mDb.update(DbSchema.GpsTrackingSchema.TABLE_NAME, values, DbSchema.GpsTrackingSchema.COLUMN_DATE + "=?", new String[]{String.valueOf(date)});
-
+        values.put(DbSchema.VisitorLocationSchema.COLUMN_Create_DATE, visitorLocation.getCreateDate());
+        values.put(DbSchema.VisitorLocationSchema.COLUMN_DATE, visitorLocation.getDate());
+        values.put(DbSchema.VisitorLocationSchema.COLUMN_LATITUDE, visitorLocation.getLatitude());
+        values.put(DbSchema.VisitorLocationSchema.COLUMN_uniqueID, visitorLocation.getUniqueID());
+        values.put(DbSchema.VisitorLocationSchema.COLUMN_LONGITUDE, visitorLocation.getLongitude());
+        values.put(DbSchema.VisitorLocationSchema.COLUMN_VisitorLocationId, visitorLocation.getVisitorLocationId());
+        values.put(DbSchema.VisitorLocationSchema.COLUMN_RowVersion, visitorLocation.getRowVersion());
+        values.put(DbSchema.VisitorLocationSchema.COLUMN_VISITOR_ID, visitorLocation.getVisitorId());
+        mDb.update(DbSchema.VisitorLocationSchema.TABLE_NAME, values, DbSchema.VisitorLocationSchema.COLUMN_uniqueID + "=?", new String[]{visitorLocation.getUniqueID()});
     }
-
     public boolean DeleteOrderDetailProperty(long id) {
         return (mDb.delete(DbSchema.OrderDetailPropertySchema.TABLE_NAME, DbSchema.OrderDetailPropertySchema.COLUMN_OrderId + "=?", new String[]{String.valueOf(id)})) > 0;
     }
@@ -9563,9 +9573,8 @@ public class DbAdapter {
     }
 
     public boolean DeleteGpsTrackingToDateSending(long date) {
-        return (mDb.delete(DbSchema.GpsTrackingSchema.TABLE_NAME, DbSchema.GpsTrackingSchema.COLUMN_DATE + "<? and " + DbSchema.GpsTrackingSchema.COLUMN_IS_SEND + " = 1 ", new String[]{String.valueOf(date)})) > 0;
+        return (mDb.delete(DbSchema.VisitorLocationSchema.TABLE_NAME, DbSchema.VisitorLocationSchema.COLUMN_DATE + "<? " , new String[]{String.valueOf(date)})) > 0;
     }
-
     public boolean DeletePicturesProduct(long pictureId) {
         return (mDb.delete(DbSchema.PicturesProductSchema.TABLE_NAME, DbSchema.PicturesProductSchema.COLUMN_PICTURE_ID + " =? ", new String[]{String.valueOf(pictureId)})) > 0;
     }
@@ -9718,7 +9727,7 @@ public class DbAdapter {
 
                 if (oldVersion < 3) {
                     db.execSQL(DbSchema.PicturesProductSchema.CREATE_TABLE);
-                    db.execSQL(DbSchema.GpsTrackingSchema.CREATE_TABLE);
+                    db.execSQL(DbSchema.VisitorLocationSchema.CREATE_TABLE);
                 }
                 if (oldVersion < 4) {
                     db.execSQL(DbSchema.NotificationSchema.CREATE_TABLE);

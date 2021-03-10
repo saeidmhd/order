@@ -1064,31 +1064,27 @@ public class DbSchema {
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
-    public static final class GpsTrackingSchema implements BaseColumns {
-        public static final String TABLE_NAME = "GpsTracking";
-        public static final String COLUMN_DATE = "date";
+    public static final class VisitorLocationSchema implements BaseColumns {
+
+        public static final String TABLE_NAME = "VisitorLocation";
+        public static final String COLUMN_uniqueID = "uniqueID";
+        public static final String COLUMN_Create_DATE = "CreateDate";
+        public static final String COLUMN_DATE = "Date";
         public static final String COLUMN_LATITUDE = "latitude";
         public static final String COLUMN_LONGITUDE = "longitude";
         public static final String COLUMN_IS_SEND = "isSend";
-        public static final String COLUMN_USER_ID = "UserId";
+        public static final String COLUMN_VISITOR_ID = "VisitorId";
         public static final String COLUMN_VisitorLocationId = "VisitorLocationId";
-        public static final String COLUMN_VisitorLocationClientId = "VisitorLocationClientId";
-        public static final String COLUMN_VisitorId = "VisitorId";
-
-
-        /*[VisitorLocationId] [int] IDENTITY(1,1) NOT NULL,
-	[VisitorId] [int] NOT NULL,
-	[SkipCount] [int] NOT NULL,
-	[CreateDate] [datetime2](7) NOT NULL,
-	[CreateSyncId] [int] NOT NULL,
-	[RowVersion] [timestamp] NULL,*/
+        public static final String COLUMN_RowVersion = "RowVersion";
+        public static final String COLUMN_skipCount = "skipCount";
+        public static final String COLUMN_CreateSyncId = "CreateSyncId";
 
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID + " INTEGER PRIMARY KEY," +
-                COLUMN_DATE + " INTEGER ," +
+                COLUMN_Create_DATE + " INTEGER ," +
                 COLUMN_LONGITUDE + " TEXT ," +
                 COLUMN_LATITUDE + " TEXT ," +
-                COLUMN_USER_ID + " INTEGER ," +
+                COLUMN_VISITOR_ID + " INTEGER ," +
                 COLUMN_IS_SEND + " INTEGER )";
 
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;

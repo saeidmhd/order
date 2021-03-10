@@ -38,8 +38,8 @@ public class BaseActivity extends AppCompatActivity {
     //public static final String BaseUrl ="http://192.168.89.31/mds/sync/" ;
     //public static final String BaseUrl ="http://order.mahaksoft.com:8085/sync/" ;
     //public static final String BaseUrl = "https://bazaraservices.mahaksoft.com/v3/sync/";
-    public static final String BaseUrl = "https://mahakacc.mahaksoft.com/api/v3/sync/";
-    public static final String loginSignalR = "https://tracking.mahaksoft.com/api/";
+    public static final String baseUrl = "https://mahakacc.mahaksoft.com/api/v3/sync/";
+    public static final String baseUrlTracking = "https://tracking.mahaksoft.com/api/";
     //public static final String BaseUrl ="http://bazaraservices.mahaksoft.com:444/sync/" ;
     public static final String baseUrlImage = "https://mahakacc.mahaksoft.com";
     public static String NegotiateToken = "";

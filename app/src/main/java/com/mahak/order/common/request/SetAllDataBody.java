@@ -8,7 +8,7 @@ import com.mahak.order.common.Cheque;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.CustomerGroup;
 import com.mahak.order.common.ExtraData;
-import com.mahak.order.common.GpsPoint;
+import com.mahak.order.common.VisitorLocation;
 import com.mahak.order.common.NonRegister;
 import com.mahak.order.common.Order;
 import com.mahak.order.common.OrderDetail;
@@ -105,7 +105,7 @@ public class SetAllDataBody {
 
     @SerializedName("VisitorLocations")
     @Expose
-    private List<GpsPoint> gpsPoints = new ArrayList<>();
+    private List<VisitorLocation> visitorLocations = new ArrayList<>();
 
 
     public String getUserToken() {
@@ -276,12 +276,12 @@ public class SetAllDataBody {
         this.receivedTransferProducts = receivedTransferProducts;
     }
 
-    public List<GpsPoint> getGpsPoints() {
-        return gpsPoints;
+    public List<VisitorLocation> getVisitorLocations() {
+        return visitorLocations;
     }
 
-    public void setGpsPoints(List<GpsPoint> gpsPoints) {
-        this.gpsPoints = gpsPoints;
+    public void setVisitorLocations(List<VisitorLocation> visitorLocations) {
+        this.visitorLocations = visitorLocations;
     }
 
     public List<VisitorPeople> getVisitorPeople() {

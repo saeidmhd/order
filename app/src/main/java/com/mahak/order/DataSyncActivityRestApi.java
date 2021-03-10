@@ -255,7 +255,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
         loginBody.setUserName(user.getUsername());
         loginBody.setPassword(user.getPassword());
 
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
         Call<LoginResult> call = apiService.Login(loginBody);
         pd = new FontProgressDialog(mContext);
         pd.setMessage(getString(R.string.reviewing_user_info));
@@ -618,7 +618,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
             final String[] mMsg = {""};
 
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
 
             SetAllDataBody setAllDataBody = new SetAllDataBody();
             setAllDataBody.setUserToken(mUserToken);
@@ -808,7 +808,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
             final String[] mMsg = {""};
 
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
             SetAllDataBody setAllDataBody = new SetAllDataBody();
             setAllDataBody.setUserToken(mUserToken);
             setAllDataBody.setPictures(picturesProducts);
@@ -956,7 +956,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
             final String[] mMsg = {""};
 
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
             Call<GetDataResult> getDataResultCall;
             getDataResultCall = apiService.GetAllData(getAllDataBody);
             pbLoading.setVisibility(View.VISIBLE);
@@ -1353,7 +1353,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         long pictureId = db.getPictureIdWithFileName(mFile.getName());
                         RequestBody filePart = RequestBody.create(MediaType.parse("multipart/form-data"), mFile);
                         MultipartBody.Part mpfile = MultipartBody.Part.createFormData("file", mFile.getName(), filePart);
-                        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+                        ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
 
                         Call<setSignImage> mSetSignImageResult = apiService.uploadSignImage(mpfile, pictureId, mFile.getName(), mUserToken);
                         pd.setMessage(getString(R.string.send_image) + mFile.getName());

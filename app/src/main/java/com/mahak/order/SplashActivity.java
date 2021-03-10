@@ -17,10 +17,8 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.SharedPreferencesHelper;
-import com.mahak.order.gpsTracking.GpsTracking;
 import com.mahak.order.libs.ZipManager;
 import com.mahak.order.service.ReadOfflinePicturesProducts;
-import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.webService.RequestSender;
 import com.mahak.order.webService.RunInternetService;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -88,10 +86,6 @@ public class SplashActivity extends BaseActivity {
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(Calendar.HOUR_OF_DAY, 0);
                     calendar.set(Calendar.MINUTE, 0);
-                   /* DbAdapter dba = new DbAdapter(SplashActivity.this);
-                    dba.open();
-                    dba.DeleteGpsTrackingToDateSending(calendar.getTimeInMillis() - 1);
-                    dba.close();*/
                     RefreshPreferenceUser();
                     intent = new Intent(SplashActivity.this, LoginActivityRestApi.class);
                     startActivity(intent);
@@ -117,11 +111,6 @@ public class SplashActivity extends BaseActivity {
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(Calendar.HOUR_OF_DAY, 0);
                     calendar.set(Calendar.MINUTE, 0);
-                 /*   DbAdapter dba = new DbAdapter(SplashActivity.this);
-                    dba.open();
-                    dba.DeleteGpsTrackingToDateSending(calendar.getTimeInMillis() - 1);
-                    dba.close();*/
-
                     BaseActivity.RefreshPreferenceUser();
                     intent = new Intent(SplashActivity.this, LoginActivityRestApi.class);
                 }

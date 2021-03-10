@@ -595,7 +595,7 @@ public class ReturnsListActivity extends BaseActivity {
         loginBody.setUserName(user.getUsername());
         loginBody.setPassword(user.getPassword());
 
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
         Call<LoginResult> call = apiService.Login(loginBody);
         pd = new FontProgressDialog(mContext);
         pd.setMessage(getString(R.string.reviewing_user_info));
@@ -701,7 +701,7 @@ public class ReturnsListActivity extends BaseActivity {
             sendpd.setCancelable(false);
             sendpd.show();
 
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
 
             SetAllDataBody setAllDataBody = new SetAllDataBody();
             setAllDataBody.setUserToken(mUserToken);

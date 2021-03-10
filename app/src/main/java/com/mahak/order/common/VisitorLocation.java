@@ -12,14 +12,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * Created by mostafavi on 7/12/2016.
  * modified by Saeid.mhd@gmail.com
  */
-public class GpsPoint {
+public class VisitorLocation {
 
-    private boolean isSend;
+    private String uniqueID ;
+
+    private long Date;
 
     @SerializedName("VisitorLocationId")
     @Expose
@@ -38,7 +41,7 @@ public class GpsPoint {
     private int skipCount;
     @SerializedName("CreateDate")
     @Expose
-    private String date;
+    private String createDate;
     @SerializedName("CreateSyncId")
     @Expose
     private int createSyncId;
@@ -46,57 +49,27 @@ public class GpsPoint {
     @Expose
     private long rowVersion;
 
-
-    public long getDate() {
-        String pattern = "yyyy-MM-dd'T'HH:mm:ss";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
-        try {
-            Date today = simpleDateFormat.parse(date);
-            return today.getTime();
-        } catch (ParseException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            e.printStackTrace();
-        }
-        return -1;
+    public String getCreateDate() {
+        return createDate;
     }
 
-    public void setDate(long Locationdate) {
-
+    public void setCreateDate(long locationDate) {
         Date today = new Date();
-        today.setTime(Locationdate);
+        today.setTime(locationDate);
         String pattern = "yyyy-MM-dd'T'HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
-        date = simpleDateFormat.format(today);
-
+        createDate = simpleDateFormat.format(today);
     }
 
-    public String getLatitude() {
-        return String.valueOf(latitude);
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = ServiceTools.toFloat(latitude);
-    }
-
-    public String getLongitude() {
-        return String.valueOf(longitude);
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = ServiceTools.toFloat(longitude);
-    }
 
     public JSONObject toJson() {
         JSONObject obj = new JSONObject();
         try {
-            obj.put(ProjectInfo._json_key_date, getDate());
+            obj.put(ProjectInfo._json_key_date, getCreateDate());
             obj.put(ProjectInfo._json_key_latitude, getLatitude());
             obj.put(ProjectInfo._json_key_longitude, getLongitude());
             return obj;
         } catch (JSONException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-            FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
         return null;
@@ -142,11 +115,35 @@ public class GpsPoint {
         this.rowVersion = rowVersion;
     }
 
-    public boolean isSend() {
-        return isSend;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setSend(boolean send) {
-        isSend = send;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getUniqueID() {
+        return uniqueID;
+    }
+
+    public void setUniqueID(String uniqueID) {
+        this.uniqueID = uniqueID;
+    }
+
+    public long getDate() {
+        return Date;
+    }
+
+    public void setDate(long date) {
+        Date = date;
     }
 }
