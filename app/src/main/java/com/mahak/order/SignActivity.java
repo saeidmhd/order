@@ -146,7 +146,7 @@ public class SignActivity extends BaseActivity {
 
     public boolean addJpgSignatureToGallery(Bitmap signature) {
         boolean result = false;
-        FileName = String.format("Signature_%s.jpg", OrderCode);
+        FileName = String.format("Signature_%s.png", OrderCode);
         try {
             File photo = new File(getAlbumStorageDir(DIRECTORY_ORDER_SIGNS), FileName);
             saveBitmapToJPG(signature, photo);
@@ -174,7 +174,7 @@ public class SignActivity extends BaseActivity {
 
     public boolean addSvgSignatureToGallery(String signatureSvg) {
         boolean result = false;
-        FileName = String.format("Signature_%d.jpg", System.currentTimeMillis());
+        FileName = String.format("Signature_%d.png", System.currentTimeMillis());
         try {
             File svgFile = new File(getAlbumStorageDir(DIRECTORY_ORDER_SIGNS), FileName);
             OutputStream stream = new FileOutputStream(svgFile);

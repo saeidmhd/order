@@ -328,7 +328,7 @@ public class PrintActivity extends BaseActivity {
             orderType = extras.getInt(ProjectInfo._TAG_Order_Type);
         }
 
-        FileName = String.format("Signature_%s.jpg", OrderCode);
+        FileName = String.format("Signature_%s.png", OrderCode);
         bitmapSign = ServiceTools.getSign(FileName);
 
         Display display = getWindowManager().getDefaultDisplay();
