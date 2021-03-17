@@ -52,10 +52,13 @@ import com.mahak.order.common.Setting;
 import com.mahak.order.common.TransactionsLog;
 import com.mahak.order.common.User;
 import com.mahak.order.common.Visitor;
+import com.mahak.order.common.VisitorLocation;
 import com.mahak.order.common.VisitorPeople;
 import com.mahak.order.common.VisitorProduct;
 import com.mahak.order.common.login.LoginBody;
 import com.mahak.order.common.login.LoginResult;
+import com.mahak.order.common.loginSignalr.SignalLoginBody;
+import com.mahak.order.common.loginSignalr.SignalLoginResult;
 import com.mahak.order.common.request.GetAllDataBody;
 import com.mahak.order.common.request.GetAllDataResult.GetDataResult;
 import com.mahak.order.common.request.SetAllDataBody;
@@ -65,6 +68,10 @@ import com.mahak.order.service.DataService;
 import com.mahak.order.service.ReadOfflinePicturesProducts;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.DbSchema;
+import com.mahak.order.tracking.visitorZone.Datum;
+import com.mahak.order.tracking.visitorZone.VisitorZoneLocation;
+import com.mahak.order.tracking.visitorZone.Zone;
+import com.mahak.order.tracking.visitorZone.ZoneBody;
 import com.mahak.order.widget.FontAlertDialog;
 import com.mahak.order.widget.FontProgressDialog;
 
@@ -554,6 +561,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
         List<CheckList> checkLists = new ArrayList<>();
         List<Customer> Customers = new ArrayList<>();
         List<Customer> newCustomers = new ArrayList<>();
+        List<VisitorLocation> visitorLocation = new ArrayList<>();
         String mUserToken;
 
         SendAsyncTask(String UserToken) {
@@ -606,6 +614,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
             Customers.addAll(newCustomers);
             payableTransfers = db.getAllPayableNotPublish(BaseActivity.getPrefUserId());
             checkLists = db.getAllDoneChecklistNotPublish();
+
+            visitorLocation = db.getAllGpsPointsForSending();
+
             return 0;
         }
 
@@ -631,6 +642,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             setAllDataBody.setPeople(Customers);
             setAllDataBody.setPayableTransfers(payableTransfers);
             setAllDataBody.setChecklists(checkLists);
+            setAllDataBody.setVisitorLocations(visitorLocation);
             Call<SaveAllDataResult> saveAllDataResultCall = apiService.SaveAllData(setAllDataBody);
 
             pd.setMessage(getString(R.string.sending_info));
@@ -737,6 +749,15 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             tvSendCustomerList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + newCustomers.size());
                         } else
                             tvSendCustomerList.setText(getString(R.string.str_message_no_need));
+
+
+                        if(visitorLocation.size()>0){
+                            for (int i = 0; i < visitorLocation.size(); i++) {
+                                visitorLocation.get(i).setVisitorLocationId(response.body().getData().getObjects().getVisitorLocations().getResults().get(i).getEntityID());
+                                visitorLocation.get(i).setRowVersion(response.body().getData().getObjects().getVisitorLocations().getResults().get(i).getRowVersion());
+                                db.updateGpsTrackingForSending(visitorLocation.get(i));
+                            }
+                        }
 
                         picturesProducts = db.getAllSignWithoutUrl();
 
@@ -1393,13 +1414,123 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     }
                 }
             }
+            new ReceiveTrackingAsyncTask().execute();
+        }
+    }
 
+
+    class ReceiveTrackingAsyncTask extends AsyncTask<String, String, Integer> {
+
+        long visitorId;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pbLoading.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Integer doInBackground(String... arg0) {
+            visitorId = getPrefUserMasterId();
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            pbLoading.setVisibility(View.GONE);
+            pd = new FontProgressDialog(mContext);
+            final String[] mMsg = {""};
+
+            ZoneBody zoneBody = new ZoneBody();
+            zoneBody.setVisitorId(visitorId);
+            ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
+            pbLoading.setVisibility(View.VISIBLE);
+            pd.setMessage(getString(R.string.recieiving_info));
+            pd.setCancelable(false);
+            pd.show();
+
+            Call<VisitorZoneLocation> call = apiService.GetZoneLocation(zoneBody);
+            call.enqueue(new Callback<VisitorZoneLocation>() {
+                @Override
+                public void onResponse(Call<VisitorZoneLocation> call, Response<VisitorZoneLocation> response) {
+                    if (response.body() != null) {
+                        if (response.body().isSucceeded()) {
+                            pd.dismiss();
+                            List<Datum> data =  response.body().getData();
+                            new SaveTrackingAsyncTask(data).execute();
+                            pbLoading.setVisibility(View.GONE);
+
+                        }else {
+                            if (response.body() != null) {
+                                pd.dismiss();
+                                mMsg[0] = response.body().getMessage();
+                                showDialog(mMsg[0]);
+                                setTextGetErrorResult();
+                                pbLoading.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<VisitorZoneLocation> call, Throwable t) {
+                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                    FirebaseCrashlytics.getInstance().log(t.getMessage());
+                    pd.dismiss();
+                    mMsg[0] = t.toString();
+                    showDialog(mMsg[0]);
+                    setTextGetErrorResult();
+                    pbLoading.setVisibility(View.GONE);
+                }
+            });
+        }
+    }
+
+    class SaveTrackingAsyncTask extends AsyncTask<String, String, Integer> {
+
+        List<Datum> trackingZoneData;
+
+        public SaveTrackingAsyncTask(List<Datum> data){
+            trackingZoneData = data;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pbLoading.setVisibility(View.VISIBLE);
+            pd = new FontProgressDialog(mContext);
+            pd.setMessage(getString(R.string.storing_info));
+            pd.setCancelable(false);
+            pd.show();
+        }
+
+        @Override
+        protected Integer doInBackground(String... arg0) {
+            db.open();
+            if (trackingZoneData != null){
+                if (trackingZoneData.size() > 0){
+                    db.DeleteAllZone();
+                    db.DeleteAllZoneLocation();
+                    for (Datum datum : trackingZoneData){
+                        DataService.InsertZone(db, datum.getZone());
+                        DataService.InsertZoneLocation(db,datum.getZone().getZoneLocations());
+                    }
+                }
+            }
+            db.close();
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
             SetDate();
             ShowDate();
             new ReadOfflinePicturesProducts(mContext).readAllImages();
-
+            pbLoading.setVisibility(View.GONE);
+            pd.dismiss();
         }
+
     }
+
 
     private void SetDate() {
         sh.edit().putLong(_Key_DateSyncInformation, new Date().getTime()).commit();
@@ -1461,6 +1592,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
         if (!isFinishing()) {
             Dialog(msg).show();
         }
+    }
+
+    public void getZoneLocation(Context context) {
+
     }
 
 

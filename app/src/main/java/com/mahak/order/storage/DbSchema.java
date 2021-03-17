@@ -1106,4 +1106,29 @@ public class DbSchema {
         public static final String COLUMN_RowVersion = "RowVersion";
     }
 
+    public static class ZoneSchema implements BaseColumns {
+
+        public static final String TABLE_NAME = "Zone";
+        public static final String COLUMN_zoneId = "zoneId";
+        public static final String COLUMN_visitorId = "visitorId";
+        public static final String COLUMN_title = "title";
+        public static final String COLUMN_createdBy = "createdBy";
+        public static final String COLUMN_created = "created";
+        public static final String COLUMN_lastModifiedBy = "lastModifiedBy";
+        public static final String COLUMN_lastModified = "lastModified";
+    }
+    public static class ZoneLocationSchema implements BaseColumns {
+
+        public static final String TABLE_NAME = "ZoneLocation";
+        public static final String COLUMN_id = "id";
+        public static final String COLUMN_zoneId = "zoneId";
+        public static final String COLUMN_visitorId = "visitorId";
+        public static final String COLUMN_latitude = "latitude";
+        public static final String COLUMN_longitude = "longitude";
+        public static final String COLUMN_createdBy = "createdBy";
+        public static final String COLUMN_created = "created";
+        public static final String COLUMN_lastModifiedBy = "lastModifiedBy";
+        public static final String COLUMN_lastModified = "lastModified";
+    }
+
 }

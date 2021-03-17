@@ -189,8 +189,8 @@ public class Customer {
         this.setZone("");
         this.setTell("");
         this.setMobile("");
-        this.setLatitude("0");
-        this.setLongitude("0");
+        this.setLatitude(0);
+        this.setLongitude(0);
         this.setCredit(0);
         this.setBalance(0);
         this.setPublish(ProjectInfo.DONT_PUBLISH);
@@ -321,14 +321,14 @@ public class Customer {
         Shift = shift;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         if (Latitude != null)
-            return Latitude.toString();
+            return Latitude.doubleValue();
         else
-            return "0.0";
+            return 0;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         try {
             Latitude = new BigDecimal(latitude);
         } catch (Exception e) {
@@ -339,14 +339,14 @@ public class Customer {
 
     }
 
-    public String getLongitude() {
+    public double getLongitude() {
         if (Longitude != null)
-            return Longitude.toString();
+            return Longitude.doubleValue();
         else
-            return "0.0";
+            return 0;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         try {
             Longitude = new BigDecimal(longitude);
         } catch (Exception e) {

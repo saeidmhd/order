@@ -18,6 +18,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.common.Bank;
 import com.mahak.order.common.Category;
@@ -66,6 +68,8 @@ import com.mahak.order.common.User;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.common.VisitorPeople;
 import com.mahak.order.common.VisitorProduct;
+import com.mahak.order.tracking.visitorZone.Zone;
+import com.mahak.order.tracking.visitorZone.ZoneLocation;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -231,6 +235,42 @@ public class DbAdapter {
                     initialvalue.put(DbSchema.Customerschema.COLUMN_Deleted, customer.getDeleted());
                     mDb.insert(DbSchema.Customerschema.TABLE_NAME, null, initialvalue);
             }
+            mDb.setTransactionSuccessful();
+        } finally {
+            mDb.endTransaction();
+        }
+    }
+    public void AddZoneLocation(List<ZoneLocation> data) {
+        mDb.beginTransaction();
+        try {
+            ContentValues initialvalue = new ContentValues();
+            for (ZoneLocation zoneLocation : data) {
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_id, zoneLocation.getId());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_zoneId, zoneLocation.getZoneId());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_latitude, zoneLocation.getLatitude());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_longitude, zoneLocation.getLongitude());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_createdBy, zoneLocation.getCreatedBy());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_created, zoneLocation.getCreated());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_lastModifiedBy, zoneLocation.getLastModifiedBy());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_lastModified, zoneLocation.getLastModified());
+                mDb.insert(DbSchema.ZoneLocationSchema.TABLE_NAME, null, initialvalue);
+            }
+            mDb.setTransactionSuccessful();
+        } finally {
+            mDb.endTransaction();
+        }
+    }
+    public void AddZone(Zone zone) {
+        mDb.beginTransaction();
+        try {
+            ContentValues initialvalue = new ContentValues();
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_zoneId, zone.getId());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_title, zone.getTitle());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_createdBy, zone.getCreatedBy());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_created, zone.getCreated());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_lastModifiedBy, zone.getLastModified());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_lastModified, zone.getLastModifiedBy());
+            mDb.insert(DbSchema.ZoneSchema.TABLE_NAME, null, initialvalue);
             mDb.setTransactionSuccessful();
         } finally {
             mDb.endTransaction();
@@ -1617,8 +1657,8 @@ public class DbAdapter {
                 customer.setZone(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ZONE)));
                 customer.setTell(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PHONE)));
                 customer.setMobile(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MOBILE)));
-                customer.setLatitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
-                customer.setLongitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
+                customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
+                customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
                 customer.setShift(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_SHIFT)));
                 customer.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MODIFYDATE)));
                 customer.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PUBLISH)));
@@ -1702,8 +1742,8 @@ public class DbAdapter {
                 customer.setZone(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ZONE)));
                 customer.setTell(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PHONE)));
                 customer.setMobile(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MOBILE)));
-                customer.setLatitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
-                customer.setLongitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
+                customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
+                customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
                 customer.setShift(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_SHIFT)));
                 customer.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MODIFYDATE)));
                 customer.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PUBLISH)));
@@ -1787,8 +1827,8 @@ public class DbAdapter {
                 customer.setZone(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ZONE)));
                 customer.setTell(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PHONE)));
                 customer.setMobile(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MOBILE)));
-                customer.setLatitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
-                customer.setLongitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
+                customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
+                customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
                 customer.setShift(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_SHIFT)));
                 customer.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MODIFYDATE)));
                 customer.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PUBLISH)));
@@ -2164,8 +2204,8 @@ public class DbAdapter {
         customer.setZone(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ZONE)));
         customer.setTell(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PHONE)));
         customer.setMobile(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MOBILE)));
-        customer.setLatitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
-        customer.setLongitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
+        customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
+        customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
         customer.setShift(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_SHIFT)));
         customer.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MODIFYDATE)));
         customer.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PUBLISH)));
@@ -3200,6 +3240,7 @@ public class DbAdapter {
         return order;
     }
 
+
     public Order GetOrderWithOrderClientId(long clientId) {
         Order order = new Order();
         Cursor cursor;
@@ -3709,6 +3750,30 @@ public class DbAdapter {
         notification.setType(cursor.getString(cursor.getColumnIndex(DbSchema.NotificationSchema.COLUMN_TYPE)));
         notification.setUserId(cursor.getLong(cursor.getColumnIndex(DbSchema.NotificationSchema.COLUMN_USER_ID)));
         return notification;
+    }
+    private Zone getZoneFromCursor(Cursor cursor) {
+        Zone zone;
+        zone = new Zone();
+        zone.setId(cursor.getInt(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_zoneId)));
+        zone.setTitle(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_title)));
+        zone.setCreatedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_createdBy)));
+        zone.setCreated(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_created)));
+        zone.setLastModified(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_lastModifiedBy)));
+        zone.setLastModifiedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_lastModified)));
+        return zone;
+    }
+    private ZoneLocation getZoneLocationFromCursor(Cursor cursor) {
+        ZoneLocation zoneLocation;
+        zoneLocation = new ZoneLocation();
+        zoneLocation.setId(cursor.getInt(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_id)));
+        zoneLocation.setZoneId(cursor.getInt(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_zoneId)));
+        zoneLocation.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_latitude)));
+        zoneLocation.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_longitude)));
+        zoneLocation.setCreatedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_createdBy)));
+        zoneLocation.setCreated(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_created)));
+        zoneLocation.setLastModified(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_lastModifiedBy)));
+        zoneLocation.setLastModifiedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_lastModified)));
+        return zoneLocation;
     }
 
     private TransactionsLog getTransactionslog(long id) {
@@ -5582,6 +5647,53 @@ public class DbAdapter {
         }
         return order;
     }
+    public ArrayList<Zone> getAllZone() {
+        ArrayList<Zone> array = new ArrayList<>();
+        Zone zone = new Zone();
+        Cursor cursor;
+        try {
+            cursor = mDb.query(DbSchema.ZoneSchema.TABLE_NAME, null, null, null, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    zone = getZoneFromCursor(cursor);
+                    array.add(zone);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorGetTransfer", e.getMessage());
+        }
+        return array;
+    }
+
+    public ArrayList<ZoneLocation> getAllZoneLocation(int id) {
+        ArrayList<ZoneLocation> array = new ArrayList<>();
+        ZoneLocation zoneLocation = new ZoneLocation();
+        Cursor cursor;
+        try {
+            cursor = mDb.query(DbSchema.ZoneLocationSchema.TABLE_NAME,null,DbSchema.ZoneLocationSchema.COLUMN_zoneId + " =? ", new String[]{String.valueOf(id)},null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    zoneLocation = getZoneLocationFromCursor(cursor);
+                    array.add(zoneLocation);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorGetTransfer", e.getMessage());
+        }
+        return array;
+    }
 
     private Cursor getAllProductCursor2(long id, String LIMIT, String orderBy ,int asset) {
         return mDb.rawQuery("select * from Products inner join ProductDetail on Products.productId = ProductDetail.productId" +
@@ -6070,7 +6182,7 @@ public class DbAdapter {
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    customer = getCustomer(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ID)));
+                    customer = getCustomerFromCursor(cursor);
                     if (customer != null)
                         array.add(customer);
                     cursor.moveToNext();
@@ -9591,6 +9703,12 @@ public class DbAdapter {
     public boolean DeleteAllNotification() {
         return (mDb.delete(DbSchema.NotificationSchema.TABLE_NAME, null, null)) > 0;
     }
+    public void DeleteAllZoneLocation() {
+        mDb.delete(DbSchema.ZoneLocationSchema.TABLE_NAME, null, null);
+    }
+    public void DeleteAllZone() {
+        mDb.delete(DbSchema.ZoneSchema.TABLE_NAME, null, null);
+    }
 
     public void upgradeDatabase() {
         if (mDb.getVersion() < DbSchema.DATABASE_VERSION) {
@@ -9634,6 +9752,8 @@ public class DbAdapter {
         mDb.delete(DbSchema.CityZoneSchema.TABLE_NAME, null, null);
         mDb.delete(DbSchema.ProductCategorySchema.TABLE_NAME, null, null);
         mDb.delete(DbSchema.CategorySchema.TABLE_NAME, null, null);
+        mDb.delete(DbSchema.ZoneLocationSchema.TABLE_NAME, null, null);
+        mDb.delete(DbSchema.ZoneSchema.TABLE_NAME, null, null);
 
 
         BaseActivity.setPrefAdminControl(0);
