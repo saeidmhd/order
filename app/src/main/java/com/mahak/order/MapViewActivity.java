@@ -68,8 +68,8 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
 
                 new ShowPersonCluster(mMap,context).showPeople();
 
-                /*mapPolygon = new MapPolygon(mMap);
-                mapPolygon.showPolygon();*/
+                mapPolygon = new MapPolygon(mMap,mContext);
+                mapPolygon.showPolygon();
 
                 // Set listener for marker click event.  See the bottom of this class for its behavior.
                 mMap.setOnMarkerClickListener(MapViewActivity.this);
