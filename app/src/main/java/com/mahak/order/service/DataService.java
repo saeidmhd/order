@@ -37,6 +37,8 @@ import com.mahak.order.common.Visitor;
 import com.mahak.order.common.VisitorPeople;
 import com.mahak.order.common.VisitorProduct;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.tracking.visitorZone.Zone;
+import com.mahak.order.tracking.visitorZone.ZoneLocation;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,6 +60,18 @@ public class DataService {
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
+    }
+
+    public static void InsertZone(DbAdapter db, Zone data) {
+        db.open();
+        db.AddZone(data);
+        db.close();
+    }
+
+    public static void InsertZoneLocation(DbAdapter db, List<ZoneLocation> data) {
+        db.open();
+        db.AddZoneLocation(data);
+        db.close();
     }
 
     public static double InsertCustomerGroup(DbAdapter db, List<CustomerGroup> data) {

@@ -1,5 +1,7 @@
 package com.mahak.order.tracking;
 
+import android.content.Context;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Dash;
 import com.google.android.gms.maps.model.Dot;
@@ -8,16 +10,24 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.tracking.visitorZone.Zone;
+import com.mahak.order.tracking.visitorZone.ZoneLocation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class MapPolygon {
 
     GoogleMap mGoogleMap;
+    DbAdapter db;
+    Context mContext;
 
-    public MapPolygon(GoogleMap googleMap){
+    public MapPolygon(GoogleMap googleMap , Context context){
         mGoogleMap = googleMap;
+        mContext = context;
+        db = new DbAdapter(mContext);
     }
 
     private static final int COLOR_WHITE_ARGB = 0xffffffff;
@@ -45,6 +55,8 @@ public class MapPolygon {
     // Create a stroke pattern of a dot followed by a gap, a dash, and another gap.
     private static final List<PatternItem> PATTERN_POLYGON_BETA =
             Arrays.asList(DOT, GAP, DASH, GAP);
+
+
 
     private void stylePolygon(Polygon polygon) {
         String type = "";
@@ -79,16 +91,24 @@ public class MapPolygon {
         polygon.setFillColor(fillColor);
     }
 
-    public void showPolygon(List<LatLng> polygonPoints) {
-        Polygon polygon1 = mGoogleMap.addPolygon(new PolygonOptions()
-                .clickable(true)
-                .addAll(polygonPoints));
-        // Store a data object with the polygon, used here to indicate an arbitrary type.
-        polygon1.setTag("alpha");
-        // [END maps_poly_activity_add_polygon]
-        // Style the polygon.
-        stylePolygon(polygon1);
-    }
+    public void showPolygon() {
+        db.open();
+        ArrayList<Zone> zones = db.getAllZone();
+        for(Zone zone : zones){
+            List<LatLng> polygonPoints = new ArrayList<>();
+            ArrayList<ZoneLocation> zoneLocations = db.getAllZoneLocation(zone.getId());
+            for (ZoneLocation zoneLocation : zoneLocations){
+                polygonPoints.add(new LatLng(zoneLocation.getLatitude(), zoneLocation.getLongitude()));
+            }
+            if(polygonPoints.size()>0){
+                Polygon polygon = mGoogleMap.addPolygon(new PolygonOptions()
+                        .clickable(true)
+                        .addAll(polygonPoints));
+                polygon.setTag("alpha");
+                stylePolygon(polygon);
+            }
 
+        }
+    }
 
 }

@@ -77,6 +77,7 @@ import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.User;
 import com.mahak.order.tracking.LocationService;
 import com.mahak.order.tracking.MapPolygon;
+import com.mahak.order.tracking.ShowPersonCluster;
 import com.mahak.order.tracking.Utils;
 import com.mahak.order.service.ReadOfflinePicturesProducts;
 import com.mahak.order.storage.DbAdapter;
@@ -176,8 +177,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
     private String TrackingState = "";
 
-
-    List<LatLng> polygonPoints;
     MapPolygon mapPolygon;
 
     //------------GCM------------
@@ -662,13 +661,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         loadLastPoint();
 
-        polygonPoints = new ArrayList<>();
-        polygonPoints.add(new LatLng(36.31791351398802, 59.56370892822217));
-        polygonPoints.add(new LatLng(36.317492032148955, 59.56463003240038));
-        polygonPoints.add(new LatLng(36.31529360414832, 59.562320027532266));
-        polygonPoints.add(new LatLng(36.31538388828845, 59.56107070271671));
-
-
         mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
 
         tvSumOfOrders = (TextView) findViewById(R.id.tvSumOfOrders);
@@ -808,11 +800,11 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     item.setLatitude(customer.getLatitude());
                     item.setLongitude(customer.getLongitude());
 
-                    double Latitude = ServiceTools.RegulartoDouble(customer.getLatitude());
-                    double Longitude = ServiceTools.RegulartoDouble(customer.getLongitude());
+                    double Latitude = customer.getLatitude();
+                    double Longitude = customer.getLongitude();
 
                     if (Latitude != 0 && Longitude != 0) {
-                        positions.add(new LatLng(ServiceTools.RegulartoDouble(customer.getLatitude()), ServiceTools.RegulartoDouble(customer.getLongitude())));
+                        positions.add(new LatLng(customer.getLatitude(), customer.getLongitude()));
                     }
                 }
             }
@@ -833,11 +825,11 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 public void onMapReady(GoogleMap googleMap) {
                     if (googleMap != null)
                         mGoogleMap = googleMap;
+                    new ShowPersonCluster(mGoogleMap,mContext).showPeople();
                     showCheckListPositon();
-                    mapPolygon = new MapPolygon(mGoogleMap);
-                    mapPolygon.showPolygon(polygonPoints);
+                    mapPolygon = new MapPolygon(mGoogleMap,mContext);
+                    mapPolygon.showPolygon();
                     initMap();
-
                     if(getLastPoint() != null)
                         showMarkerOnMap(getLastPoint());
 
@@ -857,10 +849,10 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                             locationService = new LocationService(getBaseContext(),DashboardActivity.this);
                         if(location != null){
                             LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
-                            if(checkIfInPolygon(position,polygonPoints))
+                            /*if(checkIfInPolygon(position,polygonPoints))
                                 Toast.makeText(mContext, "IN", Toast.LENGTH_SHORT).show();
                             else
-                                Toast.makeText(mContext, "out", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, "out", Toast.LENGTH_SHORT).show();*/
                             if(saveInDb)
                                 drawLineBetweenPoints(position);
                             showMarkerOnMap(position);
@@ -879,7 +871,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         if (mGoogleMap != null) {
             marker = mGoogleMap.addMarker(new MarkerOptions().position(position));
             marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_visitor_3));
-            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(position.latitude, position.longitude), 18));
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(position.latitude, position.longitude), 15));
         }
     }
 
@@ -969,28 +961,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             locationService = new LocationService(getBaseContext(),DashboardActivity.this);
     }
 
-    private void addCustomerMarkersToMap() {
-
-        mGoogleMap.clear();
-
-        for (Customer customer : customers) {
-
-            if (customer.getOrderCount() > 0) {
-                mGoogleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(ServiceTools.RegulartoDouble(customer.getLatitude()), ServiceTools.RegulartoDouble(customer.getLongitude())))
-                        .title(customer.getName())
-                        .snippet(getString(R.string.order_has_been_registered))
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-            } else {
-                mGoogleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(ServiceTools.RegulartoDouble(customer.getLatitude()), ServiceTools.RegulartoDouble(customer.getLongitude())))
-                        .title(customer.getName())
-                        .snippet(getString(R.string.order_has_not_been_registered))
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            }
-        }
-
-    }
 
     private void refreshCountInformation() {
         if (btnNavCustomerList == null)

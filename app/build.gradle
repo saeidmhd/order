@@ -16,8 +16,8 @@ android {
         applicationId "com.mahak.order"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 3230
-        versionName '3.230'
+        versionCode 3231
+        versionName '3.231'
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

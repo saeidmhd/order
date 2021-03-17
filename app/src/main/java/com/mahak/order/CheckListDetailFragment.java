@@ -121,8 +121,8 @@ public class CheckListDetailFragment extends Fragment {
                 mapFragment.getMapAsync(new OnMapReadyCallback() {
                     @Override
                     public void onMapReady(GoogleMap googleMap) {
-                        Double Latitude = ServiceTools.RegulartoDouble(checklist.getLatitude());
-                        Double Longitude = ServiceTools.RegulartoDouble(checklist.getLongitude());
+                        Double Latitude = checklist.getLatitude();
+                        Double Longitude = checklist.getLongitude();
                         if (Latitude != 0 || Longitude != 0) {
                             LatLng pos = new LatLng(Latitude, Longitude);
                             if (checklist.getName() != null)
