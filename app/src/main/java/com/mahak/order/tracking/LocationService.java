@@ -56,6 +56,7 @@ import com.mahak.order.common.loginSignalr.SignalLoginResult;
 import com.mahak.order.common.request.SetAllDataBody;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.tracking.setting.TrackingSetting;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -82,6 +83,7 @@ public class LocationService extends Service {
     private static long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 1 meters
     // The minimum time between updates in milliseconds
     private static long MIN_TIME_BW_UPDATES = 120000; // 2 min
+    private static int radius = 1; // 2 min
     public Context mContext;
 
     boolean isLogging = false;
@@ -197,7 +199,7 @@ public class LocationService extends Service {
         long time = (System.currentTimeMillis() - obj.optLong(ProjectInfo._json_key_date)) / 1000;
         double mDistanse = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), location.getLatitude(), location.getLongitude(), "K") * 1000;
         double speed = mDistanse / time;//m/s
-        return mDistanse > MIN_DISTANCE_CHANGE_FOR_UPDATES && speed < 42;//42m/s = 150km/h
+        return mDistanse > 1 && speed < 42;//42m/s = 150km/h
     }
 
     private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
@@ -258,6 +260,7 @@ public class LocationService extends Service {
         buildLocationSettingsRequest();
         getLastLocation();
         currentLocation();
+        getSetting(mContext);
     }
 
     public void currentLocation() {
@@ -708,6 +711,7 @@ public class LocationService extends Service {
                 .setContentText(text)
                 .setContentTitle(Utils.getLocationTitle(this))
                 .setOngoing(true)
+                .setSilent(true)
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setTicker(text)
@@ -719,6 +723,73 @@ public class LocationService extends Service {
         }
 
         return builder.build();
+    }
+
+    public Notification showNotificationServiceRun() {
+
+        createNotificationChannel(mContext);
+        String string = mContext.getString(R.string.str_pause);
+        String header = mContext.getString(R.string.str_msg_notification_active_tracking);
+        /*if (isPauseService()) {
+            string = mContext.getString(R.string.str_play);
+            header = mContext.getString(R.string.str_tracking_pause_header);
+        }*/
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext, "default")
+                .setContentText(header);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mBuilder.setSmallIcon(R.drawable.ic_launcher_noti);
+            mBuilder.setColor(mContext.getResources().getColor(R.color.notification_color));
+        } else {
+            mBuilder.setSmallIcon(R.drawable.ic_launcher);
+        }
+
+        mBuilder.setAutoCancel(false);
+        mBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        if (!(BaseActivity.getPrefAdminControl(mContext) == 1 && BaseActivity.getPrefTrackingControl(mContext) == 1)) {
+
+            Intent intent = new Intent();
+            intent.setAction(ProjectInfo._notification_action_stop);
+            intent.setPackage(mContext.getPackageName());
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 12345, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            mBuilder.addAction(0, mContext.getString(R.string.str_stop), pendingIntent);
+
+            intent = new Intent();
+            intent.setAction(ProjectInfo._notification_action_pause);
+            intent.setPackage(mContext.getPackageName());
+            pendingIntent = PendingIntent.getBroadcast(mContext, 12345, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            mBuilder.addAction(0, string, pendingIntent);
+
+        }
+
+        NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+// mId allows you to update the notification later on.
+        Notification notification = mBuilder.build();
+        notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+        if (mNotificationManager != null) {
+            mNotificationManager.notify(ID_NOTIFICATION_TRACKING, notification);
+        }
+
+        return notification;
+
+    }
+
+
+    public void createNotificationChannel(Context context) {
+        if (Build.VERSION.SDK_INT < 26) {
+            return;
+        }
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                "Foreground Service Channel",
+                NotificationManager.IMPORTANCE_HIGH);
+        channel.setDescription("Channel description");
+
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.createNotificationChannel(channel);
     }
 
     private void getLastLocation() {
@@ -832,6 +903,28 @@ public class LocationService extends Service {
             public void onFailure(Call<SignalLoginResult> call, Throwable t) {
                 Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT).show();
                 isLogging = false;
+            }
+        });
+    }
+    public void getSetting(Context context) {
+        ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
+        Call<TrackingSetting> call = apiService.GetTrackingSetting();
+        call.enqueue(new Callback<TrackingSetting>() {
+            @Override
+            public void onResponse(Call<TrackingSetting> call, Response<TrackingSetting> response) {
+                if (response.body() != null) {
+                    if (response.body().isSucceeded()) {
+                        MIN_DISTANCE_CHANGE_FOR_UPDATES = ServiceTools.toLong(response.body().getData().getSendPointsPerMeter());
+                        MIN_TIME_BW_UPDATES = ServiceTools.toLong(response.body().getData().getSendPointsEveryMinute());
+                        radius = ServiceTools.toInt(response.body().getData().getRadius());
+                    }else {
+                        Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<TrackingSetting> call, Throwable t) {
+                Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -42,24 +42,25 @@
             android:orientation="horizontal"
             android:padding="7dp">
 
-
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/btnTrackingService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp" />
 
-
             <com.mahak.order.widget.FontTextView
                 android:id="@+id/tvTrackingService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="3dp"
                 android:gravity="right"
                 android:text="@string/str_tracking_description" />
+            <ImageView
+                android:id="@+id/trackingSetting"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_tracking_setting"/>
         </LinearLayout>
-
 
         <RelativeLayout
             android:layout_width="match_parent"
