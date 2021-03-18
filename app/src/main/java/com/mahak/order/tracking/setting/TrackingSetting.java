@@ -1,25 +1,24 @@
 
 package com.mahak.order.tracking.setting;
 
+import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class TrackingSetting {
 
-    @SerializedName("Result")
-    @Expose
-    private boolean result;
-    @SerializedName("Data")
+    @SerializedName("data")
     @Expose
     private Data data;
-
-    public boolean isResult() {
-        return result;
-    }
-
-    public void setResult(boolean result) {
-        this.result = result;
-    }
+    @SerializedName("succeeded")
+    @Expose
+    private boolean succeeded;
+    @SerializedName("message")
+    @Expose
+    private String message;
+    @SerializedName("errors")
+    @Expose
+    private List<String> errors = null;
 
     public Data getData() {
         return data;
@@ -27,6 +26,30 @@ public class TrackingSetting {
 
     public void setData(Data data) {
         this.data = data;
+    }
+
+    public boolean isSucceeded() {
+        return succeeded;
+    }
+
+    public void setSucceeded(boolean succeeded) {
+        this.succeeded = succeeded;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public List<String> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<String> errors) {
+        this.errors = errors;
     }
 
 }

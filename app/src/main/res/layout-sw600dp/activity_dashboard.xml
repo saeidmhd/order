@@ -32,7 +32,6 @@
                 android:background="@drawable/forms_btn_circle_selector"
                 android:src="@drawable/ic_point_selector" />
 
-
         </RelativeLayout>
 
         <LinearLayout

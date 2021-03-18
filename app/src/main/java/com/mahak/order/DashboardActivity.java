@@ -1279,6 +1279,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                         RefreshPreferenceUser();
                         Intent intent = new Intent(DashboardActivity.this, LoginActivityRestApi.class);
                         startActivity(intent);
+                        setPrefSignalUserToken("");
                         dialog.dismiss();
                         finish();
                     }
