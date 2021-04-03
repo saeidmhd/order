@@ -14,7 +14,10 @@ public class Product_Extra_Data {
     private BigDecimal averagePrice;
 
     public double getLastBuyPrice() {
-        return lastBuyPrice.doubleValue();
+        if (lastBuyPrice != null)
+            return lastBuyPrice.doubleValue();
+        else
+            return 0;
     }
 
     public void setLastBuyPrice(double lastBuyPrice) {
@@ -22,7 +25,10 @@ public class Product_Extra_Data {
     }
 
     public double getAveragePrice() {
-        return averagePrice.doubleValue();
+        if (averagePrice != null)
+            return averagePrice.doubleValue();
+        else
+            return 0;
     }
 
     public void setAveragePrice(double averagePrice) {

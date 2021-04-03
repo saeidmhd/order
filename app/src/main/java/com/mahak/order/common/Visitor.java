@@ -249,7 +249,10 @@ public class Visitor {
     }
 
     public double getChequeCredit() {
-        return ChequeCredit.doubleValue();
+        if (ChequeCredit != null)
+            return ChequeCredit.doubleValue();
+        else
+            return 0;
     }
 
     public void setChequeCredit(double chequeCredit) {
@@ -257,7 +260,10 @@ public class Visitor {
     }
 
     public double getTotalCredit() {
-        return TotalCredit.doubleValue();
+        if (TotalCredit != null)
+            return TotalCredit.doubleValue();
+        else
+            return 0;
     }
 
     public void setTotalCredit(double totalCredit) {

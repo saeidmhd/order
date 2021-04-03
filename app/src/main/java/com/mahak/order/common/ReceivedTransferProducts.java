@@ -157,7 +157,10 @@ public class ReceivedTransferProducts {
     }
 
     public double getCount1() {
-        return count1.doubleValue();
+        if (count1 != null)
+            return count1.doubleValue();
+        else
+            return 0;
     }
 
     public void setCount1(double count) {
@@ -165,7 +168,10 @@ public class ReceivedTransferProducts {
     }
 
     public double getCount2() {
-        return count2.doubleValue();
+        if (count2 != null)
+            return count2.doubleValue();
+        else
+            return 0;
     }
 
     public void setCount2(double count2) {

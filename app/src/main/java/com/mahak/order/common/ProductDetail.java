@@ -381,7 +381,10 @@ public class ProductDetail {
     }
 
     public double getDiscount1() {
-        return discount1.doubleValue();
+        if (discount1 != null)
+            return discount1.doubleValue();
+        else
+            return 0;
     }
 
     public void setDiscount1(double discount1) {
@@ -389,7 +392,10 @@ public class ProductDetail {
     }
 
     public double getDiscount2() {
-        return discount2.doubleValue();
+        if (discount2 != null)
+            return discount2.doubleValue();
+        else
+            return 0;
     }
 
     public void setDiscount2(double discount2) {
@@ -397,7 +403,10 @@ public class ProductDetail {
     }
 
     public double getDiscount3() {
-        return discount3.doubleValue();
+        if (discount3 != null)
+            return discount3.doubleValue();
+        else
+            return 0;
     }
 
     public void setDiscount3(double discount3) {
@@ -405,7 +414,10 @@ public class ProductDetail {
     }
 
     public double getDiscount4() {
-        return discount4.doubleValue();
+        if (discount4 != null)
+            return discount4.doubleValue();
+        else
+            return 0;
     }
 
     public void setDiscount4(double discount4) {

@@ -239,6 +239,18 @@ public class DataSyncActivityRestApi extends BaseActivity {
         });
     }
 
+    private void dismissProgressDialog() {
+        if (pd != null && pd.isShowing()) {
+            pd.dismiss();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        dismissProgressDialog();
+        super.onDestroy();
+    }
+
     public void SendReceive() {
 
         db.open();
@@ -264,7 +276,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
         call.enqueue(new Callback<LoginResult>() {
             @Override
             public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
-                pd.dismiss();
+                dismissProgressDialog();
                 if (response.body() != null) {
                     if (response.body().isResult()) {
                         if (userDatabaseId == response.body().getData().getDatabaseId() && userId == response.body().getData().getVisitorId()) {
@@ -300,20 +312,17 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
-                        pd.dismiss();
+                        dismissProgressDialog();
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResult> call, Throwable t) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                FirebaseCrashlytics.getInstance().log(t.getMessage());
-                pd.dismiss();
                 Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
                 FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
                 FirebaseCrashlytics.getInstance().log(t.getMessage());
-                pd.dismiss();
+                dismissProgressDialog();
             }
         });
     }
@@ -639,7 +648,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             saveAllDataResultCall.enqueue(new Callback<SaveAllDataResult>() {
                 @Override
                 public void onResponse(@NonNull Call<SaveAllDataResult> call, @NonNull Response<SaveAllDataResult> response) {
-                    pd.dismiss();
+                    dismissProgressDialog();
                     if (response.body() != null && response.body().isResult()) {
                         db.open();
                         if (arrayInvoice.size() > 0) {
@@ -754,7 +763,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
                     } else if (response.body() != null) {
                         // mMsg[0] = response.body().getData().getObjects().getOrders().getResults().get(0).getErrors().get(0).getError();
-                        pd.dismiss();
+                        dismissProgressDialog();
                         mMsg[0] = getString(R.string.send_error);
                         showDialog(response.body().getMessage());
                         setTextSendErrorResult();
@@ -766,7 +775,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
                     FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
                     FirebaseCrashlytics.getInstance().log(t.getMessage());
-                    pd.dismiss();
+                    dismissProgressDialog();
                     mMsg[0] = t.toString();
                     showDialog(mMsg[0]);
                     pbLoading.setVisibility(View.GONE);
@@ -820,7 +829,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             saveAllDataResultCall.enqueue(new Callback<SaveAllDataResult>() {
                 @Override
                 public void onResponse(@NonNull Call<SaveAllDataResult> call, @NonNull Response<SaveAllDataResult> response) {
-                    pd.dismiss();
+                    dismissProgressDialog();
                     if (response.body() != null && response.body().isResult()) {
                         db.open();
                         if (picturesProducts.size() > 0) {
@@ -835,7 +844,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
                     } else if (response.body() != null) {
                         // mMsg[0] = response.body().getData().getObjects().getOrders().getResults().get(0).getErrors().get(0).getError();
-                        pd.dismiss();
+                        dismissProgressDialog();
                         mMsg[0] = getString(R.string.send_error);
                         showDialog(response.body().getMessage());
                         setTextSendErrorResult();
@@ -847,7 +856,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
                     FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
                     FirebaseCrashlytics.getInstance().log(t.getMessage());
-                    pd.dismiss();
+                    dismissProgressDialog();
                     mMsg[0] = t.toString();
                     showDialog(mMsg[0]);
                     pbLoading.setVisibility(View.GONE);
@@ -966,7 +975,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             getDataResultCall.enqueue(new Callback<GetDataResult>() {
                 @Override
                 public void onResponse(Call<GetDataResult> call, Response<GetDataResult> response) {
-                    pd.dismiss();
+                    dismissProgressDialog();
                     if (response.body() != null && response.body().isResult()) {
                         if (response.body().getData() != null) {
 
@@ -1007,7 +1016,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         }
                         pbLoading.setVisibility(View.GONE);
                     } else if (response.body() != null) {
-                        pd.dismiss();
+                        dismissProgressDialog();
                         mMsg[0] = response.body().getMessage();
                         showDialog(mMsg[0]);
                         setTextGetErrorResult();
@@ -1019,7 +1028,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 public void onFailure(Call<GetDataResult> call, Throwable t) {
                     FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
                     FirebaseCrashlytics.getInstance().log(t.getMessage());
-                    pd.dismiss();
+                    dismissProgressDialog();
                     mMsg[0] = t.toString();
                     showDialog(mMsg[0]);
                     setTextGetErrorResult();
@@ -1325,7 +1334,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             }
             new SendSignImageAsyncTask(mUserToken).execute();
             pbLoading.setVisibility(View.GONE);
-            pd.dismiss();
+            dismissProgressDialog();
         }
 
     }
@@ -1362,7 +1371,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         mSetSignImageResult.enqueue(new Callback<setSignImage>() {
                             @Override
                             public void onResponse(@NonNull Call<setSignImage> call, @NonNull Response<setSignImage> response) {
-                                pd.dismiss();
+                                dismissProgressDialog();
                                 if (response.body() != null && response.body().getResult()) {
                                     db.open();
                                     PicturesProduct picturesProduct = db.getPictureWithPictureId(response.body().getData().getEntityId());
@@ -1372,7 +1381,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                     pbLoading.setVisibility(View.GONE);
 
                                 } else if (response.body() != null) {
-                                    pd.dismiss();
+                                    dismissProgressDialog();
                                     mMsg[0] = getString(R.string.send_error);
                                     setTextSendErrorResult();
                                     pbLoading.setVisibility(View.GONE);
@@ -1383,7 +1392,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             public void onFailure(Call<setSignImage> call, Throwable t) {
                                 FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
                                 FirebaseCrashlytics.getInstance().log(t.getMessage());
-                                pd.dismiss();
+                                dismissProgressDialog();
                                 mMsg[0] = t.toString();
                                 showDialog(mMsg[0]);
                                 pbLoading.setVisibility(View.GONE);

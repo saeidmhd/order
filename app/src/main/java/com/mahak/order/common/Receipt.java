@@ -162,7 +162,10 @@ public class Receipt {
     }
 
     public double getCashAmount() {
-        return CashAmount.doubleValue();
+        if (CashAmount != null)
+            return CashAmount.doubleValue();
+        else
+            return 0;
     }
 
     public void setDescription(String description) {

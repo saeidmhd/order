@@ -99,7 +99,10 @@ public class Person_Extra_Data {
     }
 
     public double getLastInvoiceAmount() {
-        return lastInvoiceAmount.doubleValue();
+        if(lastInvoiceAmount != null)
+            return lastInvoiceAmount.doubleValue();
+        else
+            return 0;
     }
 
     public void setLastInvoiceAmount(double lastInvoiceAmount) {
@@ -115,7 +118,10 @@ public class Person_Extra_Data {
     }
 
     public double getInvoiceAVGAmount() {
-        return invoiceAVGAmount.doubleValue();
+        if(invoiceAVGAmount != null)
+            return invoiceAVGAmount.doubleValue();
+        else
+            return 0;
     }
 
     public void setInvoiceAVGAmount(double invoiceAVGAmount) {
@@ -123,7 +129,10 @@ public class Person_Extra_Data {
     }
 
     public double getInvoiceAVGDiscount() {
-        return invoiceAVGDiscount.doubleValue();
+        if(invoiceAVGDiscount != null)
+            return invoiceAVGDiscount.doubleValue();
+        else
+            return 0;
     }
 
     public void setInvoiceAVGDiscount(double invoiceAVGDiscount) {
@@ -141,7 +150,9 @@ public class Person_Extra_Data {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 utf8Bytes = storeAddress.getBytes(StandardCharsets.UTF_8);
             }
-            zoneNameStr = new String(utf8Bytes, StandardCharsets.UTF_8);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                zoneNameStr = new String(utf8Bytes, StandardCharsets.UTF_8);
+            }
         }
         return zoneNameStr;
     }
@@ -151,7 +162,10 @@ public class Person_Extra_Data {
     }
 
     public double getAvailableChequeAmount() {
-        return availableChequeAmount.doubleValue();
+        if(availableChequeAmount != null)
+            return availableChequeAmount.doubleValue();
+        else
+            return 0;
     }
 
     public void setAvailableChequeAmount(double availableChequeAmount) {
@@ -167,7 +181,10 @@ public class Person_Extra_Data {
     }
 
     public double getInReceiptChequeAmount() {
-        return inReceiptChequeAmount.doubleValue();
+        if(inReceiptChequeAmount != null)
+            return inReceiptChequeAmount.doubleValue();
+        else
+            return 0;
     }
 
     public void setInReceiptChequeAmount(double inReceiptChequeAmount) {
@@ -183,7 +200,10 @@ public class Person_Extra_Data {
     }
 
     public double getSpentChequeAmount() {
-        return spentChequeAmount.doubleValue();
+        if(spentChequeAmount != null)
+            return spentChequeAmount.doubleValue();
+        else
+            return 0;
     }
 
     public void setSpentChequeAmount(double spentChequeAmount) {
@@ -199,7 +219,10 @@ public class Person_Extra_Data {
     }
 
     public double getReturnChequeAmount() {
-        return returnChequeAmount.doubleValue();
+        if(returnChequeAmount != null)
+            return returnChequeAmount.doubleValue();
+        else
+            return 0;
     }
 
     public void setReturnChequeAmount(double returnChequeAmount) {
