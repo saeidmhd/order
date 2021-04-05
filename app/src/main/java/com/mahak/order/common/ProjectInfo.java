@@ -147,6 +147,10 @@ public class ProjectInfo {
     public static String _json_key_config = "result";
     public static String _json_key_mingps_time_change = "minGpsTimeChange";
     public static String _json_key_mingps_distance_change = "minGpsDistanceChange";
+    public static String _json_key_sendingPointsByAdmin = "sendingPointsByAdmin";
+    public static String _json_key_sendingPoints = "sendingPoints";
+    public static String _json_key_isRestricted = "isRestricted";
+    public static String _json_key_radius = "radius";
     public static String _json_key_banks = "BankNames";
 
     //Action

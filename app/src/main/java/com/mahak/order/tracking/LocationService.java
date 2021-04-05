@@ -176,6 +176,16 @@ public class LocationService extends Service {
     public LocationService(Context context , Activity activity) {
         this.mContext = context;
         this.activity = activity;
+        String config = ServiceTools.getKeyFromSharedPreferences(mContext, ProjectInfo.pre_gps_config);
+        if (!ServiceTools.isNull(config)) {
+            try {
+                JSONObject obj = new JSONObject(config);
+                MIN_DISTANCE_CHANGE_FOR_UPDATES = obj.getLong(ProjectInfo._json_key_mingps_distance_change);
+                MIN_TIME_BW_UPDATES = obj.getLong(ProjectInfo._json_key_mingps_time_change);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private Location getCorrectLocation(Location location) {
@@ -260,7 +270,6 @@ public class LocationService extends Service {
         buildLocationSettingsRequest();
         getLastLocation();
         currentLocation();
-        getSetting(mContext);
     }
 
     public void currentLocation() {
@@ -903,28 +912,6 @@ public class LocationService extends Service {
             public void onFailure(Call<SignalLoginResult> call, Throwable t) {
                 Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT).show();
                 isLogging = false;
-            }
-        });
-    }
-    public void getSetting(Context context) {
-        ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
-        Call<TrackingSetting> call = apiService.GetTrackingSetting();
-        call.enqueue(new Callback<TrackingSetting>() {
-            @Override
-            public void onResponse(Call<TrackingSetting> call, Response<TrackingSetting> response) {
-                if (response.body() != null) {
-                    if (response.body().isSucceeded()) {
-                        MIN_DISTANCE_CHANGE_FOR_UPDATES = ServiceTools.toLong(response.body().getData().getSendPointsPerMeter());
-                        MIN_TIME_BW_UPDATES = ServiceTools.toLong(response.body().getData().getSendPointsEveryMinute());
-                        radius = ServiceTools.toInt(response.body().getData().getRadius());
-                    }else {
-                        Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<TrackingSetting> call, Throwable t) {
-                Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

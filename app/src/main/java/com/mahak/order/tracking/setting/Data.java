@@ -1,6 +1,7 @@
 
 package com.mahak.order.tracking.setting;
 
+import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -24,6 +25,9 @@ public class Data {
     @SerializedName("radius")
     @Expose
     private String radius;
+    @SerializedName("geofencingSetting")
+    @Expose
+    private List<GeofencingSetting> geofencingSetting = null;
 
     public int getId() {
         return id;
@@ -71,6 +75,14 @@ public class Data {
 
     public void setRadius(String radius) {
         this.radius = radius;
+    }
+
+    public List<GeofencingSetting> getGeofencingSetting() {
+        return geofencingSetting;
+    }
+
+    public void setGeofencingSetting(List<GeofencingSetting> geofencingSetting) {
+        this.geofencingSetting = geofencingSetting;
     }
 
 }

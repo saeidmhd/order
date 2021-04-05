@@ -31,6 +31,7 @@ import com.mahak.order.tracking.ShowPersonCluster;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class MapViewActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
@@ -47,6 +48,8 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
     private ClusterManager<ClusterPoint> clusterManager;
     Context context;
     private MapPolygon mapPolygon;
+    private DbAdapter db;
+    private List<LatLng> latLngpoints = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +118,8 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
             });
         }
 
+        loadLastPoint();
+
     }
 
     private void showMarkerOnMap(LatLng position) {
@@ -124,7 +129,7 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
         if (mMap != null) {
             marker = mMap.addMarker(new MarkerOptions().position(position));
             marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_visitor_3));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(position.latitude, position.longitude), 10));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(position.latitude, position.longitude), 15));
         }
     }
 
@@ -155,7 +160,7 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
         polylineOptions.visible(true);
         polyline = mMap.addPolyline(polylineOptions);
         if(polyline != null)
-            polyline.setPoints(DashboardActivity.latLngpoints);
+            polyline.setPoints(latLngpoints);
     }
 
     @Override
@@ -208,6 +213,33 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
             latLng = new LatLng(lastLocation.getLatitude(),lastLocation.getLongitude());
         }
         return latLng;
+    }
+
+    private void loadLastPoint() {
+        new loadingGpsLocation().execute();
+    }
+
+    class loadingGpsLocation extends AsyncTask<String, String, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            if (db == null) db = new DbAdapter(mContext);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            long userId = BaseActivity.getPrefUserMasterId(mContext);
+            db.open();
+            latLngpoints = db.getAllLatLngPointsFromDate(calendar.getTimeInMillis(), userId);
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if(polyline != null)
+                polyline.setPoints(latLngpoints);
+            showMarkerOnMap(getLastPoint());
+        }
     }
 
 

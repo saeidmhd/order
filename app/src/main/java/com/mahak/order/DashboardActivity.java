@@ -70,6 +70,8 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.android.PolyUtil;
+import com.mahak.order.apiHelper.ApiClient;
+import com.mahak.order.apiHelper.ApiInterface;
 import com.mahak.order.common.CheckList;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.ProjectInfo;
@@ -81,18 +83,26 @@ import com.mahak.order.tracking.ShowPersonCluster;
 import com.mahak.order.tracking.Utils;
 import com.mahak.order.service.ReadOfflinePicturesProducts;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.tracking.setting.SettingBody;
+import com.mahak.order.tracking.setting.TrackingSetting;
 import com.mahak.order.widget.FontAlertDialog;
+import com.mahak.order.widget.FontProgressDialog;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DashboardActivity extends BaseActivity implements View.OnClickListener, GoogleMap.OnMarkerClickListener,
         GoogleMap.OnMapClickListener {
@@ -108,6 +118,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     private static final int ACCESS_FINE_LOCATION = 113;
     private static final int ACCESS_COARSE_LOCATION = 114;
     private static final int REQUEST_WRITE_STORAGE = 115;
+    private boolean inZone = false;
     //nav buttons
     private Button
             btnNavProductList,
@@ -134,7 +145,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             btnNavReportsList,
             btnAddNewTransference;
 
-    private ImageButton btnZoomMapView;
+    private ImageButton btnZoomMapView , trackingSetting;
     private TextView
             tvSumOfReceipts,
             tvSumOfOrders,
@@ -226,7 +237,9 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         }
     };
     private boolean isServiceRun = false;
-    public static List<LatLng> latLngpoints = new ArrayList<>();
+    private List<LatLng> latLngpoints = new ArrayList<>();
+    private FontProgressDialog pd;
+    private LatLng lastPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -416,16 +429,47 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         });
         btnAddNewInvoice.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 InvoiceDetailActivity.orderDetails.clear();
                 if (mDrawerLayout.isDrawerOpen(mDrawerLeft))
                     mDrawerLayout.closeDrawers();
-                Type = ProjectInfo.TYPE_INVOCIE;
-                Intent intent = new Intent(mContext, PeopleListActivity.class);
-                intent.putExtra(PAGE, PAGE_ADD_INVOICE);
-                startActivityForResult(intent, REQUEST_CUSTOMER_LIST);
+                if(resticted()){
+                    if(mapPolygon != null)
+                        if(mapPolygon.checkPositionInZone(lastPosition)){
+                            Type = ProjectInfo.TYPE_INVOCIE;
+                            Intent intent = new Intent(mContext, PeopleListActivity.class);
+                            intent.putExtra(PAGE, PAGE_ADD_INVOICE);
+                            startActivityForResult(intent, REQUEST_CUSTOMER_LIST);
+                        }else Toast.makeText(mContext, "خارج از منطقه یا خاموش بودن سامانه ردیابی ! امکان ثبت فاکتور وجود ندارد.", Toast.LENGTH_SHORT).show();
+                }else {
+                    Type = ProjectInfo.TYPE_INVOCIE;
+                    Intent intent = new Intent(mContext, PeopleListActivity.class);
+                    intent.putExtra(PAGE, PAGE_ADD_INVOICE);
+                    startActivityForResult(intent, REQUEST_CUSTOMER_LIST);
+                }
+            }
+        });
+        trackingSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setMessage("دریافت تنظیمات ردیابی ویزیتور");
+                builder.setPositiveButton(R.string.str_yes, new OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        getSetting(mContext);
+                    }
+                });
+                builder.setNegativeButton(R.string.str_cancel, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+
             }
         });
         btnZoomMapView.setOnClickListener(new View.OnClickListener() {
@@ -498,8 +542,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
             }
         });
-
-
         //on receive message from google gcm
         MyGcmListenerService.receiveMessag = new View.OnClickListener() {
             @Override
@@ -517,6 +559,76 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
 
     }//end of onCreate
+
+    public void getSetting(Context context) {
+        ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
+        SettingBody settingBody = new SettingBody();
+        settingBody.setVisitorId(0);
+        Call<TrackingSetting> call = apiService.GetTrackingSetting(getPrefSignalUserToken(),settingBody);
+        pd = new FontProgressDialog(mContext);
+        pd.setMessage("در حال دریافت تنظیمات ردیابی ویزیتور");
+        pd.setCancelable(false);
+        pd.show();
+        call.enqueue(new Callback<TrackingSetting>() {
+            @Override
+            public void onResponse(Call<TrackingSetting> call, Response<TrackingSetting> response) {
+                pd.dismiss();
+                if (response.body() != null) {
+                    if (response.body().isSucceeded()) {
+                        int visitorId = 0;
+                        boolean isRestricted = false;
+
+                        JSONObject gpsData = new JSONObject();
+                        long MIN_DISTANCE_CHANGE_FOR_UPDATES = ServiceTools.toLong(response.body().getData().getSendPointsPerMeter());
+                        long MIN_TIME_BW_UPDATES = ServiceTools.toLong(response.body().getData().getSendPointsEveryMinute());
+                        int radius = ServiceTools.toInt(response.body().getData().getRadius());
+                        boolean sendingPointsByAdmin = response.body().getData().isControlSendingPointsByAdmin();
+                        boolean sendingPoints = response.body().getData().isSendingPoints();
+
+                        if(response.body().getData().getGeofencingSetting() != null)
+                            visitorId = response.body().getData().getGeofencingSetting().get(0).getVisitorId();
+                        if(visitorId == getPrefUserMasterId())
+                            isRestricted = true;
+                        try {
+                            gpsData.put(ProjectInfo._json_key_mingps_distance_change, MIN_DISTANCE_CHANGE_FOR_UPDATES);
+                            gpsData.put(ProjectInfo._json_key_mingps_time_change, MIN_TIME_BW_UPDATES);
+                            gpsData.put(ProjectInfo._json_key_sendingPointsByAdmin, sendingPointsByAdmin);
+                            gpsData.put(ProjectInfo._json_key_sendingPoints, sendingPoints);
+                            gpsData.put(ProjectInfo._json_key_isRestricted, isRestricted);
+                            gpsData.put(ProjectInfo._json_key_radius, radius);
+                            ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_gps_config, gpsData.toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        btnTrackingService.setEnabled(!sendingPointsByAdmin);
+                        Toast.makeText(DashboardActivity.this, "تنظیمات دریافت گردید", Toast.LENGTH_LONG).show();
+
+                    }else {
+                        Toast.makeText(context, response.body().getErrors().get(0).toString(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<TrackingSetting> call, Throwable t) {
+                pd.dismiss();
+                Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public boolean resticted() {
+        boolean isRestricted = false;
+        String config = ServiceTools.getKeyFromSharedPreferences(mContext, ProjectInfo.pre_gps_config);
+        if (!ServiceTools.isNull(config)) {
+            try {
+                JSONObject obj = new JSONObject(config);
+                isRestricted = obj.getBoolean(ProjectInfo._json_key_isRestricted);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return isRestricted;
+    }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -676,6 +788,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnAddNewReceipt = (Button) findViewById(R.id.btnAddNewReceipt);
         btnAddNewTransference = (Button) findViewById(R.id.btnAddNewTransference);
         btnZoomMapView = (ImageButton) findViewById(R.id.btnZoomMapView);
+        trackingSetting = (ImageButton) findViewById(R.id.trackingSetting);
 
         tvSumOfOrders = (TextView) findViewById(R.id.tvSumOfOrders);
         tvTrackingService = (TextView) findViewById(R.id.tvTrackingService);
@@ -834,7 +947,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                         showMarkerOnMap(getLastPoint());
 
                     if(polyline != null)
-                        polyline.setPoints(DashboardActivity.latLngpoints);
+                        polyline.setPoints(latLngpoints);
                 }
             });
         }
@@ -848,14 +961,10 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                         if (locationService == null)
                             locationService = new LocationService(getBaseContext(),DashboardActivity.this);
                         if(location != null){
-                            LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
-                            /*if(checkIfInPolygon(position,polygonPoints))
-                                Toast.makeText(mContext, "IN", Toast.LENGTH_SHORT).show();
-                            else
-                                Toast.makeText(mContext, "out", Toast.LENGTH_SHORT).show();*/
+                            lastPosition = new LatLng(location.getLatitude(), location.getLongitude());
                             if(saveInDb)
-                                drawLineBetweenPoints(position);
-                            showMarkerOnMap(position);
+                                drawLineBetweenPoints(lastPosition);
+                            showMarkerOnMap(lastPosition);
                         }
                     }
                 });

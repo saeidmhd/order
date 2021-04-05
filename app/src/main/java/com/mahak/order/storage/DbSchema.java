@@ -8,6 +8,7 @@ public class DbSchema {
     public static final int DATABASE_VERSION = 7;
 
     public static class Userschema implements BaseColumns {
+
         public static final String TABLE_NAME = "User";
         public static final String COLUMN_ID = "Id";
         public static final String COLUMN_NAME = "Name";
@@ -26,11 +27,28 @@ public class DbSchema {
         public static final String COLUMN_USER_ID = "UserId";
         public static final String COLUMN_UserToken = "UserToken";
 
+        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
+                " (" + COLUMN_ID + " INTEGER PRIMARY KEY ," +
+                COLUMN_NAME + " TEXT," +
+                COLUMN_USERNAME + " TEXT," +
+                COLUMN_PASSWORD + " TEXT," +
+                COLUMN_TYPE + " NUMERIC," +
+                COLUMN_LOGINDATE + " NUMERIC," +
+                COLUMN_MAHAK_ID + " TEXT, " +
+                COLUMN_DATABASE_ID + " TEXT, " +
+                COLUMN_MASTER_ID + " NUMERIC," +
+                COLUMN_MODIFYDATE + " NUMERIC," +
+                COLUMN_PACKAGE_SERIAL + " TEXT," +
+                COLUMN_SYNC_ID + " TEXT, " +
+                COLUMN_DATE_SYNC + " NUMERIC, " +
+                COLUMN_StoreCode + " TEXT, " +
+                COLUMN_USER_ID + " TEXT, " +
+                COLUMN_UserToken + " NUMERIC )";
+
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
     public static class Customerschema implements BaseColumns {
-
 
         public static final String TABLE_NAME = "Customers";
         public static final String COLUMN_ID = "Id";
