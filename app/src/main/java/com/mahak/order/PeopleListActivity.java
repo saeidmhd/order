@@ -47,6 +47,7 @@ import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.CustomerGroup;
+import com.mahak.order.common.Person_Extra_Data;
 import com.mahak.order.common.Printer;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
@@ -422,7 +423,9 @@ public class PeopleListActivity extends BaseActivity {
 
             public void Populate(Customer customer) {
 
-                double amount = customer.getBalance();
+                double amount;
+                Person_Extra_Data person_extra_data =  db.getMoreCustomerInfo(customer.getPersonCode());
+                amount = person_extra_data.getRemainAmount();
 
                 if (amount == 0) {// if customerStatus =	incalculable
                     tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_incalculable));
