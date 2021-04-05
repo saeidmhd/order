@@ -15,10 +15,10 @@ public class TrackingSetting {
     private boolean succeeded;
     @SerializedName("message")
     @Expose
-    private String message;
+    private Object message;
     @SerializedName("errors")
     @Expose
-    private List<String> errors = null;
+    private List<Object> errors = null;
 
     public Data getData() {
         return data;
@@ -36,19 +36,19 @@ public class TrackingSetting {
         this.succeeded = succeeded;
     }
 
-    public String getMessage() {
+    public Object getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(Object message) {
         this.message = message;
     }
 
-    public List<String> getErrors() {
+    public List<Object> getErrors() {
         return errors;
     }
 
-    public void setErrors(List<String> errors) {
+    public void setErrors(List<Object> errors) {
         this.errors = errors;
     }
 

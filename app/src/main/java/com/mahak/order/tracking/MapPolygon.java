@@ -10,6 +10,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.maps.android.PolyUtil;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.tracking.visitorZone.Zone;
 import com.mahak.order.tracking.visitorZone.ZoneLocation;
@@ -91,15 +92,20 @@ public class MapPolygon {
         polygon.setFillColor(fillColor);
     }
 
+    public List<LatLng> getPolygonPoints(Zone zone){
+        List<LatLng> polygonPoints = new ArrayList<>();
+        ArrayList<ZoneLocation> zoneLocations = db.getAllZoneLocation(zone.getId());
+        for (ZoneLocation zoneLocation : zoneLocations){
+            polygonPoints.add(new LatLng(zoneLocation.getLatitude(), zoneLocation.getLongitude()));
+        }
+        return polygonPoints;
+    }
+
     public void showPolygon() {
         db.open();
         ArrayList<Zone> zones = db.getAllZone();
         for(Zone zone : zones){
-            List<LatLng> polygonPoints = new ArrayList<>();
-            ArrayList<ZoneLocation> zoneLocations = db.getAllZoneLocation(zone.getId());
-            for (ZoneLocation zoneLocation : zoneLocations){
-                polygonPoints.add(new LatLng(zoneLocation.getLatitude(), zoneLocation.getLongitude()));
-            }
+            List<LatLng> polygonPoints = getPolygonPoints(zone);
             if(polygonPoints.size()>0){
                 Polygon polygon = mGoogleMap.addPolygon(new PolygonOptions()
                         .clickable(true)
@@ -109,6 +115,20 @@ public class MapPolygon {
             }
 
         }
+    }
+    public boolean checkPositionInZone(LatLng position) {
+        if(position == null)
+            return false;
+        db.open();
+        ArrayList<Zone> zones = db.getAllZone();
+        for(Zone zone : zones){
+            List<LatLng> polygonPoints = getPolygonPoints(zone);
+            if(polygonPoints.size()>0){
+                if(PolyUtil.containsLocation(position, polygonPoints, true))
+                    return true;
+            }
+        }
+        return false;
     }
 
 }

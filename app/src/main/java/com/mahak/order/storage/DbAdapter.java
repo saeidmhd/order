@@ -7686,7 +7686,7 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<LatLng> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("Select * from " + DbSchema.VisitorLocationSchema.TABLE_NAME + " Where Date >=? and VisitorId=?", new String[]{String.valueOf(date), String.valueOf(visitorId)});
+            cursor = mDb.rawQuery("Select * from " + DbSchema.VisitorLocationSchema.TABLE_NAME + " Where Date >=? and VisitorId =? order by " + DbSchema.VisitorLocationSchema.COLUMN_DATE + " DESC", new String[]{String.valueOf(date), String.valueOf(visitorId)});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
