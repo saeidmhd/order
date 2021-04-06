@@ -4739,7 +4739,7 @@ public class DbAdapter {
         int TotalCount = 0;
         try {
             cursor = mDb.rawQuery(
-                    "select count(*) from Products inner join ProductDetail on Products.productId = ProductDetail.productId"
+                    "select count(*) from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId "
                             + " where " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + 0
                             + " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_MAHAK_ID + " = " + BaseActivity.getPrefMahakId()
                             + " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_DATABASE_ID + " = " + BaseActivity.getPrefDatabaseId()
@@ -5573,7 +5573,7 @@ public class DbAdapter {
     }
 
     private Cursor getAllProductCursor2(long id, String LIMIT, String orderBy ,int asset) {
-        return mDb.rawQuery("select * from Products inner join ProductDetail on Products.productId = ProductDetail.productId" +
+        return mDb.rawQuery("select * from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                 " where " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
                 " and " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_Deleted + " = " + 0 +
                 getProductAssetStrnig(asset) +
@@ -5996,7 +5996,7 @@ public class DbAdapter {
         ArrayList<Product> array = new ArrayList<>();
         try {
             if (type == ProjectInfo.TYPE_INVOCIE) {
-                    rawquery = "select * from Products inner join ProductDetail on Products.productId = ProductDetail.productId" +
+                    rawquery = "select * from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                         " where ( " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_NAME + " LIKE " + "'%" + searchString + "%'" +
                         " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchString + "%'" +
                         " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
@@ -6004,7 +6004,7 @@ public class DbAdapter {
                          getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(1) +
                         " order by " + DbSchema.Productschema.COLUMN_PRODUCT_CODE;
             } else {
-                rawquery = "select * from Products inner join ProductDetail on Products.productId = ProductDetail.productId" +
+                rawquery = "select * from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                         " where ( " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_NAME + " LIKE " + "'%" + searchString + "%'" +
                         " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchString + "%'" +
                         " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
