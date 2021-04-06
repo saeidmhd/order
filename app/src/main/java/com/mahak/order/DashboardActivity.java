@@ -973,9 +973,11 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             marker.remove();
         }
         if (mGoogleMap != null) {
-            marker = mGoogleMap.addMarker(new MarkerOptions().position(position));
-            marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_visitor_3));
-            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(position.latitude, position.longitude), 15));
+            if(position != null){
+                marker = mGoogleMap.addMarker(new MarkerOptions().position(position));
+                marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_visitor_3));
+                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(position.latitude, position.longitude), 15));
+            }
         }
     }
 

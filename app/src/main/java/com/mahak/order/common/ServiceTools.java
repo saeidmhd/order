@@ -18,6 +18,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
@@ -31,6 +32,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -70,6 +72,8 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
@@ -790,11 +794,20 @@ public class ServiceTools {
         return true;
     }
 
+
     public static boolean checkDate2(long serverTime) {
-        DateTime nowTehran = new DateTime(DateTimeZone.forID("Asia/Tehran"));
-        long lTehran = nowTehran.getMillis();
-        long diff = lTehran - serverTime;
-        return diff <= 780000 && diff >= -780000;
+        /*ZoneId zoneId = ZoneId.of("Asia/Tehran");
+        LocalDateTime dt = LocalDateTime.now();*/
+        DateTime nowTehran = null;
+        try {
+            nowTehran = new DateTime(DateTimeZone.forID("Asia/Tehran"));
+            long lTehran = nowTehran.getMillis();
+            long diff = lTehran - serverTime;
+            return diff <= 780000 && diff >= -780000;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 

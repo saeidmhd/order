@@ -127,9 +127,11 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
             marker.remove();
         }
         if (mMap != null) {
-            marker = mMap.addMarker(new MarkerOptions().position(position));
-            marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_visitor_3));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(position.latitude, position.longitude), 15));
+            if(position != null){
+                marker = mMap.addMarker(new MarkerOptions().position(position));
+                marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_visitor_3));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(position.latitude, position.longitude), 15));
+            }
         }
     }
 
