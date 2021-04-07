@@ -167,7 +167,7 @@ public class BaseActivity extends AppCompatActivity {
     public static String DefaultUserToken = "";
     public static long DefaultMasterId = 0;
     public static String DefaultDatabaseId = "";
-    public static int DefaultAdminControl = 0;
+    public static boolean DefaultAdminControl = false;
     public static int DefaultUnit2Setting = 1;
     public static int DefaultTextView = 0;
     public static int DefaultTrackingControl = 0;
@@ -635,13 +635,13 @@ public class BaseActivity extends AppCompatActivity {
         return sh.getString(_Key_DatabaseId, DefaultDatabaseId);
     }
 
-    public static void setPrefAdminControl(int AdminControl) {
-        sh.edit().putInt(_Key_AdminControl, AdminControl).commit();
+    public static void setPrefAdminControl(boolean AdminControl) {
+        sh.edit().putBoolean(_Key_AdminControl, AdminControl).commit();
     }
 
-    public static int getPrefAdminControl(Context context) {
+    public static boolean getPrefAdminControl(Context context) {
         if (sh == null) sh = context.getSharedPreferences(SharedPreferencesMahak, MODE_PRIVATE);
-        return sh.getInt(_Key_AdminControl, DefaultAdminControl);
+        return sh.getBoolean(_Key_AdminControl, DefaultAdminControl);
     }
 
     public static void setPrefUnit2Setting(int Unit2Setting) {

@@ -66,11 +66,15 @@ public class MapPolygon {
             type = polygon.getTag().toString();
         }
 
-        List<PatternItem> pattern = null;
+        List<PatternItem> pattern = PATTERN_POLYGON_ALPHA;
         int strokeColor = COLOR_BLACK_ARGB;
-        int fillColor = COLOR_WHITE_ARGB;
+        int fillColor = COLOR_PURPLE_ARGB;
 
-        switch (type) {
+        pattern = PATTERN_POLYGON_ALPHA;
+        strokeColor = COLOR_GREEN_ARGB;
+        fillColor = COLOR_PURPLE_ARGB;
+
+        /*switch (type) {
             // If no type is given, allow the API to use the default.
             case "alpha":
                 // Apply a stroke pattern to render a dashed line, and define colors.
@@ -84,7 +88,7 @@ public class MapPolygon {
                 strokeColor = COLOR_ORANGE_ARGB;
                 fillColor = COLOR_BLUE_ARGB;
                 break;
-        }
+        }*/
 
         polygon.setStrokePattern(pattern);
         polygon.setStrokeWidth(POLYGON_STROKE_WIDTH_PX);

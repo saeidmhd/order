@@ -757,7 +757,7 @@ public class LocationService extends Service {
         mBuilder.setAutoCancel(false);
         mBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
 
-        if (!(BaseActivity.getPrefAdminControl(mContext) == 1 && BaseActivity.getPrefTrackingControl(mContext) == 1)) {
+        if (!(BaseActivity.getPrefAdminControl(mContext) && BaseActivity.getPrefTrackingControl(mContext) == 1)) {
 
             Intent intent = new Intent();
             intent.setAction(ProjectInfo._notification_action_stop);

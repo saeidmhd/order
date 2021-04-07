@@ -69,6 +69,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.maps.android.PolyUtil;
 import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
@@ -77,14 +78,21 @@ import com.mahak.order.common.Customer;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.User;
+import com.mahak.order.common.loginSignalr.SignalLoginBody;
+import com.mahak.order.common.loginSignalr.SignalLoginResult;
+import com.mahak.order.service.DataService;
 import com.mahak.order.tracking.LocationService;
 import com.mahak.order.tracking.MapPolygon;
 import com.mahak.order.tracking.ShowPersonCluster;
+import com.mahak.order.tracking.TrackingConfig;
 import com.mahak.order.tracking.Utils;
 import com.mahak.order.service.ReadOfflinePicturesProducts;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.tracking.setting.SettingBody;
 import com.mahak.order.tracking.setting.TrackingSetting;
+import com.mahak.order.tracking.visitorZone.Datum;
+import com.mahak.order.tracking.visitorZone.VisitorZoneLocation;
+import com.mahak.order.tracking.visitorZone.ZoneBody;
 import com.mahak.order.widget.FontAlertDialog;
 import com.mahak.order.widget.FontProgressDialog;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -372,10 +380,9 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (isChecked && BaseActivity.getPrefAdminControl(mContext) == 0) {
+                if (isChecked && BaseActivity.getPrefAdminControl(mContext)) {
                     tvTrackingService.setText(R.string.tracking_system_is_active);
-                    //suggestEnableGps();
-                } else if (!isChecked && BaseActivity.getPrefAdminControl(mContext) == 0) {
+                } else if (!isChecked && BaseActivity.getPrefAdminControl(mContext)) {
                     tvTrackingService.setText(R.string.tracking_system_is_disabled);
                 }
 
@@ -449,12 +456,13 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         trackingSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setMessage("دریافت تنظیمات ردیابی ویزیتور");
+                builder.setTitle("تنظیمات ردیابی ویزیتور");
+                builder.setMessage("دریافت تنظیمات ردیابی ویزیتور از سرور");
                 builder.setPositiveButton(R.string.str_yes, new OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        getSetting(mContext);
+                        new TrackingConfig(mContext,mGoogleMap).getSignalTokenAndSetting();
+                        //getSignalTokenAndSetting(mContext);
                     }
                 });
                 builder.setNegativeButton(R.string.str_cancel, new OnClickListener() {
@@ -555,62 +563,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
 
     }//end of onCreate
-
-    public void getSetting(Context context) {
-        ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
-        SettingBody settingBody = new SettingBody();
-        settingBody.setVisitorId(0);
-        Call<TrackingSetting> call = apiService.GetTrackingSetting(getPrefSignalUserToken(),settingBody);
-        pd = new FontProgressDialog(mContext);
-        pd.setMessage("در حال دریافت تنظیمات ردیابی ویزیتور");
-        pd.setCancelable(false);
-        pd.show();
-        call.enqueue(new Callback<TrackingSetting>() {
-            @Override
-            public void onResponse(Call<TrackingSetting> call, Response<TrackingSetting> response) {
-                pd.dismiss();
-                if (response.body() != null) {
-                    if (response.body().isSucceeded()) {
-                        int visitorId = 0;
-                        boolean isRestricted = false;
-
-                        JSONObject gpsData = new JSONObject();
-                        long MIN_DISTANCE_CHANGE_FOR_UPDATES = ServiceTools.toLong(response.body().getData().getSendPointsPerMeter());
-                        long MIN_TIME_BW_UPDATES = ServiceTools.toLong(response.body().getData().getSendPointsEveryMinute());
-                        int radius = ServiceTools.toInt(response.body().getData().getRadius());
-                        boolean sendingPointsByAdmin = response.body().getData().isControlSendingPointsByAdmin();
-                        boolean sendingPoints = response.body().getData().isSendingPoints();
-
-                        if(response.body().getData().getGeofencingSetting() != null)
-                            visitorId = response.body().getData().getGeofencingSetting().get(0).getVisitorId();
-                        if(visitorId == getPrefUserMasterId())
-                            isRestricted = true;
-                        try {
-                            gpsData.put(ProjectInfo._json_key_mingps_distance_change, MIN_DISTANCE_CHANGE_FOR_UPDATES);
-                            gpsData.put(ProjectInfo._json_key_mingps_time_change, MIN_TIME_BW_UPDATES);
-                            gpsData.put(ProjectInfo._json_key_sendingPointsByAdmin, sendingPointsByAdmin);
-                            gpsData.put(ProjectInfo._json_key_sendingPoints, sendingPoints);
-                            gpsData.put(ProjectInfo._json_key_isRestricted, isRestricted);
-                            gpsData.put(ProjectInfo._json_key_radius, radius);
-                            ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_gps_config, gpsData.toString());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        btnTrackingService.setEnabled(!sendingPointsByAdmin);
-                        Toast.makeText(DashboardActivity.this, "تنظیمات دریافت گردید", Toast.LENGTH_LONG).show();
-
-                    }else {
-                        Toast.makeText(context, response.body().getErrors().get(0).toString(), Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<TrackingSetting> call, Throwable t) {
-                pd.dismiss();
-                Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     public boolean resticted() {
         boolean isRestricted = false;
@@ -1421,7 +1373,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     public void onClick(DialogInterface dialog, int which) {
 
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                        Intent intent = new Intent(getApplicationContext(), DataSyncActivityRestApi.class);
+                        Intent intent = new Intent(getApplicationContext(),DataSyncActivityRestApi.class);
                         startActivityForResult(intent, REQUEST_DATASYNC);
 
                         dialog.dismiss();
@@ -1524,14 +1476,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         refreshCountInformation();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        if (btnTrackingService.isChecked() && BaseActivity.getPrefAdminControl(mContext) == 1) {
-
-            tvTrackingService.setText(R.string.tracking_system_is_active_admin);
-            forceEnableGps();
-
-        } else if (!btnTrackingService.isChecked() && BaseActivity.getPrefAdminControl(mContext) == 1) {
-            tvTrackingService.setText(R.string.tracking_system_is_disabled_admin);
-        }
+        forceGpsAdminControl();
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -1539,6 +1484,15 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         //----------GCM------------
         registerReceiver();
+    }
+
+    private void forceGpsAdminControl() {
+        if (btnTrackingService.isChecked() && BaseActivity.getPrefAdminControl(mContext)) {
+            tvTrackingService.setText(R.string.tracking_system_is_active_admin);
+            forceEnableGps();
+        } else if (!btnTrackingService.isChecked() && BaseActivity.getPrefAdminControl(mContext)) {
+            tvTrackingService.setText(R.string.tracking_system_is_disabled_admin);
+        }
     }
 
     private void forceEnableGps() {
@@ -1667,8 +1621,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     startActivity(intent);
                 }
             }
-
-
         }
 
         super.onActivityResult(requestCode, resultCode, data);
