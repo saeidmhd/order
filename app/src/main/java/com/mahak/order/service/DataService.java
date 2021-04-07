@@ -31,7 +31,6 @@ import com.mahak.order.common.ReceivedTransferProducts;
 import com.mahak.order.common.ReceivedTransfers;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.Setting;
-import com.mahak.order.common.TrackingConfig;
 import com.mahak.order.common.TransactionsLog;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.common.VisitorPeople;
@@ -44,8 +43,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-//import com.mahak.order.common.DeliveryOrder;
 
 public class DataService {
 
@@ -503,18 +500,6 @@ public class DataService {
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
-    }
-
-    public static void ChangeTrackingConfig(String data) {
-
-        ArrayList<TrackingConfig> arrayTrackingConfig = Parser.getTrackingConfig(data);
-
-        for (int i = 0; i < arrayTrackingConfig.size(); i++) {
-
-            BaseActivity.setPrefAdminControl(arrayTrackingConfig.get(i).getAdminControl());
-            BaseActivity.setPrefTrackingControl(arrayTrackingConfig.get(i).getTrackingControl());
-
-        }
     }
 
 }

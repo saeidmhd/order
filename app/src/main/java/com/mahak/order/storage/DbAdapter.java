@@ -10247,7 +10247,7 @@ public class DbAdapter {
         mDb.delete(DbSchema.ZoneSchema.TABLE_NAME, null, null);
 
 
-        BaseActivity.setPrefAdminControl(0);
+        BaseActivity.setPrefAdminControl(false);
         BaseActivity.setPrefTrackingControl(0);
 
         //reset setting
