@@ -33,6 +33,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.mahak.order.BaseActivity.baseUrl;
 import static com.mahak.order.BaseActivity.getPrefSignalUserToken;
 import static com.mahak.order.BaseActivity.getPrefUserMasterId;
 import static com.mahak.order.BaseActivity.setPrefSignalUserToken;
@@ -116,9 +117,12 @@ public class TrackingConfig {
                         BaseActivity.setPrefAdminControl(sendingPointsByAdmin);
                         if(sendingPoints)
                             BaseActivity.setPrefTrackingControl(1);
+                        else
+                            BaseActivity.setPrefTrackingControl(0);
 
                         if(response.body().getData().getGeofencingSetting() != null)
-                            visitorId = response.body().getData().getGeofencingSetting().get(0).getVisitorId();
+                            if(response.body().getData().getGeofencingSetting().size() > 0)
+                                visitorId = response.body().getData().getGeofencingSetting().get(0).getVisitorId();
                         if(visitorId == getPrefUserMasterId())
                             isRestricted = true;
                         try {

@@ -1497,6 +1497,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void forceGpsAdminControl() {
+
         if (btnTrackingService.isChecked() && BaseActivity.getPrefAdminControl(mContext)) {
             tvTrackingService.setText(R.string.tracking_system_is_active_admin);
             forceEnableGps();
@@ -1504,6 +1505,62 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             tvTrackingService.setText(R.string.tracking_system_is_disabled_admin);
         }
     }
+
+    private void getTrackingConfig() {
+
+        if (BaseActivity.getPrefAdminControl(mContext) && BaseActivity.getPrefTrackingControl(mContext) == 1){
+
+            if (locationService == null) locationService = new LocationService(mContext,DashboardActivity.this);
+            ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking_pause, "0");
+            locationService.startTracking();
+            //locationService.showNotificationServiceRun();
+            if(locationService.isRunService()) {
+                btnTrackingService.setChecked(true);
+            }
+
+            else {
+                Toast.makeText(DashboardActivity.this, R.string.can_not_active_gps_tracking, Toast.LENGTH_SHORT).show();
+                if(mTracker!=null) {
+                    mTracker.send(new HitBuilders.ExceptionBuilder()
+                            .setDescription("Can't Start GPS")
+                            .setFatal(true)
+                            .build());
+                }
+            }
+            btnTrackingService.setEnabled(false);
+        }
+        else if (BaseActivity.getPrefAdminControl(mContext) && BaseActivity.getPrefTrackingControl(mContext) == 0)
+        {
+
+            if (locationService.isRunService()) {
+                locationService.stopTracking();
+                //locationService.stopNotificationServiceTracking();
+                btnTrackingService.setChecked(false);
+            }
+            btnTrackingService.setEnabled(false);
+
+
+        }
+        else if (BaseActivity.getPrefAdminControl(mContext) && BaseActivity.getPrefTrackingControl(mContext) == 1)
+        {
+            if (locationService == null) locationService = new LocationService(mContext,DashboardActivity.this);
+            ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking_pause, "0");
+            locationService.startTracking();
+            //locationService.showNotificationServiceRun();
+            if(locationService.isRunService()) {
+                btnTrackingService.setChecked(true);
+            }else {
+                Toast.makeText(DashboardActivity.this, R.string.can_not_active_gps_tracking, Toast.LENGTH_SHORT).show();
+                if(mTracker!=null) {
+                    mTracker.send(new HitBuilders.ExceptionBuilder()
+                            .setDescription("Can't Start GPS")
+                            .setFatal(true)
+                            .build());
+                }
+            }
+        }
+    }
+
 
     private void forceEnableGps() {
         LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
