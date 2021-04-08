@@ -94,9 +94,6 @@ import retrofit2.Response;
 
 import static com.mahak.order.common.ServiceTools.getDateAndTimeForLong;
 
-//import com.mahak.order.common.DeliveryOrder;
-//import com.mahak.order.common.ProductInOrder;
-
 public class DataSyncActivityRestApi extends BaseActivity {
 
     private ProgressBar pbLoading;
