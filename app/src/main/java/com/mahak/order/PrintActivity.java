@@ -445,9 +445,9 @@ public class PrintActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if (printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
-                   /* Message msg = mPrintHandler.obtainMessage(PRINT_BITMAP);
+                    Message msg = mPrintHandler.obtainMessage(PRINT_BITMAP);
                     msg.obj = bPrint;
-                    msg.sendToTarget();*/
+                    msg.sendToTarget();
                 } else if (printerBrand == ProjectInfo.Centerm_K9) {
                     printBmpFast(bPrint);
                 } else if (printerBrand == ProjectInfo.Woosim_WSP_R341) {
@@ -969,7 +969,6 @@ public class PrintActivity extends BaseActivity {
     }
 
     public void initPrinter() {
-
         if (printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
             new CustomThread().start();
             mIsConnected = true;
