@@ -663,6 +663,7 @@ public class InvoiceDetailActivity extends BaseActivity {
                                 item.setPrice("" + price);
                                 item.setGiftCount1(0);
                                 item.setGiftCount2(0);
+                                item.setGiftType(0);
                                 db.AddOrderDetail(item);
 
                                 //for reduce
@@ -757,6 +758,7 @@ public class InvoiceDetailActivity extends BaseActivity {
                                 item.setSumCountBaJoz(sumCountBaJoz);
                                 item.setGiftCount1(0);
                                 item.setGiftCount2(0);
+                                item.setGiftType(0);
                                 item.setDiscount(discount);
                                 item.setOrderId((int) order.getId());
                                 db.AddOrderDetail(item);
