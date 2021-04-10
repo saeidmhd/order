@@ -9427,7 +9427,7 @@ public class DbAdapter {
         boolean result;
         ContentValues initialvalue = new ContentValues();
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderDetailId, orderDetail.getOrderDetailId());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderDetailClientId, orderDetail.getOrderDetailClientId());
+        /*initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderDetailClientId, orderDetail.getOrderDetailClientId());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderClientId, orderDetail.getOrderClientId());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderId, orderDetail.getOrderId());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_ProductDetailId, orderDetail.getProductDetailId());
@@ -9450,7 +9450,7 @@ public class DbAdapter {
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_CreateSyncId, orderDetail.getCreateSyncId());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_UpdateSyncId, orderDetail.getUpdateSyncId());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_RowVersion, orderDetail.getRowVersion());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_CostLevel, orderDetail.getCostLevel());
+        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_CostLevel, orderDetail.getCostLevel());*/
 
         result = (mDb.update(DbSchema.OrderDetailSchema.TABLE_NAME, initialvalue, DbSchema.OrderDetailSchema.COLUMN_ID + "=?", new String[]{String.valueOf(orderDetail.getId())})) > 0;
         return result;
