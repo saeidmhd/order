@@ -2096,10 +2096,8 @@ public class DbAdapter {
 
         product.setCustomerPrice(cursor.getDouble(cursor.getColumnIndex(DbSchema.ProductDetailSchema.COLUMN_CustomerPrice)));
 
-        product.setCustomerPrice(cursor.getDouble(cursor.getColumnIndex(DbSchema.ProductDetailSchema.COLUMN_CustomerPrice)));
-
-        product.setSumCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.ProductDetailSchema.COLUMN_Count1)));
-        product.setSumCount2(cursor.getDouble(cursor.getColumnIndex(DbSchema.ProductDetailSchema.COLUMN_Count2)));
+        product.setSumCount1(cursor.getDouble(cursor.getColumnIndex("sumcount1")));
+        product.setSumCount2(cursor.getDouble(cursor.getColumnIndex("sumcount2")));
 
 
         ProductDetail productDetail = getProductDetailFromCursor(cursor);
@@ -5573,12 +5571,11 @@ public class DbAdapter {
     }
 
     private Cursor getAllProductCursor2(long id, String LIMIT, String orderBy ,int asset) {
-        return mDb.rawQuery("select * from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+        return mDb.rawQuery("select * , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                 " where " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
                 " and " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_Deleted + " = " + 0 +
                 getProductAssetStrnig(asset) +
-                getProductCategoryStrnig(id) +
-                " order by " + orderBy + " LIMIT " + LIMIT, null);
+                getProductCategoryStrnig(id) + " GROUP by Products.productId " + " order by " + orderBy + " LIMIT " + LIMIT, null);
     }
 
     public ArrayList<Notification> getAllNotifications(String userId) {

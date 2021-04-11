@@ -197,49 +197,52 @@ public class KolJozAdapter extends RecyclerView.Adapter<KolJozAdapter.ViewHolder
             }
         }
         setSumAmount(holder, orderDetailProperties.get(holder.getAdapterPosition()));
-        holder.txtCountKol.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (TextUtils.isEmpty(holder.txtCountKol.getText().toString())) {
-                    holder.txtCountKol.setText(ServiceTools.formatCount(0));
-                }
-                if (product.getUnitRatio() > 0) {
+
+        if (product.getUnitRatio() > 0) {
+            holder.txtCountKol.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (TextUtils.isEmpty(holder.txtCountKol.getText().toString())) {
+                        holder.txtCountKol.setText(ServiceTools.formatCount(0));
+                    }
+                    if (product.getUnitRatio() > 0) {
                         /*if(type == ProjectInfo.TYPE_INVOCIE){
                             double remainPackage =  ((maxValueRetail - ServiceTools.toDouble(holder.txtCountKol.getText().toString())) / product.getUnitRatio());
                             holder.txtCountJoz.setFilters(new InputFilter[]{new CountInputFilterMinMax(0,  remainPackage)});
                         }*/
+                    }
+
+                }
+            });
+            holder.txtCountKol.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
+                    if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                        // DoneProductCount(finalProductPriceLevel);
+                    }
+                    return false;
+                }
+            });
+            holder.txtCountKol.addTextChangedListener(new TextWatcher() {
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    editJoz = false;
+                    editSum = false;
+                    editKol = true;
                 }
 
-            }
-        });
-        holder.txtCountKol.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
-                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
-                    // DoneProductCount(finalProductPriceLevel);
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
                 }
-                return false;
-            }
-        });
 
-        holder.txtCountKol.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    setSumAmount(holder, orderDetailProperties.get(holder.getAdapterPosition()));
+                }
+            });
+        }
 
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                editJoz = false;
-                editSum = false;
-                editKol = true;
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                setSumAmount(holder, orderDetailProperties.get(holder.getAdapterPosition()));
-            }
-        });
 
         holder.txtCountJoz.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
@@ -286,7 +289,7 @@ public class KolJozAdapter extends RecyclerView.Adapter<KolJozAdapter.ViewHolder
 
             }
         });
-        holder.txtCount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+       /* holder.txtCount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus)
@@ -331,7 +334,7 @@ public class KolJozAdapter extends RecyclerView.Adapter<KolJozAdapter.ViewHolder
                 }
                 setSumAmount(holder, orderDetailProperties.get(holder.getAdapterPosition()));
             }
-        });
+        });*/
 
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -440,11 +443,11 @@ public class KolJozAdapter extends RecyclerView.Adapter<KolJozAdapter.ViewHolder
             holder.tv_asset2.setText(ServiceTools.formatCount(maxValueRetail2));
         }
         // CalculateJozKolSum(holder.txtCountKol, holder.txtCountJoz, holder.txtCount);
-        if (type == ProjectInfo.TYPE_INVOCIE) {
+        /*if (type == ProjectInfo.TYPE_INVOCIE) {
             holder.txtCountJoz.setFilters(new InputFilter[]{new CountInputFilterMinMax(0, maxValueRetail)});
             holder.txtCountKol.setFilters(new InputFilter[]{new CountInputFilterMinMax(0, maxValueRetail2)});
             holder.txtCount.setFilters(new InputFilter[]{new CountInputFilterMinMax(0, maxValueRetail)});
-        }
+        }*/
 
     }
 
@@ -506,7 +509,7 @@ public class KolJozAdapter extends RecyclerView.Adapter<KolJozAdapter.ViewHolder
         sum = (intPart * product.getUnitRatio() + joz);
 
         holder.txtCountJoz.setText(ServiceTools.formatCount(joz));
-        holder.txtCountKol.setText(ServiceTools.formatCount(intPart));
+      //  holder.txtCountKol.setText(ServiceTools.formatCount(intPart));
         holder.txtCount.setText(ServiceTools.formatCount(sum));
 
         setSumAmount(holder, orderDetailProperties.get(holder.getAdapterPosition()));
