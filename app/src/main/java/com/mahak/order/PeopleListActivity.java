@@ -427,7 +427,22 @@ public class PeopleListActivity extends BaseActivity {
                 Person_Extra_Data person_extra_data =  db.getMoreCustomerInfo(customer.getPersonCode());
                 amount = person_extra_data.getRemainAmount();
 
-                if (amount == 0) {// if customerStatus =	incalculable
+                switch (person_extra_data.getRemainStatus()){
+                    case 0:
+                        tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_incalculable));
+                        tvRemained.setText(ServiceTools.formatPrice(amount));
+                        break;
+                    case 1:
+                        tvRemained.setText(ServiceTools.formatPrice(amount));
+                        tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_debitor));
+                        break;
+                    case 2:
+                        tvRemained.setText(ServiceTools.formatPrice(amount));
+                        tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_creditor));
+                        break;
+                }
+
+                /*if (amount == 0) {// if customerStatus =	incalculable
                     tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_incalculable));
                     tvRemained.setText(ServiceTools.formatPrice(amount));
                 }
@@ -439,7 +454,7 @@ public class PeopleListActivity extends BaseActivity {
                 {
                     tvRemained.setText(ServiceTools.formatPrice(amount));
                     tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_creditor));
-                }
+                }*/
 
                 tvMarketName.setText(customer.getOrganization());
                 tvCustomerName.setText(customer.getName());
@@ -1042,20 +1057,22 @@ public class PeopleListActivity extends BaseActivity {
 
             public void Populate(Customer customer, int position) {
 
-                double amount = customer.getBalance();
+                Person_Extra_Data person_extra_data =  db.getMoreCustomerInfo(customer.getPersonCode());
+                double amount = person_extra_data.getRemainAmount();
 
-                if (amount == 0) {// if customerStatus =	incalculable
-                    tvStatus.setText(mContext.getResources().getString(R.string.str_incalculable));
-                    tvBalance‌.setText(ServiceTools.formatPrice(amount));
-                }
-                if (amount < 0) {    // if customerStatus =	Debtor
-                    amount = amount * -1;
-                    tvBalance‌.setText(ServiceTools.formatPrice(amount));
-                    tvStatus.setText(mContext.getResources().getString(R.string.str_debitor));
-                } else if (amount > 0) // if customerStaus =	Creditor
-                {
-                    tvBalance‌.setText(ServiceTools.formatPrice(amount));
-                    tvStatus.setText(mContext.getResources().getString(R.string.str_creditor));
+                switch (person_extra_data.getRemainStatus()){
+                    case 0:
+                        tvStatus.setText(mContext.getResources().getString(R.string.str_incalculable));
+                        tvBalance‌.setText(ServiceTools.formatPrice(amount));
+                        break;
+                    case 1:
+                        tvBalance‌.setText(ServiceTools.formatPrice(amount));
+                        tvStatus.setText(mContext.getResources().getString(R.string.str_debitor));
+                        break;
+                    case 2:
+                        tvBalance‌.setText(ServiceTools.formatPrice(amount));
+                        tvStatus.setText(mContext.getResources().getString(R.string.str_creditor));
+                        break;
                 }
 
                 tvCustomerCode.setText(String.valueOf(customer.getPersonCode()));

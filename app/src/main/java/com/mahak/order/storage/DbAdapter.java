@@ -5993,20 +5993,20 @@ public class DbAdapter {
         ArrayList<Product> array = new ArrayList<>();
         try {
             if (type == ProjectInfo.TYPE_INVOCIE) {
-                    rawquery = "select * from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+                    rawquery = "select * , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                         " where ( " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_NAME + " LIKE " + "'%" + searchString + "%'" +
                         " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchString + "%'" +
                         " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
                         " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                         getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(1) +
+                         getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(1) + " GROUP by Products.productId " +
                         " order by " + DbSchema.Productschema.COLUMN_PRODUCT_CODE;
             } else {
-                rawquery = "select * from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+                rawquery = "select * , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                         " where ( " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_NAME + " LIKE " + "'%" + searchString + "%'" +
                         " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchString + "%'" +
                         " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
                         " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                         getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) +
+                         getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + " GROUP by Products.productId " +
                         " order by " + DbSchema.Productschema.COLUMN_PRODUCT_CODE;
             }
             cursor = mDb.rawQuery(rawquery, null);
@@ -6260,7 +6260,8 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<ProductGroup> array = new ArrayList<>();
         try {
-            cursor = mDb.query(DbSchema.ProductGroupSchema.TABLE_NAME, null, null, null, null, null, null);
+            cursor = mDb.query(DbSchema.ProductGroupSchema.TABLE_NAME, null, DbSchema.ProductGroupSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(getPrefUserId())}, null, null, null);
+            //cursor = mDb.rawQuery(DbSchema.ProductGroupSchema.TABLE_NAME, null, null, null, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {

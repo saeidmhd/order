@@ -452,19 +452,19 @@ public class ManageCustomerActivity extends BaseActivity {
             if (customer.getPersonCode() != 0) {
                 extraData = db.getMoreCustomerInfo(customer.getPersonCode());
                 double RemainedAmount = extraData.getRemainAmount();
-                if (extraData.getRemainStatus() == 1)
-                    RemainedAmount = RemainedAmount * -1;
 
-                if (RemainedAmount == 0)    // if customerStatus = Incalculable
-                    spnCustomerType.setSelection(0);
-                else if (RemainedAmount < 0)    // if customerStatus =	Debtor
-                {
-                    spnCustomerType.setSelection(1);
-                    RemainedAmount = RemainedAmount * -1;
-                } else if (RemainedAmount > 0) // if customerStaus =	Creditor
-                {
-                    spnCustomerType.setSelection(2);
+                switch (extraData.getRemainStatus()){
+                    case 0:
+                        spnCustomerType.setSelection(0);
+                        break;
+                    case 1:
+                        spnCustomerType.setSelection(1);
+                        break;
+                    case 2:
+                        spnCustomerType.setSelection(2);
+                        break;
                 }
+
                 txtRemained.setText(ServiceTools.formatPrice(RemainedAmount));
 
                 if (extraData != null) {

@@ -166,8 +166,7 @@ public class CheckListDetailFragment extends Fragment {
                 extraData = db.getMoreCustomerInfo(customer.getPersonCode());
                 if (extraData != null)
                     amount = extraData.getRemainAmount();
-                if (extraData.getRemainStatus() == 1)
-                    amount = amount * -1;
+
                 Shift = customer.getShift();
                 Mobile = customer.getMobile();
                 Tell = customer.getTell();
@@ -187,18 +186,20 @@ public class CheckListDetailFragment extends Fragment {
 
         tvAddress.setText(checklist.getAddress());
         tvShift.setText(Shift);
-        if (amount == 0) {// if customerStatus =	Incalculable
-            tvStatus.setText(getActivity().getResources().getString(R.string.str_incalculable));
-            tvRemained.setText(ServiceTools.formatPrice(amount));
-        }
-        if (amount < 0) {    // if customerStatus =	Debtor
-            amount = amount * -1;
-            tvRemained.setText(ServiceTools.formatPrice(amount));
-            tvStatus.setText(getActivity().getResources().getString(R.string.str_debitor));
-        } else if (amount > 0) // if customerStaus =	Creditor
-        {
-            tvRemained.setText(ServiceTools.formatPrice(amount));
-            tvStatus.setText(getActivity().getResources().getString(R.string.str_creditor));
+
+        switch (extraData.getRemainStatus()){
+            case 0:
+                tvStatus.setText(getActivity().getResources().getString(R.string.str_incalculable));
+                tvRemained.setText(ServiceTools.formatPrice(amount));
+                break;
+            case 1:
+                tvRemained.setText(ServiceTools.formatPrice(amount));
+                tvStatus.setText(getActivity().getResources().getString(R.string.str_debitor));
+                break;
+            case 2:
+                tvRemained.setText(ServiceTools.formatPrice(amount));
+                tvStatus.setText(getActivity().getResources().getString(R.string.str_creditor));
+                break;
         }
 
         if (checklist.getStatus() == ProjectInfo.STATUS_DO)
