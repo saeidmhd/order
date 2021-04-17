@@ -3,6 +3,7 @@ package com.mahak.order.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
@@ -503,6 +504,8 @@ public class PDF {
 
         addFooterPage(document, Element.ALIGN_RIGHT, "امضا خریدار");
 
+        addImage(document);
+
     }
 
     private boolean isOdd(int i) {
@@ -678,12 +681,17 @@ public class PDF {
     private void addImage(Document document) throws DocumentException {
 
         try {
-            InputStream ims = mContext.getAssets().open("logo/logo.png");
-            Bitmap bmp = BitmapFactory.decodeStream(ims);
+
+
+            String FileName = String.format("Signature_%s.png", code);
+            Bitmap bitmapSign = ServiceTools.getSign(FileName);
+            bitmapSign = Bitmap.createScaledBitmap(bitmapSign, 150, 150, false);
+            //InputStream ims = mContext.getAssets().open("logo/logo.png");
+            //Bitmap bmp = BitmapFactory.decodeStream(ims);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            bitmapSign.compress(Bitmap.CompressFormat.PNG, 100, stream);
             Image image = Image.getInstance(stream.toByteArray());
-            image.setAbsolutePosition(25f, 650f);
+            image.setAlignment(Image.RIGHT);
 
             document.add(image);
 

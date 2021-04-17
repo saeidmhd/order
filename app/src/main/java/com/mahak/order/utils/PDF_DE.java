@@ -512,7 +512,26 @@ public class PDF_DE {
         addSpaceDocument(document);
 
         addFooterPage(document, Element.ALIGN_LEFT, mContext.getString(R.string.customer_sign));
+        addSign(document);
 
+    }
+
+    private void addSign(Document document) throws DocumentException {
+
+        try {
+            String FileName = String.format("Signature_%s.png", code);
+            Bitmap bitmapSign = ServiceTools.getSign(FileName);
+            bitmapSign = Bitmap.createScaledBitmap(bitmapSign, 150, 150, false);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmapSign.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            Image image = Image.getInstance(stream.toByteArray());
+            document.add(image);
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("Exception ", e.getMessage());
+        }
     }
 
     private boolean isOdd(int i) {
