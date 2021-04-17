@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="384px"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:id="@+id/ll_receipt_container"
+        android:layout_width="384px"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#aaa"
+            android:gravity="center"
+            android:text="رسید  غیر  بانکی"
+            android:textColor="#eee"
+            android:textSize="11sp" />
+
+        <ImageView
+            android:id="@+id/image_bitmap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="384px"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_receipt_container"
+        android:layout_gravity="center"
+        android:layout_marginTop="5px"
+        android:background="#aaa"
+        android:gravity="center"
+        android:text="رسید  غیر  بانکی"
+        android:textColor="#eee"
+        android:textSize="11sp" />
+
+
+</RelativeLayout>

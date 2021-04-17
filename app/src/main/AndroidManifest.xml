@@ -603,6 +603,14 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${mapsApiKey}" />
 
+        <service
+            android:name=".messaging.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>
