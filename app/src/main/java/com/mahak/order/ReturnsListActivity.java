@@ -382,7 +382,7 @@ public class ReturnsListActivity extends BaseActivity {
                     for (int i = 0; i < arrayorginal.size(); i++) {
                         Order returnOfSale = arrayorginal.get(i);
                         InvoiceNumber = returnOfSale.getCode();
-                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), InvoiceNumber.toLowerCase());
+                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), InvoiceNumber);
                         if (result_contain) {
                             filterItem.add(returnOfSale);
                             CheckFilter = true;
@@ -392,7 +392,7 @@ public class ReturnsListActivity extends BaseActivity {
                         for (int i = 0; i < arrayorginal.size(); i++) {
                             Order returnOfSale = arrayorginal.get(i);
                             CustomerName = returnOfSale.getCustomerName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), CustomerName.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), CustomerName);
                             if (result_contain) {
                                 filterItem.add(returnOfSale);
                                 CheckFilter = true;
@@ -403,7 +403,7 @@ public class ReturnsListActivity extends BaseActivity {
                         for (int i = 0; i < arrayorginal.size(); i++) {
                             Order returnOfSale = arrayorginal.get(i);
                             MarketName = returnOfSale.getMarketName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), MarketName.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), MarketName);
                             if (result_contain) {
                                 filterItem.add(returnOfSale);
                             }

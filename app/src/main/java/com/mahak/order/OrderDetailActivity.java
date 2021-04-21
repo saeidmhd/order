@@ -1282,7 +1282,7 @@ public class OrderDetailActivity extends BaseActivity {
                         printerBrand == ProjectInfo.PRINTER_BABY_380_A ||
                         printerBrand == ProjectInfo.PRINTER_DELTA_380_A ||
                         printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII ||
-                        printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310
+                        printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310 || printerBrand == ProjectInfo.UROVO_K319
                 ) {
                     tvFee.setText(ServiceTools.formatPrice(orderDetail.getPrice()));
                 }

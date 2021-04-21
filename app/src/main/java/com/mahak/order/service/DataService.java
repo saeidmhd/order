@@ -99,14 +99,12 @@ public class DataService {
         long startTime = System.nanoTime();
         db.open();
         if (visitorPeopleMaxRowVersion != 0) {
-            if (!db.UpdateVisitorPeopleFast(data)) {
+            if (!db.UpdateVisitorPeopleFast(data))
                 db.AddVisitorPeopleFast(data);
-                db.UpdatePersonFromVisitorPeopleFast(data);
-            }
-        } else {
+        }else {
             db.AddVisitorPeopleFast(data);
-            db.UpdatePersonFromVisitorPeopleFast(data);
         }
+        db.UpdatePersonFromVisitorPeopleFast(data);
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;

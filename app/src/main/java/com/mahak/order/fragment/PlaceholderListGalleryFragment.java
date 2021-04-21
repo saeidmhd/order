@@ -289,7 +289,7 @@ public class PlaceholderListGalleryFragment extends Fragment {
                 for (int i = 0; i < arrayOrginal.size(); i++) {
                     Product product = arrayOrginal.get(i);
                     name = product.getName();
-                    boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name.toLowerCase());
+                    boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name);
                     if (result_contain)
                         filterItem.add(product);
                 }

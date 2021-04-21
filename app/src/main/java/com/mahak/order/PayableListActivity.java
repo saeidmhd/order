@@ -433,7 +433,7 @@ public class PayableListActivity extends BaseActivity {
                 PayableList.addAll(originalList);
             } else {
                 for (PayableTransfer item : originalList) {
-                    boolean result_contain = ServiceTools.CheckContainsWithSimillar(query, String.valueOf(item.getTransferCode()).toLowerCase());
+                    boolean result_contain = ServiceTools.CheckContainsWithSimillar(query, String.valueOf(item.getTransferCode()));
                     if (String.valueOf(item.getTransferCode()).toLowerCase().contains(query))
                         if (result_contain) {
                             newList.add(item);
@@ -445,10 +445,10 @@ public class PayableListActivity extends BaseActivity {
 
                     for (PayableTransfer item : originalList) {
                         User user = db.getUser();
-                        String txtUser = "";
+                        String name = "";
                         if (user != null)
-                            txtUser = user.getName();
-                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(query, String.valueOf(txtUser.toLowerCase()));
+                            name = user.getName();
+                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(query, name);
                         if (result_contain) {
                             newList.add(item);
                             CheckFilter = true;

@@ -592,7 +592,7 @@ public class OrdersListActivity extends BaseActivity {
                     for (int i = 0; i < arrayorgin.size(); i++) {
                         ReceivedTransfers receivedTransfers = arrayorgin.get(i);
                         InvoiceNumber = String.valueOf(receivedTransfers.getTransferStoreClientId());
-                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), InvoiceNumber.toLowerCase());
+                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), InvoiceNumber);
                         if (result_contain) {
                             filterItem.add(receivedTransfers);
                             CheckFilter = true;
@@ -604,7 +604,7 @@ public class OrdersListActivity extends BaseActivity {
                             db.open();
                             visitor = db.getVisitorWithVisitorID(ServiceTools.toLong(receivedTransfers.getSenderVisitorId()));
                             CustomerName = visitor.getName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), CustomerName.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), CustomerName);
                             if (result_contain) {
                                 filterItem.add(receivedTransfers);
                                 CheckFilter = true;
@@ -616,7 +616,7 @@ public class OrdersListActivity extends BaseActivity {
                         for (int i = 0; i < arrayorgin.size(); i++) {
                             ReceivedTransfers receivedTransfers = arrayorgin.get(i);
                             //    MarketName = receivedTransfers.getOrganization();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), MarketName.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), MarketName);
                             if (result_contain) {
                                 filterItem.add(receivedTransfers);
 
@@ -908,7 +908,7 @@ public class OrdersListActivity extends BaseActivity {
                     for (int i = 0; i < arrayorginal.size(); i++) {
                         Order order = arrayorginal.get(i);
                         InvoiceNumber = order.getCode();
-                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), InvoiceNumber.toLowerCase());
+                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), InvoiceNumber);
                         if (result_contain) {
                             filterItem.add(order);
                             CheckFilter = true;
@@ -918,7 +918,7 @@ public class OrdersListActivity extends BaseActivity {
                         for (int i = 0; i < arrayorginal.size(); i++) {
                             Order order = arrayorginal.get(i);
                             CustomerName = order.getCustomerName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), CustomerName.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), CustomerName);
                             if (result_contain) {
                                 filterItem.add(order);
                                 CheckFilter = true;
@@ -929,7 +929,7 @@ public class OrdersListActivity extends BaseActivity {
                         for (int i = 0; i < arrayorginal.size(); i++) {
                             Order order = arrayorginal.get(i);
                             MarketName = order.getMarketName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), MarketName.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), MarketName);
                             if (result_contain) {
                                 filterItem.add(order);
 
@@ -1460,6 +1460,7 @@ public class OrdersListActivity extends BaseActivity {
                 break;
 
             case R.id.mnuAdd:
+                InvoiceDetailActivity.orderDetails.clear();
                 Intent intent = new Intent(mContext, PeopleListActivity.class);
                 intent.putExtra(PAGE, PAGE_ADD_NON_REGISTER);
                 startActivityForResult(intent, REQUEST_CUSTOMER_LIST);

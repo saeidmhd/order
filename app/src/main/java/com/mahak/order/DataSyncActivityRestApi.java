@@ -772,6 +772,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         showDialog(response.body().getMessage());
                         setTextSendErrorResult();
                         pbLoading.setVisibility(View.GONE);
+
+                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                        FirebaseCrashlytics.getInstance().log(response.body().getMessage());
                     }
                 }
 
@@ -847,12 +850,13 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         new ReceiveAsyncTask(mUserToken).execute();
 
                     } else if (response.body() != null) {
-                        // mMsg[0] = response.body().getData().getObjects().getOrders().getResults().get(0).getErrors().get(0).getError();
-                        dismissProgressDialog();
                         mMsg[0] = getString(R.string.send_error);
                         showDialog(response.body().getMessage());
                         setTextSendErrorResult();
                         pbLoading.setVisibility(View.GONE);
+
+                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                        FirebaseCrashlytics.getInstance().log(response.body().getMessage());
                     }
                 }
 
@@ -1389,6 +1393,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                     mMsg[0] = getString(R.string.send_error);
                                     setTextSendErrorResult();
                                     pbLoading.setVisibility(View.GONE);
+
+                                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                                    FirebaseCrashlytics.getInstance().log(response.body().toString());
                                 }
                             }
 

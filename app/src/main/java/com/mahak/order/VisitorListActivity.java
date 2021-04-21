@@ -242,7 +242,7 @@ public class VisitorListActivity extends BaseActivity {
                     for (int i = 0; i < arrayorginal.size(); i++) {
                         Visitor visitor = arrayorginal.get(i);
                         UserName = visitor.getName();
-                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), UserName.toLowerCase());
+                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), UserName);
                         //if(CustomerName.toLowerCase().contains(constraint))
                         if (result_contain) {
                             filterItem.add(visitor);

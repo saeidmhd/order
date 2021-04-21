@@ -311,6 +311,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
             @Override
             public void onClick(View v) {
+                InvoiceDetailActivity.orderDetails.clear();
                 if (mDrawerLayout.isDrawerOpen(mDrawerLeft))
                     mDrawerLayout.closeDrawers();
                 Type = ProjectInfo.TYPE_ORDER;
@@ -338,7 +339,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
             @Override
             public void onClick(View v) {
-
+                InvoiceDetailActivity.orderDetails.clear();
                 if (mDrawerLayout.isDrawerOpen(mDrawerLeft))
                     mDrawerLayout.closeDrawers();
                 Type = ProjectInfo.TYPE_INVOCIE;
@@ -467,8 +468,9 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
         btnAddNewOrder = (Button) findViewById(R.id.btnAddNewOrder);
-        btnAddNewReceipt = (Button) findViewById(R.id.btnAddNewReceipt);
         btnAddNewInvoice = (Button) findViewById(R.id.btnAddNewInvoice);
+
+        btnAddNewReceipt = (Button) findViewById(R.id.btnAddNewReceipt);
         btnAddNewTransference = (Button) findViewById(R.id.btnAddNewTransference);
         btnZoomMapView = (ImageButton) findViewById(R.id.btnZoomMapView);
 

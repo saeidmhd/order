@@ -12,10 +12,12 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mahak.order.BaseActivity;
+import com.mahak.order.InvoiceDetailActivity;
 import com.mahak.order.PhotoViewerActivity;
 import com.mahak.order.PriceCountSelectActivity;
 import com.mahak.order.ProductItemInitialize;
@@ -300,8 +302,6 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             count2 = ServiceTools.toDouble(countPackage);
         }
 
-        if (db == null) db = new DbAdapter(mContext);
-        db.open();
 
 
         Set mapSet = ProductPickerListActivity.HashMap_Product.entrySet();
@@ -395,7 +395,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                 double FinalPrice = ServiceTools.getCalculateFinalPrice(object, mContext);
                 object.setFinalPrice(String.valueOf(FinalPrice));
                 ProductPickerListActivity.HashMap_Product.put(product.getProductId(), object);
-
+                InvoiceDetailActivity.orderDetails.add(object);
             }//End of if
         }//End of if
         //Calculate Count and Final Price////////////////////////
@@ -412,7 +412,6 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     productPickerListActivity.productGridGalleryFragment.dismissDialog();
             }
         }
-        db.close();
     }
 
     private void showCountPriceDialog(int position, String price, String count, String packageCount, int type, int customerId, long groupId, int productId, String description, int mode, long orderId) {
@@ -465,7 +464,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             constraint = constraint.toString().toLowerCase();
             FilterResults result = new FilterResults();
 
-            if (constraint != null && constraint.toString().length() > 0) {
+            if (constraint.toString().length() > 0) {
                 Set<Product> filterItem = new LinkedHashSet<>();
                 if (ServiceTools.checkArabic(constraint.toString()))
                     filterItem.addAll(dbAdapter.searchProduct(ServiceTools.replaceWithEnglish(constraint.toString()), Type , categoryId , modeAsset));

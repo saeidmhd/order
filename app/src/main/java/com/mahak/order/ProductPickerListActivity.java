@@ -449,16 +449,9 @@ public class ProductPickerListActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                ClearZero();
-                ArrayList<OrderDetail> orderDetails = new ArrayList<>();
+                //ClearZero();
                 if (Mode == MODE_NEW) {
                     if (HashMap_Product.size() != 0) {
-                        Set mapSet = HashMap_Product.entrySet();
-                        for (Object aMapSet : mapSet) {
-                            Map.Entry mapEntry = (Map.Entry) aMapSet;
-                            OrderDetail object = (OrderDetail) mapEntry.getValue();
-                            orderDetails.add(object);
-                        }// End of While
                         Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
                         intent.putExtra(CUSTOMERID_KEY, CustomerId);
                         intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
@@ -1055,7 +1048,7 @@ public class ProductPickerListActivity extends BaseActivity {
                         for (int i = 0; i < arrayOrginal.size(); i++) {
                             Product product = arrayOrginal.get(i);
                             name = product.getName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name);
                             if (result_contain)
                                 filterItem.add(product);
                         }
@@ -1374,7 +1367,7 @@ public class ProductPickerListActivity extends BaseActivity {
                         for (int i = 0; i < arrayOrginal.size(); i++) {
                             Product product = arrayOrginal.get(i);
                             name = product.getName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name);
                             if (result_contain)
                                 filterItem.add(product);
                         }

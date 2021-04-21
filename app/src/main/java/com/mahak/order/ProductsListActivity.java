@@ -678,7 +678,7 @@ public class ProductsListActivity extends BaseActivity {
                         for (int i = 0; i < arrayOrginal.size(); i++) {
                             Product product = arrayOrginal.get(i);
                             name = product.getName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name);
                             //if(name.toLowerCase().contains(constraint))
                             if (result_contain)
                                 filterItem.add(product);
@@ -908,7 +908,7 @@ public class ProductsListActivity extends BaseActivity {
                         for (int i = 0; i < arrayOrginal.size(); i++) {
                             Product product = arrayOrginal.get(i);
                             name = product.getName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name);
                             //if(name.toLowerCase().contains(constraint))
                             if (result_contain)
                                 filterItem.add(product);

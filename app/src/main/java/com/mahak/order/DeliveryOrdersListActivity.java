@@ -244,7 +244,7 @@ public class DeliveryOrdersListActivity extends BaseActivity {
                         Order deliveryorder = arrayorginal.get(i);
                         InvoiceNumber = deliveryorder.getCode();
 
-                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), InvoiceNumber.toLowerCase());
+                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), InvoiceNumber);
 
                         //if(InvoiceNumber.toLowerCase().contains(constraint))
                         if (result_contain) {
@@ -256,7 +256,7 @@ public class DeliveryOrdersListActivity extends BaseActivity {
                         for (int i = 0; i < arrayorginal.size(); i++) {
                             Order order = arrayorginal.get(i);
                             CustomerName = order.getCustomerName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), CustomerName.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), CustomerName);
                             if (result_contain)
                                 //if(CustomerName.toLowerCase().contains(constraint))
                                 if (result_contain) {
@@ -269,7 +269,7 @@ public class DeliveryOrdersListActivity extends BaseActivity {
                         for (int i = 0; i < arrayorginal.size(); i++) {
                             Order order = arrayorginal.get(i);
                             MarketName = order.getMarketName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), MarketName.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), MarketName);
 
                             //if(MarketName.toLowerCase().contains(constraint))
                             if (result_contain) {

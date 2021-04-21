@@ -466,7 +466,7 @@ public class ReceiptsListActivity extends BaseActivity {
                 ReceiptList.addAll(originalList);
             } else {
                 for (Receipt item : originalList) {
-                    boolean result_contain = ServiceTools.CheckContainsWithSimillar(query, item.getCustomerName().toLowerCase());
+                    boolean result_contain = ServiceTools.CheckContainsWithSimillar(query, item.getCustomerName());
                     //if(item.getCustomerName().toLowerCase().contains(query))
                     if (result_contain) {
                         newList.add(item);
@@ -476,7 +476,7 @@ public class ReceiptsListActivity extends BaseActivity {
                 if (CheckFilter == false) {
 
                     for (Receipt item : originalList) {
-                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(query, String.valueOf(item.getTrackingCode()).toLowerCase());
+                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(query, String.valueOf(item.getTrackingCode()));
                         //if(item.getCustomerName().toLowerCase().contains(query))
                         if (result_contain) {
                             newList.add(item);

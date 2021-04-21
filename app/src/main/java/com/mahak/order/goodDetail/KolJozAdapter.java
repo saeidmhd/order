@@ -135,7 +135,7 @@ public class KolJozAdapter extends RecyclerView.Adapter<KolJozAdapter.ViewHolder
                 filterItem = new ArrayList<>();
                 for (int i = 0; i < productDetailOriginal.size(); i++) {
                     title = productDetailOriginal.get(i).getProperties();
-                    boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), title.toLowerCase());
+                    boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), title);
                     if (result_contain) {
                         filterItem.add(productDetailOriginal.get(i));
                         CheckFilter = true;

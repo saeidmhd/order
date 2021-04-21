@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -512,11 +513,17 @@ public class ServiceTools {
         }
 
         int totalHeight = 0;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
+
+        if(listAdapter.getCount()>0){
+            View listItem = listAdapter.getView(0, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight() * listAdapter.getCount();
+        }
+        /*for (int i = 0; i < listAdapter.getCount(); i++) {
             View listItem = listAdapter.getView(i, null, listView);
             listItem.measure(0, 0);
             totalHeight += listItem.getMeasuredHeight();
-        }
+        }*/
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
@@ -1119,12 +1126,15 @@ public class ServiceTools {
         return check;
     }
 
-    public static boolean CheckContainsWithSimillar(String value, String hystack) {
+    public static boolean CheckContainsWithSimillar(String value, String searchStr) {
+        if(searchStr == null)
+            return false;
+        searchStr = searchStr.toLowerCase();
         if (Locale.getDefault().getLanguage().equals("de")) {
-            return hystack.contains(value);
+            return searchStr.contains(value);
         } else {
             String Value = value.trim();
-            String Hystack = hystack;
+            String Hystack = searchStr;
 
             String[][] simillarChars = {
                     {"ی", "ي"},
@@ -1152,8 +1162,8 @@ public class ServiceTools {
                     }
             }
 
-            for (int i = 0; i < hystack.length(); i++) {
-                char CH_in = hystack.charAt(i);
+            for (int i = 0; i < searchStr.length(); i++) {
+                char CH_in = searchStr.charAt(i);
                 for (String[] group : simillarChars)
                     for (String ch : group) {
                         if (CH_in == ch.charAt(0)) {

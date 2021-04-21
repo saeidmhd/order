@@ -2057,52 +2057,20 @@ public class DbAdapter {
     private Product getProductFromCursor2(Cursor cursor) {
         Product product;
         product = new Product();
-        product.setId(cursor.getLong(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_ID)));
-        product.setProductCategoryId(cursor.getLong(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_CATEGORYID)));
+
         product.setProductCode(cursor.getLong(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_PRODUCT_CODE)));
-        product.setMahakId(cursor.getString(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_MAHAK_ID)));
-        product.setDatabaseId(cursor.getString(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_DATABASE_ID)));
-        product.setUserId(cursor.getLong(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_USER_ID)));
-        product.setName(cursor.getString(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_NAME)));
         product.setUnitRatio(cursor.getDouble(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_UnitRatio)));
-        product.setRealPrice(cursor.getString(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_REALPRICE)));
-        product.setTags(cursor.getString(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_TAGS)));
-
-        product.setMin(cursor.getInt(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_MIN)));
-        product.setCode(cursor.getString(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_CODE)));
-        product.setWeight(cursor.getDouble(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_WEIGHT)));
-
-        product.setWidth(cursor.getFloat(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_Width)));
-        product.setHeight(cursor.getFloat(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_Height)));
-        product.setLength(cursor.getFloat(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_Length)));
-
-        product.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_MODIFYDATE)));
-        product.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_PUBLISH)));
+        product.setProductId(cursor.getInt(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_ProductId)));
+        product.setName(cursor.getString(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_NAME)));
         product.setUnitName(cursor.getString(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_UNITNAME)));
         product.setUnitName2(cursor.getString(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_UNITNAME2)));
-        product.setTaxPercent(cursor.getDouble(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_TAX)));
-        product.setChargePercent(cursor.getDouble(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_CHARGE)));
-        product.setDiscountPercent(cursor.getString(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_DiscountPercent)));
-        product.setBarcode(cursor.getString(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_Barcode)));
-        product.setProductId(cursor.getInt(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_ProductId)));
-        product.setProductClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_ProductClientId)));
-        product.setDataHash(cursor.getString(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_DataHash)));
-        product.setCreateDate(cursor.getString(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_CreateDate)));
-        product.setUpdateDate(cursor.getString(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_UpdateDate)));
-        product.setCreateSyncId(cursor.getInt(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_CreateSyncId)));
-        product.setUpdateSyncId(cursor.getInt(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_UpdateSyncId)));
-        product.setRowVersion(cursor.getLong(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_RowVersion)));
-        product.setDeleted(cursor.getInt(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_Deleted)));
-
         product.setCustomerPrice(cursor.getDouble(cursor.getColumnIndex(DbSchema.ProductDetailSchema.COLUMN_CustomerPrice)));
-
         product.setSumCount1(cursor.getDouble(cursor.getColumnIndex("sumcount1")));
         product.setSumCount2(cursor.getDouble(cursor.getColumnIndex("sumcount2")));
+        product.setPrice(cursor.getDouble(cursor.getColumnIndex("price")));
 
-
-        ProductDetail productDetail = getProductDetailFromCursor(cursor);
-        double price = ServiceTools.getPriceFromPriceLevel2(productDetail);
-        product.setPrice(price);
+        /*double price = ServiceTools.getPriceFromPriceLevel3(cursor);
+        product.setPrice(price);*/
 
         return product;
     }
@@ -5571,7 +5539,9 @@ public class DbAdapter {
     }
 
     private Cursor getAllProductCursor2(long id, String LIMIT, String orderBy ,int asset) {
-        return mDb.rawQuery("select * , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+        return mDb.rawQuery(" select Products.ProductId , productcode , name , UnitRatio , DefaultSellPriceLevel , UnitName2 , UnitName, " +
+                "case DefaultSellPriceLevel when 1 then Price1 when 2 then Price2 when 3 then price3 when 4 then price4 when 5 then price5 when 6 then price6 when 7 then price7 when 8 then price8 when 9 then price9 when 10 then price10 end as price ," +
+                " productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                 " where " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
                 " and " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_Deleted + " = " + 0 +
                 getProductAssetStrnig(asset) +
@@ -5952,7 +5922,7 @@ public class DbAdapter {
                         " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_NAME + " LIKE " + "'%" + arabicStr + "%'" +
                         " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
                         " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
-                        " ) and " + DbSchema.Customerschema.COLUMN_USER_ID + " = " + getPrefUserId() +
+                        " ) and " + DbSchema.Customerschema.COLUMN_USER_ID + " = " + getPrefUserId() + " and " + DbSchema.Customerschema.DELETE + " = " + 0 +
                         " order by " + DbSchema.Customerschema.COLUMN_PersonCode;
                 selectArgs = new String[]{"%" + searchString + "%", "%" + searchString + "%", "%" + searchString + "%"};
             } else {
@@ -5962,7 +5932,7 @@ public class DbAdapter {
                         " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_NAME + " LIKE " + "'%" + arabicStr + "%'" +
                         " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
                         " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
-                        " ) and " + DbSchema.Customerschema.COLUMN_USER_ID + " = " + getPrefUserId() +
+                        " ) and " + DbSchema.Customerschema.COLUMN_USER_ID + " = " + getPrefUserId() + " and " + DbSchema.Customerschema.DELETE + " = " + 0 +
                         " order by " + DbSchema.Customerschema.COLUMN_PersonCode;
                 selectArgs = new String[]{"%" + searchString + "%", "%" + searchString + "%", "%" + searchString + "%"};
             }
@@ -5993,7 +5963,9 @@ public class DbAdapter {
         ArrayList<Product> array = new ArrayList<>();
         try {
             if (type == ProjectInfo.TYPE_INVOCIE) {
-                    rawquery = "select * , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+                    rawquery = " select Products.ProductId , productcode , name , UnitRatio , DefaultSellPriceLevel , UnitName2 , UnitName, " +
+                            "case DefaultSellPriceLevel when 1 then Price1 when 2 then Price2 when 3 then price3 when 4 then price4 when 5 then price5 when 6 then price6 when 7 then price7 when 8 then price8 when 9 then price9 when 10 then price10 end as price ," +
+                            " productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                         " where ( " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_NAME + " LIKE " + "'%" + searchString + "%'" +
                         " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchString + "%'" +
                         " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
@@ -6001,7 +5973,9 @@ public class DbAdapter {
                          getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(1) + " GROUP by Products.productId " +
                         " order by " + DbSchema.Productschema.COLUMN_PRODUCT_CODE;
             } else {
-                rawquery = "select * , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+                rawquery = " select Products.ProductId , productcode , name , UnitRatio, DefaultSellPriceLevel , UnitName2 , UnitName, " +
+                        "case DefaultSellPriceLevel when 1 then Price1 when 2 then Price2 when 3 then price3 when 4 then price4 when 5 then price5 when 6 then price6 when 7 then price7 when 8 then price8 when 9 then price9 when 10 then price10 end as price ," +
+                        " productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                         " where ( " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_NAME + " LIKE " + "'%" + searchString + "%'" +
                         " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchString + "%'" +
                         " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
@@ -7519,8 +7493,7 @@ public class DbAdapter {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     picturesProduct = getPictureProductFromCursor(cursor);
-                    if (picturesProduct != null)
-                        array.add(picturesProduct);
+                    array.add(picturesProduct);
                     cursor.moveToNext();
                 }
                 cursor.close();

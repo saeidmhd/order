@@ -247,7 +247,7 @@ public class ProductPagerFragment extends Fragment {
             products = new ArrayList<>();
             for (int i = 0; i < originalProducts.size(); i++) {
                 Product product = originalProducts.get(i);
-                boolean result_contain = ServiceTools.CheckContainsWithSimillar(name, product.getName().toLowerCase());
+                boolean result_contain = ServiceTools.CheckContainsWithSimillar(name, product.getName());
                 if (result_contain)
                     products.add(product);
             }

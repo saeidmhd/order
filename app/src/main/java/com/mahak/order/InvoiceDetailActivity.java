@@ -324,28 +324,24 @@ public class InvoiceDetailActivity extends BaseActivity {
         if (res) {
             if (OrderType == ProjectInfo.TYPE_RETURN_OF_SALE) {
                 Intent intent = new Intent(mContext, ReturnDetailActivity.class);
-                //Intent intent = new Intent(mContext, OrderDetailActivity.class);
                 intent.putExtra(ID, OrderId);
                 intent.putExtra(PAGE, PAGE_Invoice_Detail_Activity);
                 intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_RETURN_OF_SALE);
                 startActivity(intent);
-                Clear();
             } else if (OrderType == TYPE_SEND_TRANSFERENCE) {
-
                 Intent intent = new Intent(mContext, OrderDetailActivity.class);
                 intent.putExtra(ID, OrderId);
                 intent.putExtra(PAGE, PAGE_Invoice_Detail_Activity);
                 intent.putExtra(TYPE_KEY, TYPE_SEND_TRANSFERENCE);
                 startActivity(intent);
-                Clear();
             } else {
                 Intent intent = new Intent(mContext, OrderDetailActivity.class);
                 intent.putExtra(PAGE, PAGE_Invoice_Detail_Activity);
                 intent.putExtra(ID, OrderId);
                 startActivity(intent);
-                Clear();
                 finish();
             }
+            Clear();
         } else {
             Toast.makeText(mContext, R.string.more_than_asset, Toast.LENGTH_SHORT).show();
         }
@@ -453,6 +449,8 @@ public class InvoiceDetailActivity extends BaseActivity {
             orderDetailArrayList = db.getAllProductWithOrderDetail(order.getId());
         }
 
+        InvoiceDetailActivity.orderDetails = orderDetailArrayList;
+
         //Fill HashMap __________________________________________________________
         ProductPickerListActivity.HashMap_Product = new LinkedHashMap<>();
         for (OrderDetail item : arrayProduct) {
@@ -525,6 +523,7 @@ public class InvoiceDetailActivity extends BaseActivity {
      * @param orderType
      * @return
      */
+
 
     public boolean SaveOrder(int requestPayFactor, int orderType) {
 

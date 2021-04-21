@@ -377,7 +377,7 @@ public class NonRegisterListActivity extends BaseActivity {
                     for (int i = 0; i < arrayorginal.size(); i++) {
                         NonRegister nonRegister = arrayorginal.get(i);
                         InvoiceNumber = nonRegister.getCode();
-                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), InvoiceNumber.toLowerCase());
+                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), InvoiceNumber);
                         if (result_contain) {
                             filterItem.add(nonRegister);
                             CheckFilter = true;
@@ -387,7 +387,7 @@ public class NonRegisterListActivity extends BaseActivity {
                         for (int i = 0; i < arrayorginal.size(); i++) {
                             NonRegister nonRegister = arrayorginal.get(i);
                             CustomerName = nonRegister.getCustomerName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), CustomerName.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), CustomerName);
                             if (result_contain) {
                                 filterItem.add(nonRegister);
                                 CheckFilter = true;
@@ -398,7 +398,7 @@ public class NonRegisterListActivity extends BaseActivity {
                         for (int i = 0; i < arrayorginal.size(); i++) {
                             NonRegister nonRegister = arrayorginal.get(i);
                             MarketName = nonRegister.getMarketName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), MarketName.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), MarketName);
                             if (result_contain) {
                                 filterItem.add(nonRegister);
 
