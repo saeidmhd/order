@@ -762,7 +762,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         pbLoading.setVisibility(View.GONE);
                         db.close();
 
-                        new SendSignInfoAsyncTask(mUserToken).execute();
+                        new ReceiveAsyncTask(mUserToken).execute();
 
 
                     } else if (response.body() != null) {
@@ -791,86 +791,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
             });
 
 
-        }
-    }
-
-    class SendSignInfoAsyncTask extends AsyncTask<String, String, Integer> {
-
-        List<PicturesProduct> picturesProducts = new ArrayList<>();
-        String mUserToken;
-
-        SendSignInfoAsyncTask(String UserToken) {
-            mUserToken = UserToken;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pbLoading.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Integer doInBackground(String... arg0) {
-            db.open();
-            picturesProducts = db.getAllSignWithoutUrl();
-            return 0;
-        }
-
-        @Override
-        protected void onPostExecute(Integer result) {
-
-            pbLoading.setVisibility(View.GONE);
-            pbLoading.setVisibility(View.VISIBLE);
-
-            final String[] mMsg = {""};
-
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-            SetAllDataBody setAllDataBody = new SetAllDataBody();
-            setAllDataBody.setUserToken(mUserToken);
-            setAllDataBody.setPictures(picturesProducts);
-            Call<SaveAllDataResult> saveAllDataResultCall = apiService.SaveAllData(setAllDataBody);
-
-            pd.setMessage(getString(R.string.sending_image));
-            pd.setCancelable(false);
-            pd.show();
-            saveAllDataResultCall.enqueue(new Callback<SaveAllDataResult>() {
-                @Override
-                public void onResponse(@NonNull Call<SaveAllDataResult> call, @NonNull Response<SaveAllDataResult> response) {
-                    dismissProgressDialog();
-                    if (response.body() != null && response.body().isResult()) {
-                        db.open();
-                        if (picturesProducts.size() > 0) {
-                            for (int i = 0; i < picturesProducts.size(); i++) {
-                                picturesProducts.get(i).setPictureId(response.body().getData().getObjects().getPictures().getResults().get(i).getEntityID());
-                                db.UpdatePicturesProductWithClientId(picturesProducts.get(i));
-                            }
-                        }
-                        pbLoading.setVisibility(View.GONE);
-                        db.close();
-                        new ReceiveAsyncTask(mUserToken).execute();
-
-                    } else if (response.body() != null) {
-                        mMsg[0] = getString(R.string.send_error);
-                        showDialog(response.body().getMessage());
-                        setTextSendErrorResult();
-                        pbLoading.setVisibility(View.GONE);
-
-                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                        FirebaseCrashlytics.getInstance().log(response.body().getMessage());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                    FirebaseCrashlytics.getInstance().log(t.getMessage());
-                    dismissProgressDialog();
-                    mMsg[0] = t.toString();
-                    showDialog(mMsg[0]);
-                    pbLoading.setVisibility(View.GONE);
-                    setTextSendErrorResult();
-                }
-            });
         }
     }
 
@@ -1340,11 +1260,92 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         break;
                 }
             }
-            new SendSignImageAsyncTask(mUserToken).execute();
+
+            new SendSignInfoAsyncTask(mUserToken).execute();
+
             pbLoading.setVisibility(View.GONE);
             dismissProgressDialog();
         }
 
+    }
+
+    class SendSignInfoAsyncTask extends AsyncTask<String, String, Integer> {
+
+        List<PicturesProduct> picturesProducts = new ArrayList<>();
+        String mUserToken;
+
+        SendSignInfoAsyncTask(String UserToken) {
+            mUserToken = UserToken;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pbLoading.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Integer doInBackground(String... arg0) {
+            db.open();
+            picturesProducts = db.getAllSignWithoutUrl();
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+
+            pbLoading.setVisibility(View.GONE);
+            pbLoading.setVisibility(View.VISIBLE);
+
+            final String[] mMsg = {""};
+
+            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            SetAllDataBody setAllDataBody = new SetAllDataBody();
+            setAllDataBody.setUserToken(mUserToken);
+            setAllDataBody.setPictures(picturesProducts);
+            Call<SaveAllDataResult> saveAllDataResultCall = apiService.SaveAllData(setAllDataBody);
+
+            pd.setMessage(getString(R.string.sending_image));
+            pd.setCancelable(false);
+            pd.show();
+            saveAllDataResultCall.enqueue(new Callback<SaveAllDataResult>() {
+                @Override
+                public void onResponse(@NonNull Call<SaveAllDataResult> call, @NonNull Response<SaveAllDataResult> response) {
+                    dismissProgressDialog();
+                    if (response.body() != null && response.body().isResult()) {
+                        db.open();
+                        if (picturesProducts.size() > 0) {
+                            for (int i = 0; i < picturesProducts.size(); i++) {
+                                picturesProducts.get(i).setPictureId(response.body().getData().getObjects().getPictures().getResults().get(i).getEntityID());
+                                db.UpdatePicturesProductWithClientId(picturesProducts.get(i));
+                            }
+                        }
+                        pbLoading.setVisibility(View.GONE);
+                        db.close();
+
+                        new SendSignImageAsyncTask(mUserToken).execute();
+
+                    } else if (response.body() != null) {
+                        mMsg[0] = getString(R.string.send_error);
+                        //showDialog(response.body().getMessage());
+                        pbLoading.setVisibility(View.GONE);
+
+                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                        FirebaseCrashlytics.getInstance().log(response.body().getMessage());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
+                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                    FirebaseCrashlytics.getInstance().log(t.getMessage());
+                    dismissProgressDialog();
+                    mMsg[0] = t.toString();
+                    //showDialog(mMsg[0]);
+                    pbLoading.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
     class SendSignImageAsyncTask extends AsyncTask<String, String, Integer> {
@@ -1391,7 +1392,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                 } else if (response.body() != null) {
                                     dismissProgressDialog();
                                     mMsg[0] = getString(R.string.send_error);
-                                    setTextSendErrorResult();
                                     pbLoading.setVisibility(View.GONE);
 
                                     FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
@@ -1405,9 +1405,8 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                 FirebaseCrashlytics.getInstance().log(t.getMessage());
                                 dismissProgressDialog();
                                 mMsg[0] = t.toString();
-                                showDialog(mMsg[0]);
+                                //showDialog(mMsg[0]);
                                 pbLoading.setVisibility(View.GONE);
-                                setTextSendErrorResult();
                             }
                         });
                     }

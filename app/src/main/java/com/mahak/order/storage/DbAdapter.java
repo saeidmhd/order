@@ -5922,7 +5922,7 @@ public class DbAdapter {
                         " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_NAME + " LIKE " + "'%" + arabicStr + "%'" +
                         " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
                         " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
-                        " ) and " + DbSchema.Customerschema.COLUMN_USER_ID + " = " + getPrefUserId() + " and " + DbSchema.Customerschema.DELETE + " = " + 0 +
+                        " ) and " + DbSchema.Customerschema.COLUMN_USER_ID + " = " + getPrefUserId() + " and " + DbSchema.Customerschema.COLUMN_Deleted + " = " + 0 +
                         " order by " + DbSchema.Customerschema.COLUMN_PersonCode;
                 selectArgs = new String[]{"%" + searchString + "%", "%" + searchString + "%", "%" + searchString + "%"};
             } else {
@@ -5932,7 +5932,7 @@ public class DbAdapter {
                         " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_NAME + " LIKE " + "'%" + arabicStr + "%'" +
                         " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
                         " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
-                        " ) and " + DbSchema.Customerschema.COLUMN_USER_ID + " = " + getPrefUserId() + " and " + DbSchema.Customerschema.DELETE + " = " + 0 +
+                        " ) and " + DbSchema.Customerschema.COLUMN_USER_ID + " = " + getPrefUserId() + " and " + DbSchema.Customerschema.COLUMN_Deleted + " = " + 0 +
                         " order by " + DbSchema.Customerschema.COLUMN_PersonCode;
                 selectArgs = new String[]{"%" + searchString + "%", "%" + searchString + "%", "%" + searchString + "%"};
             }

@@ -442,25 +442,9 @@ public class PeopleListActivity extends BaseActivity {
                         break;
                 }
 
-                /*if (amount == 0) {// if customerStatus =	incalculable
-                    tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_incalculable));
-                    tvRemained.setText(ServiceTools.formatPrice(amount));
-                }
-                if (amount < 0) {    // if customerStatus =	Debtor
-                    amount = amount * -1;
-                    tvRemained.setText(ServiceTools.formatPrice(amount));
-                    tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_debitor));
-                } else if (amount > 0) // if customerStaus =	Creditor
-                {
-                    tvRemained.setText(ServiceTools.formatPrice(amount));
-                    tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_creditor));
-                }*/
-
                 tvMarketName.setText(customer.getOrganization());
                 tvCustomerName.setText(customer.getName());
                 tvAddress.setText(customer.getAddress());
-
-
 
             }
         }// End of Holder
