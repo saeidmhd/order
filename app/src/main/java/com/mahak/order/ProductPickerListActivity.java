@@ -953,6 +953,7 @@ public class ProductPickerListActivity extends BaseActivity {
                 public Holder(View view) {
 
                     tvProductName = (TextView) view.findViewById(R.id.tvName);
+                    tvProductName.setSelected(true);
                     tvAsset = (TextView) view.findViewById(R.id.tvAsset);
                     tvAsset2 = (TextView) view.findViewById(R.id.tvAsset2);
                     tvInbox = (TextView) view.findViewById(R.id.tvInbox);
@@ -1272,6 +1273,7 @@ public class ProductPickerListActivity extends BaseActivity {
 
                 public Holder(View view) {
                     tvName = (TextView) view.findViewById(R.id.tvName);
+                    tvName.setSelected(true);
                     tvAsset = (TextView) view.findViewById(R.id.tvAsset);
                     tvAsset2 = (TextView) view.findViewById(R.id.tvAsset2);
                     tvInbox = (TextView) view.findViewById(R.id.tvInbox);

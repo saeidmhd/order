@@ -230,6 +230,7 @@ public class ProductGridFragment extends Fragment {
 
             public Holder(View view) {
                 tvName = (TextView) view.findViewById(R.id.tvName);
+                tvName.setSelected(true);
                 tvAsset = (TextView) view.findViewById(R.id.tvAsset);
                 tvAsset2 = (TextView) view.findViewById(R.id.tvAsset2);
                 tvInbox = (TextView) view.findViewById(R.id.tvInbox);
@@ -392,7 +393,7 @@ public class ProductGridFragment extends Fragment {
         //View rootView = inflater.inflate(R.layout.fragment_products_grid, container, false);
         View rootView = inflater.inflate(R.layout.fragment_products_grid2, container, false);
         lstProduct = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        gridLayoutManager = new GridLayoutManager(mContext, 3);
+        gridLayoutManager = new GridLayoutManager(mContext, 2);
         lstProduct.setLayoutManager(gridLayoutManager);
         Bundle bundle = this.getArguments();
         if (bundle != null) {

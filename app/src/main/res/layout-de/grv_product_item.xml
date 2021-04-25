@@ -27,8 +27,10 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:layout_marginBottom="@dimen/SmallSize"
-            android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
             android:background="@color/forms_alter_row"
             android:text="@string/product_code" />
 

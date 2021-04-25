@@ -3,8 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:padding="@dimen/LargeSize"
-    android:layout_margin="@dimen/LargeSize"
     android:orientation="vertical">
 
     <LinearLayout
@@ -17,7 +15,7 @@
         android:paddingTop="@dimen/SmallSize"
         android:paddingRight="@dimen/SmallSize"
         android:paddingBottom="@dimen/NormalSize"
-        android:layout_margin="@dimen/LargeSize">
+        android:layout_margin="@dimen/NormalSize">
 
         <com.mahak.order.widget.FontTextView
             android:id="@+id/tvProductCode"
@@ -35,11 +33,14 @@
         <com.mahak.order.widget.FontTextView
             android:id="@+id/tvName"
             style="@style/forms_label_default"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_marginBottom="@dimen/SmallSize"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:gravity="center"
             android:text="@string/sample_product" />
 
         <ImageView

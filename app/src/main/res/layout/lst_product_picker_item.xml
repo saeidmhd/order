@@ -45,6 +45,9 @@
                     android:layout_height="32dp"
                     android:gravity="center_vertical|right"
                     android:singleLine="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:layout_weight="1"
+                    android:ellipsize="marquee"
                     android:textSize="@dimen/LargeSize"
                     android:text="@string/sample_product" />
             </LinearLayout>

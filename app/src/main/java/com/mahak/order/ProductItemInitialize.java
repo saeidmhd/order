@@ -234,6 +234,7 @@ public class ProductItemInitialize {
             imgProduct = (ImageView) view.findViewById(R.id.imgProduct);
             recyclerImage = (RecyclerView) view.findViewById(R.id.recyclerImage);
             tvProductName = (TextView) view.findViewById(R.id.tvName);
+            tvProductName.setSelected(true);
             tvAsset = (TextView) view.findViewById(R.id.tvAsset);
             tvAsset2 = (TextView) view.findViewById(R.id.tvAsset2);
             tvInbox = (TextView) view.findViewById(R.id.tvInbox);

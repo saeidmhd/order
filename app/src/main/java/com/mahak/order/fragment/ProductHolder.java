@@ -22,6 +22,7 @@ public class ProductHolder extends RecyclerView.ViewHolder {
     ProductHolder(View view) {
         super(view);
         tvName = (TextView) view.findViewById(R.id.tvName);
+        tvName.setSelected(true);
         tvProductCode = (TextView) view.findViewById(R.id.tvProductCode);
         panelCount = (LinearLayout) view.findViewById(R.id.panelCount);
         tvCustomerPrice = (TextView) view.findViewById(R.id.tvCustomerPrice);

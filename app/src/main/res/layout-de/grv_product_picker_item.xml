@@ -14,7 +14,8 @@
         android:paddingLeft="@dimen/SmallSize"
         android:paddingTop="@dimen/SmallSize"
         android:paddingRight="@dimen/SmallSize"
-        android:paddingBottom="@dimen/NormalSize">
+        android:paddingBottom="@dimen/NormalSize"
+        android:layout_margin="@dimen/NormalSize">
 
         <com.mahak.order.widget.FontTextView
             android:id="@+id/tvProductCode"
@@ -35,8 +36,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/SmallSize"
-            android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
             android:text="@string/sample_product" />
 
         <ImageView
