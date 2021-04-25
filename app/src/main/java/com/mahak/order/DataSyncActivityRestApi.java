@@ -23,6 +23,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
 import com.mahak.order.common.Bank;
@@ -59,7 +61,28 @@ import com.mahak.order.common.login.LoginResult;
 import com.mahak.order.common.request.GetAllDataBody;
 import com.mahak.order.common.request.GetAllDataResult.GetDataResult;
 import com.mahak.order.common.request.SetAllDataBody;
+import com.mahak.order.common.request.SetAllDataResult.Banks.Banks;
+import com.mahak.order.common.request.SetAllDataResult.Checklists.Checklists;
+import com.mahak.order.common.request.SetAllDataResult.Cheques.Cheques;
+import com.mahak.order.common.request.SetAllDataResult.ExtraDatas.ExtraDatas;
+import com.mahak.order.common.request.SetAllDataResult.NonRegisters.NonRegisters;
+import com.mahak.order.common.request.SetAllDataResult.Objects;
+import com.mahak.order.common.request.SetAllDataResult.OrderDetails.OrderDetails;
+import com.mahak.order.common.request.SetAllDataResult.Orders.Orders;
+import com.mahak.order.common.request.SetAllDataResult.PayableTransfers.PayableTransfers;
+import com.mahak.order.common.request.SetAllDataResult.PersonGroups.PersonGroups;
+import com.mahak.order.common.request.SetAllDataResult.Persons.People;
+import com.mahak.order.common.request.SetAllDataResult.Pictures.Pictures;
+import com.mahak.order.common.request.SetAllDataResult.ProductCategories.ProductCategories;
+import com.mahak.order.common.request.SetAllDataResult.ProductDetails.ProductDetails;
+import com.mahak.order.common.request.SetAllDataResult.Products.Products;
+import com.mahak.order.common.request.SetAllDataResult.Receipts.Receipts;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
+import com.mahak.order.common.request.SetAllDataResult.Settings.Settings;
+import com.mahak.order.common.request.SetAllDataResult.Transactions.Transactions;
+import com.mahak.order.common.request.SetAllDataResult.TransferStoreDetails.TransferStoreDetails;
+import com.mahak.order.common.request.SetAllDataResult.TransferStores.TransferStores;
+import com.mahak.order.common.request.SetAllDataResult.Visitors.Visitors;
 import com.mahak.order.common.request.SetSign.setSignImage;
 import com.mahak.order.service.DataService;
 import com.mahak.order.service.ReadOfflinePicturesProducts;
@@ -769,7 +792,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         // mMsg[0] = response.body().getData().getObjects().getOrders().getResults().get(0).getErrors().get(0).getError();
                         dismissProgressDialog();
                         mMsg[0] = getString(R.string.send_error);
-                        showDialog(response.body().getMessage());
+                        showDialog(getResponseError(response.body().getData().getObjects()));
                         setTextSendErrorResult();
                         pbLoading.setVisibility(View.GONE);
 
@@ -792,6 +815,50 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
 
         }
+    }
+
+    private String getResponseError(Objects objects) {
+        if(objects.getPeople().getResults().size()>0)
+            return "خطا در ارسال اشخاص" + "\n" +objects.getPeople().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getPeople().getResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getBanks().getResults().size()>0)
+            return "خطا در ارسال بانک" + "\n" +objects.getBanks().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getBanks().getResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getChecklists().getResults().size()>0)
+            return "خطا در ارسال چک لیست ها" + "\n" +objects.getChecklists().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getChecklists().getResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getCheques().getResults().size()>0)
+            return "خطا در ارسال چک ها" + "\n" +objects.getCheques().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getCheques().getResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getPayableTransfers().getResults().size()>0)
+            return "خطا در ارسال پرداختی ها" + "\n" +objects.getPayableTransfers().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getPayableTransfers().getResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getSettings().getSettingsResults().size()>0)
+            return "خطا در ارسال تنظیمات" + "\n" +objects.getSettings().getSettingsResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getSettings().getSettingsResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getExtraDatas().getResults().size()>0)
+            return "خطا در ارسال اطلاعات بیشتر" + "\n" +objects.getExtraDatas().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getExtraDatas().getResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getOrderDetails().getResults().size()>0)
+            return "خطا در ارسال جزییات فاکتور" + "\n" +objects.getOrderDetails().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getOrderDetails().getResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getOrders().getResults().size()>0)
+            return "خطا در ارسال فاکتور" + "\n" +objects.getOrders().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getOrders().getResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getPersonGroups().getResults().size()>0)
+            return "خطا در ارسال گروه اشخاص" + "\n" +objects.getPersonGroups().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getPersonGroups().getResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getPictures().getResults().size()>0)
+            return "خطا در ارسال تصاویر" + "\n" +objects.getPictures().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getPictures().getResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getProductCategories().getResults().size()>0)
+            return "خطا در ارسال گروه کالاها" + "\n" +objects.getProductCategories().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getProductCategories().getResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getProductDetails().getResults().size()>0)
+            return "خطا در ارسال جزییات کالاها" + "\n" +objects.getProductDetails().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getProductDetails().getResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getProducts().getResults().size()>0)
+            return "خطا در ارسال کالاها" + "\n" +objects.getProducts().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getProducts().getResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getReceipts().getResults().size()>0)
+            return "خطا در ارسال دریافتی ها" + "\n" +objects.getReceipts().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getReceipts().getResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getTransactions().getResults().size()>0)
+            return "خطا در ارسال گردش حساب ها" + "\n" +objects.getTransactions().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getTransactions().getResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getVisitors().getResults().size()>0)
+            return "خطا در ارسال ویزیتور ها" + "\n" +objects.getVisitors().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getVisitors().getResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getNotRegisters().getResults().size()>0)
+            return "خطا در ارسال عدم ثبت سفارش" + "\n" +objects.getNotRegisters().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getNotRegisters().getResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getTransferStores().getResults().size()>0)
+            return "خطا در ارسال حواله کالا" + "\n" +objects.getTransferStores().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getTransferStores().getResults().get(0).getErrors().get(0).getProperty();
+        if(objects.getTransferStoreDetails().getResults().size()>0)
+            return "خطا در ارسال جزییات حواله کالاها" + "\n" +objects.getTransferStoreDetails().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getTransferStoreDetails().getResults().get(0).getErrors().get(0).getProperty();
+        return "";
     }
 
     class ReceiveAsyncTask extends AsyncTask<String, String, Integer> {

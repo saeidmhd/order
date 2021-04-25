@@ -865,8 +865,8 @@
     <string name="clear">پاک کردن</string>
     <string name="register">ثبت امضاء</string>
     <string name="mahak_url">www.MahakSoft.com</string>
-    <string name="status">وضعیت</string>
-    <string name="balance">مانده</string>
+    <string name="status">وضعیت:</string>
+    <string name="balance">مانده:</string>
     <string name="creditor_amount">مبلغ بستانکار</string>
     <string name="debt_amount">مبلغ بدهکار</string>
     <string name="date_str">تاریخ</string>
