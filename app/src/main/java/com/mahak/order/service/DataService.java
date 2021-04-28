@@ -36,7 +36,7 @@ import com.mahak.order.common.Visitor;
 import com.mahak.order.common.VisitorPeople;
 import com.mahak.order.common.VisitorProduct;
 import com.mahak.order.storage.DbAdapter;
-import com.mahak.order.tracking.visitorZone.Zone;
+import com.mahak.order.tracking.visitorZone.Datum;
 import com.mahak.order.tracking.visitorZone.ZoneLocation;
 
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class DataService {
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
-    public static void InsertZone(DbAdapter db, Zone data) {
+    public static void InsertZone(DbAdapter db, Datum data) {
         db.open();
         db.AddZone(data);
         db.close();

@@ -69,18 +69,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.maps.android.PolyUtil;
-import com.mahak.order.apiHelper.ApiClient;
-import com.mahak.order.apiHelper.ApiInterface;
 import com.mahak.order.common.CheckList;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.User;
-import com.mahak.order.common.loginSignalr.SignalLoginBody;
-import com.mahak.order.common.loginSignalr.SignalLoginResult;
-import com.mahak.order.service.DataService;
 import com.mahak.order.tracking.LocationService;
 import com.mahak.order.tracking.MapPolygon;
 import com.mahak.order.tracking.ShowPersonCluster;
@@ -88,11 +82,6 @@ import com.mahak.order.tracking.TrackingConfig;
 import com.mahak.order.tracking.Utils;
 import com.mahak.order.service.ReadOfflinePicturesProducts;
 import com.mahak.order.storage.DbAdapter;
-import com.mahak.order.tracking.setting.SettingBody;
-import com.mahak.order.tracking.setting.TrackingSetting;
-import com.mahak.order.tracking.visitorZone.Datum;
-import com.mahak.order.tracking.visitorZone.VisitorZoneLocation;
-import com.mahak.order.tracking.visitorZone.ZoneBody;
 import com.mahak.order.widget.FontAlertDialog;
 import com.mahak.order.widget.FontProgressDialog;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -101,23 +90,18 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class DashboardActivity extends BaseActivity implements View.OnClickListener, GoogleMap.OnMarkerClickListener,
         GoogleMap.OnMapClickListener {
 
     private static final int REQUEST_CUSTOMER_LIST = 2;
     private static int REQUEST_DATASYNC = 1;
-    private Context mContext;
+    private static Context mContext;
     private Activity mActivity;
     private DrawerLayout mDrawerLayout;
     private RelativeLayout mDrawerLeft;
@@ -196,7 +180,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
     private String TrackingState = "";
 
-    MapPolygon mapPolygon;
+    private static MapPolygon mapPolygon;
 
     //------------GCM------------
     String SENDER_ID = "779811760050";
@@ -247,7 +231,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     private boolean isServiceRun = false;
     private List<LatLng> latLngpoints = new ArrayList<>();
     private FontProgressDialog pd;
-    private LatLng lastPosition;
+    private static LatLng lastPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -441,19 +425,13 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 InvoiceDetailActivity.orderDetails.clear();
                 if (mDrawerLayout.isDrawerOpen(mDrawerLeft))
                     mDrawerLayout.closeDrawers();
-                if(resticted()){
-                    if(mapPolygon != null)
-                        if(mapPolygon.checkPositionInZone(lastPosition)){
-                            Type = ProjectInfo.TYPE_INVOCIE;
-                            Intent intent = new Intent(mContext, PeopleListActivity.class);
-                            intent.putExtra(PAGE, PAGE_ADD_INVOICE);
-                            startActivityForResult(intent, REQUEST_CUSTOMER_LIST);
-                        }else Toast.makeText(mContext, "خارج از منطقه یا خاموش بودن سامانه ردیابی ! امکان ثبت فاکتور وجود ندارد.", Toast.LENGTH_SHORT).show();
-                }else {
+                if(CanRegisterInvoiceOutOfZone()){
                     Type = ProjectInfo.TYPE_INVOCIE;
                     Intent intent = new Intent(mContext, PeopleListActivity.class);
                     intent.putExtra(PAGE, PAGE_ADD_INVOICE);
                     startActivityForResult(intent, REQUEST_CUSTOMER_LIST);
+                }else {
+                    Toast.makeText(mContext, "خارج از منطقه یا خاموش بودن سامانه ردیابی ! امکان ثبت فاکتور وجود ندارد.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -466,7 +444,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 builder.setPositiveButton(R.string.str_yes, new OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         new TrackingConfig(mContext,mGoogleMap).getSignalTokenAndSetting();
-                        //getSignalTokenAndSetting(mContext);
                     }
                 });
                 builder.setNegativeButton(R.string.str_cancel, new OnClickListener() {
@@ -568,19 +545,23 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
     }//end of onCreate
 
-    public boolean resticted() {
-        boolean isRestricted = false;
+    public static boolean CanRegisterInvoiceOutOfZone() {
+        boolean canRegister = false;
         String config = ServiceTools.getKeyFromSharedPreferences(mContext, ProjectInfo.pre_gps_config);
         if (!ServiceTools.isNull(config)) {
             try {
                 JSONObject obj = new JSONObject(config);
-                isRestricted = obj.getBoolean(ProjectInfo._json_key_isRestricted);
+                canRegister = obj.getBoolean(ProjectInfo._json_key_isRestricted);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return isRestricted;
+        if(!canRegister)
+            if(mapPolygon != null)
+                return mapPolygon.checkPositionInZone(lastPosition);
+        return canRegister;
     }
+
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -972,7 +953,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         bindService(new Intent(this, LocationService.class), mServiceConnection,
                 Context.BIND_AUTO_CREATE);
 
-        //setButtonsState(Utils.requestingLocationUpdates(this));
+        setButtonsState(Utils.requestingLocationUpdates(this));
     }
 
     private void setButtonsState(boolean requestingLocationUpdates) {
@@ -1560,7 +1541,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         }
     }
-
 
     private void forceEnableGps() {
         LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);

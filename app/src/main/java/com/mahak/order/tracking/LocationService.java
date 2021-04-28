@@ -833,6 +833,8 @@ public class LocationService extends Service {
         if (serviceIsRunningInForeground(this)) {
             mNotificationManager.notify(NOTIFICATION_ID, getNotification());
         }
+
+
     }
 
     /**

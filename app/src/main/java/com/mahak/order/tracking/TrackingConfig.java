@@ -33,7 +33,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.mahak.order.BaseActivity.baseUrl;
 import static com.mahak.order.BaseActivity.getPrefSignalUserToken;
 import static com.mahak.order.BaseActivity.getPrefUserMasterId;
 import static com.mahak.order.BaseActivity.setPrefSignalUserToken;
@@ -43,7 +42,7 @@ public class TrackingConfig {
     Context mContext;
     private FontProgressDialog pd;
     GoogleMap mGoogleMap;
-    private DbAdapter db;
+    private final DbAdapter db;
 
     public TrackingConfig(Context context , GoogleMap googleMap){
         mContext = context;
@@ -105,7 +104,6 @@ public class TrackingConfig {
                 if (response.body() != null) {
                     if (response.body().isSucceeded()) {
                         int visitorId = 0;
-                        boolean isRestricted = false;
 
                         JSONObject gpsData = new JSONObject();
                         long MIN_DISTANCE_CHANGE_FOR_UPDATES = ServiceTools.toLong(response.body().getData().getSendPointsPerMeter());
@@ -120,23 +118,16 @@ public class TrackingConfig {
                         else
                             BaseActivity.setPrefTrackingControl(0);
 
-                        if(response.body().getData().getGeofencingSetting() != null)
-                            if(response.body().getData().getGeofencingSetting().size() > 0)
-                                visitorId = response.body().getData().getGeofencingSetting().get(0).getVisitorId();
-                        if(visitorId == getPrefUserMasterId())
-                            isRestricted = true;
                         try {
                             gpsData.put(ProjectInfo._json_key_mingps_distance_change, MIN_DISTANCE_CHANGE_FOR_UPDATES);
                             gpsData.put(ProjectInfo._json_key_mingps_time_change, MIN_TIME_BW_UPDATES);
                             gpsData.put(ProjectInfo._json_key_sendingPointsByAdmin, sendingPointsByAdmin);
                             gpsData.put(ProjectInfo._json_key_sendingPoints, sendingPoints);
-                            gpsData.put(ProjectInfo._json_key_isRestricted, isRestricted);
                             gpsData.put(ProjectInfo._json_key_radius, radius);
                             ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_gps_config, gpsData.toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        //btnTrackingService.setEnabled(!sendingPointsByAdmin);
                         Toast.makeText(mContext, "تنظیمات دریافت گردید", Toast.LENGTH_LONG).show();
 
                         new getTrackingZoneAsync().execute();
@@ -189,6 +180,13 @@ public class TrackingConfig {
                     if (response.body() != null) {
                         if (response.body().isSucceeded()) {
                             List<Datum> data =  response.body().getData();
+                            JSONObject gpsData = new JSONObject();
+                            try {
+                                gpsData.put(ProjectInfo._json_key_isRestricted, data.get(0).isFactorRegistrationOutRange());
+                                ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_gps_config, gpsData.toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             new SaveTrackingZoneAsyncTask(data).execute();
 
                         }else {
@@ -235,8 +233,8 @@ public class TrackingConfig {
                     db.DeleteAllZone();
                     db.DeleteAllZoneLocation();
                     for (Datum datum : trackingZoneData){
-                        DataService.InsertZone(db, datum.getZone());
-                        DataService.InsertZoneLocation(db,datum.getZone().getZoneLocations());
+                        DataService.InsertZone(db, datum);
+                        DataService.InsertZoneLocation(db,datum.getZoneLocations());
                     }
                 }
             }
@@ -247,6 +245,7 @@ public class TrackingConfig {
 
         @Override
         protected void onPostExecute(Integer result) {
+            mapPolygon.removeAllPolygon();
             mapPolygon.showPolygon();
             pd.dismiss();
         }
