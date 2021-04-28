@@ -11,9 +11,13 @@ import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.maps.android.PolyUtil;
+import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.storage.DbAdapter;
-import com.mahak.order.tracking.visitorZone.Zone;
+import com.mahak.order.tracking.visitorZone.Datum;
 import com.mahak.order.tracking.visitorZone.ZoneLocation;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,6 +61,8 @@ public class MapPolygon {
     private static final List<PatternItem> PATTERN_POLYGON_BETA =
             Arrays.asList(DOT, GAP, DASH, GAP);
 
+    private static List<Polygon> polygons = new ArrayList<>();
+
 
 
     private void stylePolygon(Polygon polygon) {
@@ -96,9 +102,9 @@ public class MapPolygon {
         polygon.setFillColor(fillColor);
     }
 
-    public List<LatLng> getPolygonPoints(Zone zone){
+    public List<LatLng> getPolygonPoints(Datum datum){
         List<LatLng> polygonPoints = new ArrayList<>();
-        ArrayList<ZoneLocation> zoneLocations = db.getAllZoneLocation(zone.getId());
+        ArrayList<ZoneLocation> zoneLocations = db.getAllZoneLocation(datum.getId());
         for (ZoneLocation zoneLocation : zoneLocations){
             polygonPoints.add(new LatLng(zoneLocation.getLatitude(), zoneLocation.getLongitude()));
         }
@@ -107,29 +113,39 @@ public class MapPolygon {
 
     public void showPolygon() {
         db.open();
-        ArrayList<Zone> zones = db.getAllZone();
-        for(Zone zone : zones){
-            List<LatLng> polygonPoints = getPolygonPoints(zone);
-            if(polygonPoints.size()>0){
+        ArrayList<Datum> data = db.getAllZone();
+        for(Datum datum : data){
+            List<LatLng> polygonPoints = getPolygonPoints(datum);
+            if(polygonPoints.size() > 0){
                 Polygon polygon = mGoogleMap.addPolygon(new PolygonOptions()
                         .clickable(true)
                         .addAll(polygonPoints));
+                polygons.add(polygon);
                 polygon.setTag("alpha");
                 stylePolygon(polygon);
             }
-
         }
     }
+
+    public void removeAllPolygon() {
+        if(polygons.size() > 0)
+            for(Polygon polygon : polygons){
+                polygon.remove();
+            }
+    }
+
     public boolean checkPositionInZone(LatLng position) {
         if(position == null)
             return false;
         db.open();
-        ArrayList<Zone> zones = db.getAllZone();
-        for(Zone zone : zones){
-            List<LatLng> polygonPoints = getPolygonPoints(zone);
+        ArrayList<Datum> data = db.getAllZone();
+        for(Datum datum : data){
+            List<LatLng> polygonPoints = getPolygonPoints(datum);
             if(polygonPoints.size()>0){
-                if(PolyUtil.containsLocation(position, polygonPoints, true))
+                if(PolyUtil.containsLocation(position, polygonPoints, true)){
                     return true;
+                }
+
             }
         }
         return false;

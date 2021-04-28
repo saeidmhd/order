@@ -1,6 +1,7 @@
 
 package com.mahak.order.tracking.visitorZone;
 
+import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,15 +10,21 @@ public class Datum {
     @SerializedName("id")
     @Expose
     private int id;
-    @SerializedName("zoneId")
+    @SerializedName("mahakId")
     @Expose
-    private int zoneId;
-    @SerializedName("visitorId")
+    private String mahakId;
+    @SerializedName("title")
     @Expose
-    private int visitorId;
-    @SerializedName("zone")
+    private String title;
+    @SerializedName("zoneLocations")
     @Expose
-    private Zone zone;
+    private List<ZoneLocation> zoneLocations = null;
+    @SerializedName("visitorZoneLocations")
+    @Expose
+    private String visitorZoneLocations;
+    @SerializedName("factorRegistrationOutRange")
+    @Expose
+    private boolean factorRegistrationOutRange;
     @SerializedName("createdBy")
     @Expose
     private String createdBy;
@@ -39,28 +46,44 @@ public class Datum {
         this.id = id;
     }
 
-    public int getZoneId() {
-        return zoneId;
+    public String getMahakId() {
+        return mahakId;
     }
 
-    public void setZoneId(int zoneId) {
-        this.zoneId = zoneId;
+    public void setMahakId(String mahakId) {
+        this.mahakId = mahakId;
     }
 
-    public int getVisitorId() {
-        return visitorId;
+    public String getTitle() {
+        return title;
     }
 
-    public void setVisitorId(int visitorId) {
-        this.visitorId = visitorId;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public Zone getZone() {
-        return zone;
+    public List<ZoneLocation> getZoneLocations() {
+        return zoneLocations;
     }
 
-    public void setZone(Zone zone) {
-        this.zone = zone;
+    public void setZoneLocations(List<ZoneLocation> zoneLocations) {
+        this.zoneLocations = zoneLocations;
+    }
+
+    public String getVisitorZoneLocations() {
+        return visitorZoneLocations;
+    }
+
+    public void setVisitorZoneLocations(String visitorZoneLocations) {
+        this.visitorZoneLocations = visitorZoneLocations;
+    }
+
+    public boolean isFactorRegistrationOutRange() {
+        return factorRegistrationOutRange;
+    }
+
+    public void setFactorRegistrationOutRange(boolean factorRegistrationOutRange) {
+        this.factorRegistrationOutRange = factorRegistrationOutRange;
     }
 
     public String getCreatedBy() {

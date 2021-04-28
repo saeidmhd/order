@@ -1460,9 +1460,13 @@ public class OrdersListActivity extends BaseActivity {
                 break;
 
             case R.id.mnuAdd:
-                Intent intent = new Intent(mContext, PeopleListActivity.class);
-                intent.putExtra(PAGE, PAGE_ADD_NON_REGISTER);
-                startActivityForResult(intent, REQUEST_CUSTOMER_LIST);
+                if(DashboardActivity.CanRegisterInvoiceOutOfZone()){
+                    Intent intent = new Intent(mContext, PeopleListActivity.class);
+                    intent.putExtra(PAGE, PAGE_ADD_NON_REGISTER);
+                    startActivityForResult(intent, REQUEST_CUSTOMER_LIST);
+                }else {
+                    Toast.makeText(mContext, "خارج از منطقه یا خاموش بودن سامانه ردیابی ! امکان ثبت فاکتور وجود ندارد.", Toast.LENGTH_SHORT).show();
+                }
                 break;
             default:
                 break;

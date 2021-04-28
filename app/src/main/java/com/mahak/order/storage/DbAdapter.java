@@ -18,8 +18,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.common.Bank;
 import com.mahak.order.common.Category;
@@ -68,7 +66,7 @@ import com.mahak.order.common.User;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.common.VisitorPeople;
 import com.mahak.order.common.VisitorProduct;
-import com.mahak.order.tracking.visitorZone.Zone;
+import com.mahak.order.tracking.visitorZone.Datum;
 import com.mahak.order.tracking.visitorZone.ZoneLocation;
 
 import java.io.File;
@@ -260,16 +258,16 @@ public class DbAdapter {
             mDb.endTransaction();
         }
     }
-    public void AddZone(Zone zone) {
+    public void AddZone(Datum datum) {
         mDb.beginTransaction();
         try {
             ContentValues initialvalue = new ContentValues();
-            initialvalue.put(DbSchema.ZoneSchema.COLUMN_zoneId, zone.getId());
-            initialvalue.put(DbSchema.ZoneSchema.COLUMN_title, zone.getTitle());
-            initialvalue.put(DbSchema.ZoneSchema.COLUMN_createdBy, zone.getCreatedBy());
-            initialvalue.put(DbSchema.ZoneSchema.COLUMN_created, zone.getCreated());
-            initialvalue.put(DbSchema.ZoneSchema.COLUMN_lastModifiedBy, zone.getLastModified());
-            initialvalue.put(DbSchema.ZoneSchema.COLUMN_lastModified, zone.getLastModifiedBy());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_zoneId, datum.getId());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_title, datum.getTitle());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_createdBy, datum.getCreatedBy());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_created, datum.getCreated());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_lastModifiedBy, datum.getLastModified());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_lastModified, datum.getLastModifiedBy());
             mDb.insert(DbSchema.ZoneSchema.TABLE_NAME, null, initialvalue);
             mDb.setTransactionSuccessful();
         } finally {
@@ -3751,16 +3749,16 @@ public class DbAdapter {
         notification.setUserId(cursor.getLong(cursor.getColumnIndex(DbSchema.NotificationSchema.COLUMN_USER_ID)));
         return notification;
     }
-    private Zone getZoneFromCursor(Cursor cursor) {
-        Zone zone;
-        zone = new Zone();
-        zone.setId(cursor.getInt(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_zoneId)));
-        zone.setTitle(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_title)));
-        zone.setCreatedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_createdBy)));
-        zone.setCreated(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_created)));
-        zone.setLastModified(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_lastModifiedBy)));
-        zone.setLastModifiedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_lastModified)));
-        return zone;
+    private Datum getZoneFromCursor(Cursor cursor) {
+        Datum datum;
+        datum = new Datum();
+        datum.setId(cursor.getInt(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_zoneId)));
+        datum.setTitle(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_title)));
+        datum.setCreatedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_createdBy)));
+        datum.setCreated(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_created)));
+        datum.setLastModified(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_lastModifiedBy)));
+        datum.setLastModifiedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_lastModified)));
+        return datum;
     }
     private ZoneLocation getZoneLocationFromCursor(Cursor cursor) {
         ZoneLocation zoneLocation;
@@ -5647,17 +5645,17 @@ public class DbAdapter {
         }
         return order;
     }
-    public ArrayList<Zone> getAllZone() {
-        ArrayList<Zone> array = new ArrayList<>();
-        Zone zone = new Zone();
+    public ArrayList<Datum> getAllZone() {
+        ArrayList<Datum> array = new ArrayList<>();
+        Datum datum = new Datum();
         Cursor cursor;
         try {
             cursor = mDb.query(DbSchema.ZoneSchema.TABLE_NAME, null, null, null, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    zone = getZoneFromCursor(cursor);
-                    array.add(zone);
+                    datum = getZoneFromCursor(cursor);
+                    array.add(datum);
                     cursor.moveToNext();
                 }
                 cursor.close();
