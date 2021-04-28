@@ -182,8 +182,10 @@ public class TrackingConfig {
                             List<Datum> data =  response.body().getData();
                             JSONObject gpsData = new JSONObject();
                             try {
-                                gpsData.put(ProjectInfo._json_key_isRestricted, data.get(0).isFactorRegistrationOutRange());
-                                ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_gps_config, gpsData.toString());
+                                if(data.size()>0){
+                                    gpsData.put(ProjectInfo._json_key_isRestricted, data.get(0).isFactorRegistrationOutRange());
+                                    ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_gps_config, gpsData.toString());
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
