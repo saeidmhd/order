@@ -542,7 +542,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     }//end of onCreate
 
     public static boolean CanRegisterInvoiceOutOfZone() {
-        boolean canRegister = false;
+        boolean canRegister = true;
         String config = ServiceTools.getKeyFromSharedPreferences(mContext, ProjectInfo.pre_gps_config);
         if (!ServiceTools.isNull(config)) {
             try {

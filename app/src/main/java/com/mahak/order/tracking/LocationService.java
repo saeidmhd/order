@@ -705,8 +705,8 @@ public class LocationService extends Service {
         intent.putExtra(EXTRA_STARTED_FROM_NOTIFICATION, true);
 
         // The PendingIntent that leads to a call to onStartCommand() in this service.
-        PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+        /*PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);*/
 
         // The PendingIntent to launch activity.
         PendingIntent activityPendingIntent = PendingIntent.getActivity(this, 0,
@@ -715,8 +715,8 @@ public class LocationService extends Service {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .addAction(R.drawable.ic_launcher, getString(R.string.app_name),
                         activityPendingIntent)
-                .addAction(R.drawable.ic_cancel, getString(R.string.cancel),
-                        servicePendingIntent)
+                /*.addAction(R.drawable.ic_cancel, getString(R.string.cancel),
+                        servicePendingIntent)*/
                 .setContentText(text)
                 .setContentTitle(Utils.getLocationTitle(this))
                 .setOngoing(true)
@@ -802,20 +802,22 @@ public class LocationService extends Service {
     }
 
     private void getLastLocation() {
-        try {
-            mFusedLocationClient.getLastLocation()
-                    .addOnCompleteListener(new OnCompleteListener<Location>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Location> task) {
-                            if (task.isSuccessful() && task.getResult() != null) {
-                                mLocation = task.getResult();
-                            } else {
-                                Log.w(TAG, "Failed to get location.");
+        if(mFusedLocationClient!=null){
+            try {
+                mFusedLocationClient.getLastLocation()
+                        .addOnCompleteListener(new OnCompleteListener<Location>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Location> task) {
+                                if (task.isSuccessful() && task.getResult() != null) {
+                                    mLocation = task.getResult();
+                                } else {
+                                    Log.w(TAG, "Failed to get location.");
+                                }
                             }
-                        }
-                    });
-        } catch (SecurityException unlikely) {
-            Log.e(TAG, "Lost location permission." + unlikely);
+                        });
+            } catch (SecurityException unlikely) {
+                Log.e(TAG, "Lost location permission." + unlikely);
+            }
         }
     }
 
