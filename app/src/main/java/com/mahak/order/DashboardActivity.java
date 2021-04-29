@@ -191,7 +191,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     private Marker marker;
     private Polyline polyline;
     private LocationService locationService;
-    private SwitchCompat btnTrackingService;
+    private static SwitchCompat btnTrackingService;
     private Menu menu;
     private int CustomerId;
     private long CustomerClientId;
@@ -291,7 +291,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         if(!isServiceRun){
             btnTrackingService.setChecked(false);
-            BaseActivity.setPrefTrackingControl(0);
             long masterUserId = BaseActivity.getPrefUserMasterId(mContext);
             ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking + masterUserId, "0");
         }
@@ -304,26 +303,9 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     locationService.stopTracking();
                     locationService.stopNotificationServiceTracking();
                     btnTrackingService.setChecked(false);
-                    BaseActivity.setPrefTrackingControl(0);
 
                 } else {
-                    if (!checkPermissions()) {
-                        requestPermissions();
-                    } else {
-                        ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking_pause, "0");
-                        locationService.startTracking();
-                        if (locationService.isRunService()) {
-                            btnTrackingService.setChecked(true);
-                        } else {
-                            Toast.makeText(DashboardActivity.this, R.string.can_not_active_gps_tracking, Toast.LENGTH_SHORT).show();
-                            if (mTracker != null) {
-                                mTracker.send(new HitBuilders.ExceptionBuilder()
-                                        .setDescription("Can't Start GPS")
-                                        .setFatal(true)
-                                        .build());
-                            }
-                        }
-                    }
+                    startTracking();
                 }
             }
         });
@@ -366,9 +348,9 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (isChecked && BaseActivity.getPrefAdminControl(mContext)) {
+                if (isChecked) {
                     tvTrackingService.setText(R.string.tracking_system_is_active);
-                } else if (!isChecked && BaseActivity.getPrefAdminControl(mContext)) {
+                } else if (!isChecked) {
                     tvTrackingService.setText(R.string.tracking_system_is_disabled);
                 }
 
@@ -541,8 +523,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 }
             }
         };
-
-
+        setTrackingConfig();
     }//end of onCreate
 
     public static boolean CanRegisterInvoiceOutOfZone() {
@@ -573,6 +554,11 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         return false;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void registerReceiverToCheckGpsOnOff() {
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.location.PROVIDERS_CHANGED");
@@ -590,7 +576,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                             locationService.stopTracking();
                             locationService.stopNotificationServiceTracking();
                             btnTrackingService.setChecked(false);
-                            BaseActivity.setPrefTrackingControl(0);
                         }
                     }
                 }
@@ -615,7 +600,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         if (shouldProvideRationale) {
             Log.i(TAG, "Displaying permission rationale to provide additional context.");
             Snackbar.make(
-                    findViewById(R.id.activity_main),
+                    findViewById(R.id.drawer_layout),
                     R.string.permission_rationale,
                     Snackbar.LENGTH_INDEFINITE)
                     .setAction(R.string.ok, new View.OnClickListener() {
@@ -648,10 +633,11 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 Log.i(TAG, "User interaction was cancelled.");
             } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission was granted.
-                locationService.requestLocationUpdates();
+                locationService.startTracking();
             } else {
+                btnTrackingService.setChecked(false);
                 Snackbar.make(
-                        findViewById(R.id.activity_main),
+                        findViewById(R.id.drawer_layout),
                         R.string.permission_denied_explanation,
                         Snackbar.LENGTH_INDEFINITE)
                         .setAction(R.string.settings, new View.OnClickListener() {
@@ -1394,89 +1380,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         return false;
     }
 
-    @Override
-    protected void onResume() {
-
-        if (locationService == null) locationService = new LocationService(mContext,DashboardActivity.this);
-        if (locationService.isRunService()) {
-            btnTrackingService.setChecked(true);
-        } else {
-            btnTrackingService.setChecked(false);
-            locationService.stopNotificationServiceTracking();
-        }
-
-        if (db == null)
-            db = new DbAdapter(this);
-
-        db.open();
-
-        if (!ACCESS_FINE_LOCATION_Permission) {
-            ActivityCompat.requestPermissions(DashboardActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    ACCESS_FINE_LOCATION);
-        }
-
-        if (!ACCESS_COARSE_LOCATION_Permission) {
-            ActivityCompat.requestPermissions(DashboardActivity.this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    ACCESS_COARSE_LOCATION);
-        }
-
-        double TotalOrder = db.getTotalPriceOrder();
-        double TotalInvoice = db.getTotalPriceInvoice();
-        double TotalReceiveTransfer = db.getTotalReceiveTransfer();
-        double TotalReceipt = db.getTotalPriceReceipt();
-        double TotalCash = db.getTotalCashAmountReceipt();
-        double TotalCheque = db.getTotalChequeReceipt();
-        double TotalCashReceipt = db.getTotalCashReceipt();
-        double TotalDiscountOrder = db.getTotalDiscountOrder();
-        double TotalDiscountInvoice = db.getTotalDiscountInvoice();
-        double TotalChargeAndTaxOrder = db.getTotalChargeAndTaxOrder();
-        double TotalChargeAndTaxInvoice = db.getTotalChargeAndTaxInvoice();
-        double TotalPureOrder = db.getPurePriceOrder();
-        double TotalPureInvoice = db.getPurePriceInvoice();
-
-        tvSumOfOrders.setText(ServiceTools.formatPrice(TotalOrder));
-        tvSumOfOrders.setSelected(true);
-        tvSumOfInvoices.setText(ServiceTools.formatPrice(TotalInvoice));
-        tvSumOfInvoices.setSelected(true);
-        tvSumOfTransference.setText(ServiceTools.formatPrice(TotalReceiveTransfer));
-        tvSumOfTransference.setSelected(true);
-        tvSumOfReceipts.setText(ServiceTools.formatPrice((TotalReceipt)));
-        tvSumOfReceipts.setSelected(true);
-        tvSumOfCash.setText(ServiceTools.formatPrice(TotalCash));
-        tvSumOfCash.setSelected(true);
-        tvSumOfCheque.setText(ServiceTools.formatPrice(TotalCheque));
-        tvSumOfCheque.setSelected(true);
-        tvSumOfReceiptsAmount.setText(ServiceTools.formatPrice(TotalCashReceipt));
-        tvSumOfReceiptsAmount.setSelected(true);
-        tvSumOfDiscountOrder.setText(ServiceTools.formatPrice(TotalDiscountOrder));
-        tvSumOfDiscountOrder.setSelected(true);
-        tvSumOfDiscountInvoice.setText(ServiceTools.formatPrice(TotalDiscountInvoice));
-        tvSumOfDiscountInvoice.setSelected(true);
-        tvSumOfPureOrder.setText(ServiceTools.formatPrice(TotalPureOrder));
-        tvSumOfPureOrder.setSelected(true);
-        tvSumOfPureInvoice.setText(ServiceTools.formatPrice(TotalPureInvoice));
-        tvSumOfPureInvoice.setSelected(true);
-        tvSumOfChargeAndTaxOrder.setText(ServiceTools.formatPrice(TotalChargeAndTaxOrder));
-        tvSumOfChargeAndTaxOrder.setSelected(true);
-        tvSumOffChargeAndTaxInvoice.setText(ServiceTools.formatPrice(TotalChargeAndTaxInvoice));
-        tvSumOffChargeAndTaxInvoice.setSelected(true);
-
-        invalidateOptionsMenu();
-        refreshCountInformation();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        forceGpsAdminControl();
-
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        super.onResume();
-
-        //----------GCM------------
-        registerReceiver();
-    }
-
     private void forceGpsAdminControl() {
 
         if (btnTrackingService.isChecked() && BaseActivity.getPrefAdminControl(mContext)) {
@@ -1487,52 +1390,24 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    private void getTrackingConfig() {
+    public void setTrackingConfig() {
+        btnTrackingService.setEnabled(!BaseActivity.getPrefAdminControl(mContext));
+        if(BaseActivity.getPrefTrackingControl(mContext) == 1)
+            startTracking();
+    }
 
-        if (BaseActivity.getPrefAdminControl(mContext) && BaseActivity.getPrefTrackingControl(mContext) == 1){
-
+    private void startTracking() {
+        if (!checkPermissions()) {
+            requestPermissions();
+        } else {
             if (locationService == null) locationService = new LocationService(mContext,DashboardActivity.this);
             ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking_pause, "0");
             locationService.startTracking();
-            //locationService.showNotificationServiceRun();
-            if(locationService.isRunService()) {
-                btnTrackingService.setChecked(true);
-            }
-
-            else {
-                Toast.makeText(DashboardActivity.this, R.string.can_not_active_gps_tracking, Toast.LENGTH_SHORT).show();
-                if(mTracker!=null) {
-                    mTracker.send(new HitBuilders.ExceptionBuilder()
-                            .setDescription("Can't Start GPS")
-                            .setFatal(true)
-                            .build());
-                }
-            }
-            btnTrackingService.setEnabled(false);
-        }
-        else if (BaseActivity.getPrefAdminControl(mContext) && BaseActivity.getPrefTrackingControl(mContext) == 0)
-        {
-
             if (locationService.isRunService()) {
-                locationService.stopTracking();
-                //locationService.stopNotificationServiceTracking();
-                btnTrackingService.setChecked(false);
-            }
-            btnTrackingService.setEnabled(false);
-
-
-        }
-        else if (BaseActivity.getPrefAdminControl(mContext) && BaseActivity.getPrefTrackingControl(mContext) == 1)
-        {
-            if (locationService == null) locationService = new LocationService(mContext,DashboardActivity.this);
-            ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking_pause, "0");
-            locationService.startTracking();
-            //locationService.showNotificationServiceRun();
-            if(locationService.isRunService()) {
                 btnTrackingService.setChecked(true);
-            }else {
+            } else {
                 Toast.makeText(DashboardActivity.this, R.string.can_not_active_gps_tracking, Toast.LENGTH_SHORT).show();
-                if(mTracker!=null) {
+                if (mTracker != null) {
                     mTracker.send(new HitBuilders.ExceptionBuilder()
                             .setDescription("Can't Start GPS")
                             .setFatal(true)
@@ -1547,15 +1422,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         boolean isGPSPROVIDEREnabled = service != null && service.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (!isGPSPROVIDEREnabled) {
             buildAlertMessageNoGps();
-        }
-    }
-
-    private void suggestEnableGps() {
-        LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
-        boolean isGPSPROVIDEREnabled = service != null && service.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        boolean isNetworkEnabled = service != null && service.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        if (!isGPSPROVIDEREnabled && !isNetworkEnabled) {
-            buildAlertSuggestGpsEnable();
         }
     }
 
@@ -1611,7 +1477,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     locationService.stopTracking();
                     locationService.stopNotificationServiceTracking();
                     btnTrackingService.setChecked(false);
-                    BaseActivity.setPrefTrackingControl(0);
                 }
             }else {
                 if (!checkPermissions()) {

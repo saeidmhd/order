@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.mahak.order.BaseActivity;
+import com.mahak.order.DashboardActivity;
 import com.mahak.order.R;
 import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
@@ -103,7 +104,6 @@ public class TrackingConfig {
                 pd.dismiss();
                 if (response.body() != null) {
                     if (response.body().isSucceeded()) {
-                        int visitorId = 0;
 
                         JSONObject gpsData = new JSONObject();
                         long MIN_DISTANCE_CHANGE_FOR_UPDATES = ServiceTools.toLong(response.body().getData().getSendPointsPerMeter());
@@ -125,6 +125,7 @@ public class TrackingConfig {
                             gpsData.put(ProjectInfo._json_key_sendingPoints, sendingPoints);
                             gpsData.put(ProjectInfo._json_key_radius, radius);
                             ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_gps_config, gpsData.toString());
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
