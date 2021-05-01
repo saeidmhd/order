@@ -795,17 +795,17 @@ public class ManageReceiptActivity extends BaseActivity {
                         db.AddCheque(item);
                     }
                     setResult(RESULT_OK);
-                    if (Page == PAGE_ORDER_DETAIL) {
-                        Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                    } else if (Page == PAGE_Invoice_Detail_Activity) {
+                    if (Page == PAGE_Invoice_Detail_Activity) {
                         Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
                         intent.putExtra("totalCashAndCheque", totalCashAndCheque());
                         setResult(RESULT_OK, intent);
                         finish();
-                    } else
+                    }else {
+                        Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
                         finish();
+                    }
                 }
                 Clear();
             } else if (Mode == MODE_EDIT) {

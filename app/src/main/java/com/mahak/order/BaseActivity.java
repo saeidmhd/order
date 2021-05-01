@@ -117,6 +117,7 @@ public class BaseActivity extends AppCompatActivity {
     public static String _Key_ForceDetailActive = "ForceDetailActive";
     public static String _Key_PropertyActive = "PropertyActive";
     public static String _Key_RowDiscountIsActive = "RowDiscountIsActive";
+    public static String _Key_ApplyRowDiscount = "ApplyRowDiscount";
     public static String _Key_ChargePercent = "ChargePercent";
     public static String _Key_TaxPercent = "TaxPercent";
     public static String _Key_CountDecimalPoint = "CountDecimalPoint";
@@ -194,6 +195,7 @@ public class BaseActivity extends AppCompatActivity {
     public static String DefaultPriceDecimalPoint = PriceDecimalPoint;
     public static String DefaultChargePercent = TaxPercent;
     public static String DefaultRowDiscountIsActive = invisible;
+    public static String DefaultApplyRowDiscount = InActive;
     public static String DefaultTwoUnitActive = Active;
     public static String DefaultKolJozActive = Active;
     public static String DefaultPropertyActive = Active;
@@ -269,26 +271,29 @@ public class BaseActivity extends AppCompatActivity {
     public static boolean HasStoragePermission = false;
 
 
-    public final static int ChargePercentCode = 14000;
-    public final static int TaxPercentCode = 14001;
-
-    public final static int TaxAndChargeIsActiveCode = 14008;
-
-    public final static int RowDiscountType = 1042;
-
+    public final static int OneUnitActiveCode = 1022;
     public final static int TwoUnitActiveCode = 1000;
     public final static int TwoUnitKolJozCode = 1015;
-    //public final static int VariableTwoUnitActiveCode = 10037;
-    public final static int OneUnitActiveCode = 1022;
 
+    public final static int CountDecimalPointCode = 1032;
+    public final static int PriceDecimalPointCode = 1033;
+
+    public final static int SHOW_ROW_DISCOUNT = 1042;
+    public final static int APPLY_DISCOUNT = 2043;
+
+    public final static int ChargePercentCode = 14000;
+    public final static int TaxPercentCode = 14001;
+    public final static int TaxAndChargeIsActiveCode = 14008;
+
+
+    public final static int VariableTwoUnitActiveCode = 10037;
     public final static int PropertyActiveCode = 1013;
     public final static int ForceDetailActiveCode = 1038;
     public final static int CubicMeterActiveCode = 1019;
 
     public final static int AutoSyncCode = 26006;
 
-    public final static int CountDecimalPointCode = 1032;
-    public final static int PriceDecimalPointCode = 1033;
+
 
     //126501,126502,126503
 
@@ -499,6 +504,14 @@ public class BaseActivity extends AppCompatActivity {
 
     public static void setPrefRowDiscountIsActive(String value) {
         sh.edit().putString(_Key_RowDiscountIsActive, value).commit();
+    }
+
+    public static String getPrefApplyRowDiscount() {
+        return sh.getString(_Key_ApplyRowDiscount, DefaultApplyRowDiscount);
+    }
+
+    public static void setPrefApplyRowDiscount(String value) {
+        sh.edit().putString(_Key_ApplyRowDiscount, value).commit();
     }
 
     public static String getPrefPropertyActive() {

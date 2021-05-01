@@ -37,7 +37,6 @@ import com.mahak.order.common.Visitor;
 import com.mahak.order.common.VisitorPeople;
 import com.mahak.order.common.VisitorProduct;
 import com.mahak.order.storage.DbAdapter;
-import com.mahak.order.storage.DbSchema;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -259,11 +258,17 @@ public class DataService {
                     if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue().equals(BaseActivity.Active))
                         BaseActivity.setPrefUnit2Setting(BaseActivity.MODE_YekVahedi);
                     break;
-                case BaseActivity.RowDiscountType:
+                case BaseActivity.SHOW_ROW_DISCOUNT:
                     if (settings.get(i).getDeleted() != 1)
                         BaseActivity.setPrefRowDiscountIsActive(settings.get(i).getValue());
                     else
                         BaseActivity.setPrefRowDiscountIsActive(BaseActivity.invisible);
+                    break;
+                case BaseActivity.APPLY_DISCOUNT:
+                    if (settings.get(i).getDeleted() != 1)
+                        BaseActivity.setPrefApplyRowDiscount(settings.get(i).getValue());
+                    else
+                        BaseActivity.setPrefApplyRowDiscount(BaseActivity.InActive);
                     break;
                 case BaseActivity.TaxAndChargeIsActiveCode:
                     if (settings.get(i).getDeleted() != 1)
