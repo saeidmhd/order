@@ -863,7 +863,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             case R.id.btnNavDataSync:
                 mDrawerLayout.closeDrawers();
                 intent = new Intent(getApplicationContext(), DataSyncActivityRestApi.class);
-                startActivityForResult(intent, REQUEST_DATASYNC);
+                startActivity(intent);
                 break;
             case R.id.btnNavContact:
                 mDrawerLayout.closeDrawers();
@@ -1176,8 +1176,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                         Intent intent = new Intent(getApplicationContext(), DataSyncActivityRestApi.class);
-                        startActivityForResult(intent, REQUEST_DATASYNC);
-
+                        startActivity(intent);
                         dialog.dismiss();
                     }
                 })
@@ -1420,9 +1419,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_DATASYNC) {
-                FillView();
-            } else if (requestCode == REQUEST_CUSTOMER_LIST) {
+
+            if (requestCode == REQUEST_CUSTOMER_LIST) {
 
                 CustomerId = data.getIntExtra(CUSTOMERID_KEY, 0);
                 CustomerClientId = data.getLongExtra(CUSTOMER_CLIENT_ID_KEY, 0);

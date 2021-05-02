@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/exit_layout"
-    android:layout_width="280dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/confirm_dialog_bg2"
     android:gravity="center_horizontal"
@@ -17,7 +17,7 @@
         android:textColor="#333"
         android:textSize="20sp" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
@@ -35,7 +35,6 @@
             android:singleLine="true"
             android:textColor="#000"
             android:textSize="15sp"
-            android:text="@string/sample_number"
             android:hint="@string/_0" />
 
         <com.mahak.order.widget.FontTextView
@@ -63,7 +62,6 @@
             android:singleLine="true"
             android:textColor="#000"
             android:textSize="15sp"
-            android:text="@string/sample_number"
             android:hint="0" />
 
         <com.mahak.order.widget.FontTextView
@@ -122,7 +120,7 @@
             android:textColor="#000"
             android:textSize="15sp"
             android:hint="0" />
-    </RelativeLayout>
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"

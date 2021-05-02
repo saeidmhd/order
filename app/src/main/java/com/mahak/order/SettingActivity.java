@@ -1,6 +1,7 @@
 package com.mahak.order;
 
 import android.app.Activity;
+import android.app.AppComponentFactory;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -21,6 +22,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.mahak.order.common.Bank;
 import com.mahak.order.common.Order;
 import com.mahak.order.common.ProjectInfo;
@@ -35,7 +38,7 @@ import com.yariksoffice.lingver.Lingver;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class SettingActivity extends Activity {
+public class SettingActivity extends AppCompatActivity {
 
     private static final int FOLDER_CODE = 131;
     private DbAdapter db;
@@ -60,7 +63,6 @@ public class SettingActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(android.R.style.Theme_Holo_Light_Dialog);
         setContentView(R.layout.activity_setting);
 
         mContext = this;

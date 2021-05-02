@@ -232,8 +232,7 @@
         <activity
             android:name=".SettingActivity"
             android:label="@string/str_setting"
-            android:screenOrientation="portrait"
-            android:theme="@style/DialogTheme" />
+            android:theme="@style/SortDialogStyle" />
         <activity
             android:name=".NotificationDialogActivity"
             android:screenOrientation="portrait"
@@ -253,7 +252,7 @@
             android:theme="@android:style/Theme.Holo.Light.Dialog" />
         <activity
             android:name=".oscar_printer.IpAddressEdit"
-            android:theme="@style/MyDialogStyle" />
+            android:theme="@style/SortDialogStyle"  />
 
         <!-- [START gcm_receiver] -->
         <receiver
@@ -321,7 +320,6 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".PrintSettingActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.Dialog"
             android:windowSoftInputMode="stateHidden" />
         <activity
@@ -485,7 +483,6 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".widget.SortDialogActivity"
-            android:label=""
             android:theme="@style/SortDialogStyle" />
         <activity
             android:name=".SignActivity"

@@ -13,11 +13,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.mahak.order.BaseActivity;
 import com.mahak.order.R;
 import com.mahak.order.common.ServiceTools;
 
-public class IpAddressEdit extends Activity {
+public class IpAddressEdit extends AppCompatActivity {
     // private MyDialog dialog;
     private LinearLayout layout;
     private int[] mIDs = {R.id.ip_edit_1, R.id.ip_edit_2, R.id.ip_edit_3, R.id.ip_edit_4};

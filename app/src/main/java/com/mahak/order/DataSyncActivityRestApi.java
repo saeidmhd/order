@@ -257,7 +257,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
             @Override
             public void onClick(View arg0) {
                 Cancel();
-                finish();
+                Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
     }
@@ -519,8 +521,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
         if (item.getItemId() == android.R.id.home) {
             // syncAsyn.cancel(true);
             pbLoading.setVisibility(View.GONE);
-            setResult(RESULT_OK);
-            finish();
+            Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -528,9 +531,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        // syncAsyn.cancel(true);
-        setResult(RESULT_OK);
-        finish();
+        Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     private void cleanDatabase() {

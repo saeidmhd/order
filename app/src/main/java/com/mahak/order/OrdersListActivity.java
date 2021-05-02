@@ -277,6 +277,14 @@ public class OrdersListActivity extends BaseActivity {
         });
     }//End Of OnCreate
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        super.onBackPressed();
+    }
+
     /**
      * Initializing Variables
      */
@@ -1464,6 +1472,11 @@ public class OrdersListActivity extends BaseActivity {
                 Intent intent = new Intent(mContext, PeopleListActivity.class);
                 intent.putExtra(PAGE, PAGE_ADD_NON_REGISTER);
                 startActivityForResult(intent, REQUEST_CUSTOMER_LIST);
+                break;
+            case android.R.id.home:
+                Intent intent2 = new Intent(getApplicationContext(), DashboardActivity.class);
+                intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent2);
                 break;
             default:
                 break;
