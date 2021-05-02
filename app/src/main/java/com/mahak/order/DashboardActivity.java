@@ -243,6 +243,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         init();
 
+        update();
+
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
 
             public void onDrawerClosed(View view) {
@@ -556,6 +558,11 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnTrackingService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!ACCESS_FINE_LOCATION_Permission) {
+                    ActivityCompat.requestPermissions(DashboardActivity.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            ACCESS_FINE_LOCATION);
+                }
                 if (gpsTracking == null) gpsTracking = new GpsTracking(mContext);
                 if (gpsTracking.isRunService()) {
                     gpsTracking.stopTracking();
@@ -1188,26 +1195,12 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         return dialog;
     }
 
-    @Override
-    protected void onResume() {
+    public void update (){
 
         if (db == null)
             db = new DbAdapter(this);
 
         db.open();
-
-
-        if (!ACCESS_FINE_LOCATION_Permission) {
-            ActivityCompat.requestPermissions(DashboardActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    ACCESS_FINE_LOCATION);
-        }
-
-        if (!ACCESS_COARSE_LOCATION_Permission) {
-            ActivityCompat.requestPermissions(DashboardActivity.this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    ACCESS_COARSE_LOCATION);
-        }
 
         double TotalOrder = db.getTotalPriceOrder();
         double TotalInvoice = db.getTotalPriceInvoice();
@@ -1249,6 +1242,28 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         tvSumOfChargeAndTaxOrder.setSelected(true);
         tvSumOffChargeAndTaxInvoice.setText(ServiceTools.formatPrice(TotalChargeAndTaxInvoice));
         tvSumOffChargeAndTaxInvoice.setSelected(true);
+    }
+
+   /* @Override
+    protected void onResume() {
+
+        if (db == null)
+            db = new DbAdapter(this);
+
+        db.open();
+
+
+        if (!ACCESS_FINE_LOCATION_Permission) {
+            ActivityCompat.requestPermissions(DashboardActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    ACCESS_FINE_LOCATION);
+        }
+
+        if (!ACCESS_COARSE_LOCATION_Permission) {
+            ActivityCompat.requestPermissions(DashboardActivity.this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    ACCESS_COARSE_LOCATION);
+        }
 
         invalidateOptionsMenu();
 
@@ -1281,15 +1296,15 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        /*asyncustomer = new AsynCustomer();
-        asyncustomer.execute();*/
+        *//*asyncustomer = new AsynCustomer();
+        asyncustomer.execute();*//*
 
 
         super.onResume();
 
         //----------GCM------------
         registerReceiver();
-    }
+    }*/
 
 
     private void forceEnableGps() {

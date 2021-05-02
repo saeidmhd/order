@@ -588,7 +588,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                 break;
         }
 
-        if (!BaseActivity.getPrefRowDiscountIsActive().equals(invisible)) {
+        if (!BaseActivity.getPrefApplyRowDiscount().equals(InActive)) {
            // default_DiscountValue = getDiscountFromDiscountLevel(productDetail.getDefaultDiscountLevel(), productDetail, price);
             if(percentOff == 0){
                 percentOff = getPercentOff(productDetail.getDefaultDiscountLevel(), productDetail, price);
