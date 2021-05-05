@@ -279,7 +279,7 @@ public class BaseActivity extends AppCompatActivity {
     public final static int PriceDecimalPointCode = 1033;
 
     public final static int SHOW_ROW_DISCOUNT = 1042;
-    public final static int APPLY_DISCOUNT = 2043;
+    public final static int APPLY_DISCOUNT = 26008;
 
     public final static int ChargePercentCode = 14000;
     public final static int TaxPercentCode = 14001;
