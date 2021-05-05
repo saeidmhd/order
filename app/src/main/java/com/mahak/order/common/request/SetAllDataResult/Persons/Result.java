@@ -3,6 +3,7 @@ package com.mahak.order.common.request.SetAllDataResult.Persons;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Result {
@@ -21,7 +22,7 @@ public class Result {
     private long rowVersion;
     @SerializedName("Errors")
     @Expose
-    private List<Error> errors = null;
+    private List<Error> errors = new ArrayList<>();
     @SerializedName("AdditionalData")
     @Expose
     private AdditionalData additionalData;
