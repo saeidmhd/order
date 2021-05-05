@@ -1085,9 +1085,16 @@ public class PrintActivity extends BaseActivity {
             }
 
         } else if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW) {
-
-
             if (!getCurrentPrinter().equals("")) {
+                progressDialog.show();
+                new Thread(new Runnable() {
+                    public void run() {
+                        myOpertion.openPrinter(getCurrentPrinter());
+                    }
+                }).start();
+                mIsConnected = true;
+                refreshStatus();
+                RefreshPreference();
 
                 myOpertion = new WifiOperation(PrintActivity.this, oscarHandler);
                 myOpertion.chooseDevice();
@@ -1164,10 +1171,6 @@ public class PrintActivity extends BaseActivity {
             mService.write(sendData);
 
         } else if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW) {
-
-            /*preparePrint preparePrint = new preparePrint(bm);
-            preparePrint.execute();*/
-
             new Thread(new Runnable() {
                 public void run() {
                     PrintUtils.printImage(bm, mPrinter, false);
