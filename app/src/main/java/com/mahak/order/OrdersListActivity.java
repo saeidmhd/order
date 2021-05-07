@@ -325,15 +325,12 @@ public class OrdersListActivity extends BaseActivity {
      * Read From Database And Fill Adapter
      */
     private void FillView() {
-        if (Type == ProjectInfo.TYPE_ORDER) {
-            arrayOrder = db.getAllOrder();
-            Collections.reverse(arrayOrder);
-        } else if (Type == ProjectInfo.TYPE_INVOCIE) {
-            arrayOrder = db.getAllInvoice();
-            Collections.reverse(arrayOrder);
-        } else if (Type == ProjectInfo.TYPE_SEND_TRANSFERENCE)
+        if (Type == ProjectInfo.TYPE_SEND_TRANSFERENCE)
             arrayOrder = db.getAllTransfer();
-
+        else {
+            arrayOrder = db.getAllOrder2(Type);
+        }
+        Collections.reverse(arrayOrder);
         for (Order order : arrayOrder) {
             if (Type == ProjectInfo.TYPE_SEND_TRANSFERENCE) {
                 visitor = db.getVisitor(order.getPersonId());
