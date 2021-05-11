@@ -1406,7 +1406,7 @@ public class DbAdapter {
         Person_Extra_Data person_extra_data = new Person_Extra_Data();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ExtraDataSchema.TABLE_NAME, null, DbSchema.ExtraDataSchema.COLUMN_ItemId + " =? and " + DbSchema.ExtraDataSchema.COLUMN_ItemType + " =? ", new String[]{String.valueOf(id), String.valueOf(BaseActivity.person_extra_info)}, null, null, null);
+            cursor = mDb.query(DbSchema.ExtraDataSchema.TABLE_NAME, null, DbSchema.ExtraDataSchema.COLUMN_ItemId + " =? and " + DbSchema.ExtraDataSchema.COLUMN_ItemType + " =? and " + DbSchema.ExtraDataSchema.COLUMN_USER_ID + "=?", new String[]{String.valueOf(id), String.valueOf(BaseActivity.person_extra_info),String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -1428,7 +1428,7 @@ public class DbAdapter {
         Product_Extra_Data product_extra_data = new Product_Extra_Data();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ExtraDataSchema.TABLE_NAME, null, DbSchema.ExtraDataSchema.COLUMN_ItemId + " =? and " + DbSchema.ExtraDataSchema.COLUMN_ItemType + " =? ", new String[]{String.valueOf(id), String.valueOf(BaseActivity.average_last_price)}, null, null, null);
+            cursor = mDb.query(DbSchema.ExtraDataSchema.TABLE_NAME, null, DbSchema.ExtraDataSchema.COLUMN_ItemId + " =? and " + DbSchema.ExtraDataSchema.COLUMN_ItemType + " =? and " + DbSchema.ExtraDataSchema.COLUMN_USER_ID + "=?" , new String[]{String.valueOf(id), String.valueOf(BaseActivity.average_last_price) , String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -1449,7 +1449,7 @@ public class DbAdapter {
         ArrayList<CityZone_Extra_Data> cityZoneExtraDataArrayList = new ArrayList<>();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ExtraDataSchema.TABLE_NAME, null, DbSchema.ExtraDataSchema.COLUMN_ItemType + " =? ", new String[]{String.valueOf(BaseActivity.city_zone)}, null, null, null);
+            cursor = mDb.query(DbSchema.ExtraDataSchema.TABLE_NAME, null, DbSchema.ExtraDataSchema.COLUMN_ItemType + " =? and " + DbSchema.ExtraDataSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(BaseActivity.city_zone)  , String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -1527,7 +1527,7 @@ public class DbAdapter {
         TaxInSell_Extra_Data taxInSell_extra_data = new TaxInSell_Extra_Data();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ExtraDataSchema.TABLE_NAME, null, DbSchema.ExtraDataSchema.COLUMN_ItemId + " =? and " + DbSchema.ExtraDataSchema.COLUMN_ItemType + " =? ", new String[]{String.valueOf(id), String.valueOf(BaseActivity.tax_sell_in_cost)}, null, null, null);
+            cursor = mDb.query(DbSchema.ExtraDataSchema.TABLE_NAME, null, DbSchema.ExtraDataSchema.COLUMN_ItemId + " =? and " + DbSchema.ExtraDataSchema.COLUMN_ItemType + " =? and " + DbSchema.ExtraDataSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(id), String.valueOf(BaseActivity.tax_sell_in_cost), String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -7974,7 +7974,7 @@ public class DbAdapter {
 
         if (type == ProjectInfo.TYPE_CASH) {
             strSelect = "select ifnull(SUM(" + DbSchema.Receiptschema.TABLE_NAME + "." + DbSchema.Receiptschema.COLUMN_CASHAMOUNT + "),'0') as sums from " + DbSchema.Receiptschema.TABLE_NAME
-                    + " Where " + DbSchema.Receiptschema.TABLE_NAME + "." + DbSchema.Receiptschema.COLUMN_DATE + " > " + startdate + " AND " + DbSchema.Receiptschema.TABLE_NAME + "." + DbSchema.Receiptschema.COLUMN_DATE + " <= " + enddate
+                    + " Where " + DbSchema.Receiptschema.TABLE_NAME + "." + DbSchema.Receiptschema.COLUMN_MODIFYDATE + " > " + startdate + " AND " + DbSchema.Receiptschema.TABLE_NAME + "." + DbSchema.Receiptschema.COLUMN_MODIFYDATE + " <= " + enddate
                     + " AND " + DbSchema.Receiptschema.TABLE_NAME + "." + DbSchema.Receiptschema.COLUMN_USER_ID + " = " + getPrefUserId()
                     + " AND " + DbSchema.Receiptschema.TABLE_NAME + "." + DbSchema.Receiptschema.COLUMN_DATABASE_ID + " ='" + BaseActivity.getPrefDatabaseId() + "'"
                     + " AND " + DbSchema.Receiptschema.TABLE_NAME + "." + DbSchema.Receiptschema.COLUMN_MAHAK_ID + " ='" + BaseActivity.getPrefMahakId() + "'";
@@ -7982,7 +7982,7 @@ public class DbAdapter {
             strSelect = "select ifnull(SUM(" + DbSchema.Chequeschema.TABLE_NAME + "." + DbSchema.Chequeschema.COLUMN_AMOUNT + "),'0') as sums from " + DbSchema.Chequeschema.TABLE_NAME
                     + " INNER JOIN " + DbSchema.Receiptschema.TABLE_NAME
                     + " ON " + DbSchema.Receiptschema.TABLE_NAME + "." + DbSchema.Receiptschema.COLUMN_ID + " = " + DbSchema.Chequeschema.TABLE_NAME + "." + DbSchema.Chequeschema.COLUMN_RECEIPTID + ""
-                    + " Where " + DbSchema.Chequeschema.TABLE_NAME + "." + DbSchema.Chequeschema.COLUMN_DATE + " > " + startdate + " AND " + DbSchema.Chequeschema.TABLE_NAME + "." + DbSchema.Chequeschema.COLUMN_DATE + " <= " + enddate
+                    + " Where " + DbSchema.Chequeschema.TABLE_NAME + "." + DbSchema.Chequeschema.COLUMN_MODIFYDATE + " > " + startdate + " AND " + DbSchema.Chequeschema.TABLE_NAME + "." + DbSchema.Chequeschema.COLUMN_MODIFYDATE + " <= " + enddate
                     + " AND " + DbSchema.Chequeschema.TABLE_NAME + "." + DbSchema.Chequeschema.COLUMN_TYPE + " = " + ProjectInfo.TYPE_CHEQUE
                     + " AND " + DbSchema.Receiptschema.TABLE_NAME + "." + DbSchema.Receiptschema.COLUMN_USER_ID + " = " + getPrefUserId()
                     + " AND " + DbSchema.Receiptschema.TABLE_NAME + "." + DbSchema.Receiptschema.COLUMN_DATABASE_ID + " ='" + BaseActivity.getPrefDatabaseId() + "'"
@@ -7991,7 +7991,7 @@ public class DbAdapter {
             strSelect = "select ifnull(SUM(" + DbSchema.Chequeschema.TABLE_NAME + "." + DbSchema.Chequeschema.COLUMN_AMOUNT + "),'0') as sums from " + DbSchema.Chequeschema.TABLE_NAME
                     + " INNER JOIN " + DbSchema.Receiptschema.TABLE_NAME
                     + " ON " + DbSchema.Receiptschema.TABLE_NAME + "." + DbSchema.Receiptschema.COLUMN_ID + " = " + DbSchema.Chequeschema.TABLE_NAME + "." + DbSchema.Chequeschema.COLUMN_RECEIPTID + ""
-                    + " Where " + DbSchema.Chequeschema.TABLE_NAME + "." + DbSchema.Chequeschema.COLUMN_DATE + " > " + startdate + " AND " + DbSchema.Chequeschema.TABLE_NAME + "." + DbSchema.Chequeschema.COLUMN_DATE + " <= " + enddate
+                    + " Where " + DbSchema.Chequeschema.TABLE_NAME + "." + DbSchema.Chequeschema.COLUMN_MODIFYDATE + " > " + startdate + " AND " + DbSchema.Chequeschema.TABLE_NAME + "." + DbSchema.Chequeschema.COLUMN_MODIFYDATE + " <= " + enddate
                     + " AND " + DbSchema.Chequeschema.TABLE_NAME + "." + DbSchema.Chequeschema.COLUMN_TYPE + " = " + ProjectInfo.TYPE_CASH_RECEIPT
                     + " AND " + DbSchema.Receiptschema.TABLE_NAME + "." + DbSchema.Receiptschema.COLUMN_USER_ID + " = " + getPrefUserId()
                     + " AND " + DbSchema.Receiptschema.TABLE_NAME + "." + DbSchema.Receiptschema.COLUMN_DATABASE_ID + " ='" + BaseActivity.getPrefDatabaseId() + "'"
