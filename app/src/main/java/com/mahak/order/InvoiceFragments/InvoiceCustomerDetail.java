@@ -420,7 +420,7 @@ public class InvoiceCustomerDetail extends Fragment implements FragmentLifecycle
                 intent.putExtra(MODE_PAGE, MODE_EDIT);
                 intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                 intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                intent.putExtra("GroupId", GroupId);
+                intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                 startActivity(intent);
             }
         });

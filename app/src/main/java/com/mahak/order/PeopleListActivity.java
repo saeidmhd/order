@@ -86,7 +86,7 @@ public class PeopleListActivity extends BaseActivity {
     private static final int REQUESTCODE_ADD_CUSTOMER = 2;
     private static long GroupId;
     private static int PositionGroup = 0;
-    private static String GROUPID_KEY = "GroupId";
+    private static String GROUPID_KEY = CUSTOMER_GROUP_KEY;
     private static String POSITION_KEY = "Position";
     private boolean FIRST_LOADE = false;
     private Context mContext;
@@ -488,13 +488,13 @@ public class PeopleListActivity extends BaseActivity {
                             intent.putExtra(MODE_PAGE, MODE_EDIT);
                             intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                             intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                            intent.putExtra("GroupId", GroupId);
+                            intent.putExtra(CUSTOMER_GROUP_KEY, customer.getPersonGroupId());
                             startActivityForResult(intent, REQUESTCODE_MANAGE_CUSTOMER);
                         } else if (Page == PAGE_ADD_INVOICE) {
                             Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
                             intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                             intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                            intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
+                            intent.putExtra(CUSTOMER_GROUP_KEY, customer.getPersonGroupId());
                             intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_INVOCIE);
                             setResult(RESULT_OK, intent);
                             finish();
@@ -502,7 +502,7 @@ public class PeopleListActivity extends BaseActivity {
                             Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
                             intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                             intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                            intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
+                            intent.putExtra(CUSTOMER_GROUP_KEY, customer.getPersonGroupId());
                             intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_ORDER);
                             setResult(RESULT_OK, intent);
                             finish();
@@ -510,7 +510,7 @@ public class PeopleListActivity extends BaseActivity {
                             Intent intent = new Intent(mContext, ManageReceiptActivity.class);
                             intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                             intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                            intent.putExtra("GroupId", GroupId);
+                            intent.putExtra(CUSTOMER_GROUP_KEY, customer.getPersonGroupId());
                             intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_NON);
                             setResult(RESULT_OK, intent);
                             finish();
@@ -518,14 +518,14 @@ public class PeopleListActivity extends BaseActivity {
                             Intent intent = new Intent(mContext, NonRegisterActivity.class);
                             intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                             intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                            intent.putExtra("GroupId", GroupId);
+                            intent.putExtra(CUSTOMER_GROUP_KEY, customer.getPersonGroupId());
                             setResult(RESULT_OK, intent);
                             finish();
                         } else if (Page == PAGE_ADD_RETURN) {
                             Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
                             intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                             intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                            intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
+                            intent.putExtra(CUSTOMER_GROUP_KEY, customer.getPersonGroupId());
                             intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_RETURN_OF_SALE);
                             setResult(RESULT_OK, intent);
                             finish();
@@ -593,7 +593,7 @@ public class PeopleListActivity extends BaseActivity {
                                     intent1.putExtra(MODE_PAGE, MODE_EDIT);
                                     intent1.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                                     intent1.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                                    intent1.putExtra("GroupId", GroupId);
+                                    intent1.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                                     startActivity(intent1);
                                     break;
                             }
@@ -683,7 +683,7 @@ public class PeopleListActivity extends BaseActivity {
                         Intent intent = new Intent(mContext, ManageCustomerActivity.class);
                         intent.putExtra(MODE_PAGE, MODE_EDIT);
                         intent.putExtra(ID, customer.getPersonId());
-                        intent.putExtra("GroupId", GroupId);
+                        intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                         startActivityForResult(intent, REQUESTCODE_MANAGE_CUSTOMER);
                     } else if (Page == PAGE_Invoice_Detail_Activity) {
                         Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
@@ -695,14 +695,14 @@ public class PeopleListActivity extends BaseActivity {
                     } else if (Page == PAGE_MANAGE_RECEIPT) {
                         Intent intent = new Intent(mContext, ManageReceiptActivity.class);
                         intent.putExtra(CUSTOMERID_KEY, customer.getId());
-                        intent.putExtra("GroupId", GroupId);
+                        intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                         setResult(RESULT_OK, intent);
                         finish();
                     } else if (Page == PAGE_ADD_NON_REGISTER) {
                         Intent intent = new Intent(mContext, NonRegisterActivity.class);
                         intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                         intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                        intent.putExtra("GroupId", GroupId);
+                        intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                         setResult(RESULT_OK, intent);
                         finish();
                     }
@@ -736,14 +736,14 @@ public class PeopleListActivity extends BaseActivity {
                     } else if (Page == PAGE_MANAGE_RECEIPT) {
                         Intent intent = new Intent(mContext, ManageReceiptActivity.class);
                         intent.putExtra(CUSTOMER_CLIENT_ID_KEY, personClientId);
-                        intent.putExtra("GroupId", GroupId);
+                        intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                         intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_NON);
                         setResult(RESULT_OK, intent);
                         finish();
                     } else if (Page == PAGE_ADD_NON_REGISTER) {
                         Intent intent = new Intent(mContext, NonRegisterActivity.class);
                         intent.putExtra(CUSTOMER_CLIENT_ID_KEY, personClientId);
-                        intent.putExtra("GroupId", GroupId);
+                        intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                         setResult(RESULT_OK, intent);
                         finish();
                     } else if (Page == PAGE_ADD_RETURN) {
@@ -845,7 +845,7 @@ public class PeopleListActivity extends BaseActivity {
                 intent.putExtra(MODE_PAGE, MODE_EDIT);
                 intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                 intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                intent.putExtra("GroupId", GroupId);
+                intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                 startActivityForResult(intent, REQUESTCODE_MANAGE_CUSTOMER);
             } else if (Page == PAGE_ADD_INVOICE) {
                 Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
@@ -867,7 +867,7 @@ public class PeopleListActivity extends BaseActivity {
                 Intent intent = new Intent(mContext, ManageReceiptActivity.class);
                 intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                 intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                intent.putExtra("GroupId", GroupId);
+                intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                 intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_NON);
                 setResult(RESULT_OK, intent);
                 finish();
@@ -875,7 +875,7 @@ public class PeopleListActivity extends BaseActivity {
                 Intent intent = new Intent(mContext, NonRegisterActivity.class);
                 intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                 intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                intent.putExtra("GroupId", GroupId);
+                intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                 setResult(RESULT_OK, intent);
                 finish();
             } else if (Page == PAGE_ADD_RETURN) {

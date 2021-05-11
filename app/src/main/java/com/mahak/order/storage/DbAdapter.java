@@ -6954,10 +6954,10 @@ public class DbAdapter {
     public int getDefGroupCustomerPriceLevel(long PersonGroupId) {
         int def = 0;
         try {
-            Cursor cursor = mDb.rawQuery("select SellPriceLevel from CustomersGroups where UserId = ?  and PersonGroupId = ?  ",new String[]{String.valueOf(PersonGroupId),String.valueOf(getPrefUserId())});
+            Cursor cursor = mDb.rawQuery("select SellPriceLevel from CustomersGroups where UserId = ?  and PersonGroupId = ?  ",new String[]{String.valueOf(getPrefUserId()),String.valueOf(PersonGroupId)});
             if(cursor!=null){
                 cursor.moveToFirst();
-                def = cursor.getInt(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_SellPriceLevel));
+                def = cursor.getInt(cursor.getColumnIndex(DbSchema.CustomersGroupschema.COLUMN_SellPriceLevel));
                 cursor.close();
             }
         } catch (Exception e) {

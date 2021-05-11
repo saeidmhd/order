@@ -41,6 +41,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.mahak.order.BaseActivity.CUSTOMER_GROUP_KEY;
+
 /**
  * Created by mostafavi on 10/4/2016.
  */
@@ -86,7 +88,7 @@ public class PlaceholderListGalleryFragment extends Fragment {
         args.putInt("type", type);
         args.putInt("mode", mode);
         args.putInt("customerId", customerId);
-        args.putLong("GroupId", groupId);
+        args.putLong(CUSTOMER_GROUP_KEY, groupId);
         args.putLong("OrderId", orderId);
         return frag;
     }
@@ -114,7 +116,7 @@ public class PlaceholderListGalleryFragment extends Fragment {
             type = bundle.getInt("type");
             mode = bundle.getInt("Mode");
             customerId = bundle.getInt("customerId");
-            GroupId = bundle.getInt("GroupId");
+            GroupId = bundle.getInt(CUSTOMER_GROUP_KEY);
             OrderId = bundle.getLong("OrderId");
             CountProduct = bundle.getInt("CountProduct");
             MODE_ASSET = bundle.getInt("MODE_ASSET");

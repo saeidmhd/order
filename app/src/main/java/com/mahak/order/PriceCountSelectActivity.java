@@ -1145,7 +1145,7 @@ public class PriceCountSelectActivity extends BaseActivity {
         }
         intent.putExtra("type", type);
         intent.putExtra("customerId", customerId);
-        intent.putExtra("groupId", groupId);
+        intent.putExtra(CUSTOMER_GROUP_KEY, groupId);
         intent.putExtra("productId", productId);
         intent.putExtra("fromRecycler", 1);
         intent.putExtra("mode", mode);

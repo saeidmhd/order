@@ -208,7 +208,7 @@ public class ProductPickerListActivity extends BaseActivity {
             if (Mode == MODE_NEW) {
                 CustomerId = Extras.getInt(CUSTOMERID_KEY);
                 Type = Extras.getInt(TYPE_KEY);
-                GroupId = Extras.getLong("GroupId");
+                GroupId = Extras.getLong(CUSTOMER_GROUP_KEY);
             } else if (Mode == MODE_EDIT) {
                 RetuenAsset = Extras.getBoolean(RETURN_ASSET_KEY);
                 Type = Extras.getInt(TYPE_KEY);
@@ -563,7 +563,7 @@ public class ProductPickerListActivity extends BaseActivity {
             args.putInt("type", Type);
             args.putLong("CustomerId", CustomerId);
             args.putLong("OrderId", OrderId);
-            args.putLong("GroupId", GroupId);
+            args.putLong(CUSTOMER_GROUP_KEY, GroupId);
             args.putInt("CountProduct", CountProduct);
             productListFragment.setArguments(args);
             ft.replace(R.id.flContent, productListFragment);
@@ -592,7 +592,7 @@ public class ProductPickerListActivity extends BaseActivity {
         args.putInt("type", Type);
         args.putLong("OrderId", OrderId);
         args.putInt("CustomerId", CustomerId);
-        args.putLong("GroupId", GroupId);
+        args.putLong(CUSTOMER_GROUP_KEY, GroupId);
         args.putInt("CountProduct", CountProduct);
         productGridFragment.setArguments(args);
         ft.replace(R.id.flContent, productGridFragment);
@@ -615,7 +615,7 @@ public class ProductPickerListActivity extends BaseActivity {
         Bundle args = new Bundle();
         args.putInt("Mode", Mode);
         args.putInt("type", Type);
-        args.putLong("GroupId", GroupId);
+        args.putLong(CUSTOMER_GROUP_KEY, GroupId);
         args.putLong("OrderId", OrderId);
         args.putLong("CustomerId", CustomerId);
         args.putInt("CountProduct", CountProduct);
