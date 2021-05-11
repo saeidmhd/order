@@ -3152,6 +3152,76 @@ public class DbAdapter {
         }
         return order;
     }
+    public Order getOrderFromCursor(Cursor cursor) {
+        Order order = new Order();
+        try {
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    order.setId(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ID)));
+                    order.setPersonId(cursor.getInt(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_PersonId)));
+
+                    order.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_LATITUDE)));
+                    order.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_LONGITUDE)));
+
+                    order.setReturnReasonId(cursor.getInt(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ReturnReasonId)));
+                    order.setPersonClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_PersonClientId)));
+                    order.setVisitorId(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_USER_ID)));
+                    order.setMahakId(cursor.getString(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_MAHAK_ID)));
+                    order.setOrderCode(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_OrderCode)));
+                    order.setDatabaseId(cursor.getString(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_DATABASE_ID)));
+                    order.setDeliveryDate(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_DELIVERYDATE)));
+                    order.setOrderDate(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ORDERDATE)));
+                    order.setDiscount(cursor.getDouble(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_DISCOUNT)));
+                    order.setDescription((cursor.getString(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_DESCRIPTION))));
+                    order.setImmediate(cursor.getInt(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_IMMEDIATE)));
+                    order.setSettlementType(cursor.getInt(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_SETTLEMEMNTTYPE)));
+                    order.setOrderType(cursor.getInt(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_TYPE)));
+                    order.setCode(cursor.getString(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_CODE)));
+                    order.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_MODIFYDATE)));
+                    order.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_PUBLISH)));
+                    order.setPromotionCode(cursor.getInt(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_PROMOTION_CODE)));
+                    order.setGiftType(cursor.getInt(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_GIFT_TYPE)));
+                    order.setOrderId(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_OrderId)));
+                    order.setOrderClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_OrderClientId)));
+                    order.setReceiptId(cursor.getString(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ReceiptId)));
+                    order.setReceiptClientId(cursor.getString(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ReceiptId)));
+                    order.setSendCost(cursor.getString(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_SendCost)));
+                    order.setOtherCost(cursor.getString(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_OtherCost)));
+                }
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorGetOrder", e.getMessage());
+        }
+        return order;
+    }
+    public Order getOrderFromCursor2(Cursor cursor) {
+        Order order = new Order();
+        try {
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    order.setId(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ID)));
+                    order.setCode(cursor.getString(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_CODE)));
+                    order.setOrderDate(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ORDERDATE)));
+                    order.setCustomerName(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_NAME)));
+                    order.setAddress(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ADDRESS)));
+                    order.setMarketName(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ORGANIZATION)));
+                    order.setPersonClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_PersonClientId)));
+                    order.setPersonId(cursor.getInt(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_PersonId)));
+                    order.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_PUBLISH)));
+                    order.setDiscount(cursor.getDouble(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_DISCOUNT)));
+                    order.setOrderType(cursor.getInt(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_TYPE)));
+                }
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorGetOrder", e.getMessage());
+        }
+        return order;
+    }
 
     public Order GetOrderWithOrderClientId(long clientId) {
         Order order = new Order();
@@ -5519,7 +5589,7 @@ public class DbAdapter {
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    order = GetOrder(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ID)));
+                    order = getOrderFromCursor(cursor);
                     if (order != null)
                         cursor.moveToNext();
                 }
@@ -6538,17 +6608,16 @@ public class DbAdapter {
         }
         return array;
     }
-
-    public ArrayList<Order> getAllOrder() {
+    public ArrayList<Order> getAllOrder(int orderType) {
         Order order;
         Cursor cursor;
         ArrayList<Order> array = new ArrayList<>();
         try {
-            cursor = mDb.query(DbSchema.Orderschema.TABLE_NAME, null, DbSchema.Orderschema.COLUMN_USER_ID + "=? AND " + DbSchema.Orderschema.COLUMN_MAHAK_ID + "=? AND " + DbSchema.Orderschema.COLUMN_DATABASE_ID + "=? AND " + DbSchema.Orderschema.COLUMN_TYPE + " =? ", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(ProjectInfo.TYPE_ORDER)}, null, null, null);
+            cursor = mDb.rawQuery("SELECT orders.id , Code , OrderDate , name, Address, Organization , orders.PersonClientId , orders.PersonId , orders.publish , Discount , Type from Orders inner join Customers on orders.PersonId = Customers.PersonId " + " Where orders.UserId=? and type =? order by OrderDate desc ", new String[]{String.valueOf(getPrefUserId()), String.valueOf(orderType)});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    order = GetOrder(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ID)));
+                    order = getOrderFromCursor2(cursor);
                     if (order != null)
                         array.add(order);
                     cursor.moveToNext();
@@ -6565,6 +6634,7 @@ public class DbAdapter {
         return array;
     }
 
+
     public ArrayList<Order> getAllReturnOfSale() {
         Order order;
         Cursor cursor;
@@ -6574,7 +6644,7 @@ public class DbAdapter {
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    order = GetOrder(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ID)));
+                    order = getOrderFromCursor(cursor);
                     if (order != null)
                         array.add(order);
                     cursor.moveToNext();
@@ -6617,31 +6687,6 @@ public class DbAdapter {
         return array;
     }
 
-    public ArrayList<Order> getAllInvoice() {
-        Order order;
-        Cursor cursor;
-        ArrayList<Order> array = new ArrayList<>();
-        try {
-            cursor = mDb.query(DbSchema.Orderschema.TABLE_NAME, null, DbSchema.Orderschema.COLUMN_USER_ID + "=? AND " + DbSchema.Orderschema.COLUMN_MAHAK_ID + "=? AND " + DbSchema.Orderschema.COLUMN_DATABASE_ID + "=? AND " + DbSchema.Orderschema.COLUMN_TYPE + " =? ", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(ProjectInfo.TYPE_INVOCIE)}, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    order = GetOrder(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ID)));
-                    if (order != null)
-                        array.add(order);
-                    cursor.moveToNext();
-                }
-                cursor.close();
-            }
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrAllOrder", e.getMessage());
-        }
-
-        return array;
-    }
-
     public ArrayList<Order> getAllInvoiceNotPublished() {
         Order order;
         Cursor cursor;
@@ -6651,7 +6696,7 @@ public class DbAdapter {
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    order = GetOrder(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ID)));
+                    order = getOrderFromCursor(cursor);
                     if (order != null)
                         array.add(order);
                     cursor.moveToNext();
@@ -6687,7 +6732,7 @@ public class DbAdapter {
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    order = GetOrder(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ID)));
+                    order = getOrderFromCursor(cursor);
                     if (order != null)
                         array.add(order);
                     cursor.moveToNext();
@@ -7003,7 +7048,7 @@ public class DbAdapter {
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    order = GetOrder(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ID)));
+                    order = getOrderFromCursor(cursor);
                     if (order != null)
                         array.add(order);
                     cursor.moveToNext();
@@ -7029,7 +7074,7 @@ public class DbAdapter {
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    order = GetOrder(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ID)));
+                    order = getOrderFromCursor(cursor);
                     if (order != null)
                         array.add(order);
                     cursor.moveToNext();
@@ -7081,7 +7126,7 @@ public class DbAdapter {
                 if (cursor != null) {
                     cursor.moveToFirst();
                     while (!cursor.isAfterLast()) {
-                        order = GetOrder(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ID)));
+                        order = getOrderFromCursor(cursor);
                         if (order != null)
                             array.add(order);
                         cursor.moveToNext();
@@ -7101,7 +7146,7 @@ public class DbAdapter {
                 if (cursor != null) {
                     cursor.moveToFirst();
                     while (!cursor.isAfterLast()) {
-                        order = GetOrder(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ID)));
+                        order = getOrderFromCursor(cursor);
                         if (order != null)
                             array.add(order);
                         cursor.moveToNext();

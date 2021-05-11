@@ -325,37 +325,16 @@ public class OrdersListActivity extends BaseActivity {
      * Read From Database And Fill Adapter
      */
     private void FillView() {
-        if (Type == ProjectInfo.TYPE_ORDER) {
-            arrayOrder = db.getAllOrder();
-            Collections.reverse(arrayOrder);
-        } else if (Type == ProjectInfo.TYPE_INVOCIE) {
-            arrayOrder = db.getAllInvoice();
-            Collections.reverse(arrayOrder);
-        } else if (Type == ProjectInfo.TYPE_SEND_TRANSFERENCE)
+        if (Type == ProjectInfo.TYPE_SEND_TRANSFERENCE){
             arrayOrder = db.getAllTransfer();
-
-        for (Order order : arrayOrder) {
-            if (Type == ProjectInfo.TYPE_SEND_TRANSFERENCE) {
-                visitor = db.getVisitor(order.getPersonId());
-                order.setCustomerName(visitor.getName());
-                order.setMarketName("");
-                order.setAddress("");
-            } else {
-                if (order.getPersonId() == ProjectInfo.CUSTOMERID_GUEST)
-                    customer = db.getCustomerWithPersonClientId(order.getPersonClientId());
-                else
-                    customer = db.getCustomerWithPersonId(order.getPersonId());
-                order.setMarketName(customer.getOrganization());
-                order.setCustomerName(customer.getName());
-
-                if (customer.getPersonCode() != 0) {
-                    Person_Extra_Data extraData = db.getMoreCustomerInfo(customer.getPersonCode());
-                    order.setAddress(extraData.getStoreAddress());
-                }else {
-                    order.setAddress(customer.getAddress());
-                }
+            for (Order order : arrayOrder) {
+                    visitor = db.getVisitor(order.getPersonId());
+                    order.setCustomerName(visitor.getName());
             }
-        }//end of For
+        }else {
+            arrayOrder = db.getAllOrder(Type);
+        }
+
         adOrder = new AdapterListOrder(mActivity, arrayOrder);
         lstOrder.setAdapter(adOrder);
 
@@ -857,7 +836,6 @@ public class OrdersListActivity extends BaseActivity {
                     txtAmount.setText(R.string.str_total_count);
                     orderDetails = db.getAllOrderDetailWithOrderId(order.getId());
                     for (OrderDetail item : orderDetails) {
-
                         count += ServiceTools.getTotalCount(item);
                     }
                     tvAmount.setText("" + count);
