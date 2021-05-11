@@ -832,6 +832,7 @@ public class InvoiceCustomerDetail extends Fragment implements FragmentLifecycle
 
                     CustomerId = data.getIntExtra(CUSTOMERID_KEY, 0);
                     CustomerClientId = data.getLongExtra(CUSTOMER_CLIENT_ID_KEY, 0);
+                    GroupId = data.getLongExtra(CUSTOMER_GROUP_KEY, 0);
 
                     if (CustomerId != ProjectInfo.CUSTOMERID_GUEST) {
                         customer = db.getCustomerWithPersonId(CustomerId);
@@ -840,7 +841,8 @@ public class InvoiceCustomerDetail extends Fragment implements FragmentLifecycle
                     }
 
                     ProductPickerListActivity.CustomerId = CustomerId;
-                    GroupId = data.getLongExtra(CUSTOMER_GROUP_KEY, 0);
+                    ProductPickerListActivity.GroupId = GroupId;
+
                     CustomerName = customer.getName();
                     tvCustomerName.setText(customer.getName());
                     moreInfo.setVisibility(View.VISIBLE);

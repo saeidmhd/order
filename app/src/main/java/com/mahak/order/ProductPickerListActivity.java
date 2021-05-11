@@ -127,7 +127,6 @@ public class ProductPickerListActivity extends BaseActivity {
     public static long CategoryId;
 
     public static ArrayList<Product> arrayProductMain = new ArrayList<>();
-    public static ArrayList<Long> arrayProductId = new ArrayList<>();
     public static LinkedHashMap<Integer, OrderDetail> HashMap_Product = new LinkedHashMap<>();
     public static final List<OrderDetail> Product_Delete = new ArrayList<>();
 
@@ -146,6 +145,7 @@ public class ProductPickerListActivity extends BaseActivity {
     public static int Type;
     private static int Mode;
     public static int CustomerId;
+    public static long GroupId;
     private AsyncProduct asynproduct;
     public static TextView tvPageTitle;
     private int CountProduct = 0;
@@ -156,7 +156,6 @@ public class ProductPickerListActivity extends BaseActivity {
     private PlaceholderListGalleryFragment placeholderListGalleryFragment;
     private ProductListFragment productListFragment;
     private ProductGridFragment productGridFragment;
-    private long GroupId;
     private long OrderId;
 
     AdapterSpnAssetProduct adspnAssetProduct;
@@ -791,6 +790,9 @@ public class ProductPickerListActivity extends BaseActivity {
         //Read Tax And Charge From Config //////////////////////////////////
         if (db == null) db = new DbAdapter(mContext);
         db.open();
+
+        BaseActivity.setPrefDefSellPrice(ServiceTools.getPrefDefPrice(db , CustomerId , GroupId));
+
         CountProduct = BaseActivity.getPrefProductCount(mContext);
         /*Default_TaxPercent = db.GetTaxPercent();
         Default_ChargePercent = db.GetChargePercent();*/
@@ -798,7 +800,6 @@ public class ProductPickerListActivity extends BaseActivity {
         if (mode == MODE_EDIT) {
             ArrayList<Product> arrayproduct;
             arrayproduct = db.getAllProduct(categoryid, modeasset, 0);
-            arrayProductId = db.getAllProductID(categoryid, modeasset, 0);
             //Set Correct Asset______________________________________________
             for (OrderDetail object : InvoiceDetailActivity.orderDetailArrayList) {
                 for (Product item : arrayproduct) {
@@ -818,9 +819,7 @@ public class ProductPickerListActivity extends BaseActivity {
         }//End of if
         else if (mode == MODE_NEW) {
             arrayProductMain = db.getAllProduct(categoryid, modeasset, 0);
-            arrayProductId = db.getAllProductID(categoryid, modeasset, 0);
         }
-        //HashMap_productDetail = db.getMapProductDetail();
         db.close();
     }
 

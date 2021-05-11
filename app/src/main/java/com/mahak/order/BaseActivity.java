@@ -95,6 +95,7 @@ public class BaseActivity extends AppCompatActivity {
     public static long DateSyncInformation = 0;
     public static String _Key_DateSyncInformation = "DateSyncInfo";
     public static String _Key_VisitorID = "UserId";
+    public static String _Key_DefPrice = "VisitorDefPrice";
     public static String _Key_UserToken = "UserToken";
     public static String _Key_SignalUserToken = "SignalUserToken";
     public static String _Key_StoreCode = "StoreCode";
@@ -163,6 +164,7 @@ public class BaseActivity extends AppCompatActivity {
 
 
     public static long DefaultUserId = 0;
+    public static int DefaultDefLevel = 0;
     public static int Defaultcount = 0;
     public static long Default = 0;
     public static String DefaultUserToken = "";
@@ -550,6 +552,14 @@ public class BaseActivity extends AppCompatActivity {
 
     public static void setPrefUserId(long userId) {
         sh.edit().putLong(_Key_VisitorID, userId).commit();
+    }
+
+    public static int getPrefDefSellPrice() {
+        return sh.getInt(_Key_DefPrice, DefaultDefLevel);
+    }
+
+    public static void setPrefDefSellPrice(int defLevel) {
+        sh.edit().putInt(_Key_DefPrice, defLevel).commit();
     }
 
     public static String getPrefUserToken() {

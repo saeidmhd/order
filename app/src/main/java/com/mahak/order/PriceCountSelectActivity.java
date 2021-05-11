@@ -132,8 +132,8 @@ public class PriceCountSelectActivity extends BaseActivity {
     //variables
     private String grantedVisitorLevel;
     private int defaultVisitorPrice = 0;
-    private String defaultCustomerPrice = "0";
-    private String defaultCustomerGroupPrice = "0";
+    private int defaultCustomerPrice = 0;
+    private int defaultCustomerGroupPrice = 0;
     private int dbPriceLevel;
     double off;
     double percentOff;
@@ -153,8 +153,6 @@ public class PriceCountSelectActivity extends BaseActivity {
     private String count1;
     private String count2;
     private long groupId;
-    private Customer customer;
-    private CustomerGroup customerGroup;
     ProductDetail productDetail = new ProductDetail();
     double default_DiscountValue;
     private boolean hasDetail = false;
@@ -205,7 +203,6 @@ public class PriceCountSelectActivity extends BaseActivity {
             count1 = getIntent().getStringExtra("count");
             count2 = getIntent().getStringExtra("count2");
             type = getIntent().getIntExtra("type", 0);
-            customerId = getIntent().getIntExtra("customerId", 0);
             productId = getIntent().getIntExtra("productId", 0);
             fromRecycler = getIntent().getIntExtra("fromRecycler", 0);
             description = getIntent().getStringExtra("description");
@@ -222,6 +219,9 @@ public class PriceCountSelectActivity extends BaseActivity {
 
         product_extra_data = db.getProductExtraInfo(product.getProductCode());
         taxInSell_extra_data = db.getTaxInSellExtra(product.getProductCode());
+
+        customerId = ProductPickerListActivity.CustomerId;
+        groupId = ProductPickerListActivity.GroupId;
 
         ArrayList<Setting> settings = db.getAllSettingsWithVisitorId(BaseActivity.getPrefUserMasterId());
 
@@ -1348,11 +1348,6 @@ public class PriceCountSelectActivity extends BaseActivity {
             }
         }
         productName.setText(product.getName());
-        if (customerId != ProjectInfo.CUSTOMERID_GUEST) {
-            customer = db.getCustomerWithPersonId(customerId);
-            groupId = db.GetgroupIdFromCustomer(customer);
-            customerGroup = db.GetCustomerGroup(groupId);
-        }
         //productDetail = db.getcostLevelSellById(products.get(position).getProductCode());
         if (productDetails.size() > 0)
             productDetail = db.getProductDetail(productDetails.get(0).getProductDetailId());
@@ -1374,13 +1369,10 @@ public class PriceCountSelectActivity extends BaseActivity {
 
         //get default price from visitor,customer,customerGroup And product
         // with priority of 1.visitor 2.customer 3.customerGroup 4.product
-        if (visitor != null)
-            defaultVisitorPrice = visitor.getSellPriceLevel();
-        if (customer != null)
-            defaultCustomerPrice = customer.getSellPriceLevel();
-        if (customerGroup != null)
-            if (customerGroup.getSellPriceLevel() != null)
-                defaultCustomerGroupPrice = customerGroup.getSellPriceLevel();
+
+        defaultVisitorPrice = db.getDefVisitorPriceLevel();
+        defaultCustomerPrice = db.getDefCustomerPriceLevel(customerId);
+        defaultCustomerGroupPrice = db.getDefGroupCustomerPriceLevel(groupId);
 
         // String defaultProductPrice = db.getProductDefaultPrice(products.get(position).getProductCode());
 
@@ -1391,10 +1383,10 @@ public class PriceCountSelectActivity extends BaseActivity {
         if (defaultVisitorPrice != 0) {
             if (getlistOfgrantedcostLevel().indexOf(String.valueOf(defaultVisitorPrice)) < getExistNameList().size())
                 spnPriceLevel.setSelection(getlistOfgrantedcostLevel().indexOf(String.valueOf(defaultVisitorPrice)));
-        } else if (!defaultCustomerPrice.equals("0")) {
+        } else if (defaultCustomerPrice != 0) {
             if (getlistOfgrantedcostLevel().indexOf(String.valueOf(defaultCustomerPrice)) < getExistNameList().size())
                 spnPriceLevel.setSelection(getlistOfgrantedcostLevel().indexOf(String.valueOf(defaultCustomerPrice)));
-        } else if (!defaultCustomerGroupPrice.equals("0")) {
+        } else if (defaultCustomerGroupPrice != 0) {
             if (getlistOfgrantedcostLevel().indexOf(String.valueOf(defaultCustomerGroupPrice)) < getExistNameList().size())
                 spnPriceLevel.setSelection(getlistOfgrantedcostLevel().indexOf(String.valueOf(defaultCustomerGroupPrice)));
         } else if (dbPriceLevel != 0) {

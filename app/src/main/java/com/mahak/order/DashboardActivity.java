@@ -460,6 +460,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         db = new DbAdapter(mContext);
         db.open();
 
+        ServiceTools.setSettingPreferences(db, mContext);
+
         mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
 
         tvSumOfOrders = (TextView) findViewById(R.id.tvSumOfOrders);

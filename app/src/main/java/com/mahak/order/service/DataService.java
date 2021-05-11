@@ -225,93 +225,9 @@ public class DataService {
             }
         }
         db.close();
-        setPreferences(db, mContext);
+        ServiceTools.setSettingPreferences(db, mContext);
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
-    }
-
-    private static void setPreferences(DbAdapter db, Context mContext) {
-
-        BaseActivity.setPrefUnit2Setting(BaseActivity.MODE_YekVahedi);
-        BaseActivity.setPrefTaxAndChargeIsActive(BaseActivity.InActive);
-        BaseActivity.setPrefTaxPercent(BaseActivity.InActive);
-        BaseActivity.setPrefChargePercent(BaseActivity.InActive);
-        BaseActivity.setPrefRowDiscountIsActive(BaseActivity.invisible);
-        BaseActivity.setPrefAutoSyncValue(BaseActivity.InActive);
-
-        db.open();
-        ArrayList<Setting> settings = db.getAllSettings();
-        db.close();
-
-        BaseActivity.setPrefRowDiscountIsActive(BaseActivity.invisible);
-        for (int i = 0; i < settings.size(); i++) {
-            switch (settings.get(i).getSettingCode()) {
-                case BaseActivity.TwoUnitKolJozCode:
-                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue().equals(BaseActivity.Active))
-                        BaseActivity.setPrefUnit2Setting(BaseActivity.MODE_MeghdarJoz);
-                    break;
-                case BaseActivity.TwoUnitActiveCode:
-                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue().equals(BaseActivity.Active))
-                        BaseActivity.setPrefUnit2Setting(BaseActivity.Mode_DoVahedi);
-                    break;
-                case BaseActivity.OneUnitActiveCode:
-                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue().equals(BaseActivity.Active))
-                        BaseActivity.setPrefUnit2Setting(BaseActivity.MODE_YekVahedi);
-                    break;
-                case BaseActivity.SHOW_ROW_DISCOUNT:
-                    if (settings.get(i).getDeleted() != 1)
-                        BaseActivity.setPrefRowDiscountIsActive(settings.get(i).getValue());
-                    else
-                        BaseActivity.setPrefRowDiscountIsActive(BaseActivity.invisible);
-                    break;
-                case BaseActivity.APPLY_DISCOUNT:
-                    if (settings.get(i).getDeleted() != 1)
-                        BaseActivity.setPrefApplyRowDiscount(settings.get(i).getValue());
-                    else
-                        BaseActivity.setPrefApplyRowDiscount(BaseActivity.InActive);
-                    break;
-                case BaseActivity.TaxAndChargeIsActiveCode:
-                    if (settings.get(i).getDeleted() != 1)
-                        BaseActivity.setPrefTaxAndChargeIsActive(settings.get(i).getValue());
-                    else
-                        BaseActivity.setPrefTaxAndChargeIsActive(BaseActivity.InActive);
-                    break;
-                case BaseActivity.TaxPercentCode:
-                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null)
-                        BaseActivity.setPrefTaxPercent(settings.get(i).getValue());
-                    else
-                        BaseActivity.setPrefTaxPercent(BaseActivity.InActive);
-                    break;
-                case BaseActivity.ChargePercentCode:
-                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null)
-                        BaseActivity.setPrefChargePercent(settings.get(i).getValue());
-                    else
-                        BaseActivity.setPrefChargePercent(BaseActivity.InActive);
-                    break;
-                case BaseActivity.AutoSyncCode:
-                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null) {
-                        BaseActivity.setPrefAutoSyncValue(settings.get(i).getValue());
-                        ServiceTools.scheduleAlarm(mContext);
-                    } else
-                        BaseActivity.setPrefAutoSyncValue(BaseActivity.InActive);
-                    break;
-                case BaseActivity.CountDecimalPointCode:
-                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null) {
-                        String value = settings.get(i).getValue();
-                        BaseActivity.setPrefCountDecimalPoint(value.substring(0, value.indexOf(".")));
-                    } else
-                        BaseActivity.setPrefCountDecimalPoint("0");
-                    break;
-                case BaseActivity.PriceDecimalPointCode:
-                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null) {
-                        String value = settings.get(i).getValue();
-                        BaseActivity.setPrefPriceDecimalPoint(value.substring(0, value.indexOf(".")));
-                    } else
-                        BaseActivity.setPrefPriceDecimalPoint("0");
-                    break;
-            }
-        }
-
     }
 
     public static double InsertCheckList(DbAdapter db, List<CheckList> data) {
