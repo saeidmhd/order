@@ -19,12 +19,12 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.mahak.order.BaseActivity;
+import com.mahak.order.ProductPickerListActivity;
 import com.mahak.order.common.Bank;
 import com.mahak.order.common.Category;
 import com.mahak.order.common.CheckList;
 import com.mahak.order.common.Cheque;
 import com.mahak.order.common.CityZone_Extra_Data;
-import com.mahak.order.common.Config;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.CustomerGroup;
 import com.mahak.order.common.ExtraData;
@@ -42,7 +42,6 @@ import com.mahak.order.common.Product;
 import com.mahak.order.common.ProductCategory;
 import com.mahak.order.common.ProductDetail;
 import com.mahak.order.common.ProductGroup;
-import com.mahak.order.common.ProductInDeliveryOrder;
 import com.mahak.order.common.ProductPriceLevelName;
 import com.mahak.order.common.Product_Extra_Data;
 import com.mahak.order.common.ProjectInfo;
@@ -68,7 +67,6 @@ import com.mahak.order.common.User;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.common.VisitorPeople;
 import com.mahak.order.common.VisitorProduct;
-import com.mahak.order.fragment.RecyclerProductAdapter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -546,7 +544,7 @@ public class DbAdapter {
 
         initialvalue.put(DbSchema.SettingSchema.COLUMN_SettingId, setting.getSettingId());
         initialvalue.put(DbSchema.SettingSchema.COLUMN_SettingCode, setting.getSettingCode());
-        initialvalue.put(DbSchema.SettingSchema.COLUMN_USER_ID, setting.getVisitorId());
+        initialvalue.put(DbSchema.SettingSchema.COLUMN_USER_ID, getPrefUserId());
         initialvalue.put(DbSchema.SettingSchema.COLUMN_Value, setting.getValue());
         initialvalue.put(DbSchema.SettingSchema.COLUMN_Deleted, setting.getDeleted());
         initialvalue.put(DbSchema.SettingSchema.COLUMN_DataHash, setting.getDataHash());
@@ -2068,9 +2066,7 @@ public class DbAdapter {
         product.setSumCount1(cursor.getDouble(cursor.getColumnIndex("sumcount1")));
         product.setSumCount2(cursor.getDouble(cursor.getColumnIndex("sumcount2")));
         product.setPrice(cursor.getDouble(cursor.getColumnIndex("price")));
-
-        /*double price = ServiceTools.getPriceFromPriceLevel3(cursor);
-        product.setPrice(price);*/
+       // product.setPriceVisitor(cursor.getDouble(cursor.getColumnIndex("priceVisitor")));
 
         return product;
     }
@@ -5538,14 +5534,47 @@ public class DbAdapter {
         return order;
     }
 
-    private Cursor getAllProductCursor2(long id, String LIMIT, String orderBy ,int asset) {
-        return mDb.rawQuery(" select Products.ProductId , productcode , name , UnitRatio , DefaultSellPriceLevel , UnitName2 , UnitName, " +
-                "case DefaultSellPriceLevel when 1 then Price1 when 2 then Price2 when 3 then price3 when 4 then price4 when 5 then price5 when 6 then price6 when 7 then price7 when 8 then price8 when 9 then price9 when 10 then price10 end as price ," +
-                " productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                " where " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                " and " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_Deleted + " = " + 0 +
-                getProductAssetStrnig(asset) +
-                getProductCategoryStrnig(id) + " GROUP by Products.productId " + " order by " + orderBy + " LIMIT " + LIMIT, null);
+    private Cursor getAllProductQuery(long id, String LIMIT, String orderBy, int modeasset, int defPriceLevel) {
+        Cursor cursor;
+        if(defPriceLevel == 0){
+            cursor =  mDb.rawQuery(" SELECT Products.ProductId , productcode , products.name , UnitRatio , DefaultSellPriceLevel , UnitName2 , UnitName , " +
+                    " case DefaultSellPriceLevel  " +
+                    " when 1 then Price1 " +
+                    " when 2 then Price2 " +
+                    " when 3 then price3 " +
+                    " when 4 then price4 " +
+                    " when 5 then price5 " +
+                    " when 6 then price6 " +
+                    " when 7 then price7 " +
+                    " when 8 then price8 " +
+                    " when 9 then price9 " +
+                    " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
+                    " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+                    " where " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
+                    " and " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_Deleted + " = " + 0 +
+                    getProductAssetStrnig(modeasset) +
+                    getProductCategoryStrnig(id) + " GROUP by Products.productId " + " order by " + orderBy + " LIMIT " + LIMIT, null);
+        }else{
+            cursor = mDb.rawQuery(" SELECT Products.ProductId , productcode , products.name , UnitRatio , DefaultSellPriceLevel , UnitName2 , UnitName , " +
+                    " case  " + defPriceLevel +
+                    " when 1 then Price1 " +
+                    " when 2 then Price2 " +
+                    " when 3 then price3 " +
+                    " when 4 then price4 " +
+                    " when 5 then price5 " +
+                    " when 6 then price6 " +
+                    " when 7 then price7 " +
+                    " when 8 then price8 " +
+                    " when 9 then price9 " +
+                    " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
+                    " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+                    " where " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
+                    " and " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_Deleted + " = " + 0 +
+                    getProductAssetStrnig(modeasset) +
+                    getProductCategoryStrnig(id) + " GROUP by Products.productId " + " order by " + orderBy + " LIMIT " + LIMIT, null);
+        }
+
+        return cursor;
     }
 
     public ArrayList<Notification> getAllNotifications(String userId) {
@@ -5958,32 +5987,54 @@ public class DbAdapter {
     public ArrayList<Product> searchProduct(String searchString, int type , long CategoryId , int MODE_ASSET) {
         Product product;
         Cursor cursor;
-        String rawquery;
-        String[] selectArgs;
+        if (ServiceTools.checkArabic(searchString)){
+            searchString = ServiceTools.replaceWithEnglish(searchString.toString());
+        }
+        int defPriceLevel = BaseActivity.getPrefDefSellPrice();
         ArrayList<Product> array = new ArrayList<>();
         try {
-            if (type == ProjectInfo.TYPE_INVOCIE) {
-                    rawquery = " select Products.ProductId , productcode , name , UnitRatio , DefaultSellPriceLevel , UnitName2 , UnitName, " +
-                            "case DefaultSellPriceLevel when 1 then Price1 when 2 then Price2 when 3 then price3 when 4 then price4 when 5 then price5 when 6 then price6 when 7 then price7 when 8 then price8 when 9 then price9 when 10 then price10 end as price ," +
-                            " productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                        " where ( " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_NAME + " LIKE " + "'%" + searchString + "%'" +
-                        " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchString + "%'" +
-                        " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
-                        " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                         getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(1) + " GROUP by Products.productId " +
-                        " order by " + DbSchema.Productschema.COLUMN_PRODUCT_CODE;
-            } else {
-                rawquery = " select Products.ProductId , productcode , name , UnitRatio, DefaultSellPriceLevel , UnitName2 , UnitName, " +
-                        "case DefaultSellPriceLevel when 1 then Price1 when 2 then Price2 when 3 then price3 when 4 then price4 when 5 then price5 when 6 then price6 when 7 then price7 when 8 then price8 when 9 then price9 when 10 then price10 end as price ," +
-                        " productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                        " where ( " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_NAME + " LIKE " + "'%" + searchString + "%'" +
-                        " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchString + "%'" +
-                        " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
-                        " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
+            if(defPriceLevel == 0){
+                 cursor =  mDb.rawQuery(" SELECT Products.ProductId , productcode , products.name , UnitRatio , DefaultSellPriceLevel , UnitName2 , UnitName , " +
+                        " case DefaultSellPriceLevel  " +
+                        " when 1 then Price1 " +
+                        " when 2 then Price2 " +
+                        " when 3 then price3 " +
+                        " when 4 then price4 " +
+                        " when 5 then price5 " +
+                        " when 6 then price6 " +
+                        " when 7 then price7 " +
+                        " when 8 then price8 " +
+                        " when 9 then price9 " +
+                        " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
+                        " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+                         " where ( " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_NAME + " LIKE " + "'%" + searchString + "%'" +
+                         " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchString + "%'" +
+                         " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
+                         " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
                          getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + " GROUP by Products.productId " +
-                        " order by " + DbSchema.Productschema.COLUMN_PRODUCT_CODE;
+                         " order by " + DbSchema.Productschema.COLUMN_PRODUCT_CODE, null);
+            }else{
+                cursor = mDb.rawQuery(" SELECT Products.ProductId , productcode , products.name , UnitRatio , DefaultSellPriceLevel , UnitName2 , UnitName , " +
+                        " case  " + defPriceLevel +
+                        " when 1 then Price1 " +
+                        " when 2 then Price2 " +
+                        " when 3 then price3 " +
+                        " when 4 then price4 " +
+                        " when 5 then price5 " +
+                        " when 6 then price6 " +
+                        " when 7 then price7 " +
+                        " when 8 then price8 " +
+                        " when 9 then price9 " +
+                        " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
+                        " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+                        " where ( " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_NAME + " LIKE " + "'%" + searchString + "%'" +
+                        " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchString + "%'" +
+                        " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
+                        " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
+                        getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + " GROUP by Products.productId " +
+                        " order by " + DbSchema.Productschema.COLUMN_PRODUCT_CODE, null);
             }
-            cursor = mDb.rawQuery(rawquery, null);
+
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -6187,36 +6238,14 @@ public class DbAdapter {
         Cursor cursor = null;
         String orderBy = BaseActivity.getPrefSortBase() + " " + BaseActivity.getPrefSortDirection();
         ArrayList<Product> array = new ArrayList<>();
+        int defPriceLevel = BaseActivity.getPrefDefSellPrice();
         try {
-            cursor = getAllProductCursor2(id, LIMIT, orderBy,modeasset);
+            cursor = getAllProductQuery(id, LIMIT, orderBy, modeasset , defPriceLevel);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     product = getProductFromCursor2(cursor);
                     array.add(product);
-                    cursor.moveToNext();
-                }
-                cursor.close();
-            }
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrAllProduct", e.getMessage());
-        }
-        return array;
-    }
-
-    public ArrayList<Long> getAllProductID(long id, int modeasset, int totalItem) {
-        String LIMIT = String.valueOf(totalItem) + ",10";
-        Cursor cursor = null;
-        String orderBy = BaseActivity.getPrefSortBase() + " " + BaseActivity.getPrefSortDirection();
-        ArrayList<Long> array = new ArrayList<>();
-        try {
-            cursor = getAllProductCursor2(id, LIMIT, orderBy , modeasset);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    array.add(cursor.getLong(cursor.getColumnIndex(DbSchema.Productschema.COLUMN_ProductId)));
                     cursor.moveToNext();
                 }
                 cursor.close();
@@ -6894,6 +6923,49 @@ public class DbAdapter {
         return array;
     }
 
+    public int getDefVisitorPriceLevel() {
+        int def = 0;
+        try {
+            Cursor cursor = mDb.rawQuery("select Sell_DefaultCostLevel from Visitors where VisitorId =? ",new String[]{String.valueOf(getPrefUserId())});
+            if(cursor!=null){
+                cursor.moveToFirst();
+                def = cursor.getInt(cursor.getColumnIndex(DbSchema.Visitorschema.COLUMN_Sell_DefaultCostLevel));
+                cursor.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return def;
+    }
+    public int getDefCustomerPriceLevel(int personId) {
+        int def = 0;
+        try {
+            Cursor cursor = mDb.rawQuery("select SellPriceLevel from Customers where personid = ? and UserId = ? ",new String[]{String.valueOf(personId),String.valueOf(getPrefUserId())});
+            if(cursor!=null){
+                cursor.moveToFirst();
+                def = cursor.getInt(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_SellPriceLevel));
+                cursor.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return def;
+    }
+    public int getDefGroupCustomerPriceLevel(long PersonGroupId) {
+        int def = 0;
+        try {
+            Cursor cursor = mDb.rawQuery("select SellPriceLevel from CustomersGroups where UserId = ?  and PersonGroupId = ?  ",new String[]{String.valueOf(getPrefUserId()),String.valueOf(PersonGroupId)});
+            if(cursor!=null){
+                cursor.moveToFirst();
+                def = cursor.getInt(cursor.getColumnIndex(DbSchema.CustomersGroupschema.COLUMN_SellPriceLevel));
+                cursor.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return def;
+    }
+
     public ArrayList<TransactionsLog> getAllTransactionlog(int customerid) {
         TransactionsLog transactionlog;
         Cursor cursor;
@@ -7413,7 +7485,7 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<Setting> array = new ArrayList<>();
         try {
-            cursor = mDb.query(DbSchema.SettingSchema.TABLE_NAME, null, null, null, null, null, null);
+            cursor = mDb.query(DbSchema.SettingSchema.TABLE_NAME, null, DbSchema.SettingSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(getPrefUserId())},  null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -9613,6 +9685,8 @@ public class DbAdapter {
 
         ServiceTools.scheduleAlarm(mCtx);
     }
+
+
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
         private final Context mcontext;

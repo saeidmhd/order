@@ -460,6 +460,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         db = new DbAdapter(mContext);
         db.open();
 
+        ServiceTools.setSettingPreferences(db, mContext);
+
         mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
 
         tvSumOfOrders = (TextView) findViewById(R.id.tvSumOfOrders);
@@ -1425,7 +1427,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 CustomerId = data.getIntExtra(CUSTOMERID_KEY, 0);
                 CustomerClientId = data.getLongExtra(CUSTOMER_CLIENT_ID_KEY, 0);
                 Type = data.getIntExtra(TYPE_KEY, 0);
-                GroupId = data.getLongExtra("GroupId", 0);
+                GroupId = data.getLongExtra(CUSTOMER_GROUP_KEY, 0);
 
                 if (Type == ProjectInfo.TYPE_INVOCIE) {
                     Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
@@ -1449,7 +1451,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_SEND_TRANSFERENCE);
                     intent.putExtra(MODE_PAGE, MODE_NEW);
                     intent.putExtra(CUSTOMERID_KEY, CustomerId);
-                    intent.putExtra("GroupId", GroupId);
+                    intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(getApplicationContext(), ManageReceiptActivity.class);

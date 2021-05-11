@@ -70,6 +70,7 @@ import java.util.Set;
 
 import static android.app.Activity.RESULT_OK;
 import static com.mahak.order.BaseActivity.CUSTOMERID_KEY;
+import static com.mahak.order.BaseActivity.CUSTOMER_GROUP_KEY;
 import static com.mahak.order.BaseActivity.MODE_EDIT;
 import static com.mahak.order.BaseActivity.MODE_NEW;
 import static com.mahak.order.BaseActivity.MODE_PAGE;
@@ -339,7 +340,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                 intent.putExtra(TYPE_KEY, OrderType);
                 intent.putExtra(PAGE, PAGE_ORDERLIST);
                 intent.putExtra(CUSTOMERID_KEY, CustomerId);
-                intent.putExtra("GroupId", GroupId);
+                intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                 intent.putExtra(MODE_PAGE, Mode);
                 intent.putExtra("OrderId", InvoiceDetailActivity.OrderId);
                 intent.putExtra(RETURN_ASSET_KEY, true);

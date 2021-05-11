@@ -1330,7 +1330,7 @@ public class OrdersListActivity extends BaseActivity {
 
                 CustomerId = data.getIntExtra(CUSTOMERID_KEY, 0);
                 CustomerClientId = data.getLongExtra(CUSTOMER_CLIENT_ID_KEY, 0);
-                GroupId = data.getLongExtra("GroupId", 0);
+                GroupId = data.getLongExtra(CUSTOMER_GROUP_KEY, 0);
                 if (Type == ProjectInfo.TYPE_INVOCIE) {
                     Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
                     intent.putExtra(CUSTOMERID_KEY, CustomerId);

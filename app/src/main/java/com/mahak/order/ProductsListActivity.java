@@ -1142,6 +1142,7 @@ public class ProductsListActivity extends BaseActivity {
         @Override
         protected Boolean doInBackground(String... arg0) {
             db.open();
+            BaseActivity.setPrefDefSellPrice(ServiceTools.getPrefDefPrice(db,0,0));
             arrayProductMain = db.getAllProduct(Id, ModeAssetProduct, 0);
             //HashMap_productDetail = db.getMapProductDetail();
             return true;

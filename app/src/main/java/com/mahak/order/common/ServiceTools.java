@@ -37,9 +37,11 @@ import androidx.core.content.FileProvider;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.datatransport.runtime.dagger.multibindings.ElementsIntoSet;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.mahak.order.BaseActivity;
+import com.mahak.order.ProductPickerListActivity;
 import com.mahak.order.R;
 import com.mahak.order.autoSync.SyncAlarmReceiver;
 import com.mahak.order.libs.BadgeDrawable;
@@ -79,6 +81,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import static com.mahak.order.BaseActivity.baseUrlImage;
 import static com.mahak.order.BaseActivity.getPrefUsername;
 import static com.mahak.order.common.ProjectInfo.DIRECTORY_ORDER_SIGNS;
 
@@ -170,6 +173,17 @@ public class ServiceTools {
         }
         myFormatter.applyPattern("###,###." + sb.toString());
         return myFormatter.format(value);
+    }
+
+    public static int getPrefDefPrice(DbAdapter db , int CustomerId , long GroupId ) {
+        int defVisitor = db.getDefVisitorPriceLevel();
+        int defCustomer = db.getDefCustomerPriceLevel(CustomerId);
+        int defGroupCustomer = db.getDefGroupCustomerPriceLevel(GroupId);
+        if(defVisitor != 0)
+            return defVisitor;
+        else if (defCustomer != 0)
+            return defCustomer;
+        else return defGroupCustomer;
     }
 
     private double roundDouble(double d) {
@@ -729,13 +743,91 @@ public class ServiceTools {
         if (gpsTracker.canGetLocation()) {
             Latitude = gpsTracker.getLatitude();
             Longitude = gpsTracker.getLongitude();
-
-            if (Latitude == 0 && Longitude == 0)
-                Toast.makeText(mContext, mContext.getString(R.string.str_message_dont_connect_gps), Toast.LENGTH_SHORT).show();
-        } else
-            Toast.makeText(mContext, mContext.getString(R.string.str_message_dont_connect_gps), Toast.LENGTH_SHORT).show();
-
+        }
         return new LatLng(Latitude, Longitude);
+    }
+
+    public static void setSettingPreferences(DbAdapter db, Context mContext) {
+
+        BaseActivity.setPrefUnit2Setting(BaseActivity.MODE_YekVahedi);
+        BaseActivity.setPrefTaxAndChargeIsActive(BaseActivity.InActive);
+        BaseActivity.setPrefTaxPercent(BaseActivity.InActive);
+        BaseActivity.setPrefChargePercent(BaseActivity.InActive);
+        BaseActivity.setPrefRowDiscountIsActive(BaseActivity.invisible);
+        BaseActivity.setPrefAutoSyncValue(BaseActivity.InActive);
+
+        db.open();
+        ArrayList<Setting> settings = db.getAllSettings();
+
+        BaseActivity.setPrefRowDiscountIsActive(BaseActivity.invisible);
+        for (int i = 0; i < settings.size(); i++) {
+            switch (settings.get(i).getSettingCode()) {
+                case BaseActivity.TwoUnitKolJozCode:
+                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue().equals(BaseActivity.Active))
+                        BaseActivity.setPrefUnit2Setting(BaseActivity.MODE_MeghdarJoz);
+                    break;
+                case BaseActivity.TwoUnitActiveCode:
+                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue().equals(BaseActivity.Active))
+                        BaseActivity.setPrefUnit2Setting(BaseActivity.Mode_DoVahedi);
+                    break;
+                case BaseActivity.OneUnitActiveCode:
+                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue().equals(BaseActivity.Active))
+                        BaseActivity.setPrefUnit2Setting(BaseActivity.MODE_YekVahedi);
+                    break;
+                case BaseActivity.SHOW_ROW_DISCOUNT:
+                    if (settings.get(i).getDeleted() != 1)
+                        BaseActivity.setPrefRowDiscountIsActive(settings.get(i).getValue());
+                    else
+                        BaseActivity.setPrefRowDiscountIsActive(BaseActivity.invisible);
+                    break;
+                case BaseActivity.APPLY_DISCOUNT:
+                    if (settings.get(i).getDeleted() != 1)
+                        BaseActivity.setPrefApplyRowDiscount(settings.get(i).getValue());
+                    else
+                        BaseActivity.setPrefApplyRowDiscount(BaseActivity.InActive);
+                    break;
+                case BaseActivity.TaxAndChargeIsActiveCode:
+                    if (settings.get(i).getDeleted() != 1)
+                        BaseActivity.setPrefTaxAndChargeIsActive(settings.get(i).getValue());
+                    else
+                        BaseActivity.setPrefTaxAndChargeIsActive(BaseActivity.InActive);
+                    break;
+                case BaseActivity.TaxPercentCode:
+                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null)
+                        BaseActivity.setPrefTaxPercent(settings.get(i).getValue());
+                    else
+                        BaseActivity.setPrefTaxPercent(BaseActivity.InActive);
+                    break;
+                case BaseActivity.ChargePercentCode:
+                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null)
+                        BaseActivity.setPrefChargePercent(settings.get(i).getValue());
+                    else
+                        BaseActivity.setPrefChargePercent(BaseActivity.InActive);
+                    break;
+                case BaseActivity.AutoSyncCode:
+                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null) {
+                        BaseActivity.setPrefAutoSyncValue(settings.get(i).getValue());
+                        ServiceTools.scheduleAlarm(mContext);
+                    } else
+                        BaseActivity.setPrefAutoSyncValue(BaseActivity.InActive);
+                    break;
+                case BaseActivity.CountDecimalPointCode:
+                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null) {
+                        String value = settings.get(i).getValue();
+                        BaseActivity.setPrefCountDecimalPoint(value.substring(0, value.indexOf(".")));
+                    } else
+                        BaseActivity.setPrefCountDecimalPoint("0");
+                    break;
+                case BaseActivity.PriceDecimalPointCode:
+                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null) {
+                        String value = settings.get(i).getValue();
+                        BaseActivity.setPrefPriceDecimalPoint(value.substring(0, value.indexOf(".")));
+                    } else
+                        BaseActivity.setPrefPriceDecimalPoint("0");
+                    break;
+            }
+        }
+
     }
 
     public static String getFaDayofWeek(String day) {

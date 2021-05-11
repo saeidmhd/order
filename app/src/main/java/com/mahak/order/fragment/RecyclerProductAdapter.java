@@ -466,11 +466,10 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
 
             if (constraint.toString().length() > 0) {
                 Set<Product> filterItem = new LinkedHashSet<>();
-                if (ServiceTools.checkArabic(constraint.toString()))
-                    filterItem.addAll(dbAdapter.searchProduct(ServiceTools.replaceWithEnglish(constraint.toString()), Type , categoryId , modeAsset));
-                else
+                if(type == ProjectInfo.TYPE_INVOCIE){
+                    filterItem.addAll(dbAdapter.searchProduct(constraint.toString(), Type , categoryId , 1));
+                }else
                     filterItem.addAll(dbAdapter.searchProduct(constraint.toString(), Type , categoryId , modeAsset));
-
                 result.values = new ArrayList<>(filterItem);
                 result.count = filterItem.size();
             } else {
