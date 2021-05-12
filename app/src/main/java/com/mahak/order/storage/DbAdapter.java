@@ -7530,6 +7530,29 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<Setting> array = new ArrayList<>();
         try {
+            cursor = mDb.query(DbSchema.SettingSchema.TABLE_NAME, null, null,  null, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    setting = getSettingFromCursor(cursor);
+                    array.add(setting);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("@Error", this.getClass().getName() + " - L:2036 - " + e.getMessage());
+        }
+        return array;
+    }
+    public ArrayList<Setting> getAllSettings2() {
+        Setting setting;
+        Cursor cursor;
+        ArrayList<Setting> array = new ArrayList<>();
+        try {
             cursor = mDb.query(DbSchema.SettingSchema.TABLE_NAME, null, DbSchema.SettingSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(getPrefUserId())},  null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
