@@ -129,6 +129,8 @@ dependencies {
 
     implementation 'com.microsoft.signalr:signalr:3.0.0'
 
+    implementation "androidx.multidex:multidex:2.0.1"
+
 
 
 }
