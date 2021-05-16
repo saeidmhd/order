@@ -1797,4 +1797,22 @@ FirebaseCrashlytics.getInstance().recordException(e);
             var10.printStackTrace();
         }
     }
+
+    public static String getLikeString(String searchStr) {
+        String[] searchArray = searchStr.toString().split(" ");
+        String LikeString = "";
+        for (String search : searchArray){
+            LikeString += " name " +  " like " + " '%" + search + "%' " + " and ";
+        }
+        LikeString = removeLastAnd(LikeString);
+        return LikeString;
+    }
+
+    public static String removeLastAnd(String str) {
+        String result = null;
+        if ((str != null) && (str.length() > 0)) {
+            result = str.substring(0, str.length() - 5);
+        }
+        return result;
+    }
 }

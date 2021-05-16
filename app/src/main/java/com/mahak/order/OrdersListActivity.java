@@ -234,8 +234,8 @@ public class OrdersListActivity extends BaseActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                 if (Type == ProjectInfo.TYPE_RECEIVE_TRANSFERENCE) {
-
-                    adReceivedTransfer.getFilter().filter(s, new FilterListener() {
+                    if(adReceivedTransfer != null){
+                        adReceivedTransfer.getFilter().filter(s, new FilterListener() {
 
                         @Override
                         public void onFilterComplete(int count) {
@@ -243,10 +243,12 @@ public class OrdersListActivity extends BaseActivity {
                             tvPageTitle.setText(getString(R.string.str_nav_transfer_list) + "(" + count + ")");
                         }
                     });
+                    }
+
                 } else {
 
-                    adOrder.getFilter().filter(s, new FilterListener() {
-
+                    if(adOrder != null){
+                        adOrder.getFilter().filter(s, new FilterListener() {
                         @Override
                         public void onFilterComplete(int count) {
 
@@ -258,20 +260,17 @@ public class OrdersListActivity extends BaseActivity {
                                 tvPageTitle.setText(getString(R.string.str_nav_transfer_list) + "(" + count + ")");
                         }
                     });
+                    }
                 }
-
             }
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count,
                                           int after) {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
 
             }
         });

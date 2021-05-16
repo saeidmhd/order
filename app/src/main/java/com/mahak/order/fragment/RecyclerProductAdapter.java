@@ -461,15 +461,14 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            constraint = constraint.toString().toLowerCase();
+            String searchStr = constraint.toString().toLowerCase();
             FilterResults result = new FilterResults();
-
             if (constraint.toString().length() > 0) {
                 Set<Product> filterItem = new LinkedHashSet<>();
                 if(type == ProjectInfo.TYPE_INVOCIE){
-                    filterItem.addAll(dbAdapter.searchProduct(constraint.toString(), Type , categoryId , 1));
+                    filterItem.addAll(dbAdapter.searchProduct(searchStr, Type , categoryId , 1));
                 }else
-                    filterItem.addAll(dbAdapter.searchProduct(constraint.toString(), Type , categoryId , modeAsset));
+                    filterItem.addAll(dbAdapter.searchProduct(searchStr, Type , categoryId , modeAsset));
                 result.values = new ArrayList<>(filterItem);
                 result.count = filterItem.size();
             } else {
