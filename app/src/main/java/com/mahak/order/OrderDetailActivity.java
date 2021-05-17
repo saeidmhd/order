@@ -575,9 +575,8 @@ public class OrderDetailActivity extends BaseActivity {
 
         orderDetailArrayList = (ArrayList<OrderDetail>) orderDetails.clone();
 
-        if (SharedPreferencesHelper.getCurrentLanguage(mContext).equals("en"))
-            _lstGroupedTax.setVisibility(View.GONE);
-        else if (SharedPreferencesHelper.getCurrentLanguage(mContext).equals("de_DE")) {
+        if (SharedPreferencesHelper.getCurrentLanguage(mContext).equals("de_DE")) {
+            _lstGroupedTax.setVisibility(View.VISIBLE);
             db.open();
             groupedTaxes = db.getGroupedTaxCharge(OrderId);
             _adGroupedTax = new AdapterGroupedTaxForPrint(mActivity, groupedTaxes);

@@ -325,7 +325,8 @@
             <ListView
                 android:id="@+id/_lstGroupedTax"
                 android:layout_width="fill_parent"
-                android:layout_height="30dp"
+                android:visibility="gone"
+                android:layout_height="@dimen/report_item_min_height_compact"
                 android:layout_margin="0dip"
                 android:background="@android:color/white"
                 android:divider="@android:color/black"
@@ -336,7 +337,7 @@
             <LinearLayout
                 android:id="@+id/_llTotalItems"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="@dimen/report_item_min_height_compact"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -668,12 +669,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/SmallSize"
                         android:gravity="left"
+                        android:textSize="16sp"
                         android:text="@string/str_print_remaining_final_person"
                         android:textColor="@android:color/black"
                         android:textStyle="bold" />
 
                     <com.mahak.order.widget.FontTextView
                         android:id="@+id/_tvCustomerStatus2"
+                        android:textSize="16sp"
                         style="@style/forms_page_title_label_default380"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"

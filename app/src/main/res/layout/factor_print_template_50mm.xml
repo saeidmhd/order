@@ -606,6 +606,7 @@
 
                     <com.mahak.order.widget.FontTextView
                         android:id="@+id/_tvCustomerStatus2"
+                        android:textSize="16sp"
                         style="@style/forms_page_title_label_default380"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
@@ -617,6 +618,7 @@
 
                     <com.mahak.order.widget.FontTextView
                         style="@style/forms_page_title_label_default380"
+                        android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/SmallSize"

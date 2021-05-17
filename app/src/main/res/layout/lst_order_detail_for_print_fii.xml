@@ -9,19 +9,19 @@
     <LinearLayout
         android:id="@+id/llitem"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/report_item_min_height"
+        android:layout_height="@dimen/lst_item_min_height_compact"
         android:gravity="center_vertical"
-        android:minHeight="@dimen/report_item_min_height"
+        android:minHeight="@dimen/lst_item_min_height_compact"
         android:orientation="horizontal">
 
         <com.mahak.order.widget.FontTextView
             android:id="@+id/tvPrice"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.75"
             android:gravity="left"
             android:text="@string/sample_number"
-            android:layout_marginLeft="@dimen/marginSize"
+            android:padding="2dp"
             android:textColor="@android:color/black"
             android:textSize="12sp" />
 
@@ -34,9 +34,9 @@
             android:id="@+id/tvfii"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/marginSize"
+            android:padding="2dp"
             android:gravity="left"
-            android:layout_weight="1"
+            android:layout_weight="0.75"
             android:text="@string/sample_number"
             android:textColor="@android:color/black"
             android:textSize="12sp" />
@@ -85,7 +85,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:minHeight="@dimen/report_item_min_height"
+        android:minHeight="@dimen/lst_item_min_height_compact"
         android:visibility="gone"
         android:orientation="horizontal">
 
