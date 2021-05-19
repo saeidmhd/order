@@ -691,7 +691,7 @@ public class ServiceTools {
     }
 
     public static double getExistCount1(OrderDetail orderDetail, ProductDetail productDetail) {
-        return orderDetail.getCount1() + productDetail.getCount1() + orderDetail.getGiftCount1();
+        return orderDetail.getSumCountBaJoz() + productDetail.getCount1() + orderDetail.getGiftCount1();
     }
 
     public static double getExistCount2(OrderDetail orderDetail, ProductDetail productDetail) {

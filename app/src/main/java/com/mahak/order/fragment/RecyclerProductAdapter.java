@@ -202,8 +202,15 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         holder.tvPrice.setText(ServiceTools.formatPrice(price));
 
         holder.tvInbox.setText(formatCount(product.getUnitRatio()));
+
         holder.tvUnit.setText(product.getUnitName());
         holder.tvUnit2.setText(product.getUnitName2());
+
+        if(holder.txtTotalCount1 != null)
+            holder.txtTotalCount1.setText(product.getUnitName());
+
+        if(holder.txtTotalCount2 != null)
+            holder.txtTotalCount2.setText(product.getUnitName2());
 
         if (product.getPictures() != null && product.getPictures().size() > 0) {
             if (product.getPictures().get(0).getUrl() != null)
