@@ -1195,7 +1195,7 @@ public class OrderDetailActivity extends BaseActivity {
                 if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
                     tvFee = (TextView) view.findViewById(R.id.tvfii);
                     //tvCount2 = (TextView) view.findViewById(R.id.tvCount2);
-                    tvProductCode = (TextView) view.findViewById(R.id.tvProductCode);
+                    //tvProductCode = (TextView) view.findViewById(R.id.tvProductCode);
                 }
 
                 if (getTemplate2Status(mContext, ProjectInfo._pName_OrderDetail))
@@ -1288,7 +1288,7 @@ public class OrderDetailActivity extends BaseActivity {
                 if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
                     db.open();
                     Product product = db.GetProductWithProductId(orderDetail.getProductId());
-                    tvProductCode.setText(String.valueOf(product.getProductCode()));
+                   // tvProductCode.setText(String.valueOf(product.getProductCode()));
                     tvFee.setText(ServiceTools.formatPrice(orderDetail.getPrice()));
                 }
 

@@ -42,8 +42,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_height="@dimen/report_item_min_height_compact"
             android:background="@android:color/white"
+            android:layout_margin="2dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -68,7 +69,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_height="@dimen/report_item_min_height_compact"
+            android:layout_margin="2dp"
             android:background="@android:color/white"
             android:gravity="center"
             android:orientation="horizontal">
@@ -95,7 +97,8 @@
         <LinearLayout
             android:id="@+id/ll_tvCustomerName"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_height="@dimen/report_item_min_height_compact"
+            android:layout_margin="2dp"
             android:background="@android:color/white"
             android:gravity="center"
             android:orientation="horizontal">
@@ -123,7 +126,8 @@
         <LinearLayout
             android:id="@+id/_llMarketName"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_height="@dimen/report_item_min_height_compact"
+            android:layout_margin="2dp"
             android:background="@android:color/white"
             android:gravity="center"
             android:orientation="horizontal">
@@ -149,7 +153,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_height="@dimen/report_item_min_height_compact"
+            android:layout_margin="2dp"
             android:background="@android:color/white"
             android:gravity="center"
             android:orientation="horizontal">
@@ -324,6 +329,7 @@
                     android:layout_marginLeft="@dimen/SmallSize"
                     android:gravity="left"
                     android:text="@string/sample_number"
+                    android:textSize="@dimen/print_text_size"
                     android:textColor="@android:color/black" />
 
                 <com.mahak.order.widget.FontTextView
@@ -334,6 +340,7 @@
                     android:layout_marginLeft="@dimen/LargeSize"
                     android:gravity="right"
                     android:text="@string/str_total_items"
+                    android:textSize="@dimen/print_text_size"
                     android:textColor="@android:color/black" />
             </LinearLayout>
 
