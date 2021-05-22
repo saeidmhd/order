@@ -12,7 +12,7 @@ import com.mahak.order.R;
 public class ProductHolder extends RecyclerView.ViewHolder {
 
     public TextView txtCount, txtTotalCount, tvPrice, tvAsset, tvAsset2, tvInbox, tvProductName, tvUnit, tvUnit2, txtTotalGift;
-    public ImageView imgProduct;
+    public ImageView imgProduct , imgGift;
     public TextView tvName;
     public TextView tvProductCode;
     public TextView tvCustomerPrice;
@@ -24,6 +24,7 @@ public class ProductHolder extends RecyclerView.ViewHolder {
         tvName = (TextView) view.findViewById(R.id.tvName);
         tvName.setSelected(true);
         tvProductCode = (TextView) view.findViewById(R.id.tvProductCode);
+        imgGift = (ImageView) view.findViewById(R.id.imgGift);
         panelCount = (LinearLayout) view.findViewById(R.id.panelCount);
         tvCustomerPrice = (TextView) view.findViewById(R.id.tvCustomerPrice);
         tvAsset = (TextView) view.findViewById(R.id.tvAsset);
