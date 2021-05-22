@@ -8,9 +8,10 @@
 
     <LinearLayout
         android:id="@+id/llitem"
-        android:layout_width="fill_parent"
-        android:layout_height="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:minHeight="@dimen/lst_item_min_height_compact"
         android:orientation="horizontal">
 
         <com.mahak.order.widget.FontTextView
