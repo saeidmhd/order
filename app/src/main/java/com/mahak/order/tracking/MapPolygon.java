@@ -145,7 +145,6 @@ public class MapPolygon {
                 if(PolyUtil.containsLocation(position, polygonPoints, true)){
                     return true;
                 }
-
             }
         }
         return false;

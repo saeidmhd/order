@@ -56,7 +56,6 @@ import com.mahak.order.common.loginSignalr.SignalLoginResult;
 import com.mahak.order.common.request.SetAllDataBody;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
 import com.mahak.order.storage.DbAdapter;
-import com.mahak.order.tracking.setting.TrackingSetting;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,9 +79,9 @@ public class LocationService extends Service {
     static final int TYPE_END_TRACKING = 1;
     private static final int ID_NOTIFICATION_START_END = 1078;
 
-    private static long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 1 meters
+    private static long MIN_DISPALCEMENT_CHANGE_FOR_UPDATES = 1; // 1 meters
     // The minimum time between updates in milliseconds
-    private static long MIN_TIME_BW_UPDATES = 120000; // 2 min
+    private static long MIN_TIME_INTERVAL_UPDATES = 120000; // 2 min
     private static int radius = 1; // 2 min
     public Context mContext;
 
@@ -92,7 +91,7 @@ public class LocationService extends Service {
     private DbAdapter dba;
     private static Map<String, EventLocation> eventLocations = new HashMap<>();
 
-    private LocationRequest mLocationRequestHighAccuracy;
+    private LocationRequest locationRequest;
 
     private SettingsClient mSettingsClient;
     private LocationSettingsRequest mLocationSettingsRequest;
@@ -247,8 +246,8 @@ public class LocationService extends Service {
         if (!ServiceTools.isNull(config)) {
             try {
                 JSONObject obj = new JSONObject(config);
-                MIN_DISTANCE_CHANGE_FOR_UPDATES = obj.getLong(ProjectInfo._json_key_mingps_distance_change);
-                MIN_TIME_BW_UPDATES = obj.getLong(ProjectInfo._json_key_mingps_time_change);
+                MIN_DISPALCEMENT_CHANGE_FOR_UPDATES = obj.getLong(ProjectInfo._json_key_mingps_distance_change);
+                MIN_TIME_INTERVAL_UPDATES = obj.getLong(ProjectInfo._json_key_mingps_time_change);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -355,7 +354,7 @@ public class LocationService extends Service {
                     @Override
                     public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
                         //noinspection MissingPermission
-                        mFusedLocationClient.requestLocationUpdates(mLocationRequestHighAccuracy,
+                        mFusedLocationClient.requestLocationUpdates(locationRequest,
                                 mLocationCallback, Looper.myLooper());
                         updateUI();
                     }
@@ -576,7 +575,7 @@ public class LocationService extends Service {
 
     private void buildLocationSettingsRequest() {
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        builder.addLocationRequest(mLocationRequestHighAccuracy);
+        builder.addLocationRequest(locationRequest);
         mLocationSettingsRequest = builder.build();
     }
 
@@ -745,11 +744,13 @@ public class LocationService extends Service {
      * Sets the location request parameters.
      */
     private void createLocationRequest() {
-        mLocationRequestHighAccuracy = new LocationRequest();
-        //مکان با دقت بالا
-        mLocationRequestHighAccuracy.setInterval(10000);
-        mLocationRequestHighAccuracy.setFastestInterval(5000);
-        mLocationRequestHighAccuracy.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        locationRequest.setFastestInterval(5000);
+        locationRequest.setInterval(MIN_TIME_INTERVAL_UPDATES);
+        locationRequest.setSmallestDisplacement(MIN_DISPALCEMENT_CHANGE_FOR_UPDATES);
 
     }
 

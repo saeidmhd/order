@@ -1,5 +1,6 @@
 package com.mahak.order.tracking;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -44,10 +45,14 @@ public class TrackingConfig {
     private FontProgressDialog pd;
     GoogleMap mGoogleMap;
     private final DbAdapter db;
+    private  LocationService mlocationService;
+    private  Activity mActivity;
 
-    public TrackingConfig(Context context , GoogleMap googleMap){
+    public TrackingConfig(Context context, GoogleMap googleMap, LocationService locationService , Activity activity){
         mContext = context;
         mGoogleMap = googleMap;
+        mlocationService = locationService;
+        mActivity = activity;
         mapPolygon = new MapPolygon(mGoogleMap,mContext);
         db = new DbAdapter(mContext);
 
@@ -131,6 +136,8 @@ public class TrackingConfig {
                         }
                         Toast.makeText(mContext, "تنظیمات دریافت گردید", Toast.LENGTH_LONG).show();
 
+                        setTrackingConfig();
+
                         new getTrackingZoneAsync().execute();
 
                     }else {
@@ -144,6 +151,23 @@ public class TrackingConfig {
                 Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void setTrackingConfig() {
+        DashboardActivity.btnTrackingService.setEnabled(!BaseActivity.getPrefAdminControl(mContext));
+        if(BaseActivity.getPrefTrackingControl(mContext) == 1)
+            startTracking(mlocationService,mActivity);
+        DashboardActivity.setTackingServiceText(DashboardActivity.btnTrackingService.isChecked());
+    }
+
+    private void startTracking(LocationService locationService , Activity activity) {
+            if (locationService == null) locationService = new LocationService(mContext,activity);
+            ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking_pause, "0");
+            locationService.startTracking();
+            if (locationService.isRunService()) {
+                DashboardActivity.btnTrackingService.setChecked(true);
+            }
+
     }
 
     class getTrackingZoneAsync extends AsyncTask<String, String, Integer> {
