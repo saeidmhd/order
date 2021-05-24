@@ -481,7 +481,7 @@
     <string name="str_tracking_pause_header">سرویس ردیابی متوقف شده است</string>
     <string name="str_play">اجرا</string>
     <string name="str_tracking">ردیابی</string>
-    <string name="str_tracking_description">سامانه ردیابی ویزیتور غیر فعال است </string>
+    <string name="str_tracking_description">سامانه ردیابی ویزیتور غیر فعال است! </string>
     <string name="str_tracking_active">فعال است</string>
     <string name="str_tracking_inactive">غیر فعال است</string>
     <string name="str_name_filter">فیلتر بر اساس نام</string>

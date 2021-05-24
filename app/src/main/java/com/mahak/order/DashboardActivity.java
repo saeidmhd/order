@@ -152,8 +152,9 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             tvSumOfChargeAndTaxOrder,
             tvSumOffChargeAndTaxInvoice,
             tvVersion,
-            tvSumOfTransference,
-            tvTrackingService;
+            tvSumOfTransference;
+    public static TextView tvTrackingService;
+
 
     private ListView lstCheckList;
 
@@ -191,7 +192,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     private Marker marker;
     private Polyline polyline;
     private LocationService locationService;
-    private static SwitchCompat btnTrackingService;
+    public static SwitchCompat btnTrackingService;
     private Menu menu;
     private int CustomerId;
     private long CustomerClientId;
@@ -305,6 +306,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     btnTrackingService.setChecked(false);
 
                 } else {
+                    new TrackingConfig(mContext,mGoogleMap,locationService,DashboardActivity.this).getSignalTokenAndSetting();
                     startTracking();
                 }
             }
@@ -346,12 +348,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (isChecked) {
-                    tvTrackingService.setText(R.string.tracking_system_is_active);
-                } else if (!isChecked) {
-                    tvTrackingService.setText(R.string.tracking_system_is_disabled);
-                }
-
+                setTackingServiceText(isChecked);
             }
         });
         new ReadOfflinePicturesProducts(this).readAllImages();
@@ -421,7 +418,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 builder.setMessage("دریافت تنظیمات ردیابی ویزیتور از سرور");
                 builder.setPositiveButton(R.string.str_yes, new OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        new TrackingConfig(mContext,mGoogleMap).getSignalTokenAndSetting();
+                        new TrackingConfig(mContext, mGoogleMap, locationService,DashboardActivity.this).getSignalTokenAndSetting();
                     }
                 });
                 builder.setNegativeButton(R.string.str_cancel, new OnClickListener() {
@@ -522,6 +519,19 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         setTrackingConfig();
     }//end of onCreate
 
+    public static void setTackingServiceText(boolean isChecked) {
+        if (isChecked) {
+            tvTrackingService.setText(R.string.tracking_system_is_active);
+        } else {
+            tvTrackingService.setText(R.string.tracking_system_is_disabled);
+        }
+        if (isChecked && BaseActivity.getPrefAdminControl(mContext)) {
+            tvTrackingService.setText(R.string.tracking_system_is_active_admin);
+        } else if (!isChecked && BaseActivity.getPrefAdminControl(mContext)) {
+            tvTrackingService.setText(R.string.tracking_system_is_disabled_admin);
+        }
+    }
+
     public static boolean CanRegisterInvoiceOutOfZone() {
         boolean canRegister = true;
         String config = ServiceTools.getKeyFromSharedPreferences(mContext, ProjectInfo.pre_gps_config);
@@ -534,8 +544,11 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         }
         if(!canRegister)
-            if(mapPolygon != null)
+            if(mapPolygon != null){
+
                 return mapPolygon.checkPositionInZone(lastPosition);
+            }
+
         return canRegister;
     }
 
@@ -1368,16 +1381,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         }
         return false;
-    }
-
-    private void forceGpsAdminControl() {
-
-        if (btnTrackingService.isChecked() && BaseActivity.getPrefAdminControl(mContext)) {
-            tvTrackingService.setText(R.string.tracking_system_is_active_admin);
-            forceEnableGps();
-        } else if (!btnTrackingService.isChecked() && BaseActivity.getPrefAdminControl(mContext)) {
-            tvTrackingService.setText(R.string.tracking_system_is_disabled_admin);
-        }
     }
 
     public void setTrackingConfig() {
