@@ -40,20 +40,15 @@ import static com.mahak.order.BaseActivity.getPrefUserMasterId;
 import static com.mahak.order.BaseActivity.setPrefSignalUserToken;
 
 public class TrackingConfig {
-    private final MapPolygon mapPolygon;
+
     Context mContext;
     private FontProgressDialog pd;
-    GoogleMap mGoogleMap;
-    private final DbAdapter db;
-    private  LocationService mlocationService;
-    private  Activity mActivity;
 
-    public TrackingConfig(Context context, GoogleMap googleMap, LocationService locationService , Activity activity){
+    private final DbAdapter db;
+    JSONObject gpsData = new JSONObject();
+
+    public TrackingConfig(Context context , Activity activity){
         mContext = context;
-        mGoogleMap = googleMap;
-        mlocationService = locationService;
-        mActivity = activity;
-        mapPolygon = new MapPolygon(mGoogleMap,mContext);
         db = new DbAdapter(mContext);
 
     }
@@ -110,7 +105,6 @@ public class TrackingConfig {
                 if (response.body() != null) {
                     if (response.body().isSucceeded()) {
 
-                        JSONObject gpsData = new JSONObject();
                         long MIN_DISTANCE_CHANGE_FOR_UPDATES = ServiceTools.toLong(response.body().getData().getSendPointsPerMeter());
                         long MIN_TIME_BW_UPDATES = ServiceTools.toLong(response.body().getData().getSendPointsEveryMinute());
                         int radius = ServiceTools.toInt(response.body().getData().getRadius());
@@ -134,9 +128,7 @@ public class TrackingConfig {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(mContext, "تنظیمات دریافت گردید", Toast.LENGTH_LONG).show();
-
-                        setTrackingConfig();
+                        Toast.makeText(mContext, "تنظیمات ردیابی دریافت گردید", Toast.LENGTH_LONG).show();
 
                         new getTrackingZoneAsync().execute();
 
@@ -153,22 +145,7 @@ public class TrackingConfig {
         });
     }
 
-    public void setTrackingConfig() {
-        DashboardActivity.btnTrackingService.setEnabled(!BaseActivity.getPrefAdminControl(mContext));
-        if(BaseActivity.getPrefTrackingControl(mContext) == 1)
-            startTracking(mlocationService,mActivity);
-        DashboardActivity.setTackingServiceText(DashboardActivity.btnTrackingService.isChecked());
-    }
 
-    private void startTracking(LocationService locationService , Activity activity) {
-            if (locationService == null) locationService = new LocationService(mContext,activity);
-            ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking_pause, "0");
-            locationService.startTracking();
-            if (locationService.isRunService()) {
-                DashboardActivity.btnTrackingService.setChecked(true);
-            }
-
-    }
 
     class getTrackingZoneAsync extends AsyncTask<String, String, Integer> {
 
@@ -205,7 +182,6 @@ public class TrackingConfig {
                     if (response.body() != null) {
                         if (response.body().isSucceeded()) {
                             List<Datum> data =  response.body().getData();
-                            JSONObject gpsData = new JSONObject();
                             try {
                                 if(data.size()>0){
                                     gpsData.put(ProjectInfo._json_key_isRestricted, data.get(0).isFactorRegistrationOutRange());
@@ -257,8 +233,8 @@ public class TrackingConfig {
             db.open();
             if (trackingZoneData != null){
                 if (trackingZoneData.size() > 0){
-                    db.DeleteAllZone();
-                    db.DeleteAllZoneLocation();
+                    /*db.DeleteAllZone();
+                    db.DeleteAllZoneLocation();*/
                     for (Datum datum : trackingZoneData){
                         DataService.InsertZone(db, datum);
                         DataService.InsertZoneLocation(db,datum.getZoneLocations());
@@ -266,14 +242,11 @@ public class TrackingConfig {
                 }
             }
             db.close();
-
             return 0;
         }
 
         @Override
         protected void onPostExecute(Integer result) {
-            mapPolygon.removeAllPolygon();
-            mapPolygon.showPolygon();
             pd.dismiss();
         }
 

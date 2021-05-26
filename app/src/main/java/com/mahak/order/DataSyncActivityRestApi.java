@@ -65,6 +65,7 @@ import com.mahak.order.common.request.SetSign.setSignImage;
 import com.mahak.order.service.DataService;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.DbSchema;
+import com.mahak.order.tracking.TrackingConfig;
 import com.mahak.order.widget.FontAlertDialog;
 import com.mahak.order.widget.FontProgressDialog;
 
@@ -1404,7 +1405,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     }
                 }
             }
+            new TrackingConfig(mContext,DataSyncActivityRestApi.this).getSignalTokenAndSetting();
         }
+
     }
 
     private void SetDate() {
