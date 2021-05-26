@@ -263,6 +263,7 @@ public class DbAdapter {
             ContentValues initialvalue = new ContentValues();
             initialvalue.put(DbSchema.ZoneSchema.COLUMN_zoneId, datum.getId());
             initialvalue.put(DbSchema.ZoneSchema.COLUMN_title, datum.getTitle());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_visitorId, getPrefUserId());
             initialvalue.put(DbSchema.ZoneSchema.COLUMN_createdBy, datum.getCreatedBy());
             initialvalue.put(DbSchema.ZoneSchema.COLUMN_created, datum.getCreated());
             initialvalue.put(DbSchema.ZoneSchema.COLUMN_lastModifiedBy, datum.getLastModified());
@@ -5754,7 +5755,7 @@ public class DbAdapter {
         Datum datum = new Datum();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ZoneSchema.TABLE_NAME, null, null, null, null, null, null);
+            cursor = mDb.rawQuery("select * from zone where visitorid =? " ,new String[]{String.valueOf(getPrefUserId())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {

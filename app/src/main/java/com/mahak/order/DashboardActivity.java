@@ -137,7 +137,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             btnNavReportsList,
             btnAddNewTransference;
 
-    private ImageButton btnZoomMapView , trackingSetting;
+    private ImageButton btnZoomMapView;
     private TextView
             tvSumOfReceipts,
             tvSumOfOrders,
@@ -306,7 +306,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     btnTrackingService.setChecked(false);
 
                 } else {
-                    new TrackingConfig(mContext,mGoogleMap,locationService,DashboardActivity.this).getSignalTokenAndSetting();
                     startTracking();
                 }
             }
@@ -414,38 +413,13 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 }
             }
         });
-        trackingSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setTitle("تنظیمات ردیابی ویزیتور");
-                builder.setMessage("دریافت تنظیمات ردیابی ویزیتور از سرور");
-                builder.setPositiveButton(R.string.str_yes, new OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        new TrackingConfig(mContext, mGoogleMap, locationService,DashboardActivity.this).getSignalTokenAndSetting();
-                    }
-                });
-                builder.setNegativeButton(R.string.str_cancel, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                AlertDialog alert = builder.create();
-                alert.show();
-
-            }
-        });
         btnZoomMapView.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(mContext, MapViewActivity.class);
                 intent.putParcelableArrayListExtra(COORDINATE, positions);
                 intent.putParcelableArrayListExtra(CustomerPositions, customerPositions);
                 startActivity(intent);
-
             }
         });
 
@@ -520,7 +494,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 }
             }
         };
-        setTrackingConfig();
     }//end of onCreate
 
     public static void setTackingServiceText(boolean isChecked) {
@@ -570,6 +543,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        setTrackingConfig();
     }
 
     private void registerReceiverToCheckGpsOnOff() {
@@ -720,7 +694,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnAddNewReceipt = (Button) findViewById(R.id.btnAddNewReceipt);
         btnAddNewTransference = (Button) findViewById(R.id.btnAddNewTransference);
         btnZoomMapView = (ImageButton) findViewById(R.id.btnZoomMapView);
-        trackingSetting = (ImageButton) findViewById(R.id.trackingSetting);
 
         tvSumOfOrders = (TextView) findViewById(R.id.tvSumOfOrders);
         tvTrackingService = (TextView) findViewById(R.id.tvTrackingService);

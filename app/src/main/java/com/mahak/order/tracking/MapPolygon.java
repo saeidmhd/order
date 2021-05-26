@@ -12,6 +12,7 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.maps.android.PolyUtil;
 import com.mahak.order.common.ProjectInfo;
+import com.mahak.order.common.ServiceTools;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.tracking.visitorZone.Datum;
 import com.mahak.order.tracking.visitorZone.ZoneLocation;
@@ -135,6 +136,16 @@ public class MapPolygon {
     }
 
     public boolean checkPositionInZone(LatLng position) {
+        int radius = 0;
+        String config = ServiceTools.getKeyFromSharedPreferences(mContext, ProjectInfo.pre_gps_config);
+        if (!ServiceTools.isNull(config)) {
+            try {
+                JSONObject obj = new JSONObject(config);
+                radius = obj.getInt(ProjectInfo._json_key_radius);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         if(position == null)
             return false;
         db.open();
@@ -142,7 +153,7 @@ public class MapPolygon {
         for(Datum datum : data){
             List<LatLng> polygonPoints = getPolygonPoints(datum);
             if(polygonPoints.size()>0){
-                if(PolyUtil.containsLocation(position, polygonPoints, true)){
+                if(PolyUtil.isLocationOnEdge(position, polygonPoints, true, radius)){
                     return true;
                 }
             }
