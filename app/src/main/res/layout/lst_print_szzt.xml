@@ -14,7 +14,7 @@
         android:minHeight="@dimen/lst_item_min_height_compact"
         android:orientation="horizontal">
 
-        <com.mahak.order.widget.FontTextView
+        <com.mahak.order.widget.PrintTextView
             android:id="@+id/tvPrice"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/black" />
 
-        <com.mahak.order.widget.FontTextView
+        <com.mahak.order.widget.PrintTextView
             android:id="@+id/tvfii"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/black" />
 
-        <com.mahak.order.widget.FontTextView
+        <com.mahak.order.widget.PrintTextView
             android:id="@+id/tvCount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/black" />
 
-        <com.mahak.order.widget.FontTextView
+        <com.mahak.order.widget.PrintTextView
             android:id="@+id/tvProductSpec"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/black" />
 
-        <com.mahak.order.widget.FontTextView
+        <com.mahak.order.widget.PrintTextView
             android:id="@+id/tvProductPropSpec"
             android:layout_width="0dip"
             android:layout_height="wrap_content"

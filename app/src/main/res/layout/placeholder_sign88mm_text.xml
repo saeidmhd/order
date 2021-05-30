@@ -18,7 +18,7 @@
         android:paddingBottom="@dimen/NormalSize"
         android:paddingTop="@dimen/NormalSize">
 
-        <com.mahak.order.widget.FontTextView
+        <com.mahak.order.widget.PrintTextView
             style="@style/forms_page_title_label_default380"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

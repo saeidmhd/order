@@ -611,7 +611,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="@string/small"
-                    android:textSize="11sp"
+                    android:textSize="12sp"
                     android:layout_margin="@dimen/SmallSize" />
 
                 <RadioButton
@@ -620,7 +620,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="@string/medium"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:layout_margin="@dimen/SmallSize" />
 
                 <RadioButton
@@ -629,7 +629,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="@string/large"
-                    android:textSize="13sp"
+                    android:textSize="16sp"
                     android:layout_margin="@dimen/SmallSize" />
             </LinearLayout>
 

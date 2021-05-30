@@ -22,7 +22,7 @@
             android:layout_gravity="center"
             android:orientation="horizontal">
 
-            <com.mahak.order.widget.FontTextView
+            <com.mahak.order.widget.PrintTextView
                 android:id="@+id/_tvType"
                 style="@style/forms_page_title_label_default"
                 android:layout_width="match_parent"

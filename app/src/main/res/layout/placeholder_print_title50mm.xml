@@ -27,7 +27,7 @@
             android:orientation="horizontal"
             android:paddingRight="@dimen/NormalSize">
 
-            <com.mahak.order.widget.FontTextView
+            <com.mahak.order.widget.PrintTextView
                 android:id="@+id/_tvType"
                 style="@style/forms_page_title_label_default"
                 android:layout_width="wrap_content"

@@ -79,7 +79,7 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 medium.setChecked(false);
                 large.setChecked(false);
-                SharedPreferencesHelper.setCurrentFontSize(mContext, 8);
+                SharedPreferencesHelper.setCurrentFontSize(mContext, 12);
 
             }
         });
@@ -89,7 +89,7 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 small.setChecked(false);
                 large.setChecked(false);
-                SharedPreferencesHelper.setCurrentFontSize(mContext, 10);
+                SharedPreferencesHelper.setCurrentFontSize(mContext, 14);
 
             }
         });
@@ -99,7 +99,7 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 small.setChecked(false);
                 medium.setChecked(false);
-                SharedPreferencesHelper.setCurrentFontSize(mContext, 12);
+                SharedPreferencesHelper.setCurrentFontSize(mContext, 16);
             }
         });
 
@@ -439,11 +439,11 @@ public class SettingActivity extends AppCompatActivity {
         else
             chkShowBelowPrice.setChecked(false);
 
-        if (SharedPreferencesHelper.getCurrentFontSize(mContext) == 8)
+        if (SharedPreferencesHelper.getCurrentFontSize(mContext) == 12)
             small.setChecked(true);
-        else if (SharedPreferencesHelper.getCurrentFontSize(mContext) == 10)
+        else if (SharedPreferencesHelper.getCurrentFontSize(mContext) == 14)
             medium.setChecked(true);
-        else if (SharedPreferencesHelper.getCurrentFontSize(mContext) == 12)
+        else if (SharedPreferencesHelper.getCurrentFontSize(mContext) == 16)
             large.setChecked(true);
 
         if (SharedPreferencesHelper.getCurrentLanguage(mContext).equals("en"))
