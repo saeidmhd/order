@@ -58,16 +58,9 @@
             android:hint="@string/str_name_product_code_filter" />
     </LinearLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshProduct"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <FrameLayout
-            android:id="@+id/flContent"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"></FrameLayout>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    <FrameLayout
+        android:id="@+id/flContent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"></FrameLayout>
 
 </LinearLayout>

@@ -44,6 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/report_item_min_height_compact"
             android:background="@android:color/white"
+            android:layout_margin="2dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -69,6 +70,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/report_item_min_height_compact"
+            android:layout_margin="2dp"
             android:background="@android:color/white"
             android:gravity="center"
             android:orientation="horizontal">
@@ -96,6 +98,7 @@
             android:id="@+id/ll_tvCustomerName"
             android:layout_width="match_parent"
             android:layout_height="@dimen/report_item_min_height_compact"
+            android:layout_margin="2dp"
             android:background="@android:color/white"
             android:gravity="center"
             android:orientation="horizontal">
@@ -124,6 +127,7 @@
             android:id="@+id/_llMarketName"
             android:layout_width="match_parent"
             android:layout_height="@dimen/report_item_min_height_compact"
+            android:layout_margin="2dp"
             android:background="@android:color/white"
             android:gravity="center"
             android:orientation="horizontal">
@@ -150,6 +154,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/report_item_min_height_compact"
+            android:layout_margin="2dp"
             android:background="@android:color/white"
             android:gravity="center"
             android:orientation="horizontal">
@@ -191,12 +196,12 @@
                     android:id="@+id/_txtPrice"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.75"
                     android:gravity="center_horizontal"
                     android:text="@string/str_price"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/print_text_size"
-                    android:layout_marginLeft="8dp" />
+                    android:padding="2dp" />
 
                 <View
                     android:layout_width="2dp"
@@ -206,12 +211,12 @@
                 <com.mahak.order.widget.FontTextView
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:padding="2dp"
+                    android:layout_weight="0.75"
                     android:gravity="center_horizontal"
                     android:text="@string/str_title_fii"
                     android:textColor="@android:color/black"
-                    android:textSize="@dimen/print_text_size"
-                    android:layout_marginLeft="8dp" />
+                    android:textSize="@dimen/print_text_size" />
 
                 <View
                     android:layout_width="2dp"
@@ -242,7 +247,6 @@
                     android:textSize="@dimen/print_text_size" />
 
             </LinearLayout>
-
 
             <View
                 android:layout_width="match_parent"
@@ -315,18 +319,19 @@
             <ListView
                 android:id="@+id/_lstGroupedTax"
                 android:layout_width="fill_parent"
-                android:layout_height="30dp"
+                android:layout_height="@dimen/report_item_min_height_compact"
                 android:layout_margin="0dip"
                 android:background="@android:color/white"
                 android:divider="@android:color/black"
                 android:dividerHeight="0dp"
+                android:visibility="gone"
                 android:listSelector="@android:color/transparent"
                 android:padding="0dip" />
 
             <LinearLayout
                 android:id="@+id/_llTotalItems"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="@dimen/report_item_min_height_compact"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -632,6 +637,7 @@
                     <com.mahak.order.widget.FontTextView
                         android:id="@+id/_tvCustomerStatus2"
                         style="@style/forms_page_title_label_default380"
+                        android:textSize="16sp"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/SmallSize"
@@ -642,6 +648,7 @@
 
                     <com.mahak.order.widget.FontTextView
                         style="@style/forms_page_title_label_default380"
+                        android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/SmallSize"

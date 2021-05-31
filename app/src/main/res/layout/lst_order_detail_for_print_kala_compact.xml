@@ -8,7 +8,7 @@
     <LinearLayout
         android:id="@+id/llitem"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/report_item_min_height_compact"
+        android:layout_height="@dimen/lst_item_min_height_compact"
         android:gravity="center_vertical"
         android:minHeight="@dimen/report_item_min_height"
         android:orientation="horizontal">

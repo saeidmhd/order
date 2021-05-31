@@ -202,8 +202,15 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         holder.tvPrice.setText(ServiceTools.formatPrice(price));
 
         holder.tvInbox.setText(formatCount(product.getUnitRatio()));
+
         holder.tvUnit.setText(product.getUnitName());
         holder.tvUnit2.setText(product.getUnitName2());
+
+        if(holder.txtTotalCount1 != null)
+            holder.txtTotalCount1.setText(product.getUnitName());
+
+        if(holder.txtTotalCount2 != null)
+            holder.txtTotalCount2.setText(product.getUnitName2());
 
         if (product.getPictures() != null && product.getPictures().size() > 0) {
             if (product.getPictures().get(0).getUrl() != null)
@@ -461,15 +468,14 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            constraint = constraint.toString().toLowerCase();
+            String searchStr = constraint.toString().toLowerCase();
             FilterResults result = new FilterResults();
-
             if (constraint.toString().length() > 0) {
                 Set<Product> filterItem = new LinkedHashSet<>();
                 if(type == ProjectInfo.TYPE_INVOCIE){
-                    filterItem.addAll(dbAdapter.searchProduct(constraint.toString(), Type , categoryId , 1));
+                    filterItem.addAll(dbAdapter.searchProduct(searchStr, Type , categoryId , 1));
                 }else
-                    filterItem.addAll(dbAdapter.searchProduct(constraint.toString(), Type , categoryId , modeAsset));
+                    filterItem.addAll(dbAdapter.searchProduct(searchStr, Type , categoryId , modeAsset));
                 result.values = new ArrayList<>(filterItem);
                 result.count = filterItem.size();
             } else {

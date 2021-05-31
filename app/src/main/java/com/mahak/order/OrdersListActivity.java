@@ -234,8 +234,8 @@ public class OrdersListActivity extends BaseActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                 if (Type == ProjectInfo.TYPE_RECEIVE_TRANSFERENCE) {
-
-                    adReceivedTransfer.getFilter().filter(s, new FilterListener() {
+                    if(adReceivedTransfer != null){
+                        adReceivedTransfer.getFilter().filter(s, new FilterListener() {
 
                         @Override
                         public void onFilterComplete(int count) {
@@ -243,10 +243,12 @@ public class OrdersListActivity extends BaseActivity {
                             tvPageTitle.setText(getString(R.string.str_nav_transfer_list) + "(" + count + ")");
                         }
                     });
+                    }
+
                 } else {
 
-                    adOrder.getFilter().filter(s, new FilterListener() {
-
+                    if(adOrder != null){
+                        adOrder.getFilter().filter(s, new FilterListener() {
                         @Override
                         public void onFilterComplete(int count) {
 
@@ -258,20 +260,17 @@ public class OrdersListActivity extends BaseActivity {
                                 tvPageTitle.setText(getString(R.string.str_nav_transfer_list) + "(" + count + ")");
                         }
                     });
+                    }
                 }
-
             }
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count,
                                           int after) {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
 
             }
         });
@@ -1023,10 +1022,11 @@ public class OrdersListActivity extends BaseActivity {
                         if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), mContext) > 0) {
                             productDetail.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail) + (orderDetail.getGiftCount1()));
                             productDetail.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail) + (orderDetail.getGiftCount2()));
-                        } else {
-                            productDetail.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail));
-                            productDetail.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail));
                         }
+
+                        productDetail.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail));
+                        productDetail.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail));
+
                         db.UpdateProductDetail(productDetail);
                     }
                     db.DeleteOrderDetailProperty(order.getId());
@@ -1034,10 +1034,10 @@ public class OrdersListActivity extends BaseActivity {
                     if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), mContext) > 0) {
                         productDetail.setCount1(productDetail.getCount1() + orderDetail.getGiftCount1());
                         productDetail.setCount2(productDetail.getCount2() + orderDetail.getGiftCount2());
-                    } else {
-                        productDetail.setCount1(productDetail.getCount1() + orderDetail.getCount1());
-                        productDetail.setCount2(productDetail.getCount2() + orderDetail.getCount2());
                     }
+                    productDetail.setCount1(productDetail.getCount1() + orderDetail.getSumCountBaJoz());
+                    productDetail.setCount2(productDetail.getCount2() + orderDetail.getCount2());
+
                     db.UpdateProductDetail(productDetail);
                 }
             }

@@ -852,10 +852,11 @@ public class InvoiceDetailActivity extends BaseActivity {
                         if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), mContext) > 0) {
                             productDetail.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail) + (orderDetail.getGiftCount1()));
                             productDetail.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail) + (orderDetail.getGiftCount2()));
-                        } else {
-                            productDetail.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail) + orderDetailProperty.getCount1());
-                            productDetail.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail) + orderDetailProperty.getCount2());
                         }
+
+                        productDetail.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail) + orderDetailProperty.getCount1());
+                        productDetail.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail) + orderDetailProperty.getCount2());
+
                         db.UpdateProductDetail(productDetail);
                     }
                     db.DeleteOrderDetailProperty(order.getId());
@@ -863,10 +864,11 @@ public class InvoiceDetailActivity extends BaseActivity {
                 if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), mContext) > 0) {
                     productDetail.setCount1(productDetail.getCount1() + orderDetail.getGiftCount1());
                     productDetail.setCount2(productDetail.getCount2() + orderDetail.getGiftCount2());
-                } else {
-                    productDetail.setCount1(productDetail.getCount1() + orderDetail.getCount1());
-                    productDetail.setCount2(productDetail.getCount2() + orderDetail.getCount2());
                 }
+
+                productDetail.setCount1(productDetail.getCount1() + orderDetail.getSumCountBaJoz());
+                productDetail.setCount2(productDetail.getCount2() + orderDetail.getCount2());
+
                 db.UpdateProductDetail(productDetail);
             }
         }
@@ -899,7 +901,7 @@ public class InvoiceDetailActivity extends BaseActivity {
             }
         } else {
             productDetail = db.getProductDetail(item.getProductDetailId());
-            productDetail.setCount1(productDetail.getCount1() - (item.getGiftCount1() + item.getCount1()));
+            productDetail.setCount1(productDetail.getCount1() - (item.getGiftCount1() + item.getSumCountBaJoz()));
             productDetail.setCount2(productDetail.getCount2() - (item.getGiftCount2() + item.getCount2()));
             db.UpdateProductDetail(productDetail);
         }

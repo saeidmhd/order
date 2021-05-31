@@ -6054,12 +6054,13 @@ public class DbAdapter {
         return array;
     }
 
-    public ArrayList<Product> searchProduct(String searchString, int type , long CategoryId , int MODE_ASSET) {
+    public ArrayList<Product> searchProduct(String searchStr, int type , long CategoryId , int MODE_ASSET) {
         Product product;
         Cursor cursor;
-        if (ServiceTools.checkArabic(searchString)){
-            searchString = ServiceTools.replaceWithEnglish(searchString.toString());
+        if (ServiceTools.checkArabic(searchStr)){
+            searchStr = ServiceTools.replaceWithEnglish(searchStr);
         }
+        String LikeStr = ServiceTools.getLikeString(searchStr);
         int defPriceLevel = BaseActivity.getPrefDefSellPrice();
         ArrayList<Product> array = new ArrayList<>();
         try {
@@ -6077,9 +6078,7 @@ public class DbAdapter {
                         " when 9 then price9 " +
                         " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
                         " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                         " where ( " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_NAME + " LIKE " + "'%" + searchString + "%'" +
-                         " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchString + "%'" +
-                         " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
+                         " where ( " + LikeStr + " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'"  + " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
                          " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
                          getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + " GROUP by Products.productId " +
                          " order by " + DbSchema.Productschema.COLUMN_PRODUCT_CODE, null);
@@ -6097,9 +6096,7 @@ public class DbAdapter {
                         " when 9 then price9 " +
                         " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
                         " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                        " where ( " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_NAME + " LIKE " + "'%" + searchString + "%'" +
-                        " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchString + "%'" +
-                        " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
+                        " where ( " + LikeStr + " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'"  +  " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
                         " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
                         getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + " GROUP by Products.productId " +
                         " order by " + DbSchema.Productschema.COLUMN_PRODUCT_CODE, null);

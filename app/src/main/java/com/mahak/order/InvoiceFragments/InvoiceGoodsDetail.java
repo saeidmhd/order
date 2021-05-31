@@ -788,9 +788,8 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
     }
 
     private void calculateGroupedTax() {
-        if (SharedPreferencesHelper.getCurrentLanguage(getActivity()).equals("en"))
-            _lstGroupedTax.setVisibility(View.GONE);
-        else if (SharedPreferencesHelper.getCurrentLanguage(getActivity()).equals("de_DE")) {
+       if (SharedPreferencesHelper.getCurrentLanguage(getActivity()).equals("de_DE")) {
+           _lstGroupedTax.setVisibility(View.VISIBLE);
             ArrayList<GroupedTax> groupedTaxes = new ArrayList<>();
             HashMap<Double, List<OrderDetail>> hashMap = new HashMap<>();
             for (OrderDetail orderDetail : orderDetails) {

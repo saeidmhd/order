@@ -691,7 +691,7 @@ public class ServiceTools {
     }
 
     public static double getExistCount1(OrderDetail orderDetail, ProductDetail productDetail) {
-        return orderDetail.getCount1() + productDetail.getCount1() + orderDetail.getGiftCount1();
+        return orderDetail.getSumCountBaJoz() + productDetail.getCount1() + orderDetail.getGiftCount1();
     }
 
     public static double getExistCount2(OrderDetail orderDetail, ProductDetail productDetail) {
@@ -1796,5 +1796,23 @@ FirebaseCrashlytics.getInstance().recordException(e);
             FirebaseCrashlytics.getInstance().recordException(var10);
             var10.printStackTrace();
         }
+    }
+
+    public static String getLikeString(String searchStr) {
+        String[] searchArray = searchStr.toString().split(" ");
+        String LikeString = "";
+        for (String search : searchArray){
+            LikeString += " name " +  " like " + " '%" + search + "%' " + " and ";
+        }
+        LikeString = removeLastAnd(LikeString);
+        return LikeString;
+    }
+
+    public static String removeLastAnd(String str) {
+        String result = null;
+        if ((str != null) && (str.length() > 0)) {
+            result = str.substring(0, str.length() - 5);
+        }
+        return result;
     }
 }

@@ -210,7 +210,7 @@ public class OrderDetailActivity extends BaseActivity {
 
         } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
             lst_order_detail_for_print = R.layout.lst_order_detail_for_print_50mm;
-        } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
+        } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
             lst_order_detail_for_print = R.layout.lst_print_szzt;
         } else {
             if (getTemplate2Status(mContext, ProjectInfo._pName_OrderDetail))
@@ -575,9 +575,8 @@ public class OrderDetailActivity extends BaseActivity {
 
         orderDetailArrayList = (ArrayList<OrderDetail>) orderDetails.clone();
 
-        if (SharedPreferencesHelper.getCurrentLanguage(mContext).equals("en"))
-            _lstGroupedTax.setVisibility(View.GONE);
-        else if (SharedPreferencesHelper.getCurrentLanguage(mContext).equals("de_DE")) {
+        if (SharedPreferencesHelper.getCurrentLanguage(mContext).equals("de_DE")) {
+            _lstGroupedTax.setVisibility(View.VISIBLE);
             db.open();
             groupedTaxes = db.getGroupedTaxCharge(OrderId);
             _adGroupedTax = new AdapterGroupedTaxForPrint(mActivity, groupedTaxes);
@@ -648,7 +647,7 @@ public class OrderDetailActivity extends BaseActivity {
                 } else if (printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310) {
                     ll = inflater.inflate(R.layout.factor_print_template_80mm_fii_compact, null, false);
 
-                } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
+                } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
                     ll = inflater.inflate(R.layout.factor_print_szzt, null, false);
 
                 } else {
@@ -678,7 +677,7 @@ public class OrderDetailActivity extends BaseActivity {
                 } else if (printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310) {
                     ll = inflater.inflate(R.layout.factor_print_template_80mm_fii, null, false);
 
-                } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
+                } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
                     ll = inflater.inflate(R.layout.factor_print_szzt, null, false);
 
                 } else {
@@ -1193,10 +1192,10 @@ public class OrderDetailActivity extends BaseActivity {
                 ) {
                     tvFee = (TextView) view.findViewById(R.id.tvfii);
                 }
-                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
+                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
                     tvFee = (TextView) view.findViewById(R.id.tvfii);
                     //tvCount2 = (TextView) view.findViewById(R.id.tvCount2);
-                    tvProductCode = (TextView) view.findViewById(R.id.tvProductCode);
+                    //tvProductCode = (TextView) view.findViewById(R.id.tvProductCode);
                 }
 
                 if (getTemplate2Status(mContext, ProjectInfo._pName_OrderDetail))
@@ -1286,10 +1285,10 @@ public class OrderDetailActivity extends BaseActivity {
                 ) {
                     tvFee.setText(ServiceTools.formatPrice(orderDetail.getPrice()));
                 }
-                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
-                    db.open();
-                    Product product = db.GetProductWithProductId(orderDetail.getProductId());
-                    tvProductCode.setText(String.valueOf(product.getProductCode()));
+                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
+                    //db.open();
+                    //Product product = db.GetProductWithProductId(orderDetail.getProductId());
+                   // tvProductCode.setText(String.valueOf(product.getProductCode()));
                     tvFee.setText(ServiceTools.formatPrice(orderDetail.getPrice()));
                 }
 

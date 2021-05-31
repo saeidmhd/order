@@ -417,7 +417,6 @@
                                 android:digits="0123456789.,"
                                 android:inputType="numberDecimal"
                                 android:selectAllOnFocus="true"
-                                android:enabled="false"
                                 android:singleLine="true" />
                         </LinearLayout>
 

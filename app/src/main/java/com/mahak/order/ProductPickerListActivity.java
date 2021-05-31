@@ -474,12 +474,6 @@ public class ProductPickerListActivity extends BaseActivity {
             }
         });
 
-        /*swipeRefreshProduct.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                SendReceive();
-            }
-        });*/
 
     }// End Of OnCreate
 
@@ -504,7 +498,6 @@ public class ProductPickerListActivity extends BaseActivity {
         ll_product_picker = (LinearLayout) findViewById(R.id.ll_product_picker);
         spnCategory = (Spinner) findViewById(R.id.spnCategory);
         spnAssetProduct = (Spinner) findViewById(R.id.spnAssetProduct);
-        //swipeRefreshProduct = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshProduct );
         txtSearch = (EditText) findViewById(R.id.txtSearch);
         tvTotalCount = (TextView) findViewById(R.id.tvTotalCount);
         txtTotalCount = (TextView) findViewById(R.id.txtTotalCount);
