@@ -57,7 +57,11 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
         protected Void doInBackground(HubConnection... hubConnections) {
             HubConnection hubConnection = hubConnections[0];
             hubConnectionArrayList = hubConnections;
-            hubConnection.start().blockingAwait();
+            try {
+                hubConnection.start().blockingAwait();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             Log.d("SignalRManage",hubConnection.getConnectionState().toString());
             return null;
         }

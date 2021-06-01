@@ -21,7 +21,6 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -66,6 +65,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import io.reactivex.annotations.NonNull;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -246,8 +246,8 @@ public class LocationService extends Service {
         if (!ServiceTools.isNull(config)) {
             try {
                 JSONObject obj = new JSONObject(config);
-                MIN_DISPALCEMENT_CHANGE_FOR_UPDATES = obj.getLong(ProjectInfo._json_key_mingps_distance_change);
-                MIN_TIME_INTERVAL_UPDATES = obj.getLong(ProjectInfo._json_key_mingps_time_change);
+                MIN_DISPALCEMENT_CHANGE_FOR_UPDATES = obj.getLong(ProjectInfo._json_key_mingps_distance_change) ;
+                MIN_TIME_INTERVAL_UPDATES = obj.getLong(ProjectInfo._json_key_mingps_time_change) * 60 * 1000;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -405,7 +405,7 @@ public class LocationService extends Service {
         boolean saveInDb = false;
         long userId = BaseActivity.getPrefUserMasterId(mContext);
         VisitorLocation visitorLocation = new VisitorLocation();
-        visitorLocation.setCreateDate(System.currentTimeMillis());
+        visitorLocation.setCreateDate(ServiceTools.formattedDate(System.currentTimeMillis()));
         visitorLocation.setDate(System.currentTimeMillis());
         visitorLocation.setLatitude(correctLocation.getLatitude());
         visitorLocation.setLongitude(correctLocation.getLongitude());
@@ -744,14 +744,12 @@ public class LocationService extends Service {
      * Sets the location request parameters.
      */
     private void createLocationRequest() {
-
         locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-        locationRequest.setFastestInterval(5000);
-        locationRequest.setInterval(MIN_TIME_INTERVAL_UPDATES);
-        locationRequest.setSmallestDisplacement(MIN_DISPALCEMENT_CHANGE_FOR_UPDATES);
-
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setFastestInterval(5000)
+                .setInterval(10000);
+        /*locationRequest.setInterval(MIN_TIME_INTERVAL_UPDATES);
+        locationRequest.setSmallestDisplacement(MIN_DISPALCEMENT_CHANGE_FOR_UPDATES);*/
     }
 
     /**

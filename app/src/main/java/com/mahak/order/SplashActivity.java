@@ -151,34 +151,6 @@ public class SplashActivity extends BaseActivity {
         ImageLoader.getInstance().init(config.build());
     }
 
-    public void getConfigGpsAndBanks() {
-
-        RequestSender.ResponseReceiver receiver = new RequestSender.ResponseReceiver() {
-            @Override
-            public void gotResponse(Object sender, StringBuffer result, StringBuffer cookies) {
-                if (result == null || ServiceTools.isNull(result.toString()))
-                    return;
-                try {
-                    JSONObject obj = new JSONObject(result.toString());
-                    if (obj != null) {
-                        JSONObject gpsData = new JSONObject();
-                        gpsData.put(ProjectInfo._json_key_mingps_distance_change, obj.optString("Location_MinDistance"));
-                        gpsData.put(ProjectInfo._json_key_mingps_time_change, obj.optString("Location_MinTime"));
-                        ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_gps_config, gpsData.toString());
-                        ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo._json_key_banks, obj.optString(ProjectInfo._json_key_banks));
-                    }
-                } catch (Exception e) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                    FirebaseCrashlytics.getInstance().recordException(e);
-                }
-            }
-        };
-        HashMap<String, Object> params = new HashMap<>();
-        String methodName = "SetConfiguration";
-        String url = ProjectInfo.SOAP_ADDRESS;
-        new RunInternetService().Do(getApplicationContext(), "", url, methodName, params, receiver, null, 14000);
-    }
-
     //region read offline pictures products
     private void readZipFile(Intent intent) {
         Uri uri = intent.getData();

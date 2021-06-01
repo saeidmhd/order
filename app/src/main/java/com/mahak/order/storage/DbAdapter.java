@@ -12,7 +12,7 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
+
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -77,6 +77,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import io.reactivex.annotations.NonNull;
 
 import static com.mahak.order.BaseActivity.MODE_MeghdarJoz;
 import static com.mahak.order.BaseActivity.baseUrlImage;
@@ -4134,7 +4136,7 @@ public class DbAdapter {
 
     private VisitorLocation getGpsPointFromCursor(Cursor cursor) {
         VisitorLocation visitorLocation = new VisitorLocation();
-        visitorLocation.setCreateDate(cursor.getLong(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_Create_DATE)));
+        visitorLocation.setCreateDate(cursor.getString(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_Create_DATE)));
         visitorLocation.setDate(cursor.getLong(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_DATE)));
         visitorLocation.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_LATITUDE)));
         visitorLocation.setUniqueID(cursor.getString(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_uniqueID)));
@@ -7712,8 +7714,7 @@ public class DbAdapter {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     VisitorLocation visitorLocation = getGpsPointFromCursor(cursor);
-                    if (visitorLocation != null)
-                        array.add(visitorLocation);
+                    array.add(visitorLocation);
                     cursor.moveToNext();
                 }
                 cursor.close();
@@ -9590,14 +9591,8 @@ public class DbAdapter {
 
     public void updateGpsTrackingForSending(VisitorLocation visitorLocation) {
         ContentValues values = new ContentValues();
-        values.put(DbSchema.VisitorLocationSchema.COLUMN_Create_DATE, visitorLocation.getCreateDate());
-        values.put(DbSchema.VisitorLocationSchema.COLUMN_DATE, visitorLocation.getDate());
-        values.put(DbSchema.VisitorLocationSchema.COLUMN_LATITUDE, visitorLocation.getLatitude());
-        values.put(DbSchema.VisitorLocationSchema.COLUMN_uniqueID, visitorLocation.getUniqueID());
-        values.put(DbSchema.VisitorLocationSchema.COLUMN_LONGITUDE, visitorLocation.getLongitude());
         values.put(DbSchema.VisitorLocationSchema.COLUMN_VisitorLocationId, visitorLocation.getVisitorLocationId());
         values.put(DbSchema.VisitorLocationSchema.COLUMN_RowVersion, visitorLocation.getRowVersion());
-        values.put(DbSchema.VisitorLocationSchema.COLUMN_VISITOR_ID, visitorLocation.getVisitorId());
         mDb.update(DbSchema.VisitorLocationSchema.TABLE_NAME, values, DbSchema.VisitorLocationSchema.COLUMN_uniqueID + "=?", new String[]{visitorLocation.getUniqueID()});
     }
     public boolean DeleteOrderDetailProperty(long id) {

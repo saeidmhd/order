@@ -31,8 +31,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -81,6 +80,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import io.reactivex.annotations.NonNull;
 
 import static com.mahak.order.BaseActivity.getPrefUsername;
 import static com.mahak.order.common.ProjectInfo.DIRECTORY_ORDER_SIGNS;
@@ -1707,5 +1708,13 @@ FirebaseCrashlytics.getInstance().recordException(e);
             FirebaseCrashlytics.getInstance().recordException(var10);
             var10.printStackTrace();
         }
+    }
+
+    public static String formattedDate(long date) {
+        Date today = new Date();
+        today.setTime(date);
+        String pattern = "yyyy-MM-dd'T'HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
+        return simpleDateFormat.format(today);
     }
 }
