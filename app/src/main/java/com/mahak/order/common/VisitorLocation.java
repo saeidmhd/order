@@ -49,19 +49,6 @@ public class VisitorLocation {
     @Expose
     private long rowVersion;
 
-    public String getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(long locationDate) {
-        Date today = new Date();
-        today.setTime(locationDate);
-        String pattern = "yyyy-MM-dd'T'HH:mm:ss";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
-        createDate = simpleDateFormat.format(today);
-    }
-
-
     public JSONObject toJson() {
         JSONObject obj = new JSONObject();
         try {
@@ -145,5 +132,13 @@ public class VisitorLocation {
 
     public void setDate(long date) {
         Date = date;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
     }
 }
