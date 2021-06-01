@@ -29,7 +29,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -67,6 +66,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import io.reactivex.annotations.NonNull;
 
 import static android.app.Activity.RESULT_OK;
 import static com.mahak.order.BaseActivity.CUSTOMERID_KEY;

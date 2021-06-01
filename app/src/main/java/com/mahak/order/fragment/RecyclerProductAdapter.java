@@ -152,21 +152,10 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
 
     public void initHolder(final Product product, final ProductHolder holder, final int position, double mCount) {
 
-        //ArrayList<ProductDetail> productDetails;
-        //productDetails = HashMap_productDetail.get(product.getProductId());
         double SumCount2 = 0;
         double SumCount1 = 0;
         double price = 0;
         double customerPrice = 0;
-
-        /*if(productDetails != null ){
-            if(productDetails.size() > 0){
-                SumCount1 = ServiceTools.getSumCount11(productDetails);
-                SumCount2 = ServiceTools.getSumCount12(productDetails);
-                price = ServiceTools.getPriceFromPriceLevel2(productDetails.get(0));
-                customerPrice = productDetails.get(0).getCustomerPrice();
-            }
-        }*/
 
         SumCount1 = product.getSumCount1();
         SumCount2 = product.getSumCount2();

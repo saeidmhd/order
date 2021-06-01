@@ -12,7 +12,6 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -76,6 +75,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import io.reactivex.annotations.NonNull;
 
 import static com.mahak.order.BaseActivity.MODE_MeghdarJoz;
 import static com.mahak.order.BaseActivity.baseUrlImage;
@@ -5560,8 +5561,6 @@ public class DbAdapter {
         Cursor cursor;
         try {
             cursor = mDb.rawQuery("select * from " + DbSchema.PromotionEntitySchema.TABLE_NAME + " where " + DbSchema.PromotionEntitySchema.COLUMN_CodeEntity + " = " + codeEntity + " AND " + DbSchema.PromotionEntitySchema.COLUMN_PromotionId + " = " + promotionId + " AND " + DbSchema.PromotionEntitySchema.COLUMN_EntityType + " = " + entityType, null);
-
-
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionEntitySchema.COLUMN_ID)) != 0) {
