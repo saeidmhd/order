@@ -1,9 +1,11 @@
 package com.mahak.order.fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mahak.order.BaseActivity;
@@ -28,6 +31,7 @@ import com.mahak.order.common.OrderDetailProperty;
 import com.mahak.order.common.Product;
 import com.mahak.order.common.ProductDetail;
 import com.mahak.order.common.ProjectInfo;
+import com.mahak.order.common.Promotion;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.storage.DbAdapter;
 
@@ -156,11 +160,27 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         double SumCount1 = 0;
         double price = 0;
         double customerPrice = 0;
+        int promotionId = 0;
 
         SumCount1 = product.getSumCount1();
         SumCount2 = product.getSumCount2();
         price = product.getPrice();
+        promotionId = product.getPromotionId();
         customerPrice = product.getCustomerPrice();
+
+        if(promotionId == 0)
+            holder.imgGift.setVisibility(View.GONE);
+
+        int finalPromotionId = promotionId;
+        holder.imgGift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                db.open();
+                Promotion promotion = db.getPromotionById(finalPromotionId);
+               // showPromoDialog();
+            }
+        });
+
 
         if (type == 0) {
             holder.panelCount.setVisibility(View.GONE);
@@ -263,6 +283,37 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         holder.txtTotalCount.setTag(R.id.Product, product);
         holder.txtTotalGift.setTag(R.id.ProductId, product.getProductId());
         holder.txtTotalGift.setTag(R.id.Product, product);
+    }
+
+    private void showPromoDialog(Promotion promotion) {
+        String promotion_type = "";
+        String stair_linear = "";
+        if (promotion.getIsCalcLinear() == 1)
+            stair_linear = mContext.getString(R.string.linear);
+        else
+            stair_linear = mContext.getString(R.string.stair);
+
+        switch (promotion.getAccordingTo()) {
+            case Promotion.Mablaghe_kole_Faktor:
+                promotion_type = mContext.getString(R.string.total_invoice_than) ;
+                break;
+            case Promotion.Jame_Aghlame_Faktor:
+                promotion_type= mContext.getString(R.string.total_invoice_items_than);
+                break;
+            case Promotion.Jame_Vazne_Faktor:
+                promotion_type= mContext.getString(R.string.total_weight_factor_than);
+                break;
+            case Promotion.Jame_anvae_Aghlame_faktor:
+                promotion_type= mContext.getString(R.string.total_invoice_types_items_than);
+                break;
+            case Promotion.Mablaghe_Satr:
+                promotion_type= mContext.getString(R.string.row_amount_than);
+                break;
+            case Promotion.Meghdare_Satr:
+                promotion_type= mContext.getString(R.string.row_count_than);
+                break;
+        }
+
     }
 
     @Override
@@ -483,5 +534,23 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             notifyDataSetChanged();
         }
 
+    }
+
+    class promoDialog extends DialogFragment {
+        public promoDialog(){}
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            return super.onCreateDialog(savedInstanceState);
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View v = inflater.inflate(R.layout.fragment_promo_details, container, false);
+            View tv = v.findViewById(R.id.text);
+            ((TextView)tv).setText("This is an instance of MyDialogFragment");
+            return v;
+        }
     }
 }

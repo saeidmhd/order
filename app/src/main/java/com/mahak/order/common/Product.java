@@ -48,6 +48,8 @@ public class Product implements Parcelable {
     private double priceVisitor = 0;
     private double customerPrice = 0;
 
+    private int PromotionId;
+
 
 
     @SerializedName("UnitRatio")
@@ -579,5 +581,13 @@ public class Product implements Parcelable {
 
     public void setPriceVisitor(double priceVisitor) {
         this.priceVisitor = priceVisitor;
+    }
+
+    public int getPromotionId() {
+        return PromotionId;
+    }
+
+    public void setPromotionId(int promotionId) {
+        PromotionId = promotionId;
     }
 }

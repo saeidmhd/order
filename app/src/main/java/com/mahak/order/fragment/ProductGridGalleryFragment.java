@@ -17,8 +17,7 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -41,6 +40,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.annotations.NonNull;
 
 import static com.mahak.order.common.ServiceTools.formatCount;
 
@@ -110,7 +111,7 @@ public class ProductGridGalleryFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated( Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (mContext instanceof ProductsListActivity) {
             String search = ProductsListActivity.txtSearch.getText().toString().trim();
@@ -134,13 +135,13 @@ public class ProductGridGalleryFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    @Nullable
+    
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
         recyclerView = new RecyclerView(mContext);
         initGridDisplay(recyclerView);
         recycleAdapter = new ProductRecycleAdapter("");
