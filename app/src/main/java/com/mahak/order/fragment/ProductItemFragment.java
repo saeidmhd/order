@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.mahak.order.ProductItemInitialize;
@@ -19,6 +18,8 @@ import com.mahak.order.common.Product;
 import com.mahak.order.storage.DbAdapter;
 
 import java.util.ArrayList;
+
+import io.reactivex.annotations.Nullable;
 
 /**
  * Created by mostafavi on 7/5/2016.

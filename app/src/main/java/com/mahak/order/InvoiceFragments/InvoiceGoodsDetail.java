@@ -56,6 +56,7 @@ import com.mahak.order.common.Visitor;
 import com.mahak.order.interfaces.FragmentLifecycle;
 import com.mahak.order.scan.SmallCaptureActivity;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.storage.DbSchema;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -1298,7 +1299,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                             for (OrderDetail orderDetail : orderDetails) {
                                 productDetail = db.getProductDetail(orderDetail.getProductDetailId());
                                 product = db.GetProductWithProductId(productDetail.getProductId());
-                                if (promotion.getIsAllGood() == 1 || db.isInEntity(product.getProductCode(), promotion.getPromotionId(), Promotion.EntityGoods) || db.isInEntity(product.getProductCategoryId(), promotion.getPromotionId(), Promotion.EntityGroupGoods)) {
+                                if ( db.isInEntity(product.getProductCode(), promotion.getPromotionId(), Promotion.EntityGoods) || db.isInEntity(product.getProductCategoryId(), promotion.getPromotionId(), Promotion.EntityGroupGoods)) {
                                     double totalPrice = (orderDetail.getPrice()) * orderDetail.getSumCountBaJoz();
                                     arrayPromotionDetail = db.getPromotionDetails(promotion.getPromotionCode(), totalPrice);
                                     if (arrayPromotionDetail.size() > 0) {
@@ -1366,7 +1367,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                             for (OrderDetail orderDetail : orderDetails) {
                                 productDetail = db.getProductDetail(orderDetail.getProductDetailId());
                                 product = db.GetProductWithProductId(productDetail.getProductId());
-                                if (promotion.getIsAllGood() == 1 || db.isInEntity(product.getProductCode(), promotion.getPromotionId(), Promotion.EntityGoods) || db.isInEntity(product.getProductCategoryId(), promotion.getPromotionId(), Promotion.EntityGroupGoods)) {
+                                if (db.isInEntity(product.getProductCode(), promotion.getPromotionId(), Promotion.EntityGoods) || db.isInEntity(product.getProductCategoryId(), promotion.getPromotionId(), Promotion.EntityGroupGoods)) {
                                     arrayPromotionDetail = db.getPromotionDetails(promotion.getPromotionCode(), orderDetail.getSumCountBaJoz());
                                     if (arrayPromotionDetail.size() > 0) {
                                         switch (arrayPromotionDetail.get(0).getHowToPromotion()) {
@@ -1579,11 +1580,18 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
 
     private void rowFixedOff(float fixedOff, int mPromoCode, Product product) {
         if (fixedOff != 0) {
+
+            double d = ServiceTools.RegulartoDouble(BaseActivity.getPrefRowDiscountIsActive());
+
             ProductPickerListActivity.HashMap_Product.get(product.getProductId()).setPromotionCode(mPromoCode);
             ProductPickerListActivity.HashMap_Product.get(product.getProductId()).setGiftType(Promotion.Takhfif_Satri);
             double price = (ProductPickerListActivity.HashMap_Product.get(product.getProductId()).getPrice());
-            double count = ProductPickerListActivity.HashMap_Product.get(product.getProductId()).getCount1();
-            ProductPickerListActivity.HashMap_Product.get(product.getProductId()).setDiscount((float) (int) ((fixedOff * 100) / (price * count)));
+            double count = ProductPickerListActivity.HashMap_Product.get(product.getProductId()).getSumCountBaJoz();
+
+            ProductPickerListActivity.HashMap_Product.get(product.getProductId()).setDiscount(fixedOff);
+            /*if (d ==== 1)
+                ProductPickerListActivity.HashMap_Product.get(product.getProductId()).setDiscount(ServiceTools.getRowOffPercent(fixedOff, price, count));*/
+
             double FinalPrice = ServiceTools.getCalculateFinalPrice(ProductPickerListActivity.HashMap_Product.get(product.getProductId()), getActivity());
             ProductPickerListActivity.HashMap_Product.get(product.getProductId()).setFinalPrice(String.valueOf(FinalPrice));
         }

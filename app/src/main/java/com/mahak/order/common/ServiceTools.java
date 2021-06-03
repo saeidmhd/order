@@ -31,7 +31,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -1326,7 +1325,6 @@ public class ServiceTools {
         return "";
     }
 
-    @NonNull
     public static ImageLoadingListener getImageLoaderListener(final int defaultImage) {
         return new ImageLoadingListener() {
             @Override

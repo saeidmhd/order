@@ -86,7 +86,10 @@ public class PromotionDetailAdapter extends RecyclerView.Adapter<PromotionDetail
             case Promotion.eshantion_Az_kalahaye_digar:
                 holder.how_to_promotion.setText(R.string.gift_other_product);
                 product = db.getProductWithProductCode(promotionDetails.get(position).getCodeGood());
-                holder.goodGift.setText(product.getName());
+                if(product.getProductId() == 0)
+                    holder.goodGift.setText(R.string.no_product);
+                else
+                    holder.goodGift.setText(product.getName());
                 holder.meghdar_promotion.setText(formatCount(promotionDetails.get(position).getMeghdar()));
                 break;
 

@@ -1259,6 +1259,7 @@
     <string name="open_file">باز کردن فایل</string>
     <string name="close_dialog">بستن دیالوگ</string>
     <string name="page">\"صفحه \"</string>
+    <string name="no_product">کالا وجود ندارد!</string>
 
 
 </resources>

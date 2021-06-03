@@ -1,37 +1,47 @@
 package com.mahak.order.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mahak.order.Baby380A.Constant;
+import com.mahak.order.Baby380A.SharedPreferencesUtil;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.InvoiceDetailActivity;
 import com.mahak.order.PhotoViewerActivity;
 import com.mahak.order.PriceCountSelectActivity;
 import com.mahak.order.ProductItemInitialize;
 import com.mahak.order.ProductPickerListActivity;
+import com.mahak.order.PromotionDetailActivity;
 import com.mahak.order.R;
+import com.mahak.order.adapter.PromotionDetailAdapter;
 import com.mahak.order.common.OrderDetail;
 import com.mahak.order.common.OrderDetailProperty;
 import com.mahak.order.common.Product;
 import com.mahak.order.common.ProductDetail;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.Promotion;
+import com.mahak.order.common.PromotionDetail;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.storage.DbAdapter;
 
@@ -44,6 +54,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.mahak.order.Baby380A.Constant.MESSAGE_UPDATE_PARAMETER;
 import static com.mahak.order.BaseActivity.category;
 import static com.mahak.order.BaseActivity.getPrefReduceAsset;
 import static com.mahak.order.common.ServiceTools.MoneyFormatToNumber;
@@ -55,7 +66,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
     private long orderId;
     private int mode;
     static public ArrayList<Product> products = new ArrayList<>();
-    DbAdapter db;
+    static DbAdapter db;
     ProductFilterDB2 Filter;
     final ArrayList<Product> arrayOrginal = new ArrayList<>();
     private static ProductPickerListActivity productPickerListActivity;
@@ -76,6 +87,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
     private final String description = "";
     int CountProduct;
     public static HashMap<Integer, ArrayList<ProductDetail>> HashMap_productDetail = new LinkedHashMap<>();
+    private static Promotion promotion;
 
     public RecyclerProductAdapter(
             Context mContext,
@@ -176,8 +188,8 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             @Override
             public void onClick(View view){
                 db.open();
-                Promotion promotion = db.getPromotionById(finalPromotionId);
-               // showPromoDialog();
+                promotion = db.getPromotionById(finalPromotionId);
+                show();
             }
         });
 
@@ -283,37 +295,6 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         holder.txtTotalCount.setTag(R.id.Product, product);
         holder.txtTotalGift.setTag(R.id.ProductId, product.getProductId());
         holder.txtTotalGift.setTag(R.id.Product, product);
-    }
-
-    private void showPromoDialog(Promotion promotion) {
-        String promotion_type = "";
-        String stair_linear = "";
-        if (promotion.getIsCalcLinear() == 1)
-            stair_linear = mContext.getString(R.string.linear);
-        else
-            stair_linear = mContext.getString(R.string.stair);
-
-        switch (promotion.getAccordingTo()) {
-            case Promotion.Mablaghe_kole_Faktor:
-                promotion_type = mContext.getString(R.string.total_invoice_than) ;
-                break;
-            case Promotion.Jame_Aghlame_Faktor:
-                promotion_type= mContext.getString(R.string.total_invoice_items_than);
-                break;
-            case Promotion.Jame_Vazne_Faktor:
-                promotion_type= mContext.getString(R.string.total_weight_factor_than);
-                break;
-            case Promotion.Jame_anvae_Aghlame_faktor:
-                promotion_type= mContext.getString(R.string.total_invoice_types_items_than);
-                break;
-            case Promotion.Mablaghe_Satr:
-                promotion_type= mContext.getString(R.string.row_amount_than);
-                break;
-            case Promotion.Meghdare_Satr:
-                promotion_type= mContext.getString(R.string.row_count_than);
-                break;
-        }
-
     }
 
     @Override
@@ -536,21 +517,131 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
 
     }
 
-    class promoDialog extends DialogFragment {
-        public promoDialog(){}
+    public static class promoDialog extends DialogFragment {
 
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-            return super.onCreateDialog(savedInstanceState);
+        static promoDialog newInstance() {
+            return new promoDialog();
         }
+
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View v = inflater.inflate(R.layout.fragment_promo_details, container, false);
-            View tv = v.findViewById(R.id.text);
-            ((TextView)tv).setText("This is an instance of MyDialogFragment");
-            return v;
+            
+            TextView stair_linear;
+            TextView promotion_type;
+            RecyclerView promotionDetailRecycler;
+            PromotionDetailAdapter promotionDetailAdapter;
+            ArrayList<PromotionDetail> promotionDetail;
+            db.open();
+            promotionDetail = db.getPromotionDetails(promotion.getPromotionCode());
+
+            // Inflate the layout for this fragment
+            View rootView = inflater.inflate(R.layout.fragment_promo_details, container, false);
+            stair_linear = (TextView) rootView.findViewById(R.id.stair_linear);
+            promotion_type = (TextView) rootView.findViewById(R.id.promotion_type);
+
+            if (promotion.getIsCalcLinear() == 1)
+                stair_linear.setText(R.string.linear);
+            else
+                stair_linear.setText(R.string.stair);
+
+            switch (promotion.getAccordingTo()) {
+                case Promotion.Mablaghe_kole_Faktor:
+                    promotion_type.setText(R.string.total_invoice_than);
+                    break;
+                case Promotion.Jame_Aghlame_Faktor:
+                    promotion_type.setText(R.string.total_invoice_items_than);
+                    break;
+                case Promotion.Jame_Vazne_Faktor:
+                    promotion_type.setText(R.string.total_weight_factor_than);
+                    break;
+                case Promotion.Jame_anvae_Aghlame_faktor:
+                    promotion_type.setText(R.string.total_invoice_types_items_than);
+                    break;
+                case Promotion.Mablaghe_Satr:
+                    promotion_type.setText(R.string.row_amount_than);
+                    break;
+                case Promotion.Meghdare_Satr:
+                    promotion_type.setText(R.string.row_count_than);
+                    break;
+            }
+
+            promotionDetailRecycler = (RecyclerView) rootView.findViewById(R.id.promotionDetailRecycler);
+
+            promotionDetailRecycler.setHasFixedSize(true);
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+            promotionDetailRecycler.setLayoutManager(mLayoutManager);
+
+            promotionDetailAdapter = new PromotionDetailAdapter(promotionDetail, getActivity());
+            promotionDetailRecycler.setAdapter(promotionDetailAdapter);
+
+            return rootView;
+            
         }
+    }
+
+    void showDialog() {
+        // Create the fragment and show it as a dialog.
+        DialogFragment newFragment = promoDialog.newInstance();
+        newFragment.show(newFragment.getChildFragmentManager(), "dialog");
+    }
+
+    public void show() {
+
+        TextView stair_linear;
+        TextView promotion_type;
+        RecyclerView promotionDetailRecycler;
+        PromotionDetailAdapter promotionDetailAdapter;
+        ArrayList<PromotionDetail> promotionDetail;
+        db.open();
+        promotionDetail = db.getPromotionDetails(promotion.getPromotionCode());
+
+        // Inflate the layout for this fragment
+        View rootView = View.inflate(mContext, R.layout.fragment_promo_details, null);
+        stair_linear = (TextView) rootView.findViewById(R.id.stair_linear);
+        promotion_type = (TextView) rootView.findViewById(R.id.promotion_type);
+
+        if (promotion.getIsCalcLinear() == 1)
+            stair_linear.setText(R.string.linear);
+        else
+            stair_linear.setText(R.string.stair);
+
+        switch (promotion.getAccordingTo()) {
+            case Promotion.Mablaghe_kole_Faktor:
+                promotion_type.setText(R.string.total_invoice_than);
+                break;
+            case Promotion.Jame_Aghlame_Faktor:
+                promotion_type.setText(R.string.total_invoice_items_than);
+                break;
+            case Promotion.Jame_Vazne_Faktor:
+                promotion_type.setText(R.string.total_weight_factor_than);
+                break;
+            case Promotion.Jame_anvae_Aghlame_faktor:
+                promotion_type.setText(R.string.total_invoice_types_items_than);
+                break;
+            case Promotion.Mablaghe_Satr:
+                promotion_type.setText(R.string.row_amount_than);
+                break;
+            case Promotion.Meghdare_Satr:
+                promotion_type.setText(R.string.row_count_than);
+                break;
+        }
+
+        promotionDetailRecycler = (RecyclerView) rootView.findViewById(R.id.promotionDetailRecycler);
+
+        promotionDetailRecycler.setHasFixedSize(true);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
+        promotionDetailRecycler.setLayoutManager(mLayoutManager);
+
+        promotionDetailAdapter = new PromotionDetailAdapter(promotionDetail, mContext);
+        promotionDetailRecycler.setAdapter(promotionDetailAdapter);
+
+        AlertDialog alertDialog = new AlertDialog.Builder(mContext).setView(rootView)
+                .setPositiveButton(mContext.getString(R.string.str_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
+        alertDialog.setCanceledOnTouchOutside(true);
     }
 }
