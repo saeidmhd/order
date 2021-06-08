@@ -35,7 +35,7 @@ public class SharedPreferencesHelper {
 
     public static float getCurrentFontSize(Context ctx) {
         SharedPreferences sh = ctx.getSharedPreferences(__pref_current_font, Context.MODE_PRIVATE);
-        return sh.getFloat(__pref_current_font, 10);
+        return sh.getFloat(__pref_current_font, 14);
     }
 
     public static void setCurrentFontSize(Context ctx, float size) {

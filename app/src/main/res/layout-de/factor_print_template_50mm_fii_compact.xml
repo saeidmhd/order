@@ -318,7 +318,7 @@
             <ListView
                 android:id="@+id/_lstGroupedTax"
                 android:layout_width="fill_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="0dip"
                 android:background="@android:color/white"
                 android:divider="@android:color/black"
@@ -330,7 +330,7 @@
             <LinearLayout
                 android:id="@+id/_llTotalItems"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -365,7 +365,7 @@
             <LinearLayout
                 android:id="@+id/_llTotalCount"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -398,7 +398,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -428,7 +428,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -460,7 +460,7 @@
             <LinearLayout
                 android:id="@+id/_llDiscount"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -491,7 +491,7 @@
             <LinearLayout
                 android:id="@+id/_llFinalPrice"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -522,7 +522,7 @@
             <LinearLayout
                 android:id="@+id/_llCustomerStatus1"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -552,7 +552,7 @@
             <LinearLayout
                 android:id="@+id/_llPayable"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -582,7 +582,7 @@
             <LinearLayout
                 android:id="@+id/_llTotalReceipt"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -613,7 +613,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
