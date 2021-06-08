@@ -510,6 +510,7 @@
         <activity android:name=".Baby380A.MainActivity" />
         <activity android:name=".Baby380A.BluetoothDeviceList" />
         <activity android:name=".Baby380A.ConnMoreDevicesActivity" />
+        <activity android:name=".Baby380A.UsbDeviceList" />
         <activity android:name=".Baby380A.SerialPortList" />
 
         <receiver
