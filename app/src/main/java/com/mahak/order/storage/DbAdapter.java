@@ -4904,6 +4904,27 @@ public class DbAdapter {
 
         return TotalCount;
     }
+    public int getCountProductPromotionEntity() {
+        Cursor cursor;
+        int TotalCount = 0;
+        try {
+            cursor = mDb.rawQuery("SELECT  count (EntityType) from PromotionEntity where EntityType = 4 " ,null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                if (cursor.getCount() > 0) {
+                    TotalCount = cursor.getInt(0);
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorgetTotalCountOrder", e.getMessage());
+        }
+
+        return TotalCount;
+    }
 
     public int getTotalCountInvoice() {
         Cursor cursor;
@@ -5227,6 +5248,22 @@ public class DbAdapter {
 
                 }
                 cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorGetUser", e.getMessage());
+        }
+        return promotion;
+    }
+    public Promotion getPromotion2(Cursor cursor) {
+        Promotion promotion = new Promotion();
+        try {
+            if (cursor != null) {
+                promotion.setAccordingTo(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_AccordingTo)));
+                promotion.setIsCalcLinear(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_IsCalcLinear)));
+                promotion.setPromotionCode(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_PromotionCode)));
             }
 
         } catch (Exception e) {
@@ -5682,6 +5719,7 @@ public class DbAdapter {
                     " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity " +
                     " where " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
                     " and " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_Deleted + " = " + 0 +
+                    " and " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_Deleted + " = " + 0 +
                     getProductAssetStrnig(modeasset) +
                     getProductCategoryStrnig(id) + " GROUP by Products.productId " + " order by " + orderBy + " LIMIT " + LIMIT, null);
         }else{
@@ -5864,6 +5902,75 @@ public class DbAdapter {
                     promotion = getPromotion(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_ID)));
                     if (promotion != null)
                         array.add(promotion);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrAllVisitor", e.getMessage());
+        }
+        return array;
+    }
+    public ArrayList<Promotion> getAllPromotion2(int promotionId) {
+        Promotion promotion;
+        Cursor cursor;
+        ArrayList<Promotion> array = new ArrayList<>();
+        try {
+            cursor = mDb.query(DbSchema.PromotionSchema.TABLE_NAME, null,DbSchema.PromotionSchema.COLUMN_PromotionId + "=? and " +
+                    DbSchema.PromotionSchema.COLUMN_MahakId + "=? and " + DbSchema.PromotionSchema.COLUMN_USER_ID + "=? and " + DbSchema.PromotionSchema.COLUMN_Deleted + "=? and " + DbSchema.PromotionSchema.COLUMN_DatabaseId + "=?", new String[]{String.valueOf(promotionId), BaseActivity.getPrefMahakId(), String.valueOf(getPrefUserId()) , String.valueOf(0), BaseActivity.getPrefDatabaseId()}, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    promotion = getPromotion(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_ID)));
+                    if (promotion != null)
+                        array.add(promotion);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrAllVisitor", e.getMessage());
+        }
+        return array;
+    }
+    public ArrayList<Promotion> getAllPromotionCodeForSpecificGood(long productCode) {
+        Promotion promotion;
+        Cursor cursor;
+        ArrayList<Promotion> array = new ArrayList<>();
+        try {
+            cursor = mDb.rawQuery("SELECT Promotion.PromotionCode , Promotion.AccordingTo , IsCalcLinear  from PromotionEntity INNER JOIN Promotion on Promotion.PromotionId = PromotionEntity.PromotionId where CodeEntity = ? and EntityType = ? and Promotion.UserId = ? and Promotion.deleted = ?" ,new String[]{String.valueOf(productCode), String.valueOf(4), String.valueOf(getPrefUserId()) , String.valueOf(0)});
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    promotion = getPromotion2(cursor);
+                    array.add(promotion);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrAllVisitor", e.getMessage());
+        }
+        return array;
+    }
+    public ArrayList<Integer> getAllPromotionCodeForSpecificGood2(long productCode) {
+        Cursor cursor;
+        ArrayList<Integer> array = new ArrayList<>();
+        try {
+            cursor = mDb.rawQuery("SELECT Promotion.PromotionCode , Promotion.AccordingTo , IsCalcLinear  from PromotionEntity INNER JOIN Promotion on Promotion.PromotionId = PromotionEntity.PromotionId where CodeEntity = ? and EntityType = ? and Promotion.UserId = ?" ,new String[]{String.valueOf(productCode), String.valueOf(4), String.valueOf(getPrefUserId())});
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    array.add(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_PromotionCode)));
                     cursor.moveToNext();
                 }
                 cursor.close();
@@ -6126,7 +6233,7 @@ public class DbAdapter {
         ArrayList<Product> array = new ArrayList<>();
         try {
             if(defPriceLevel == 0){
-                 cursor =  mDb.rawQuery(" SELECT Products.ProductId , productcode , products.name , UnitRatio , DefaultSellPriceLevel , UnitName2 , UnitName , " +
+                 cursor =  mDb.rawQuery(" SELECT Products.ProductId , productcode , products.name , UnitRatio , DefaultSellPriceLevel , PromotionId ,UnitName2 , UnitName , " +
                         " case DefaultSellPriceLevel  " +
                         " when 1 then Price1 " +
                         " when 2 then Price2 " +
@@ -6139,12 +6246,13 @@ public class DbAdapter {
                         " when 9 then price9 " +
                         " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
                         " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+                         " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity " +
                          " where ( " + LikeStr + " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'"  + " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
                          " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
                          getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + " GROUP by Products.productId " +
                          " order by " + DbSchema.Productschema.COLUMN_PRODUCT_CODE, null);
             }else{
-                cursor = mDb.rawQuery(" SELECT Products.ProductId , productcode , products.name , UnitRatio , DefaultSellPriceLevel , UnitName2 , UnitName , " +
+                cursor = mDb.rawQuery(" SELECT Products.ProductId , productcode , products.name , UnitRatio , DefaultSellPriceLevel , PromotionId , UnitName2 , UnitName , " +
                         " case  " + defPriceLevel +
                         " when 1 then Price1 " +
                         " when 2 then Price2 " +
@@ -6157,6 +6265,7 @@ public class DbAdapter {
                         " when 9 then price9 " +
                         " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
                         " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+                        " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity " +
                         " where ( " + LikeStr + " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'"  +  " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
                         " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
                         getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + " GROUP by Products.productId " +
@@ -8872,7 +8981,7 @@ public class DbAdapter {
         initialvalue.put(DbSchema.PromotionSchema.COLUMN_RowVersion, promotion.getRowVersion());
         initialvalue.put(DbSchema.PromotionSchema.COLUMN_Deleted, promotion.getDeleted());
 
-        result = (mDb.update(DbSchema.PromotionSchema.TABLE_NAME, initialvalue, DbSchema.PromotionSchema.COLUMN_MahakId + "=? and " + DbSchema.PromotionSchema.COLUMN_USER_ID + "=? and " + DbSchema.PromotionSchema.COLUMN_PromotionCode + "=? and " + DbSchema.PromotionSchema.COLUMN_DatabaseId + "=?", new String[]{String.valueOf(promotion.getMahakId()), String.valueOf(promotion.getUserId()), promotion.getPromotionCode(), promotion.getDatabaseId()})) > 0;
+        result = (mDb.update(DbSchema.PromotionSchema.TABLE_NAME, initialvalue, DbSchema.PromotionSchema.COLUMN_MahakId + "=? and " + DbSchema.PromotionSchema.COLUMN_USER_ID + "=? and " + DbSchema.PromotionSchema.COLUMN_PromotionId + "=? and " + DbSchema.PromotionSchema.COLUMN_DatabaseId + "=?", new String[]{String.valueOf(promotion.getMahakId()), String.valueOf(promotion.getUserId()), String.valueOf(promotion.getPromotionId()), promotion.getDatabaseId()})) > 0;
         return result;
     }
 
@@ -9750,6 +9859,26 @@ public class DbAdapter {
 
     public boolean DeleteAllNotification() {
         return (mDb.delete(DbSchema.NotificationSchema.TABLE_NAME, null, null)) > 0;
+    }
+
+    public boolean DeletePromotion(int id) {
+        return (mDb.delete(DbSchema.PromotionSchema.TABLE_NAME, DbSchema.PromotionSchema.COLUMN_PromotionId + " =? ", new String[]{String.valueOf(id)})) > 0;
+    }
+    public boolean DeleteAllPromotion() {
+        return (mDb.delete(DbSchema.PromotionSchema.TABLE_NAME, null, null)) > 0;
+    }
+
+    public boolean DeletePromotionEntity(int id) {
+        return (mDb.delete(DbSchema.PromotionEntitySchema.TABLE_NAME, DbSchema.PromotionEntitySchema.COLUMN_PromotionId + " =? ", new String[]{String.valueOf(id)})) > 0;
+    }
+    public boolean DeleteAllPromotionEntity() {
+        return (mDb.delete(DbSchema.PromotionEntitySchema.TABLE_NAME, null, null)) > 0;
+    }
+    public boolean DeletePromotionDetail(String id) {
+        return (mDb.delete(DbSchema.PromotionDetailSchema.TABLE_NAME, DbSchema.PromotionDetailSchema.COLUMN_PromotionCode + " =? ", new String[]{id})) > 0;
+    }
+    public boolean DeleteAllPromotionDetail() {
+        return (mDb.delete(DbSchema.PromotionDetailSchema.TABLE_NAME, null, null)) > 0;
     }
 
     public void upgradeDatabase() {

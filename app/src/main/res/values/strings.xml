@@ -929,14 +929,14 @@
     <string name="special_customer">مشتریان خاص</string>
     <string name="this_plan_for_some">این طرح برای برخی</string>
     <string name="included_in_this_plan">شامل این طرح می شوند.</string>
-    <string name="all_customer">همه مشتریان</string>
+    <string name="all_customer">همه مشتریان  </string>
     <string name="type">نوع</string>
     <string name="visitors">ویزیتورها</string>
     <string name="special_visitors">ویزیتورها خاص</string>
     <string name="all_visitors">همه ویزیتورها</string>
     <string name="products">کالاها</string>
     <string name="product_list">لیست کالاها</string>
-    <string name="all_products">همه کالاها</string>
+    <string name="all_products"> همه کالاها </string>
     <string name="special_products">کالاها خاص</string>
     <string name="special_store">انبارها خاص</string>
     <string name="all_stores">همه انبارها</string>
@@ -1107,7 +1107,7 @@
     <string name="cheque_cash">نقد و چک</string>
     <string name="credit">نسیه</string>
     <string name="cheque">چک</string>
-    <string name="discount_level">سطح تخفیف</string>
+    <string name="discount_level"> سطح تخفیف </string>
     <string name="waiting">لطفا کمی صبر نمایید..</string>
     <string name="disabled">غیر فعال</string>
     <string name="store">انبار</string>

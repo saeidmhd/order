@@ -348,15 +348,15 @@
 
             <ImageView
                 android:id="@+id/imgGift"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_gravity="right"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginRight="8dp"
                 android:layout_marginTop="@dimen/NormalSize"
-                app:srcCompat="@drawable/ic_gifts"
+                android:layout_marginRight="8dp"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:scaleType="fitCenter" />
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_gifts" />
 
         </LinearLayout>
 

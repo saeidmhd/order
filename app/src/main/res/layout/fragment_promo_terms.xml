@@ -104,8 +104,8 @@
 
                     <com.mahak.order.widget.FontTextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="32dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="2dp"
                         android:text="@string/all_customer"
                         android:textColor="@color/green_promo"
                         android:textSize="14sp" />
@@ -406,7 +406,7 @@
                     <com.mahak.order.widget.FontTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="32dp"
+                        android:layout_marginLeft="2dp"
                         android:text="@string/all_products"
                         android:textColor="@color/green_promo"
                         android:textSize="14sp" />

@@ -947,9 +947,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
             getAllDataBody.setOrderTypes(orderTypes);
 
             getAllDataBody.setFromReturnReasonVersion(ReasonMaxRowVersion);
-            getAllDataBody.setFromPromotionVersion(PromotionMaxRowVersion);
-            getAllDataBody.setFromPromotionDetailVersion(PromotionDetailMaxRowVersion);
-            getAllDataBody.setFromPromotionEntityVersion(PromotionEntityMaxRowVersion);
+
+            getAllDataBody.setFromPromotionVersion(0);
+            getAllDataBody.setFromPromotionDetailVersion(0);
+            getAllDataBody.setFromPromotionEntityVersion(0);
 
             getAllDataBody.setFromPictureVersion(PicturesMaxRowVersion);
             getAllDataBody.setFromExtraDataVersion(ExtraDataMaxRowVersion);
@@ -1125,14 +1126,17 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 if (promotions.size() > 0) {
                     arrayTime[12] = DataService.InsertPromotion(db, promotions);
                 }
+
             if (promotionDetails != null)
                 if (promotionDetails.size() > 0) {
                     arrayTime[13] = DataService.InsertPromotionDetails(db, promotionDetails);
                 }
+
             if (promotionEntities != null)
                 if (promotionEntities.size() > 0) {
-                    arrayTime[14] = DataService.InsertEntitiesOfPromotions(db, promotionEntities);
+                    arrayTime[13] = DataService.InsertEntitiesOfPromotions(db, promotionEntities);
                 }
+
             if (extraData != null)
                 if (extraData.size() > 0)
                     arrayTime[15] = DataService.InsertExtraInfo(db, extraData, ExtraDataMaxRowVersion);

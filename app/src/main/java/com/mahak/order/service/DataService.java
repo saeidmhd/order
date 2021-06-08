@@ -381,6 +381,7 @@ public class DataService {
     public static double InsertPromotion(DbAdapter db, List<Promotion> data) {
         long startTime = System.nanoTime();
         db.open();
+        db.DeleteAllPromotion();
         Date date = new Date();
         Gson gson = new Gson();
         PromotionOtherFields promotionOtherFields = new PromotionOtherFields();
@@ -395,9 +396,7 @@ public class DataService {
                     e.printStackTrace();
                 }
                 db.upgradeDatabase();
-                //if item is new add then to database
-                //else item isnot new then update to database
-                if (!db.UpdatePromotion(data.get(i), promotionOtherFields))
+                if(data.get(i).getDeleted() == 0)
                     result = db.AddPromotion(data.get(i), promotionOtherFields);
         }
         db.close();
@@ -408,7 +407,7 @@ public class DataService {
     public static double InsertPromotionDetails(DbAdapter db, List<PromotionDetail> data) {
         long startTime = System.nanoTime();
         db.open();
-
+        db.DeleteAllPromotionDetail();
         Date date = new Date();
         Gson gson = new Gson();
         PromotionDetailOtherFields promotionDetailOtherFields = new PromotionDetailOtherFields();
@@ -424,7 +423,7 @@ public class DataService {
             }
             //if item is new add then to database
             //else item is not new then update to database
-            if (!db.UpdatePromotionDetail(data.get(i), promotionDetailOtherFields))
+            if(!data.get(i).isDeleted())
                 result = db.AddPromotionDetail(data.get(i), promotionDetailOtherFields);
         }
         db.close();
@@ -436,6 +435,7 @@ public class DataService {
         long startTime = System.nanoTime();
         db.open();
         // ArrayList<PromotionEntity> arrayEntitiesOfPromotions = Parser.getEntitiesOfPromotions(data);
+        db.DeleteAllPromotionEntity();
         Date date = new Date();
         Gson gson = new Gson();
         PromotionEntityOtherFields promotionEntityOtherFields = new PromotionEntityOtherFields();
@@ -451,8 +451,9 @@ public class DataService {
             }
             //if item is new add then to database
             //else item is not new then update to database
-            if (!db.UpdateEntitiesOfPromotions(data.get(i), promotionEntityOtherFields))
+            if(!data.get(i).isDeleted())
                 result = db.AddEntitiesOfPromotions(data.get(i), promotionEntityOtherFields);
+
         }
         db.close();
         long endTime = System.nanoTime();

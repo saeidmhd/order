@@ -2,37 +2,29 @@ package com.mahak.order.fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.os.Bundle;
-import android.os.Message;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.EditText;
 import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.mahak.order.Baby380A.Constant;
-import com.mahak.order.Baby380A.SharedPreferencesUtil;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.InvoiceDetailActivity;
 import com.mahak.order.PhotoViewerActivity;
 import com.mahak.order.PriceCountSelectActivity;
 import com.mahak.order.ProductItemInitialize;
 import com.mahak.order.ProductPickerListActivity;
-import com.mahak.order.PromotionDetailActivity;
 import com.mahak.order.R;
 import com.mahak.order.adapter.PromotionDetailAdapter;
 import com.mahak.order.common.OrderDetail;
@@ -54,8 +46,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.mahak.order.Baby380A.Constant.MESSAGE_UPDATE_PARAMETER;
-import static com.mahak.order.BaseActivity.category;
 import static com.mahak.order.BaseActivity.getPrefReduceAsset;
 import static com.mahak.order.common.ServiceTools.MoneyFormatToNumber;
 import static com.mahak.order.common.ServiceTools.formatCount;
@@ -87,7 +77,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
     private final String description = "";
     int CountProduct;
     public static HashMap<Integer, ArrayList<ProductDetail>> HashMap_productDetail = new LinkedHashMap<>();
-    private static Promotion promotion;
+    private static ArrayList<Promotion> promotions;
 
     public RecyclerProductAdapter(
             Context mContext,
@@ -180,15 +170,23 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         promotionId = product.getPromotionId();
         customerPrice = product.getCustomerPrice();
 
-        if(promotionId == 0)
-            holder.imgGift.setVisibility(View.GONE);
+        db.open();
+        int count = db.getCountProductPromotionEntity();
 
-        int finalPromotionId = promotionId;
+        if(count > 0){
+            if(promotionId == 0)
+                holder.imgGift.setVisibility(View.GONE);
+            else
+                holder.imgGift.setVisibility(View.VISIBLE);
+        }else
+            holder.imgGift.setVisibility(View.VISIBLE);
+
         holder.imgGift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                db.open();
-                promotion = db.getPromotionById(finalPromotionId);
+                promotions = db.getAllPromotionCodeForSpecificGood(product.getProductCode());
+                if(promotions.size() == 0)
+                    promotions = db.getAllPromotion();
                 show();
             }
         });
@@ -517,29 +515,22 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
 
     }
 
-    public static class promoDialog extends DialogFragment {
+    public void show() {
 
-        static promoDialog newInstance() {
-            return new promoDialog();
-        }
+        TextView stair_linear;
+        TextView promotion_type;
+        RecyclerView promotionDetailRecycler;
+        PromotionDetailAdapter promotionDetailAdapter;
+        ArrayList<PromotionDetail> promotionDetail = new ArrayList<>();
 
+        // Inflate the layout for this fragment
+        View rootView = View.inflate(mContext, R.layout.fragment_promo_details, null);
+        stair_linear = (TextView) rootView.findViewById(R.id.stair_linear);
+        promotion_type = (TextView) rootView.findViewById(R.id.promotion_type);
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            
-            TextView stair_linear;
-            TextView promotion_type;
-            RecyclerView promotionDetailRecycler;
-            PromotionDetailAdapter promotionDetailAdapter;
-            ArrayList<PromotionDetail> promotionDetail;
-            db.open();
-            promotionDetail = db.getPromotionDetails(promotion.getPromotionCode());
-
-            // Inflate the layout for this fragment
-            View rootView = inflater.inflate(R.layout.fragment_promo_details, container, false);
-            stair_linear = (TextView) rootView.findViewById(R.id.stair_linear);
-            promotion_type = (TextView) rootView.findViewById(R.id.promotion_type);
-
+        db.open();
+        for (Promotion promotion : promotions){
+            promotionDetail.addAll(db.getPromotionDetails(promotion.getPromotionCode()));
             if (promotion.getIsCalcLinear() == 1)
                 stair_linear.setText(R.string.linear);
             else
@@ -566,65 +557,6 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     break;
             }
 
-            promotionDetailRecycler = (RecyclerView) rootView.findViewById(R.id.promotionDetailRecycler);
-
-            promotionDetailRecycler.setHasFixedSize(true);
-            LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-            promotionDetailRecycler.setLayoutManager(mLayoutManager);
-
-            promotionDetailAdapter = new PromotionDetailAdapter(promotionDetail, getActivity());
-            promotionDetailRecycler.setAdapter(promotionDetailAdapter);
-
-            return rootView;
-            
-        }
-    }
-
-    void showDialog() {
-        // Create the fragment and show it as a dialog.
-        DialogFragment newFragment = promoDialog.newInstance();
-        newFragment.show(newFragment.getChildFragmentManager(), "dialog");
-    }
-
-    public void show() {
-
-        TextView stair_linear;
-        TextView promotion_type;
-        RecyclerView promotionDetailRecycler;
-        PromotionDetailAdapter promotionDetailAdapter;
-        ArrayList<PromotionDetail> promotionDetail;
-        db.open();
-        promotionDetail = db.getPromotionDetails(promotion.getPromotionCode());
-
-        // Inflate the layout for this fragment
-        View rootView = View.inflate(mContext, R.layout.fragment_promo_details, null);
-        stair_linear = (TextView) rootView.findViewById(R.id.stair_linear);
-        promotion_type = (TextView) rootView.findViewById(R.id.promotion_type);
-
-        if (promotion.getIsCalcLinear() == 1)
-            stair_linear.setText(R.string.linear);
-        else
-            stair_linear.setText(R.string.stair);
-
-        switch (promotion.getAccordingTo()) {
-            case Promotion.Mablaghe_kole_Faktor:
-                promotion_type.setText(R.string.total_invoice_than);
-                break;
-            case Promotion.Jame_Aghlame_Faktor:
-                promotion_type.setText(R.string.total_invoice_items_than);
-                break;
-            case Promotion.Jame_Vazne_Faktor:
-                promotion_type.setText(R.string.total_weight_factor_than);
-                break;
-            case Promotion.Jame_anvae_Aghlame_faktor:
-                promotion_type.setText(R.string.total_invoice_types_items_than);
-                break;
-            case Promotion.Mablaghe_Satr:
-                promotion_type.setText(R.string.row_amount_than);
-                break;
-            case Promotion.Meghdare_Satr:
-                promotion_type.setText(R.string.row_count_than);
-                break;
         }
 
         promotionDetailRecycler = (RecyclerView) rootView.findViewById(R.id.promotionDetailRecycler);

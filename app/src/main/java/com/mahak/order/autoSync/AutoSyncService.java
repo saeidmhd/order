@@ -434,6 +434,7 @@ public class AutoSyncService extends IntentService {
             getAllDataBody.setOrderTypes(orderTypes);
 
             getAllDataBody.setFromReturnReasonVersion(ReasonMaxRowVersion);
+
             getAllDataBody.setFromPromotionVersion(PromotionMaxRowVersion);
             getAllDataBody.setFromPromotionDetailVersion(PromotionDetailMaxRowVersion);
             getAllDataBody.setFromPromotionEntityVersion(PromotionEntityMaxRowVersion);

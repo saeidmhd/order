@@ -1299,7 +1299,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                             for (OrderDetail orderDetail : orderDetails) {
                                 productDetail = db.getProductDetail(orderDetail.getProductDetailId());
                                 product = db.GetProductWithProductId(productDetail.getProductId());
-                                if ( db.isInEntity(product.getProductCode(), promotion.getPromotionId(), Promotion.EntityGoods) || db.isInEntity(product.getProductCategoryId(), promotion.getPromotionId(), Promotion.EntityGroupGoods)) {
+                                if ( promotion.getIsAllGood() == 1 || db.isInEntity( product.getProductCode(), promotion.getPromotionId(), Promotion.EntityGoods) || db.isInEntity(product.getProductCategoryId(), promotion.getPromotionId(), Promotion.EntityGroupGoods)) {
                                     double totalPrice = (orderDetail.getPrice()) * orderDetail.getSumCountBaJoz();
                                     arrayPromotionDetail = db.getPromotionDetails(promotion.getPromotionCode(), totalPrice);
                                     if (arrayPromotionDetail.size() > 0) {
@@ -1367,7 +1367,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                             for (OrderDetail orderDetail : orderDetails) {
                                 productDetail = db.getProductDetail(orderDetail.getProductDetailId());
                                 product = db.GetProductWithProductId(productDetail.getProductId());
-                                if (db.isInEntity(product.getProductCode(), promotion.getPromotionId(), Promotion.EntityGoods) || db.isInEntity(product.getProductCategoryId(), promotion.getPromotionId(), Promotion.EntityGroupGoods)) {
+                                if (promotion.getIsAllGood() == 1 || db.isInEntity(product.getProductCode(), promotion.getPromotionId(), Promotion.EntityGoods) || db.isInEntity(product.getProductCategoryId(), promotion.getPromotionId(), Promotion.EntityGroupGoods)) {
                                     arrayPromotionDetail = db.getPromotionDetails(promotion.getPromotionCode(), orderDetail.getSumCountBaJoz());
                                     if (arrayPromotionDetail.size() > 0) {
                                         switch (arrayPromotionDetail.get(0).getHowToPromotion()) {
