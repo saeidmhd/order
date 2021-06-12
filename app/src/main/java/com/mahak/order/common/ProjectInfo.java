@@ -72,6 +72,7 @@ public class ProjectInfo {
     public static int ASSET_EXIST_PRODUCT = 1;
     public static int ASSET_ZERO_PRODUCT = 2;
     public static int ASSET_NOT_EXIST_PRODUCT = 3;
+    public static int ASSET_promotion = 4;
 
     //Printers Brand
     public static int PRINTER_BIXOLON_SPP_R200_II = 0;

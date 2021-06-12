@@ -1661,11 +1661,12 @@ public class DbAdapter {
                 "," + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_MODIFYDATE + " as " + DbSchema.Customerschema.COLUMN_MODIFYDATE +
                 "," + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_PUBLISH + " as " + DbSchema.Customerschema.COLUMN_PUBLISH +
                 "," + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_RowVersion + " as " + DbSchema.Customerschema.COLUMN_RowVersion +
-                "," + DbSchema.CustomersGroupschema.TABLE_NAME + "." + DbSchema.CustomersGroupschema.COLUMN_NAME + " as " + "GroupName";
+                "," + DbSchema.CustomersGroupschema.TABLE_NAME + "." + DbSchema.CustomersGroupschema.COLUMN_NAME + " as " + "GroupName" +
+                "," + DbSchema.PromotionEntitySchema.TABLE_NAME + "." + DbSchema.PromotionEntitySchema.COLUMN_PromotionId;
 
         try {
             //cursor = mDb.query(DbSchema.Customerschema.TABLE_NAME, null, DbSchema.Customerschema.COLUMN_ID + "=?",new String[]{String.valueOf(id)}, null, null, null);
-            cursor = mDb.rawQuery("select " + Columns + " from  " + DbSchema.Customerschema.TABLE_NAME + " inner join " + DbSchema.CustomersGroupschema.TABLE_NAME + " on " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_PersonGroupId + " = " + DbSchema.CustomersGroupschema.TABLE_NAME + "." + DbSchema.CustomersGroupschema.COLUMN_PersonGroupId + " where " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_ID + " = " + id + " and " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_Deleted + " = " + "0" + " order by " + DbSchema.Customerschema.COLUMN_PersonCode, null);
+            cursor = mDb.rawQuery("select " + Columns + " from  " + DbSchema.Customerschema.TABLE_NAME + " inner join " + DbSchema.CustomersGroupschema.TABLE_NAME + " on " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_PersonGroupId + " = " + DbSchema.CustomersGroupschema.TABLE_NAME + "." + DbSchema.CustomersGroupschema.COLUMN_PersonGroupId + " LEFT join PromotionEntity  on PromotionEntity.CodeEntity = Customers.PersonCode and EntityType = 2 " + " where " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_ID + " = " + id + " and " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_Deleted + " = " + "0" + " order by " + DbSchema.Customerschema.COLUMN_PersonCode, null);
             cursor.moveToFirst();
             if (cursor.getCount() > 0) {
                 customer = new Customer();
@@ -1701,6 +1702,7 @@ public class DbAdapter {
                 customer.setSellPriceLevel(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_SellPriceLevel)));
                 customer.setRowVersion(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_RowVersion)));
                 customer.setGroup(cursor.getString(cursor.getColumnIndex("GroupName")));
+                customer.setPromotionId(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionEntitySchema.COLUMN_PromotionId)));
                 cursor.close();
             }
         } catch (Exception e) {
@@ -5716,7 +5718,7 @@ public class DbAdapter {
                     " when 9 then price9 " +
                     " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
                     " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                    " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity " +
+                    " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and entitytype = 4" +
                     " where " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
                     " and " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_Deleted + " = " + 0 +
                     " and " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_Deleted + " = " + 0 +
@@ -5736,7 +5738,7 @@ public class DbAdapter {
                     " when 9 then price9 " +
                     " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
                     " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                    " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity " +
+                    " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and entitytype = 4 " +
                     " where " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
                     " and " + DbSchema.Productschema.TABLE_NAME + " . " + DbSchema.Productschema.COLUMN_Deleted + " = " + 0 +
                     getProductAssetStrnig(modeasset) +
@@ -6246,7 +6248,7 @@ public class DbAdapter {
                         " when 9 then price9 " +
                         " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
                         " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                         " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity " +
+                         " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and entitytype = 4 " +
                          " where ( " + LikeStr + " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'"  + " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
                          " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
                          getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + " GROUP by Products.productId " +
@@ -6265,7 +6267,7 @@ public class DbAdapter {
                         " when 9 then price9 " +
                         " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
                         " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                        " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity " +
+                        " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and entitytype = 4 " +
                         " where ( " + LikeStr + " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'"  +  " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
                         " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
                         getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + " GROUP by Products.productId " +
@@ -6304,6 +6306,8 @@ public class DbAdapter {
             return   " and " + DbSchema.ProductDetailSchema.COLUMN_Count1 + " = " + " 0.0 ";
         } else if (modeasset == ProjectInfo.ASSET_NOT_EXIST_PRODUCT) {
             return   " and " + DbSchema.ProductDetailSchema.COLUMN_Count1 + " < " + " 0.0 ";
+        }else if (modeasset == ProjectInfo.ASSET_promotion) {
+            return   " and " + "PromotionId" + ">" + " 0 ";
         }
         return "";
     }
