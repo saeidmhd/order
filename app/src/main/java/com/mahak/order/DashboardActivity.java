@@ -713,7 +713,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             } else {
                 //setMapPoints(positions);
                 for (int i = 0; i < positions.size(); i++) {
-                    mGoogleMap.addMarker(new MarkerOptions().position(positions.get(i)).title(arrayChecklist.get(i).getName()));
+                    if (arrayChecklist.get(i).getName() != null)
+                        mGoogleMap.addMarker(new MarkerOptions().position(positions.get(i)).title(arrayChecklist.get(i).getName()));
                 }
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(positions.get(positions.size() - 1), 14));
             }
@@ -1020,8 +1021,12 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
 
             void Populate(CheckList checklist, int position) {
-                tvName.setText(checklist.getName().trim());
-                tvAddress.setText(checklist.getAddress().trim());
+                if (checklist.getName() != null)
+                    tvName.setText(checklist.getName().trim());
+
+                if (checklist.getAddress() != null)
+                    tvAddress.setText(checklist.getAddress().trim());
+
                 if (checklist.getDescription() != null)
                     tvDescription.setText(checklist.getDescription().trim());
 

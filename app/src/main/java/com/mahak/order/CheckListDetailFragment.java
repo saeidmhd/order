@@ -126,7 +126,8 @@ public class CheckListDetailFragment extends Fragment {
                         Double Longitude = ServiceTools.RegulartoDouble(checklist.getLongitude());
                         if (Latitude != 0 || Longitude != 0) {
                             LatLng pos = new LatLng(Latitude, Longitude);
-                            googleMap.addMarker(new MarkerOptions().position(pos).title(checklist.getName()));
+                            if (checklist.getName() != null)
+                                googleMap.addMarker(new MarkerOptions().position(pos).title(checklist.getName()));
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15), 3000, new GoogleMap.CancelableCallback() {
                                 @Override
                                 public void onFinish() {
@@ -172,8 +173,10 @@ public class CheckListDetailFragment extends Fragment {
                 Tell = customer.getTell();
             }
         }
-        if (!checklist.getName().equals(""))
-            tvName.setText(checklist.getName());
+
+        if (checklist.getName() != null)
+            if (!checklist.getName().equals(""))
+                tvName.setText(checklist.getName());
         else
             tvName.setVisibility(View.GONE);
 

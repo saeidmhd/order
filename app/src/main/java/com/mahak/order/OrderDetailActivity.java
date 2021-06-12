@@ -210,7 +210,7 @@ public class OrderDetailActivity extends BaseActivity {
 
         } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
             lst_order_detail_for_print = R.layout.lst_order_detail_for_print_50mm;
-        } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
+        } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
             lst_order_detail_for_print = R.layout.lst_print_szzt;
         } else {
             if (getTemplate2Status(mContext, ProjectInfo._pName_OrderDetail))
@@ -647,7 +647,7 @@ public class OrderDetailActivity extends BaseActivity {
                 } else if (printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310) {
                     ll = inflater.inflate(R.layout.factor_print_template_80mm_fii_compact, null, false);
 
-                } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
+                } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
                     ll = inflater.inflate(R.layout.factor_print_szzt, null, false);
 
                 } else {
@@ -677,7 +677,7 @@ public class OrderDetailActivity extends BaseActivity {
                 } else if (printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310) {
                     ll = inflater.inflate(R.layout.factor_print_template_80mm_fii, null, false);
 
-                } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
+                } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
                     ll = inflater.inflate(R.layout.factor_print_szzt, null, false);
 
                 } else {
@@ -1192,7 +1192,7 @@ public class OrderDetailActivity extends BaseActivity {
                 ) {
                     tvFee = (TextView) view.findViewById(R.id.tvfii);
                 }
-                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
+                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
                     tvFee = (TextView) view.findViewById(R.id.tvfii);
                     //tvCount2 = (TextView) view.findViewById(R.id.tvCount2);
                     //tvProductCode = (TextView) view.findViewById(R.id.tvProductCode);
@@ -1285,7 +1285,7 @@ public class OrderDetailActivity extends BaseActivity {
                 ) {
                     tvFee.setText(ServiceTools.formatPrice(orderDetail.getPrice()));
                 }
-                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
+                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
                     //db.open();
                     //Product product = db.GetProductWithProductId(orderDetail.getProductId());
                    // tvProductCode.setText(String.valueOf(product.getProductCode()));

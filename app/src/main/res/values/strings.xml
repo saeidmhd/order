@@ -103,7 +103,7 @@
     <string name="str_username_en">UserName</string>
     <string name="str_password_en">Password</string>
     <string name="str_login">ورود به سیستم</string>
-    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2021 - Version 3.285</string>
+    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2021 - Version 3.287</string>
     <string name="str_email">پست الکترونیک</string>
     <string name="str_body">متن پیام</string>
     <string name="str_message_content">متن پیام</string>
@@ -892,7 +892,7 @@
     <string name="count">عدد</string>
     <string name="bank">بانک ملت</string>
     <string name="description">لطفا جهت افزایش کیف پول در بستره اینترنت یکی از کانال های</string>
-    <string name="sample_customer">سعید محمدی</string>
+    <string name="sample_customer">ناشناس</string>
     <string name="invoice">فاکتور</string>
     <string name="price">قیمت(ریال)</string>
     <string name="open_connect_dialogue">Open connect dialogue</string>
@@ -905,7 +905,7 @@
     <string name="continuous_printing">Continuous printing</string>
     <string name="customerdisplay">CustomerDisplay</string>
     <string name="done">انجام شده</string>
-    <string name="sample_name">سید ماشالله هومن بهرامی زاده</string>
+    <string name="sample_name">ناشناس</string>
     <string name="sample_address">مشهد، بلوار احمد آباد، نبش خیابان پاستور، سید ماشالله 14، پلاک 178</string>
     <string name="morning">صبح</string>
     <string name="debtor">بدهکار</string>

@@ -519,8 +519,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         if (item.getItemId() == android.R.id.home) {
-            // syncAsyn.cancel(true);
-            pbLoading.setVisibility(View.GONE);
+            Cancel();
             Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -531,6 +530,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        Cancel();
         Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
