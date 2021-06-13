@@ -186,8 +186,6 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             @Override
             public void onClick(View view){
                 promotions = db.getAllPromotionCodeForSpecificGood(product.getProductCode());
-                if(promotions.size() == 0)
-                    promotions = db.getAllPromotion();
                 show();
             }
         });
