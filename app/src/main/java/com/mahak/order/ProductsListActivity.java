@@ -66,6 +66,7 @@ import com.mahak.order.fragment.ProductGridFragment;
 import com.mahak.order.fragment.ProductGridGalleryFragment;
 import com.mahak.order.fragment.ProductListFragment;
 import com.mahak.order.fragment.ProductPagerFragment;
+import com.mahak.order.fragment.RecyclerProductAdapter;
 import com.mahak.order.service.DataService;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.DbSchema;
@@ -1187,7 +1188,7 @@ public class ProductsListActivity extends BaseActivity {
         _tvOrderDate.setText(getDateAndTimeForLong(dt.getTime()));
         if (BaseActivity.getAuthentication())
             _tvUsername.setText(BaseActivity.getUserProfile().getName());
-        _adProduct = new AdapterListProductForPrint(mActivity, arrayProductMain);
+        _adProduct = new AdapterListProductForPrint(mActivity, RecyclerProductAdapter.products);
         _lstProduct.setDrawingCacheEnabled(true);
         _lstProduct.setAdapter(_adProduct);
         ServiceTools.setListViewHeightBasedOnChildren(_lstProduct);
@@ -1321,7 +1322,6 @@ public class ProductsListActivity extends BaseActivity {
             public Holder(View view) {
 
                 llitem = (LinearLayout) view.findViewById(R.id.llitem);
-
                 tvProductName = (TextView) view.findViewById(R.id.tvProductSpec);
                 tvCount = (TextView) view.findViewById(R.id.tvCount);
                 tvKalaCode = (TextView) view.findViewById(R.id.tvKalaCode);
@@ -1329,27 +1329,9 @@ public class ProductsListActivity extends BaseActivity {
             }
 
             public void Populate(Product product, int position) {
-
-                if (db == null) db = new DbAdapter(mContext);
-                db.open();
-
-                double SumCount2 = 0;
-                double SumCount1 = 0;
-
-                ArrayList<ProductDetail> productDetails = db.getAllProductDetailWithProductId(product.getProductId());
-
-                for (ProductDetail productDetail : productDetails) {
-                    SumCount1 = ServiceTools.getSumCount1(productDetail.getProductId(), mContext);
-                    SumCount2 = ServiceTools.getSumCount2(productDetail.getProductId(), mContext);
-                }
-                db.close();
-
-
                 tvProductName.setText(product.getName());
-                tvCount.setText(formatCount(SumCount1));
-                tvKalaCode.setText("" + product.getProductCode());
-
-
+                tvCount.setText(ServiceTools.formatCount(product.getSumCount1()));
+                tvKalaCode.setText(String.valueOf(product.getProductCode()));
             }
         }
 
