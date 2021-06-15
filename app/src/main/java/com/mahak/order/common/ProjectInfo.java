@@ -28,6 +28,7 @@ public class ProjectInfo {
     public static int PUBLISH_REJECT = 3;
     public static int CUSTOMERID_GUEST = 0;
     public static long DONT_CUSTOMER_GROUP = 0;
+    public static int promo_CUSTOMER_GROUP = -2;
     public static String DONT_CODE = "-1";
 
     public static int CHECKLIST_TYPE_ORDER = 1;

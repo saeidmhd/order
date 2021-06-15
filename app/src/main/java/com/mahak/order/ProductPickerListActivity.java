@@ -251,7 +251,7 @@ public class ProductPickerListActivity extends BaseActivity {
                     || Type == ProjectInfo.TYPE_INVOCIE ||
                     (Type == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext))) {
                 MODE_ASSET = ProjectInfo.ASSET_EXIST_PRODUCT;
-                spnAssetProduct.setEnabled(false);
+                //spnAssetProduct.setEnabled(false);
             } else
                 MODE_ASSET = ProjectInfo.ASSET_ALL_PRODUCT;
 

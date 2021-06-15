@@ -136,6 +136,38 @@ public class ManageReceiptActivity extends BaseActivity {
 
         //hostApp = SDKManager.init(this);
         hostApp = SDKManager.init(this);
+        switch (hostApp) {
+            case IKC:
+                Toast.makeText(mContext, "IKC", Toast.LENGTH_SHORT).show();
+                break;
+            case SEP:
+                Toast.makeText(mContext, "SEP", Toast.LENGTH_SHORT).show();
+                break;
+            case SEP_IKCC:
+                Toast.makeText(mContext, "SEP_IKCC", Toast.LENGTH_SHORT).show();
+                break;
+            case FANAVA:
+                Toast.makeText(mContext, "FANAVA", Toast.LENGTH_SHORT).show();
+                break;
+            case SAYAN_CARD:
+                Toast.makeText(mContext, "SAYAN_CARD", Toast.LENGTH_SHORT).show();
+                break;
+            case PEC:
+                Toast.makeText(mContext, "PEC", Toast.LENGTH_SHORT).show();
+                break;
+            case NAVACO:
+                Toast.makeText(mContext, "NAVACO", Toast.LENGTH_SHORT).show();
+                break;
+            case SEPEHR:
+                Toast.makeText(mContext, "SEPEHR", Toast.LENGTH_SHORT).show();
+                break;
+            case PEC_MEHRANA:
+                Toast.makeText(mContext, "PEC_MEHRANA", Toast.LENGTH_SHORT).show();
+                break;
+            case UNKNOWN:
+                Toast.makeText(mContext, "UNKNOWN", Toast.LENGTH_SHORT).show();
+                break;
+        }
 
         alertDialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(mActivity);
 

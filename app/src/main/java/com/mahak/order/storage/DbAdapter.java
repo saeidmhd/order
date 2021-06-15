@@ -18,7 +18,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.mahak.order.BaseActivity;
-import com.mahak.order.ProductPickerListActivity;
 import com.mahak.order.common.Bank;
 import com.mahak.order.common.Category;
 import com.mahak.order.common.CheckList;
@@ -183,55 +182,55 @@ public class DbAdapter {
         try {
             ContentValues initialvalue = new ContentValues();
             for (Customer customer : customers) {
-                    if (customer.getFirstName() == null)
-                        customer.setFirstName("");
-                    if (customer.getLastName() == null)
-                        customer.setLastName("");
-                    customer.setName(customer.getFirstName() + " " + customer.getLastName());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_PersonGroupId, customer.getPersonGroupId());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_PersonGroupCode, customer.getPersonGroupCode());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_NAME, customer.getName());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_FirstName, customer.getFirstName());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_LastName, customer.getLastName());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_ORGANIZATION, customer.getOrganization());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_CREDIT, customer.getCredit());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_BALANCE, customer.getBalance());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_STATE, customer.getState());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_CITY, customer.getCity());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_ADDRESS, customer.getAddress());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_ZONE, customer.getZone());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_PHONE, customer.getTell());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_MOBILE, customer.getMobile());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_LATITUDE, customer.getLatitude());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_LONGITUDE, customer.getLongitude());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_SHIFT, customer.getShift());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_MODIFYDATE, customer.getModifyDate());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_PUBLISH, customer.getPublish());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_MAHAK_ID, customer.getMahakId());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_PersonCode, customer.getPersonCode());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_DATABASE_ID, customer.getDatabaseId());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_USER_ID, customer.getUserId());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_DiscountPercent, customer.getDiscountPercent());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_SellPriceLevel, customer.getSellPriceLevel());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_DataHash, customer.getDataHash());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_CreateDate, customer.getCreateDate());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_UpdateDate, customer.getUpdateDate());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_CreateSyncId, customer.getCreateSyncId());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_UpdateSyncId, customer.getUpdateSyncId());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_RowVersion, customer.getRowVersion());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_PersonId, customer.getPersonId());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_HasOrder, customer.getOrderCount());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_PersonClientId, customer.getPersonClientId());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_PersonType, customer.getPersonType());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_Gender, customer.getGender());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_NationalCode, customer.getNationalCode());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_Email, customer.getEmail());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_UserName, customer.getUserName());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_Password, customer.getPassword());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_CityCode, customer.getCityCode());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_Fax, customer.getFax());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_Deleted, customer.getDeleted());
-                    mDb.insert(DbSchema.Customerschema.TABLE_NAME, null, initialvalue);
+                if (customer.getFirstName() == null)
+                    customer.setFirstName("");
+                if (customer.getLastName() == null)
+                    customer.setLastName("");
+                customer.setName(customer.getFirstName() + " " + customer.getLastName());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_PersonGroupId, customer.getPersonGroupId());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_PersonGroupCode, customer.getPersonGroupCode());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_NAME, customer.getName());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_FirstName, customer.getFirstName());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_LastName, customer.getLastName());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_ORGANIZATION, customer.getOrganization());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_CREDIT, customer.getCredit());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_BALANCE, customer.getBalance());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_STATE, customer.getState());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_CITY, customer.getCity());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_ADDRESS, customer.getAddress());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_ZONE, customer.getZone());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_PHONE, customer.getTell());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_MOBILE, customer.getMobile());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_LATITUDE, customer.getLatitude());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_LONGITUDE, customer.getLongitude());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_SHIFT, customer.getShift());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_MODIFYDATE, customer.getModifyDate());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_PUBLISH, customer.getPublish());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_MAHAK_ID, customer.getMahakId());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_PersonCode, customer.getPersonCode());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_DATABASE_ID, customer.getDatabaseId());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_USER_ID, customer.getUserId());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_DiscountPercent, customer.getDiscountPercent());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_SellPriceLevel, customer.getSellPriceLevel());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_DataHash, customer.getDataHash());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_CreateDate, customer.getCreateDate());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_UpdateDate, customer.getUpdateDate());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_CreateSyncId, customer.getCreateSyncId());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_UpdateSyncId, customer.getUpdateSyncId());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_RowVersion, customer.getRowVersion());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_PersonId, customer.getPersonId());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_HasOrder, customer.getOrderCount());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_PersonClientId, customer.getPersonClientId());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_PersonType, customer.getPersonType());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_Gender, customer.getGender());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_NationalCode, customer.getNationalCode());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_Email, customer.getEmail());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_UserName, customer.getUserName());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_Password, customer.getPassword());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_CityCode, customer.getCityCode());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_Fax, customer.getFax());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_Deleted, customer.getDeleted());
+                mDb.insert(DbSchema.Customerschema.TABLE_NAME, null, initialvalue);
             }
             mDb.setTransactionSuccessful();
         } finally {
@@ -2070,7 +2069,7 @@ public class DbAdapter {
         product.setSumCount2(cursor.getDouble(cursor.getColumnIndex("sumcount2")));
         product.setPrice(cursor.getDouble(cursor.getColumnIndex("price")));
         product.setPromotionId(cursor.getInt(cursor.getColumnIndex("PromotionId")));
-       // product.setPriceVisitor(cursor.getDouble(cursor.getColumnIndex("priceVisitor")));
+        // product.setPriceVisitor(cursor.getDouble(cursor.getColumnIndex("priceVisitor")));
 
         return product;
     }
@@ -2129,6 +2128,21 @@ public class DbAdapter {
         customer.setRowVersion(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_RowVersion)));
         customer.setDiscountPercent(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_DiscountPercent)));
         customer.setSellPriceLevel(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_SellPriceLevel)));
+        return customer;
+    }
+    private Customer getCustomerFromCursor2(Cursor cursor) {
+        Customer customer =  new Customer();
+        customer.setPersonCode(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PersonCode)));
+        customer.setName(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_NAME)));
+        customer.setOrganization(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ORGANIZATION)));
+        customer.setAddress(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ADDRESS)));
+        customer.setPromotionId(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionEntitySchema.COLUMN_PromotionId)));
+        customer.setPersonId(cursor.getInt(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PersonId)));
+        customer.setPersonClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PersonClientId)));
+        customer.setPersonGroupId(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PersonGroupId)));
+        customer.setTell(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PHONE)));
+        customer.setMobile(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MOBILE)));
+        customer.setId(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ID)));
         return customer;
     }
 
@@ -6102,14 +6116,18 @@ public class DbAdapter {
         String LIMIT = String.valueOf(totalItemCount) + ",15";
         ArrayList<Customer> array = new ArrayList<>();
         try {
-            if (groupId == ProjectInfo.DONT_CUSTOMER_GROUP)
-                cursor = mDb.query(DbSchema.Customerschema.TABLE_NAME, null, DbSchema.Customerschema.COLUMN_USER_ID + " =? and " + DbSchema.Customerschema.COLUMN_MAHAK_ID + "=? and " + DbSchema.Customerschema.COLUMN_DATABASE_ID + "=? and " + DbSchema.Customerschema.COLUMN_Deleted + "=?", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), String.valueOf(BaseActivity.getPrefDatabaseId()), String.valueOf(0)}, null, null, orderBy, LIMIT);
-            else
-                cursor = mDb.query(DbSchema.Customerschema.TABLE_NAME, null, DbSchema.Customerschema.COLUMN_USER_ID + " =? and " + DbSchema.Customerschema.COLUMN_MAHAK_ID + "=? and " + DbSchema.Customerschema.COLUMN_DATABASE_ID + "=? and " + DbSchema.Customerschema.COLUMN_PersonGroupId + " =? and " + DbSchema.Customerschema.COLUMN_Deleted + "=?", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(groupId), String.valueOf(0)}, null, null, orderBy, LIMIT);
+            cursor = mDb.rawQuery("select Customers.Organization, Customers.name, Customers.Address, Customers.PersonCode, PromotionId, Customers.PersonClientId, Customers.PersonId, Customers.PersonGroupId, Customers.Mobile, Customers.Phone, Customers.Id "+
+                    " from Customers inner join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId " +
+                    " LEFT join PromotionEntity  on PromotionEntity.CodeEntity = Customers.PersonCode and EntityType = 2 " +
+                    " where " + groupIdScript(groupId) +
+                    " Customers.UserId = ? and Customers.MahakId = ? and Customers.DatabaseId = ? and Customers.Deleted = ?" +
+                    " order by " + orderBy + " LIMIT " + LIMIT, new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(0)});
+            // cursor = mDb.query(DbSchema.Customerschema.TABLE_NAME, null, DbSchema.Customerschema.COLUMN_USER_ID + " =? and " + DbSchema.Customerschema.COLUMN_MAHAK_ID + "=? and " + DbSchema.Customerschema.COLUMN_DATABASE_ID + "=? and " + groupIdScript(groupId) + DbSchema.Customerschema.COLUMN_Deleted + "=?", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(0)}, null, null, orderBy, LIMIT);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    customer = getCustomer(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ID)));
+                    //customer = getCustomer(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ID)));
+                    customer = getCustomerFromCursor2(cursor);
                     //extra_info_people.put(customer.getPersonId(),getMoreCustomerInfo(customer.getPersonCode()));
                     array.add(customer);
                     cursor.moveToNext();
@@ -6122,6 +6140,15 @@ public class DbAdapter {
             Log.e("ErrAllCustomer", e.getMessage());
         }
         return array;
+    }
+
+    public String groupIdScript(long groupId){
+        if(groupId == ProjectInfo.DONT_CUSTOMER_GROUP)
+            return "";
+        else if (groupId == ProjectInfo.promo_CUSTOMER_GROUP)
+            return " PromotionId > 0 " + " and ";
+        else
+            return " Customers.PersonGroupId = " + groupId + " and " ;
     }
 
     public ArrayList<ReportUserDetail> getCustomerReturnOfSale(long startdate, long enddate, int orderType) {
@@ -6179,38 +6206,26 @@ public class DbAdapter {
     public ArrayList<Customer> searchCustomer(long groupId, String searchString) {
         Customer customer;
         Cursor cursor;
-        String rawquery;
-        String[] selectArgs;
-        String arabicStr = ServiceTools.replaceWithEnglish(searchString);
+        if (ServiceTools.checkArabic(searchString)){
+            searchString = ServiceTools.replaceWithEnglish(searchString);
+        }
+        String orderBy = BaseActivity.getPrefSortBase_customer() + " " + BaseActivity.getPrefSortDirection();
+        String LikeStr = ServiceTools.getCustomerLikeString(searchString);
         ArrayList<Customer> array = new ArrayList<>();
-        //extra_info_people.clear();
         try {
-            if (groupId == ProjectInfo.DONT_CUSTOMER_GROUP) {
-                rawquery = " SELECT * FROM Customers " +
-                        " where ( " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_NAME +" LIKE " + "'%" + searchString + "%'" +
-                        " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_NAME + " LIKE " + "'%" + arabicStr + "%'" +
-                        " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
-                        " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
-                        " ) and " + DbSchema.Customerschema.COLUMN_USER_ID + " = " + getPrefUserId() + " and " + DbSchema.Customerschema.COLUMN_Deleted + " = " + 0 +
-                        " order by " + DbSchema.Customerschema.COLUMN_PersonCode;
-                selectArgs = new String[]{"%" + searchString + "%", "%" + searchString + "%", "%" + searchString + "%"};
-            } else {
-                rawquery = " SELECT * FROM Customers " +
-                        " where " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_PersonGroupId + " = " + groupId +
-                        " and ( " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_NAME + " LIKE " + "'%" + searchString + "%'" +
-                        " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_NAME + " LIKE " + "'%" + arabicStr + "%'" +
-                        " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
-                        " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
-                        " ) and " + DbSchema.Customerschema.COLUMN_USER_ID + " = " + getPrefUserId() + " and " + DbSchema.Customerschema.COLUMN_Deleted + " = " + 0 +
-                        " order by " + DbSchema.Customerschema.COLUMN_PersonCode;
-                selectArgs = new String[]{"%" + searchString + "%", "%" + searchString + "%", "%" + searchString + "%"};
-            }
-            cursor = mDb.rawQuery(rawquery, null);
+            cursor = mDb.rawQuery("select Customers.Organization, Customers.name, Customers.Address, Customers.PersonCode, PromotionId, Customers.PersonClientId, Customers.PersonId, Customers.PersonGroupId, Customers.Mobile, Customers.Phone, Customers.Id "+
+                    " from Customers inner join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId " +
+                    " LEFT join PromotionEntity  on PromotionEntity.CodeEntity = Customers.PersonCode and EntityType = 2 " +
+                    " where ( " + LikeStr +
+                    " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
+                    " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
+                    " ) and " + groupIdScript(groupId) +
+                    " Customers.UserId = ? and Customers.MahakId = ? and Customers.DatabaseId = ? and Customers.Deleted = ?" +
+                    " order by " + orderBy , new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(0)});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    customer = getCustomer(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ID)));
-                    //extra_info_people.put(customer.getPersonId(),getMoreCustomerInfo(customer.getPersonCode()));
+                    customer = getCustomerFromCursor2(cursor);
                     array.add(customer);
                     cursor.moveToNext();
                 }
@@ -6227,6 +6242,7 @@ public class DbAdapter {
     public ArrayList<Product> searchProduct(String searchStr, int type , long CategoryId , int MODE_ASSET) {
         Product product;
         Cursor cursor;
+        String orderBy = BaseActivity.getPrefSortBase_product() + " " + BaseActivity.getPrefSortDirection();
         if (ServiceTools.checkArabic(searchStr)){
             searchStr = ServiceTools.replaceWithEnglish(searchStr);
         }
@@ -6235,7 +6251,7 @@ public class DbAdapter {
         ArrayList<Product> array = new ArrayList<>();
         try {
             if(defPriceLevel == 0){
-                 cursor =  mDb.rawQuery(" SELECT Products.ProductId , productcode , products.name , UnitRatio , DefaultSellPriceLevel , PromotionId ,UnitName2 , UnitName , " +
+                cursor =  mDb.rawQuery(" SELECT Products.ProductId , productcode , products.name , UnitRatio , DefaultSellPriceLevel , PromotionId ,UnitName2 , UnitName , " +
                         " case DefaultSellPriceLevel  " +
                         " when 1 then Price1 " +
                         " when 2 then Price2 " +
@@ -6248,11 +6264,11 @@ public class DbAdapter {
                         " when 9 then price9 " +
                         " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
                         " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                         " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and entitytype = 4 " +
-                         " where ( " + LikeStr + " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'"  + " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
-                         " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                         getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + " GROUP by Products.productId " +
-                         " order by " + DbSchema.Productschema.COLUMN_PRODUCT_CODE, null);
+                        " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and entitytype = 4 " +
+                        " where ( " + LikeStr + " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'"  + " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
+                        " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
+                        getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + " GROUP by Products.productId " +
+                        " order by " + orderBy, null);
             }else{
                 cursor = mDb.rawQuery(" SELECT Products.ProductId , productcode , products.name , UnitRatio , DefaultSellPriceLevel , PromotionId , UnitName2 , UnitName , " +
                         " case  " + defPriceLevel +
@@ -6271,7 +6287,7 @@ public class DbAdapter {
                         " where ( " + LikeStr + " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'"  +  " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
                         " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
                         getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + " GROUP by Products.productId " +
-                        " order by " + DbSchema.Productschema.COLUMN_PRODUCT_CODE, null);
+                        " order by " + orderBy, null);
             }
 
             if (cursor != null) {
@@ -6477,7 +6493,7 @@ public class DbAdapter {
         Product product;
         String LIMIT = totalItem + ",15";
         Cursor cursor = null;
-        String orderBy = BaseActivity.getPrefSortBase() + " " + BaseActivity.getPrefSortDirection();
+        String orderBy = BaseActivity.getPrefSortBase_product() + " " + BaseActivity.getPrefSortDirection();
         ArrayList<Product> array = new ArrayList<>();
         int defPriceLevel = BaseActivity.getPrefDefSellPrice();
         try {
@@ -8657,49 +8673,49 @@ public class DbAdapter {
         try {
             ContentValues initialvalue = new ContentValues();
             for (Customer customer : customers) {
-                    if (customer.getFirstName() == null)
-                        customer.setFirstName("");
-                    if (customer.getLastName() == null)
-                        customer.setLastName("");
-                    customer.setName(customer.getFirstName() + " " + customer.getLastName());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_PersonGroupId, customer.getPersonGroupId());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_PersonGroupCode, customer.getPersonGroupCode());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_NAME, customer.getName());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_FirstName, customer.getFirstName());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_LastName, customer.getLastName());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_ORGANIZATION, customer.getOrganization());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_CREDIT, customer.getCredit());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_BALANCE, customer.getBalance());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_STATE, customer.getState());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_CITY, customer.getCity());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_ADDRESS, customer.getAddress());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_ZONE, customer.getZone());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_PHONE, customer.getTell());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_MOBILE, customer.getMobile());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_LATITUDE, customer.getLatitude());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_LONGITUDE, customer.getLongitude());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_SHIFT, customer.getShift());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_MODIFYDATE, customer.getModifyDate());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_MAHAK_ID, customer.getMahakId());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_PersonCode, customer.getPersonCode());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_DATABASE_ID, customer.getDatabaseId());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_USER_ID, customer.getUserId());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_PUBLISH, customer.getPublish());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_DiscountPercent, customer.getDiscountPercent());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_SellPriceLevel, customer.getSellPriceLevel());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_PersonId, customer.getPersonId());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_HasOrder, customer.getOrderCount());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_PersonClientId, customer.getPersonClientId());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_PersonType, customer.getPersonType());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_Gender, customer.getGender());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_NationalCode, customer.getNationalCode());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_Email, customer.getEmail());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_UserName, customer.getUserName());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_Password, customer.getPassword());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_CityCode, customer.getCityCode());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_Fax, customer.getFax());
-                    initialvalue.put(DbSchema.Customerschema.COLUMN_RowVersion, customer.getRowVersion());
-                    result = (mDb.update(DbSchema.Customerschema.TABLE_NAME, initialvalue, DbSchema.Customerschema.COLUMN_PersonId + "=? and " + DbSchema.Customerschema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(customer.getPersonId()), String.valueOf(getPrefUserId())})) > 0;
+                if (customer.getFirstName() == null)
+                    customer.setFirstName("");
+                if (customer.getLastName() == null)
+                    customer.setLastName("");
+                customer.setName(customer.getFirstName() + " " + customer.getLastName());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_PersonGroupId, customer.getPersonGroupId());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_PersonGroupCode, customer.getPersonGroupCode());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_NAME, customer.getName());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_FirstName, customer.getFirstName());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_LastName, customer.getLastName());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_ORGANIZATION, customer.getOrganization());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_CREDIT, customer.getCredit());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_BALANCE, customer.getBalance());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_STATE, customer.getState());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_CITY, customer.getCity());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_ADDRESS, customer.getAddress());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_ZONE, customer.getZone());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_PHONE, customer.getTell());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_MOBILE, customer.getMobile());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_LATITUDE, customer.getLatitude());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_LONGITUDE, customer.getLongitude());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_SHIFT, customer.getShift());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_MODIFYDATE, customer.getModifyDate());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_MAHAK_ID, customer.getMahakId());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_PersonCode, customer.getPersonCode());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_DATABASE_ID, customer.getDatabaseId());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_USER_ID, customer.getUserId());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_PUBLISH, customer.getPublish());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_DiscountPercent, customer.getDiscountPercent());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_SellPriceLevel, customer.getSellPriceLevel());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_PersonId, customer.getPersonId());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_HasOrder, customer.getOrderCount());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_PersonClientId, customer.getPersonClientId());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_PersonType, customer.getPersonType());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_Gender, customer.getGender());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_NationalCode, customer.getNationalCode());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_Email, customer.getEmail());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_UserName, customer.getUserName());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_Password, customer.getPassword());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_CityCode, customer.getCityCode());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_Fax, customer.getFax());
+                initialvalue.put(DbSchema.Customerschema.COLUMN_RowVersion, customer.getRowVersion());
+                result = (mDb.update(DbSchema.Customerschema.TABLE_NAME, initialvalue, DbSchema.Customerschema.COLUMN_PersonId + "=? and " + DbSchema.Customerschema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(customer.getPersonId()), String.valueOf(getPrefUserId())})) > 0;
             }
             mDb.setTransactionSuccessful();
         } finally {

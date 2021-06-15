@@ -1192,7 +1192,7 @@ public class OrderDetailActivity extends BaseActivity {
                 ) {
                     tvFee = (TextView) view.findViewById(R.id.tvfii);
                 }
-                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
+                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s || printerBrand == Woosim_WSP_R341) {
                     tvFee = (TextView) view.findViewById(R.id.tvfii);
                     //tvCount2 = (TextView) view.findViewById(R.id.tvCount2);
                     //tvProductCode = (TextView) view.findViewById(R.id.tvProductCode);
@@ -1285,7 +1285,7 @@ public class OrderDetailActivity extends BaseActivity {
                 ) {
                     tvFee.setText(ServiceTools.formatPrice(orderDetail.getPrice()));
                 }
-                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
+                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s || printerBrand == Woosim_WSP_R341) {
                     //db.open();
                     //Product product = db.GetProductWithProductId(orderDetail.getProductId());
                    // tvProductCode.setText(String.valueOf(product.getProductCode()));

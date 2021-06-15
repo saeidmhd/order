@@ -336,6 +336,10 @@ public class PeopleListActivity extends BaseActivity {
         arrayGroup.add(group);
         arrayTemp = db.getAllCustomerGroup();
         arrayGroup.addAll(arrayTemp);
+        CustomerGroup group2 = new CustomerGroup();
+        group2.setPersonGroupId(ProjectInfo.promo_CUSTOMER_GROUP);
+        group2.setName("مشتریان دارای طرح تشویقی");
+        arrayGroup.add(group2);
 
         adspinner = new AdapterSpnGroup(mContext, R.layout.item_spinner, arrayGroup);
         spnGroup.setAdapter(adspinner);
