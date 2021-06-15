@@ -174,19 +174,18 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         int count = db.getCountProductPromotionEntity();
 
         if(count > 0){
-            if(promotionId == 0)
-                holder.imgGift.setVisibility(View.GONE);
-            else
+            if(promotionId > 0 )
                 holder.imgGift.setVisibility(View.VISIBLE);
+            else
+                holder.imgGift.setVisibility(View.GONE);
         }else
-            holder.imgGift.setVisibility(View.VISIBLE);
+            holder.imgGift.setVisibility(View.GONE);
+
 
         holder.imgGift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
                 promotions = db.getAllPromotionCodeForSpecificGood(product.getProductCode());
-                if(promotions.size() == 0)
-                    promotions = db.getAllPromotion();
                 show();
             }
         });

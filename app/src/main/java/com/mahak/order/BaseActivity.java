@@ -29,7 +29,6 @@ import com.mahak.order.common.User;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.libs.FontsOverride;
 import com.mahak.order.storage.DbAdapter;
-import com.mahak.order.storage.DbSchema;
 
 import java.util.Locale;
 
@@ -158,8 +157,8 @@ public class BaseActivity extends AppCompatActivity {
     public static String _Key_Store = "Store";
     public static String _Key_ServerUserId = "ServerUserId";
 
-    public static String pref_sort_base = DbSchema.Productschema.COLUMN_PRODUCT_CODE;
-    public static String pref_sort_base_customer = DbSchema.Customerschema.COLUMN_PersonCode;
+    public static String pref_sort_base_product ="Products.ProductCode";
+    public static String pref_sort_base_customer = "Customers.PersonCode";
     public static String pref_sort_direction = "Asc";
 
 
@@ -451,11 +450,11 @@ public class BaseActivity extends AppCompatActivity {
         sh.edit().putString(_Key_SortDirection, value).commit();
     }
 
-    public static String getPrefSortBase() {
-        return sh.getString(_Key_SortBase, pref_sort_base);
+    public static String getPrefSortBase_product() {
+        return sh.getString(_Key_SortBase, pref_sort_base_product);
     }
 
-    public static void setPrefSortBase(String value) {
+    public static void setPrefSortBase_product(String value) {
         sh.edit().putString(_Key_SortBase, value).commit();
     }
 

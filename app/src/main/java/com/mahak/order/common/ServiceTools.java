@@ -1805,6 +1805,15 @@ FirebaseCrashlytics.getInstance().recordException(e);
         LikeString = removeLastAnd(LikeString);
         return LikeString;
     }
+    public static String getCustomerLikeString(String searchStr) {
+        String[] searchArray = searchStr.toString().split(" ");
+        String LikeString = "";
+        for (String search : searchArray){
+            LikeString += " Customers.name " +  " like " + " '%" + search + "%' " + " and ";
+        }
+        LikeString = removeLastAnd(LikeString);
+        return LikeString;
+    }
 
     public static String removeLastAnd(String str) {
         String result = null;
