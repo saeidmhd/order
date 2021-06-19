@@ -6824,6 +6824,58 @@ public class DbAdapter {
     }
 
 
+    public ArrayList<Order> getAllOrder() {
+        Order order;
+        Cursor cursor;
+        ArrayList<Order> array = new ArrayList<>();
+        try {
+            cursor = mDb.query(DbSchema.Orderschema.TABLE_NAME, null, DbSchema.Orderschema.COLUMN_USER_ID + "=? AND " + DbSchema.Orderschema.COLUMN_MAHAK_ID + "=? AND " + DbSchema.Orderschema.COLUMN_DATABASE_ID + "=? AND " + DbSchema.Orderschema.COLUMN_TYPE + " =? ", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(ProjectInfo.TYPE_ORDER)}, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    order = GetOrder(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ID)));
+                    if (order != null)
+                        array.add(order);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrAllOrder", e.getMessage());
+        }
+
+        return array;
+    }
+
+    public ArrayList<Order> getAllInvoice() {
+        Order order;
+        Cursor cursor;
+        ArrayList<Order> array = new ArrayList<>();
+        try {
+            cursor = mDb.query(DbSchema.Orderschema.TABLE_NAME, null, DbSchema.Orderschema.COLUMN_USER_ID + "=? AND " + DbSchema.Orderschema.COLUMN_MAHAK_ID + "=? AND " + DbSchema.Orderschema.COLUMN_DATABASE_ID + "=? AND " + DbSchema.Orderschema.COLUMN_TYPE + " =? ", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(ProjectInfo.TYPE_INVOCIE)}, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    order = GetOrder(cursor.getLong(cursor.getColumnIndex(DbSchema.Orderschema.COLUMN_ID)));
+                    if (order != null)
+                        array.add(order);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrAllOrder", e.getMessage());
+        }
+
+        return array;
+    }
+
+
     public ArrayList<Order> getAllReturnOfSale() {
         Order order;
         Cursor cursor;
