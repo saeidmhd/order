@@ -834,8 +834,7 @@ public class OrderDetailActivity extends BaseActivity {
                 tvMarketName.setText(customer.getOrganization());
 
                 if (customer != null)
-                    extraData = db.getMoreCustomerInfo(customer.getPersonCode());
-                RemainedCustomer = extraData.getRemainAmount();
+                RemainedCustomer = customer.getBalance();
                 if (extraData.getRemainStatus() == 1)
                     RemainedCustomer = RemainedCustomer * -1;
             }

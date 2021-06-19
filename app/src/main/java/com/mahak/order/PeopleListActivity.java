@@ -427,23 +427,19 @@ public class PeopleListActivity extends BaseActivity {
 
             public void Populate(Customer customer) {
 
-                double amount;
-                Person_Extra_Data person_extra_data =  db.getMoreCustomerInfo(customer.getPersonCode());
-                amount = person_extra_data.getRemainAmount();
+                double amount = customer.getBalance();
 
-                switch (person_extra_data.getRemainStatus()){
-                    case 0:
-                        tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_incalculable));
-                        tvRemained.setText(ServiceTools.formatPrice(amount));
-                        break;
-                    case 1:
-                        tvRemained.setText(ServiceTools.formatPrice(amount));
-                        tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_debitor));
-                        break;
-                    case 2:
-                        tvRemained.setText(ServiceTools.formatPrice(amount));
-                        tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_creditor));
-                        break;
+                if (amount == 0) {
+                    tvRemained.setText(ServiceTools.formatPrice(amount));
+                    tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_incalculable));
+                }
+                if (amount < 0) {
+                    amount = amount * -1;
+                    tvRemained.setText(ServiceTools.formatPrice(amount));
+                    tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_debitor));
+                } else if (amount > 0) {
+                    tvRemained.setText(ServiceTools.formatPrice(amount));
+                    tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_creditor));
                 }
 
                 tvMarketName.setText(customer.getOrganization());
@@ -1029,38 +1025,34 @@ public class PeopleListActivity extends BaseActivity {
         }
 
         public class Holder {
-            public TextView tvCustomerCode, tvStatus, tvCustomerName, tvBalance‌;
+            public TextView tvCustomerCode, tvStatus, tvCustomerName, tvBalance;
             public LinearLayout llitem;
 
             public Holder(View view) {
 
                 llitem = (LinearLayout) view.findViewById(R.id.llitem);
-
                 tvCustomerCode = (TextView) view.findViewById(R.id.tvCustomerCode);
                 tvStatus = (TextView) view.findViewById(R.id.tvStatus);
                 tvCustomerName = (TextView) view.findViewById(R.id.tvCustomerName);
-                tvBalance‌ = (TextView) view.findViewById(R.id.tvBalance‌);
+                tvBalance = (TextView) view.findViewById(R.id.tvBalance);
 
             }
 
             public void Populate(Customer customer, int position) {
 
-                Person_Extra_Data person_extra_data =  db.getMoreCustomerInfo(customer.getPersonCode());
-                double amount = person_extra_data.getRemainAmount();
+                double amount = customer.getBalance();
 
-                switch (person_extra_data.getRemainStatus()){
-                    case 0:
-                        tvStatus.setText(mContext.getResources().getString(R.string.str_incalculable));
-                        tvBalance‌.setText(ServiceTools.formatPrice(amount));
-                        break;
-                    case 1:
-                        tvBalance‌.setText(ServiceTools.formatPrice(amount));
-                        tvStatus.setText(mContext.getResources().getString(R.string.str_debitor));
-                        break;
-                    case 2:
-                        tvBalance‌.setText(ServiceTools.formatPrice(amount));
-                        tvStatus.setText(mContext.getResources().getString(R.string.str_creditor));
-                        break;
+                if (amount == 0) {
+                    tvBalance.setText(ServiceTools.formatPrice(amount));
+                    tvStatus.setText(mContext.getResources().getString(R.string.str_incalculable));
+                }
+                if (amount < 0) {
+                    amount = amount * -1;
+                    tvBalance.setText(ServiceTools.formatPrice(amount));
+                    tvStatus.setText(mContext.getResources().getString(R.string.str_debitor));
+                } else if (amount > 0) {
+                    tvBalance.setText(ServiceTools.formatPrice(amount));
+                    tvStatus.setText(mContext.getResources().getString(R.string.str_creditor));
                 }
 
                 tvCustomerCode.setText(String.valueOf(customer.getPersonCode()));
@@ -1260,7 +1252,7 @@ public class PeopleListActivity extends BaseActivity {
                     DataService.InsertCustomerGroup(db, personGroupLists);
                 }
             if (extraDataList.size() > 0)
-                    DataService.InsertExtraInfo(db, extraDataList, ExtraDataMaxRowVersion);
+                    DataService.InsertExtraInfo(db, customerLists , extraDataList, ExtraDataMaxRowVersion);
             return 0;
         }
 

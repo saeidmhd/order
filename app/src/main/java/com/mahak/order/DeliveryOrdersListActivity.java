@@ -133,11 +133,8 @@ public class DeliveryOrdersListActivity extends BaseActivity {
                 deliveryorder.setMarketName(getResources().getString(R.string.str_guest_market_customer));
             } else if ((deliveryorder.getPersonId() != ProjectInfo.CUSTOMERID_GUEST)) {
                 Customer customer = db.getCustomerWithPersonId(deliveryorder.getPersonId());
-                if (customer.getPersonCode() != 0) {
-                    Person_Extra_Data extraData = db.getMoreCustomerInfo(customer.getPersonCode());
-                    deliveryorder.setAddress(extraData.getStoreAddress());
-                }else
-                    deliveryorder.setAddress(customer.getAddress());
+
+                deliveryorder.setAddress(customer.getAddress());
                 deliveryorder.setMarketName(customer.getOrganization());
                 deliveryorder.setCustomerName(customer.getName());
 

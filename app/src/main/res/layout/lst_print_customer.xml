@@ -31,7 +31,7 @@
 
 
         <com.mahak.order.widget.FontTextView
-            android:id="@+id/tvBalance‌"
+            android:id="@+id/tvBalance"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"

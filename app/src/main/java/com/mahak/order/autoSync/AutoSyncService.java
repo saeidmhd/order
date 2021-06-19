@@ -566,7 +566,7 @@ public class AutoSyncService extends IntentService {
                 }
             if (extraData != null)
                 if (extraData.size() > 0)
-                    if (DataService.InsertExtraInfo(db, extraData, ExtraDataMaxRowVersion) == -1) {
+                    if (DataService.InsertExtraInfo(db, customerLists , extraData, ExtraDataMaxRowVersion) == -1) {
                     }
             if (checkLists != null)
                 if (checkLists.size() > 0)

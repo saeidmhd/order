@@ -23,8 +23,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
 import com.mahak.order.common.Bank;
@@ -61,28 +59,8 @@ import com.mahak.order.common.login.LoginResult;
 import com.mahak.order.common.request.GetAllDataBody;
 import com.mahak.order.common.request.GetAllDataResult.GetDataResult;
 import com.mahak.order.common.request.SetAllDataBody;
-import com.mahak.order.common.request.SetAllDataResult.Banks.Banks;
-import com.mahak.order.common.request.SetAllDataResult.Checklists.Checklists;
-import com.mahak.order.common.request.SetAllDataResult.Cheques.Cheques;
-import com.mahak.order.common.request.SetAllDataResult.ExtraDatas.ExtraDatas;
-import com.mahak.order.common.request.SetAllDataResult.NonRegisters.NonRegisters;
 import com.mahak.order.common.request.SetAllDataResult.Objects;
-import com.mahak.order.common.request.SetAllDataResult.OrderDetails.OrderDetails;
-import com.mahak.order.common.request.SetAllDataResult.Orders.Orders;
-import com.mahak.order.common.request.SetAllDataResult.PayableTransfers.PayableTransfers;
-import com.mahak.order.common.request.SetAllDataResult.PersonGroups.PersonGroups;
-import com.mahak.order.common.request.SetAllDataResult.Persons.People;
-import com.mahak.order.common.request.SetAllDataResult.Pictures.Pictures;
-import com.mahak.order.common.request.SetAllDataResult.ProductCategories.ProductCategories;
-import com.mahak.order.common.request.SetAllDataResult.ProductDetails.ProductDetails;
-import com.mahak.order.common.request.SetAllDataResult.Products.Products;
-import com.mahak.order.common.request.SetAllDataResult.Receipts.Receipts;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
-import com.mahak.order.common.request.SetAllDataResult.Settings.Settings;
-import com.mahak.order.common.request.SetAllDataResult.Transactions.Transactions;
-import com.mahak.order.common.request.SetAllDataResult.TransferStoreDetails.TransferStoreDetails;
-import com.mahak.order.common.request.SetAllDataResult.TransferStores.TransferStores;
-import com.mahak.order.common.request.SetAllDataResult.Visitors.Visitors;
 import com.mahak.order.common.request.SetSign.setSignImage;
 import com.mahak.order.service.DataService;
 import com.mahak.order.service.ReadOfflinePicturesProducts;
@@ -1139,7 +1117,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
             if (extraData != null)
                 if (extraData.size() > 0)
-                    arrayTime[15] = DataService.InsertExtraInfo(db, extraData, ExtraDataMaxRowVersion);
+                    arrayTime[15] = DataService.InsertExtraInfo(db, customerLists, extraData, ExtraDataMaxRowVersion);
 
             if (orders != null)
                 if (orders.size() > 0) {

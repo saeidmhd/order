@@ -351,12 +351,7 @@ public class AddPersonActivity extends BaseActivity {
         db.close();
 
         if (customer != null) {
-            if (customer.getPersonCode() != 0) {
-                Person_Extra_Data extraData = db.getMoreCustomerInfo(customer.getPersonCode());
-                txtAddress.setText(extraData.getStoreAddress());
-            }else
-                txtAddress.setText(customer.getAddress());
-
+            txtAddress.setText(customer.getAddress());
             txtFirstName.setText(customer.getFirstName());
             txtLastName.setText(customer.getLastName());
             txtMarketName.setText(customer.getOrganization());

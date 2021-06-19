@@ -414,13 +414,27 @@ public class ManageCustomerActivity extends BaseActivity {
             } else
                 txtCredit.setText(ServiceTools.formatPrice(customer.getCredit()));
 
-
             txtZone.setText(customer.getZone());
             txtMobile.setText(customer.getMobile());
+            txtAddress.setText(customer.getAddress());
+            txtTell.setText(customer.getMobile());
 
             txtShift.setText(customer.getShift());
             txtLatitude.setText(customer.getLatitude());
             txtLongitude.setText(customer.getLongitude());
+
+            double amount = customer.getBalance();
+            if (amount == 0) {
+                spnCustomerType.setSelection(0);
+            }
+            if (amount < 0) {
+                amount = amount * -1;
+                spnCustomerType.setSelection(1);
+            } else if (amount > 0) {
+                spnCustomerType.setSelection(2);
+            }
+
+            txtRemained.setText(ServiceTools.formatPrice(amount));
 
             //set selection spnCustomerGroup
             for (int i = 0; i < arrayCustomerGroup.size(); i++) {
@@ -450,28 +464,9 @@ public class ManageCustomerActivity extends BaseActivity {
             }// End of for i
 
             if (customer.getPersonCode() != 0) {
+
                 extraData = db.getMoreCustomerInfo(customer.getPersonCode());
-                double RemainedAmount = extraData.getRemainAmount();
-
-                switch (extraData.getRemainStatus()){
-                    case 0:
-                        spnCustomerType.setSelection(0);
-                        break;
-                    case 1:
-                        spnCustomerType.setSelection(1);
-                        break;
-                    case 2:
-                        spnCustomerType.setSelection(2);
-                        break;
-                }
-
-                txtRemained.setText(ServiceTools.formatPrice(RemainedAmount));
-
                 if (extraData != null) {
-
-                    txtAddress.setText(extraData.getStoreAddress());
-                    txtTell.setText(extraData.getStorePhone());
-
                     txtInvoiceAVGAmount.setText(ServiceTools.formatPrice(extraData.getInvoiceAVGAmount()));
                     txtInvoiceAVGDiscount.setText(ServiceTools.formatPrice(extraData.getInvoiceAVGDiscount()));
                     txtLastInvoiceAmount.setText(ServiceTools.formatPrice(extraData.getLastInvoiceAmount()));
@@ -486,9 +481,6 @@ public class ManageCustomerActivity extends BaseActivity {
                     txtReturnChequeAmount.setText(ServiceTools.formatPrice(extraData.getReturnChequeAmount()));
                     txtReturnChequeCount.setText(ServiceTools.formatPrice(extraData.getReturnChequeCount()));
                 }
-            }else {
-                txtAddress.setText(customer.getAddress());
-                txtTell.setText(customer.getMobile());
             }
         }
     }

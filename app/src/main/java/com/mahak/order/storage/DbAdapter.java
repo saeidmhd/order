@@ -18,6 +18,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.mahak.order.BaseActivity;
+import com.mahak.order.R;
 import com.mahak.order.common.Bank;
 import com.mahak.order.common.Category;
 import com.mahak.order.common.CheckList;
@@ -2143,6 +2144,7 @@ public class DbAdapter {
         customer.setTell(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PHONE)));
         customer.setMobile(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MOBILE)));
         customer.setId(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ID)));
+        customer.setBalance(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_BALANCE)));
         return customer;
     }
 
@@ -6116,7 +6118,7 @@ public class DbAdapter {
         String LIMIT = String.valueOf(totalItemCount) + ",15";
         ArrayList<Customer> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select Customers.Organization, Customers.name, Customers.Address, Customers.PersonCode, PromotionId, Customers.PersonClientId, Customers.PersonId, Customers.PersonGroupId, Customers.Mobile, Customers.Phone, Customers.Id "+
+            cursor = mDb.rawQuery("select Customers.Organization, Customers.name, Customers.Address, Customers.PersonCode, PromotionId, Customers.PersonClientId, Customers.PersonId, Customers.PersonGroupId, Customers.Mobile, Customers.Phone, Customers.Id , Customers.balance "+
                     " from Customers inner join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId " +
                     " LEFT join PromotionEntity  on PromotionEntity.CodeEntity = Customers.PersonCode and EntityType = 2 " +
                     " where " + groupIdScript(groupId) +
@@ -6213,7 +6215,7 @@ public class DbAdapter {
         String LikeStr = ServiceTools.getCustomerLikeString(searchString);
         ArrayList<Customer> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select Customers.Organization, Customers.name, Customers.Address, Customers.PersonCode, PromotionId, Customers.PersonClientId, Customers.PersonId, Customers.PersonGroupId, Customers.Mobile, Customers.Phone, Customers.Id "+
+            cursor = mDb.rawQuery("select Customers.Organization, Customers.name, Customers.Address, Customers.PersonCode, PromotionId, Customers.PersonClientId, Customers.PersonId, Customers.PersonGroupId, Customers.Mobile, Customers.Phone, Customers.Id, Customers.balance "+
                     " from Customers inner join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId " +
                     " LEFT join PromotionEntity  on PromotionEntity.CodeEntity = Customers.PersonCode and EntityType = 2 " +
                     " where ( " + LikeStr +
@@ -8601,6 +8603,7 @@ public class DbAdapter {
     }
 
     public boolean UpdateCustomer(Customer customer) {
+
         boolean result;
         ContentValues initialvalue = new ContentValues();
         initialvalue.put(DbSchema.Customerschema.COLUMN_PersonGroupId, customer.getPersonGroupId());
@@ -8633,6 +8636,27 @@ public class DbAdapter {
             result = (mDb.update(DbSchema.Customerschema.TABLE_NAME, initialvalue, DbSchema.Customerschema.COLUMN_PersonClientId + "=? and " + DbSchema.Customerschema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(customer.getPersonClientId()), String.valueOf(getPrefUserId())})) > 0;
 
         return result;
+    }
+    public void UpdateCustomer2(List<Customer> customerLists) {
+        mDb.beginTransaction();
+        ContentValues initialvalue = new ContentValues();
+        try {
+            for(Customer customer : customerLists){
+                Person_Extra_Data person_extra_data =  getMoreCustomerInfo(customer.getPersonCode());
+                double amount = person_extra_data.getRemainAmount();
+                if (person_extra_data.getRemainStatus() == 1) {
+                    amount = amount * -1;
+                }
+                initialvalue.put(DbSchema.Customerschema.COLUMN_BALANCE, amount);
+                if(customer.getPersonId() != 0)
+                     mDb.update(DbSchema.Customerschema.TABLE_NAME, initialvalue, DbSchema.Customerschema.COLUMN_PersonId + "=? and " + DbSchema.Customerschema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(customer.getPersonId()), String.valueOf(getPrefUserId())});
+                else
+                    mDb.update(DbSchema.Customerschema.TABLE_NAME, initialvalue, DbSchema.Customerschema.COLUMN_PersonClientId + "=? and " + DbSchema.Customerschema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(customer.getPersonClientId()), String.valueOf(getPrefUserId())});
+            }
+            mDb.setTransactionSuccessful();
+        } finally {
+            mDb.endTransaction();
+        }
     }
 
     public boolean UpdateCustomerWithClientId(Customer customer) {

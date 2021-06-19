@@ -208,12 +208,7 @@ public class ReturnsListActivity extends BaseActivity {
             }
             order.setMarketName(customer.getOrganization());
             order.setCustomerName(customer.getName());
-            if (customer.getPersonCode() != 0) {
-                Person_Extra_Data extraData = db.getMoreCustomerInfo(customer.getPersonCode());
-                order.setAddress(extraData.getStoreAddress());
-            }else {
-                order.setAddress(customer.getAddress());
-            }
+            order.setAddress(customer.getAddress());
         }//end of For
         returnAdapter = new AdapterListReturns(mActivity, arrayOrder);
         lstReturn.setAdapter(returnAdapter);

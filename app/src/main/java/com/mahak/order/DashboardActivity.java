@@ -618,11 +618,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             } else {
                 customer = db.getCustomerWithPersonId(item.getPersonId());
                 if (customer != null) {
-                    if (customer.getPersonCode() != 0) {
-                        Person_Extra_Data extraData = db.getMoreCustomerInfo(customer.getPersonCode());
-                        item.setAddress(extraData.getStoreAddress());
-                    }else
-                        item.setAddress(customer.getAddress());
+
+                    item.setAddress(customer.getAddress());
                     item.setName(customer.getName());
                     item.setMarketName(customer.getOrganization());
                     item.setLatitude(customer.getLatitude());

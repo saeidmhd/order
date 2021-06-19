@@ -66,7 +66,6 @@ public class CheckListDetailFragment extends Fragment {
      */
     private int mPageNumber;
     private DbAdapter db;
-    private Person_Extra_Data extraData;
 
     /**
      * Factory method for this fragment class. Constructs a new fragment for the given page number.
@@ -164,9 +163,8 @@ public class CheckListDetailFragment extends Fragment {
         } else {
             customer = db.getCustomerWithPersonId(checklist.getPersonId());
             if (customer != null) {
-                extraData = db.getMoreCustomerInfo(customer.getPersonCode());
-                if (extraData != null)
-                    amount = extraData.getRemainAmount();
+
+                amount = customer.getBalance();
 
                 Shift = customer.getShift();
                 Mobile = customer.getMobile();
@@ -190,19 +188,18 @@ public class CheckListDetailFragment extends Fragment {
         tvAddress.setText(checklist.getAddress());
         tvShift.setText(Shift);
 
-        switch (extraData.getRemainStatus()){
-            case 0:
-                tvStatus.setText(getActivity().getResources().getString(R.string.str_incalculable));
-                tvRemained.setText(ServiceTools.formatPrice(amount));
-                break;
-            case 1:
-                tvRemained.setText(ServiceTools.formatPrice(amount));
-                tvStatus.setText(getActivity().getResources().getString(R.string.str_debitor));
-                break;
-            case 2:
-                tvRemained.setText(ServiceTools.formatPrice(amount));
-                tvStatus.setText(getActivity().getResources().getString(R.string.str_creditor));
-                break;
+
+        if (amount == 0) {
+            tvStatus.setText(getActivity().getResources().getString(R.string.str_incalculable));
+            tvRemained.setText(ServiceTools.formatPrice(amount));
+        }
+        if (amount < 0) {
+            amount = amount * -1;
+            tvRemained.setText(ServiceTools.formatPrice(amount));
+            tvStatus.setText(getActivity().getResources().getString(R.string.str_debitor));
+        } else if (amount > 0) {
+            tvRemained.setText(ServiceTools.formatPrice(amount));
+            tvStatus.setText(getActivity().getResources().getString(R.string.str_creditor));
         }
 
         if (checklist.getStatus() == ProjectInfo.STATUS_DO)

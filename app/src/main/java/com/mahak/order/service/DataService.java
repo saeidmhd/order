@@ -13,6 +13,7 @@ import com.mahak.order.common.CustomerGroup;
 import com.mahak.order.common.ExtraData;
 import com.mahak.order.common.Order;
 import com.mahak.order.common.OrderDetail;
+import com.mahak.order.common.Person_Extra_Data;
 import com.mahak.order.common.PicturesProduct;
 import com.mahak.order.common.Product;
 import com.mahak.order.common.ProductDetail;
@@ -460,7 +461,7 @@ public class DataService {
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
-    public static double InsertExtraInfo(DbAdapter db, List<ExtraData> data, long extraDataMaxRowVersion) {
+    public static double InsertExtraInfo(DbAdapter db, List<Customer> customerLists, List<ExtraData> data, long extraDataMaxRowVersion) {
         long startTime = System.nanoTime();
         db.open();
         if (extraDataMaxRowVersion != 0) {
@@ -468,8 +469,7 @@ public class DataService {
                 db.AddExtraInfo(data);
         } else
             db.AddExtraInfo(data);
-
-
+        db.UpdateCustomer2(customerLists);
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;

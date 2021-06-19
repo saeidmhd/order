@@ -187,9 +187,6 @@ public class NonRegisterListActivity extends BaseActivity {
 
             if ((nonRegister.getPersonId() != ProjectInfo.CUSTOMERID_GUEST)) {
                 customer = db.getCustomerWithPersonId(nonRegister.getPersonId());
-                if (customer.getPersonCode() != 0) {
-                    Person_Extra_Data extraData = db.getMoreCustomerInfo(customer.getPersonCode());
-                }
                 nonRegister.setMarketName(customer.getOrganization());
                 nonRegister.setCustomerName(customer.getName());
 
@@ -199,12 +196,7 @@ public class NonRegisterListActivity extends BaseActivity {
                 nonRegister.setCustomerName(customer.getName());
             }
 
-            if (customer.getPersonCode() != 0) {
-                Person_Extra_Data extraData = db.getMoreCustomerInfo(customer.getPersonCode());
-                nonRegister.setAddress(extraData.getStoreAddress());
-            }else {
-                nonRegister.setAddress(customer.getAddress());
-            }
+            nonRegister.setAddress(customer.getAddress());
 
         }//end of For
         nonRegisterAdapter = new AdapterListNonRegister(mActivity, arrayNonRegister);
