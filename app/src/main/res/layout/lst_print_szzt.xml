@@ -5,7 +5,6 @@
     android:gravity="center_vertical"
     android:orientation="vertical">
 
-
     <LinearLayout
         android:id="@+id/llitem"
         android:layout_width="match_parent"
@@ -110,4 +109,6 @@
         android:layout_height="2dp"
         android:visibility="gone"
         android:background="@android:color/black" />
+
+
 </LinearLayout>
