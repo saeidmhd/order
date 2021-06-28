@@ -18,7 +18,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.mahak.order.BaseActivity;
-import com.mahak.order.R;
 import com.mahak.order.common.Bank;
 import com.mahak.order.common.Category;
 import com.mahak.order.common.CheckList;
@@ -4812,6 +4811,43 @@ public class DbAdapter {
 
         return TotalCount;
     }
+    public int getTotalCountPeople(long groupId , String searchString) {
+        Cursor cursor;
+        if (ServiceTools.checkArabic(searchString)){
+            searchString = ServiceTools.replaceWithEnglish(searchString);
+        }
+        String orderBy = BaseActivity.getPrefSortBase_customer() + " " + BaseActivity.getPrefSortDirection();
+        String LikeStr = ServiceTools.anyPartOfPersonNameLikeString(searchString);
+
+        int TotalCount = 0;
+        try {
+            cursor = mDb.rawQuery(
+                    "select count(*) from Customers INNER join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId and Customers.UserId = CustomersGroups.UserId "
+                            +" where ( " + LikeStr +
+                            " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
+                            " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
+                            " ) and " + groupIdScript(groupId)
+                            + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_Deleted + " = " + 0
+                            + " and " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_MAHAK_ID + " = " + BaseActivity.getPrefMahakId()
+                            + " and " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_DATABASE_ID + " = " + BaseActivity.getPrefDatabaseId()
+                            + " and " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_USER_ID + " = " + getPrefUserId()
+                            + " order by " + orderBy , null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                if (cursor.getCount() > 0) {
+                    TotalCount = cursor.getInt(0);
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("Errorget", e.getMessage());
+        }
+
+        return TotalCount;
+    }
 
     public int getTotalCountReceipt() {
         Cursor cursor;
@@ -6111,9 +6147,13 @@ public class DbAdapter {
         return array;
     }
 
-    public ArrayList<Customer> getAllCustomer(long groupId, int totalItemCount) {
+    public ArrayList<Customer> getAllCustomer(long groupId, int totalItemCount , String searchString) {
         Customer customer;
         Cursor cursor;
+        if (ServiceTools.checkArabic(searchString)){
+            searchString = ServiceTools.replaceWithEnglish(searchString);
+        }
+        String LikeStr = ServiceTools.anyPartOfPersonNameLikeString(searchString);
         String orderBy = BaseActivity.getPrefSortBase_customer() + " " + BaseActivity.getPrefSortDirection();
         String LIMIT = String.valueOf(totalItemCount) + ",15";
         ArrayList<Customer> array = new ArrayList<>();
@@ -6121,7 +6161,10 @@ public class DbAdapter {
             cursor = mDb.rawQuery("select Customers.Organization, Customers.name, Customers.Address, Customers.PersonCode, PromotionId, Customers.PersonClientId, Customers.PersonId, Customers.PersonGroupId, Customers.Mobile, Customers.Phone, Customers.Id , Customers.balance "+
                     " from Customers inner join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId " +
                     " LEFT join PromotionEntity  on PromotionEntity.CodeEntity = Customers.PersonCode and EntityType = 2 " +
-                    " where " + groupIdScript(groupId) +
+                    " where ( " + LikeStr +
+                    " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
+                    " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
+                    " ) and " + groupIdScript(groupId) +
                     " Customers.UserId = ? and Customers.MahakId = ? and Customers.DatabaseId = ? and Customers.Deleted = ?" +
                     " order by " + orderBy + " LIMIT " + LIMIT, new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(0)});
             // cursor = mDb.query(DbSchema.Customerschema.TABLE_NAME, null, DbSchema.Customerschema.COLUMN_USER_ID + " =? and " + DbSchema.Customerschema.COLUMN_MAHAK_ID + "=? and " + DbSchema.Customerschema.COLUMN_DATABASE_ID + "=? and " + groupIdScript(groupId) + DbSchema.Customerschema.COLUMN_Deleted + "=?", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(0)}, null, null, orderBy, LIMIT);
@@ -6212,7 +6255,7 @@ public class DbAdapter {
             searchString = ServiceTools.replaceWithEnglish(searchString);
         }
         String orderBy = BaseActivity.getPrefSortBase_customer() + " " + BaseActivity.getPrefSortDirection();
-        String LikeStr = ServiceTools.getCustomerLikeString(searchString);
+        String LikeStr = ServiceTools.anyPartOfPersonNameLikeString(searchString);
         ArrayList<Customer> array = new ArrayList<>();
         try {
             cursor = mDb.rawQuery("select Customers.Organization, Customers.name, Customers.Address, Customers.PersonCode, PromotionId, Customers.PersonClientId, Customers.PersonId, Customers.PersonGroupId, Customers.Mobile, Customers.Phone, Customers.Id, Customers.balance "+

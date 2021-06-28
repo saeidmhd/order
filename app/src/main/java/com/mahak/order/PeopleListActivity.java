@@ -125,6 +125,7 @@ public class PeopleListActivity extends BaseActivity {
     private int CountCustomer;
     private int totalItem = 0;
     Boolean CheckFilter = false;
+    private String search;
 
 
     @Override
@@ -178,8 +179,8 @@ public class PeopleListActivity extends BaseActivity {
         initialise();
 
         db.open();
-        CountCustomer = db.getTotalCountPeople();
-        tvPageTitle.setText(getString(R.string.str_nav_customer_list) + "(" + CountCustomer + ")");
+        /*CountCustomer = db.getTotalCountPeople();
+        tvPageTitle.setText(getString(R.string.str_nav_customer_list) + "(" + CountCustomer + ")");*/
 
         FillSpinner();
 
@@ -203,27 +204,14 @@ public class PeopleListActivity extends BaseActivity {
                 PositionGroup = position;
                 //Cancel Asyn//////////////////////////////////////////////////////////////
                 if (FIRST_LOADE) {
-                    CustomerGroup group = (CustomerGroup) parent.getItemAtPosition(position);
                     GroupId = arrayGroup.get(position).getPersonGroupId();
-                    if (!TextUtils.isEmpty(txtSearch.getText().toString())) {
-                        adCustomer.getFilter().filter(txtSearch.getText().toString(), new FilterListener() {
-                            @Override
-                            public void onFilterComplete(int count) {
-                                tvPageTitle.setText(getString(R.string.str_nav_customer_list) + "(" + count + ")");
-                            }
-                        });
-                    } else {
-                        CheckFilter = false;
-                        ReadALLCustomer();
-                    }
+                    ReadALLCustomer();
                 }
                 FIRST_LOADE = true;
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-
             }
 
         });
@@ -262,7 +250,7 @@ public class PeopleListActivity extends BaseActivity {
                                                 });
                                             } else {
                                                 ReadALLCustomer();
-                                                tvPageTitle.setText(getString(R.string.str_nav_customer_list) + "(" + CountCustomer + ")");
+                                                //tvPageTitle.setText(getString(R.string.str_nav_customer_list) + "(" + CountCustomer + ")");
                                             }
                                         }
                                     }
@@ -285,12 +273,11 @@ public class PeopleListActivity extends BaseActivity {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if(mLastFirstVisibleItem < firstVisibleItem){
-                    if (!CheckFilter) {
-                        if (firstVisibleItem + visibleItemCount > totalItemCount - 2 && totalItemCount < CountCustomer) {
+                    if (firstVisibleItem + visibleItemCount > totalItemCount - 2 && totalItemCount < CountCustomer) {
                             totalItem = totalItemCount;
-                            adCustomer.addAll(db.getAllCustomer(GroupId, totalItem));
+                            search = txtSearch.getText().toString();
+                            adCustomer.addAll(db.getAllCustomer(GroupId, totalItem,search));
                             adCustomer.notifyDataSetChanged();
-                        }
                     }
                 }
                 mLastFirstVisibleItem = firstVisibleItem;
@@ -318,10 +305,12 @@ public class PeopleListActivity extends BaseActivity {
      */
     private void ReadALLCustomer() {
         db.open();
-        arrayCustomer = db.getAllCustomer(GroupId, 0);
+        search = txtSearch.getText().toString();
+        arrayCustomer = db.getAllCustomer(GroupId, 0,search);
+        CountCustomer = db.getTotalCountPeople(GroupId , search);
+        tvPageTitle.setText(getString(R.string.str_nav_customer_list) + "(" + CountCustomer + ")");
         adCustomer = new AdapterCustomer(mActivity);
         lstCustomer.setAdapter(adCustomer);
-       // tvPageTitle.setText(getString(R.string.str_nav_customer_list) + "(" + lstCustomer.getCount() + ")");
     }//End of if
 
     /**
