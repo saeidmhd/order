@@ -875,35 +875,9 @@ public class PrintActivity extends BaseActivity {
     private void insertTitle(String titleString) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view;
-        if (printerBrand == ProjectInfo.PRINTER_BABY_380_A || printerBrand == ProjectInfo.PRINTER_DELTA_380_A) {
-            view = inflater.inflate(R.layout.placeholder_print_title80mm, null, false);
-            TextView title = (TextView) view.findViewById(R.id._tvType);
-            title.setText(titleString);
-        } else if (printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310) {
-            view = inflater.inflate(R.layout.placeholder_print_title80mm, null, false);
-            TextView title = (TextView) view.findViewById(R.id._tvType);
-            title.setText(titleString);
-        } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
-            view = inflater.inflate(R.layout.placeholder_print_title50mm, null, false);
-            TextView title = (TextView) view.findViewById(R.id._tvType);
-            title.setText(titleString);
-        } else if (printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII) {
-            view = inflater.inflate(R.layout.placeholder_print_title88mm, null, false);
-            TextView title = (TextView) view.findViewById(R.id._tvType);
-            title.setText(titleString);
-            LinearLayout _llPrint = (LinearLayout) view.findViewById(R.id._llPrint);
-            //ChangePrintWidth(_llPrint);
-        } else if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW || printerBrand == ProjectInfo.UROVO_K319 || printerBrand == Woosim_WSP_R341) {
-            view = inflater.inflate(R.layout.placeholder_print_title88mm, null, false);
-            TextView title = (TextView) view.findViewById(R.id._tvType);
-            title.setText(titleString);
-            LinearLayout _llPrint = (LinearLayout) view.findViewById(R.id._llPrint);
-            // ChangePrintWidth(_llPrint);
-        } else {
-            view = inflater.inflate(R.layout.placeholder_print_title, null, false);
-            TextView title = (TextView) view.findViewById(R.id._tvType);
-            title.setText(titleString);
-        }
+        view = inflater.inflate(R.layout.placeholder_print_title, null, false);
+        TextView title = (TextView) view.findViewById(R.id._tvType);
+        title.setText(titleString);
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         // view.setLayoutParams(layoutParams);
 

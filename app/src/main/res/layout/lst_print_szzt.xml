@@ -8,9 +8,9 @@
     <LinearLayout
         android:id="@+id/llitem"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/report_item_min_height"
+        android:layout_height="48dp"
+        android:minHeight="48dp"
         android:gravity="center_vertical"
-        android:minHeight="@dimen/report_item_min_height"
         android:orientation="horizontal">
 
         <com.mahak.order.widget.PrintTextView

@@ -500,7 +500,7 @@ public class OrderDetailActivity extends BaseActivity {
         TextView _tvTotalItems = (TextView) view.findViewById(R.id._tvTotalItems);
         TextView _tvCustomerName = (TextView) view.findViewById(R.id._tvCustomerName);
         TextView _tvMarketName = (TextView) view.findViewById(R.id._tvMarketName);
-        LinearLayout _llMarketName = (LinearLayout) view.findViewById(R.id._llMarketName);
+
         LinearLayout _llFooterMessage = (LinearLayout) view.findViewById(R.id._llFooterMessage);
         LinearLayout _llTotalReceipt = (LinearLayout) view.findViewById(R.id._llTotalReceipt);
         LinearLayout _llPayable = (LinearLayout) view.findViewById(R.id._llPayable);
@@ -524,6 +524,13 @@ public class OrderDetailActivity extends BaseActivity {
         TextView _tvFooterMessage = (TextView) view.findViewById(R.id._tvFooterMessage);
         TextView _tvPayable = (TextView) view.findViewById(R.id._tvPayable);
         TextView _tvType = (TextView) view.findViewById(R.id._tvType);
+
+        LinearLayout InvocieNumber = (LinearLayout) view.findViewById(R.id.InvocieNumber);
+        LinearLayout _llMarketName = (LinearLayout) view.findViewById(R.id._llMarketName);
+        LinearLayout Username = (LinearLayout) view.findViewById(R.id.Username);
+        LinearLayout _llTotalItems = (LinearLayout) view.findViewById(R.id._llTotalItems);
+
+
         LinearLayout _llTitle = (LinearLayout) view.findViewById(R.id.llTitle);
         _llTitle.setVisibility(View.GONE);
         TextView _tvUsername = (TextView) view.findViewById(R.id._tvUsername);
@@ -601,10 +608,26 @@ public class OrderDetailActivity extends BaseActivity {
         _tvCustomerStatus2.setText(tvCustomerStatus2.getText().toString() + " " + tvFinalRemainingCustomer.getText().toString());
         _tvPayable.setText(tvPayable.getText().toString());
 
+        if (!SharedPreferencesHelper.get_chk_tracking_code(mContext)) {
+            InvocieNumber.setVisibility(View.GONE);
+        }
+
+        if (!SharedPreferencesHelper.get_chk_market_name(mContext)) {
+            _llMarketName.setVisibility(View.GONE);
+        }
+
+        if (!SharedPreferencesHelper.get_chk_customer_name(mContext)) {
+            Username.setVisibility(View.GONE);
+        }
+
+        if (!SharedPreferencesHelper.get_chk_count_product(mContext)) {
+            _llTotalItems.setVisibility(View.GONE);
+        }
+
         if (getTemplate2Status(mContext, ProjectInfo._pName_OrderDetail) && printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R200_II)
             _tvFooterMessage.setText(tvDescription.getText().toString());
         else
-            _tvFooterMessage.setText(getString(R.string.print_footer_messages_part1) + " " + tvCustomerName.getText().toString() + "\n" + getString(R.string.print_footer_messages_part2));
+            _tvFooterMessage.setText(String.format(getResources().getString(R.string.print_footer_messages_part1),tvCustomerName.getText().toString()));
 
     }
 
@@ -693,6 +716,8 @@ public class OrderDetailActivity extends BaseActivity {
             if (!SharedPreferencesHelper.getSignUnderFactor(mContext)) {
                 _llFooterMessage.setVisibility(View.GONE);
             }
+
+
             FillPrintView(ll);
             ll.setDrawingCacheEnabled(true);
             ll.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));

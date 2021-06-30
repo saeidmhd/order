@@ -42,7 +42,7 @@ public class SettingActivity extends AppCompatActivity {
 
     private static final int FOLDER_CODE = 131;
     private DbAdapter db;
-    private CheckBox chkReduceAsset, chkShowField, chkShowSign, chkShowBelow, chkShowBelowPrice, chkPrintCompact, chkTemplate2;
+    private CheckBox chkReduceAsset, chkShowField, chkShowSign, chkShowBelow, chkShowBelowPrice, chkPrintCompact, chkTemplate2 , chk_tracking_code,chk_market_name,chk_customer_name,chk_count_product;
     private RelativeLayout rvReduceAsset;
     private TextView tvReduceAsset;
     private EditText txtChargePercent, txtTaxPercent;
@@ -163,6 +163,42 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 SharedPreferencesHelper.setSignUnderFactor(mContext, chkShowSign.isChecked());
+
+            }
+        });
+
+        chk_tracking_code.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SharedPreferencesHelper.set_chk_tracking_code(mContext, chk_tracking_code.isChecked());
+
+            }
+        });
+
+        chk_market_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SharedPreferencesHelper.set_chk_market_name(mContext, chk_market_name.isChecked());
+
+            }
+        });
+
+        chk_customer_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SharedPreferencesHelper.set_chk_customer_name(mContext, chk_customer_name.isChecked());
+
+            }
+        });
+
+        chk_count_product.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SharedPreferencesHelper.set_chk_count_product(mContext, chk_count_product.isChecked());
 
             }
         });
@@ -368,6 +404,12 @@ public class SettingActivity extends AppCompatActivity {
         chkShowField = (CheckBox) findViewById(R.id.chkShowField);
         chkPrintCompact = (CheckBox) findViewById(R.id.chkPrintCompact);
         chkShowSign = (CheckBox) findViewById(R.id.chkShowSign);
+
+        chk_tracking_code = (CheckBox) findViewById(R.id.chk_tracking_code);
+        chk_market_name = (CheckBox) findViewById(R.id.chk_market_name);
+        chk_customer_name = (CheckBox) findViewById(R.id.chk_customer_name);
+        chk_count_product = (CheckBox) findViewById(R.id.chk_count_product);
+
         chkShowBelow = (CheckBox) findViewById(R.id.chkShowBelow);
         chkShowBelowPrice = (CheckBox) findViewById(R.id.chkBelowPrice);
         chkTemplate2 = (CheckBox) findViewById(R.id.chkTemplate2);
@@ -409,35 +451,25 @@ public class SettingActivity extends AppCompatActivity {
             tvReduceAsset.setTextColor(getResources().getColor(android.R.color.black));
         }
 
-        if (BaseActivity.getPrefReduceAsset(mContext))
-            chkReduceAsset.setChecked(true);
-        else
-            chkReduceAsset.setChecked(false);
+        chkReduceAsset.setChecked(BaseActivity.getPrefReduceAsset(mContext));
 
-        if (BaseActivity.getPrefShowFieldOrder(mContext))
-            chkShowField.setChecked(true);
-        else
-            chkShowField.setChecked(false);
+        chkShowField.setChecked(BaseActivity.getPrefShowFieldOrder(mContext));
 
-        if (SharedPreferencesHelper.getSignUnderFactor(mContext))
-            chkShowSign.setChecked(true);
-        else
-            chkShowSign.setChecked(false);
+        chkShowSign.setChecked(SharedPreferencesHelper.getSignUnderFactor(mContext));
 
-        if (SharedPreferencesHelper.getCompactPrint(mContext))
-            chkPrintCompact.setChecked(true);
-        else
-            chkPrintCompact.setChecked(false);
+        chk_tracking_code.setChecked(SharedPreferencesHelper.get_chk_tracking_code(mContext));
 
-        if (SharedPreferencesHelper.getDetailUnderFactor(mContext))
-            chkShowBelow.setChecked(true);
-        else
-            chkShowBelow.setChecked(false);
+        chk_market_name.setChecked(SharedPreferencesHelper.get_chk_market_name(mContext));
 
-        if (SharedPreferencesHelper.getBelowPrice(mContext))
-            chkShowBelowPrice.setChecked(true);
-        else
-            chkShowBelowPrice.setChecked(false);
+        chk_customer_name.setChecked(SharedPreferencesHelper.get_chk_customer_name(mContext));
+
+        chk_count_product.setChecked(SharedPreferencesHelper.get_chk_count_product(mContext));
+
+        chkPrintCompact.setChecked(SharedPreferencesHelper.getCompactPrint(mContext));
+
+        chkShowBelow.setChecked(SharedPreferencesHelper.getDetailUnderFactor(mContext));
+
+        chkShowBelowPrice.setChecked(SharedPreferencesHelper.getBelowPrice(mContext));
 
         if (SharedPreferencesHelper.getCurrentFontSize(mContext) == 12)
             small.setChecked(true);

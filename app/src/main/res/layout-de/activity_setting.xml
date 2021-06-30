@@ -23,7 +23,6 @@
                 android:background="@color/setting_title_bar_bg"
                 android:padding="@dimen/NormalSize"
                 android:text="@string/str_setting_order" />
-
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="0.5dp"
@@ -64,7 +63,7 @@
                 android:background="@color/setting_line_separator" />
 
             <RelativeLayout
-                android:id="@+id/rvShowBelowPrice‌"
+                android:id="@+id/rvShowBelowPrice"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -431,6 +430,87 @@
                     android:checked="false"
                     android:text="@string/str_setting_template2" />
 
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.mahak.order.widget.FontCheckBox
+                        android:id="@+id/chk_market_name"
+                        style="@style/forms_checkbox_default"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="@string/show_market_name" />
+
+                    <com.mahak.order.widget.FontCheckBox
+                        android:id="@+id/chk_tracking_code"
+                        style="@style/forms_checkbox_default"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:checked="true"
+                        android:text="@string/show_invoice_code" />
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.mahak.order.widget.FontCheckBox
+                        android:id="@+id/chk_count_product"
+                        style="@style/forms_checkbox_default"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="@string/show_count" />
+
+                    <com.mahak.order.widget.FontCheckBox
+                        android:id="@+id/chk_customer_name"
+                        style="@style/forms_checkbox_default"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:checked="true"
+                        android:text="@string/show_user_name" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.mahak.order.widget.FontCheckBox
+                        android:id="@+id/chkShowSign"
+                        style="@style/forms_checkbox_default"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="@string/str_setting_sign" />
+
+                    <com.mahak.order.widget.FontCheckBox
+                        android:id="@+id/chkShowBelow"
+                        android:layout_weight="1"
+                        style="@style/forms_checkbox_default"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/str_setting_under_sum" />
+
+
+                </LinearLayout>
+
+
             </LinearLayout>
 
 
@@ -628,51 +708,6 @@
                     android:text="@string/large"
                     android:textSize="13sp"
                     android:layout_margin="@dimen/SmallSize" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/setting_line_separator" />
-
-            <com.mahak.order.widget.FontTextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/setting_title_bar_bg"
-                android:padding="@dimen/NormalSize"
-                android:text="@string/str_setting_factor_detail" />
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/setting_line_separator" />
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="@dimen/NormalSize">
-
-                <com.mahak.order.widget.FontCheckBox
-                    android:id="@+id/chkShowSign"
-                    style="@style/forms_checkbox_default"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:checked="true"
-                    android:text="@string/str_setting_sign" />
-
-                <com.mahak.order.widget.FontCheckBox
-                    android:id="@+id/chkShowBelow"
-                    android:layout_weight="1"
-                    style="@style/forms_checkbox_default"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="@string/str_setting_under_sum" />
-
-
             </LinearLayout>
 
             <View

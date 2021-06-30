@@ -227,7 +227,7 @@ public class TransferDetailActivity extends BaseActivity {
         _lstProduct.setAdapter(_adProduct);
         ServiceTools.setListViewHeightBasedOnChildren(_lstProduct);
         _tvTotalPrice.setText(tvTotalPrice.getText().toString());
-        _tvFooterMessage.setText(getString(R.string.print_footer_messages_part1) + " " + tvCustomerName.getText().toString() + " " + getString(R.string.print_footer_messages_part2));
+        _tvFooterMessage.setText(String.format(getResources().getString(R.string.print_footer_messages_part1),tvCustomerName.getText().toString()));
 
     }
 

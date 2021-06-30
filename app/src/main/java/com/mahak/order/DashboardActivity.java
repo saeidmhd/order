@@ -65,7 +65,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.mahak.order.common.CheckList;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.GPSTracker;
-import com.mahak.order.common.Person_Extra_Data;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.SharedPreferencesHelper;
@@ -108,7 +107,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             btnAddNewReceipt,
             btnNavReceiptList,
             btnNavOrderList,
-            btnWhatsNew‌,
+            btnWhatsNew,
             btnNavPayableList,
             btnNavTransferList,
             btnNavBackUp,
@@ -525,11 +524,11 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnNavTransferList = (Button) findViewById(R.id.btnNavTransferList);
         btnNavTransferList.setCompoundDrawables(null, null, new IconicsDrawable(mContext, Ionicons.Icon.ion_arrow_swap).color(Color.WHITE).sizeDp(30), null);
 
-        btnNavBackUp = (Button) findViewById(R.id.btn‌Backup);
+        btnNavBackUp = (Button) findViewById(R.id.btnBackup);
         btnNavBackUp.setCompoundDrawables(null, null, new IconicsDrawable(mContext, FontAwesome.Icon.faw_database).color(Color.WHITE).sizeDp(30), null);
 
-        btnWhatsNew‌ = (Button) findViewById(R.id.btnWhatsNew‌);
-        btnWhatsNew‌.setCompoundDrawables(null, null, new IconicsDrawable(mContext, FontAwesome.Icon.faw_clock).color(Color.WHITE).sizeDp(30), null);
+        btnWhatsNew = (Button) findViewById(R.id.btnWhatsNew);
+        btnWhatsNew.setCompoundDrawables(null, null, new IconicsDrawable(mContext, FontAwesome.Icon.faw_clock).color(Color.WHITE).sizeDp(30), null);
 
         btnNavReturnOfSale = (Button) findViewById(R.id.btnNavReturnOfSale);
         btnNavReturnOfSale.setCompoundDrawables(null, null, new IconicsDrawable(mContext, Ionicons.Icon.ion_arrow_return_left).color(Color.WHITE).sizeDp(30), null);
@@ -551,7 +550,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnNavPayableList.setOnClickListener(this);
         btnNavTransferList.setOnClickListener(this);
         btnNavBackUp.setOnClickListener(this);
-        btnWhatsNew‌.setOnClickListener(this);
+        btnWhatsNew.setOnClickListener(this);
         btnNavReturnOfSale.setOnClickListener(this);
         btnNavNonRegister.setOnClickListener(this);
         btnNavPromotionList.setOnClickListener(this);
@@ -916,12 +915,12 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_SEND_TRANSFERENCE);
                 startActivity(intent);
                 break;
-            case R.id.btn‌Backup:
+            case R.id.btnBackup:
                 mDrawerLayout.closeDrawers();
                 intent = new Intent(getApplicationContext(), BackupListActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.btnWhatsNew‌:
+            case R.id.btnWhatsNew:
                 mDrawerLayout.closeDrawers();
                 intent = new Intent(getApplicationContext(), WhatsNewActivity.class);
                 startActivity(intent);

@@ -68,6 +68,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/InvocieNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
@@ -152,6 +153,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/Username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
@@ -651,6 +653,7 @@
 
     <LinearLayout
         android:id="@+id/_llFooterMessage"
+        android:scrollHorizontally="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -658,11 +661,14 @@
 
         <com.mahak.order.widget.PrintTextView
             android:id="@+id/_tvFooterMessage"
+            android:scrollHorizontally="false"
             style="@style/forms_page_title_label_default380"
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:textStyle="bold"
             android:layout_weight="1"
+            android:maxLines="2"
+            android:inputType="textMultiLine"
             android:gravity="right"
             android:text="@string/print_footer_messages_part1"
             android:textColor="@android:color/black" />
