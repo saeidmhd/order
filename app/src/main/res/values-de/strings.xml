@@ -368,8 +368,7 @@
     <string name="msg_no_connected_printer">Es gibt keinen angeschlossenen Drucker</string>
     <string name="dlg_title_paired_printer_list">Angeschlossene Druckerliste</string>
     <string name="msg_compeleted_print">Druck war erfolgreich</string>
-    <string name="print_footer_messages_part1">Endgültige Bilanz-Betrag für mich akzeptabel</string>
-    <string name="print_footer_messages_part2">Ist.</string>
+    <string name="print_footer_messages_part1">Endgültige Bilanz-Betrag für mich akzeptabel %s Ist.</string>
     <string name="print_sign">Unterschrift</string>
     <string name="str_print_remaining_final_person">Endgültige Bilanz</string>
     <string name="str_print_remaining_person">Vorherige Bilanz</string>
@@ -1189,6 +1188,11 @@
     <string name="new_3_190_5">اضافه شدن زبان آلمانی به نرم‌افزار اندروید سفارشگیر همراه</string>
     <string name="new_3_190_6">امکان دریافت و ثبت امضاء مشتری زیر فاکتور</string>
     <string name="no_product">کالا وجود ندارد!</string>
+
+    <string name="show_invoice_code">show invoice</string>
+    <string name="show_market_name">show market name</string>
+    <string name="show_count">show count</string>
+    <string name="show_user_name">show user name</string>
 
 
 </resources>

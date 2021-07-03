@@ -76,7 +76,7 @@ public class PlaceholderListGalleryFragment extends Fragment {
     private int totalItem;
     private int CountProduct;
     private static int MODE_ASSET;
-    private static int CategoryId;
+    private static long CategoryId;
 
     private MultiLevelRecyclerView multiLevelRecyclerView;
     private LinearLayout show_all_product, ll_category;
@@ -119,8 +119,6 @@ public class PlaceholderListGalleryFragment extends Fragment {
             GroupId = bundle.getInt(CUSTOMER_GROUP_KEY);
             OrderId = bundle.getLong("OrderId");
             CountProduct = bundle.getInt("CountProduct");
-            MODE_ASSET = bundle.getInt("MODE_ASSET");
-            CategoryId = bundle.getInt("CategoryId");
         }
     }
 
@@ -209,10 +207,14 @@ public class PlaceholderListGalleryFragment extends Fragment {
             array.addAll(ProductPickerListActivity.arrayProductMain);
             arrayOrginal.addAll(array);
             txtSearch = ProductPickerListActivity.txtSearch;
+            MODE_ASSET = ProductPickerListActivity.MODE_ASSET;
+            CategoryId = ProductPickerListActivity.CategoryId;
         } else if (productsListActivity != null) {
             array.addAll(ProductsListActivity.arrayProductMain);
             arrayOrginal.addAll(array);
             txtSearch = ProductsListActivity.txtSearch;
+            MODE_ASSET = ProductsListActivity.MODE_ASSET;
+            CategoryId = ProductsListActivity.CategoryId;
         }
         if (mActivity != null) {
             calculateSelectedProduct();

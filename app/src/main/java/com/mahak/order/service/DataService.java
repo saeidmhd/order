@@ -13,7 +13,6 @@ import com.mahak.order.common.CustomerGroup;
 import com.mahak.order.common.ExtraData;
 import com.mahak.order.common.Order;
 import com.mahak.order.common.OrderDetail;
-import com.mahak.order.common.Person_Extra_Data;
 import com.mahak.order.common.PicturesProduct;
 import com.mahak.order.common.Product;
 import com.mahak.order.common.ProductDetail;
@@ -52,31 +51,14 @@ public class DataService {
     static int FALSE = 0;
     private static long result = 0;
 
-
     public static double InsertCustomer(DbAdapter db, List<Customer> data, long customerMaxRowVersion) {
         long startTime = System.nanoTime();
         db.open();
-        if (customerMaxRowVersion != 0) {
-            if (!db.UpdateServerCustomerFast(data))
-                db.AddCustomerFast(data);
-        } else
-            db.AddCustomerFast(data);
-       // BaseActivity.setPrefPersonCount(db.getTotalCountPeople());
+        db.UpdateOrAddServerCustomerFast(data);
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
-
     }
-   /* public static double InsertCustomer(DbAdapter db, List<Customer> data, long customerMaxRowVersion) {
-        long startTime = System.nanoTime();
-        db.open();
-        db.DeleteAllCustomer();
-        db.AddCustomerFast(data);
-        db.close();
-        long endTime = System.nanoTime();
-        return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
-
-    }*/
 
     public static double InsertCustomerGroup(DbAdapter db, List<CustomerGroup> data) {
         long startTime = System.nanoTime();
@@ -98,33 +80,17 @@ public class DataService {
     public static double InsertVisitorPeople(DbAdapter db, List<VisitorPeople> data, long visitorPeopleMaxRowVersion) {
         long startTime = System.nanoTime();
         db.open();
-        if (visitorPeopleMaxRowVersion != 0) {
-            if (!db.UpdateVisitorPeopleFast(data))
-                db.AddVisitorPeopleFast(data);
-        }else {
-            db.AddVisitorPeopleFast(data);
-        }
+        db.UpdateOrAddVisitorPeopleFast(data);
         db.UpdatePersonFromVisitorPeopleFast(data);
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
-    /*public static double InsertCustomer(DbAdapter db, List<Customer> data) {
-        long startTime = System.nanoTime();
-        db.open();
-        db.DeleteAllCustomer();
-        db.AddCustomerFast(data);
-        db.close();
-        long endTime = System.nanoTime();
-        return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
-    }*/
-
     public static double InsertVisitor(DbAdapter db, List<Visitor> data) {
         long startTime = System.nanoTime();
         db.open();
-        if (!db.UpdateServerVisitor(data))
-            db.AddVisitor(data);
+        db.UpdateOrAddServerVisitor(data);
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
@@ -167,12 +133,7 @@ public class DataService {
     public static double InsertProduct(DbAdapter db, List<Product> data, long productMaxRowVersion) {
         long startTime = System.nanoTime();
         db.open();
-        if (productMaxRowVersion != 0) {
-            if (!db.UpdateServerProductFast(data))
-                db.AddProductFast(data);
-        } else
-            db.AddProductFast(data);
-        //BaseActivity.setPrefProductCount(db.getTotalCountProduct());
+        db.UpdateOrAddServerProductFast(data);
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
@@ -181,13 +142,7 @@ public class DataService {
     public static double InsertProductDetail(DbAdapter db, List<ProductDetail> data, long productMaxRowVersion) {
         long startTime = System.nanoTime();
         db.open();
-        if (productMaxRowVersion != 0) {
-            if (!db.UpdateProductDetailFromServerFast(data))
-                db.AddProductDetailFast(data);
-        } else {
-            db.AddProductDetailFast(data);
-        }
-        // db.UpdateProductFromProductDetailFast(data);
+        db.UpdateOrAddProductDetail(data);
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
@@ -196,17 +151,8 @@ public class DataService {
     public static double InsertVisitorProducts(DbAdapter db, List<VisitorProduct> data, long visitorProductMaxRowVersion) {
         long startTime = System.nanoTime();
         db.open();
-        if (visitorProductMaxRowVersion != 0) {
-            if (!db.UpdateVisitorProductFast(data))
-                db.AddVisitorProductFast(data);
-        } else {
-            db.AddVisitorProductFast(data);
-        }
 
-        /*db.UpdateProductDetailCount1();
-        db.UpdateProductDetailCount2();
-        db.UpdateProductDetailDeleted();*/
-
+        db.UpdateOrAddVisitorProductFast(data);
         db.UpdateProductFromVisitorProductFast(data);
         db.UpdateProductDetailFromVisitorProductFast(data);
 
@@ -214,7 +160,6 @@ public class DataService {
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
-
 
     public static double InsertSettings(DbAdapter db, List<Setting> data, Context mContext) {
         long startTime = System.nanoTime();
@@ -464,12 +409,8 @@ public class DataService {
     public static double InsertExtraInfo(DbAdapter db, List<Customer> customerLists, List<ExtraData> data, long extraDataMaxRowVersion) {
         long startTime = System.nanoTime();
         db.open();
-        if (extraDataMaxRowVersion != 0) {
-            if (!db.UpdateExtraInfo(data))
-                db.AddExtraInfo(data);
-        } else
-            db.AddExtraInfo(data);
-        db.UpdateCustomer2(customerLists);
+        db.UpdateOrAddExtraInfo(data);
+       // db.UpdateCustomer2(customerLists);
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;

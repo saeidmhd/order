@@ -190,7 +190,7 @@
                 android:background="@color/nav_item_line_dark" />
 
             <com.mahak.order.widget.FontButtonView
-                android:id="@+id/btn‌Backup"
+                android:id="@+id/btnBackup"
                 style="@style/nav_item_default"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/navigation_drawer_item_height"
@@ -202,7 +202,7 @@
                 android:background="@color/nav_item_line_dark" />
 
             <com.mahak.order.widget.FontButtonView
-                android:id="@+id/btnWhatsNew‌"
+                android:id="@+id/btnWhatsNew"
                 style="@style/nav_item_default"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/navigation_drawer_item_height"

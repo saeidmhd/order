@@ -415,8 +415,7 @@
     <string name="msg_no_connected_printer">هیچ چاپگر متصلی وجود ندارد</string>
     <string name="dlg_title_paired_printer_list">لیست چاپگرهای متصل</string>
     <string name="msg_compeleted_print">چاپ با موفقیت انجام شد</string>
-    <string name="print_footer_messages_part1">مبلغ مانده نهایی مورد قبول اینجانب</string>
-    <string name="print_footer_messages_part2">می باشد.</string>
+    <string name="print_footer_messages_part1">مبلغ مانده نهایی مورد قبول اینجانب \n %s می باشد.</string>
     <string name="print_sign">امضاء</string>
     <string name="str_print_remaining_final_person">مانده نهایی</string>
     <string name="str_print_remaining_person">مانده قبلی</string>
@@ -507,7 +506,7 @@
     <string name="str_msg_notification_start_tracking">آیا می خواهید سرویس ردیابی شروع به کار کند؟</string>
     <string name="str_msg_notification_end_tracking">آیا می خواهید سرویس ردیابی متوقف شود؟</string>
     <string name="str_msg_notification_active_tracking">سرویس ردیابی فعال است</string>
-    <string name="str_setting_template2">قالب سفارشی</string>
+    <string name="str_setting_template2">قالب سفارشی Bixolon R200II</string>
 
     <!--notification-->
     <string name="str_notification">پیام</string>
@@ -894,7 +893,7 @@
     <string name="description">لطفا جهت افزایش کیف پول در بستره اینترنت یکی از کانال های</string>
     <string name="sample_customer">ناشناس</string>
     <string name="invoice">فاکتور</string>
-    <string name="price">قیمت(ریال)</string>
+    <string name="price">قیمت</string>
     <string name="open_connect_dialogue">Open connect dialogue</string>
     <string name="print_test_page">Print test page</string>
     <string name="get_printer_status">Get printer status</string>
@@ -1260,6 +1259,10 @@
     <string name="close_dialog">بستن دیالوگ</string>
     <string name="page">\"صفحه \"</string>
     <string name="no_product">کالا وجود ندارد!</string>
+    <string name="show_invoice_code">نمایش کد پیگیری</string>
+    <string name="show_market_name">نمایش نام فروشگاه</string>
+    <string name="show_count">نمایش تعداداقلام</string>
+    <string name="show_user_name">نمایش نام کاربری</string>
 
 
 </resources>

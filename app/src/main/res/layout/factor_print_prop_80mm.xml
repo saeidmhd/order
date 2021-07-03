@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:gravity="center_horizontal"
+    android:scrollHorizontally="false"
     android:orientation="vertical">
 
     <LinearLayout
@@ -68,6 +69,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/InvocieNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
@@ -152,6 +154,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/Username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
@@ -650,6 +653,7 @@
 
     <LinearLayout
         android:id="@+id/_llFooterMessage"
+        android:scrollHorizontally="false"
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:background="@android:color/black"
@@ -678,6 +682,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
+                android:maxLines="2"
+                android:inputType="textMultiLine"
                 android:text="@string/print_sign"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/print_text_size" />

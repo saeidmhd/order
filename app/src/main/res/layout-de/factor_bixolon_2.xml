@@ -657,6 +657,8 @@
 
         <com.mahak.order.widget.FontTextView
             android:id="@+id/_tvFooterMessage"
+            android:maxLines="2"
+            android:inputType="textMultiLine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"

@@ -349,7 +349,8 @@ public class OrdersListActivity extends BaseActivity {
 
                 if (customer.getPersonCode() != 0) {
                     Person_Extra_Data extraData = db.getMoreCustomerInfo(customer.getPersonCode());
-                    order.setAddress(extraData.getStoreAddress());
+                    if(extraData != null)
+                        order.setAddress(extraData.getStoreAddress());
                 }else {
                     order.setAddress(customer.getAddress());
                 }

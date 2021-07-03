@@ -86,7 +86,7 @@ public class ProductGridFragment extends Fragment {
     private DbAdapter db;
     private int CountProduct;
     private static int MODE_ASSET;
-    private static int CategoryId;
+    private static long CategoryId;
     private LinearLayout show_all_product, ll_category;
 
     private MultiLevelRecyclerView multiLevelRecyclerView;
@@ -123,8 +123,6 @@ public class ProductGridFragment extends Fragment {
             type = bundle.getInt("type");
             mode = bundle.getInt("Mode");
             CountProduct = bundle.getInt("CountProduct");
-            MODE_ASSET = bundle.getInt("MODE_ASSET");
-            CategoryId = bundle.getInt("CategoryId");
         }
         super.onCreate(savedInstanceState);
 
@@ -402,8 +400,8 @@ public class ProductGridFragment extends Fragment {
             GroupId = bundle.getLong("GroupId");
             OrderId = bundle.getLong("OrderId");
             CountProduct = bundle.getInt("CountProduct");
-            MODE_ASSET = bundle.getInt("MODE_ASSET");
-            CategoryId = bundle.getInt("CategoryId");
+            
+            
         }
 
         multiLevelRecyclerView = (MultiLevelRecyclerView) rootView.findViewById(R.id.rv_list);
@@ -479,8 +477,8 @@ public class ProductGridFragment extends Fragment {
             type = bundle.getInt("type");
             mode = bundle.getInt("Mode");
             CountProduct = bundle.getInt("CountProduct");
-            MODE_ASSET = bundle.getInt("MODE_ASSET");
-            CategoryId = bundle.getInt("CategoryId");
+            
+            
         }
 
 
@@ -491,10 +489,17 @@ public class ProductGridFragment extends Fragment {
             array.addAll(ProductPickerListActivity.arrayProductMain);
             arrayTemp.addAll(ProductPickerListActivity.arrayProductMain);
             txtSearch = ProductPickerListActivity.txtSearch;
+            
+            MODE_ASSET = ProductPickerListActivity.MODE_ASSET;
+            CategoryId = ProductPickerListActivity.CategoryId;
+            
         } else if (productsListActivity != null) {
             array.addAll(ProductsListActivity.arrayProductMain);
             arrayTemp.addAll(ProductsListActivity.arrayProductMain);
             txtSearch = ProductsListActivity.txtSearch;
+            
+            MODE_ASSET = ProductsListActivity.MODE_ASSET;
+            CategoryId = ProductsListActivity.CategoryId;
         }
         if (mActivity != null) {
 //            adapterlistProduct = new AdapterListProduct(mActivity, array);
