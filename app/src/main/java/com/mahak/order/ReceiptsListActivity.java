@@ -595,8 +595,18 @@ public class ReceiptsListActivity extends BaseActivity {
                     FontPopUp.applyFontToMenuItem(mi, mContext);
                 }
                 break;
+            case android.R.id.home:
+                finishing();
+                break;
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishing();
+        super.onBackPressed();
     }
 
     public void sortItem(MenuItem item) {
@@ -776,5 +786,12 @@ public class ReceiptsListActivity extends BaseActivity {
                 Toast.makeText(mContext, t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+
+    public void finishing(){
+        Intent intent2 = new Intent(getApplicationContext(), DashboardActivity.class);
+        intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent2);
     }
 }

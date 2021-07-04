@@ -264,6 +264,7 @@ public class OrderDetailActivity extends BaseActivity {
                 } else {
                     Intent intent = new Intent(mContext, ManageReceiptActivity.class);
                     intent.putExtra(MODE_PAGE, MODE_NEW);
+                    intent.putExtra(ID,order.getId());
                     intent.putExtra(CODE_KEY, order.getCode());
                     intent.putExtra(CUSTOMERID_KEY, order.getPersonId());
                     intent.putExtra(CUSTOMER_CLIENT_ID_KEY, order.getPersonClientId());

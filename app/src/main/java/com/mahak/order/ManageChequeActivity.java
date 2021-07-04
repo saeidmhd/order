@@ -366,8 +366,6 @@ public class ManageChequeActivity extends BaseActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
-
             }
 
         });

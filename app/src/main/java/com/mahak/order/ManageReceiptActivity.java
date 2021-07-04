@@ -97,7 +97,6 @@ public class ManageReceiptActivity extends BaseActivity {
     private DbAdapter db;
     private long ReceiptId;
     private Receipt receipt;
-    private Order order;
     private Customer customer;
     private double currentVisitorCredit;
     private double mVisitorCredit;
@@ -116,6 +115,8 @@ public class ManageReceiptActivity extends BaseActivity {
     private HostApp hostApp;
     private androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder;
     int printerBrand;
+    Order order;
+    private long OrderId;
 
 
     @Override
@@ -137,39 +138,43 @@ public class ManageReceiptActivity extends BaseActivity {
         mActivity = this;
 
         //hostApp = SDKManager.init(this);
-        hostApp = SDKManager.init(this);
-        switch (hostApp) {
-            case IKC:
-                Toast.makeText(mContext, "IKC", Toast.LENGTH_SHORT).show();
-                break;
-            case SEP:
-                Toast.makeText(mContext, "SEP", Toast.LENGTH_SHORT).show();
-                break;
-            case SEP_IKCC:
-                Toast.makeText(mContext, "SEP_IKCC", Toast.LENGTH_SHORT).show();
-                break;
-            case FANAVA:
-                Toast.makeText(mContext, "FANAVA", Toast.LENGTH_SHORT).show();
-                break;
-            case SAYAN_CARD:
-                Toast.makeText(mContext, "SAYAN_CARD", Toast.LENGTH_SHORT).show();
-                break;
-            case PEC:
-                Toast.makeText(mContext, "PEC", Toast.LENGTH_SHORT).show();
-                break;
-            case NAVACO:
-                Toast.makeText(mContext, "NAVACO", Toast.LENGTH_SHORT).show();
-                break;
-            case SEPEHR:
-                Toast.makeText(mContext, "SEPEHR", Toast.LENGTH_SHORT).show();
-                break;
-            case PEC_MEHRANA:
-                Toast.makeText(mContext, "PEC_MEHRANA", Toast.LENGTH_SHORT).show();
-                break;
-            case UNKNOWN:
-                Toast.makeText(mContext, "UNKNOWN", Toast.LENGTH_SHORT).show();
-                break;
+
+        if(printerBrand == ProjectInfo.PRINTER_SZZT_KS8223){
+            hostApp = SDKManager.init(this);
+            switch (hostApp) {
+                case IKC:
+                    Toast.makeText(mContext, "IKC", Toast.LENGTH_SHORT).show();
+                    break;
+                case SEP:
+                    Toast.makeText(mContext, "SEP", Toast.LENGTH_SHORT).show();
+                    break;
+                case SEP_IKCC:
+                    Toast.makeText(mContext, "SEP_IKCC", Toast.LENGTH_SHORT).show();
+                    break;
+                case FANAVA:
+                    Toast.makeText(mContext, "FANAVA", Toast.LENGTH_SHORT).show();
+                    break;
+                case SAYAN_CARD:
+                    Toast.makeText(mContext, "SAYAN_CARD", Toast.LENGTH_SHORT).show();
+                    break;
+                case PEC:
+                    Toast.makeText(mContext, "PEC", Toast.LENGTH_SHORT).show();
+                    break;
+                case NAVACO:
+                    Toast.makeText(mContext, "NAVACO", Toast.LENGTH_SHORT).show();
+                    break;
+                case SEPEHR:
+                    Toast.makeText(mContext, "SEPEHR", Toast.LENGTH_SHORT).show();
+                    break;
+                case PEC_MEHRANA:
+                    Toast.makeText(mContext, "PEC_MEHRANA", Toast.LENGTH_SHORT).show();
+                    break;
+                case UNKNOWN:
+                    Toast.makeText(mContext, "UNKNOWN", Toast.LENGTH_SHORT).show();
+                    break;
+            }
         }
+
 
         alertDialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(mActivity);
 
@@ -203,7 +208,7 @@ public class ManageReceiptActivity extends BaseActivity {
                 Mode = Extras.getInt(MODE_PAGE);
                 CustomerId = Extras.getInt(CUSTOMERID_KEY);
                 CustomerClientId = Extras.getLong(CUSTOMER_CLIENT_ID_KEY);
-
+                OrderId = Extras.getLong(ID);
                 Code = Extras.getString(CODE_KEY) != null ? Extras.getString(CODE_KEY) : ProjectInfo.DONT_CODE;
                 Payment = Extras.getDouble(PAYMENT_KEY);
 
@@ -758,7 +763,7 @@ public class ManageReceiptActivity extends BaseActivity {
     }
 
     private double CalculatePayment(String code) {
-        Order order = db.GetOrder(code);
+        order = db.GetOrder(code);
         ArrayList<OrderDetail> array;
         double Price = 0, Discount = 0, FinalPrice = 0;
         //calculate FinalPrice________________________________________________________
@@ -849,7 +854,14 @@ public class ManageReceiptActivity extends BaseActivity {
                         intent.putExtra("totalCashAndCheque", totalCashAndCheque());
                         setResult(RESULT_OK, intent);
                         finish();
-                    } else {
+                    } else if (Page == PAGE_ORDER_DETAIL ) {
+                        Intent intent = new Intent(getApplicationContext(), OrderDetailActivity.class);
+                        intent.putExtra(PAGE, PAGE_Invoice_Detail_Activity);
+                        intent.putExtra(ID, OrderId);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    }else {
                         Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
