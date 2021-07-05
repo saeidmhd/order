@@ -18,7 +18,7 @@
         android:paddingBottom="@dimen/NormalSize"
         android:paddingTop="@dimen/NormalSize">
 
-        <com.mahak.order.widget.FontTextView
+        <com.mahak.order.widget.PrintTextView
             android:id="@+id/tvText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

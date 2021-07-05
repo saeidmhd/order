@@ -7,13 +7,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,24 +19,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -64,9 +54,9 @@ import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.SharedPreferencesHelper;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.interfaces.FragmentLifecycle;
-import com.mahak.order.libs.SoftKeyboard;
 import com.mahak.order.scan.SmallCaptureActivity;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.storage.DbSchema;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -78,8 +68,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import io.reactivex.annotations.NonNull;
+
 import static android.app.Activity.RESULT_OK;
 import static com.mahak.order.BaseActivity.CUSTOMERID_KEY;
+import static com.mahak.order.BaseActivity.CUSTOMER_GROUP_KEY;
 import static com.mahak.order.BaseActivity.MODE_EDIT;
 import static com.mahak.order.BaseActivity.MODE_NEW;
 import static com.mahak.order.BaseActivity.MODE_PAGE;
@@ -87,7 +80,6 @@ import static com.mahak.order.BaseActivity.PAGE;
 import static com.mahak.order.BaseActivity.PAGE_ORDERLIST;
 import static com.mahak.order.BaseActivity.RETURN_ASSET_KEY;
 import static com.mahak.order.BaseActivity.TYPE_KEY;
-import static com.mahak.order.BaseActivity.getPrefReduceAsset;
 import static com.mahak.order.InvoiceDetailActivity.CommitPromoCode;
 import static com.mahak.order.InvoiceDetailActivity.CustomerId;
 import static com.mahak.order.InvoiceDetailActivity.Discount;
@@ -102,7 +94,6 @@ import static com.mahak.order.InvoiceDetailActivity.orderPromotionCode;
 import static com.mahak.order.InvoiceDetailActivity.percentDiscount;
 import static com.mahak.order.common.ServiceTools.formatCount;
 import static com.mahak.order.common.ServiceTools.formatPrice;
-import static com.mahak.order.common.ServiceTools.formatPriceWithoutSymbol;
 import static com.mahak.order.common.ServiceTools.getDateForLong;
 
 
@@ -160,6 +151,8 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
     private ListView _lstGroupedTax;
     private int printerBrand;
 
+    private static boolean promotionAvailable = false;
+
     public InvoiceGoodsDetail() {
         // Required empty public constructor
     }
@@ -177,12 +170,9 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         setHasOptionsMenu(true);
         db = new DbAdapter(getActivity());
         db.open();
-        hashMap = db.getMapProductIdBarcode();
-        clearStatics();
-        FillArrayProduct();
-        if ((OrderType == ProjectInfo.TYPE_INVOCIE || OrderType == ProjectInfo.TYPE_Delivery))
-            CalculatePromotion();
-
+        promotionAvailable = isPromotionAvailable();
+        if(hashMap.size() == 0)
+            hashMap = db.getMapProductIdBarcode();
         printerBrand = SharedPreferencesHelper.getPrefPrinterBrand(getActivity());
         if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223)
             SDKManager.init(getActivity());
@@ -195,49 +185,15 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_invoice_goods_detail, container, false);
         LinearLayout linearLayout = (LinearLayout) v.findViewById(R.id.frmLayout);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         initView(v);
-        FillView();
         final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-
-       /* SoftKeyboard softKeyboard;
-        softKeyboard = new SoftKeyboard(linearLayout, imm);*/
-
-       /* softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
-            @Override
-            public void onSoftKeyboardHide() {
-            }
-
-            @Override
-            public void onSoftKeyboardShow() {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                goodsScroll.pageScroll(View.FOCUS_DOWN);
-                                //txtDiscount.requestFocus();
-                            }
-                        }, 500);
-                    }
-                });
-            }
-        });*/
-
-        if (Mode == MODE_EDIT) {
-            FillArrayProduct();
-            CalculationTotal();
-            setCalculateResult();
-        }
-        setPromoDiscountView();
+        refreshCalculation();
 
         if (OrderType == ProjectInfo.TYPE_SEND_TRANSFERENCE || OrderType == ProjectInfo.TYPE_RETURN_OF_SALE) {
 
@@ -349,28 +305,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         return v;
     }
 
-    private void clearStatics() {
-
-        Set mapSet = ProductPickerListActivity.HashMap_Product.entrySet();
-        if (Mode == MODE_NEW) {
-            for (Object aMapSet : mapSet) {
-                Map.Entry mapEntry = (Map.Entry) aMapSet;
-                OrderDetail object = (OrderDetail) mapEntry.getValue();
-                object.setGiftCount1(0);
-                object.setGiftCount2(0);
-            }// End of While
-        }
-        CommitPromoCode.clear();
-        if (promoDiscount != 0 || promoPercentDiscount != 0) {
-            percentDiscount = 0;
-            Discount = 0;
-            promoDiscount = 0;
-            promoPercentDiscount = 0;
-        }
-    }
-
-
-
     private void showCountPriceDialog(int position, double price, double count, double PackageCount, int productId, String description, int mode, long orderId) {
         Intent intent = new Intent(getActivity(), PriceCountSelectActivity.class);
         intent.putExtra("position", position);
@@ -408,7 +342,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                 intent.putExtra(TYPE_KEY, OrderType);
                 intent.putExtra(PAGE, PAGE_ORDERLIST);
                 intent.putExtra(CUSTOMERID_KEY, CustomerId);
-                intent.putExtra("GroupId", GroupId);
+                intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                 intent.putExtra(MODE_PAGE, Mode);
                 intent.putExtra("OrderId", InvoiceDetailActivity.OrderId);
                 intent.putExtra(RETURN_ASSET_KEY, true);
@@ -452,12 +386,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_PRODUCT_LIST:
-                    clearStatics();
-                    FillArrayProduct();
-                    FillView();
-                    if ((OrderType == ProjectInfo.TYPE_INVOCIE || OrderType == ProjectInfo.TYPE_Delivery))
-                        CalculatePromotion();
-                    setPromoDiscountView();
+                    refreshCalculation();
                     break;
                 case REQUEST_FOR_ACTIVITY_CODE:
                     double count = data.getDoubleExtra("count", 0);
@@ -546,7 +475,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                 }
                 object.setProductDetailId(productDetail.getProductDetailId());
                 object.setProductId(product.getProductId());
-                //object.setProductMasterId(product.getProductCode());
                 object.setProductName(product.getName());
                 object.setPrice(String.valueOf(price));
                 object.setMin((int) product.getMin());
@@ -575,47 +503,30 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             }//End of if
 
         }else {
-            //Set Item////////////////////////////////////////////////////////////////
-            InvoiceDetailActivity.orderDetails.get(position).setDiscount(ServiceTools.toFloat(discount));
-            InvoiceDetailActivity.orderDetails.get(position).setCount1(count);
-            InvoiceDetailActivity.orderDetails.get(position).setCount2(count2);
-            InvoiceDetailActivity.orderDetails.get(position).setSumCountBaJoz(sumCountBaJoz);
-            InvoiceDetailActivity.orderDetails.get(position).setDescription(description);
-            InvoiceDetailActivity.orderDetails.get(position).setDiscountType(discountType);
-            InvoiceDetailActivity.orderDetails.get(position).setPrice(String.valueOf(price));
-            InvoiceDetailActivity.orderDetails.get(position).setTaxPercent(InvoiceDetailActivity.orderDetails.get(position).getTaxPercent());
-            InvoiceDetailActivity.orderDetails.get(position).setChargePercent(InvoiceDetailActivity.orderDetails.get(position).getChargePercent());
-            double finalPrice = ServiceTools.getCalculateFinalPrice(InvoiceDetailActivity.orderDetails.get(position), getActivity());
-            InvoiceDetailActivity.orderDetails.get(position).setFinalPrice(String.valueOf(finalPrice));
-            InvoiceDetailActivity.orderDetails.get(position).setCostLevel(spnPriceLevel);
-            //Fill HashMap_Product////////////////////////////////////////////////////////
-            Set mapSet = ProductPickerListActivity.HashMap_Product.entrySet();
-            for (Object aMapSet : mapSet) {
-                Map.Entry mapEntry = (Map.Entry) aMapSet;
-                int keyValue = (int) mapEntry.getKey();
-                if (InvoiceDetailActivity.orderDetails.get(position).getProductId() == keyValue) {
-                    OrderDetail object = (OrderDetail) mapEntry.getValue();
-                    object.setDescription(InvoiceDetailActivity.orderDetails.get(position).getDescription());
-                    object.setTaxPercent(InvoiceDetailActivity.orderDetails.get(position).getTaxPercent());
-                    object.setChargePercent(InvoiceDetailActivity.orderDetails.get(position).getChargePercent());
-                    object.setDiscount(InvoiceDetailActivity.orderDetails.get(position).getDiscount());
-                    object.setFixedOff(InvoiceDetailActivity.orderDetails.get(position).getFixedOff());
-                    ProductPickerListActivity.HashMap_Product.put(object.getProductId(), object);
-                    break;
-                }// End of if
-            }// End of While
-        }
-
-        //Refresh Adapter And Calculate Total///////////////////////////////////////
-
-        if ((OrderType == ProjectInfo.TYPE_INVOCIE || OrderType == ProjectInfo.TYPE_Delivery)) {
-            if(InvoiceDetailActivity.orderDetails.size()>0){
-                ClearZero(InvoiceDetailActivity.orderDetails.get(position));
-                clearStatics();
-                CalculatePromotion();
+            OrderDetail orderDetail = InvoiceDetailActivity.orderDetails.get(position);
+            if (count == 0 && count2 == 0 && sumCountBaJoz == 0) {
+                ProductPickerListActivity.HashMap_Product.remove(orderDetail.getProductId());
+                ProductPickerListActivity.Product_Delete.add(orderDetail);
+                InvoiceDetailActivity.orderDetails.remove(orderDetail);
+            }else {
+                orderDetail.setDiscount(ServiceTools.toFloat(discount));
+                orderDetail.setCount1(count);
+                orderDetail.setCount2(count2);
+                orderDetail.setSumCountBaJoz(sumCountBaJoz);
+                orderDetail.setDescription(description);
+                orderDetail.setDiscountType(discountType);
+                orderDetail.setPrice(String.valueOf(price));
+                orderDetail.setTaxPercent(orderDetail.getTaxPercent());
+                orderDetail.setChargePercent(orderDetail.getChargePercent());
+                double finalPrice = ServiceTools.getCalculateFinalPrice(orderDetail, getActivity());
+                orderDetail.setFinalPrice(String.valueOf(finalPrice));
+                orderDetail.setCostLevel(spnPriceLevel);
+                //Fill HashMap_Product////////////////////////////////////////////////////////
+                ProductPickerListActivity.HashMap_Product.remove(orderDetail.getProductId());
+                ProductPickerListActivity.HashMap_Product.put(orderDetail.getProductId(), orderDetail);
             }
         }
-        setPromoDiscountView();
+        refreshCalculation();
         adListProduct.notifyDataSetChanged();
         lstCart.setAdapter(adListProduct);
         ServiceTools.setListViewHeightBasedOnChildren(lstCart);
@@ -628,34 +539,18 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         super.setUserVisibleHint(isVisibleToUser);
         if (this.isVisible()) {
             if (isVisibleToUser) {
-                if (OrderType == ProjectInfo.TYPE_ORDER && InvoiceDetailActivity.orderDetails.size() > 0) {
-                    clearStatics();
-                    ClearAllGift();
-                    setPromoDiscountView();
-                    adListProduct.notifyDataSetChanged();
-                } else if ((OrderType == ProjectInfo.TYPE_INVOCIE || OrderType == ProjectInfo.TYPE_Delivery) && InvoiceDetailActivity.orderDetails.size() > 0) {
-                    clearStatics();
-                    ClearAllGift();
-                    CalculatePromotion();
-                    setPromoDiscountView();
-                    adListProduct.notifyDataSetChanged();
-                }
+                refreshCalculation();
             }
         }
     }
 
-    private void FillArrayProduct() {
-
-        InvoiceDetailActivity.orderDetails = new ArrayList<>();
-        Set mapSet = ProductPickerListActivity.HashMap_Product.entrySet();
-        for (Object aMapSet : mapSet) {
-            Map.Entry mapEntry = (Map.Entry) aMapSet;
-            OrderDetail object = (OrderDetail) mapEntry.getValue();
-            object.setDiscount(object.getDiscount());
-            object.setFixedOff(String.valueOf(object.getFixedOff()));
-            object.setCostLevel(object.getCostLevel());
-            InvoiceDetailActivity.orderDetails.add(object);
-        }// End of While
+    private void refreshCalculation() {
+        CalculationTotal();
+        setCalculateResult();
+        FillView();
+        if(promotionAvailable){
+            CalculatePromotion();
+        }
     }
 
     public class AdapterGroupedTaxForPrint extends ArrayAdapter<GroupedTax> {
@@ -705,7 +600,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         }
 
     }// End of AdapterListProduct
-
 
     class AdapterListProduct extends ArrayAdapter<OrderDetail> {
         private final Activity mcontext;
@@ -758,35 +652,14 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                             OrderDetail obj = (OrderDetail) v.getTag();
                             if (InvoiceDetailActivity.orderDetails.size() == 1)
                                 InvoiceDetailActivity.orderDetails.clear();
-                            else
+                            else{
+                                ProductPickerListActivity.HashMap_Product.remove(InvoiceDetailActivity.orderDetails.get(position).getProductId());
                                 InvoiceDetailActivity.orderDetails.remove(position);
-                            Set mapSet = ProductPickerListActivity.HashMap_Product.entrySet();
-                            Iterator mapIterator = mapSet.iterator();
-                            while (mapIterator.hasNext()) {
-                                Map.Entry mapEntry = (Map.Entry) mapIterator.next();
-                                int keyValue = (int) mapEntry.getKey();
-                                if (obj.getProductId() == keyValue)
-                                    mapIterator.remove();
-                            }// End of While
-                            //Calculate Count and Final Price And Refresh Adapter////////////////////////
-                            ClearAllGift();
-                            if ((OrderType == ProjectInfo.TYPE_INVOCIE || OrderType == ProjectInfo.TYPE_Delivery)) {
-                                clearStatics();
-                                CalculatePromotion();
                             }
-                            setPromoDiscountView();
-                            /*adListProduct.notifyDataSetChanged();
-                            lstCart.setAdapter(adListProduct);
-                            ServiceTools.setListViewHeightBasedOnChildren(lstCart);*/
-
+                            refreshCalculation();
                             adListProduct = new AdapterListProduct(getActivity(), InvoiceDetailActivity.orderDetails);
                             lstCart.setAdapter(adListProduct);
                             ServiceTools.setListViewHeightBasedOnChildren(lstCart);
-
-                            /*db.open();
-                            ProductDetail productDetail = db.getProductDetail(obj.getProductDetailId());
-                            productDetail.setCount1(obj.getMax());
-                            db.UpdateProductDetail(productDetail);*/
 
                             /////////////////////////////////////////////////////////
                             ProductPickerListActivity.Product_Delete.add(obj);
@@ -913,17 +786,13 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         adListProduct = new AdapterListProduct(getActivity(), InvoiceDetailActivity.orderDetails);
         lstCart.setAdapter(adListProduct);
         ServiceTools.setListViewHeightBasedOnChildren(lstCart);
-        calculateGroupedtax();
+        calculateGroupedTax();
     }
 
-    private void calculateGroupedtax() {
-        if (SharedPreferencesHelper.getCurrentLanguage(getActivity()).equals("en"))
-            _lstGroupedTax.setVisibility(View.GONE);
-        else if (SharedPreferencesHelper.getCurrentLanguage(getActivity()).equals("de_DE")) {
-            // db.open();
-
+    private void calculateGroupedTax() {
+       if (SharedPreferencesHelper.getCurrentLanguage(getActivity()).equals("de_DE")) {
+           _lstGroupedTax.setVisibility(View.VISIBLE);
             ArrayList<GroupedTax> groupedTaxes = new ArrayList<>();
-
             HashMap<Double, List<OrderDetail>> hashMap = new HashMap<>();
             for (OrderDetail orderDetail : orderDetails) {
                 if (!hashMap.containsKey(orderDetail.getTaxPercent())) {
@@ -996,7 +865,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
     @SuppressWarnings("rawtypes")
     private void CalculationTotal() {
         db.open();
-        Product product;
+       // Product product;
         double finalDiscount = 0;
         totalTaxAndCharge = 0;
         double Price, Final, Tax, Charge;
@@ -1013,35 +882,34 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         TotalCountWithoutGift = 0;
         TotalWeightWithoutGift = 0;
         TotalPrice = 0;
-        while (mapIterator.hasNext()) {
-            Map.Entry mapEntry = (Map.Entry) mapIterator.next();
-            int keyValue = (int) mapEntry.getKey();
-            OrderDetail orderDetail = (OrderDetail) mapEntry.getValue();
-            if (keyValue == orderDetail.getProductId()) {
-                product = db.GetProductWithProductId(orderDetail.getProductId());
-                Price = orderDetail.getPrice();
-                Final = (Price * orderDetail.getSumCountBaJoz());
-                offValue = orderDetail.getDiscount();
-                TaxPercent = orderDetail.getTaxPercent();
-                ChargePercent = orderDetail.getChargePercent();
-                off = (offValue * 1);
-                Final = Final - off;
 
-                Tax = ((Final * TaxPercent) / 100);
-                Charge = ((Final * ChargePercent) / 100);
-                double TaxAndCharge = Tax + Charge;
+        ArrayList<OrderDetail> orderDetails = InvoiceDetailActivity.orderDetails;
 
-                TotalPrice += Price * orderDetail.getSumCountBaJoz();
-                TotalWeightWithoutGift += product.getWeight() * orderDetail.getSumCountBaJoz();
-                TotalOff += off;
-                totalTaxAndCharge += TaxAndCharge;
-                TotalCount += orderDetail.getSumCountBaJoz() + ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), getActivity());
-                TotalCountWithoutGift += orderDetail.getSumCountBaJoz();
-            }
+        for (OrderDetail orderDetail : orderDetails){
+            Price = orderDetail.getPrice();
+            Final = (Price * orderDetail.getSumCountBaJoz());
+            offValue = orderDetail.getDiscount();
+            TaxPercent = orderDetail.getTaxPercent();
+            ChargePercent = orderDetail.getChargePercent();
+            off = (offValue * 1);
+            Final = Final - off;
+
+            Tax = ((Final * TaxPercent) / 100);
+            Charge = ((Final * ChargePercent) / 100);
+            double TaxAndCharge = Tax + Charge;
+
+            TotalPrice += Price * orderDetail.getSumCountBaJoz();
+            //TotalWeightWithoutGift += product.getWeight() * orderDetail.getSumCountBaJoz();
+            TotalOff += off;
+            totalTaxAndCharge += TaxAndCharge;
+            TotalCount += orderDetail.getSumCountBaJoz() + ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), getActivity());
+            TotalCountWithoutGift += orderDetail.getSumCountBaJoz();
+
             if (OrderType != ProjectInfo.TYPE_RETURN_OF_SALE) {
                 FinalPrice = (TotalPrice - TotalOff) + (totalTaxAndCharge);
             }
-        }// End of While
+
+        }
         if (OrderType != ProjectInfo.TYPE_RETURN_OF_SALE) {
             if (Discount > 0) {
                 if (Discount > FinalPrice && FinalPrice != 0) {
@@ -1103,21 +971,12 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         return 0;
     }
 
-    public void CalculatePromotion() {
-
-        CommitPromoCode.clear();
-        CalculationTotal();
-        mPromoObject = new OrderDetail();
-        ArrayList<OrderDetail> orderDetails = new ArrayList<>();
-        if (ProductPickerListActivity.HashMap_Product.size() != 0) {
-            Set mapSet = ProductPickerListActivity.HashMap_Product.entrySet();
-            for (Object aMapSet : mapSet) {
-                Map.Entry mapEntry = (Map.Entry) aMapSet;
-                OrderDetail object = (OrderDetail) mapEntry.getValue();
-                orderDetails.add(object);
-            }// End of While
-            validPromotionList(orderDetails);
-        }
+    private boolean isPromotionAvailable(){
+        if (db == null) db = new DbAdapter(getActivity());
+        db.open();
+        String invoiceDate = getDateForLong(new Date().getTime());
+        ArrayList<Promotion> promotions = db.getValidPromotions(invoiceDate);
+        return promotions.size() > 0;
     }
 
     public void validPromotionList(ArrayList<OrderDetail> orderDetails) {
@@ -1145,69 +1004,53 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         db.open();
         Customer customer = db.getCustomerWithPersonId(CustomerId);
         promotions = promotionCanBeApplied(InvoiceDate, customer);
-        if (promotions != null) {
-            if (promotions.size() > 0) {
-                for (Promotion promotion : promotions) {
-                    if (promotion.getTypeTasvieh() == 0 || (promotion.getTypeTasvieh() != 0 && promotion.getTypeTasvieh() == SettlementType + 1)) {
-                        switch (promotion.getAccordingTo()) {
-                            case Promotion.Mablaghe_kole_Faktor:
-                                double final_price = (TotalPrice - TotalOff) + (totalTaxAndCharge);
-                                arrayPromotionDetail = db.getPromotionDetails(promotion.getPromotionCode(), final_price);
-                                if (arrayPromotionDetail.size() > 0) {
-                                    switch (arrayPromotionDetail.get(0).getHowToPromotion()) {
-                                        case Promotion.takhfif_mablaghe_sabet:
-                                            if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
-                                                zarib = roundDoubleToInt(final_price / arrayPromotionDetail.get(0).getToPayment());
-                                            fixedDiscount = zarib * arrayPromotionDetail.get(0).getMeghdarPromotion();
+        if (promotions.size() > 0) {
+            for (Promotion promotion : promotions) {
+                if (promotion.getTypeTasvieh() == 0 || (promotion.getTypeTasvieh() != 0 && promotion.getTypeTasvieh() == SettlementType + 1)) {
+                    switch (promotion.getAccordingTo()) {
+                        case Promotion.Mablaghe_kole_Faktor:
+                            double final_price = (TotalPrice - TotalOff) + (totalTaxAndCharge);
+                            arrayPromotionDetail = db.getPromotionDetails(promotion.getPromotionCode(), final_price);
+                            if (arrayPromotionDetail.size() > 0) {
+                                switch (arrayPromotionDetail.get(0).getHowToPromotion()) {
+                                    case Promotion.takhfif_mablaghe_sabet:
+                                        if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
+                                            zarib = roundDoubleToInt(final_price / arrayPromotionDetail.get(0).getToPayment());
+                                        fixedDiscount = zarib * arrayPromotionDetail.get(0).getMeghdarPromotion();
+                                        howToPromotion = 3;
+                                        mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                        CommitPromoCode.add(mPromoCode);
+                                        wholeFactorFixedDiscount(fixedDiscount, mPromoCode);
+                                        break;
+                                    case Promotion.takhfif_darsadi:
+                                        if (promotion.getIsCalcLinear() == 1)
+                                            percentDiscount = arrayPromotionDetail.get(0).getMeghdarPromotion();
+                                        else {
+                                            double mStairOff = calculateStairOff(arrayPromotionDetail, (final_price));
+                                            percentDiscount = ((mStairOff * 100) / (final_price));
+                                        }
+                                        howToPromotion = 3;
+                                        mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                        CommitPromoCode.add(mPromoCode);
+                                        wholeFactorPercentDiscount(percentDiscount, mPromoCode);
+                                        break;
+                                    case Promotion.takhfif_Az_Sotooh:
+                                        for (OrderDetail orderDetail : orderDetails) {
+                                            productDetail = db.getProductDetail(orderDetail.getProductDetailId());
+                                            product = db.GetProductWithProductId(productDetail.getProductId());
+                                            offPercent = getDiscountFromDiscountLevel(arrayPromotionDetail.get(0).getMeghdarPromotion(), productDetail);
                                             howToPromotion = 3;
                                             mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                             CommitPromoCode.add(mPromoCode);
-                                            wholeFactorFixedDiscount(fixedDiscount, mPromoCode);
-                                            break;
-                                        case Promotion.takhfif_darsadi:
-                                            if (promotion.getIsCalcLinear() == 1)
-                                                percentDiscount = arrayPromotionDetail.get(0).getMeghdarPromotion();
-                                            else {
-                                                double mStairOff = calculateStairOff(arrayPromotionDetail, (final_price));
-                                                percentDiscount = ((mStairOff * 100) / (final_price));
-                                            }
-                                            howToPromotion = 3;
-                                            mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                            CommitPromoCode.add(mPromoCode);
-                                            wholeFactorPercentDiscount(percentDiscount, mPromoCode);
-                                            break;
-                                        case Promotion.takhfif_Az_Sotooh:
-                                            for (OrderDetail orderDetail : orderDetails) {
-                                                productDetail = db.getProductDetail(orderDetail.getProductDetailId());
-                                                product = db.GetProductWithProductId(productDetail.getProductId());
-                                                offPercent = getDiscountFromDiscountLevel(arrayPromotionDetail.get(0).getMeghdarPromotion(), productDetail);
-                                                howToPromotion = 3;
-                                                mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                CommitPromoCode.add(mPromoCode);
-                                                rowPercentOff(offPercent, mPromoCode, product);
-                                            }
-                                            break;
-                                        case Promotion.eshantion_Az_hamanKala:
-                                            //gift az haman kala agar be andaze gift kala mojood bashad.
-                                            for (OrderDetail orderDetail : orderDetails) {
-                                                productDetail = db.getProductDetail(orderDetail.getProductDetailId());
-                                                product = db.GetProductWithProductId(productDetail.getProductId());
-                                                KalaCode = (int) (product.getProductCode());
-                                                if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
-                                                    zarib = (int) (final_price / arrayPromotionDetail.get(0).getToPayment());
-                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
-                                                mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                howToPromotion = 2;
-                                                CommitPromoCode.add(mPromoCode);
-                                                giftFromSameProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
-                                            }
-                                            break;
-                                        case Promotion.eshantion_Az_kalahaye_digar:
-                                            //gift az kalaye digar.
-                                            KalaCode = (arrayPromotionDetail.get(0).getCodeGood());
-                                            Product product1 = db.getProductWithProductCode(KalaCode);
-                                            productDetail = db.getProductDetailWithProductId(product1.getProductId());
+                                            rowPercentOff(offPercent, mPromoCode, product);
+                                        }
+                                        break;
+                                    case Promotion.eshantion_Az_hamanKala:
+                                        //gift az haman kala agar be andaze gift kala mojood bashad.
+                                        for (OrderDetail orderDetail : orderDetails) {
+                                            productDetail = db.getProductDetail(orderDetail.getProductDetailId());
+                                            product = db.GetProductWithProductId(productDetail.getProductId());
+                                            KalaCode = (int) (product.getProductCode());
                                             if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
                                                 zarib = (int) (final_price / arrayPromotionDetail.get(0).getToPayment());
                                             mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
@@ -1215,69 +1058,69 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                             mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                             howToPromotion = 2;
                                             CommitPromoCode.add(mPromoCode);
-                                            giftFromAnotherProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
-                                            break;
-                                    }
+                                            giftFromSameProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                        }
+                                        break;
+                                    case Promotion.eshantion_Az_kalahaye_digar:
+                                        //gift az kalaye digar.
+                                        KalaCode = (arrayPromotionDetail.get(0).getCodeGood());
+                                        Product product1 = db.getProductWithProductCode(KalaCode);
+                                        productDetail = db.getProductDetailWithProductId(product1.getProductId());
+                                        if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
+                                            zarib = (int) (final_price / arrayPromotionDetail.get(0).getToPayment());
+                                        mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                        mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                        mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                        howToPromotion = 2;
+                                        CommitPromoCode.add(mPromoCode);
+                                        giftFromAnotherProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                        break;
                                 }
-                                break;
+                            }
+                            break;
 
-                            case Promotion.Jame_Aghlame_Faktor:
-                                arrayPromotionDetail = db.getPromotionDetails(promotion.getPromotionCode(), TotalCountWithoutGift);
-                                if (arrayPromotionDetail.size() > 0) {
-                                    switch (arrayPromotionDetail.get(0).getHowToPromotion()) {
-                                        case Promotion.takhfif_mablaghe_sabet:
-                                            if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
-                                                zarib = roundDoubleToInt(TotalCountWithoutGift / arrayPromotionDetail.get(0).getToPayment());
-                                            fixedDiscount = zarib * arrayPromotionDetail.get(0).getMeghdarPromotion();
+                        case Promotion.Jame_Aghlame_Faktor:
+                            arrayPromotionDetail = db.getPromotionDetails(promotion.getPromotionCode(), TotalCountWithoutGift);
+                            if (arrayPromotionDetail.size() > 0) {
+                                switch (arrayPromotionDetail.get(0).getHowToPromotion()) {
+                                    case Promotion.takhfif_mablaghe_sabet:
+                                        if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
+                                            zarib = roundDoubleToInt(TotalCountWithoutGift / arrayPromotionDetail.get(0).getToPayment());
+                                        fixedDiscount = zarib * arrayPromotionDetail.get(0).getMeghdarPromotion();
+                                        howToPromotion = 3;
+                                        mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                        CommitPromoCode.add(mPromoCode);
+                                        wholeFactorFixedDiscount(fixedDiscount, mPromoCode);
+                                        break;
+                                    case Promotion.takhfif_darsadi:
+                                        if (promotion.getIsCalcLinear() == 1)
+                                            percentDiscount = arrayPromotionDetail.get(0).getMeghdarPromotion();
+                                        else {
+                                            double mStairOff = calculateStairOff(arrayPromotionDetail, TotalCountWithoutGift);
+                                            percentDiscount = ((mStairOff * 100) / TotalCountWithoutGift);
+                                        }
+                                        howToPromotion = 3;
+                                        mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                        CommitPromoCode.add(mPromoCode);
+                                        wholeFactorPercentDiscount(percentDiscount, mPromoCode);
+                                        break;
+                                    case Promotion.takhfif_Az_Sotooh:
+                                        for (OrderDetail orderDetail : orderDetails) {
+                                            productDetail = db.getProductDetail(orderDetail.getProductDetailId());
+                                            product = db.GetProductWithProductId(productDetail.getProductId());
+                                            offPercent = getDiscountFromDiscountLevel(arrayPromotionDetail.get(0).getMeghdarPromotion(), productDetail);
                                             howToPromotion = 3;
                                             mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                             CommitPromoCode.add(mPromoCode);
-                                            wholeFactorFixedDiscount(fixedDiscount, mPromoCode);
-                                            break;
-                                        case Promotion.takhfif_darsadi:
-                                            if (promotion.getIsCalcLinear() == 1)
-                                                percentDiscount = arrayPromotionDetail.get(0).getMeghdarPromotion();
-                                            else {
-                                                double mStairOff = calculateStairOff(arrayPromotionDetail, TotalCountWithoutGift);
-                                                percentDiscount = ((mStairOff * 100) / TotalCountWithoutGift);
-                                            }
-                                            howToPromotion = 3;
-                                            mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                            CommitPromoCode.add(mPromoCode);
-                                            wholeFactorPercentDiscount(percentDiscount, mPromoCode);
-                                            break;
-                                        case Promotion.takhfif_Az_Sotooh:
-                                            for (OrderDetail orderDetail : orderDetails) {
-                                                productDetail = db.getProductDetail(orderDetail.getProductDetailId());
-                                                product = db.GetProductWithProductId(productDetail.getProductId());
-                                                offPercent = getDiscountFromDiscountLevel(arrayPromotionDetail.get(0).getMeghdarPromotion(), productDetail);
-                                                howToPromotion = 3;
-                                                mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                CommitPromoCode.add(mPromoCode);
-                                                rowPercentOff(offPercent, mPromoCode, product);
-                                            }
-                                            break;
-                                        case Promotion.eshantion_Az_hamanKala:
-                                            //gift az haman kala agar be andaze gift kala mojood bashad.
-                                            for (OrderDetail orderDetail : orderDetails) {
-                                                productDetail = db.getProductDetail(orderDetail.getProductDetailId());
-                                                product = db.GetProductWithProductId(productDetail.getProductId());
-                                                KalaCode = (int) (product.getProductCode());
-                                                if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
-                                                    zarib = (int) (TotalCountWithoutGift / arrayPromotionDetail.get(0).getToPayment());
-                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
-                                                mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                howToPromotion = 2;
-                                                CommitPromoCode.add(mPromoCode);
-                                                giftFromSameProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
-                                            }
-                                            break;
-                                        case Promotion.eshantion_Az_kalahaye_digar:
-                                            //gift az kalaye digar.
-                                            KalaCode = (arrayPromotionDetail.get(0).getCodeGood());
-                                            Product product1 = db.getProductWithProductCode(KalaCode);
-                                            productDetail = db.getProductDetailWithProductId(product1.getProductId());
+                                            rowPercentOff(offPercent, mPromoCode, product);
+                                        }
+                                        break;
+                                    case Promotion.eshantion_Az_hamanKala:
+                                        //gift az haman kala agar be andaze gift kala mojood bashad.
+                                        for (OrderDetail orderDetail : orderDetails) {
+                                            productDetail = db.getProductDetail(orderDetail.getProductDetailId());
+                                            product = db.GetProductWithProductId(productDetail.getProductId());
+                                            KalaCode = (int) (product.getProductCode());
                                             if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
                                                 zarib = (int) (TotalCountWithoutGift / arrayPromotionDetail.get(0).getToPayment());
                                             mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
@@ -1285,292 +1128,306 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                             mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                             howToPromotion = 2;
                                             CommitPromoCode.add(mPromoCode);
-                                            giftFromAnotherProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
-                                            break;
-                                    }
-                                }
-                                break;
-
-                            case Promotion.Jame_Vazne_Faktor:
-                                arrayPromotionDetail = db.getPromotionDetails(promotion.getPromotionCode(), TotalWeightWithoutGift);
-                                if (arrayPromotionDetail.size() > 0) {
-                                    switch (arrayPromotionDetail.get(0).getHowToPromotion()) {
-                                        case Promotion.takhfif_mablaghe_sabet:
-                                            if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
-                                                zarib = roundDoubleToInt(TotalWeightWithoutGift / arrayPromotionDetail.get(0).getToPayment());
-                                            fixedDiscount = zarib * arrayPromotionDetail.get(0).getMeghdarPromotion();
-                                            mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                            howToPromotion = 3;
-                                            CommitPromoCode.add(mPromoCode);
-                                            wholeFactorFixedDiscount(fixedDiscount, mPromoCode);
-                                            break;
-                                        case Promotion.takhfif_darsadi:
-                                            if (promotion.getIsCalcLinear() == 1)
-                                                percentDiscount = arrayPromotionDetail.get(0).getMeghdarPromotion();
-                                            else {
-                                                double mStairOff = calculateStairOff(arrayPromotionDetail, TotalWeightWithoutGift);
-                                                percentDiscount = ((mStairOff * 100) / TotalWeightWithoutGift);
-                                            }
-                                            mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                            howToPromotion = 3;
-                                            CommitPromoCode.add(mPromoCode);
-                                            wholeFactorPercentDiscount(percentDiscount, mPromoCode);
-                                            break;
-                                        case Promotion.takhfif_Az_Sotooh:
-                                            for (OrderDetail orderDetail : orderDetails) {
-                                                productDetail = db.getProductDetail(orderDetail.getProductDetailId());
-                                                product = db.GetProductWithProductId(productDetail.getProductId());
-                                                offPercent = getDiscountFromDiscountLevel(arrayPromotionDetail.get(0).getMeghdarPromotion(), productDetail);
-                                                mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                howToPromotion = 3;
-                                                CommitPromoCode.add(mPromoCode);
-                                                rowPercentOff(offPercent, mPromoCode, product);
-                                            }
-
-                                            break;
-                                        case Promotion.eshantion_Az_hamanKala:
-                                            //gift az haman kala agar be andaze gift kala mojood bashad.
-
-                                            for (OrderDetail orderDetail : orderDetails) {
-                                                productDetail = db.getProductDetail(orderDetail.getProductDetailId());
-                                                product = db.GetProductWithProductId(productDetail.getProductId());
-                                                KalaCode = (int) (product.getProductCode());
-                                                if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
-                                                    zarib = roundDoubleToInt(TotalWeightWithoutGift / arrayPromotionDetail.get(0).getToPayment());
-                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
-                                                mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                howToPromotion = 2;
-                                                CommitPromoCode.add(mPromoCode);
-                                                giftFromSameProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
-                                            }
-                                            break;
-                                        case Promotion.eshantion_Az_kalahaye_digar:
-                                            //gift az kalaye digar.
-                                            KalaCode = (arrayPromotionDetail.get(0).getCodeGood());
-                                            Product product1 = db.getProductWithProductCode(KalaCode);
-                                            productDetail = db.getProductDetailWithProductId(product1.getProductId());
-                                            if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
-                                                zarib = roundDoubleToInt(TotalWeightWithoutGift / arrayPromotionDetail.get(0).getToPayment());
-                                            mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                            mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
-                                            mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                            howToPromotion = 2;
-                                            CommitPromoCode.add(mPromoCode);
-                                            giftFromAnotherProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
-                                            break;
-                                    }
-                                }
-                                break;
-
-                            case Promotion.Jame_anvae_Aghlame_faktor:
-                                for (OrderDetail orderDetail : orderDetails) {
-                                    jameTedadAghlam++;
-                                }
-                                arrayPromotionDetail = db.getPromotionDetails(promotion.getPromotionCode(), jameTedadAghlam);
-                                if (arrayPromotionDetail.size() > 0) {
-                                    switch (arrayPromotionDetail.get(0).getHowToPromotion()) {
-                                        case Promotion.takhfif_mablaghe_sabet:
-                                            if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
-                                                zarib = roundDoubleToInt(jameTedadAghlam / arrayPromotionDetail.get(0).getToPayment());
-                                            fixedDiscount = zarib * arrayPromotionDetail.get(0).getMeghdarPromotion();
-                                            howToPromotion = 3;
-                                            mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                            CommitPromoCode.add(mPromoCode);
-                                            wholeFactorFixedDiscount(fixedDiscount, mPromoCode);
-                                            break;
-                                        case Promotion.takhfif_darsadi:
-                                            if (promotion.getIsCalcLinear() == 1)
-                                                percentDiscount = arrayPromotionDetail.get(0).getMeghdarPromotion();
-                                            else {
-                                                double mStairOff = calculateStairOff(arrayPromotionDetail, jameTedadAghlam);
-                                                percentDiscount = ((mStairOff * 100) / jameTedadAghlam);
-                                            }
-                                            howToPromotion = 3;
-                                            mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                            CommitPromoCode.add(mPromoCode);
-                                            wholeFactorPercentDiscount(percentDiscount, mPromoCode);
-                                            break;
-                                        case Promotion.takhfif_Az_Sotooh:
-                                            for (OrderDetail orderDetail : orderDetails) {
-                                                productDetail = db.getProductDetail(orderDetail.getProductDetailId());
-                                                product = db.GetProductWithProductId(productDetail.getProductId());
-                                                offPercent = getDiscountFromDiscountLevel(arrayPromotionDetail.get(0).getMeghdarPromotion(), productDetail);
-                                                howToPromotion = 3;
-                                                mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                CommitPromoCode.add(mPromoCode);
-                                                rowPercentOff(offPercent, mPromoCode, product);
-                                            }
-                                            break;
-                                        case Promotion.eshantion_Az_hamanKala:
-                                            //gift az haman kala agar be andaze gift kala mojood bashad.
-                                            for (OrderDetail orderDetail : orderDetails) {
-                                                productDetail = db.getProductDetail(orderDetail.getProductDetailId());
-                                                product = db.GetProductWithProductId(productDetail.getProductId());
-                                                KalaCode = (int) (product.getProductCode());
-                                                if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
-                                                    zarib = roundDoubleToInt(jameTedadAghlam / arrayPromotionDetail.get(0).getToPayment());
-                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
-                                                mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                howToPromotion = 2;
-                                                CommitPromoCode.add(mPromoCode);
-                                                giftFromSameProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
-                                            }
-                                            break;
-                                        case Promotion.eshantion_Az_kalahaye_digar:
-                                            //gift az kalaye digar.
-                                            KalaCode = (arrayPromotionDetail.get(0).getCodeGood());
-                                            Product product1 = db.getProductWithProductCode(KalaCode);
-                                            productDetail = db.getProductDetailWithProductId(product1.getProductId());
-                                            if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
-                                                zarib = roundDoubleToInt(jameTedadAghlam / arrayPromotionDetail.get(0).getToPayment());
-                                            mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                            mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
-                                            mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                            howToPromotion = 2;
-                                            CommitPromoCode.add(mPromoCode);
-                                            giftFromAnotherProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
-                                            break;
-                                    }
-                                }
-                                break;
-
-                            case Promotion.Mablaghe_Satr:
-                                //mablaghe satr
-                                for (OrderDetail orderDetail : orderDetails) {
-                                    productDetail = db.getProductDetail(orderDetail.getProductDetailId());
-                                    product = db.GetProductWithProductId(productDetail.getProductId());
-                                    if (promotion.getIsAllGood() == 1 || db.isInEntity(product.getProductCode(), promotion.getPromotionId(), Promotion.EntityGoods) || db.isInEntity(product.getProductCategoryId(), promotion.getPromotionId(), Promotion.EntityGroupGoods)) {
-                                        double totalPrice = (orderDetail.getPrice()) * orderDetail.getSumCountBaJoz();
-                                        arrayPromotionDetail = db.getPromotionDetails(promotion.getPromotionCode(), totalPrice);
-                                        if (arrayPromotionDetail.size() > 0) {
-                                            switch (arrayPromotionDetail.get(0).getHowToPromotion()) {
-                                                case Promotion.takhfif_mablaghe_sabet:
-                                                    if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
-                                                        zarib = roundDoubleToInt(totalPrice / arrayPromotionDetail.get(0).getToPayment());
-                                                    fixedOff = zarib * arrayPromotionDetail.get(0).getMeghdarPromotion();
-                                                    howToPromotion = 3;
-                                                    mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                    CommitPromoCode.add(mPromoCode);
-                                                    rowFixedOff(fixedOff, mPromoCode, product);
-                                                    break;
-                                                case Promotion.takhfif_darsadi:
-                                                    if (promotion.getIsCalcLinear() == 1)
-                                                        offPercent = arrayPromotionDetail.get(0).getMeghdarPromotion();
-                                                    else {
-                                                        float mStairOff = calculateStairOff(arrayPromotionDetail, totalPrice);
-                                                        offPercent = (float) ((mStairOff * 100) / (orderDetail.getPrice() * orderDetail.getSumCountBaJoz()));
-                                                    }
-                                                    howToPromotion = 3;
-                                                    mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                    CommitPromoCode.add(mPromoCode);
-                                                    rowPercentOff(offPercent, mPromoCode, product);
-                                                    break;
-                                                case Promotion.takhfif_Az_Sotooh:
-                                                    offPercent = getDiscountFromDiscountLevel(arrayPromotionDetail.get(0).getMeghdarPromotion(), productDetail);
-                                                    howToPromotion = 3;
-                                                    mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                    CommitPromoCode.add(mPromoCode);
-                                                    rowPercentOff(offPercent, mPromoCode, product);
-                                                    break;
-                                                case Promotion.eshantion_Az_hamanKala:
-                                                    //gift az haman kala agar be andaze gift kala mojood bashad.
-                                                    productDetail = db.getProductDetail(orderDetail.getProductDetailId());
-                                                    KalaCode = (int) (product.getProductCode());
-                                                    if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
-                                                        zarib = roundDoubleToInt(totalPrice / arrayPromotionDetail.get(0).getToPayment());
-                                                    mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                    mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
-                                                    mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                    howToPromotion = 2;
-                                                    CommitPromoCode.add(mPromoCode);
-                                                    giftFromSameProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
-                                                    break;
-                                                case Promotion.eshantion_Az_kalahaye_digar:
-                                                    //gift az kalaye digar.
-                                                    KalaCode = (arrayPromotionDetail.get(0).getCodeGood());
-                                                    if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
-                                                        zarib = roundDoubleToInt(totalPrice / arrayPromotionDetail.get(0).getToPayment());
-                                                    mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                    mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
-                                                    mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                    howToPromotion = 2;
-                                                    CommitPromoCode.add(mPromoCode);
-                                                    giftFromAnotherProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
-                                                    break;
-                                            }
+                                            giftFromSameProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                         }
-                                    }
+                                        break;
+                                    case Promotion.eshantion_Az_kalahaye_digar:
+                                        //gift az kalaye digar.
+                                        KalaCode = (arrayPromotionDetail.get(0).getCodeGood());
+                                        Product product1 = db.getProductWithProductCode(KalaCode);
+                                        productDetail = db.getProductDetailWithProductId(product1.getProductId());
+                                        if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
+                                            zarib = (int) (TotalCountWithoutGift / arrayPromotionDetail.get(0).getToPayment());
+                                        mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                        mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                        mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                        howToPromotion = 2;
+                                        CommitPromoCode.add(mPromoCode);
+                                        giftFromAnotherProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                        break;
                                 }
-                                break;
-                            case Promotion.Meghdare_Satr:
-                                //meghdare satr
-                                for (OrderDetail orderDetail : orderDetails) {
-                                    productDetail = db.getProductDetail(orderDetail.getProductDetailId());
-                                    product = db.GetProductWithProductId(productDetail.getProductId());
-                                    if (promotion.getIsAllGood() == 1 || db.isInEntity(product.getProductCode(), promotion.getPromotionId(), Promotion.EntityGoods) || db.isInEntity(product.getProductCategoryId(), promotion.getPromotionId(), Promotion.EntityGroupGoods)) {
-                                        arrayPromotionDetail = db.getPromotionDetails(promotion.getPromotionCode(), orderDetail.getSumCountBaJoz());
-                                        if (arrayPromotionDetail.size() > 0) {
-                                            switch (arrayPromotionDetail.get(0).getHowToPromotion()) {
-                                                case Promotion.takhfif_mablaghe_sabet:
-                                                    if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
-                                                        zarib = roundDoubleToInt(orderDetail.getSumCountBaJoz() / arrayPromotionDetail.get(0).getToPayment());
-                                                    fixedOff = zarib * arrayPromotionDetail.get(0).getMeghdarPromotion();
-                                                    mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                    howToPromotion = 3;
-                                                    CommitPromoCode.add(mPromoCode);
-                                                    rowFixedOff(fixedOff, mPromoCode, product);
-                                                    break;
-                                                case Promotion.takhfif_darsadi:
+                            }
+                            break;
+
+                        case Promotion.Jame_Vazne_Faktor:
+                            arrayPromotionDetail = db.getPromotionDetails(promotion.getPromotionCode(), TotalWeightWithoutGift);
+                            if (arrayPromotionDetail.size() > 0) {
+                                switch (arrayPromotionDetail.get(0).getHowToPromotion()) {
+                                    case Promotion.takhfif_mablaghe_sabet:
+                                        if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
+                                            zarib = roundDoubleToInt(TotalWeightWithoutGift / arrayPromotionDetail.get(0).getToPayment());
+                                        fixedDiscount = zarib * arrayPromotionDetail.get(0).getMeghdarPromotion();
+                                        mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                        howToPromotion = 3;
+                                        CommitPromoCode.add(mPromoCode);
+                                        wholeFactorFixedDiscount(fixedDiscount, mPromoCode);
+                                        break;
+                                    case Promotion.takhfif_darsadi:
+                                        if (promotion.getIsCalcLinear() == 1)
+                                            percentDiscount = arrayPromotionDetail.get(0).getMeghdarPromotion();
+                                        else {
+                                            double mStairOff = calculateStairOff(arrayPromotionDetail, TotalWeightWithoutGift);
+                                            percentDiscount = ((mStairOff * 100) / TotalWeightWithoutGift);
+                                        }
+                                        mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                        howToPromotion = 3;
+                                        CommitPromoCode.add(mPromoCode);
+                                        wholeFactorPercentDiscount(percentDiscount, mPromoCode);
+                                        break;
+                                    case Promotion.takhfif_Az_Sotooh:
+                                        for (OrderDetail orderDetail : orderDetails) {
+                                            productDetail = db.getProductDetail(orderDetail.getProductDetailId());
+                                            product = db.GetProductWithProductId(productDetail.getProductId());
+                                            offPercent = getDiscountFromDiscountLevel(arrayPromotionDetail.get(0).getMeghdarPromotion(), productDetail);
+                                            mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                            howToPromotion = 3;
+                                            CommitPromoCode.add(mPromoCode);
+                                            rowPercentOff(offPercent, mPromoCode, product);
+                                        }
+
+                                        break;
+                                    case Promotion.eshantion_Az_hamanKala:
+                                        //gift az haman kala agar be andaze gift kala mojood bashad.
+
+                                        for (OrderDetail orderDetail : orderDetails) {
+                                            productDetail = db.getProductDetail(orderDetail.getProductDetailId());
+                                            product = db.GetProductWithProductId(productDetail.getProductId());
+                                            KalaCode = (int) (product.getProductCode());
+                                            if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
+                                                zarib = roundDoubleToInt(TotalWeightWithoutGift / arrayPromotionDetail.get(0).getToPayment());
+                                            mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                            mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                            mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                            howToPromotion = 2;
+                                            CommitPromoCode.add(mPromoCode);
+                                            giftFromSameProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                        }
+                                        break;
+                                    case Promotion.eshantion_Az_kalahaye_digar:
+                                        //gift az kalaye digar.
+                                        KalaCode = (arrayPromotionDetail.get(0).getCodeGood());
+                                        Product product1 = db.getProductWithProductCode(KalaCode);
+                                        productDetail = db.getProductDetailWithProductId(product1.getProductId());
+                                        if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
+                                            zarib = roundDoubleToInt(TotalWeightWithoutGift / arrayPromotionDetail.get(0).getToPayment());
+                                        mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                        mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                        mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                        howToPromotion = 2;
+                                        CommitPromoCode.add(mPromoCode);
+                                        giftFromAnotherProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                        break;
+                                }
+                            }
+                            break;
+
+                        case Promotion.Jame_anvae_Aghlame_faktor:
+                            for (OrderDetail orderDetail : orderDetails) {
+                                jameTedadAghlam++;
+                            }
+                            arrayPromotionDetail = db.getPromotionDetails(promotion.getPromotionCode(), jameTedadAghlam);
+                            if (arrayPromotionDetail.size() > 0) {
+                                switch (arrayPromotionDetail.get(0).getHowToPromotion()) {
+                                    case Promotion.takhfif_mablaghe_sabet:
+                                        if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
+                                            zarib = roundDoubleToInt(jameTedadAghlam / arrayPromotionDetail.get(0).getToPayment());
+                                        fixedDiscount = zarib * arrayPromotionDetail.get(0).getMeghdarPromotion();
+                                        howToPromotion = 3;
+                                        mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                        CommitPromoCode.add(mPromoCode);
+                                        wholeFactorFixedDiscount(fixedDiscount, mPromoCode);
+                                        break;
+                                    case Promotion.takhfif_darsadi:
+                                        if (promotion.getIsCalcLinear() == 1)
+                                            percentDiscount = arrayPromotionDetail.get(0).getMeghdarPromotion();
+                                        else {
+                                            double mStairOff = calculateStairOff(arrayPromotionDetail, jameTedadAghlam);
+                                            percentDiscount = ((mStairOff * 100) / jameTedadAghlam);
+                                        }
+                                        howToPromotion = 3;
+                                        mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                        CommitPromoCode.add(mPromoCode);
+                                        wholeFactorPercentDiscount(percentDiscount, mPromoCode);
+                                        break;
+                                    case Promotion.takhfif_Az_Sotooh:
+                                        for (OrderDetail orderDetail : orderDetails) {
+                                            productDetail = db.getProductDetail(orderDetail.getProductDetailId());
+                                            product = db.GetProductWithProductId(productDetail.getProductId());
+                                            offPercent = getDiscountFromDiscountLevel(arrayPromotionDetail.get(0).getMeghdarPromotion(), productDetail);
+                                            howToPromotion = 3;
+                                            mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                            CommitPromoCode.add(mPromoCode);
+                                            rowPercentOff(offPercent, mPromoCode, product);
+                                        }
+                                        break;
+                                    case Promotion.eshantion_Az_hamanKala:
+                                        //gift az haman kala agar be andaze gift kala mojood bashad.
+                                        for (OrderDetail orderDetail : orderDetails) {
+                                            productDetail = db.getProductDetail(orderDetail.getProductDetailId());
+                                            product = db.GetProductWithProductId(productDetail.getProductId());
+                                            KalaCode = (int) (product.getProductCode());
+                                            if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
+                                                zarib = roundDoubleToInt(jameTedadAghlam / arrayPromotionDetail.get(0).getToPayment());
+                                            mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                            mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                            mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                            howToPromotion = 2;
+                                            CommitPromoCode.add(mPromoCode);
+                                            giftFromSameProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                        }
+                                        break;
+                                    case Promotion.eshantion_Az_kalahaye_digar:
+                                        //gift az kalaye digar.
+                                        KalaCode = (arrayPromotionDetail.get(0).getCodeGood());
+                                        Product product1 = db.getProductWithProductCode(KalaCode);
+                                        productDetail = db.getProductDetailWithProductId(product1.getProductId());
+                                        if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
+                                            zarib = roundDoubleToInt(jameTedadAghlam / arrayPromotionDetail.get(0).getToPayment());
+                                        mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                        mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                        mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                        howToPromotion = 2;
+                                        CommitPromoCode.add(mPromoCode);
+                                        giftFromAnotherProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                        break;
+                                }
+                            }
+                            break;
+
+                        case Promotion.Mablaghe_Satr:
+                            //mablaghe satr
+                            for (OrderDetail orderDetail : orderDetails) {
+                                productDetail = db.getProductDetail(orderDetail.getProductDetailId());
+                                product = db.GetProductWithProductId(productDetail.getProductId());
+                                if ( promotion.getIsAllGood() == 1 || db.isInEntity( product.getProductCode(), promotion.getPromotionId(), Promotion.EntityGoods) || db.isInEntity(product.getProductCategoryId(), promotion.getPromotionId(), Promotion.EntityGroupGoods)) {
+                                    double totalPrice = (orderDetail.getPrice()) * orderDetail.getSumCountBaJoz();
+                                    arrayPromotionDetail = db.getPromotionDetails(promotion.getPromotionCode(), totalPrice);
+                                    if (arrayPromotionDetail.size() > 0) {
+                                        switch (arrayPromotionDetail.get(0).getHowToPromotion()) {
+                                            case Promotion.takhfif_mablaghe_sabet:
+                                                if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
+                                                    zarib = roundDoubleToInt(totalPrice / arrayPromotionDetail.get(0).getToPayment());
+                                                fixedOff = zarib * arrayPromotionDetail.get(0).getMeghdarPromotion();
+                                                howToPromotion = 3;
+                                                mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                                CommitPromoCode.add(mPromoCode);
+                                                rowFixedOff(fixedOff, mPromoCode, product);
+                                                break;
+                                            case Promotion.takhfif_darsadi:
+                                                if (promotion.getIsCalcLinear() == 1)
                                                     offPercent = arrayPromotionDetail.get(0).getMeghdarPromotion();
-                                                    mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                    howToPromotion = 3;
-                                                    CommitPromoCode.add(mPromoCode);
-                                                    rowPercentOff(offPercent, mPromoCode, product);
-                                                    break;
-                                                case Promotion.takhfif_Az_Sotooh:
-                                                    offPercent = getDiscountFromDiscountLevel(arrayPromotionDetail.get(0).getMeghdarPromotion(), productDetail);
-                                                    mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                    howToPromotion = 3;
-                                                    CommitPromoCode.add(mPromoCode);
-                                                    rowPercentOff(offPercent, mPromoCode, product);
-                                                    break;
-                                                case Promotion.eshantion_Az_hamanKala:
-                                                    //gift az haman kala agar be andaze gift kala mojood bashad.
-                                                    productDetail = db.getProductDetail(orderDetail.getProductDetailId());
-                                                    KalaCode = (int) (product.getProductCode());
-                                                    if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
-                                                        zarib = roundDoubleToInt(orderDetail.getSumCountBaJoz() / arrayPromotionDetail.get(0).getToPayment());
-                                                    mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                    mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
-                                                    mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                    howToPromotion = 2;
-                                                    CommitPromoCode.add(mPromoCode);
-                                                    giftFromSameProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
-                                                    break;
-                                                case Promotion.eshantion_Az_kalahaye_digar:
-                                                    //gift az kalaye digar.
-                                                    KalaCode = (arrayPromotionDetail.get(0).getCodeGood());
-                                                    if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
-                                                        zarib = roundDoubleToInt(orderDetail.getSumCountBaJoz() / arrayPromotionDetail.get(0).getToPayment());
-                                                    mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                    mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
-                                                    mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                    howToPromotion = 2;
-                                                    CommitPromoCode.add(mPromoCode);
-                                                    giftFromAnotherProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
-                                                    break;
-                                            }
+                                                else {
+                                                    float mStairOff = calculateStairOff(arrayPromotionDetail, totalPrice);
+                                                    offPercent = (float) ((mStairOff * 100) / (orderDetail.getPrice() * orderDetail.getSumCountBaJoz()));
+                                                }
+                                                howToPromotion = 3;
+                                                mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                                CommitPromoCode.add(mPromoCode);
+                                                rowPercentOff(offPercent, mPromoCode, product);
+                                                break;
+                                            case Promotion.takhfif_Az_Sotooh:
+                                                offPercent = getDiscountFromDiscountLevel(arrayPromotionDetail.get(0).getMeghdarPromotion(), productDetail);
+                                                howToPromotion = 3;
+                                                mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                                CommitPromoCode.add(mPromoCode);
+                                                rowPercentOff(offPercent, mPromoCode, product);
+                                                break;
+                                            case Promotion.eshantion_Az_hamanKala:
+                                                //gift az haman kala agar be andaze gift kala mojood bashad.
+                                                productDetail = db.getProductDetail(orderDetail.getProductDetailId());
+                                                KalaCode = (int) (product.getProductCode());
+                                                if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
+                                                    zarib = roundDoubleToInt(totalPrice / arrayPromotionDetail.get(0).getToPayment());
+                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                                mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                                howToPromotion = 2;
+                                                CommitPromoCode.add(mPromoCode);
+                                                giftFromSameProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                break;
+                                            case Promotion.eshantion_Az_kalahaye_digar:
+                                                //gift az kalaye digar.
+                                                KalaCode = (arrayPromotionDetail.get(0).getCodeGood());
+                                                if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
+                                                    zarib = roundDoubleToInt(totalPrice / arrayPromotionDetail.get(0).getToPayment());
+                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                                mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                                howToPromotion = 2;
+                                                CommitPromoCode.add(mPromoCode);
+                                                giftFromAnotherProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                break;
                                         }
                                     }
                                 }
-                                break;
-                        }
+                            }
+                            break;
+                        case Promotion.Meghdare_Satr:
+                            //meghdare satr
+                            for (OrderDetail orderDetail : orderDetails) {
+                                productDetail = db.getProductDetail(orderDetail.getProductDetailId());
+                                product = db.GetProductWithProductId(productDetail.getProductId());
+                                if (promotion.getIsAllGood() == 1 || db.isInEntity(product.getProductCode(), promotion.getPromotionId(), Promotion.EntityGoods) || db.isInEntity(product.getProductCategoryId(), promotion.getPromotionId(), Promotion.EntityGroupGoods)) {
+                                    arrayPromotionDetail = db.getPromotionDetails(promotion.getPromotionCode(), orderDetail.getSumCountBaJoz());
+                                    if (arrayPromotionDetail.size() > 0) {
+                                        switch (arrayPromotionDetail.get(0).getHowToPromotion()) {
+                                            case Promotion.takhfif_mablaghe_sabet:
+                                                if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
+                                                    zarib = roundDoubleToInt(orderDetail.getSumCountBaJoz() / arrayPromotionDetail.get(0).getToPayment());
+                                                fixedOff = zarib * arrayPromotionDetail.get(0).getMeghdarPromotion();
+                                                mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                                howToPromotion = 3;
+                                                CommitPromoCode.add(mPromoCode);
+                                                rowFixedOff(fixedOff, mPromoCode, product);
+                                                break;
+                                            case Promotion.takhfif_darsadi:
+                                                offPercent = arrayPromotionDetail.get(0).getMeghdarPromotion();
+                                                mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                                howToPromotion = 3;
+                                                CommitPromoCode.add(mPromoCode);
+                                                rowPercentOff(offPercent, mPromoCode, product);
+                                                break;
+                                            case Promotion.takhfif_Az_Sotooh:
+                                                offPercent = getDiscountFromDiscountLevel(arrayPromotionDetail.get(0).getMeghdarPromotion(), productDetail);
+                                                mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                                howToPromotion = 3;
+                                                CommitPromoCode.add(mPromoCode);
+                                                rowPercentOff(offPercent, mPromoCode, product);
+                                                break;
+                                            case Promotion.eshantion_Az_hamanKala:
+                                                //gift az haman kala agar be andaze gift kala mojood bashad.
+                                                productDetail = db.getProductDetail(orderDetail.getProductDetailId());
+                                                KalaCode = (int) (product.getProductCode());
+                                                if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
+                                                    zarib = roundDoubleToInt(orderDetail.getSumCountBaJoz() / arrayPromotionDetail.get(0).getToPayment());
+                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                                mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                                howToPromotion = 2;
+                                                CommitPromoCode.add(mPromoCode);
+                                                giftFromSameProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                break;
+                                            case Promotion.eshantion_Az_kalahaye_digar:
+                                                //gift az kalaye digar.
+                                                KalaCode = (arrayPromotionDetail.get(0).getCodeGood());
+                                                if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
+                                                    zarib = roundDoubleToInt(orderDetail.getSumCountBaJoz() / arrayPromotionDetail.get(0).getToPayment());
+                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                                mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
+                                                howToPromotion = 2;
+                                                CommitPromoCode.add(mPromoCode);
+                                                giftFromAnotherProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                break;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
                     }
-                    if (mGiftCount1 > 0 && promotion.getAggregateWithOther() == 0)
-                        break;
                 }
+                if (mGiftCount1 > 0 && promotion.getAggregateWithOther() == 0)
+                    break;
             }
         }
 
@@ -1613,7 +1470,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         Product promoProduct;
         promoProduct = db.getProductWithProductCode(kalaCode);
         ProductDetail promoProductDetail = db.getProductDetailWithProductId(promoProduct.getProductId());
-        if (promoProduct != null && mGiftCount1 != 0) {
+        if (mGiftCount1 != 0) {
             if (promoProduct.getProductId() == productDetail.getProductId()) {
 
                 mGiftCount1 += ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).getGiftCount1();
@@ -1723,11 +1580,18 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
 
     private void rowFixedOff(float fixedOff, int mPromoCode, Product product) {
         if (fixedOff != 0) {
+
+            double d = ServiceTools.RegulartoDouble(BaseActivity.getPrefRowDiscountIsActive());
+
             ProductPickerListActivity.HashMap_Product.get(product.getProductId()).setPromotionCode(mPromoCode);
             ProductPickerListActivity.HashMap_Product.get(product.getProductId()).setGiftType(Promotion.Takhfif_Satri);
             double price = (ProductPickerListActivity.HashMap_Product.get(product.getProductId()).getPrice());
-            double count = ProductPickerListActivity.HashMap_Product.get(product.getProductId()).getCount1();
-            ProductPickerListActivity.HashMap_Product.get(product.getProductId()).setDiscount((float) (int) ((fixedOff * 100) / (price * count)));
+            double count = ProductPickerListActivity.HashMap_Product.get(product.getProductId()).getSumCountBaJoz();
+
+            ProductPickerListActivity.HashMap_Product.get(product.getProductId()).setDiscount(fixedOff);
+            /*if (d ==== 1)
+                ProductPickerListActivity.HashMap_Product.get(product.getProductId()).setDiscount(ServiceTools.getRowOffPercent(fixedOff, price, count));*/
+
             double FinalPrice = ServiceTools.getCalculateFinalPrice(ProductPickerListActivity.HashMap_Product.get(product.getProductId()), getActivity());
             ProductPickerListActivity.HashMap_Product.get(product.getProductId()).setFinalPrice(String.valueOf(FinalPrice));
         }
@@ -1750,25 +1614,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         }
     }
 
-    private void setPromoDiscountView() {
-
-        double final_price = (TotalPrice - TotalOff) + (totalTaxAndCharge);
-        //double final_price = (TotalPrice);
-        double calculatedPercentDiscount = (final_price * promoPercentDiscount) / 100;
-        if (promoDiscount > 0 || promoPercentDiscount > 0) {
-            Discount = promoDiscount + calculatedPercentDiscount;
-            txtDiscount.setText(String.valueOf(Discount));
-            txtDiscountPercent.setText(String.valueOf(roundDoubleToInt(calculatedPercentDiscount * 100) / final_price));
-        }
-        CalculationTotal();
-        calculateGroupedtax();
-        setCalculateResult();
-        ClearZeroGift();
-        adListProduct.notifyDataSetChanged();
-        lstCart.setAdapter(adListProduct);
-        ServiceTools.setListViewHeightBasedOnChildren(lstCart);
-    }
-
     private float calculateStairOff(ArrayList<PromotionDetail> arrayPromotionDetail, double price) {
         double differnce;
         float fixedOff = 0;
@@ -1782,7 +1627,40 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         return fixedOff;
     }
 
-    public void ClearZero(OrderDetail prodInOrder) {
+    private void clearStatics() {
+        Set mapSet = ProductPickerListActivity.HashMap_Product.entrySet();
+        if (Mode == MODE_NEW) {
+            for (Object aMapSet : mapSet) {
+                Map.Entry mapEntry = (Map.Entry) aMapSet;
+                OrderDetail object = (OrderDetail) mapEntry.getValue();
+                object.setGiftCount1(0);
+                object.setGiftCount2(0);
+            }// End of While
+        }
+        CommitPromoCode.clear();
+        if (promoDiscount != 0 || promoPercentDiscount != 0) {
+            percentDiscount = 0;
+            Discount = 0;
+            promoDiscount = 0;
+            promoPercentDiscount = 0;
+        }
+    }
+
+    public void CalculatePromotion() {
+        if(promotionAvailable && (OrderType == ProjectInfo.TYPE_INVOCIE || OrderType == ProjectInfo.TYPE_Delivery)){
+            ClearZero();
+            clearStatics();
+            ClearAllGift();
+            CommitPromoCode.clear();
+            mPromoObject = new OrderDetail();
+            if (InvoiceDetailActivity.orderDetails.size() != 0) {
+                validPromotionList(InvoiceDetailActivity.orderDetails);
+            }
+            setPromoDiscountView();
+        }
+    }
+
+    public void ClearZero() {
         Set mapSet = ProductPickerListActivity.HashMap_Product.entrySet();
         Iterator mapIterator = mapSet.iterator();
         while (mapIterator.hasNext()) {
@@ -1792,7 +1670,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             orderDetail.setGiftCount2(0);
             if (orderDetail.getCount1() == 0 && orderDetail.getCount2() == 0 && orderDetail.getSumCountBaJoz() == 0) {
                 mapIterator.remove();
-                ProductPickerListActivity.Product_Delete.add(prodInOrder);
+                ProductPickerListActivity.Product_Delete.add(orderDetail);
                 InvoiceDetailActivity.orderDetails.remove(orderDetail);
             }
         }// End of While
@@ -1814,32 +1692,48 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
     }
 
     public void ClearAllGift() {
-        Discount = 0;
-        Set mapSet = ProductPickerListActivity.HashMap_Product.entrySet();
-        Iterator mapIterator = mapSet.iterator();
-        while (mapIterator.hasNext()) {
-            Map.Entry mapEntry = (Map.Entry) mapIterator.next();
-            OrderDetail orderDetail = (OrderDetail) mapEntry.getValue();
-            if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), getActivity()) != 0)
-                if (orderDetail.getCount1() == 0 && orderDetail.getCount2() == 0 && orderDetail.getSumCountBaJoz() == 0) {
+            Discount = 0;
+            Set mapSet = ProductPickerListActivity.HashMap_Product.entrySet();
+            Iterator mapIterator = mapSet.iterator();
+            while (mapIterator.hasNext()) {
+                Map.Entry mapEntry = (Map.Entry) mapIterator.next();
+                OrderDetail orderDetail = (OrderDetail) mapEntry.getValue();
+                if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), getActivity()) != 0)
+                    if (orderDetail.getCount1() == 0 && orderDetail.getCount2() == 0 && orderDetail.getSumCountBaJoz() == 0) {
+                        mapIterator.remove();
+                        ProductPickerListActivity.Product_Delete.add(orderDetail);
+                        InvoiceDetailActivity.orderDetails.remove(orderDetail);
+                    } else {
+                        orderDetail.setGiftCount1(0);
+                        orderDetail.setGiftCount2(0);
+                    }
+
+                if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), getActivity()) == 0 && orderDetail.getCount1() == 0 && orderDetail.getCount2() == 0 && orderDetail.getSumCountBaJoz() == 0) {
                     mapIterator.remove();
                     ProductPickerListActivity.Product_Delete.add(orderDetail);
                     InvoiceDetailActivity.orderDetails.remove(orderDetail);
-                } else {
-                    orderDetail.setGiftCount1(0);
-                    orderDetail.setGiftCount2(0);
-
                 }
+            }// End of While
+            /////////////////////////////////////////////////////////
+    }
 
+    private void setPromoDiscountView() {
 
-            if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), getActivity()) == 0 && orderDetail.getCount1() == 0 && orderDetail.getCount2() == 0 && orderDetail.getSumCountBaJoz() == 0) {
-                mapIterator.remove();
-                ProductPickerListActivity.Product_Delete.add(orderDetail);
-                InvoiceDetailActivity.orderDetails.remove(orderDetail);
-            }
-
-        }// End of While
-        /////////////////////////////////////////////////////////
+        double final_price = (TotalPrice - TotalOff) + (totalTaxAndCharge);
+        //double final_price = (TotalPrice);
+        double calculatedPercentDiscount = (final_price * promoPercentDiscount) / 100;
+        if (promoDiscount > 0 || promoPercentDiscount > 0) {
+            Discount = promoDiscount + calculatedPercentDiscount;
+            txtDiscount.setText(String.valueOf(Discount));
+            txtDiscountPercent.setText(String.valueOf(roundDoubleToInt(calculatedPercentDiscount * 100) / final_price));
+        }
+        CalculationTotal();
+        calculateGroupedTax();
+        setCalculateResult();
+        ClearZeroGift();
+        adListProduct.notifyDataSetChanged();
+        lstCart.setAdapter(adListProduct);
+        ServiceTools.setListViewHeightBasedOnChildren(lstCart);
     }
 
 }

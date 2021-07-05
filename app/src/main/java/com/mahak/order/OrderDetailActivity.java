@@ -210,7 +210,7 @@ public class OrderDetailActivity extends BaseActivity {
 
         } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
             lst_order_detail_for_print = R.layout.lst_order_detail_for_print_50mm;
-        } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
+        } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
             lst_order_detail_for_print = R.layout.lst_print_szzt;
         } else {
             if (getTemplate2Status(mContext, ProjectInfo._pName_OrderDetail))
@@ -264,6 +264,7 @@ public class OrderDetailActivity extends BaseActivity {
                 } else {
                     Intent intent = new Intent(mContext, ManageReceiptActivity.class);
                     intent.putExtra(MODE_PAGE, MODE_NEW);
+                    intent.putExtra(ID,order.getId());
                     intent.putExtra(CODE_KEY, order.getCode());
                     intent.putExtra(CUSTOMERID_KEY, order.getPersonId());
                     intent.putExtra(CUSTOMER_CLIENT_ID_KEY, order.getPersonClientId());
@@ -500,7 +501,7 @@ public class OrderDetailActivity extends BaseActivity {
         TextView _tvTotalItems = (TextView) view.findViewById(R.id._tvTotalItems);
         TextView _tvCustomerName = (TextView) view.findViewById(R.id._tvCustomerName);
         TextView _tvMarketName = (TextView) view.findViewById(R.id._tvMarketName);
-        LinearLayout _llMarketName = (LinearLayout) view.findViewById(R.id._llMarketName);
+
         LinearLayout _llFooterMessage = (LinearLayout) view.findViewById(R.id._llFooterMessage);
         LinearLayout _llTotalReceipt = (LinearLayout) view.findViewById(R.id._llTotalReceipt);
         LinearLayout _llPayable = (LinearLayout) view.findViewById(R.id._llPayable);
@@ -524,6 +525,13 @@ public class OrderDetailActivity extends BaseActivity {
         TextView _tvFooterMessage = (TextView) view.findViewById(R.id._tvFooterMessage);
         TextView _tvPayable = (TextView) view.findViewById(R.id._tvPayable);
         TextView _tvType = (TextView) view.findViewById(R.id._tvType);
+
+        LinearLayout InvocieNumber = (LinearLayout) view.findViewById(R.id.InvocieNumber);
+        LinearLayout _llMarketName = (LinearLayout) view.findViewById(R.id._llMarketName);
+        LinearLayout Username = (LinearLayout) view.findViewById(R.id.Username);
+        LinearLayout _llTotalItems = (LinearLayout) view.findViewById(R.id._llTotalItems);
+
+
         LinearLayout _llTitle = (LinearLayout) view.findViewById(R.id.llTitle);
         _llTitle.setVisibility(View.GONE);
         TextView _tvUsername = (TextView) view.findViewById(R.id._tvUsername);
@@ -575,9 +583,8 @@ public class OrderDetailActivity extends BaseActivity {
 
         orderDetailArrayList = (ArrayList<OrderDetail>) orderDetails.clone();
 
-        if (SharedPreferencesHelper.getCurrentLanguage(mContext).equals("en"))
-            _lstGroupedTax.setVisibility(View.GONE);
-        else if (SharedPreferencesHelper.getCurrentLanguage(mContext).equals("de_DE")) {
+        if (SharedPreferencesHelper.getCurrentLanguage(mContext).equals("de_DE")) {
+            _lstGroupedTax.setVisibility(View.VISIBLE);
             db.open();
             groupedTaxes = db.getGroupedTaxCharge(OrderId);
             _adGroupedTax = new AdapterGroupedTaxForPrint(mActivity, groupedTaxes);
@@ -602,10 +609,26 @@ public class OrderDetailActivity extends BaseActivity {
         _tvCustomerStatus2.setText(tvCustomerStatus2.getText().toString() + " " + tvFinalRemainingCustomer.getText().toString());
         _tvPayable.setText(tvPayable.getText().toString());
 
+        if (!SharedPreferencesHelper.get_chk_tracking_code(mContext)) {
+            InvocieNumber.setVisibility(View.GONE);
+        }
+
+        if (!SharedPreferencesHelper.get_chk_market_name(mContext)) {
+            _llMarketName.setVisibility(View.GONE);
+        }
+
+        if (!SharedPreferencesHelper.get_chk_customer_name(mContext)) {
+            Username.setVisibility(View.GONE);
+        }
+
+        if (!SharedPreferencesHelper.get_chk_count_product(mContext)) {
+            _llTotalItems.setVisibility(View.GONE);
+        }
+
         if (getTemplate2Status(mContext, ProjectInfo._pName_OrderDetail) && printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R200_II)
             _tvFooterMessage.setText(tvDescription.getText().toString());
         else
-            _tvFooterMessage.setText(getString(R.string.print_footer_messages_part1) + " " + tvCustomerName.getText().toString() + "\n" + getString(R.string.print_footer_messages_part2));
+            _tvFooterMessage.setText(String.format(getResources().getString(R.string.print_footer_messages_part1),tvCustomerName.getText().toString()));
 
     }
 
@@ -648,7 +671,7 @@ public class OrderDetailActivity extends BaseActivity {
                 } else if (printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310) {
                     ll = inflater.inflate(R.layout.factor_print_template_80mm_fii_compact, null, false);
 
-                } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
+                } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
                     ll = inflater.inflate(R.layout.factor_print_szzt, null, false);
 
                 } else {
@@ -678,7 +701,7 @@ public class OrderDetailActivity extends BaseActivity {
                 } else if (printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310) {
                     ll = inflater.inflate(R.layout.factor_print_template_80mm_fii, null, false);
 
-                } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
+                } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
                     ll = inflater.inflate(R.layout.factor_print_szzt, null, false);
 
                 } else {
@@ -694,6 +717,8 @@ public class OrderDetailActivity extends BaseActivity {
             if (!SharedPreferencesHelper.getSignUnderFactor(mContext)) {
                 _llFooterMessage.setVisibility(View.GONE);
             }
+
+
             FillPrintView(ll);
             ll.setDrawingCacheEnabled(true);
             ll.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
@@ -835,8 +860,7 @@ public class OrderDetailActivity extends BaseActivity {
                 tvMarketName.setText(customer.getOrganization());
 
                 if (customer != null)
-                    extraData = db.getMoreCustomerInfo(customer.getPersonCode());
-                RemainedCustomer = extraData.getRemainAmount();
+                RemainedCustomer = customer.getBalance();
                 if (extraData.getRemainStatus() == 1)
                     RemainedCustomer = RemainedCustomer * -1;
             }
@@ -1193,10 +1217,10 @@ public class OrderDetailActivity extends BaseActivity {
                 ) {
                     tvFee = (TextView) view.findViewById(R.id.tvfii);
                 }
-                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
+                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s || printerBrand == Woosim_WSP_R341) {
                     tvFee = (TextView) view.findViewById(R.id.tvfii);
                     //tvCount2 = (TextView) view.findViewById(R.id.tvCount2);
-                    tvProductCode = (TextView) view.findViewById(R.id.tvProductCode);
+                    //tvProductCode = (TextView) view.findViewById(R.id.tvProductCode);
                 }
 
                 if (getTemplate2Status(mContext, ProjectInfo._pName_OrderDetail))
@@ -1282,14 +1306,14 @@ public class OrderDetailActivity extends BaseActivity {
                         printerBrand == ProjectInfo.PRINTER_BABY_380_A ||
                         printerBrand == ProjectInfo.PRINTER_DELTA_380_A ||
                         printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII ||
-                        printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310
+                        printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310 || printerBrand == ProjectInfo.UROVO_K319
                 ) {
                     tvFee.setText(ServiceTools.formatPrice(orderDetail.getPrice()));
                 }
-                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
-                    db.open();
-                    Product product = db.GetProductWithProductId(orderDetail.getProductId());
-                    tvProductCode.setText(String.valueOf(product.getProductCode()));
+                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s || printerBrand == Woosim_WSP_R341) {
+                    //db.open();
+                    //Product product = db.GetProductWithProductId(orderDetail.getProductId());
+                   // tvProductCode.setText(String.valueOf(product.getProductCode()));
                     tvFee.setText(ServiceTools.formatPrice(orderDetail.getPrice()));
                 }
 

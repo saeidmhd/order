@@ -186,6 +186,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     //------------GCM------------
     String SENDER_ID = "779811760050";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private static final String TAG = "MainActivity";
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private boolean isReceiverRegistered;
     private PolylineOptions polylineOptions;
@@ -200,6 +201,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     private boolean ACCESS_COARSE_LOCATION_Permission;
     private boolean ACCESS_FINE_LOCATION_Permission;
     private boolean hasWritePermission;
+    private AsynCustomer asyncustomer;
     SupportMapFragment mapFragment;
     private static final int REQUEST_Location_ON = 1200;
 
@@ -311,6 +313,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         });
 
+        update();
+
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
 
             public void onDrawerClosed(View view) {
@@ -371,6 +375,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
             @Override
             public void onClick(View v) {
+                InvoiceDetailActivity.orderDetails.clear();
                 if (mDrawerLayout.isDrawerOpen(mDrawerLeft))
                     mDrawerLayout.closeDrawers();
                 Type = ProjectInfo.TYPE_ORDER;
@@ -395,8 +400,10 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         });
         btnAddNewInvoice.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+                InvoiceDetailActivity.orderDetails.clear();
                 if (mDrawerLayout.isDrawerOpen(mDrawerLeft))
                     mDrawerLayout.closeDrawers();
                 if(CanRegisterInvoiceOutOfZone()){
@@ -410,12 +417,15 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         });
         btnZoomMapView.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(mContext, MapViewActivity.class);
                 intent.putParcelableArrayListExtra(COORDINATE, positions);
                 intent.putParcelableArrayListExtra(CustomerPositions, customerPositions);
                 startActivity(intent);
+
             }
         });
 
@@ -476,6 +486,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
             }
         });
+
+
         //on receive message from google gcm
         MyGcmListenerService.receiveMessag = new View.OnClickListener() {
             @Override
@@ -487,9 +499,12 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                             showBadgeNotification(menu);
                         }
                     });
+
                 }
             }
         };
+
+
     }//end of onCreate
 
     public static void setTackingServiceText(boolean isChecked) {
@@ -675,6 +690,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         loadLastPoint();
 
+        ServiceTools.setSettingPreferences(db, mContext);
+
         mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
 
         tvSumOfOrders = (TextView) findViewById(R.id.tvSumOfOrders);
@@ -685,8 +702,9 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
         btnAddNewOrder = (Button) findViewById(R.id.btnAddNewOrder);
-        btnAddNewReceipt = (Button) findViewById(R.id.btnAddNewReceipt);
         btnAddNewInvoice = (Button) findViewById(R.id.btnAddNewInvoice);
+
+        btnAddNewReceipt = (Button) findViewById(R.id.btnAddNewReceipt);
         btnAddNewTransference = (Button) findViewById(R.id.btnAddNewTransference);
         btnZoomMapView = (ImageButton) findViewById(R.id.btnZoomMapView);
 
@@ -807,9 +825,10 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             } else {
                 customer = db.getCustomerWithPersonId(item.getPersonId());
                 if (customer != null) {
+
+                    item.setAddress(customer.getAddress());
                     item.setName(customer.getName());
                     item.setMarketName(customer.getOrganization());
-                    item.setAddress(customer.getAddress());
                     item.setLatitude(customer.getLatitude());
                     item.setLongitude(customer.getLongitude());
 
@@ -893,7 +912,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
             if (positions.size() != 0) {
                 for (int i = 0; i < positions.size(); i++) {
-                    mGoogleMap.addMarker(new MarkerOptions().position(positions.get(i)).title(arrayChecklist.get(i).getName()));
+                    if (arrayChecklist.get(i).getName() != null)
+                        mGoogleMap.addMarker(new MarkerOptions().position(positions.get(i)).title(arrayChecklist.get(i).getName()));
                 }
             }
 
@@ -976,16 +996,19 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         if (btnNavCustomerList == null)
             return;
 
-        int CountCustomer = db.getTotalCountPeople();
-        int CountProduct = db.getTotalCountProduct();
-        int CountOrder = db.getTotalCountOrder();
-        int CountInvoice = db.getTotalCountInvoice();
-        int CountDeliverOrder = db.getTotalCountDeliveryOrder();
-        int CountReceipt = db.getTotalCountReceipt();
-        int CountPayable = db.getTotalCountPayable();
-        int CountReturnOfSales = db.getTotalCountReturnOfSale();
-        int CountNonRegisters = db.getTotalCountNonRegister();
-        int CountPromotion = db.getTotalCountPromotion();
+        CountCustomer = db.getTotalCountPeople();
+        CountProduct = db.getTotalCountProduct();
+        CountOrder = db.getTotalCountOrder();
+        CountInvoice = db.getTotalCountInvoice();
+        CountDeliverOrder = db.getTotalCountDeliveryOrder();
+        CountReceipt = db.getTotalCountReceipt();
+        CountPayable = db.getTotalCountPayable();
+        CountReturnOfSales = db.getTotalCountReturnOfSale();
+        CountNonRegisters = db.getTotalCountNonRegister();
+        CountPromotion = db.getTotalCountPromotion();
+
+        BaseActivity.setPrefProductCount(CountProduct);
+        BaseActivity.setPrefPersonCount(CountCustomer);
 
 
         btnNavCustomerList.setText(getString(R.string.str_nav_customer_list) + "(" + CountCustomer + ")");
@@ -1018,7 +1041,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             case R.id.btnNavDataSync:
                 mDrawerLayout.closeDrawers();
                 intent = new Intent(getApplicationContext(), DataSyncActivityRestApi.class);
-                startActivityForResult(intent, REQUEST_DATASYNC);
+                startActivity(intent);
                 break;
             case R.id.btnNavContact:
                 mDrawerLayout.closeDrawers();
@@ -1168,8 +1191,12 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
 
             void Populate(CheckList checklist, int position) {
-                tvName.setText(checklist.getName().trim());
-                tvAddress.setText(checklist.getAddress().trim());
+                if (checklist.getName() != null)
+                    tvName.setText(checklist.getName().trim());
+
+                if (checklist.getAddress() != null)
+                    tvAddress.setText(checklist.getAddress().trim());
+
                 if (checklist.getDescription() != null)
                     tvDescription.setText(checklist.getDescription().trim());
 
@@ -1327,8 +1354,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                         Intent intent = new Intent(getApplicationContext(),DataSyncActivityRestApi.class);
-                        startActivityForResult(intent, REQUEST_DATASYNC);
-
+                        startActivity(intent);
                         dialog.dismiss();
                     }
                 })
@@ -1346,6 +1372,56 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         return dialog;
     }
 
+    public void update (){
+
+        if (db == null)
+            db = new DbAdapter(this);
+
+        db.open();
+
+        double TotalOrder = db.getTotalPriceOrder();
+        double TotalInvoice = db.getTotalPriceInvoice();
+        double TotalReceiveTransfer = db.getTotalReceiveTransfer();
+        double TotalReceipt = db.getTotalPriceReceipt();
+        double TotalCash = db.getTotalCashAmountReceipt();
+        double TotalCheque = db.getTotalChequeReceipt();
+        double TotalCashReceipt = db.getTotalCashReceipt();
+        double TotalDiscountOrder = db.getTotalDiscountOrder();
+        double TotalDiscountInvoice = db.getTotalDiscountInvoice();
+        double TotalChargeAndTaxOrder = db.getTotalChargeAndTaxOrder();
+        double TotalChargeAndTaxInvoice = db.getTotalChargeAndTaxInvoice();
+        double TotalPureOrder = db.getPurePriceOrder();
+        double TotalPureInvoice = db.getPurePriceInvoice();
+
+        tvSumOfOrders.setText(ServiceTools.formatPrice(TotalOrder));
+        tvSumOfOrders.setSelected(true);
+        tvSumOfInvoices.setText(ServiceTools.formatPrice(TotalInvoice));
+        tvSumOfInvoices.setSelected(true);
+        tvSumOfTransference.setText(ServiceTools.formatPrice(TotalReceiveTransfer));
+        tvSumOfTransference.setSelected(true);
+        tvSumOfReceipts.setText(ServiceTools.formatPrice((TotalReceipt)));
+        tvSumOfReceipts.setSelected(true);
+        tvSumOfCash.setText(ServiceTools.formatPrice(TotalCash));
+        tvSumOfCash.setSelected(true);
+        tvSumOfCheque.setText(ServiceTools.formatPrice(TotalCheque));
+        tvSumOfCheque.setSelected(true);
+        tvSumOfReceiptsAmount.setText(ServiceTools.formatPrice(TotalCashReceipt));
+        tvSumOfReceiptsAmount.setSelected(true);
+        tvSumOfDiscountOrder.setText(ServiceTools.formatPrice(TotalDiscountOrder));
+        tvSumOfDiscountOrder.setSelected(true);
+        tvSumOfDiscountInvoice.setText(ServiceTools.formatPrice(TotalDiscountInvoice));
+        tvSumOfDiscountInvoice.setSelected(true);
+        tvSumOfPureOrder.setText(ServiceTools.formatPrice(TotalPureOrder));
+        tvSumOfPureOrder.setSelected(true);
+        tvSumOfPureInvoice.setText(ServiceTools.formatPrice(TotalPureInvoice));
+        tvSumOfPureInvoice.setSelected(true);
+        tvSumOfChargeAndTaxOrder.setText(ServiceTools.formatPrice(TotalChargeAndTaxOrder));
+        tvSumOfChargeAndTaxOrder.setSelected(true);
+        tvSumOffChargeAndTaxInvoice.setText(ServiceTools.formatPrice(TotalChargeAndTaxInvoice));
+        tvSumOffChargeAndTaxInvoice.setSelected(true);
+    }
+
+
     private boolean checkServiceLocationIsRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -1354,12 +1430,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         }
         return false;
-    }
-
-    public void setTrackingConfig() {
-        btnTrackingService.setEnabled(!BaseActivity.getPrefAdminControl(mContext));
-        if(BaseActivity.getPrefTrackingControl(mContext) == 1)
-            startTracking();
     }
 
     private void startTracking() {
@@ -1380,7 +1450,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                             .build());
                 }
             }
-        }
     }
 
     private void forceEnableGps() {
@@ -1437,6 +1506,10 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        if (resultCode == RESULT_OK) {
+
+            if (requestCode == REQUEST_CUSTOMER_LIST) {
+
         if (requestCode == REQUEST_Location_ON) {
             if(resultCode != RESULT_OK){
                 if (locationService.isRunService()) {
@@ -1463,7 +1536,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 CustomerId = data.getIntExtra(CUSTOMERID_KEY, 0);
                 CustomerClientId = data.getLongExtra(CUSTOMER_CLIENT_ID_KEY, 0);
                 Type = data.getIntExtra(TYPE_KEY, 0);
-                GroupId = data.getLongExtra("GroupId", 0);
+                GroupId = data.getLongExtra(CUSTOMER_GROUP_KEY, 0);
 
                 if (Type == ProjectInfo.TYPE_INVOCIE) {
                     Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
@@ -1487,7 +1560,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_SEND_TRANSFERENCE);
                     intent.putExtra(MODE_PAGE, MODE_NEW);
                     intent.putExtra(CUSTOMERID_KEY, CustomerId);
-                    intent.putExtra("GroupId", GroupId);
+                    intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(getApplicationContext(), ManageReceiptActivity.class);

@@ -201,7 +201,6 @@ public class ProductListFragment extends Fragment {
         TextView txtSearch = null;
         if (productPickerListActivity != null) {
             array.addAll(ProductPickerListActivity.arrayProductMain);
-            arrayID.addAll(ProductPickerListActivity.arrayProductId);
             arrayTemp.addAll(ProductPickerListActivity.arrayProductMain);
             txtSearch = ProductPickerListActivity.txtSearch;
 

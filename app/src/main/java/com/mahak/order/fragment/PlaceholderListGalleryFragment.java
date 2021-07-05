@@ -41,6 +41,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.mahak.order.BaseActivity.CUSTOMER_GROUP_KEY;
+
 /**
  * Created by mostafavi on 10/4/2016.
  */
@@ -74,7 +76,7 @@ public class PlaceholderListGalleryFragment extends Fragment {
     private int totalItem;
     private int CountProduct;
     private static int MODE_ASSET;
-    private static int CategoryId;
+    private static long CategoryId;
 
     private MultiLevelRecyclerView multiLevelRecyclerView;
     private LinearLayout show_all_product, ll_category;
@@ -86,7 +88,7 @@ public class PlaceholderListGalleryFragment extends Fragment {
         args.putInt("type", type);
         args.putInt("mode", mode);
         args.putInt("customerId", customerId);
-        args.putLong("GroupId", groupId);
+        args.putLong(CUSTOMER_GROUP_KEY, groupId);
         args.putLong("OrderId", orderId);
         return frag;
     }
@@ -114,11 +116,9 @@ public class PlaceholderListGalleryFragment extends Fragment {
             type = bundle.getInt("type");
             mode = bundle.getInt("Mode");
             customerId = bundle.getInt("customerId");
-            GroupId = bundle.getInt("GroupId");
+            GroupId = bundle.getInt(CUSTOMER_GROUP_KEY);
             OrderId = bundle.getLong("OrderId");
             CountProduct = bundle.getInt("CountProduct");
-            MODE_ASSET = bundle.getInt("MODE_ASSET");
-            CategoryId = bundle.getInt("CategoryId");
         }
     }
 
@@ -207,10 +207,14 @@ public class PlaceholderListGalleryFragment extends Fragment {
             array.addAll(ProductPickerListActivity.arrayProductMain);
             arrayOrginal.addAll(array);
             txtSearch = ProductPickerListActivity.txtSearch;
+            MODE_ASSET = ProductPickerListActivity.MODE_ASSET;
+            CategoryId = ProductPickerListActivity.CategoryId;
         } else if (productsListActivity != null) {
             array.addAll(ProductsListActivity.arrayProductMain);
             arrayOrginal.addAll(array);
             txtSearch = ProductsListActivity.txtSearch;
+            MODE_ASSET = ProductsListActivity.MODE_ASSET;
+            CategoryId = ProductsListActivity.CategoryId;
         }
         if (mActivity != null) {
             calculateSelectedProduct();
@@ -289,7 +293,7 @@ public class PlaceholderListGalleryFragment extends Fragment {
                 for (int i = 0; i < arrayOrginal.size(); i++) {
                     Product product = arrayOrginal.get(i);
                     name = product.getName();
-                    boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name.toLowerCase());
+                    boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name);
                     if (result_contain)
                         filterItem.add(product);
                 }

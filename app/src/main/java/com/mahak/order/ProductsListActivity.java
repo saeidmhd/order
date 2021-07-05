@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -65,6 +66,7 @@ import com.mahak.order.fragment.ProductGridFragment;
 import com.mahak.order.fragment.ProductGridGalleryFragment;
 import com.mahak.order.fragment.ProductListFragment;
 import com.mahak.order.fragment.ProductPagerFragment;
+import com.mahak.order.fragment.RecyclerProductAdapter;
 import com.mahak.order.service.DataService;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.DbSchema;
@@ -78,6 +80,8 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -146,7 +150,6 @@ public class ProductsListActivity extends BaseActivity {
     List<ProductGroup> productGroupLists;
     List<ProductPriceLevelName> productPriceLevelNames;
     private List<com.mahak.order.common.ExtraData> extraDataList;
-    private SwipeRefreshLayout swipeRefreshProduct;
     AdapterSpnAssetProduct adspnAssetProduct;
 
     private long PicturesMaxRowVersion;
@@ -249,11 +252,11 @@ public class ProductsListActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (POSITION != position) {
                     POSITION = position;
-                    txtSearch.setText("");
+                    //txtSearch.setText("");
                     ProductGroup productGroup = (ProductGroup) parent.getItemAtPosition(position);
                     CategoryId = productGroup.getProductCategoryId();
                     db.open();
-                    CountProduct = db.getTotalCountProduct(CategoryId , MODE_ASSET);
+                    CountProduct = db.getTotalCountProduct(txtSearch.getText().toString(), CategoryId , MODE_ASSET);
                     setPageTitle(CountProduct);
                     //Read Product And Fill Adapter///////////////////////////////////////////
                     if (asyproduct != null) {
@@ -277,13 +280,13 @@ public class ProductsListActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 db.open();
-                CountProduct = db.getTotalCountProduct(CategoryId , position);
+                CountProduct = db.getTotalCountProduct(txtSearch.getText().toString() , CategoryId , position);
                 setPageTitle(CountProduct);
 
                 if (MODE_ASSET != position) {
                     // RecyclerProductAdapter.products.clear();
                     MODE_ASSET = position;
-                    txtSearch.setText("");
+                    //txtSearch.setText("");
                     //Read Product And Fill Adapter///////////////////////////////////////////
                     if (asyproduct != null) {
                         if (asyproduct.getStatus() == Status.RUNNING)
@@ -385,14 +388,6 @@ public class ProductsListActivity extends BaseActivity {
             }
         });
 
-        swipeRefreshProduct.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                SendReceive();
-            }
-        });
-
-
     }// End of onCreate
 
     public void getProducts(int totalItem) {
@@ -408,7 +403,6 @@ public class ProductsListActivity extends BaseActivity {
         spnCategory = (Spinner) findViewById(R.id.spnCategory);
         spnAssetProduct = (Spinner) findViewById(R.id.spnAssetProduct);
         llprogressBar = (LinearLayout) findViewById(R.id.llprogressBar);
-        swipeRefreshProduct = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshProduct);
         txtSearch = (EditText) findViewById(R.id.txtSearch);
         db = new DbAdapter(mContext);
         ArrayAssetProduct = getResources().getStringArray(R.array.array_asset_product);
@@ -435,7 +429,7 @@ public class ProductsListActivity extends BaseActivity {
         adspnAssetProduct = new AdapterSpnAssetProduct(mContext, R.layout.item_spinner, ArrayAssetProduct);
         spnAssetProduct.setAdapter(adspnAssetProduct);
 
-        txtSearch.setText("");
+        //txtSearch.setText("");
 
     }
 
@@ -606,6 +600,7 @@ public class ProductsListActivity extends BaseActivity {
 
                 public Holder(View view) {
                     tvProductName = (TextView) view.findViewById(R.id.tvName);
+                    tvProductName.setSelected(true);
                     tvAsset = (TextView) view.findViewById(R.id.tvAsset);
                     tvAsset2 = (TextView) view.findViewById(R.id.tvAsset2);
                     tvInbox = (TextView) view.findViewById(R.id.tvInbox);
@@ -675,7 +670,7 @@ public class ProductsListActivity extends BaseActivity {
                         for (int i = 0; i < arrayOrginal.size(); i++) {
                             Product product = arrayOrginal.get(i);
                             name = product.getName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name);
                             //if(name.toLowerCase().contains(constraint))
                             if (result_contain)
                                 filterItem.add(product);
@@ -836,6 +831,7 @@ public class ProductsListActivity extends BaseActivity {
 
                 public Holder(View view) {
                     tvName = (TextView) view.findViewById(R.id.tvName);
+                    tvName.setSelected(true);
                     tvAsset = (TextView) view.findViewById(R.id.tvAsset);
                     tvAsset2 = (TextView) view.findViewById(R.id.tvAsset2);
                     tvInbox = (TextView) view.findViewById(R.id.tvInbox);
@@ -905,7 +901,7 @@ public class ProductsListActivity extends BaseActivity {
                         for (int i = 0; i < arrayOrginal.size(); i++) {
                             Product product = arrayOrginal.get(i);
                             name = product.getName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name);
                             //if(name.toLowerCase().contains(constraint))
                             if (result_contain)
                                 filterItem.add(product);
@@ -1137,6 +1133,7 @@ public class ProductsListActivity extends BaseActivity {
         @Override
         protected Boolean doInBackground(String... arg0) {
             db.open();
+            BaseActivity.setPrefDefSellPrice(ServiceTools.getPrefDefPrice(db,0,0));
             arrayProductMain = db.getAllProduct(Id, ModeAssetProduct, 0);
             //HashMap_productDetail = db.getMapProductDetail();
             return true;
@@ -1191,7 +1188,7 @@ public class ProductsListActivity extends BaseActivity {
         _tvOrderDate.setText(getDateAndTimeForLong(dt.getTime()));
         if (BaseActivity.getAuthentication())
             _tvUsername.setText(BaseActivity.getUserProfile().getName());
-        _adProduct = new AdapterListProductForPrint(mActivity, arrayProductMain);
+        _adProduct = new AdapterListProductForPrint(mActivity, RecyclerProductAdapter.products);
         _lstProduct.setDrawingCacheEnabled(true);
         _lstProduct.setAdapter(_adProduct);
         ServiceTools.setListViewHeightBasedOnChildren(_lstProduct);
@@ -1325,7 +1322,6 @@ public class ProductsListActivity extends BaseActivity {
             public Holder(View view) {
 
                 llitem = (LinearLayout) view.findViewById(R.id.llitem);
-
                 tvProductName = (TextView) view.findViewById(R.id.tvProductSpec);
                 tvCount = (TextView) view.findViewById(R.id.tvCount);
                 tvKalaCode = (TextView) view.findViewById(R.id.tvKalaCode);
@@ -1333,27 +1329,9 @@ public class ProductsListActivity extends BaseActivity {
             }
 
             public void Populate(Product product, int position) {
-
-                if (db == null) db = new DbAdapter(mContext);
-                db.open();
-
-                double SumCount2 = 0;
-                double SumCount1 = 0;
-
-                ArrayList<ProductDetail> productDetails = db.getAllProductDetailWithProductId(product.getProductId());
-
-                for (ProductDetail productDetail : productDetails) {
-                    SumCount1 = ServiceTools.getSumCount1(productDetail.getProductId(), mContext);
-                    SumCount2 = ServiceTools.getSumCount2(productDetail.getProductId(), mContext);
-                }
-                db.close();
-
-
                 tvProductName.setText(product.getName());
-                tvCount.setText(formatCount(SumCount1));
-                tvKalaCode.setText("" + product.getProductCode());
-
-
+                tvCount.setText(ServiceTools.formatCount(product.getSumCount1()));
+                tvKalaCode.setText(String.valueOf(product.getProductCode()));
             }
         }
 
@@ -1472,211 +1450,6 @@ public class ProductsListActivity extends BaseActivity {
 
 
         return dialog;
-    }
-
-    public void SendReceive() {
-
-        db.open();
-        final User user = db.getUser();
-        LoginBody loginBody = new LoginBody();
-        //String DeviceID = ServiceTools.getDeviceID(mContext);
-        loginBody.setAppId("MahakOrder");
-        loginBody.setDatabaseId(0);
-        loginBody.setLanguage("en-US");
-        loginBody.setDeviceId("");
-        loginBody.setDescription("login");
-        loginBody.setUserName(user.getUsername());
-        loginBody.setPassword(user.getPassword());
-
-        ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
-        Call<LoginResult> call = apiService.Login(loginBody);
-        pd = new FontProgressDialog(mContext);
-        pd.setMessage(getString(R.string.reviewing_user_info));
-        pd.setCancelable(false);
-        pd.show();
-        call.enqueue(new Callback<LoginResult>() {
-            @Override
-            public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
-                pd.dismiss();
-                if (response.body() != null) {
-                    if (response.body().isResult()) {
-                        BaseActivity.setPrefUserToken(response.body().getData().getUserToken());
-                        setPrefSyncId(response.body().getData().getSyncId());
-                        //Save db
-                        db.open();
-                        user.setSyncId(response.body().getData().getSyncId());
-                        user.setUserToken(response.body().getData().getUserToken());
-                        db.UpdateUser(user);
-                        db.close();
-                        new ReceiveAsyncTask(response.body().getData().getUserToken()).execute();
-                        //setAndGetRequest(response.body().getData().getUserToken());
-                    } else {
-                        Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                        pd.dismiss();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoginResult> call, Throwable t) {
-                pd.dismiss();
-                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
-                pd.dismiss();
-            }
-        });
-    }
-
-    class ReceiveAsyncTask extends AsyncTask<String, String, Integer> {
-        String mUserToken;
-        GetAllDataBody getAllDataBody;
-
-        ReceiveAsyncTask(String UserToken) {
-            mUserToken = UserToken;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Integer doInBackground(String... arg0) {
-
-            db.open();
-            getAllDataBody = new GetAllDataBody();
-            getAllDataBody.setUserToken(mUserToken);
-
-            PicturesMaxRowVersion = db.getMaxRowVersion(DbSchema.PicturesProductSchema.TABLE_NAME);
-            ExtraDataMaxRowVersion = db.getMaxRowVersion(DbSchema.ExtraDataSchema.TABLE_NAME);
-            PropertyDescriptionMaxRowVersion = db.getMaxRowVersion(DbSchema.PropertyDescriptionSchema.TABLE_NAME);
-            VisitorProductMaxRowVersion = db.getMaxRowVersion(DbSchema.VisitorProductSchema.TABLE_NAME);
-            PriceLevelMaxRowVersion = db.getMaxRowVersion(DbSchema.PriceLevelNameSchema.TABLE_NAME);
-            CategoryMaxRowVersion = db.getMaxRowVersion(DbSchema.ProductGroupSchema.TABLE_NAME);
-            ProductMaxRowVersion = db.getMaxRowVersion(DbSchema.Productschema.TABLE_NAME);
-            ProductDetailMaxRowVersion = db.getMaxRowVersion(DbSchema.ProductDetailSchema.TABLE_NAME);
-
-            getAllDataBody.setFromPictureVersion(PicturesMaxRowVersion);
-            getAllDataBody.setFromExtraDataVersion(ExtraDataMaxRowVersion);
-            getAllDataBody.setFromPropertyDescriptionVersion(PropertyDescriptionMaxRowVersion);
-            getAllDataBody.setFromVisitorProductVersion(VisitorProductMaxRowVersion);
-            getAllDataBody.setFromCostLevelNameVersion(PriceLevelMaxRowVersion);
-            getAllDataBody.setFromProductCategoryVersion(CategoryMaxRowVersion);
-            getAllDataBody.setFromProductVersion(ProductMaxRowVersion);
-            getAllDataBody.setFromProductDetailVersion(ProductDetailMaxRowVersion);
-            return 0;
-        }
-
-        @Override
-        protected void onPostExecute(Integer result) {
-
-            pd = new FontProgressDialog(mContext);
-
-            final String[] mMsg = {""};
-
-            ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
-            Call<GetDataResult> getDataResultCall;
-            getDataResultCall = apiService.GetAllData(getAllDataBody);
-            pd.setMessage(getString(R.string.recieiving_info));
-            pd.setCancelable(false);
-            pd.show();
-            getDataResultCall.enqueue(new Callback<GetDataResult>() {
-                @Override
-                public void onResponse(Call<GetDataResult> call, Response<GetDataResult> response) {
-                    pd.dismiss();
-                    if (response.body() != null && response.body().isResult()) {
-                        if (response.body().getData() != null) {
-                            swipeRefreshProduct.setRefreshing(false);
-
-                            extraDataList = response.body().getData().getObjects().getExtraData();
-                            picturesProducts = response.body().getData().getObjects().getPictures();
-                            propertyDescriptions = response.body().getData().getObjects().getPropertyDescriptions();
-                            visitorProducts = response.body().getData().getObjects().getVisitorProducts();
-                            productPriceLevelNames = response.body().getData().getObjects().getCostLevelNames();
-                            productGroupLists = response.body().getData().getObjects().getProductCategories();
-                            productList = response.body().getData().getObjects().getProducts();
-                            productDetails = response.body().getData().getObjects().getProductDetails();
-
-                            new SaveAsyncTask().execute();
-                        }
-                    } else if (response.body() != null) {
-                        pd.dismiss();
-                        mMsg[0] = response.body().getMessage();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<GetDataResult> call, Throwable t) {
-                    pd.dismiss();
-                    mMsg[0] = t.toString();
-                }
-            });
-        }
-    }
-
-    class SaveAsyncTask extends AsyncTask<String, String, Integer> {
-        SaveAsyncTask() {
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pd = new FontProgressDialog(mContext);
-            pd.setMessage(getString(R.string.storing_info));
-            pd.setCancelable(false);
-            pd.show();
-        }
-
-        @Override
-        protected Integer doInBackground(String... arg0) {
-            if (productList != null)
-                if (productList.size() > 0)
-                    if (DataService.InsertProduct(db, productList, ProductMaxRowVersion) == -1) {
-                    }
-            if (productDetails != null)
-                if (productDetails.size() > 0) {
-                    if (DataService.InsertProductDetail(db, productDetails, ProductDetailMaxRowVersion) == -1) {
-                    }
-                }
-            if (productGroupLists != null)
-                if (productGroupLists.size() > 0) {
-                    if (DataService.InsertCategory(db, productGroupLists) == -1) {
-                    }
-                }
-            if (picturesProducts != null)
-                if (picturesProducts.size() > 0)
-                    if (DataService.InsertPicturesProduct(db, picturesProducts) == -1) {
-                    }
-            if (propertyDescriptions != null)
-                if (propertyDescriptions.size() > 0) {
-                    if (DataService.InsertPropertyDescription(db, propertyDescriptions) == -1) {
-                    }
-                }
-            if (visitorProducts != null)
-                if (visitorProducts.size() > 0) {
-                    if (DataService.InsertVisitorProducts(db, visitorProducts, VisitorProductMaxRowVersion) == -1) {
-                    }
-                }
-            if (productPriceLevelNames != null)
-                if (productPriceLevelNames.size() > 0) {
-                    if (DataService.InsertCostLevelName(db, productPriceLevelNames) == -1) {
-                    }
-                }
-            if (extraDataList != null)
-                if (extraDataList.size() > 0)
-                    if (DataService.InsertExtraInfo(db, extraDataList, ExtraDataMaxRowVersion) == -1) {
-                    }
-            return 0;
-        }
-
-        @Override
-        protected void onPostExecute(Integer result) {
-            pd.dismiss();
-
-            getProducts(totalItem);
-
-            arrayProductGroup.addAll(productGroupLists);
-            adspnAssetProduct.notifyDataSetChanged();
-        }
     }
 
     public void sort() {

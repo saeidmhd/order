@@ -13,27 +13,27 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginBottom="15dp"
-        android:background="@android:color/black"
         android:orientation="vertical"
         android:padding="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="@android:color/black"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingRight="@dimen/NormalSize">
 
-            <TextView
+            <com.mahak.order.widget.PrintTextView
                 android:id="@+id/_tvType"
                 style="@style/forms_page_title_label_default"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="فاکتور"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="فاکتور فروش"
+                android:textColor="@color/black"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

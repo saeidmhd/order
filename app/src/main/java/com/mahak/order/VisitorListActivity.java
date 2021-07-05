@@ -45,7 +45,7 @@ public class VisitorListActivity extends BaseActivity {
     private static int REQUESTCODE_MANAGE_CUSTOMER = 1;
     private static long GroupId;
     private static int PositionGroup = 0;
-    private static String GROUPID_KEY = "GroupId";
+    private static String GROUPID_KEY = CUSTOMER_GROUP_KEY;
     private static String POSITION_KEY = "Position";
     private boolean FIRST_LOADE = false;
     private Context mContext;
@@ -242,7 +242,7 @@ public class VisitorListActivity extends BaseActivity {
                     for (int i = 0; i < arrayorginal.size(); i++) {
                         Visitor visitor = arrayorginal.get(i);
                         UserName = visitor.getName();
-                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), UserName.toLowerCase());
+                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), UserName);
                         //if(CustomerName.toLowerCase().contains(constraint))
                         if (result_contain) {
                             filterItem.add(visitor);

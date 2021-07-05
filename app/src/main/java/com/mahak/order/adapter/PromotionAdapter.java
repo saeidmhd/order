@@ -68,7 +68,7 @@ public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.View
                 for (int i = 0; i < arrayOriginal.size(); i++) {
                     Promotion promotion = arrayOriginal.get(i);
                     PromotionName = promotion.getNamePromotion();
-                    boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), PromotionName.toLowerCase());
+                    boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), PromotionName);
                     if (result_contain) {
                         filterItem.add(promotion);
                     }

@@ -17,6 +17,7 @@ import com.mahak.order.storage.DbAdapter;
 import java.util.ArrayList;
 
 import static com.mahak.order.common.ServiceTools.formatCount;
+import static com.mahak.order.common.ServiceTools.formatPrice;
 
 public class PromotionDetailAdapter extends RecyclerView.Adapter<PromotionDetailAdapter.ViewHolder> {
 
@@ -76,7 +77,7 @@ public class PromotionDetailAdapter extends RecyclerView.Adapter<PromotionDetail
             case Promotion.takhfif_Az_Sotooh:
                 holder.how_to_promotion.setText(R.string.discount_from_levels);
                 holder.goodGift.setText("-------");
-                holder.meghdar_promotion.setText(context.getString(R.string.discount_level) + formatCount(promotionDetails.get(position).getMeghdarPromotion()));
+                holder.meghdar_promotion.setText( context.getString(R.string.discount_level) +" "+ formatCount(promotionDetails.get(position).getMeghdarPromotion()));
                 break;
             case Promotion.eshantion_Az_hamanKala:
                 holder.how_to_promotion.setText(R.string.gift_same_product);
@@ -86,12 +87,15 @@ public class PromotionDetailAdapter extends RecyclerView.Adapter<PromotionDetail
             case Promotion.eshantion_Az_kalahaye_digar:
                 holder.how_to_promotion.setText(R.string.gift_other_product);
                 product = db.getProductWithProductCode(promotionDetails.get(position).getCodeGood());
-                holder.goodGift.setText(product.getName());
+                if(product.getProductId() == 0)
+                    holder.goodGift.setText(R.string.no_product);
+                else
+                    holder.goodGift.setText(product.getName());
                 holder.meghdar_promotion.setText(formatCount(promotionDetails.get(position).getMeghdar()));
                 break;
 
         }
-        holder.to_payment.setText(formatCount(promotionDetails.get(position).getToPayment()));
+        holder.to_payment.setText(formatPrice(promotionDetails.get(position).getToPayment()));
 
     }
 

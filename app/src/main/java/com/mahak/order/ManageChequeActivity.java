@@ -325,7 +325,11 @@ public class ManageChequeActivity extends BaseActivity {
                             ManageReceiptActivity.arrayCheque.get(PositionArray).setModifyDate(date.getTime());
                             ManageReceiptActivity.arrayCheque.get(PositionArray).setDate(LngDate);
                             if (bank != null) {
-                                ManageReceiptActivity.arrayCheque.get(PositionArray).setBankId(String.valueOf(bank.getId()));
+                                if (Type == ProjectInfo.CHEQUE_TYPE)
+                                    ManageReceiptActivity.arrayCheque.get(PositionArray).setBankId(null);
+                                else if (Type == ProjectInfo.CASHRECEIPT_TYPE)
+                                    ManageReceiptActivity.arrayCheque.get(PositionArray).setBankId(String.valueOf(bank.getId()));
+
                                 ManageReceiptActivity.arrayCheque.get(PositionArray).setBankName(bank.getName());
                             }
                             setResult(RESULT_OK);
@@ -362,8 +366,6 @@ public class ManageChequeActivity extends BaseActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
-
             }
 
         });

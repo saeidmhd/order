@@ -19,6 +19,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import androidx.appcompat.app.ActionBar;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -59,6 +60,7 @@ import com.mahak.order.common.login.LoginResult;
 import com.mahak.order.common.request.GetAllDataBody;
 import com.mahak.order.common.request.GetAllDataResult.GetDataResult;
 import com.mahak.order.common.request.SetAllDataBody;
+import com.mahak.order.common.request.SetAllDataResult.Objects;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
 import com.mahak.order.common.request.SetSign.setSignImage;
 import com.mahak.order.service.DataService;
@@ -232,9 +234,23 @@ public class DataSyncActivityRestApi extends BaseActivity {
             @Override
             public void onClick(View arg0) {
                 Cancel();
-                finish();
+                Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
+    }
+
+    private void dismissProgressDialog() {
+        if (pd != null && pd.isShowing()) {
+            pd.dismiss();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        dismissProgressDialog();
+        super.onDestroy();
     }
 
     public void SendReceive() {
@@ -262,7 +278,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
         call.enqueue(new Callback<LoginResult>() {
             @Override
             public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
-                pd.dismiss();
+                dismissProgressDialog();
                 if (response.body() != null) {
                     if (response.body().isResult()) {
                         if (userDatabaseId == response.body().getData().getDatabaseId() && userId == response.body().getData().getVisitorId()) {
@@ -298,20 +314,17 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
-                        pd.dismiss();
+                        dismissProgressDialog();
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResult> call, Throwable t) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                FirebaseCrashlytics.getInstance().log(t.getMessage());
-                pd.dismiss();
                 Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
                 FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
                 FirebaseCrashlytics.getInstance().log(t.getMessage());
-                pd.dismiss();
+                dismissProgressDialog();
             }
         });
     }
@@ -483,10 +496,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         if (item.getItemId() == android.R.id.home) {
-            // syncAsyn.cancel(true);
-            pbLoading.setVisibility(View.GONE);
-            setResult(RESULT_OK);
-            finish();
+            Cancel();
+            Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -494,9 +507,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        // syncAsyn.cancel(true);
-        setResult(RESULT_OK);
-        finish();
+        Cancel();
+        Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     private void cleanDatabase() {
@@ -574,6 +588,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 arrayInvoice.get(i).setOrderId(0);
                 orderDetails = db.getAllOrderDetailForSend(arrayInvoice.get(i).getId());
                 for (OrderDetail orderDetail : orderDetails) {
+                    if ((orderDetail.getGiftCount1() > 0 || orderDetail.getGiftCount2() > 0)) {
+                        orderDetail.setCount1(orderDetail.getGiftCount1());
+                        orderDetail.setCount2(orderDetail.getGiftCount2());
+                    }
                     orderDetailProperties = db.getAllOrderDetailProperty(orderDetail.getOrderId(), orderDetail.getProductId());
                     if (orderDetailProperties.size() > 0) {
                         for (OrderDetailProperty orderDetailProperty : orderDetailProperties) {
@@ -642,7 +660,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             saveAllDataResultCall.enqueue(new Callback<SaveAllDataResult>() {
                 @Override
                 public void onResponse(@NonNull Call<SaveAllDataResult> call, @NonNull Response<SaveAllDataResult> response) {
-                    pd.dismiss();
+                    dismissProgressDialog();
                     if (response.body() != null && response.body().isResult()) {
                         db.open();
                         if (arrayInvoice.size() > 0) {
@@ -761,16 +779,24 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         pbLoading.setVisibility(View.GONE);
                         db.close();
 
-                        new SendSignInfoAsyncTask(mUserToken).execute();
+                        new ReceiveAsyncTask(mUserToken).execute();
 
 
                     } else if (response.body() != null) {
                         // mMsg[0] = response.body().getData().getObjects().getOrders().getResults().get(0).getErrors().get(0).getError();
-                        pd.dismiss();
+                        dismissProgressDialog();
                         mMsg[0] = getString(R.string.send_error);
-                        showDialog(response.body().getMessage());
+
+                        if (response.body().getData().getObjects() != null)
+                            showDialog(getResponseError(response.body().getData().getObjects()));
+                        else
+                            showDialog(response.body().getMessage());
+
                         setTextSendErrorResult();
                         pbLoading.setVisibility(View.GONE);
+
+                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                        FirebaseCrashlytics.getInstance().log(response.body().getMessage());
                     }
                 }
 
@@ -778,7 +804,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
                     FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
                     FirebaseCrashlytics.getInstance().log(t.getMessage());
-                    pd.dismiss();
+                    dismissProgressDialog();
                     mMsg[0] = t.toString();
                     showDialog(mMsg[0]);
                     pbLoading.setVisibility(View.GONE);
@@ -790,82 +816,52 @@ public class DataSyncActivityRestApi extends BaseActivity {
         }
     }
 
-    class SendSignInfoAsyncTask extends AsyncTask<String, String, Integer> {
-
-        List<PicturesProduct> picturesProducts = new ArrayList<>();
-        String mUserToken;
-
-        SendSignInfoAsyncTask(String UserToken) {
-            mUserToken = UserToken;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pbLoading.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Integer doInBackground(String... arg0) {
-            db.open();
-            picturesProducts = db.getAllSignWithoutUrl();
-            return 0;
-        }
-
-        @Override
-        protected void onPostExecute(Integer result) {
-
-            pbLoading.setVisibility(View.GONE);
-            pbLoading.setVisibility(View.VISIBLE);
-
-            final String[] mMsg = {""};
-
-            ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
-            SetAllDataBody setAllDataBody = new SetAllDataBody();
-            setAllDataBody.setUserToken(mUserToken);
-            setAllDataBody.setPictures(picturesProducts);
-            Call<SaveAllDataResult> saveAllDataResultCall = apiService.SaveAllData(setAllDataBody);
-
-            pd.setMessage(getString(R.string.sending_image));
-            pd.setCancelable(false);
-            pd.show();
-            saveAllDataResultCall.enqueue(new Callback<SaveAllDataResult>() {
-                @Override
-                public void onResponse(@NonNull Call<SaveAllDataResult> call, @NonNull Response<SaveAllDataResult> response) {
-                    pd.dismiss();
-                    if (response.body() != null && response.body().isResult()) {
-                        db.open();
-                        if (picturesProducts.size() > 0) {
-                            for (int i = 0; i < picturesProducts.size(); i++) {
-                                picturesProducts.get(i).setPictureId(response.body().getData().getObjects().getPictures().getResults().get(i).getEntityID());
-                                db.UpdatePicturesProductWithClientId(picturesProducts.get(i));
-                            }
-                        }
-                        pbLoading.setVisibility(View.GONE);
-                        db.close();
-                        new ReceiveAsyncTask(mUserToken).execute();
-
-                    } else if (response.body() != null) {
-                        // mMsg[0] = response.body().getData().getObjects().getOrders().getResults().get(0).getErrors().get(0).getError();
-                        pd.dismiss();
-                        mMsg[0] = getString(R.string.send_error);
-                        showDialog(response.body().getMessage());
-                        setTextSendErrorResult();
-                        pbLoading.setVisibility(View.GONE);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                    FirebaseCrashlytics.getInstance().log(t.getMessage());
-                    pd.dismiss();
-                    mMsg[0] = t.toString();
-                    showDialog(mMsg[0]);
-                    pbLoading.setVisibility(View.GONE);
-                    setTextSendErrorResult();
-                }
-            });
+    private String getResponseError(Objects objects) {
+        try {
+            if(objects.getPeople().getResults().size()>0)
+                return "خطا در ارسال اشخاص" + "\n" + objects.getPeople().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getPeople().getResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getBanks().getResults().size()>0)
+                return "خطا در ارسال بانک" + "\n" +objects.getBanks().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getBanks().getResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getChecklists().getResults().size()>0)
+                return "خطا در ارسال چک لیست ها" + "\n" +objects.getChecklists().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getChecklists().getResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getCheques().getResults().size()>0)
+                return "خطا در ارسال چک ها" + "\n" +objects.getCheques().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getCheques().getResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getPayableTransfers().getResults().size()>0)
+                return "خطا در ارسال پرداختی ها" + "\n" +objects.getPayableTransfers().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getPayableTransfers().getResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getSettings().getSettingsResults().size()>0)
+                return "خطا در ارسال تنظیمات" + "\n" +objects.getSettings().getSettingsResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getSettings().getSettingsResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getExtraDatas().getResults().size()>0)
+                return "خطا در ارسال اطلاعات بیشتر" + "\n" +objects.getExtraDatas().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getExtraDatas().getResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getOrderDetails().getResults().size()>0)
+                return "خطا در ارسال جزییات فاکتور" + "\n" +objects.getOrderDetails().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getOrderDetails().getResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getOrders().getResults().size()>0)
+                return "خطا در ارسال فاکتور" + "\n" +objects.getOrders().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getOrders().getResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getPersonGroups().getResults().size()>0)
+                return "خطا در ارسال گروه اشخاص" + "\n" +objects.getPersonGroups().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getPersonGroups().getResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getPictures().getResults().size()>0)
+                return "خطا در ارسال تصاویر" + "\n" +objects.getPictures().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getPictures().getResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getProductCategories().getResults().size()>0)
+                return "خطا در ارسال گروه کالاها" + "\n" +objects.getProductCategories().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getProductCategories().getResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getProductDetails().getResults().size()>0)
+                return "خطا در ارسال جزییات کالاها" + "\n" +objects.getProductDetails().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getProductDetails().getResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getProducts().getResults().size()>0)
+                return "خطا در ارسال کالاها" + "\n" +objects.getProducts().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getProducts().getResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getReceipts().getResults().size()>0)
+                return "خطا در ارسال دریافتی ها" + "\n" +objects.getReceipts().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getReceipts().getResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getTransactions().getResults().size()>0)
+                return "خطا در ارسال گردش حساب ها" + "\n" +objects.getTransactions().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getTransactions().getResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getVisitors().getResults().size()>0)
+                return "خطا در ارسال ویزیتور ها" + "\n" +objects.getVisitors().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getVisitors().getResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getNotRegisters().getResults().size()>0)
+                return "خطا در ارسال عدم ثبت سفارش" + "\n" +objects.getNotRegisters().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getNotRegisters().getResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getTransferStores().getResults().size()>0)
+                return "خطا در ارسال حواله کالا" + "\n" +objects.getTransferStores().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getTransferStores().getResults().get(0).getErrors().get(0).getProperty();
+            if(objects.getTransferStoreDetails().getResults().size()>0)
+                return "خطا در ارسال جزییات حواله کالاها" + "\n" +objects.getTransferStoreDetails().getResults().get(0).getErrors().get(0).getError()+ "\n" + objects.getTransferStoreDetails().getResults().get(0).getErrors().get(0).getProperty();
+            return "";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "خطای ناشناخته";
         }
     }
 
@@ -941,9 +937,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
             getAllDataBody.setOrderTypes(orderTypes);
 
             getAllDataBody.setFromReturnReasonVersion(ReasonMaxRowVersion);
-            getAllDataBody.setFromPromotionVersion(PromotionMaxRowVersion);
-            getAllDataBody.setFromPromotionDetailVersion(PromotionDetailMaxRowVersion);
-            getAllDataBody.setFromPromotionEntityVersion(PromotionEntityMaxRowVersion);
+
+            getAllDataBody.setFromPromotionVersion(0);
+            getAllDataBody.setFromPromotionDetailVersion(0);
+            getAllDataBody.setFromPromotionEntityVersion(0);
 
             getAllDataBody.setFromPictureVersion(PicturesMaxRowVersion);
             getAllDataBody.setFromExtraDataVersion(ExtraDataMaxRowVersion);
@@ -978,7 +975,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             getDataResultCall.enqueue(new Callback<GetDataResult>() {
                 @Override
                 public void onResponse(Call<GetDataResult> call, Response<GetDataResult> response) {
-                    pd.dismiss();
+                    dismissProgressDialog();
                     if (response.body() != null && response.body().isResult()) {
                         if (response.body().getData() != null) {
 
@@ -1019,7 +1016,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         }
                         pbLoading.setVisibility(View.GONE);
                     } else if (response.body() != null) {
-                        pd.dismiss();
+                        dismissProgressDialog();
                         mMsg[0] = response.body().getMessage();
                         showDialog(mMsg[0]);
                         setTextGetErrorResult();
@@ -1031,7 +1028,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 public void onFailure(Call<GetDataResult> call, Throwable t) {
                     FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
                     FirebaseCrashlytics.getInstance().log(t.getMessage());
-                    pd.dismiss();
+                    dismissProgressDialog();
                     mMsg[0] = t.toString();
                     showDialog(mMsg[0]);
                     setTextGetErrorResult();
@@ -1119,14 +1116,17 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 if (promotions.size() > 0) {
                     arrayTime[12] = DataService.InsertPromotion(db, promotions);
                 }
+
             if (promotionDetails != null)
                 if (promotionDetails.size() > 0) {
                     arrayTime[13] = DataService.InsertPromotionDetails(db, promotionDetails);
                 }
+
             if (promotionEntities != null)
                 if (promotionEntities.size() > 0) {
-                    arrayTime[14] = DataService.InsertEntitiesOfPromotions(db, promotionEntities);
+                    arrayTime[13] = DataService.InsertEntitiesOfPromotions(db, promotionEntities);
                 }
+
             if (extraData != null)
                 if (extraData.size() > 0)
                     arrayTime[15] = DataService.InsertExtraInfo(db, extraData, ExtraDataMaxRowVersion);
@@ -1335,11 +1335,92 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         break;
                 }
             }
-            new SendSignImageAsyncTask(mUserToken).execute();
+
+            new SendSignInfoAsyncTask(mUserToken).execute();
+
             pbLoading.setVisibility(View.GONE);
-            pd.dismiss();
+            dismissProgressDialog();
         }
 
+    }
+
+    class SendSignInfoAsyncTask extends AsyncTask<String, String, Integer> {
+
+        List<PicturesProduct> picturesProducts = new ArrayList<>();
+        String mUserToken;
+
+        SendSignInfoAsyncTask(String UserToken) {
+            mUserToken = UserToken;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pbLoading.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Integer doInBackground(String... arg0) {
+            db.open();
+            picturesProducts = db.getAllSignWithoutUrl();
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+
+            pbLoading.setVisibility(View.GONE);
+            pbLoading.setVisibility(View.VISIBLE);
+
+            final String[] mMsg = {""};
+
+            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            SetAllDataBody setAllDataBody = new SetAllDataBody();
+            setAllDataBody.setUserToken(mUserToken);
+            setAllDataBody.setPictures(picturesProducts);
+            Call<SaveAllDataResult> saveAllDataResultCall = apiService.SaveAllData(setAllDataBody);
+
+            pd.setMessage(getString(R.string.sending_image));
+            pd.setCancelable(false);
+            pd.show();
+            saveAllDataResultCall.enqueue(new Callback<SaveAllDataResult>() {
+                @Override
+                public void onResponse(@NonNull Call<SaveAllDataResult> call, @NonNull Response<SaveAllDataResult> response) {
+                    dismissProgressDialog();
+                    if (response.body() != null && response.body().isResult()) {
+                        db.open();
+                        if (picturesProducts.size() > 0) {
+                            for (int i = 0; i < picturesProducts.size(); i++) {
+                                picturesProducts.get(i).setPictureId(response.body().getData().getObjects().getPictures().getResults().get(i).getEntityID());
+                                db.UpdatePicturesProductWithClientId(picturesProducts.get(i));
+                            }
+                        }
+                        pbLoading.setVisibility(View.GONE);
+                        db.close();
+
+                        new SendSignImageAsyncTask(mUserToken).execute();
+
+                    } else if (response.body() != null) {
+                        mMsg[0] = getString(R.string.send_error);
+                        //showDialog(response.body().getMessage());
+                        pbLoading.setVisibility(View.GONE);
+
+                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                        FirebaseCrashlytics.getInstance().log(response.body().getMessage());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
+                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                    FirebaseCrashlytics.getInstance().log(t.getMessage());
+                    dismissProgressDialog();
+                    mMsg[0] = t.toString();
+                    //showDialog(mMsg[0]);
+                    pbLoading.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
     class SendSignImageAsyncTask extends AsyncTask<String, String, Integer> {
@@ -1374,7 +1455,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         mSetSignImageResult.enqueue(new Callback<setSignImage>() {
                             @Override
                             public void onResponse(@NonNull Call<setSignImage> call, @NonNull Response<setSignImage> response) {
-                                pd.dismiss();
+                                dismissProgressDialog();
                                 if (response.body() != null && response.body().getResult()) {
                                     db.open();
                                     PicturesProduct picturesProduct = db.getPictureWithPictureId(response.body().getData().getEntityId());
@@ -1384,10 +1465,12 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                     pbLoading.setVisibility(View.GONE);
 
                                 } else if (response.body() != null) {
-                                    pd.dismiss();
+                                    dismissProgressDialog();
                                     mMsg[0] = getString(R.string.send_error);
-                                    setTextSendErrorResult();
                                     pbLoading.setVisibility(View.GONE);
+
+                                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                                    FirebaseCrashlytics.getInstance().log(response.body().toString());
                                 }
                             }
 
@@ -1395,19 +1478,21 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             public void onFailure(Call<setSignImage> call, Throwable t) {
                                 FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
                                 FirebaseCrashlytics.getInstance().log(t.getMessage());
-                                pd.dismiss();
+                                dismissProgressDialog();
                                 mMsg[0] = t.toString();
-                                showDialog(mMsg[0]);
+                                //showDialog(mMsg[0]);
                                 pbLoading.setVisibility(View.GONE);
-                                setTextSendErrorResult();
                             }
                         });
                     }
                 }
             }
-            new TrackingConfig(mContext,DataSyncActivityRestApi.this).getSignalTokenAndSetting();
-        }
 
+            SetDate();
+            ShowDate();
+            new ReadOfflinePicturesProducts(mContext).readAllImages();
+
+        }
     }
 
     private void SetDate() {

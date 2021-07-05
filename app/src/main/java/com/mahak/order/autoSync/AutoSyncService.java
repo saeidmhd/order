@@ -434,6 +434,7 @@ public class AutoSyncService extends IntentService {
             getAllDataBody.setOrderTypes(orderTypes);
 
             getAllDataBody.setFromReturnReasonVersion(ReasonMaxRowVersion);
+
             getAllDataBody.setFromPromotionVersion(PromotionMaxRowVersion);
             getAllDataBody.setFromPromotionDetailVersion(PromotionDetailMaxRowVersion);
             getAllDataBody.setFromPromotionEntityVersion(PromotionEntityMaxRowVersion);
@@ -565,7 +566,7 @@ public class AutoSyncService extends IntentService {
                 }
             if (extraData != null)
                 if (extraData.size() > 0)
-                    if (DataService.InsertExtraInfo(db, extraData, ExtraDataMaxRowVersion) == -1) {
+                    if (DataService.InsertExtraInfo(db , extraData, ExtraDataMaxRowVersion) == -1) {
                     }
             if (checkLists != null)
                 if (checkLists.size() > 0)

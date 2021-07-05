@@ -175,6 +175,16 @@
     </style>
 
 
+    <style name="MyDialogStyle2" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+
     <style name="MyDialogStyle">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowFrame">@null</item>
@@ -189,7 +199,7 @@
     <style name="SortDialogStyle" parent="Base.Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
-        <item name="@android:windowBackground">@android:color/white</item>
+        <item name="android:windowBackground">@android:color/white</item>
     </style>
 
     <style name="forms_checkbox_default_item" parent="android:Widget.TextView.SpinnerItem">
@@ -213,8 +223,8 @@
     </style>
 
     <style name="DialogTheme" parent="android:Theme.Dialog">
-        <item name="@android:windowBackground">@android:color/white</item>
-        <item name="@android:textColor">@android:color/holo_blue_light</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:textColor">@android:color/holo_blue_light</item>
     </style>
 
     <style name="FilePickerTheme" parent="NNF_BaseTheme.Light">

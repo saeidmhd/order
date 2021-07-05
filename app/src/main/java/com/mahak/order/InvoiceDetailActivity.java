@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +41,7 @@ import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.DbSchema;
+import com.mahak.order.widget.FontProgressDialog;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -91,7 +94,7 @@ public class InvoiceDetailActivity extends BaseActivity {
     public static long lngDeliveryDate;
     public static long lngOrderDate;
     private static DbAdapter db;
-    private static Context mContext;
+    private Context mContext;
     public static int orderPromotionCode = 0;
     public static int orderGiftType = 0;
     public static Button btnSave, btnSave_close;
@@ -108,6 +111,9 @@ public class InvoiceDetailActivity extends BaseActivity {
     private static final long NoLimit = -1;
     private static double mSpentCredit;
     private static double mCurrentPrice;
+
+
+    private FontProgressDialog pd;
 
     /////////////////
 
@@ -282,23 +288,19 @@ public class InvoiceDetailActivity extends BaseActivity {
         btnSave_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SaveBasedOnOrder();
+                new AsyncSave(0, OrderType).execute();
             }
         });
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SaveBasedOnOrderWithoutClose();
+                new AsyncSave(0, OrderType).execute();
             }
         });
     }
 
-    private void SaveBasedOnOrderWithoutClose() {
-        SaveOrder(0, OrderType);
-        //Mode = MODE_EDIT;
 
-    }
 
     private void SaveAndReceiptBasedOnOrder() {
         if (validateAsset()) {
@@ -319,37 +321,6 @@ public class InvoiceDetailActivity extends BaseActivity {
 
     }
 
-    private void SaveBasedOnOrder() {
-        boolean res = SaveOrder(0, OrderType);
-        if (res) {
-            if (OrderType == ProjectInfo.TYPE_RETURN_OF_SALE) {
-                Intent intent = new Intent(mContext, ReturnDetailActivity.class);
-                //Intent intent = new Intent(mContext, OrderDetailActivity.class);
-                intent.putExtra(ID, OrderId);
-                intent.putExtra(PAGE, PAGE_Invoice_Detail_Activity);
-                intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_RETURN_OF_SALE);
-                startActivity(intent);
-                Clear();
-            } else if (OrderType == TYPE_SEND_TRANSFERENCE) {
-
-                Intent intent = new Intent(mContext, OrderDetailActivity.class);
-                intent.putExtra(ID, OrderId);
-                intent.putExtra(PAGE, PAGE_Invoice_Detail_Activity);
-                intent.putExtra(TYPE_KEY, TYPE_SEND_TRANSFERENCE);
-                startActivity(intent);
-                Clear();
-            } else {
-                Intent intent = new Intent(mContext, OrderDetailActivity.class);
-                intent.putExtra(PAGE, PAGE_Invoice_Detail_Activity);
-                intent.putExtra(ID, OrderId);
-                startActivity(intent);
-                Clear();
-                finish();
-            }
-        } else {
-            Toast.makeText(mContext, R.string.more_than_asset, Toast.LENGTH_SHORT).show();
-        }
-    }
 
     public static boolean visitorHasCredit(double finalPrice) {
 
@@ -438,7 +409,6 @@ public class InvoiceDetailActivity extends BaseActivity {
         double mGiftCount1 = 0;
         double mGiftCount2 = 0;
         int giftProductId = 0;
-        ArrayList<OrderDetail> arrayProduct;
 
         order = db.GetOrder(orderid);
 
@@ -446,16 +416,16 @@ public class InvoiceDetailActivity extends BaseActivity {
         orderDetailArrayList = db.getAllProductWithOrderDetail(order.getId());*/
 
         if (OrderType == ProjectInfo.TYPE_Delivery) {
-            arrayProduct = db.getAllProductWithOrderDetail(order.getOrderId());
             orderDetailArrayList = db.getAllProductWithOrderDetail(order.getOrderId());
         } else {
-            arrayProduct = db.getAllProductWithOrderDetail(order.getId());
             orderDetailArrayList = db.getAllProductWithOrderDetail(order.getId());
         }
 
+        InvoiceDetailActivity.orderDetails = orderDetailArrayList;
+
         //Fill HashMap __________________________________________________________
         ProductPickerListActivity.HashMap_Product = new LinkedHashMap<>();
-        for (OrderDetail item : arrayProduct) {
+        for (OrderDetail item : orderDetailArrayList) {
             mCurrentPrice = ServiceTools.getCalculateFinalPrice(item, mContext);
             item.setFinalPrice(String.valueOf(mCurrentPrice));
             if (order.getOrderType() == TYPE_SEND_TRANSFERENCE || order.getOrderType() == ProjectInfo.TYPE_INVOCIE || order.getOrderType() == ProjectInfo.TYPE_RETURN_OF_SALE || (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext)))
@@ -518,300 +488,355 @@ public class InvoiceDetailActivity extends BaseActivity {
 
     }
 
-    /**
-     * Save Order In database
-     *
-     * @param requestPayFactor
-     * @param orderType
-     * @return
-     */
 
-    public boolean SaveOrder(int requestPayFactor, int orderType) {
+    public class AsyncSave extends AsyncTask<String, String, Boolean> {
+        int requestPayFactor;
+        int orderType;
 
-        double mGiftCount1;
-        double mGiftCount2;
-        ArrayList<OrderDetailProperty> orderDetailProperties = new ArrayList<>();
-        long OrderDetailClientId = ServiceTools.toLong(InvoiceCode);
-        long OrderClientId = ServiceTools.toLong(InvoiceCode);
-        if (db == null) db = new DbAdapter(mContext);
-        db.open();
-        boolean FinalResult = true;
-        long res;
-        order = new Order();
-        Product product;
-        ProductDetail productDetail;
-        if (requestPayFactor == REQUEST_PAY_FACTOR)
-            order.setReceiptClientId(InvoiceCode);
-        if (orderType == TYPE_SEND_TRANSFERENCE)
-            order.setPersonId((int) visitor.getId());
-        else {
-            order.setPersonClientId(customer.getPersonClientId());
-            order.setPersonId(customer.getPersonId());
+        public AsyncSave(int requestPayFactor , int orderType ){
+            this.requestPayFactor = requestPayFactor;
+            this.orderType = orderType;
         }
-        order.setCode(InvoiceCode);
-        order.setOrderClientId(OrderClientId);
-        order.setGiftType(orderGiftType);
-        order.setPromotionCode(orderPromotionCode);
-        order.setOrderDate(lngOrderDate);
-        order.setDeliveryDate(lngDeliveryDate);
-        order.setModifyDate(new Date().getTime());
-        order.setDescription(Description);
-        order.setMahakId(BaseActivity.getPrefMahakId());
-        order.setDatabaseId(BaseActivity.getPrefDatabaseId());
-        order.setVisitorId(BaseActivity.getPrefUserId());
 
-        order.setLatitude(ServiceTools.getLatLang(mContext).latitude);
-        order.setLongitude(ServiceTools.getLatLang(mContext).longitude);
+        @Override
+        protected void onPreExecute() {
+            pd = new FontProgressDialog(mContext);
+            pd.setMessage(getString(R.string.storing_info));
+            pd.setCancelable(false);
+            pd.show();
+            super.onPreExecute();
+        }
 
-        if (Discount != 0) {
-            order.setDiscount(Discount);
-        } else if (percentDiscount != 0) {
-            //Calculate Final Price//////////////////////////////////////////
-            double finalPrice = 0;
-            for (OrderDetail item : orderDetails) {
-                double result = ServiceTools.getCalculateFinalPrice(item, mContext);
-                finalPrice += result;
+        @Override
+        protected Boolean doInBackground(String... arg0) {
+
+            double mGiftCount1;
+            double mGiftCount2;
+            ArrayList<OrderDetailProperty> orderDetailProperties = new ArrayList<>();
+            long OrderDetailClientId = ServiceTools.toLong(InvoiceCode);
+            long OrderClientId = ServiceTools.toLong(InvoiceCode);
+            if (db == null) db = new DbAdapter(mContext);
+            db.open();
+            boolean FinalResult = true;
+            long res;
+            order = new Order();
+            Product product;
+            ProductDetail productDetail;
+            if (requestPayFactor == REQUEST_PAY_FACTOR)
+                order.setReceiptClientId(InvoiceCode);
+            if (orderType == TYPE_SEND_TRANSFERENCE)
+                order.setPersonId((int) visitor.getId());
+            else {
+                order.setPersonClientId(customer.getPersonClientId());
+                order.setPersonId(customer.getPersonId());
             }
-            //////////////////////////////////////////////////////////////
-            double discount = ((finalPrice * percentDiscount / 100));
-            order.setDiscount(discount);
-        } else
-            order.setDiscount(0);
+            order.setCode(InvoiceCode);
+            order.setOrderClientId(OrderClientId);
+            order.setGiftType(orderGiftType);
+            order.setPromotionCode(orderPromotionCode);
+            order.setOrderDate(lngOrderDate);
+            order.setDeliveryDate(lngDeliveryDate);
+            order.setModifyDate(new Date().getTime());
+            order.setDescription(Description);
+            order.setMahakId(BaseActivity.getPrefMahakId());
+            order.setDatabaseId(BaseActivity.getPrefDatabaseId());
+            order.setVisitorId(BaseActivity.getPrefUserId());
+            order.setLatitude(ServiceTools.getLatLang(mContext).latitude);
+            order.setLongitude(ServiceTools.getLatLang(mContext).longitude);
 
-        order.setSettlementType(SettlementType);
-        order.setOrderType(OrderType);
-        if (OrderType == ProjectInfo.TYPE_RETURN_OF_SALE)
-            order.setReturnReasonId(ReasonCode);
-
-        //check asset for delivery
-        if (order.getOrderType() == ProjectInfo.TYPE_Delivery) {
-            if (orderDetails.size() > 0) {
+            if (Discount != 0) {
+                order.setDiscount(Discount);
+            } else if (percentDiscount != 0) {
+                //Calculate Final Price//////////////////////////////////////////
+                double finalPrice = 0;
                 for (OrderDetail item : orderDetails) {
-                    productDetail = db.getProductDetail(item.getProductDetailId());
-                    product = db.GetProductWithProductId(productDetail.getProductId());
-                    orderDetailProperties = db.getAllOrderDetailProperty(0, product.getProductId());
-                    if (!(FinalResult = checkAsset(item, orderDetailProperties))) {
-                        break;
-                    }
+                    double result = ServiceTools.getCalculateFinalPrice(item, mContext);
+                    finalPrice += result;
+                }
+                //////////////////////////////////////////////////////////////
+                double discount = ((finalPrice * percentDiscount / 100));
+                order.setDiscount(discount);
+            } else
+                order.setDiscount(0);
 
+            order.setSettlementType(SettlementType);
+            order.setOrderType(OrderType);
+            if (OrderType == ProjectInfo.TYPE_RETURN_OF_SALE)
+                order.setReturnReasonId(ReasonCode);
+
+            //check asset for delivery
+            if (order.getOrderType() == ProjectInfo.TYPE_Delivery) {
+                if (orderDetails.size() > 0) {
+                    for (OrderDetail item : orderDetails) {
+                        productDetail = db.getProductDetail(item.getProductDetailId());
+                        product = db.GetProductWithProductId(productDetail.getProductId());
+                        orderDetailProperties = db.getAllOrderDetailProperty(0, product.getProductId());
+                        if (!(FinalResult = checkAsset(item, orderDetailProperties))) {
+                            break;
+                        }
+
+                    }
                 }
             }
-        }
 
-        if (orderDetails.size() > 0) {
-            if (FinalResult) {
-                if (Mode == MODE_NEW) {
-                    res = db.AddOrder(order);
-                    if (res > 0) {
-                        OrderId = db.getMax(DbSchema.Orderschema.TABLE_NAME, DbSchema.Orderschema.COLUMN_ID);
-                        deleteOrderDetail(order);
-                        for (OrderDetail item : orderDetails) {
-                            OrderDetailClientId++;
-                            productDetail = db.getProductDetail(item.getProductDetailId());
-                            product = db.GetProductWithProductId(productDetail.getProductId());
-                            orderDetailProperties = db.getAllOrderDetailProperty(0, product.getProductId());
-                            for (OrderDetailProperty orderDetailProperty : orderDetailProperties) {
-                                if (orderDetailProperty.getOrderId() == 0) {
-                                    orderDetailProperty.setOrderId(OrderId);
-                                    db.UpdateOrderDetailPropertyWithOrderid(0, orderDetailProperty);
+            if (orderDetails.size() > 0) {
+                if (FinalResult) {
+                    if (Mode == MODE_NEW) {
+                        res = db.AddOrder(order);
+                        if (res > 0) {
+                            OrderId = db.getMax(DbSchema.Orderschema.TABLE_NAME, DbSchema.Orderschema.COLUMN_ID);
+                            deleteOrderDetail(order);
+                            for (OrderDetail item : orderDetails) {
+                                OrderDetailClientId++;
+                                productDetail = db.getProductDetail(item.getProductDetailId());
+                                product = db.GetProductWithProductId(productDetail.getProductId());
+                                orderDetailProperties = db.getAllOrderDetailProperty(0, product.getProductId());
+                                for (OrderDetailProperty orderDetailProperty : orderDetailProperties) {
+                                    if (orderDetailProperty.getOrderId() == 0) {
+                                        orderDetailProperty.setOrderId(OrderId);
+                                        db.UpdateOrderDetailPropertyWithOrderid(0, orderDetailProperty);
+                                    }
                                 }
-                            }
-                            if ((item.getCount1() > 0 || item.getCount2() > 0) && (item.getGiftCount1() == 0 && item.getGiftCount2() == 0)) {
-                                item.setOrderId((int) OrderId);
-                                OrderDetailClientId++;
-                                item.setOrderDetailClientId(OrderDetailClientId);
-                                item.setOrderClientId(OrderClientId);
-                                db.AddOrderDetail(item);
-                                if (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext)) {
-                                    reduceAsset(item, orderDetailProperties);
-                                } else if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE) {
-                                    reduceAsset(item, orderDetailProperties);
-                                }
-                            } else if ((item.getCount1() > 0 || item.getCount2() > 0) && (item.getGiftCount1() > 0 || item.getGiftCount2() > 0)) {
+                                if ((item.getCount1() > 0 || item.getCount2() > 0) && (item.getGiftCount1() == 0 && item.getGiftCount2() == 0)) {
+                                    item.setOrderId((int) OrderId);
+                                    OrderDetailClientId++;
+                                    item.setOrderDetailClientId(OrderDetailClientId);
+                                    item.setOrderClientId(OrderClientId);
+                                    db.AddOrderDetail(item);
+                                    if (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext)) {
+                                        reduceAsset(item, orderDetailProperties);
+                                    } else if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE) {
+                                        reduceAsset(item, orderDetailProperties);
+                                    }
+                                } else if ((item.getCount1() > 0 || item.getCount2() > 0) && (item.getGiftCount1() > 0 || item.getGiftCount2() > 0)) {
 
-                                item.setOrderId((int) OrderId);
-                                OrderDetailClientId++;
+                                    item.setOrderId((int) OrderId);
+                                    OrderDetailClientId++;
 
-                                double count1 = item.getCount1();
-                                double count2 = item.getCount2();
-                                double price = item.getPrice();
-                                double sumCountBaJoz = item.getSumCountBaJoz();
+                                    double count1 = item.getCount1();
+                                    double count2 = item.getCount2();
+                                    double price = item.getPrice();
+                                    double sumCountBaJoz = item.getSumCountBaJoz();
+                                    double discount = item.getDiscount();
 
-                                //insert gift
-                                OrderDetailClientId++;
-                                item.setOrderDetailClientId(OrderDetailClientId);
-                                item.setOrderClientId(OrderClientId);
-                                mGiftCount1 = item.getGiftCount1();
-                                mGiftCount2 = item.getGiftCount2();
-                                item.setGiftCount1(mGiftCount1);
-                                item.setGiftCount2(mGiftCount2);
-                                item.setCount1(0);
-                                item.setCount2(0);
-                                item.setPrice("0");
-                                item.setSumCountBaJoz(0);
-                                db.AddOrderDetail(item);
+                                    //insert gift
+                                    OrderDetailClientId++;
+                                    item.setOrderDetailClientId(OrderDetailClientId);
+                                    item.setOrderClientId(OrderClientId);
+                                    mGiftCount1 = item.getGiftCount1();
+                                    mGiftCount2 = item.getGiftCount2();
+                                    item.setGiftCount1(mGiftCount1);
+                                    item.setGiftCount2(mGiftCount2);
+                                    item.setCount1(0);
+                                    item.setCount2(0);
+                                    item.setPrice("0");
+                                    item.setSumCountBaJoz(0);
+                                    item.setDiscount(0);
+                                    db.AddOrderDetail(item);
 
-                                OrderDetailClientId++;
-                                item.setOrderDetailClientId(OrderDetailClientId);
-                                item.setOrderClientId(OrderClientId);
-                                item.setCount1(count1);
-                                item.setCount2(count2);
-                                item.setSumCountBaJoz(sumCountBaJoz);
-                                item.setPrice("" + price);
-                                item.setGiftCount1(0);
-                                item.setGiftCount2(0);
-                                db.AddOrderDetail(item);
+                                    OrderDetailClientId++;
+                                    item.setOrderDetailClientId(OrderDetailClientId);
+                                    item.setOrderClientId(OrderClientId);
+                                    item.setCount1(count1);
+                                    item.setCount2(count2);
+                                    item.setSumCountBaJoz(sumCountBaJoz);
+                                    item.setDiscount(discount);
+                                    item.setPrice("" + price);
+                                    item.setGiftCount1(0);
+                                    item.setGiftCount2(0);
+                                    item.setGiftType(0);
+                                    db.AddOrderDetail(item);
 
-                                //for reduce
-                                item.setCount1(count1);
-                                item.setCount2(count2);
-                                item.setGiftCount1(mGiftCount1);
-                                item.setGiftCount2(mGiftCount2);
+                                    //for reduce
+                                    item.setCount1(count1);
+                                    item.setCount2(count2);
+                                    item.setGiftCount1(mGiftCount1);
+                                    item.setGiftCount2(mGiftCount2);
 
-                                if (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext)) {
-                                    reduceAsset(item, orderDetailProperties);
-                                } else if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE) {
-                                    reduceAsset(item, orderDetailProperties);
-                                }
+                                    if (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext)) {
+                                        reduceAsset(item, orderDetailProperties);
+                                    } else if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE) {
+                                        reduceAsset(item, orderDetailProperties);
+                                    }
 
-                            } else if ((item.getCount1() == 0 && item.getCount2() == 0) && (item.getGiftCount1() > 0 || item.getGiftCount2() > 0)) {
-                                item.setOrderId((int) OrderId);
-                                OrderDetailClientId++;
-                                item.setOrderDetailClientId(OrderDetailClientId);
-                                item.setOrderClientId(OrderClientId);
+                                } else if ((item.getCount1() == 0 && item.getCount2() == 0) && (item.getGiftCount1() > 0 || item.getGiftCount2() > 0)) {
+                                    item.setOrderId((int) OrderId);
+                                    OrderDetailClientId++;
+                                    item.setOrderDetailClientId(OrderDetailClientId);
+                                    item.setOrderClientId(OrderClientId);
 
-                                mGiftCount1 = item.getGiftCount1();
-                                mGiftCount2 = item.getGiftCount2();
+                                    mGiftCount1 = item.getGiftCount1();
+                                    mGiftCount2 = item.getGiftCount2();
 
-                                item.setGiftCount1(mGiftCount1);
-                                item.setGiftCount2(mGiftCount2);
+                                    item.setGiftCount1(mGiftCount1);
+                                    item.setGiftCount2(mGiftCount2);
 
-                                item.setCount1(0);
-                                item.setCount2(0);
-                                item.setPrice("0");
+                                    item.setCount1(0);
+                                    item.setCount2(0);
+                                    item.setPrice("0");
 
-                                db.AddOrderDetail(item);
-                                if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE) {
-                                    reduceAsset(item, orderDetailProperties);
+                                    db.AddOrderDetail(item);
+                                    if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE) {
+                                        reduceAsset(item, orderDetailProperties);
+                                    }
                                 }
                             }
                         }
+                    } else if (Mode == MODE_EDIT) {
+                        if (OrderType == ProjectInfo.TYPE_Delivery) {
+                            order.setOrderType(ProjectInfo.TYPE_INVOCIE);
+                            db.UpdateFinalDeliveryOrder(DeliveryId);
+                        }
+                        order.setId(OrderId);
+                        boolean result = db.UpdateOrder(order);
+                        if (result) {
+                            deleteOrderDetail(order);
+                            for (OrderDetail item : orderDetails) {
+                                productDetail = db.getProductDetail(item.getProductDetailId());
+                                product = db.GetProductWithProductId(productDetail.getProductId());
+                                orderDetailProperties = db.getAllOrderDetailProperty(order.getId(), product.getProductId());
+                                //////////////////////////
+                                if ((item.getCount1() > 0 || item.getCount2() > 0) && (item.getGiftCount1() == 0 && item.getGiftCount2() == 0)) {
+                                    OrderDetailClientId++;
+                                    item.setOrderDetailClientId(OrderDetailClientId);
+                                    item.setOrderId((int) order.getId());
+                                    item.setOrderClientId(OrderClientId);
+                                    db.AddOrderDetail(item);
+                                    if (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext)) {
+                                        reduceAsset(item, orderDetailProperties);
+                                    } else if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE) {
+                                        reduceAsset(item, orderDetailProperties);
+                                    }
+                                } else if ((item.getCount1() > 0 || item.getCount2() > 0) && (item.getGiftCount1() > 0 || item.getGiftCount2() > 0)) {
+
+                                    double count1 = item.getCount1();
+                                    double count2 = item.getCount2();
+                                    double price = item.getPrice();
+                                    mGiftCount1 = item.getGiftCount1();
+                                    mGiftCount2 = item.getGiftCount2();
+                                    double discount = item.getDiscount();
+                                    double sumCountBaJoz = item.getSumCountBaJoz();
+
+                                    //insert gift
+                                    OrderDetailClientId++;
+                                    item.setOrderDetailClientId(OrderDetailClientId);
+                                    item.setOrderClientId(OrderClientId);
+                                    item.setGiftCount1(mGiftCount1);
+                                    item.setGiftCount2(mGiftCount2);
+                                    item.setCount1(0);
+                                    item.setCount2(0);
+                                    item.setPrice("0");
+                                    item.setDiscount(0);
+                                    item.setSumCountBaJoz(0);
+                                    db.AddOrderDetail(item);
+
+                                    OrderDetailClientId++;
+                                    item.setOrderDetailClientId(OrderDetailClientId);
+                                    item.setOrderClientId(OrderClientId);
+                                    item.setCount1(count1);
+                                    item.setCount2(count2);
+                                    item.setPrice("" + price);
+                                    item.setSumCountBaJoz(sumCountBaJoz);
+                                    item.setGiftCount1(0);
+                                    item.setGiftCount2(0);
+                                    item.setGiftType(0);
+                                    item.setDiscount(discount);
+                                    item.setOrderId((int) order.getId());
+                                    db.AddOrderDetail(item);
+
+                                    //for reduce
+                                    item.setCount1(count1);
+                                    item.setCount2(count2);
+                                    item.setGiftCount1(mGiftCount1);
+                                    item.setGiftCount2(mGiftCount2);
+
+                                    if (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext)) {
+                                        reduceAsset(item, orderDetailProperties);
+                                    } else if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE) {
+                                        reduceAsset(item, orderDetailProperties);
+                                    }
+
+                                } else if ((item.getCount1() == 0 && item.getCount2() == 0) && (item.getGiftCount1() > 0 || item.getGiftCount2() > 0)) {
+
+                                    OrderDetailClientId++;
+                                    item.setOrderDetailClientId(OrderDetailClientId);
+                                    item.setOrderId((int) order.getId());
+                                    item.setOrderClientId(OrderClientId);
+
+                                    mGiftCount1 = item.getGiftCount1();
+                                    mGiftCount2 = item.getGiftCount2();
+
+                                    item.setGiftCount1(mGiftCount1);
+                                    item.setGiftCount2(mGiftCount2);
+
+                                    item.setCount1(0);
+                                    item.setCount2(0);
+                                    item.setPrice("0");
+
+                                    db.AddOrderDetail(item);
+                                    if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE) {
+                                        reduceAsset(item, orderDetailProperties);
+                                    }
+                                }
+                            }//End of For
+                        }//End of If
                     }
-                } else if (Mode == MODE_EDIT) {
-                    if (OrderType == ProjectInfo.TYPE_Delivery) {
-                        order.setOrderType(ProjectInfo.TYPE_INVOCIE);
-                        db.UpdateFinalDeliveryOrder(DeliveryId);
-                    }
-                    order.setId(OrderId);
-                    boolean result = db.UpdateOrder(order);
-                    if (result) {
-                        deleteOrderDetail(order);
-                        for (OrderDetail item : orderDetails) {
-                            productDetail = db.getProductDetail(item.getProductDetailId());
-                            product = db.GetProductWithProductId(productDetail.getProductId());
-                            orderDetailProperties = db.getAllOrderDetailProperty(order.getId(), product.getProductId());
-                            //////////////////////////
-                            if ((item.getCount1() > 0 || item.getCount2() > 0) && (item.getGiftCount1() == 0 && item.getGiftCount2() == 0)) {
-                                OrderDetailClientId++;
-                                item.setOrderDetailClientId(OrderDetailClientId);
-                                item.setOrderId((int) order.getId());
-                                item.setOrderClientId(OrderClientId);
-                                db.AddOrderDetail(item);
-                                if (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext)) {
-                                    reduceAsset(item, orderDetailProperties);
-                                } else if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE) {
-                                    reduceAsset(item, orderDetailProperties);
-                                }
-                            } else if ((item.getCount1() > 0 || item.getCount2() > 0) && (item.getGiftCount1() > 0 || item.getGiftCount2() > 0)) {
-
-                                double count1 = item.getCount1();
-                                double count2 = item.getCount2();
-                                double price = item.getPrice();
-                                mGiftCount1 = item.getGiftCount1();
-                                mGiftCount2 = item.getGiftCount2();
-                                double sumCountBaJoz = item.getSumCountBaJoz();
-
-                                //insert gift
-                                OrderDetailClientId++;
-                                item.setOrderDetailClientId(OrderDetailClientId);
-                                item.setOrderClientId(OrderClientId);
-                                item.setGiftCount1(mGiftCount1);
-                                item.setGiftCount2(mGiftCount2);
-                                item.setCount1(0);
-                                item.setCount2(0);
-                                item.setPrice("0");
-                                item.setSumCountBaJoz(0);
-                                db.AddOrderDetail(item);
-
-                                OrderDetailClientId++;
-                                item.setOrderDetailClientId(OrderDetailClientId);
-                                item.setOrderClientId(OrderClientId);
-                                item.setCount1(count1);
-                                item.setCount2(count2);
-                                item.setPrice("" + price);
-                                item.setSumCountBaJoz(sumCountBaJoz);
-                                item.setGiftCount1(0);
-                                item.setGiftCount2(0);
-                                item.setOrderId((int) order.getId());
-                                db.AddOrderDetail(item);
-
-                                //for reduce
-                                item.setCount1(count1);
-                                item.setCount2(count2);
-                                item.setGiftCount1(mGiftCount1);
-                                item.setGiftCount2(mGiftCount2);
-
-                                if (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext)) {
-                                    reduceAsset(item, orderDetailProperties);
-                                } else if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE) {
-                                    reduceAsset(item, orderDetailProperties);
-                                }
-
-                            } else if ((item.getCount1() == 0 && item.getCount2() == 0) && (item.getGiftCount1() > 0 || item.getGiftCount2() > 0)) {
-
-                                OrderDetailClientId++;
-                                item.setOrderDetailClientId(OrderDetailClientId);
-                                item.setOrderId((int) order.getId());
-                                item.setOrderClientId(OrderClientId);
-
-                                mGiftCount1 = item.getGiftCount1();
-                                mGiftCount2 = item.getGiftCount2();
-
-                                item.setGiftCount1(mGiftCount1);
-                                item.setGiftCount2(mGiftCount2);
-
-                                item.setCount1(0);
-                                item.setCount2(0);
-                                item.setPrice("0");
-
-                                db.AddOrderDetail(item);
-                                if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE) {
-                                    reduceAsset(item, orderDetailProperties);
-                                }
-                            }
-                        }//End of For
-                    }//End of If
+                } else {
+                   // Toast.makeText(mContext, R.string.more_than_asset, Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(this, R.string.more_than_asset, Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(mContext, String.valueOf(getResources().getString(R.string.str_message_no_product)), Toast.LENGTH_SHORT).show();
+                FinalResult = false;
             }
-        } else {
-            Toast.makeText(mContext, String.valueOf(getResources().getString(R.string.str_message_no_product)), Toast.LENGTH_SHORT).show();
-            FinalResult = false;
-        }
-        //save in db___________________________________
+            //save in db___________________________________
 
-        if (FinalResult) {
-            Toast.makeText(mContext, R.string.save_success, Toast.LENGTH_SHORT).show();
-            int count = customer.getOrderCount();
-            count += 1;
-            customer.setOrderCount(count);
-            db.UpdateCustomer(customer);
+            if (FinalResult) {
+             //   Toast.makeText(mContext, R.string.save_success, Toast.LENGTH_SHORT).show();
+                int count = customer.getOrderCount();
+                count += 1;
+                customer.setOrderCount(count);
+                db.UpdateCustomer(customer);
+            }
+
+            return FinalResult;
         }
 
-        return FinalResult;
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                if (OrderType == ProjectInfo.TYPE_RETURN_OF_SALE) {
+                    Intent intent = new Intent(mContext, ReturnDetailActivity.class);
+                    intent.putExtra(ID, OrderId);
+                    intent.putExtra(PAGE, PAGE_Invoice_Detail_Activity);
+                    intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_RETURN_OF_SALE);
+                    startActivity(intent);
+                } else if (OrderType == TYPE_SEND_TRANSFERENCE) {
+                    Intent intent = new Intent(mContext, OrderDetailActivity.class);
+                    intent.putExtra(ID, OrderId);
+                    intent.putExtra(PAGE, PAGE_Invoice_Detail_Activity);
+                    intent.putExtra(TYPE_KEY, TYPE_SEND_TRANSFERENCE);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(mContext, OrderDetailActivity.class);
+                    intent.putExtra(PAGE, PAGE_Invoice_Detail_Activity);
+                    intent.putExtra(ID, OrderId);
+                    startActivity(intent);
+                }
+                Clear();
+
+            } else {
+                Toast.makeText(mContext, R.string.more_than_asset, Toast.LENGTH_SHORT).show();
+            }
+
+            pd.dismiss();
+
+            super.onPostExecute(result);
+        }
 
     }
+
+
+
 
     private void deleteOrderDetail(Order order) {
         db.open();
@@ -827,10 +852,11 @@ public class InvoiceDetailActivity extends BaseActivity {
                         if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), mContext) > 0) {
                             productDetail.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail) + (orderDetail.getGiftCount1()));
                             productDetail.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail) + (orderDetail.getGiftCount2()));
-                        } else {
-                            productDetail.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail) + orderDetailProperty.getCount1());
-                            productDetail.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail) + orderDetailProperty.getCount2());
                         }
+
+                        productDetail.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail) + orderDetailProperty.getCount1());
+                        productDetail.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail) + orderDetailProperty.getCount2());
+
                         db.UpdateProductDetail(productDetail);
                     }
                     db.DeleteOrderDetailProperty(order.getId());
@@ -838,10 +864,11 @@ public class InvoiceDetailActivity extends BaseActivity {
                 if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), mContext) > 0) {
                     productDetail.setCount1(productDetail.getCount1() + orderDetail.getGiftCount1());
                     productDetail.setCount2(productDetail.getCount2() + orderDetail.getGiftCount2());
-                } else {
-                    productDetail.setCount1(productDetail.getCount1() + orderDetail.getCount1());
-                    productDetail.setCount2(productDetail.getCount2() + orderDetail.getCount2());
                 }
+
+                productDetail.setCount1(productDetail.getCount1() + orderDetail.getSumCountBaJoz());
+                productDetail.setCount2(productDetail.getCount2() + orderDetail.getCount2());
+
                 db.UpdateProductDetail(productDetail);
             }
         }
@@ -874,7 +901,7 @@ public class InvoiceDetailActivity extends BaseActivity {
             }
         } else {
             productDetail = db.getProductDetail(item.getProductDetailId());
-            productDetail.setCount1(productDetail.getCount1() - (item.getGiftCount1() + item.getCount1()));
+            productDetail.setCount1(productDetail.getCount1() - (item.getGiftCount1() + item.getSumCountBaJoz()));
             productDetail.setCount2(productDetail.getCount2() - (item.getGiftCount2() + item.getCount2()));
             db.UpdateProductDetail(productDetail);
         }
@@ -1011,14 +1038,7 @@ public class InvoiceDetailActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_PAY_FACTOR:
-                    boolean res = SaveOrder(REQUEST_PAY_FACTOR, OrderType);
-                    if (res) {
-                        Intent intent = new Intent(mContext, OrderDetailActivity.class);
-                        intent.putExtra(PAGE, PAGE_Invoice_Detail_Activity);
-                        intent.putExtra(ID, OrderId);
-                        startActivity(intent);
-                        Clear();
-                    }
+                    new AsyncSave(REQUEST_PAY_FACTOR, OrderType).execute();
                     break;
                 case REQUEST_PRODUCT_LIST:
 
@@ -1063,7 +1083,7 @@ public class InvoiceDetailActivity extends BaseActivity {
                             if (OrderType == ProjectInfo.TYPE_INVOCIE && !visitorHasCredit(FinalPrice)) {
                                 SaveAndReceiptBasedOnOrder();
                             } else
-                                SaveBasedOnOrder();
+                                new AsyncSave(0, OrderType).execute();
                             dialog.cancel();
                         }
                     })

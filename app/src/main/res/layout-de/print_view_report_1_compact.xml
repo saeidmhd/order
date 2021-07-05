@@ -69,7 +69,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:background="@color/forms_alter_row"
                 android:gravity="center_vertical"
@@ -97,7 +97,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -124,7 +124,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:background="@color/forms_alter_row"
                 android:gravity="center_vertical"
@@ -152,7 +152,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -179,7 +179,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:background="@color/forms_alter_row"
                 android:gravity="center_vertical"
@@ -237,7 +237,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -264,7 +264,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:background="@color/forms_alter_row"
                 android:gravity="center_vertical"
@@ -292,7 +292,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -319,7 +319,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:background="@color/forms_alter_row"
                 android:gravity="center_vertical"
@@ -346,7 +346,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -373,7 +373,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:background="@color/forms_alter_row"
                 android:gravity="center_vertical"
@@ -429,7 +429,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -455,7 +455,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:background="@color/forms_alter_row"
                 android:gravity="center_vertical"
@@ -482,7 +482,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -509,7 +509,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:background="@color/forms_alter_row"
                 android:gravity="center_vertical"
@@ -565,7 +565,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -592,7 +592,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:background="@color/forms_alter_row"
                 android:gravity="center_vertical"
@@ -619,7 +619,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -676,7 +676,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/ThinSize"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">

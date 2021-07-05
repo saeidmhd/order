@@ -1,31 +1,39 @@
 package com.mahak.order.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 
+import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mahak.order.BaseActivity;
+import com.mahak.order.InvoiceDetailActivity;
 import com.mahak.order.PhotoViewerActivity;
 import com.mahak.order.PriceCountSelectActivity;
 import com.mahak.order.ProductItemInitialize;
 import com.mahak.order.ProductPickerListActivity;
 import com.mahak.order.R;
+import com.mahak.order.adapter.PromotionDetailAdapter;
 import com.mahak.order.common.OrderDetail;
 import com.mahak.order.common.OrderDetailProperty;
 import com.mahak.order.common.Product;
 import com.mahak.order.common.ProductDetail;
 import com.mahak.order.common.ProjectInfo;
+import com.mahak.order.common.Promotion;
+import com.mahak.order.common.PromotionDetail;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.storage.DbAdapter;
 
@@ -38,7 +46,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.mahak.order.BaseActivity.category;
 import static com.mahak.order.BaseActivity.getPrefReduceAsset;
 import static com.mahak.order.common.ServiceTools.MoneyFormatToNumber;
 import static com.mahak.order.common.ServiceTools.formatCount;
@@ -49,7 +56,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
     private long orderId;
     private int mode;
     static public ArrayList<Product> products = new ArrayList<>();
-    DbAdapter db;
+    static DbAdapter db;
     ProductFilterDB2 Filter;
     final ArrayList<Product> arrayOrginal = new ArrayList<>();
     private static ProductPickerListActivity productPickerListActivity;
@@ -70,6 +77,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
     private final String description = "";
     int CountProduct;
     public static HashMap<Integer, ArrayList<ProductDetail>> HashMap_productDetail = new LinkedHashMap<>();
+    private static ArrayList<Promotion> promotions;
 
     public RecyclerProductAdapter(
             Context mContext,
@@ -150,26 +158,38 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
 
     public void initHolder(final Product product, final ProductHolder holder, final int position, double mCount) {
 
-        //ArrayList<ProductDetail> productDetails;
-        //productDetails = HashMap_productDetail.get(product.getProductId());
         double SumCount2 = 0;
         double SumCount1 = 0;
         double price = 0;
         double customerPrice = 0;
-
-        /*if(productDetails != null ){
-            if(productDetails.size() > 0){
-                SumCount1 = ServiceTools.getSumCount11(productDetails);
-                SumCount2 = ServiceTools.getSumCount12(productDetails);
-                price = ServiceTools.getPriceFromPriceLevel2(productDetails.get(0));
-                customerPrice = productDetails.get(0).getCustomerPrice();
-            }
-        }*/
+        int promotionId = 0;
 
         SumCount1 = product.getSumCount1();
         SumCount2 = product.getSumCount2();
         price = product.getPrice();
+        promotionId = product.getPromotionId();
         customerPrice = product.getCustomerPrice();
+
+        db.open();
+        int count = db.getCountProductPromotionEntity();
+
+        if(count > 0){
+            if(promotionId > 0 )
+                holder.imgGift.setVisibility(View.VISIBLE);
+            else
+                holder.imgGift.setVisibility(View.GONE);
+        }else
+            holder.imgGift.setVisibility(View.GONE);
+
+
+        holder.imgGift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                promotions = db.getAllPromotionCodeForSpecificGood(product.getProductCode());
+                show();
+            }
+        });
+
 
         if (type == 0) {
             holder.panelCount.setVisibility(View.GONE);
@@ -200,8 +220,15 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         holder.tvPrice.setText(ServiceTools.formatPrice(price));
 
         holder.tvInbox.setText(formatCount(product.getUnitRatio()));
+
         holder.tvUnit.setText(product.getUnitName());
         holder.tvUnit2.setText(product.getUnitName2());
+
+        if(holder.txtTotalCount1 != null)
+            holder.txtTotalCount1.setText(product.getUnitName());
+
+        if(holder.txtTotalCount2 != null)
+            holder.txtTotalCount2.setText(product.getUnitName2());
 
         if (product.getPictures() != null && product.getPictures().size() > 0) {
             if (product.getPictures().get(0).getUrl() != null)
@@ -300,8 +327,6 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             count2 = ServiceTools.toDouble(countPackage);
         }
 
-        if (db == null) db = new DbAdapter(mContext);
-        db.open();
 
 
         Set mapSet = ProductPickerListActivity.HashMap_Product.entrySet();
@@ -395,7 +420,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                 double FinalPrice = ServiceTools.getCalculateFinalPrice(object, mContext);
                 object.setFinalPrice(String.valueOf(FinalPrice));
                 ProductPickerListActivity.HashMap_Product.put(product.getProductId(), object);
-
+                InvoiceDetailActivity.orderDetails.add(object);
             }//End of if
         }//End of if
         //Calculate Count and Final Price////////////////////////
@@ -412,7 +437,6 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     productPickerListActivity.productGridGalleryFragment.dismissDialog();
             }
         }
-        db.close();
     }
 
     private void showCountPriceDialog(int position, String price, String count, String packageCount, int type, int customerId, long groupId, int productId, String description, int mode, long orderId) {
@@ -462,16 +486,14 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            constraint = constraint.toString().toLowerCase();
+            String searchStr = constraint.toString().toLowerCase();
             FilterResults result = new FilterResults();
-
-            if (constraint != null && constraint.toString().length() > 0) {
+            if (constraint.toString().length() > 0) {
                 Set<Product> filterItem = new LinkedHashSet<>();
-                if (ServiceTools.checkArabic(constraint.toString()))
-                    filterItem.addAll(dbAdapter.searchProduct(ServiceTools.replaceWithEnglish(constraint.toString()), Type , categoryId , modeAsset));
-                else
-                    filterItem.addAll(dbAdapter.searchProduct(constraint.toString(), Type , categoryId , modeAsset));
-
+                if(type == ProjectInfo.TYPE_INVOCIE){
+                    filterItem.addAll(dbAdapter.searchProduct(searchStr, Type , categoryId , 1));
+                }else
+                    filterItem.addAll(dbAdapter.searchProduct(searchStr, Type , categoryId , modeAsset));
                 result.values = new ArrayList<>(filterItem);
                 result.count = filterItem.size();
             } else {
@@ -490,5 +512,67 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             notifyDataSetChanged();
         }
 
+    }
+
+    public void show() {
+
+        TextView stair_linear;
+        TextView promotion_type;
+        RecyclerView promotionDetailRecycler;
+        PromotionDetailAdapter promotionDetailAdapter;
+        ArrayList<PromotionDetail> promotionDetail = new ArrayList<>();
+
+        // Inflate the layout for this fragment
+        View rootView = View.inflate(mContext, R.layout.fragment_promo_details, null);
+        stair_linear = (TextView) rootView.findViewById(R.id.stair_linear);
+        promotion_type = (TextView) rootView.findViewById(R.id.promotion_type);
+
+        db.open();
+        for (Promotion promotion : promotions){
+            promotionDetail.addAll(db.getPromotionDetails(promotion.getPromotionCode()));
+            if (promotion.getIsCalcLinear() == 1)
+                stair_linear.setText(R.string.linear);
+            else
+                stair_linear.setText(R.string.stair);
+
+            switch (promotion.getAccordingTo()) {
+                case Promotion.Mablaghe_kole_Faktor:
+                    promotion_type.setText(R.string.total_invoice_than);
+                    break;
+                case Promotion.Jame_Aghlame_Faktor:
+                    promotion_type.setText(R.string.total_invoice_items_than);
+                    break;
+                case Promotion.Jame_Vazne_Faktor:
+                    promotion_type.setText(R.string.total_weight_factor_than);
+                    break;
+                case Promotion.Jame_anvae_Aghlame_faktor:
+                    promotion_type.setText(R.string.total_invoice_types_items_than);
+                    break;
+                case Promotion.Mablaghe_Satr:
+                    promotion_type.setText(R.string.row_amount_than);
+                    break;
+                case Promotion.Meghdare_Satr:
+                    promotion_type.setText(R.string.row_count_than);
+                    break;
+            }
+
+        }
+
+        promotionDetailRecycler = (RecyclerView) rootView.findViewById(R.id.promotionDetailRecycler);
+
+        promotionDetailRecycler.setHasFixedSize(true);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
+        promotionDetailRecycler.setLayoutManager(mLayoutManager);
+
+        promotionDetailAdapter = new PromotionDetailAdapter(promotionDetail, mContext);
+        promotionDetailRecycler.setAdapter(promotionDetailAdapter);
+
+        AlertDialog alertDialog = new AlertDialog.Builder(mContext).setView(rootView)
+                .setPositiveButton(mContext.getString(R.string.str_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
+        alertDialog.setCanceledOnTouchOutside(true);
     }
 }

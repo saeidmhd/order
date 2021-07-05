@@ -20,6 +20,7 @@
         <item>کالاهای موجود</item>
         <item>کالاهای موجودی صفر</item>
         <item>کالاهای موجودی منفی</item>
+        <item>کالاهای دارای طرح تشویقی</item>
     </string-array>
     <string-array name="array_sum_invoice_order">
         <item>مبلغ کل بدون عوارض و مالیات</item>

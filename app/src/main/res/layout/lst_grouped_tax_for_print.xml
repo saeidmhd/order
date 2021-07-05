@@ -8,12 +8,12 @@
     <LinearLayout
         android:id="@+id/llitem"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/report_item_min_height"
+        android:layout_height="48dp"
         android:gravity="center_vertical"
-        android:minHeight="@dimen/report_item_min_height"
+        android:minHeight="@dimen/lst_item_min_height_compact"
         android:orientation="horizontal">
 
-        <com.mahak.order.widget.FontTextView
+        <com.mahak.order.widget.PrintTextView
             android:id="@+id/tvTaxValue"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
             android:textColor="@android:color/black"
             android:textSize="@dimen/txtSizelarge" />
 
-        <com.mahak.order.widget.FontTextView
+        <com.mahak.order.widget.PrintTextView
             android:id="@+id/tvPriceValue"
             android:layout_width="0dip"
             android:layout_height="wrap_content"

@@ -328,7 +328,7 @@ public class PrintActivity extends BaseActivity {
             orderType = extras.getInt(ProjectInfo._TAG_Order_Type);
         }
 
-        FileName = String.format("Signature_%s.jpg", OrderCode);
+        FileName = String.format("Signature_%s.png", OrderCode);
         bitmapSign = ServiceTools.getSign(FileName);
 
         Display display = getWindowManager().getDefaultDisplay();
@@ -445,9 +445,9 @@ public class PrintActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if (printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
-                   /* Message msg = mPrintHandler.obtainMessage(PRINT_BITMAP);
+                    Message msg = mPrintHandler.obtainMessage(PRINT_BITMAP);
                     msg.obj = bPrint;
-                    msg.sendToTarget();*/
+                    msg.sendToTarget();
                 } else if (printerBrand == ProjectInfo.Centerm_K9) {
                     printBmpFast(bPrint);
                 } else if (printerBrand == ProjectInfo.Woosim_WSP_R341) {
@@ -875,35 +875,9 @@ public class PrintActivity extends BaseActivity {
     private void insertTitle(String titleString) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view;
-        if (printerBrand == ProjectInfo.PRINTER_BABY_380_A || printerBrand == ProjectInfo.PRINTER_DELTA_380_A) {
-            view = inflater.inflate(R.layout.placeholder_print_title80mm, null, false);
-            TextView title = (TextView) view.findViewById(R.id._tvType);
-            title.setText(titleString);
-        } else if (printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310) {
-            view = inflater.inflate(R.layout.placeholder_print_title80mm, null, false);
-            TextView title = (TextView) view.findViewById(R.id._tvType);
-            title.setText(titleString);
-        } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
-            view = inflater.inflate(R.layout.placeholder_print_title50mm, null, false);
-            TextView title = (TextView) view.findViewById(R.id._tvType);
-            title.setText(titleString);
-        } else if (printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII) {
-            view = inflater.inflate(R.layout.placeholder_print_title88mm, null, false);
-            TextView title = (TextView) view.findViewById(R.id._tvType);
-            title.setText(titleString);
-            LinearLayout _llPrint = (LinearLayout) view.findViewById(R.id._llPrint);
-            //ChangePrintWidth(_llPrint);
-        } else if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW || printerBrand == ProjectInfo.UROVO_K319 || printerBrand == Woosim_WSP_R341) {
-            view = inflater.inflate(R.layout.placeholder_print_title88mm, null, false);
-            TextView title = (TextView) view.findViewById(R.id._tvType);
-            title.setText(titleString);
-            LinearLayout _llPrint = (LinearLayout) view.findViewById(R.id._llPrint);
-            // ChangePrintWidth(_llPrint);
-        } else {
-            view = inflater.inflate(R.layout.placeholder_print_title, null, false);
-            TextView title = (TextView) view.findViewById(R.id._tvType);
-            title.setText(titleString);
-        }
+        view = inflater.inflate(R.layout.placeholder_print_title, null, false);
+        TextView title = (TextView) view.findViewById(R.id._tvType);
+        title.setText(titleString);
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         // view.setLayoutParams(layoutParams);
 
@@ -969,7 +943,6 @@ public class PrintActivity extends BaseActivity {
     }
 
     public void initPrinter() {
-
         if (printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
             new CustomThread().start();
             mIsConnected = true;
@@ -1086,9 +1059,16 @@ public class PrintActivity extends BaseActivity {
             }
 
         } else if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW) {
-
-
             if (!getCurrentPrinter().equals("")) {
+                progressDialog.show();
+                new Thread(new Runnable() {
+                    public void run() {
+                        myOpertion.openPrinter(getCurrentPrinter());
+                    }
+                }).start();
+                mIsConnected = true;
+                refreshStatus();
+                RefreshPreference();
 
                 myOpertion = new WifiOperation(PrintActivity.this, oscarHandler);
                 myOpertion.chooseDevice();
@@ -1165,10 +1145,6 @@ public class PrintActivity extends BaseActivity {
             mService.write(sendData);
 
         } else if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW) {
-
-            /*preparePrint preparePrint = new preparePrint(bm);
-            preparePrint.execute();*/
-
             new Thread(new Runnable() {
                 public void run() {
                     PrintUtils.printImage(bm, mPrinter, false);

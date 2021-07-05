@@ -66,6 +66,7 @@ public class ManageReceiptActivity extends BaseActivity {
     private static int REQUEST_CUSTOMER_LIST = 1;
     private static int REQUEST_MANAGE_CHEQUE = 2;
     private static int REQUEST_ORDER_LIST = 3;
+    private static int REQUEST_i9000s = 103;
     private static String STR_DATE_KEY = "StrDate";
     private static String CASHAMOUNT_KEY = "CashAmount";
     private static String DESCRIPTION_KEY = "Description";
@@ -96,7 +97,6 @@ public class ManageReceiptActivity extends BaseActivity {
     private DbAdapter db;
     private long ReceiptId;
     private Receipt receipt;
-    private Order order;
     private Customer customer;
     private double currentVisitorCredit;
     private double mVisitorCredit;
@@ -114,6 +114,9 @@ public class ManageReceiptActivity extends BaseActivity {
 
     private HostApp hostApp;
     private androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder;
+    int printerBrand;
+    Order order;
+    private long OrderId;
 
 
     @Override
@@ -135,7 +138,43 @@ public class ManageReceiptActivity extends BaseActivity {
         mActivity = this;
 
         //hostApp = SDKManager.init(this);
-        hostApp = SDKManager.init(this);
+
+        if(printerBrand == ProjectInfo.PRINTER_SZZT_KS8223){
+            hostApp = SDKManager.init(this);
+            switch (hostApp) {
+                case IKC:
+                    Toast.makeText(mContext, "IKC", Toast.LENGTH_SHORT).show();
+                    break;
+                case SEP:
+                    Toast.makeText(mContext, "SEP", Toast.LENGTH_SHORT).show();
+                    break;
+                case SEP_IKCC:
+                    Toast.makeText(mContext, "SEP_IKCC", Toast.LENGTH_SHORT).show();
+                    break;
+                case FANAVA:
+                    Toast.makeText(mContext, "FANAVA", Toast.LENGTH_SHORT).show();
+                    break;
+                case SAYAN_CARD:
+                    Toast.makeText(mContext, "SAYAN_CARD", Toast.LENGTH_SHORT).show();
+                    break;
+                case PEC:
+                    Toast.makeText(mContext, "PEC", Toast.LENGTH_SHORT).show();
+                    break;
+                case NAVACO:
+                    Toast.makeText(mContext, "NAVACO", Toast.LENGTH_SHORT).show();
+                    break;
+                case SEPEHR:
+                    Toast.makeText(mContext, "SEPEHR", Toast.LENGTH_SHORT).show();
+                    break;
+                case PEC_MEHRANA:
+                    Toast.makeText(mContext, "PEC_MEHRANA", Toast.LENGTH_SHORT).show();
+                    break;
+                case UNKNOWN:
+                    Toast.makeText(mContext, "UNKNOWN", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+
 
         alertDialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(mActivity);
 
@@ -169,7 +208,7 @@ public class ManageReceiptActivity extends BaseActivity {
                 Mode = Extras.getInt(MODE_PAGE);
                 CustomerId = Extras.getInt(CUSTOMERID_KEY);
                 CustomerClientId = Extras.getLong(CUSTOMER_CLIENT_ID_KEY);
-
+                OrderId = Extras.getLong(ID);
                 Code = Extras.getString(CODE_KEY) != null ? Extras.getString(CODE_KEY) : ProjectInfo.DONT_CODE;
                 Payment = Extras.getDouble(PAYMENT_KEY);
 
@@ -476,8 +515,10 @@ public class ManageReceiptActivity extends BaseActivity {
 
             @Override
             public void onClick(View v) {
-                //managePay();
-                managePay2();
+                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223)
+                    managePaySzzt();
+                else if (printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s)
+                    managePayUrovoI9000();
             }
         });
 
@@ -511,7 +552,7 @@ public class ManageReceiptActivity extends BaseActivity {
         }
     }
 
-    private void managePay2() {
+    private void managePaySzzt() {
 
         String invoiceNumber = Code;
         String amount = String.valueOf((int) Payment);
@@ -528,6 +569,7 @@ public class ManageReceiptActivity extends BaseActivity {
 
                     @Override
                     public void onPaymentSucceed(String terminalNo, String merchantId, String posSerial, String reserveNumber, String traceNumber, String rrn, String ref, String amount, String txnDate, String txnTime, String maskedPan, String panHash) {
+                        saveReceipt(traceNumber, amount);
                         startActivity(ResultActivity.getIntent(ManageReceiptActivity.this, "پرداخت با موفقیت انجام شد.",
                                 String.format(Locale.ENGLISH, "کد فاکتور: %s", reserveNumber),
                                 String.format(Locale.ENGLISH, "کد پیگیری: %s", traceNumber),
@@ -568,6 +610,7 @@ public class ManageReceiptActivity extends BaseActivity {
 
                 @Override
                 public void onPaymentSucceed(String terminalNo, String merchantId, String posSerial, String reserveNumber, String traceNumber, String rrn, String ref, String amount, String txnDate, String txnTime, String maskedPan, String panHash) {
+                    saveReceipt(traceNumber, amount);
                     startActivity(ResultActivity.getIntent(ManageReceiptActivity.this, "پرداخت با موفقیت انجام شد.",
                             String.format(Locale.ENGLISH, "کد فاکتور: %s", reserveNumber),
                             String.format(Locale.ENGLISH, "کد پیگیری: %s", traceNumber),
@@ -598,6 +641,17 @@ public class ManageReceiptActivity extends BaseActivity {
                 }
             });
         }
+    }
+
+    private void managePayUrovoI9000() {
+        String amount = String.valueOf((int) Payment);
+        Intent intent = new Intent("ir.totan.pos.view.cart.TXN");
+        intent.putExtra("type", 3);
+        intent.putExtra("invoiceNumber", Code);
+        intent.putExtra("amount", amount);
+        intent.putExtra("res_num", 2L);
+        startActivityForResult(intent, REQUEST_i9000s);
+
     }
 
     private void saveReceipt(String traceNumber, String amount) {
@@ -709,7 +763,7 @@ public class ManageReceiptActivity extends BaseActivity {
     }
 
     private double CalculatePayment(String code) {
-        Order order = db.GetOrder(code);
+        order = db.GetOrder(code);
         ArrayList<OrderDetail> array;
         double Price = 0, Discount = 0, FinalPrice = 0;
         //calculate FinalPrice________________________________________________________
@@ -744,8 +798,8 @@ public class ManageReceiptActivity extends BaseActivity {
         posLL = (LinearLayout) findViewById(R.id.posLL);
         lstCheque = (ListView) findViewById(R.id.lstCheque);
 
-        int printerBrand = SharedPreferencesHelper.getPrefPrinterBrand(mContext);
-        if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223)
+        printerBrand = SharedPreferencesHelper.getPrefPrinterBrand(mContext);
+        if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s)
             posLL.setVisibility(View.VISIBLE);
 
         db = new DbAdapter(mContext);
@@ -795,17 +849,24 @@ public class ManageReceiptActivity extends BaseActivity {
                         db.AddCheque(item);
                     }
                     setResult(RESULT_OK);
-                    if (Page == PAGE_ORDER_DETAIL) {
-                        Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                    } else if (Page == PAGE_Invoice_Detail_Activity) {
+                    if (Page == PAGE_Invoice_Detail_Activity) {
                         Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
                         intent.putExtra("totalCashAndCheque", totalCashAndCheque());
                         setResult(RESULT_OK, intent);
                         finish();
-                    } else
+                    } else if (Page == PAGE_ORDER_DETAIL ) {
+                        Intent intent = new Intent(getApplicationContext(), OrderDetailActivity.class);
+                        intent.putExtra(PAGE, PAGE_Invoice_Detail_Activity);
+                        intent.putExtra(ID, OrderId);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
                         finish();
+                    }else {
+                        Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    }
                 }
                 Clear();
             } else if (Mode == MODE_EDIT) {
@@ -956,8 +1017,8 @@ public class ManageReceiptActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_CUSTOMER_LIST) {
+        if (requestCode == REQUEST_CUSTOMER_LIST) {
+            if (resultCode == RESULT_OK) {
                 CustomerId = data.getIntExtra(CUSTOMERID_KEY, 0);
                 CustomerClientId = data.getLongExtra(CUSTOMER_CLIENT_ID_KEY, 0);
 
@@ -970,8 +1031,11 @@ public class ManageReceiptActivity extends BaseActivity {
                     txtCustomerName.setText(customer.getName());
                     txtMarketName.setText(customer.getOrganization());
                 }
+            }
 
-            } else if (requestCode == REQUEST_MANAGE_CHEQUE) {
+        } else if (requestCode == REQUEST_MANAGE_CHEQUE) {
+
+            if (resultCode == RESULT_OK) {
                 if (adCheque == null) {
                     adCheque = new AdapterCheque(mActivity, arrayCheque);
                     lstCheque.setAdapter(adCheque);
@@ -995,8 +1059,9 @@ public class ManageReceiptActivity extends BaseActivity {
                     // form field with an error.
                     focusView.requestFocus();
                 }
-                //____________________________________________________________________________
-            } else if (requestCode == REQUEST_ORDER_LIST) {
+            }
+        } else if (requestCode == REQUEST_ORDER_LIST) {
+            if (resultCode == RESULT_OK) {
                 Code = data.getStringExtra(CODE_KEY);
                 Payment = data.getDoubleExtra(PAYMENT_KEY, 0);
                 CustomerId = data.getIntExtra(CUSTOMERID_KEY, 0);
@@ -1013,7 +1078,16 @@ public class ManageReceiptActivity extends BaseActivity {
                     txtMarketName.setText(customer.getOrganization());
                 }
             }
+        } else if (requestCode == REQUEST_i9000s) {
+            if (resultCode == RESULT_OK) {
+                Bundle b = data.getBundleExtra("response");
+                String trace = b.getString("trace", null);
+                String amount = b.getString("amount", null);
+                saveReceipt(trace, amount);
+            } else
+                Toast.makeText(mContext, "خطا در پرداخت توسط پوز", Toast.LENGTH_SHORT).show();
         }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 

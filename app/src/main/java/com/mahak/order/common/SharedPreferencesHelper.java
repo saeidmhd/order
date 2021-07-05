@@ -21,6 +21,11 @@ public class SharedPreferencesHelper {
     public static String __pref_current_language = "language";
     private static String PREF_Bank_Pos = "";
 
+    private static String PREF_chk_tracking_code = "chk_tracking_code";
+    private static String PREF_chk_market_name = "chk_market_name";
+    private static String PREF_chk_customer_name = "chk_customer_name";
+    private static String PREF_chk_count_product = "chk_count_product";
+
 
     public static int getCurrentWidthSize(Context ctx) {
         SharedPreferences sh = ctx.getSharedPreferences(__pref_current_Width, Context.MODE_PRIVATE);
@@ -35,7 +40,7 @@ public class SharedPreferencesHelper {
 
     public static float getCurrentFontSize(Context ctx) {
         SharedPreferences sh = ctx.getSharedPreferences(__pref_current_font, Context.MODE_PRIVATE);
-        return sh.getFloat(__pref_current_font, 10);
+        return sh.getFloat(__pref_current_font, 14);
     }
 
     public static void setCurrentFontSize(Context ctx, float size) {
@@ -125,6 +130,58 @@ public class SharedPreferencesHelper {
 
     public static boolean getSignUnderFactor(Context ctx) {
         return ctx.getSharedPreferences(PREF_SignUnderFactor, Context.MODE_PRIVATE).getBoolean(PREF_SignUnderFactor, true);
+    }
+
+
+    public static void set_chk_tracking_code(Context ctx, boolean value) {
+
+        SharedPreferences perfs = ctx.getSharedPreferences(PREF_chk_tracking_code, Context.MODE_PRIVATE);
+        Editor editor = perfs.edit();
+        editor.putBoolean(PREF_chk_tracking_code, value);
+        editor.commit();
+    }
+
+    public static boolean get_chk_tracking_code(Context ctx) {
+        return ctx.getSharedPreferences(PREF_chk_tracking_code, Context.MODE_PRIVATE).getBoolean(PREF_chk_tracking_code, true);
+    }
+
+
+    public static void set_chk_market_name(Context ctx, boolean value) {
+
+        SharedPreferences perfs = ctx.getSharedPreferences(PREF_chk_market_name, Context.MODE_PRIVATE);
+        Editor editor = perfs.edit();
+        editor.putBoolean(PREF_chk_market_name, value);
+        editor.commit();
+    }
+
+    public static boolean get_chk_market_name(Context ctx) {
+        return ctx.getSharedPreferences(PREF_chk_market_name, Context.MODE_PRIVATE).getBoolean(PREF_chk_market_name, true);
+    }
+
+
+    public static void set_chk_customer_name(Context ctx, boolean value) {
+
+        SharedPreferences perfs = ctx.getSharedPreferences(PREF_chk_customer_name, Context.MODE_PRIVATE);
+        Editor editor = perfs.edit();
+        editor.putBoolean(PREF_chk_customer_name, value);
+        editor.commit();
+    }
+
+    public static boolean get_chk_customer_name(Context ctx) {
+        return ctx.getSharedPreferences(PREF_chk_customer_name, Context.MODE_PRIVATE).getBoolean(PREF_chk_customer_name, true);
+    }
+
+
+    public static void set_chk_count_product(Context ctx, boolean value) {
+
+        SharedPreferences perfs = ctx.getSharedPreferences(PREF_chk_count_product, Context.MODE_PRIVATE);
+        Editor editor = perfs.edit();
+        editor.putBoolean(PREF_chk_count_product, value);
+        editor.commit();
+    }
+
+    public static boolean get_chk_count_product(Context ctx) {
+        return ctx.getSharedPreferences(PREF_chk_count_product, Context.MODE_PRIVATE).getBoolean(PREF_chk_count_product, true);
     }
 
     public static void setCompactPrint(Context ctx, boolean value) {

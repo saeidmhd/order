@@ -39,8 +39,9 @@
     <!-- printer -->
     <dimen name="print_text_size">13sp</dimen>
     <dimen name="print_number_size">14sp</dimen>
-    <dimen name="report_item_min_height">52dp</dimen>
-    <dimen name="report_item_min_height_compact">18dp</dimen>
+    <dimen name="report_item_min_height">54dp</dimen>
+    <dimen name="report_item_min_height_compact">20dp</dimen>
+    <dimen name="lst_item_min_height_compact">36dp</dimen>
     <dimen name="box_title_height">26dp</dimen>
     <dimen name="print_width">280dp</dimen>
     <dimen name="print_width80mm">350dp</dimen>

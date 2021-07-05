@@ -74,6 +74,10 @@ public class WifiOperation implements IPrinterOpertion {
         //mPrinter.setEncoding("gbk");
         mPrinter.openConnection();
     }
+    public void openPrinter(String ipAddress) {
+        mPrinter = new PrinterInstance(ipAddress, 9100, mHandler);
+        mPrinter.openConnection();
+    }
 
     @Override
     public void chooseDevice() {

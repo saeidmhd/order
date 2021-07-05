@@ -466,7 +466,7 @@ public class ReceiptsListActivity extends BaseActivity {
                 ReceiptList.addAll(originalList);
             } else {
                 for (Receipt item : originalList) {
-                    boolean result_contain = ServiceTools.CheckContainsWithSimillar(query, item.getCustomerName().toLowerCase());
+                    boolean result_contain = ServiceTools.CheckContainsWithSimillar(query, item.getCustomerName());
                     //if(item.getCustomerName().toLowerCase().contains(query))
                     if (result_contain) {
                         newList.add(item);
@@ -476,7 +476,7 @@ public class ReceiptsListActivity extends BaseActivity {
                 if (CheckFilter == false) {
 
                     for (Receipt item : originalList) {
-                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(query, String.valueOf(item.getTrackingCode()).toLowerCase());
+                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(query, String.valueOf(item.getTrackingCode()));
                         //if(item.getCustomerName().toLowerCase().contains(query))
                         if (result_contain) {
                             newList.add(item);
@@ -540,7 +540,7 @@ public class ReceiptsListActivity extends BaseActivity {
 
                 CustomerId = data.getIntExtra(CUSTOMERID_KEY, 0);
                 CustomerClientId = data.getLongExtra(CUSTOMER_CLIENT_ID_KEY, 0);
-                GroupId = data.getLongExtra("GroupId", 0);
+                GroupId = data.getLongExtra(CUSTOMER_GROUP_KEY, 0);
 
                 Intent intent = new Intent(getApplicationContext(), ManageReceiptActivity.class);
                 intent.putExtra(PAGE, PAGE_RECEIPTLIST);
@@ -595,8 +595,18 @@ public class ReceiptsListActivity extends BaseActivity {
                     FontPopUp.applyFontToMenuItem(mi, mContext);
                 }
                 break;
+            case android.R.id.home:
+                finishing();
+                break;
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishing();
+        super.onBackPressed();
     }
 
     public void sortItem(MenuItem item) {
@@ -776,5 +786,12 @@ public class ReceiptsListActivity extends BaseActivity {
                 Toast.makeText(mContext, t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+
+    public void finishing(){
+        Intent intent2 = new Intent(getApplicationContext(), DashboardActivity.class);
+        intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent2);
     }
 }

@@ -45,7 +45,10 @@ public class Product implements Parcelable {
     private double SumCount2 = 0;
     private double SumCount1 = 0;
     private double price = 0;
+    private double priceVisitor = 0;
     private double customerPrice = 0;
+
+    private int PromotionId;
 
 
 
@@ -570,5 +573,21 @@ public class Product implements Parcelable {
 
     public void setCustomerPrice(double customerPrice) {
         this.customerPrice = customerPrice;
+    }
+
+    public double getPriceVisitor() {
+        return priceVisitor;
+    }
+
+    public void setPriceVisitor(double priceVisitor) {
+        this.priceVisitor = priceVisitor;
+    }
+
+    public int getPromotionId() {
+        return PromotionId;
+    }
+
+    public void setPromotionId(int promotionId) {
+        PromotionId = promotionId;
     }
 }

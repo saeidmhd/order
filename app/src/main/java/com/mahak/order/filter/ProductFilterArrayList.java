@@ -61,7 +61,7 @@ public class ProductFilterArrayList extends Filter {
             for (int i = 0; i < arrayOrginal.size(); i++) {
                 Product product = arrayOrginal.get(i);
                 code = String.valueOf(product.getProductCode());
-                result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), code.toLowerCase());
+                result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), code);
                 if (result_contain) {
                     set.add(product);
                 }

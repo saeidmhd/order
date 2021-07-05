@@ -149,7 +149,10 @@ public class TransactionsLog {
     }
 
     public double getDebtAmount() {
-        return debtAmount.doubleValue();
+        if (debtAmount != null)
+            return debtAmount.doubleValue();
+        else
+            return 0;
     }
 
     public void setCreditAmount(double creditAmount) {
@@ -158,11 +161,17 @@ public class TransactionsLog {
     }
 
     public double getCreditAmount() {
-        return CreditAmount.doubleValue();
+        if (CreditAmount != null)
+            return CreditAmount.doubleValue();
+        else
+            return 0;
     }
 
     public double getBalance() {
-        return balance.doubleValue();
+        if (balance != null)
+            return balance.doubleValue();
+        else
+            return 0;
     }
 
     public void setBalance(double mBalance) {

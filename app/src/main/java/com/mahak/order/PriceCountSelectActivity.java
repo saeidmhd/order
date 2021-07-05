@@ -132,8 +132,8 @@ public class PriceCountSelectActivity extends BaseActivity {
     //variables
     private String grantedVisitorLevel;
     private int defaultVisitorPrice = 0;
-    private String defaultCustomerPrice = "0";
-    private String defaultCustomerGroupPrice = "0";
+    private int defaultCustomerPrice = 0;
+    private int defaultCustomerGroupPrice = 0;
     private int dbPriceLevel;
     double off;
     double percentOff;
@@ -153,8 +153,6 @@ public class PriceCountSelectActivity extends BaseActivity {
     private String count1;
     private String count2;
     private long groupId;
-    private Customer customer;
-    private CustomerGroup customerGroup;
     ProductDetail productDetail = new ProductDetail();
     double default_DiscountValue;
     private boolean hasDetail = false;
@@ -205,7 +203,6 @@ public class PriceCountSelectActivity extends BaseActivity {
             count1 = getIntent().getStringExtra("count");
             count2 = getIntent().getStringExtra("count2");
             type = getIntent().getIntExtra("type", 0);
-            customerId = getIntent().getIntExtra("customerId", 0);
             productId = getIntent().getIntExtra("productId", 0);
             fromRecycler = getIntent().getIntExtra("fromRecycler", 0);
             description = getIntent().getStringExtra("description");
@@ -222,6 +219,9 @@ public class PriceCountSelectActivity extends BaseActivity {
 
         product_extra_data = db.getProductExtraInfo(product.getProductCode());
         taxInSell_extra_data = db.getTaxInSellExtra(product.getProductCode());
+
+        customerId = ProductPickerListActivity.CustomerId;
+        groupId = ProductPickerListActivity.GroupId;
 
         ArrayList<Setting> settings = db.getAllSettingsWithVisitorId(BaseActivity.getPrefUserMasterId());
 
@@ -315,9 +315,9 @@ public class PriceCountSelectActivity extends BaseActivity {
         txtCountKol.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                editKol = true;
                 editJoz = false;
                 editSum = false;
-                editKol = true;
             }
 
             @Override
@@ -356,11 +356,11 @@ public class PriceCountSelectActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
                 if (editJoz) {
                     if (txtCountJoz.hasFocus()) {
                         try {
@@ -376,19 +376,56 @@ public class PriceCountSelectActivity extends BaseActivity {
 
                     }
                 }
-                //setOff(price);
+            }
+        });
+
+        txtCountJoz.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    int kol = 0;
+                    double sum = ServiceTools.RegulartoDouble(txtSumCount12.getText().toString());
+                    if(product.getUnitRatio() > 0)
+                        kol = (int) (sum / product.getUnitRatio());
+                    int joz =  (int)(sum - (kol * product.getUnitRatio()));
+
+                    txtCountKol.setText(formatCount(kol));
+                    txtCountJoz.setText(formatCount(joz));
+                }
             }
         });
 
         txtSumCount12.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                editKol = true;
+                editJoz = false;
+                editSum = false;
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (editKol) {
+                    if (txtSumCount12.hasFocus()) {
+                        try {
+                            int kol = 0;
+                            double sum = ServiceTools.RegulartoDouble(txtSumCount12.getText().toString());
+                            if(product.getUnitRatio() > 0)
+                                kol = (int) (sum / product.getUnitRatio());
+                            int joz =  (int)(sum - (kol * product.getUnitRatio()));
 
+                            txtCountKol.setText(formatCount(kol));
+                            txtCountJoz.setText(formatCount(joz));
+
+                        } catch (NumberFormatException e) {
+                            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                            FirebaseCrashlytics.getInstance().recordException(e);
+                            txtCountJoz.setError(getString(R.string.illegal));
+                        }
+
+                    }
+                }
             }
 
             @Override
@@ -588,7 +625,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                 break;
         }
 
-        if (!BaseActivity.getPrefRowDiscountIsActive().equals(invisible)) {
+        if (!BaseActivity.getPrefApplyRowDiscount().equals(InActive)) {
            // default_DiscountValue = getDiscountFromDiscountLevel(productDetail.getDefaultDiscountLevel(), productDetail, price);
             if(percentOff == 0){
                 percentOff = getPercentOff(productDetail.getDefaultDiscountLevel(), productDetail, price);
@@ -731,66 +768,23 @@ public class PriceCountSelectActivity extends BaseActivity {
     }
 
     private boolean CalculateJozKolSum() {
+
+        double sum;
+        int kol = 0;
+        int joz;
+
         if (type == ProjectInfo.TYPE_ORDER || type == ProjectInfo.TYPE_RETURN_OF_SALE) {
             return true;
         }
-        String txtKol = txtCountKol.getText().toString();
-        String txtJoz = txtCountJoz.getText().toString();
-        String txtSum = txtSumCount12.getText().toString();
 
-        BigDecimal kol = null;
-        double joz = 0;
-        double sum = 0;
+        sum = ServiceTools.RegulartoDouble(txtSumCount12.getText().toString());
+        if(product.getUnitRatio() > 0)
+            kol = (int) (sum / product.getUnitRatio());
+        joz =  (int)(sum - (kol * product.getUnitRatio()));
 
-        if (!TextUtils.isEmpty(txtKol)) {
-            try {
-                kol = new BigDecimal(txtKol);
-            } catch (NumberFormatException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                FirebaseCrashlytics.getInstance().recordException(e);
-                e.printStackTrace();
-            }
-        }
-
-        if (!TextUtils.isEmpty(txtJoz)) {
-            try {
-                joz = ServiceTools.toDouble(txtJoz);
-            } catch (NumberFormatException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                FirebaseCrashlytics.getInstance().recordException(e);
-                e.printStackTrace();
-            }
-        }
-
-        if (!TextUtils.isEmpty(txtSum)) {
-            try {
-                sum = ServiceTools.toDouble(txtSum);
-            } catch (NumberFormatException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                FirebaseCrashlytics.getInstance().recordException(e);
-                e.printStackTrace();
-            }
-        }
-
-        int intPart = 0;
-        double decimalPart = 0;
-
-        if (kol != null) {
-            intPart = kol.intValue();
-            decimalPart = kol.subtract(new BigDecimal(intPart)).doubleValue();
-        }
-        if (decimalPart > 0) {
-            joz += (decimalPart * (int) product.getUnitRatio());
-        }
-        if (joz >= product.getUnitRatio() && product.getUnitRatio() > 0) {
-            intPart += (joz / product.getUnitRatio());
-            joz -= product.getUnitRatio() * (int) (joz / product.getUnitRatio());
-
-        }
-        sum = (intPart * product.getUnitRatio() + joz);
-        /*txtCountJoz.setText(formatCount(joz));
-        txtCountKol.setText(formatCount(intPart));
-        txtSumCount12.setText(formatCount(sum));*/
+        txtCountKol.setText(formatCount(kol));
+        txtCountJoz.setText(formatCount(joz));
+        txtSumCount12.setText(formatCount(sum));
 
         return (sum <= maxValueRetail);
 
@@ -1145,7 +1139,7 @@ public class PriceCountSelectActivity extends BaseActivity {
         }
         intent.putExtra("type", type);
         intent.putExtra("customerId", customerId);
-        intent.putExtra("groupId", groupId);
+        intent.putExtra(CUSTOMER_GROUP_KEY, groupId);
         intent.putExtra("productId", productId);
         intent.putExtra("fromRecycler", 1);
         intent.putExtra("mode", mode);
@@ -1220,10 +1214,15 @@ public class PriceCountSelectActivity extends BaseActivity {
 
     @SuppressLint("SetTextI18n")
     public void setValue() {
+
+
+
         switch (BaseActivity.getPrefUnit2Setting(context)) {
             case MODE_MeghdarJoz:
                 setContentView(R.layout.activity_good_detail_kol_joz);
                 initView();
+
+                show_avg_lastBuyPrice();
 
                 if (hasProductDetail(product)) {
                     txtSumCount12.setEnabled(false);
@@ -1236,28 +1235,18 @@ public class PriceCountSelectActivity extends BaseActivity {
                 double joz = ServiceTools.toDouble(count1);
                 txtSumCount12.setText(formatCount((int) (kol + joz)));
 
-                if (showAvg)
-                    txtAveragePrice.setText(getString(R.string.average_price) + " " + ServiceTools.formatPrice(product_extra_data.getAveragePrice()));
-                else
-                    txtAveragePrice.setVisibility(View.GONE);
-
-                if (showLastPrice)
-                    txtLastBuyPrice.setText(getString(R.string.last_price_buy) + " " + ServiceTools.formatPrice(product_extra_data.getLastBuyPrice()));
-                else
-                    txtLastBuyPrice.setVisibility(View.GONE);
-
                 CalculateJozKolSum();
                 unitName2.setText("( " + product.getUnitName2() + " )");
                 unitRatio.setText(formatCount(product.getUnitRatio()));
                 txtRetailCountExistJoz.setText(getString(R.string.asset_amount) + formatCount(maxValueRetail) + " " + product.getUnitName());
-                /*if(type == ProjectInfo.TYPE_INVOCIE ) {
-                    txtSumCount12.setFilters(new InputFilter[]{new CountInputFilterMinMax(0, maxValueRetail)});
-                    // txtCountJoz.setFilters(new InputFilter[]{new CountInputFilterMinMax(0, maxValueRetail / product.getUnitRatio())});
-                }*/
+
                 break;
             case Mode_DoVahedi:
                 setContentView(R.layout.activity_good_detail_count_1_2);
                 initView();
+
+                show_avg_lastBuyPrice();
+
                 if (hasProductDetail(product)) {
                     txtCount1.setEnabled(false);
                     txtCount2.setEnabled(false);
@@ -1267,17 +1256,6 @@ public class PriceCountSelectActivity extends BaseActivity {
                     txtCount2.setText(formatCount(ServiceTools.toDouble(count1) / product.getUnitRatio()));
                 else
                     txtCount2.setText(formatCount(ServiceTools.toDouble(count2)));
-
-
-                if (showAvg)
-                    txtAveragePrice.setText(getString(R.string.average_price) + " " + ServiceTools.formatPrice(product_extra_data.getAveragePrice()));
-                else
-                    txtAveragePrice.setVisibility(View.GONE);
-
-                if (showLastPrice)
-                    txtLastBuyPrice.setText(getString(R.string.last_price_buy) + " " + ServiceTools.formatPrice(product_extra_data.getLastBuyPrice()));
-                else
-                    txtLastBuyPrice.setVisibility(View.GONE);
 
                 unitName.setText("( " + product.getUnitName() + " )");
                 unitName2.setText("( " + product.getUnitName2() + " )");
@@ -1292,19 +1270,12 @@ public class PriceCountSelectActivity extends BaseActivity {
             case MODE_YekVahedi:
                 setContentView(R.layout.activity_good_detail_count);
                 initView();
+
+                show_avg_lastBuyPrice();
+
                 if (hasProductDetail(product)) {
                     txtCount.setEnabled(false);
                 }
-
-                if (showAvg)
-                    txtAveragePrice.setText(getString(R.string.average_price) + " " + ServiceTools.formatPrice(product_extra_data.getAveragePrice()));
-                else
-                    txtAveragePrice.setVisibility(View.GONE);
-
-                if (showLastPrice)
-                    txtLastBuyPrice.setText(getString(R.string.last_price_buy) + " " + ServiceTools.formatPrice(product_extra_data.getLastBuyPrice()));
-                else
-                    txtLastBuyPrice.setVisibility(View.GONE);
 
                 unitName.setText("( " + product.getUnitName() + " )");
                 txtRetailCountExist.setText(getString(R.string.asset_amount) + formatCount(maxValueRetail) + " " + product.getUnitName());
@@ -1338,6 +1309,18 @@ public class PriceCountSelectActivity extends BaseActivity {
 
     }
 
+    private void show_avg_lastBuyPrice() {
+        if (showAvg)
+            txtAveragePrice.setText(getString(R.string.average_price) + " " + ServiceTools.formatPrice(product_extra_data.getAveragePrice()));
+        else
+            txtAveragePrice.setVisibility(View.GONE);
+
+        if (showLastPrice)
+            txtLastBuyPrice.setText(getString(R.string.last_price_buy) + " " + ServiceTools.formatPrice(product_extra_data.getLastBuyPrice()));
+        else
+            txtLastBuyPrice.setVisibility(View.GONE);
+    }
+
     public void handle_price_discount_tax_charge() {
         if (description != null)
             txtDescription.setText(description);
@@ -1348,11 +1331,6 @@ public class PriceCountSelectActivity extends BaseActivity {
             }
         }
         productName.setText(product.getName());
-        if (customerId != ProjectInfo.CUSTOMERID_GUEST) {
-            customer = db.getCustomerWithPersonId(customerId);
-            groupId = db.GetgroupIdFromCustomer(customer);
-            customerGroup = db.GetCustomerGroup(groupId);
-        }
         //productDetail = db.getcostLevelSellById(products.get(position).getProductCode());
         if (productDetails.size() > 0)
             productDetail = db.getProductDetail(productDetails.get(0).getProductDetailId());
@@ -1374,13 +1352,10 @@ public class PriceCountSelectActivity extends BaseActivity {
 
         //get default price from visitor,customer,customerGroup And product
         // with priority of 1.visitor 2.customer 3.customerGroup 4.product
-        if (visitor != null)
-            defaultVisitorPrice = visitor.getSellPriceLevel();
-        if (customer != null)
-            defaultCustomerPrice = customer.getSellPriceLevel();
-        if (customerGroup != null)
-            if (customerGroup.getSellPriceLevel() != null)
-                defaultCustomerGroupPrice = customerGroup.getSellPriceLevel();
+
+        defaultVisitorPrice = db.getDefVisitorPriceLevel();
+        defaultCustomerPrice = db.getDefCustomerPriceLevel(customerId);
+        defaultCustomerGroupPrice = db.getDefGroupCustomerPriceLevel(groupId);
 
         // String defaultProductPrice = db.getProductDefaultPrice(products.get(position).getProductCode());
 
@@ -1391,10 +1366,10 @@ public class PriceCountSelectActivity extends BaseActivity {
         if (defaultVisitorPrice != 0) {
             if (getlistOfgrantedcostLevel().indexOf(String.valueOf(defaultVisitorPrice)) < getExistNameList().size())
                 spnPriceLevel.setSelection(getlistOfgrantedcostLevel().indexOf(String.valueOf(defaultVisitorPrice)));
-        } else if (!defaultCustomerPrice.equals("0")) {
+        } else if (defaultCustomerPrice != 0) {
             if (getlistOfgrantedcostLevel().indexOf(String.valueOf(defaultCustomerPrice)) < getExistNameList().size())
                 spnPriceLevel.setSelection(getlistOfgrantedcostLevel().indexOf(String.valueOf(defaultCustomerPrice)));
-        } else if (!defaultCustomerGroupPrice.equals("0")) {
+        } else if (defaultCustomerGroupPrice != 0) {
             if (getlistOfgrantedcostLevel().indexOf(String.valueOf(defaultCustomerGroupPrice)) < getExistNameList().size())
                 spnPriceLevel.setSelection(getlistOfgrantedcostLevel().indexOf(String.valueOf(defaultCustomerGroupPrice)));
         } else if (dbPriceLevel != 0) {

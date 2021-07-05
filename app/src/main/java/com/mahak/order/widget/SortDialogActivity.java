@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.mahak.order.BaseActivity;
 import com.mahak.order.R;
-import com.mahak.order.storage.DbSchema;
 
 public class SortDialogActivity extends AppCompatActivity {
     RadioGroup sort_base;
@@ -26,7 +25,7 @@ public class SortDialogActivity extends AppCompatActivity {
         sort_base = findViewById(R.id.sort_base);
         sort_direction = findViewById(R.id.sort_direction);
 
-        if (BaseActivity.getPrefSortBase().equals(DbSchema.Productschema.COLUMN_NAME) || BaseActivity.getPrefSortBase_customer().equals(DbSchema.Customerschema.COLUMN_NAME))
+        if (BaseActivity.getPrefSortBase_product().equals("Products.Name") || BaseActivity.getPrefSortBase_customer().equals("Customers.Name"))
             sort_base.check(R.id.NameRB);
         else
             sort_base.check(R.id.CodeRB);
@@ -42,14 +41,14 @@ public class SortDialogActivity extends AppCompatActivity {
 
         if (sort_base.getCheckedRadioButtonId() == R.id.NameRB) {
             if (type.equals("product"))
-                BaseActivity.setPrefSortBase(DbSchema.Productschema.COLUMN_NAME);
+                BaseActivity.setPrefSortBase_product("Products.Name");
             else if (type.equals("customer"))
-                BaseActivity.setPrefSortBase_customer(DbSchema.Customerschema.COLUMN_NAME);
+                BaseActivity.setPrefSortBase_customer("Customers.Name");
         } else {
             if (type.equals("product"))
-                BaseActivity.setPrefSortBase(DbSchema.Productschema.COLUMN_PRODUCT_CODE);
+                BaseActivity.setPrefSortBase_product("Products.ProductCode");
             else if (type.equals("customer"))
-                BaseActivity.setPrefSortBase_customer(DbSchema.Customerschema.COLUMN_PersonCode);
+                BaseActivity.setPrefSortBase_customer("Customers.PersonCode");
         }
         if (sort_direction.getCheckedRadioButtonId() == R.id.ascRB)
             BaseActivity.setPrefSortDirection("Asc");

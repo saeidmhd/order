@@ -67,7 +67,6 @@
             android:layout_weight="1"
             android:digits="0123456789.,"
             android:gravity="center"
-            android:imeOptions="actionNext"
             android:inputType="numberDecimal"
             android:selectAllOnFocus="true"
             android:singleLine="true"
@@ -81,10 +80,10 @@
             android:layout_weight="1"
             android:digits="0123456789.,"
             android:gravity="center"
-            android:imeOptions="actionNext"
             android:inputType="numberDecimal"
             android:selectAllOnFocus="true"
             android:singleLine="true"
+            android:enabled="false"
             android:text="@string/sample_number" />
 
         <com.mahak.order.widget.FontTextView

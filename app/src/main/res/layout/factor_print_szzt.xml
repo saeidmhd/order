@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:gravity="center_horizontal"
+    android:scrollHorizontally="false"
     android:orientation="vertical">
 
     <LinearLayout
@@ -23,7 +24,7 @@
             android:orientation="vertical"
             android:paddingRight="@dimen/NormalSize">
 
-            <com.mahak.order.widget.FontTextView
+            <com.mahak.order.widget.PrintTextView
                 android:id="@+id/_tvType"
                 style="@style/forms_page_title_label_default380"
                 android:layout_width="wrap_content"
@@ -42,12 +43,12 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/report_item_min_height_compact"
+            android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:gravity="center"
             android:orientation="horizontal">
 
-            <com.mahak.order.widget.FontTextView
+            <com.mahak.order.widget.PrintTextView
                 android:id="@+id/_tvOrderDate"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
@@ -56,7 +57,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/print_number_size" />
 
-            <com.mahak.order.widget.FontTextView
+            <com.mahak.order.widget.PrintTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/LargeSize"
@@ -67,13 +68,14 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/InvocieNumber"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/report_item_min_height_compact"
+            android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:gravity="center"
             android:orientation="horizontal">
 
-            <com.mahak.order.widget.FontTextView
+            <com.mahak.order.widget.PrintTextView
                 android:id="@+id/_tvInvocieNumber"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
@@ -82,7 +84,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/print_number_size" />
 
-            <com.mahak.order.widget.FontTextView
+            <com.mahak.order.widget.PrintTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/LargeSize"
@@ -95,12 +97,12 @@
         <LinearLayout
             android:id="@+id/ll_tvCustomerName"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/report_item_min_height_compact"
+            android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:gravity="center"
             android:orientation="horizontal">
 
-            <com.mahak.order.widget.FontTextView
+            <com.mahak.order.widget.PrintTextView
                 android:id="@+id/_tvCustomerName"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
@@ -109,7 +111,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/print_text_size" />
 
-            <com.mahak.order.widget.FontTextView
+            <com.mahak.order.widget.PrintTextView
                 android:id="@+id/tvCustomerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -123,12 +125,12 @@
         <LinearLayout
             android:id="@+id/_llMarketName"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/report_item_min_height_compact"
+            android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:gravity="center"
             android:orientation="horizontal">
 
-            <com.mahak.order.widget.FontTextView
+            <com.mahak.order.widget.PrintTextView
                 android:id="@+id/_tvMarketName"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
@@ -137,7 +139,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/print_text_size" />
 
-            <com.mahak.order.widget.FontTextView
+            <com.mahak.order.widget.PrintTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/LargeSize"
@@ -148,13 +150,14 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/Username"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/report_item_min_height_compact"
+            android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:gravity="center"
             android:orientation="horizontal">
 
-            <com.mahak.order.widget.FontTextView
+            <com.mahak.order.widget.PrintTextView
                 android:id="@+id/_tvUsername"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
@@ -163,7 +166,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/print_text_size" />
 
-            <com.mahak.order.widget.FontTextView
+            <com.mahak.order.widget.PrintTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/LargeSize"
@@ -175,24 +178,24 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/black"
+            android:layout_height="match_parent"
             android:orientation="vertical"
+            android:background="@android:color/black"
             android:padding="2dp">
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="24dp"
+                android:layout_height="wrap_content"
                 android:background="@color/print_white_box"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:id="@+id/_txtPrice"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.1"
-                    android:gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:gravity="center"
                     android:text="@string/price"
                     android:textColor="@android:color/black"
                     android:textSize="11sp" />
@@ -202,7 +205,7 @@
                     android:layout_height="match_parent"
                     android:background="@android:color/black" />
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -216,10 +219,10 @@
                     android:layout_height="match_parent"
                     android:background="@android:color/black" />
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
+                    android:layout_weight="0.5"
                     android:gravity="center_horizontal"
                     android:text="@string/str_count"
                     android:textColor="@android:color/black"
@@ -230,26 +233,12 @@
                     android:layout_height="match_parent"
                     android:background="@android:color/black" />
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.5"
+                    android:layout_weight="2"
                     android:gravity="center_horizontal"
                     android:text="@string/str_product_name"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/print_text_size" />
-
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/black" />
-
-                <com.mahak.order.widget.FontTextView
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
-                    android:gravity="center_horizontal"
-                    android:text="@string/str_product_code"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/print_text_size" />
 
@@ -259,17 +248,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:background="@android:color/black" />
-
             <ListView
                 android:id="@+id/_lstProduct"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="0dip"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@android:color/white"
                 android:divider="@android:color/black"
                 android:dividerHeight="0dp"
-                android:listSelector="@android:color/transparent"
-                android:padding="0dip" />
+                android:listSelector="@android:color/transparent"/>
         </LinearLayout>
 
         <View
@@ -292,7 +278,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:id="@+id/_tvTotalPrice"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
@@ -302,7 +288,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="16sp" />
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:id="@+id/_txtTotalPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -326,24 +312,25 @@
             <ListView
                 android:id="@+id/_lstGroupedTax"
                 android:layout_width="fill_parent"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="0dip"
                 android:background="@android:color/white"
                 android:divider="@android:color/black"
                 android:dividerHeight="0dp"
+                android:visibility="gone"
                 android:listSelector="@android:color/transparent"
                 android:padding="0dip" />
 
             <LinearLayout
                 android:id="@+id/_llTotalItems"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="visible">
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:id="@+id/_tvTotalItems"
                     style="@style/forms_page_title_label_default380"
                     android:layout_width="0dip"
@@ -351,10 +338,11 @@
                     android:layout_weight="1"
                     android:layout_marginLeft="@dimen/SmallSize"
                     android:gravity="left"
+                    android:textSize="@dimen/print_text_size"
                     android:text="@string/sample_number"
                     android:textColor="@android:color/black" />
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:id="@+id/_txtTotalItems"
                     style="@style/forms_page_title_label_default380"
                     android:layout_width="wrap_content"
@@ -362,19 +350,20 @@
                     android:layout_marginLeft="@dimen/LargeSize"
                     android:gravity="right"
                     android:text="@string/str_total_items"
+                    android:textSize="@dimen/print_text_size"
                     android:textColor="@android:color/black" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/_llTotalCount"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="visible">
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:id="@+id/_tvTotalCount"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
@@ -385,7 +374,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/print_text_size" />
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:id="@+id/_txtTotalCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -397,13 +386,13 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:id="@+id/_tvTotalOff"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
@@ -414,7 +403,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/print_text_size" />
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/LargeSize"
@@ -426,13 +415,13 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:id="@+id/_tvTotalChargeAndTax"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
@@ -443,7 +432,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/print_text_size" />
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/LargeSize"
@@ -456,12 +445,12 @@
             <LinearLayout
                 android:id="@+id/_llDiscount"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:id="@+id/_tvDiscount"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
@@ -472,7 +461,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/print_number_size" />
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/LargeSize"
@@ -485,12 +474,12 @@
             <LinearLayout
                 android:id="@+id/_llFinalPrice"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:id="@+id/_tvFinalPrice"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
@@ -501,7 +490,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/print_number_size" />
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/LargeSize"
@@ -514,12 +503,12 @@
             <LinearLayout
                 android:id="@+id/_llCustomerStatus1"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:id="@+id/_tvCustomerStatus1"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
@@ -529,7 +518,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/print_number_size" />
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/LargeSize"
@@ -542,12 +531,12 @@
             <LinearLayout
                 android:id="@+id/_llPayable"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:id="@+id/_tvPayable"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
@@ -557,7 +546,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/print_number_size" />
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/LargeSize"
@@ -570,12 +559,12 @@
             <LinearLayout
                 android:id="@+id/_llTotalReceipt"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:id="@+id/_tvTotalReceipt"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
@@ -586,7 +575,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/print_number_size" />
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/LargeSize"
@@ -598,13 +587,13 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:id="@+id/_tvRemainingOrder"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
@@ -615,7 +604,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/print_number_size" />
 
-                <com.mahak.order.widget.FontTextView
+                <com.mahak.order.widget.PrintTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/LargeSize"
@@ -640,8 +629,9 @@
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <com.mahak.order.widget.FontTextView
+                    <com.mahak.order.widget.PrintTextView
                         android:id="@+id/_tvCustomerStatus2"
+                        android:textSize="16sp"
                         style="@style/forms_page_title_label_default380"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
@@ -651,8 +641,9 @@
                         android:textColor="@android:color/black"
                         android:textStyle="bold" />
 
-                    <com.mahak.order.widget.FontTextView
+                    <com.mahak.order.widget.PrintTextView
                         style="@style/forms_page_title_label_default380"
+                        android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/SmallSize"
@@ -672,17 +663,21 @@
 
     <LinearLayout
         android:id="@+id/_llFooterMessage"
+        android:scrollHorizontally="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:orientation="vertical">
 
-        <com.mahak.order.widget.FontTextView
+        <com.mahak.order.widget.PrintTextView
+            android:scrollHorizontally="false"
             android:id="@+id/_tvFooterMessage"
             style="@style/forms_page_title_label_default380"
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:textStyle="bold"
+            android:maxLines="2"
+            android:inputType="textMultiLine"
             android:layout_weight="1"
             android:gravity="right"
             android:text="@string/print_footer_messages_part1"
@@ -690,3 +685,4 @@
     </LinearLayout>
 
 </LinearLayout>
+

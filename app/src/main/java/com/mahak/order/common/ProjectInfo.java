@@ -28,6 +28,7 @@ public class ProjectInfo {
     public static int PUBLISH_REJECT = 3;
     public static int CUSTOMERID_GUEST = 0;
     public static long DONT_CUSTOMER_GROUP = 0;
+    public static int promo_CUSTOMER_GROUP = -2;
     public static String DONT_CODE = "-1";
 
     public static int CHECKLIST_TYPE_ORDER = 1;
@@ -72,6 +73,7 @@ public class ProjectInfo {
     public static int ASSET_EXIST_PRODUCT = 1;
     public static int ASSET_ZERO_PRODUCT = 2;
     public static int ASSET_NOT_EXIST_PRODUCT = 3;
+    public static int ASSET_promotion = 4;
 
     //Printers Brand
     public static int PRINTER_BIXOLON_SPP_R200_II = 0;

@@ -180,16 +180,18 @@ public class PromoTerms extends Fragment {
             ll_detail_visitors.setVisibility(View.VISIBLE);
         }
 
-        if (promotion.getIsAllGood() == Promotion.AllGoods) {
-            changeToAllGoods();
-            ll_detail_goods.setVisibility(View.GONE);
-            ll_goods.setClickable(false);
-        } else {
+        if(goodEntities.size() > 0){
             changeToSpecialGoods();
             goodsEntityAdapter = new GoodsEntityAdapter(goodEntities, getActivity());
             good_recycler.setAdapter(goodsEntityAdapter);
             ll_goods.setClickable(true);
+
+        }else {
+            changeToAllGoods();
+            ll_detail_goods.setVisibility(View.GONE);
+            ll_goods.setClickable(false);
         }
+
 
         if (promotion.getIsAllStore() == Promotion.AllStores) {
             changeToAllStores();

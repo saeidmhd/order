@@ -50,21 +50,15 @@ public class DataService {
     static int FALSE = 0;
     private static long result = 0;
 
-
-    public static double InsertCustomer(DbAdapter db, List<Customer> data, long customerMaxRowVersion) {
+    public static double InsertCustomer(DbAdapter db, List<Customer> data, long rowVersion) {
         long startTime = System.nanoTime();
         db.open();
-        if (customerMaxRowVersion != 0) {
-            if (!db.UpdateServerCustomerFast(data))
-                db.AddCustomerFast(data);
-        } else
-            db.AddCustomerFast(data);
-       // BaseActivity.setPrefPersonCount(db.getTotalCountPeople());
+        db.UpdateOrAddServerCustomerFast(data,rowVersion);
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
-
     }
+
 
     public static void InsertZone(DbAdapter db, Datum data) {
         db.open();
@@ -95,38 +89,20 @@ public class DataService {
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
-    public static double InsertVisitorPeople(DbAdapter db, List<VisitorPeople> data, long visitorPeopleMaxRowVersion) {
+    public static double InsertVisitorPeople(DbAdapter db, List<VisitorPeople> data, long rowVersion) {
         long startTime = System.nanoTime();
         db.open();
-        if (visitorPeopleMaxRowVersion != 0) {
-            if (!db.UpdateVisitorPeopleFast(data)) {
-                db.AddVisitorPeopleFast(data);
-                db.UpdatePersonFromVisitorPeopleFast(data);
-            }
-        } else {
-            db.AddVisitorPeopleFast(data);
-            db.UpdatePersonFromVisitorPeopleFast(data);
-        }
+        db.UpdateOrAddVisitorPeopleFast(data , rowVersion);
+        db.UpdatePersonFromVisitorPeopleFast(data);
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
-    /*public static double InsertCustomer(DbAdapter db, List<Customer> data) {
-        long startTime = System.nanoTime();
-        db.open();
-        db.DeleteAllCustomer();
-        db.AddCustomerFast(data);
-        db.close();
-        long endTime = System.nanoTime();
-        return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
-    }*/
-
     public static double InsertVisitor(DbAdapter db, List<Visitor> data) {
         long startTime = System.nanoTime();
         db.open();
-        if (!db.UpdateServerVisitor(data))
-            db.AddVisitor(data);
+        db.UpdateOrAddServerVisitor(data);
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
@@ -166,45 +142,29 @@ public class DataService {
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
-    public static double InsertProduct(DbAdapter db, List<Product> data, long productMaxRowVersion) {
+    public static double InsertProduct(DbAdapter db, List<Product> data, long rowVersion) {
         long startTime = System.nanoTime();
         db.open();
-        if (productMaxRowVersion != 0) {
-            if (!db.UpdateServerProductFast(data))
-                db.AddProductFast(data);
-        } else
-            db.AddProductFast(data);
-        //BaseActivity.setPrefProductCount(db.getTotalCountProduct());
+        db.UpdateOrAddServerProductFast(data , rowVersion);
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
-    public static double InsertProductDetail(DbAdapter db, List<ProductDetail> data, long productMaxRowVersion) {
+    public static double InsertProductDetail(DbAdapter db, List<ProductDetail> data, long rowVersion) {
         long startTime = System.nanoTime();
         db.open();
-        if (productMaxRowVersion != 0) {
-            if (!db.UpdateProductDetailFromServerFast(data))
-                db.AddProductDetailFast(data);
-        } else {
-            db.AddProductDetailFast(data);
-        }
-        // db.UpdateProductFromProductDetailFast(data);
+        db.UpdateOrAddProductDetail(data,rowVersion);
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
-    public static double InsertVisitorProducts(DbAdapter db, List<VisitorProduct> data, long visitorProductMaxRowVersion) {
+    public static double InsertVisitorProducts(DbAdapter db, List<VisitorProduct> data, long rowVersion) {
         long startTime = System.nanoTime();
         db.open();
-        if (visitorProductMaxRowVersion != 0) {
-            if (!db.UpdateVisitorProductFast(data))
-                db.AddVisitorProductFast(data);
-        } else {
-            db.AddVisitorProductFast(data);
-        }
 
+        db.UpdateOrAddVisitorProductFast(data,rowVersion);
         db.UpdateProductFromVisitorProductFast(data);
         db.UpdateProductDetailFromVisitorProductFast(data);
 
@@ -212,7 +172,6 @@ public class DataService {
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
-
 
     public static double InsertSettings(DbAdapter db, List<Setting> data, Context mContext) {
         long startTime = System.nanoTime();
@@ -224,87 +183,9 @@ public class DataService {
             }
         }
         db.close();
-        setPreferences(db, mContext);
+        ServiceTools.setSettingPreferences(db, mContext);
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
-    }
-
-    private static void setPreferences(DbAdapter db, Context mContext) {
-
-        BaseActivity.setPrefUnit2Setting(BaseActivity.MODE_YekVahedi);
-        BaseActivity.setPrefTaxAndChargeIsActive(BaseActivity.InActive);
-        BaseActivity.setPrefTaxPercent(BaseActivity.InActive);
-        BaseActivity.setPrefChargePercent(BaseActivity.InActive);
-        BaseActivity.setPrefRowDiscountIsActive(BaseActivity.invisible);
-        BaseActivity.setPrefAutoSyncValue(BaseActivity.InActive);
-
-        db.open();
-        ArrayList<Setting> settings = db.getAllSettings();
-        db.close();
-
-        BaseActivity.setPrefRowDiscountIsActive(BaseActivity.invisible);
-        for (int i = 0; i < settings.size(); i++) {
-            switch (settings.get(i).getSettingCode()) {
-                case BaseActivity.TwoUnitKolJozCode:
-                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue().equals(BaseActivity.Active))
-                        BaseActivity.setPrefUnit2Setting(BaseActivity.MODE_MeghdarJoz);
-                    break;
-                case BaseActivity.TwoUnitActiveCode:
-                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue().equals(BaseActivity.Active))
-                        BaseActivity.setPrefUnit2Setting(BaseActivity.Mode_DoVahedi);
-                    break;
-                case BaseActivity.OneUnitActiveCode:
-                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue().equals(BaseActivity.Active))
-                        BaseActivity.setPrefUnit2Setting(BaseActivity.MODE_YekVahedi);
-                    break;
-                case BaseActivity.RowDiscountType:
-                    if (settings.get(i).getDeleted() != 1)
-                        BaseActivity.setPrefRowDiscountIsActive(settings.get(i).getValue());
-                    else
-                        BaseActivity.setPrefRowDiscountIsActive(BaseActivity.invisible);
-                    break;
-                case BaseActivity.TaxAndChargeIsActiveCode:
-                    if (settings.get(i).getDeleted() != 1)
-                        BaseActivity.setPrefTaxAndChargeIsActive(settings.get(i).getValue());
-                    else
-                        BaseActivity.setPrefTaxAndChargeIsActive(BaseActivity.InActive);
-                    break;
-                case BaseActivity.TaxPercentCode:
-                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null)
-                        BaseActivity.setPrefTaxPercent(settings.get(i).getValue());
-                    else
-                        BaseActivity.setPrefTaxPercent(BaseActivity.InActive);
-                    break;
-                case BaseActivity.ChargePercentCode:
-                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null)
-                        BaseActivity.setPrefChargePercent(settings.get(i).getValue());
-                    else
-                        BaseActivity.setPrefChargePercent(BaseActivity.InActive);
-                    break;
-                case BaseActivity.AutoSyncCode:
-                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null) {
-                        BaseActivity.setPrefAutoSyncValue(settings.get(i).getValue());
-                        ServiceTools.scheduleAlarm(mContext);
-                    } else
-                        BaseActivity.setPrefAutoSyncValue(BaseActivity.InActive);
-                    break;
-                case BaseActivity.CountDecimalPointCode:
-                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null) {
-                        String value = settings.get(i).getValue();
-                        BaseActivity.setPrefCountDecimalPoint(value.substring(0, value.indexOf(".")));
-                    } else
-                        BaseActivity.setPrefCountDecimalPoint("0");
-                    break;
-                case BaseActivity.PriceDecimalPointCode:
-                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null) {
-                        String value = settings.get(i).getValue();
-                        BaseActivity.setPrefPriceDecimalPoint(value.substring(0, value.indexOf(".")));
-                    } else
-                        BaseActivity.setPrefPriceDecimalPoint("0");
-                    break;
-            }
-        }
-
     }
 
     public static double InsertCheckList(DbAdapter db, List<CheckList> data) {
@@ -458,6 +339,7 @@ public class DataService {
     public static double InsertPromotion(DbAdapter db, List<Promotion> data) {
         long startTime = System.nanoTime();
         db.open();
+        db.DeleteAllPromotion();
         Date date = new Date();
         Gson gson = new Gson();
         PromotionOtherFields promotionOtherFields = new PromotionOtherFields();
@@ -472,9 +354,7 @@ public class DataService {
                     e.printStackTrace();
                 }
                 db.upgradeDatabase();
-                //if item is new add then to database
-                //else item isnot new then update to database
-                if (!db.UpdatePromotion(data.get(i), promotionOtherFields))
+                if(data.get(i).getDeleted() == 0)
                     result = db.AddPromotion(data.get(i), promotionOtherFields);
         }
         db.close();
@@ -485,7 +365,7 @@ public class DataService {
     public static double InsertPromotionDetails(DbAdapter db, List<PromotionDetail> data) {
         long startTime = System.nanoTime();
         db.open();
-
+        db.DeleteAllPromotionDetail();
         Date date = new Date();
         Gson gson = new Gson();
         PromotionDetailOtherFields promotionDetailOtherFields = new PromotionDetailOtherFields();
@@ -501,7 +381,7 @@ public class DataService {
             }
             //if item is new add then to database
             //else item is not new then update to database
-            if (!db.UpdatePromotionDetail(data.get(i), promotionDetailOtherFields))
+            if(!data.get(i).isDeleted())
                 result = db.AddPromotionDetail(data.get(i), promotionDetailOtherFields);
         }
         db.close();
@@ -513,6 +393,7 @@ public class DataService {
         long startTime = System.nanoTime();
         db.open();
         // ArrayList<PromotionEntity> arrayEntitiesOfPromotions = Parser.getEntitiesOfPromotions(data);
+        db.DeleteAllPromotionEntity();
         Date date = new Date();
         Gson gson = new Gson();
         PromotionEntityOtherFields promotionEntityOtherFields = new PromotionEntityOtherFields();
@@ -528,24 +409,19 @@ public class DataService {
             }
             //if item is new add then to database
             //else item is not new then update to database
-            if (!db.UpdateEntitiesOfPromotions(data.get(i), promotionEntityOtherFields))
+            if(!data.get(i).isDeleted())
                 result = db.AddEntitiesOfPromotions(data.get(i), promotionEntityOtherFields);
+
         }
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
-    public static double InsertExtraInfo(DbAdapter db, List<ExtraData> data, long extraDataMaxRowVersion) {
+    public static double InsertExtraInfo(DbAdapter db, List<ExtraData> data, long rowVersion) {
         long startTime = System.nanoTime();
         db.open();
-        if (extraDataMaxRowVersion != 0) {
-            if (!db.UpdateExtraInfo(data))
-                db.AddExtraInfo(data);
-        } else
-            db.AddExtraInfo(data);
-
-
+        db.UpdateOrAddExtraInfo(data , rowVersion);
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;

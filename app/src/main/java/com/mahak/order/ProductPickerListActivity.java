@@ -127,7 +127,6 @@ public class ProductPickerListActivity extends BaseActivity {
     public static long CategoryId;
 
     public static ArrayList<Product> arrayProductMain = new ArrayList<>();
-    public static ArrayList<Long> arrayProductId = new ArrayList<>();
     public static LinkedHashMap<Integer, OrderDetail> HashMap_Product = new LinkedHashMap<>();
     public static final List<OrderDetail> Product_Delete = new ArrayList<>();
 
@@ -146,6 +145,7 @@ public class ProductPickerListActivity extends BaseActivity {
     public static int Type;
     private static int Mode;
     public static int CustomerId;
+    public static long GroupId;
     private AsyncProduct asynproduct;
     public static TextView tvPageTitle;
     private int CountProduct = 0;
@@ -156,7 +156,6 @@ public class ProductPickerListActivity extends BaseActivity {
     private PlaceholderListGalleryFragment placeholderListGalleryFragment;
     private ProductListFragment productListFragment;
     private ProductGridFragment productGridFragment;
-    private long GroupId;
     private long OrderId;
 
     AdapterSpnAssetProduct adspnAssetProduct;
@@ -209,7 +208,7 @@ public class ProductPickerListActivity extends BaseActivity {
             if (Mode == MODE_NEW) {
                 CustomerId = Extras.getInt(CUSTOMERID_KEY);
                 Type = Extras.getInt(TYPE_KEY);
-                GroupId = Extras.getLong("GroupId");
+                GroupId = Extras.getLong(CUSTOMER_GROUP_KEY);
             } else if (Mode == MODE_EDIT) {
                 RetuenAsset = Extras.getBoolean(RETURN_ASSET_KEY);
                 Type = Extras.getInt(TYPE_KEY);
@@ -252,7 +251,7 @@ public class ProductPickerListActivity extends BaseActivity {
                     || Type == ProjectInfo.TYPE_INVOCIE ||
                     (Type == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext))) {
                 MODE_ASSET = ProjectInfo.ASSET_EXIST_PRODUCT;
-                spnAssetProduct.setEnabled(false);
+                //spnAssetProduct.setEnabled(false);
             } else
                 MODE_ASSET = ProjectInfo.ASSET_ALL_PRODUCT;
 
@@ -281,7 +280,7 @@ public class ProductPickerListActivity extends BaseActivity {
                     ProductGroup productGroup = (ProductGroup) parent.getItemAtPosition(position);
                     CategoryId = productGroup.getProductCategoryId();
 
-                    CountProduct = db.getTotalCountProduct(CategoryId , MODE_ASSET);
+                    CountProduct = db.getTotalCountProduct(txtSearch.getText().toString(), CategoryId , MODE_ASSET);
                     setPageTitle(CountProduct);
 
                     //Clear Adapter/////////////////////////////////////
@@ -321,7 +320,7 @@ public class ProductPickerListActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 db.open();
-                CountProduct = db.getTotalCountProduct(CategoryId , position);
+                CountProduct = db.getTotalCountProduct(txtSearch.getText().toString(),CategoryId , position);
                 setPageTitle(CountProduct);
 
                 MODE_ASSET = position;
@@ -449,16 +448,9 @@ public class ProductPickerListActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                ClearZero();
-                ArrayList<OrderDetail> orderDetails = new ArrayList<>();
+                //ClearZero();
                 if (Mode == MODE_NEW) {
                     if (HashMap_Product.size() != 0) {
-                        Set mapSet = HashMap_Product.entrySet();
-                        for (Object aMapSet : mapSet) {
-                            Map.Entry mapEntry = (Map.Entry) aMapSet;
-                            OrderDetail object = (OrderDetail) mapEntry.getValue();
-                            orderDetails.add(object);
-                        }// End of While
                         Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
                         intent.putExtra(CUSTOMERID_KEY, CustomerId);
                         intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
@@ -482,12 +474,6 @@ public class ProductPickerListActivity extends BaseActivity {
             }
         });
 
-        /*swipeRefreshProduct.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                SendReceive();
-            }
-        });*/
 
     }// End Of OnCreate
 
@@ -512,7 +498,6 @@ public class ProductPickerListActivity extends BaseActivity {
         ll_product_picker = (LinearLayout) findViewById(R.id.ll_product_picker);
         spnCategory = (Spinner) findViewById(R.id.spnCategory);
         spnAssetProduct = (Spinner) findViewById(R.id.spnAssetProduct);
-        //swipeRefreshProduct = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshProduct );
         txtSearch = (EditText) findViewById(R.id.txtSearch);
         tvTotalCount = (TextView) findViewById(R.id.tvTotalCount);
         txtTotalCount = (TextView) findViewById(R.id.txtTotalCount);
@@ -571,7 +556,7 @@ public class ProductPickerListActivity extends BaseActivity {
             args.putInt("type", Type);
             args.putLong("CustomerId", CustomerId);
             args.putLong("OrderId", OrderId);
-            args.putLong("GroupId", GroupId);
+            args.putLong(CUSTOMER_GROUP_KEY, GroupId);
             args.putInt("CountProduct", CountProduct);
             productListFragment.setArguments(args);
             ft.replace(R.id.flContent, productListFragment);
@@ -600,7 +585,7 @@ public class ProductPickerListActivity extends BaseActivity {
         args.putInt("type", Type);
         args.putLong("OrderId", OrderId);
         args.putInt("CustomerId", CustomerId);
-        args.putLong("GroupId", GroupId);
+        args.putLong(CUSTOMER_GROUP_KEY, GroupId);
         args.putInt("CountProduct", CountProduct);
         productGridFragment.setArguments(args);
         ft.replace(R.id.flContent, productGridFragment);
@@ -623,7 +608,7 @@ public class ProductPickerListActivity extends BaseActivity {
         Bundle args = new Bundle();
         args.putInt("Mode", Mode);
         args.putInt("type", Type);
-        args.putLong("GroupId", GroupId);
+        args.putLong(CUSTOMER_GROUP_KEY, GroupId);
         args.putLong("OrderId", OrderId);
         args.putLong("CustomerId", CustomerId);
         args.putInt("CountProduct", CountProduct);
@@ -798,6 +783,9 @@ public class ProductPickerListActivity extends BaseActivity {
         //Read Tax And Charge From Config //////////////////////////////////
         if (db == null) db = new DbAdapter(mContext);
         db.open();
+
+        BaseActivity.setPrefDefSellPrice(ServiceTools.getPrefDefPrice(db , CustomerId , GroupId));
+
         CountProduct = BaseActivity.getPrefProductCount(mContext);
         /*Default_TaxPercent = db.GetTaxPercent();
         Default_ChargePercent = db.GetChargePercent();*/
@@ -805,7 +793,6 @@ public class ProductPickerListActivity extends BaseActivity {
         if (mode == MODE_EDIT) {
             ArrayList<Product> arrayproduct;
             arrayproduct = db.getAllProduct(categoryid, modeasset, 0);
-            arrayProductId = db.getAllProductID(categoryid, modeasset, 0);
             //Set Correct Asset______________________________________________
             for (OrderDetail object : InvoiceDetailActivity.orderDetailArrayList) {
                 for (Product item : arrayproduct) {
@@ -825,9 +812,7 @@ public class ProductPickerListActivity extends BaseActivity {
         }//End of if
         else if (mode == MODE_NEW) {
             arrayProductMain = db.getAllProduct(categoryid, modeasset, 0);
-            arrayProductId = db.getAllProductID(categoryid, modeasset, 0);
         }
-        //HashMap_productDetail = db.getMapProductDetail();
         db.close();
     }
 
@@ -960,6 +945,7 @@ public class ProductPickerListActivity extends BaseActivity {
                 public Holder(View view) {
 
                     tvProductName = (TextView) view.findViewById(R.id.tvName);
+                    tvProductName.setSelected(true);
                     tvAsset = (TextView) view.findViewById(R.id.tvAsset);
                     tvAsset2 = (TextView) view.findViewById(R.id.tvAsset2);
                     tvInbox = (TextView) view.findViewById(R.id.tvInbox);
@@ -1055,7 +1041,7 @@ public class ProductPickerListActivity extends BaseActivity {
                         for (int i = 0; i < arrayOrginal.size(); i++) {
                             Product product = arrayOrginal.get(i);
                             name = product.getName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name);
                             if (result_contain)
                                 filterItem.add(product);
                         }
@@ -1279,6 +1265,7 @@ public class ProductPickerListActivity extends BaseActivity {
 
                 public Holder(View view) {
                     tvName = (TextView) view.findViewById(R.id.tvName);
+                    tvName.setSelected(true);
                     tvAsset = (TextView) view.findViewById(R.id.tvAsset);
                     tvAsset2 = (TextView) view.findViewById(R.id.tvAsset2);
                     tvInbox = (TextView) view.findViewById(R.id.tvInbox);
@@ -1374,7 +1361,7 @@ public class ProductPickerListActivity extends BaseActivity {
                         for (int i = 0; i < arrayOrginal.size(); i++) {
                             Product product = arrayOrginal.get(i);
                             name = product.getName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name);
                             if (result_contain)
                                 filterItem.add(product);
                         }

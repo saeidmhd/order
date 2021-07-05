@@ -47,6 +47,7 @@ import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.CustomerGroup;
+import com.mahak.order.common.Person_Extra_Data;
 import com.mahak.order.common.Printer;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
@@ -85,7 +86,7 @@ public class PeopleListActivity extends BaseActivity {
     private static final int REQUESTCODE_ADD_CUSTOMER = 2;
     private static long GroupId;
     private static int PositionGroup = 0;
-    private static String GROUPID_KEY = "GroupId";
+    private static String GROUPID_KEY = CUSTOMER_GROUP_KEY;
     private static String POSITION_KEY = "Position";
     private boolean FIRST_LOADE = false;
     private Context mContext;
@@ -124,6 +125,7 @@ public class PeopleListActivity extends BaseActivity {
     private int CountCustomer;
     private int totalItem = 0;
     Boolean CheckFilter = false;
+    private String search;
 
 
     @Override
@@ -177,8 +179,8 @@ public class PeopleListActivity extends BaseActivity {
         initialise();
 
         db.open();
-        CountCustomer = db.getTotalCountPeople();
-        tvPageTitle.setText(getString(R.string.str_nav_customer_list) + "(" + CountCustomer + ")");
+        /*CountCustomer = db.getTotalCountPeople();
+        tvPageTitle.setText(getString(R.string.str_nav_customer_list) + "(" + CountCustomer + ")");*/
 
         FillSpinner();
 
@@ -202,27 +204,14 @@ public class PeopleListActivity extends BaseActivity {
                 PositionGroup = position;
                 //Cancel Asyn//////////////////////////////////////////////////////////////
                 if (FIRST_LOADE) {
-                    CustomerGroup group = (CustomerGroup) parent.getItemAtPosition(position);
                     GroupId = arrayGroup.get(position).getPersonGroupId();
-                    if (!TextUtils.isEmpty(txtSearch.getText().toString())) {
-                        adCustomer.getFilter().filter(txtSearch.getText().toString(), new FilterListener() {
-                            @Override
-                            public void onFilterComplete(int count) {
-                                tvPageTitle.setText(getString(R.string.str_nav_customer_list) + "(" + count + ")");
-                            }
-                        });
-                    } else {
-                        CheckFilter = false;
-                        ReadALLCustomer();
-                    }
+                    ReadALLCustomer();
                 }
                 FIRST_LOADE = true;
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-
             }
 
         });
@@ -261,7 +250,6 @@ public class PeopleListActivity extends BaseActivity {
                                                 });
                                             } else {
                                                 ReadALLCustomer();
-                                                tvPageTitle.setText(getString(R.string.str_nav_customer_list) + "(" + CountCustomer + ")");
                                             }
                                         }
                                     }
@@ -284,12 +272,11 @@ public class PeopleListActivity extends BaseActivity {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if(mLastFirstVisibleItem < firstVisibleItem){
-                    if (!CheckFilter) {
-                        if (firstVisibleItem + visibleItemCount > totalItemCount - 2 && totalItemCount < CountCustomer) {
+                    if (firstVisibleItem + visibleItemCount > totalItemCount - 2 && totalItemCount < CountCustomer) {
                             totalItem = totalItemCount;
-                            adCustomer.addAll(db.getAllCustomer(GroupId, totalItem));
+                            search = txtSearch.getText().toString();
+                            adCustomer.addAll(db.getAllCustomer(GroupId, totalItem,search));
                             adCustomer.notifyDataSetChanged();
-                        }
                     }
                 }
                 mLastFirstVisibleItem = firstVisibleItem;
@@ -317,10 +304,12 @@ public class PeopleListActivity extends BaseActivity {
      */
     private void ReadALLCustomer() {
         db.open();
-        arrayCustomer = db.getAllCustomer(GroupId, 0);
+        search = txtSearch.getText().toString();
+        arrayCustomer = db.getAllCustomer(GroupId, 0,search);
+        CountCustomer = db.getTotalCountPeople(GroupId , search);
+        tvPageTitle.setText(getString(R.string.str_nav_customer_list) + "(" + CountCustomer + ")");
         adCustomer = new AdapterCustomer(mActivity);
         lstCustomer.setAdapter(adCustomer);
-       // tvPageTitle.setText(getString(R.string.str_nav_customer_list) + "(" + lstCustomer.getCount() + ")");
     }//End of if
 
     /**
@@ -335,6 +324,10 @@ public class PeopleListActivity extends BaseActivity {
         arrayGroup.add(group);
         arrayTemp = db.getAllCustomerGroup();
         arrayGroup.addAll(arrayTemp);
+        CustomerGroup group2 = new CustomerGroup();
+        group2.setPersonGroupId(ProjectInfo.promo_CUSTOMER_GROUP);
+        group2.setName("مشتریان دارای طرح تشویقی");
+        arrayGroup.add(group2);
 
         adspinner = new AdapterSpnGroup(mContext, R.layout.item_spinner, arrayGroup);
         spnGroup.setAdapter(adspinner);
@@ -424,16 +417,15 @@ public class PeopleListActivity extends BaseActivity {
 
                 double amount = customer.getBalance();
 
-                if (amount == 0) {// if customerStatus =	incalculable
-                    tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_incalculable));
+                if (amount == 0) {
                     tvRemained.setText(ServiceTools.formatPrice(amount));
+                    tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_incalculable));
                 }
-                if (amount < 0) {    // if customerStatus =	Debtor
+                if (amount < 0) {
                     amount = amount * -1;
                     tvRemained.setText(ServiceTools.formatPrice(amount));
                     tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_debitor));
-                } else if (amount > 0) // if customerStaus =	Creditor
-                {
+                } else if (amount > 0) {
                     tvRemained.setText(ServiceTools.formatPrice(amount));
                     tvCustomerStatus.setText(mContext.getResources().getString(R.string.str_creditor));
                 }
@@ -441,8 +433,6 @@ public class PeopleListActivity extends BaseActivity {
                 tvMarketName.setText(customer.getOrganization());
                 tvCustomerName.setText(customer.getName());
                 tvAddress.setText(customer.getAddress());
-
-
 
             }
         }// End of Holder
@@ -486,13 +476,13 @@ public class PeopleListActivity extends BaseActivity {
                             intent.putExtra(MODE_PAGE, MODE_EDIT);
                             intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                             intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                            intent.putExtra("GroupId", GroupId);
+                            intent.putExtra(CUSTOMER_GROUP_KEY, customer.getPersonGroupId());
                             startActivityForResult(intent, REQUESTCODE_MANAGE_CUSTOMER);
                         } else if (Page == PAGE_ADD_INVOICE) {
                             Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
                             intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                             intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                            intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
+                            intent.putExtra(CUSTOMER_GROUP_KEY, customer.getPersonGroupId());
                             intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_INVOCIE);
                             setResult(RESULT_OK, intent);
                             finish();
@@ -500,7 +490,7 @@ public class PeopleListActivity extends BaseActivity {
                             Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
                             intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                             intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                            intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
+                            intent.putExtra(CUSTOMER_GROUP_KEY, customer.getPersonGroupId());
                             intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_ORDER);
                             setResult(RESULT_OK, intent);
                             finish();
@@ -508,7 +498,7 @@ public class PeopleListActivity extends BaseActivity {
                             Intent intent = new Intent(mContext, ManageReceiptActivity.class);
                             intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                             intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                            intent.putExtra("GroupId", GroupId);
+                            intent.putExtra(CUSTOMER_GROUP_KEY, customer.getPersonGroupId());
                             intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_NON);
                             setResult(RESULT_OK, intent);
                             finish();
@@ -516,14 +506,14 @@ public class PeopleListActivity extends BaseActivity {
                             Intent intent = new Intent(mContext, NonRegisterActivity.class);
                             intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                             intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                            intent.putExtra("GroupId", GroupId);
+                            intent.putExtra(CUSTOMER_GROUP_KEY, customer.getPersonGroupId());
                             setResult(RESULT_OK, intent);
                             finish();
                         } else if (Page == PAGE_ADD_RETURN) {
                             Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
                             intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                             intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                            intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
+                            intent.putExtra(CUSTOMER_GROUP_KEY, customer.getPersonGroupId());
                             intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_RETURN_OF_SALE);
                             setResult(RESULT_OK, intent);
                             finish();
@@ -591,7 +581,7 @@ public class PeopleListActivity extends BaseActivity {
                                     intent1.putExtra(MODE_PAGE, MODE_EDIT);
                                     intent1.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                                     intent1.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                                    intent1.putExtra("GroupId", GroupId);
+                                    intent1.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                                     startActivity(intent1);
                                     break;
                             }
@@ -681,7 +671,7 @@ public class PeopleListActivity extends BaseActivity {
                         Intent intent = new Intent(mContext, ManageCustomerActivity.class);
                         intent.putExtra(MODE_PAGE, MODE_EDIT);
                         intent.putExtra(ID, customer.getPersonId());
-                        intent.putExtra("GroupId", GroupId);
+                        intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                         startActivityForResult(intent, REQUESTCODE_MANAGE_CUSTOMER);
                     } else if (Page == PAGE_Invoice_Detail_Activity) {
                         Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
@@ -693,14 +683,14 @@ public class PeopleListActivity extends BaseActivity {
                     } else if (Page == PAGE_MANAGE_RECEIPT) {
                         Intent intent = new Intent(mContext, ManageReceiptActivity.class);
                         intent.putExtra(CUSTOMERID_KEY, customer.getId());
-                        intent.putExtra("GroupId", GroupId);
+                        intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                         setResult(RESULT_OK, intent);
                         finish();
                     } else if (Page == PAGE_ADD_NON_REGISTER) {
                         Intent intent = new Intent(mContext, NonRegisterActivity.class);
                         intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                         intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                        intent.putExtra("GroupId", GroupId);
+                        intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                         setResult(RESULT_OK, intent);
                         finish();
                     }
@@ -734,14 +724,14 @@ public class PeopleListActivity extends BaseActivity {
                     } else if (Page == PAGE_MANAGE_RECEIPT) {
                         Intent intent = new Intent(mContext, ManageReceiptActivity.class);
                         intent.putExtra(CUSTOMER_CLIENT_ID_KEY, personClientId);
-                        intent.putExtra("GroupId", GroupId);
+                        intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                         intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_NON);
                         setResult(RESULT_OK, intent);
                         finish();
                     } else if (Page == PAGE_ADD_NON_REGISTER) {
                         Intent intent = new Intent(mContext, NonRegisterActivity.class);
                         intent.putExtra(CUSTOMER_CLIENT_ID_KEY, personClientId);
-                        intent.putExtra("GroupId", GroupId);
+                        intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                         setResult(RESULT_OK, intent);
                         finish();
                     } else if (Page == PAGE_ADD_RETURN) {
@@ -843,7 +833,7 @@ public class PeopleListActivity extends BaseActivity {
                 intent.putExtra(MODE_PAGE, MODE_EDIT);
                 intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                 intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                intent.putExtra("GroupId", GroupId);
+                intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                 startActivityForResult(intent, REQUESTCODE_MANAGE_CUSTOMER);
             } else if (Page == PAGE_ADD_INVOICE) {
                 Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
@@ -865,7 +855,7 @@ public class PeopleListActivity extends BaseActivity {
                 Intent intent = new Intent(mContext, ManageReceiptActivity.class);
                 intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                 intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                intent.putExtra("GroupId", GroupId);
+                intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                 intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_NON);
                 setResult(RESULT_OK, intent);
                 finish();
@@ -873,7 +863,7 @@ public class PeopleListActivity extends BaseActivity {
                 Intent intent = new Intent(mContext, NonRegisterActivity.class);
                 intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
                 intent.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
-                intent.putExtra("GroupId", GroupId);
+                intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                 setResult(RESULT_OK, intent);
                 finish();
             } else if (Page == PAGE_ADD_RETURN) {
@@ -1023,17 +1013,16 @@ public class PeopleListActivity extends BaseActivity {
         }
 
         public class Holder {
-            public TextView tvCustomerCode, tvStatus, tvCustomerName, tvBalance‌;
+            public TextView tvCustomerCode, tvStatus, tvCustomerName, tvBalance;
             public LinearLayout llitem;
 
             public Holder(View view) {
 
                 llitem = (LinearLayout) view.findViewById(R.id.llitem);
-
                 tvCustomerCode = (TextView) view.findViewById(R.id.tvCustomerCode);
                 tvStatus = (TextView) view.findViewById(R.id.tvStatus);
                 tvCustomerName = (TextView) view.findViewById(R.id.tvCustomerName);
-                tvBalance‌ = (TextView) view.findViewById(R.id.tvBalance‌);
+                tvBalance = (TextView) view.findViewById(R.id.tvBalance);
 
             }
 
@@ -1041,17 +1030,16 @@ public class PeopleListActivity extends BaseActivity {
 
                 double amount = customer.getBalance();
 
-                if (amount == 0) {// if customerStatus =	incalculable
+                if (amount == 0) {
+                    tvBalance.setText(ServiceTools.formatPrice(amount));
                     tvStatus.setText(mContext.getResources().getString(R.string.str_incalculable));
-                    tvBalance‌.setText(ServiceTools.formatPrice(amount));
                 }
-                if (amount < 0) {    // if customerStatus =	Debtor
+                if (amount < 0) {
                     amount = amount * -1;
-                    tvBalance‌.setText(ServiceTools.formatPrice(amount));
+                    tvBalance.setText(ServiceTools.formatPrice(amount));
                     tvStatus.setText(mContext.getResources().getString(R.string.str_debitor));
-                } else if (amount > 0) // if customerStaus =	Creditor
-                {
-                    tvBalance‌.setText(ServiceTools.formatPrice(amount));
+                } else if (amount > 0) {
+                    tvBalance.setText(ServiceTools.formatPrice(amount));
                     tvStatus.setText(mContext.getResources().getString(R.string.str_creditor));
                 }
 
@@ -1252,7 +1240,7 @@ public class PeopleListActivity extends BaseActivity {
                     DataService.InsertCustomerGroup(db, personGroupLists);
                 }
             if (extraDataList.size() > 0)
-                    DataService.InsertExtraInfo(db, extraDataList, ExtraDataMaxRowVersion);
+                    DataService.InsertExtraInfo(db , extraDataList, ExtraDataMaxRowVersion);
             return 0;
         }
 

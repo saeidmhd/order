@@ -309,18 +309,19 @@
             <ListView
                 android:id="@+id/_lstGroupedTax"
                 android:layout_width="fill_parent"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="0dip"
                 android:background="@android:color/white"
                 android:divider="@android:color/black"
                 android:dividerHeight="0dp"
+                android:visibility="gone"
                 android:listSelector="@android:color/transparent"
                 android:padding="0dip" />
 
             <LinearLayout
                 android:id="@+id/_llTotalItems"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -355,7 +356,7 @@
             <LinearLayout
                 android:id="@+id/_llTotalCount"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -388,7 +389,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -418,7 +419,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -450,7 +451,7 @@
             <LinearLayout
                 android:id="@+id/_llDiscount"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -481,7 +482,7 @@
             <LinearLayout
                 android:id="@+id/_llFinalPrice"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -512,7 +513,7 @@
             <LinearLayout
                 android:id="@+id/_llCustomerStatus1"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -542,7 +543,7 @@
             <LinearLayout
                 android:id="@+id/_llPayable"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -572,7 +573,7 @@
             <LinearLayout
                 android:id="@+id/_llTotalReceipt"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -603,7 +604,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_min_height_compact"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -648,6 +649,7 @@
 
                     <com.mahak.order.widget.FontTextView
                         style="@style/forms_page_title_label_default380"
+                        android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/SmallSize"
@@ -658,6 +660,7 @@
 
                     <com.mahak.order.widget.FontTextView
                         android:id="@+id/_tvCustomerStatus2"
+                        android:textSize="16sp"
                         style="@style/forms_page_title_label_default380"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
@@ -691,6 +694,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:textStyle="bold"
+            android:maxLines="2"
+            android:inputType="textMultiLine"
             android:layout_weight="1"
             android:gravity="left"
             android:text="@string/print_footer_messages_part1"

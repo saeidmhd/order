@@ -29,7 +29,6 @@ import com.mahak.order.common.User;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.libs.FontsOverride;
 import com.mahak.order.storage.DbAdapter;
-import com.mahak.order.storage.DbSchema;
 
 import java.util.Locale;
 
@@ -95,6 +94,7 @@ public class BaseActivity extends AppCompatActivity {
     public static long DateSyncInformation = 0;
     public static String _Key_DateSyncInformation = "DateSyncInfo";
     public static String _Key_VisitorID = "UserId";
+    public static String _Key_DefPrice = "VisitorDefPrice";
     public static String _Key_UserToken = "UserToken";
     public static String _Key_SignalUserToken = "SignalUserToken";
     public static String _Key_StoreCode = "StoreCode";
@@ -117,6 +117,7 @@ public class BaseActivity extends AppCompatActivity {
     public static String _Key_ForceDetailActive = "ForceDetailActive";
     public static String _Key_PropertyActive = "PropertyActive";
     public static String _Key_RowDiscountIsActive = "RowDiscountIsActive";
+    public static String _Key_ApplyRowDiscount = "ApplyRowDiscount";
     public static String _Key_ChargePercent = "ChargePercent";
     public static String _Key_TaxPercent = "TaxPercent";
     public static String _Key_CountDecimalPoint = "CountDecimalPoint";
@@ -156,12 +157,13 @@ public class BaseActivity extends AppCompatActivity {
     public static String _Key_Store = "Store";
     public static String _Key_ServerUserId = "ServerUserId";
 
-    public static String pref_sort_base = DbSchema.Productschema.COLUMN_PRODUCT_CODE;
-    public static String pref_sort_base_customer = DbSchema.Customerschema.COLUMN_PersonCode;
+    public static String pref_sort_base_product ="Products.ProductCode";
+    public static String pref_sort_base_customer = "Customers.PersonCode";
     public static String pref_sort_direction = "Asc";
 
 
     public static long DefaultUserId = 0;
+    public static int DefaultDefLevel = 0;
     public static int Defaultcount = 0;
     public static long Default = 0;
     public static String DefaultUserToken = "";
@@ -194,6 +196,7 @@ public class BaseActivity extends AppCompatActivity {
     public static String DefaultPriceDecimalPoint = PriceDecimalPoint;
     public static String DefaultChargePercent = TaxPercent;
     public static String DefaultRowDiscountIsActive = invisible;
+    public static String DefaultApplyRowDiscount = InActive;
     public static String DefaultTwoUnitActive = Active;
     public static String DefaultKolJozActive = Active;
     public static String DefaultPropertyActive = Active;
@@ -269,26 +272,29 @@ public class BaseActivity extends AppCompatActivity {
     public static boolean HasStoragePermission = false;
 
 
-    public final static int ChargePercentCode = 14000;
-    public final static int TaxPercentCode = 14001;
-
-    public final static int TaxAndChargeIsActiveCode = 14008;
-
-    public final static int RowDiscountType = 1042;
-
+    public final static int OneUnitActiveCode = 1022;
     public final static int TwoUnitActiveCode = 1000;
     public final static int TwoUnitKolJozCode = 1015;
-    //public final static int VariableTwoUnitActiveCode = 10037;
-    public final static int OneUnitActiveCode = 1022;
 
+    public final static int CountDecimalPointCode = 1032;
+    public final static int PriceDecimalPointCode = 1033;
+
+    public final static int SHOW_ROW_DISCOUNT = 1042;
+    public final static int APPLY_DISCOUNT = 26008;
+
+    public final static int ChargePercentCode = 14000;
+    public final static int TaxPercentCode = 14001;
+    public final static int TaxAndChargeIsActiveCode = 14008;
+
+
+    public final static int VariableTwoUnitActiveCode = 10037;
     public final static int PropertyActiveCode = 1013;
     public final static int ForceDetailActiveCode = 1038;
     public final static int CubicMeterActiveCode = 1019;
 
     public final static int AutoSyncCode = 26006;
 
-    public final static int CountDecimalPointCode = 1032;
-    public final static int PriceDecimalPointCode = 1033;
+
 
     //126501,126502,126503
 
@@ -444,11 +450,11 @@ public class BaseActivity extends AppCompatActivity {
         sh.edit().putString(_Key_SortDirection, value).commit();
     }
 
-    public static String getPrefSortBase() {
-        return sh.getString(_Key_SortBase, pref_sort_base);
+    public static String getPrefSortBase_product() {
+        return sh.getString(_Key_SortBase, pref_sort_base_product);
     }
 
-    public static void setPrefSortBase(String value) {
+    public static void setPrefSortBase_product(String value) {
         sh.edit().putString(_Key_SortBase, value).commit();
     }
 
@@ -501,6 +507,14 @@ public class BaseActivity extends AppCompatActivity {
         sh.edit().putString(_Key_RowDiscountIsActive, value).commit();
     }
 
+    public static String getPrefApplyRowDiscount() {
+        return sh.getString(_Key_ApplyRowDiscount, DefaultApplyRowDiscount);
+    }
+
+    public static void setPrefApplyRowDiscount(String value) {
+        sh.edit().putString(_Key_ApplyRowDiscount, value).commit();
+    }
+
     public static String getPrefPropertyActive() {
         return sh.getString(_Key_PropertyActive, DefaultPropertyActive);
     }
@@ -537,6 +551,14 @@ public class BaseActivity extends AppCompatActivity {
 
     public static void setPrefUserId(long userId) {
         sh.edit().putLong(_Key_VisitorID, userId).commit();
+    }
+
+    public static int getPrefDefSellPrice() {
+        return sh.getInt(_Key_DefPrice, DefaultDefLevel);
+    }
+
+    public static void setPrefDefSellPrice(int defLevel) {
+        sh.edit().putInt(_Key_DefPrice, defLevel).commit();
     }
 
     public static String getPrefUserToken() {

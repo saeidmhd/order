@@ -38,8 +38,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/SmallSize"
-            android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
             android:text="@string/sample_product" />
 
         <ImageView

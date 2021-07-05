@@ -415,8 +415,7 @@
     <string name="msg_no_connected_printer">هیچ چاپگر متصلی وجود ندارد</string>
     <string name="dlg_title_paired_printer_list">لیست چاپگرهای متصل</string>
     <string name="msg_compeleted_print">چاپ با موفقیت انجام شد</string>
-    <string name="print_footer_messages_part1">مبلغ مانده نهایی مورد قبول اینجانب</string>
-    <string name="print_footer_messages_part2">می باشد.</string>
+    <string name="print_footer_messages_part1">مبلغ مانده نهایی مورد قبول اینجانب \n %s می باشد.</string>
     <string name="print_sign">امضاء</string>
     <string name="str_print_remaining_final_person">مانده نهایی</string>
     <string name="str_print_remaining_person">مانده قبلی</string>
@@ -484,7 +483,7 @@
     <string name="str_tracking_description">سامانه ردیابی ویزیتور غیر فعال است! </string>
     <string name="str_tracking_active">فعال است</string>
     <string name="str_tracking_inactive">غیر فعال است</string>
-    <string name="str_name_filter">فیلتر بر اساس نام</string>
+    <string name="str_name_filter">فیلتر بر اساس نام ، کد شخص و آدرس</string>
     <string name="str_name_product_code_filter"> نام یا کد کالا</string>
     <string name="str_name_code_filter"> نام یا کد پیگیری</string>
     <string name="str_search_detail">کد کالا یا مشخصه مورد نظر خود را جستجو کنید …</string>
@@ -507,7 +506,7 @@
     <string name="str_msg_notification_start_tracking">آیا می خواهید سرویس ردیابی شروع به کار کند؟</string>
     <string name="str_msg_notification_end_tracking">آیا می خواهید سرویس ردیابی متوقف شود؟</string>
     <string name="str_msg_notification_active_tracking">سرویس ردیابی فعال است</string>
-    <string name="str_setting_template2">قالب سفارشی</string>
+    <string name="str_setting_template2">قالب سفارشی Bixolon R200II</string>
 
     <!--notification-->
     <string name="str_notification">پیام</string>
@@ -865,8 +864,8 @@
     <string name="clear">پاک کردن</string>
     <string name="register">ثبت امضاء</string>
     <string name="mahak_url">www.MahakSoft.com</string>
-    <string name="status">وضعیت</string>
-    <string name="balance">مانده</string>
+    <string name="status">وضعیت:</string>
+    <string name="balance">مانده:</string>
     <string name="creditor_amount">مبلغ بستانکار</string>
     <string name="debt_amount">مبلغ بدهکار</string>
     <string name="date_str">تاریخ</string>
@@ -888,13 +887,13 @@
     <string name="asset_1">موجودی ۱</string>
     <string name="paired_devices">Paired Devices</string>
     <string name="other_available_devices">Other Available Devices</string>
-    <string name="sample_product">ماکارونی تک </string>
+    <string name="sample_product">ماکارونی تک ماکارونی تک ماکارونی تک ماکارونی تک ماکارونی تک ماکارونی تک ماکارونی تک تک ماکارونی تک تک ماکارونی تک تک ماکارونی تک تک ماکارونی تک تک ماکارونی تک تک ماکارونی تک تک ماکارونی تک </string>
     <string name="count">عدد</string>
     <string name="bank">بانک ملت</string>
     <string name="description">لطفا جهت افزایش کیف پول در بستره اینترنت یکی از کانال های</string>
-    <string name="sample_customer">سعید محمدی</string>
+    <string name="sample_customer">ناشناس</string>
     <string name="invoice">فاکتور</string>
-    <string name="price">قیمت(ریال)</string>
+    <string name="price">قیمت</string>
     <string name="open_connect_dialogue">Open connect dialogue</string>
     <string name="print_test_page">Print test page</string>
     <string name="get_printer_status">Get printer status</string>
@@ -905,7 +904,7 @@
     <string name="continuous_printing">Continuous printing</string>
     <string name="customerdisplay">CustomerDisplay</string>
     <string name="done">انجام شده</string>
-    <string name="sample_name">سید ماشالله هومن بهرامی زاده</string>
+    <string name="sample_name">ناشناس</string>
     <string name="sample_address">مشهد، بلوار احمد آباد، نبش خیابان پاستور، سید ماشالله 14، پلاک 178</string>
     <string name="morning">صبح</string>
     <string name="debtor">بدهکار</string>
@@ -929,14 +928,14 @@
     <string name="special_customer">مشتریان خاص</string>
     <string name="this_plan_for_some">این طرح برای برخی</string>
     <string name="included_in_this_plan">شامل این طرح می شوند.</string>
-    <string name="all_customer">همه مشتریان</string>
+    <string name="all_customer">همه مشتریان  </string>
     <string name="type">نوع</string>
     <string name="visitors">ویزیتورها</string>
     <string name="special_visitors">ویزیتورها خاص</string>
     <string name="all_visitors">همه ویزیتورها</string>
     <string name="products">کالاها</string>
     <string name="product_list">لیست کالاها</string>
-    <string name="all_products">همه کالاها</string>
+    <string name="all_products"> همه کالاها </string>
     <string name="special_products">کالاها خاص</string>
     <string name="special_store">انبارها خاص</string>
     <string name="all_stores">همه انبارها</string>
@@ -1107,7 +1106,7 @@
     <string name="cheque_cash">نقد و چک</string>
     <string name="credit">نسیه</string>
     <string name="cheque">چک</string>
-    <string name="discount_level">سطح تخفیف</string>
+    <string name="discount_level"> سطح تخفیف </string>
     <string name="waiting">لطفا کمی صبر نمایید..</string>
     <string name="disabled">غیر فعال</string>
     <string name="store">انبار</string>
@@ -1259,6 +1258,11 @@
     <string name="open_file">باز کردن فایل</string>
     <string name="close_dialog">بستن دیالوگ</string>
     <string name="page">\"صفحه \"</string>
+    <string name="no_product">کالا وجود ندارد!</string>
+    <string name="show_invoice_code">نمایش کد پیگیری</string>
+    <string name="show_market_name">نمایش نام فروشگاه</string>
+    <string name="show_count">نمایش تعداداقلام</string>
+    <string name="show_user_name">نمایش نام کاربری</string>
 
     <string name="launch_activity">Launch activity</string>
     <string name="location_unknown">Location unknown</string>

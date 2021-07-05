@@ -66,7 +66,6 @@ public class CheckListDetailFragment extends Fragment {
      */
     private int mPageNumber;
     private DbAdapter db;
-    private Person_Extra_Data extraData;
 
     /**
      * Factory method for this fragment class. Constructs a new fragment for the given page number.
@@ -126,7 +125,8 @@ public class CheckListDetailFragment extends Fragment {
                         Double Longitude = checklist.getLongitude();
                         if (Latitude != 0 || Longitude != 0) {
                             LatLng pos = new LatLng(Latitude, Longitude);
-                            googleMap.addMarker(new MarkerOptions().position(pos).title(checklist.getName()));
+                            if (checklist.getName() != null)
+                                googleMap.addMarker(new MarkerOptions().position(pos).title(checklist.getName()));
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15), 3000, new GoogleMap.CancelableCallback() {
                                 @Override
                                 public void onFinish() {
@@ -163,18 +163,18 @@ public class CheckListDetailFragment extends Fragment {
         } else {
             customer = db.getCustomerWithPersonId(checklist.getPersonId());
             if (customer != null) {
-                extraData = db.getMoreCustomerInfo(customer.getPersonCode());
-                if (extraData != null)
-                    amount = extraData.getRemainAmount();
-                if (extraData.getRemainStatus() == 1)
-                    amount = amount * -1;
+
+                amount = customer.getBalance();
+
                 Shift = customer.getShift();
                 Mobile = customer.getMobile();
                 Tell = customer.getTell();
             }
         }
-        if (!checklist.getName().equals(""))
-            tvName.setText(checklist.getName());
+
+        if (checklist.getName() != null)
+            if (!checklist.getName().equals(""))
+                tvName.setText(checklist.getName());
         else
             tvName.setVisibility(View.GONE);
 
@@ -187,16 +187,17 @@ public class CheckListDetailFragment extends Fragment {
 
         tvAddress.setText(checklist.getAddress());
         tvShift.setText(Shift);
-        if (amount == 0) {// if customerStatus =	Incalculable
+
+
+        if (amount == 0) {
             tvStatus.setText(getActivity().getResources().getString(R.string.str_incalculable));
             tvRemained.setText(ServiceTools.formatPrice(amount));
         }
-        if (amount < 0) {    // if customerStatus =	Debtor
+        if (amount < 0) {
             amount = amount * -1;
             tvRemained.setText(ServiceTools.formatPrice(amount));
             tvStatus.setText(getActivity().getResources().getString(R.string.str_debitor));
-        } else if (amount > 0) // if customerStaus =	Creditor
-        {
+        } else if (amount > 0) {
             tvRemained.setText(ServiceTools.formatPrice(amount));
             tvStatus.setText(getActivity().getResources().getString(R.string.str_creditor));
         }

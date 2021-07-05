@@ -49,6 +49,7 @@ public class Customer {
     private String Shift;
 
     private int orderCount;
+    private int promotionId;
 
     @SerializedName("FirstName")
     @Expose
@@ -579,5 +580,13 @@ public class Customer {
 
     public void setOrderCount(int orderCount) {
         this.orderCount = orderCount;
+    }
+
+    public int getPromotionId() {
+        return promotionId;
+    }
+
+    public void setPromotionId(int promotionId) {
+        this.promotionId = promotionId;
     }
 }

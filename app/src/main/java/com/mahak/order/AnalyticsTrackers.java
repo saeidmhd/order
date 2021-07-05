@@ -7,6 +7,7 @@ import android.os.Environment;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDex;
+import androidx.multidex.MultiDexApplication;
 
 import com.google.android.gms.analytics.ExceptionReporter;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -22,7 +23,7 @@ import java.io.RandomAccessFile;
 import java.io.StringWriter;
 
 
-public final class AnalyticsTrackers extends Application {
+public final class AnalyticsTrackers extends MultiDexApplication {
 
     private static Context mContext;
 
@@ -35,7 +36,6 @@ public final class AnalyticsTrackers extends Application {
     synchronized public Tracker getDefaultTracker() {
         if (mTracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
             mTracker = analytics.newTracker(R.xml.app_tracker);
         }
         return mTracker;

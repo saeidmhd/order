@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -37,9 +38,11 @@ import androidx.core.content.FileProvider;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.datatransport.runtime.dagger.multibindings.ElementsIntoSet;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.mahak.order.BaseActivity;
+import com.mahak.order.ProductPickerListActivity;
 import com.mahak.order.R;
 import com.mahak.order.autoSync.SyncAlarmReceiver;
 import com.mahak.order.libs.BadgeDrawable;
@@ -81,8 +84,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import io.reactivex.annotations.NonNull;
-
+import static com.mahak.order.BaseActivity.baseUrlImage;
 import static com.mahak.order.BaseActivity.getPrefUsername;
 import static com.mahak.order.common.ProjectInfo.DIRECTORY_ORDER_SIGNS;
 
@@ -174,6 +176,17 @@ public class ServiceTools {
         }
         myFormatter.applyPattern("###,###." + sb.toString());
         return myFormatter.format(value);
+    }
+
+    public static int getPrefDefPrice(DbAdapter db , int CustomerId , long GroupId ) {
+        int defVisitor = db.getDefVisitorPriceLevel();
+        int defCustomer = db.getDefCustomerPriceLevel(CustomerId);
+        int defGroupCustomer = db.getDefGroupCustomerPriceLevel(GroupId);
+        if(defVisitor != 0)
+            return defVisitor;
+        else if (defCustomer != 0)
+            return defCustomer;
+        else return defGroupCustomer;
     }
 
     private double roundDouble(double d) {
@@ -517,10 +530,10 @@ public class ServiceTools {
         }
 
         int totalHeight = 0;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            View listItem = listAdapter.getView(i, null, listView);
+        if(listAdapter.getCount()>0){
+            View listItem = listAdapter.getView(0, null, listView);
             listItem.measure(0, 0);
-            totalHeight += listItem.getMeasuredHeight();
+            totalHeight += listItem.getMeasuredHeight() * listAdapter.getCount();
         }
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
@@ -675,7 +688,7 @@ public class ServiceTools {
     }
 
     public static double getExistCount1(OrderDetail orderDetail, ProductDetail productDetail) {
-        return orderDetail.getCount1() + productDetail.getCount1() + orderDetail.getGiftCount1();
+        return orderDetail.getSumCountBaJoz() + productDetail.getCount1() + orderDetail.getGiftCount1();
     }
 
     public static double getExistCount2(OrderDetail orderDetail, ProductDetail productDetail) {
@@ -727,13 +740,91 @@ public class ServiceTools {
         if (gpsTracker.canGetLocation()) {
             Latitude = gpsTracker.getLatitude();
             Longitude = gpsTracker.getLongitude();
-
-            if (Latitude == 0 && Longitude == 0)
-                Toast.makeText(mContext, mContext.getString(R.string.str_message_dont_connect_gps), Toast.LENGTH_SHORT).show();
-        } else
-            Toast.makeText(mContext, mContext.getString(R.string.str_message_dont_connect_gps), Toast.LENGTH_SHORT).show();
-
+        }
         return new LatLng(Latitude, Longitude);
+    }
+
+    public static void setSettingPreferences(DbAdapter db, Context mContext) {
+
+        BaseActivity.setPrefUnit2Setting(BaseActivity.MODE_YekVahedi);
+        BaseActivity.setPrefTaxAndChargeIsActive(BaseActivity.InActive);
+        BaseActivity.setPrefTaxPercent(BaseActivity.InActive);
+        BaseActivity.setPrefChargePercent(BaseActivity.InActive);
+        BaseActivity.setPrefRowDiscountIsActive(BaseActivity.invisible);
+        BaseActivity.setPrefAutoSyncValue(BaseActivity.InActive);
+
+        db.open();
+        ArrayList<Setting> settings = db.getAllSettings();
+
+        BaseActivity.setPrefRowDiscountIsActive(BaseActivity.invisible);
+        for (int i = 0; i < settings.size(); i++) {
+            switch (settings.get(i).getSettingCode()) {
+                case BaseActivity.TwoUnitKolJozCode:
+                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue().equals(BaseActivity.Active))
+                        BaseActivity.setPrefUnit2Setting(BaseActivity.MODE_MeghdarJoz);
+                    break;
+                case BaseActivity.TwoUnitActiveCode:
+                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue().equals(BaseActivity.Active))
+                        BaseActivity.setPrefUnit2Setting(BaseActivity.Mode_DoVahedi);
+                    break;
+                case BaseActivity.OneUnitActiveCode:
+                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue().equals(BaseActivity.Active))
+                        BaseActivity.setPrefUnit2Setting(BaseActivity.MODE_YekVahedi);
+                    break;
+                case BaseActivity.SHOW_ROW_DISCOUNT:
+                    if (settings.get(i).getDeleted() != 1)
+                        BaseActivity.setPrefRowDiscountIsActive(settings.get(i).getValue());
+                    else
+                        BaseActivity.setPrefRowDiscountIsActive(BaseActivity.invisible);
+                    break;
+                case BaseActivity.APPLY_DISCOUNT:
+                    if (settings.get(i).getDeleted() != 1)
+                        BaseActivity.setPrefApplyRowDiscount(settings.get(i).getValue());
+                    else
+                        BaseActivity.setPrefApplyRowDiscount(BaseActivity.InActive);
+                    break;
+                case BaseActivity.TaxAndChargeIsActiveCode:
+                    if (settings.get(i).getDeleted() != 1)
+                        BaseActivity.setPrefTaxAndChargeIsActive(settings.get(i).getValue());
+                    else
+                        BaseActivity.setPrefTaxAndChargeIsActive(BaseActivity.InActive);
+                    break;
+                case BaseActivity.TaxPercentCode:
+                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null)
+                        BaseActivity.setPrefTaxPercent(settings.get(i).getValue());
+                    else
+                        BaseActivity.setPrefTaxPercent(BaseActivity.InActive);
+                    break;
+                case BaseActivity.ChargePercentCode:
+                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null)
+                        BaseActivity.setPrefChargePercent(settings.get(i).getValue());
+                    else
+                        BaseActivity.setPrefChargePercent(BaseActivity.InActive);
+                    break;
+                case BaseActivity.AutoSyncCode:
+                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null) {
+                        BaseActivity.setPrefAutoSyncValue(settings.get(i).getValue());
+                        ServiceTools.scheduleAlarm(mContext);
+                    } else
+                        BaseActivity.setPrefAutoSyncValue(BaseActivity.InActive);
+                    break;
+                case BaseActivity.CountDecimalPointCode:
+                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null) {
+                        String value = settings.get(i).getValue();
+                        BaseActivity.setPrefCountDecimalPoint(value.substring(0, value.indexOf(".")));
+                    } else
+                        BaseActivity.setPrefCountDecimalPoint("0");
+                    break;
+                case BaseActivity.PriceDecimalPointCode:
+                    if (settings.get(i).getDeleted() != 1 && settings.get(i).getValue() != null) {
+                        String value = settings.get(i).getValue();
+                        BaseActivity.setPrefPriceDecimalPoint(value.substring(0, value.indexOf(".")));
+                    } else
+                        BaseActivity.setPrefPriceDecimalPoint("0");
+                    break;
+            }
+        }
+
     }
 
     public static String getFaDayofWeek(String day) {
@@ -1133,12 +1224,15 @@ public class ServiceTools {
         return check;
     }
 
-    public static boolean CheckContainsWithSimillar(String value, String hystack) {
+    public static boolean CheckContainsWithSimillar(String value, String searchStr) {
+        if(searchStr == null)
+            return false;
+        searchStr = searchStr.toLowerCase();
         if (Locale.getDefault().getLanguage().equals("de")) {
-            return hystack.contains(value);
+            return searchStr.contains(value);
         } else {
             String Value = value.trim();
-            String Hystack = hystack;
+            String Hystack = searchStr;
 
             String[][] simillarChars = {
                     {"ی", "ي"},
@@ -1166,8 +1260,8 @@ public class ServiceTools {
                     }
             }
 
-            for (int i = 0; i < hystack.length(); i++) {
-                char CH_in = hystack.charAt(i);
+            for (int i = 0; i < searchStr.length(); i++) {
+                char CH_in = searchStr.charAt(i);
                 for (String[] group : simillarChars)
                     for (String ch : group) {
                         if (CH_in == ch.charAt(0)) {
@@ -1238,7 +1332,6 @@ public class ServiceTools {
         return "";
     }
 
-    @NonNull
     public static ImageLoadingListener getImageLoaderListener(final int defaultImage) {
         return new ImageLoadingListener() {
             @Override
@@ -1708,6 +1801,33 @@ FirebaseCrashlytics.getInstance().recordException(e);
             FirebaseCrashlytics.getInstance().recordException(var10);
             var10.printStackTrace();
         }
+    }
+
+    public static String getLikeString(String searchStr) {
+        String[] searchArray = searchStr.toString().split(" ");
+        String LikeString = "";
+        for (String search : searchArray){
+            LikeString += " name " +  " like " + " '%" + search + "%' " + " and ";
+        }
+        LikeString = removeLastAnd(LikeString);
+        return LikeString;
+    }
+    public static String anyPartOfPersonNameLikeString(String searchStr) {
+        String[] searchArray = searchStr.toString().split(" ");
+        String LikeString = "";
+        for (String search : searchArray){
+            LikeString += " Customers.name " +  " like " + " '%" + search + "%' " + " and ";
+        }
+        LikeString = removeLastAnd(LikeString);
+        return LikeString;
+    }
+
+    public static String removeLastAnd(String str) {
+        String result = null;
+        if ((str != null) && (str.length() > 0)) {
+            result = str.substring(0, str.length() - 5);
+        }
+        return result;
     }
 
     public static String formattedDate(long date) {

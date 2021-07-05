@@ -234,8 +234,8 @@ public class OrdersListActivity extends BaseActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                 if (Type == ProjectInfo.TYPE_RECEIVE_TRANSFERENCE) {
-
-                    adReceivedTransfer.getFilter().filter(s, new FilterListener() {
+                    if(adReceivedTransfer != null){
+                        adReceivedTransfer.getFilter().filter(s, new FilterListener() {
 
                         @Override
                         public void onFilterComplete(int count) {
@@ -243,10 +243,12 @@ public class OrdersListActivity extends BaseActivity {
                             tvPageTitle.setText(getString(R.string.str_nav_transfer_list) + "(" + count + ")");
                         }
                     });
+                    }
+
                 } else {
 
-                    adOrder.getFilter().filter(s, new FilterListener() {
-
+                    if(adOrder != null){
+                        adOrder.getFilter().filter(s, new FilterListener() {
                         @Override
                         public void onFilterComplete(int count) {
 
@@ -258,24 +260,29 @@ public class OrdersListActivity extends BaseActivity {
                                 tvPageTitle.setText(getString(R.string.str_nav_transfer_list) + "(" + count + ")");
                         }
                     });
+                    }
                 }
-
             }
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count,
                                           int after) {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
 
             }
         });
     }//End Of OnCreate
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        super.onBackPressed();
+    }
 
     /**
      * Initializing Variables
@@ -342,7 +349,8 @@ public class OrdersListActivity extends BaseActivity {
 
                 if (customer.getPersonCode() != 0) {
                     Person_Extra_Data extraData = db.getMoreCustomerInfo(customer.getPersonCode());
-                    order.setAddress(extraData.getStoreAddress());
+                    if(extraData != null)
+                        order.setAddress(extraData.getStoreAddress());
                 }else {
                     order.setAddress(customer.getAddress());
                 }
@@ -592,7 +600,7 @@ public class OrdersListActivity extends BaseActivity {
                     for (int i = 0; i < arrayorgin.size(); i++) {
                         ReceivedTransfers receivedTransfers = arrayorgin.get(i);
                         InvoiceNumber = String.valueOf(receivedTransfers.getTransferStoreClientId());
-                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), InvoiceNumber.toLowerCase());
+                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), InvoiceNumber);
                         if (result_contain) {
                             filterItem.add(receivedTransfers);
                             CheckFilter = true;
@@ -604,7 +612,7 @@ public class OrdersListActivity extends BaseActivity {
                             db.open();
                             visitor = db.getVisitorWithVisitorID(ServiceTools.toLong(receivedTransfers.getSenderVisitorId()));
                             CustomerName = visitor.getName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), CustomerName.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), CustomerName);
                             if (result_contain) {
                                 filterItem.add(receivedTransfers);
                                 CheckFilter = true;
@@ -616,7 +624,7 @@ public class OrdersListActivity extends BaseActivity {
                         for (int i = 0; i < arrayorgin.size(); i++) {
                             ReceivedTransfers receivedTransfers = arrayorgin.get(i);
                             //    MarketName = receivedTransfers.getOrganization();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), MarketName.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), MarketName);
                             if (result_contain) {
                                 filterItem.add(receivedTransfers);
 
@@ -703,7 +711,6 @@ public class OrdersListActivity extends BaseActivity {
         });
         db.close();
     }
-
 
     public class AdapterListOrder extends ArrayAdapter<Order> {
         Activity mcontaxt;
@@ -849,7 +856,6 @@ public class OrdersListActivity extends BaseActivity {
                     txtAmount.setText(R.string.str_total_count);
                     orderDetails = db.getAllOrderDetailWithOrderId(order.getId());
                     for (OrderDetail item : orderDetails) {
-
                         count += ServiceTools.getTotalCount(item);
                     }
                     tvAmount.setText("" + count);
@@ -908,7 +914,7 @@ public class OrdersListActivity extends BaseActivity {
                     for (int i = 0; i < arrayorginal.size(); i++) {
                         Order order = arrayorginal.get(i);
                         InvoiceNumber = order.getCode();
-                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), InvoiceNumber.toLowerCase());
+                        boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), InvoiceNumber);
                         if (result_contain) {
                             filterItem.add(order);
                             CheckFilter = true;
@@ -918,7 +924,7 @@ public class OrdersListActivity extends BaseActivity {
                         for (int i = 0; i < arrayorginal.size(); i++) {
                             Order order = arrayorginal.get(i);
                             CustomerName = order.getCustomerName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), CustomerName.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), CustomerName);
                             if (result_contain) {
                                 filterItem.add(order);
                                 CheckFilter = true;
@@ -929,7 +935,7 @@ public class OrdersListActivity extends BaseActivity {
                         for (int i = 0; i < arrayorginal.size(); i++) {
                             Order order = arrayorginal.get(i);
                             MarketName = order.getMarketName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), MarketName.toLowerCase());
+                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), MarketName);
                             if (result_contain) {
                                 filterItem.add(order);
 
@@ -1037,10 +1043,11 @@ public class OrdersListActivity extends BaseActivity {
                         if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), mContext) > 0) {
                             productDetail.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail) + (orderDetail.getGiftCount1()));
                             productDetail.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail) + (orderDetail.getGiftCount2()));
-                        } else {
-                            productDetail.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail));
-                            productDetail.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail));
                         }
+
+                        productDetail.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail));
+                        productDetail.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail));
+
                         db.UpdateProductDetail(productDetail);
                     }
                     db.DeleteOrderDetailProperty(order.getId());
@@ -1048,10 +1055,10 @@ public class OrdersListActivity extends BaseActivity {
                     if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), mContext) > 0) {
                         productDetail.setCount1(productDetail.getCount1() + orderDetail.getGiftCount1());
                         productDetail.setCount2(productDetail.getCount2() + orderDetail.getGiftCount2());
-                    } else {
-                        productDetail.setCount1(productDetail.getCount1() + orderDetail.getCount1());
-                        productDetail.setCount2(productDetail.getCount2() + orderDetail.getCount2());
                     }
+                    productDetail.setCount1(productDetail.getCount1() + orderDetail.getSumCountBaJoz());
+                    productDetail.setCount2(productDetail.getCount2() + orderDetail.getCount2());
+
                     db.UpdateProductDetail(productDetail);
                 }
             }
@@ -1322,7 +1329,7 @@ public class OrdersListActivity extends BaseActivity {
 
                 CustomerId = data.getIntExtra(CUSTOMERID_KEY, 0);
                 CustomerClientId = data.getLongExtra(CUSTOMER_CLIENT_ID_KEY, 0);
-                GroupId = data.getLongExtra("GroupId", 0);
+                GroupId = data.getLongExtra(CUSTOMER_GROUP_KEY, 0);
                 if (Type == ProjectInfo.TYPE_INVOCIE) {
                     Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
                     intent.putExtra(CUSTOMERID_KEY, CustomerId);
@@ -1467,6 +1474,11 @@ public class OrdersListActivity extends BaseActivity {
                 }else {
                     Toast.makeText(mContext, "خارج از منطقه یا خاموش بودن سامانه ردیابی ! امکان ثبت فاکتور وجود ندارد.", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case android.R.id.home:
+                Intent intent2 = new Intent(getApplicationContext(), DashboardActivity.class);
+                intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent2);
                 break;
             default:
                 break;

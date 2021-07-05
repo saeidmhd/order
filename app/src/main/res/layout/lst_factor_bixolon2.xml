@@ -5,13 +5,12 @@
     android:gravity="center_vertical"
     android:orientation="vertical">
 
-
     <LinearLayout
         android:id="@+id/llitem"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/report_item_min_height"
+        android:layout_height="48dp"
         android:gravity="center_vertical"
-        android:minHeight="@dimen/report_item_min_height"
+        android:minHeight="@dimen/lst_item_min_height_compact"
         android:orientation="horizontal">
 
         <com.mahak.order.widget.FontTextView
@@ -88,7 +87,7 @@
             android:layout_weight="1.5"
             android:gravity="right"
             android:maxLines="3"
-            android:text="﻿مخابراتي طوسي 0.6*2*2"
+            android:text="مخابراتي طوسي 0.6*2*2"
             android:paddingRight="@dimen/SmallSize"
             android:textColor="@android:color/black"
             android:textSize="12sp" />
