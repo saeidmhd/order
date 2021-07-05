@@ -8570,7 +8570,7 @@ public class DbAdapter {
         }
     }
 
-    public boolean UpdateOrAddVisitorProductFast(List<VisitorProduct> visitorProducts) {
+    public boolean UpdateOrAddVisitorProductFast(List<VisitorProduct> visitorProducts, long rowVersion) {
         boolean result = false;
         mDb.beginTransaction();
         try {
@@ -8591,9 +8591,14 @@ public class DbAdapter {
                 initialvalue.put(DbSchema.VisitorProductSchema.COLUMN_CreateSyncId, visitorProduct.getCreateSyncId());
                 initialvalue.put(DbSchema.VisitorProductSchema.COLUMN_UpdateSyncId, visitorProduct.getUpdateSyncId());
                 initialvalue.put(DbSchema.VisitorProductSchema.COLUMN_RowVersion, visitorProduct.getRowVersion());
-                result = (mDb.update(DbSchema.VisitorProductSchema.TABLE_NAME, initialvalue, DbSchema.VisitorProductSchema.COLUMN_VisitorProductId + "=?", new String[]{String.valueOf(visitorProduct.getVisitorProductId())})) > 0;
-                if(!result)
+
+                if(rowVersion == 0)
                     mDb.insert(DbSchema.VisitorProductSchema.TABLE_NAME, null, initialvalue);
+                else {
+                    result = (mDb.update(DbSchema.VisitorProductSchema.TABLE_NAME, initialvalue, DbSchema.VisitorProductSchema.COLUMN_VisitorProductId + "=?", new String[]{String.valueOf(visitorProduct.getVisitorProductId())})) > 0;
+                    if(!result)
+                        mDb.insert(DbSchema.VisitorProductSchema.TABLE_NAME, null, initialvalue);
+                }
             }
 
             mDb.setTransactionSuccessful();
@@ -8604,7 +8609,7 @@ public class DbAdapter {
         return result;
     }
 
-    public boolean UpdateOrAddVisitorPeopleFast(List<VisitorPeople> visitorPeople) {
+    public boolean UpdateOrAddVisitorPeopleFast(List<VisitorPeople> visitorPeople, long rowVersion) {
         boolean result = false;
         mDb.beginTransaction();
         try {
@@ -8622,9 +8627,14 @@ public class DbAdapter {
                 initialvalue.put(DbSchema.VisitorPeopleSchema.COLUMN_CreateSyncId, visitorPerson.getCreateSyncId());
                 initialvalue.put(DbSchema.VisitorPeopleSchema.COLUMN_UpdateSyncId, visitorPerson.getUpdateSyncId());
                 initialvalue.put(DbSchema.VisitorPeopleSchema.COLUMN_RowVersion, visitorPerson.getRowVersion());
-                result = (mDb.update(DbSchema.VisitorPeopleSchema.TABLE_NAME, initialvalue, DbSchema.VisitorPeopleSchema.COLUMN_VisitorPersonId + "=?", new String[]{String.valueOf(visitorPerson.getVisitorPersonId())})) > 0;
-                if(!result)
+
+                if(rowVersion == 0)
                     mDb.insert(DbSchema.VisitorPeopleSchema.TABLE_NAME, null, initialvalue);
+                else {
+                    result = (mDb.update(DbSchema.VisitorPeopleSchema.TABLE_NAME, initialvalue, DbSchema.VisitorPeopleSchema.COLUMN_VisitorPersonId + "=?", new String[]{String.valueOf(visitorPerson.getVisitorPersonId())})) > 0;
+                    if(!result)
+                        mDb.insert(DbSchema.VisitorPeopleSchema.TABLE_NAME, null, initialvalue);
+                }
             }
 
             mDb.setTransactionSuccessful();
@@ -8792,7 +8802,7 @@ public class DbAdapter {
         return result;
     }
 
-    public boolean UpdateOrAddServerCustomerFast(List<Customer> customers) {
+    public boolean UpdateOrAddServerCustomerFast(List<Customer> customers, long rowVersion) {
         boolean result = false;
         mDb.beginTransaction();
         try {
@@ -8840,9 +8850,13 @@ public class DbAdapter {
                 initialvalue.put(DbSchema.Customerschema.COLUMN_CityCode, customer.getCityCode());
                 initialvalue.put(DbSchema.Customerschema.COLUMN_Fax, customer.getFax());
                 initialvalue.put(DbSchema.Customerschema.COLUMN_RowVersion, customer.getRowVersion());
-                result = (mDb.update(DbSchema.Customerschema.TABLE_NAME, initialvalue, DbSchema.Customerschema.COLUMN_PersonId + "=? and " + DbSchema.Customerschema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(customer.getPersonId()), String.valueOf(getPrefUserId())})) > 0;
-                if(!result)
+                if(rowVersion == 0)
                     mDb.insert(DbSchema.Customerschema.TABLE_NAME, null, initialvalue);
+                else{
+                    result = (mDb.update(DbSchema.Customerschema.TABLE_NAME, initialvalue, DbSchema.Customerschema.COLUMN_PersonId + "=? and " + DbSchema.Customerschema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(customer.getPersonId()), String.valueOf(getPrefUserId())})) > 0;
+                    if(!result)
+                        mDb.insert(DbSchema.Customerschema.TABLE_NAME, null, initialvalue);
+                }
             }
             mDb.setTransactionSuccessful();
         } finally {
@@ -8897,7 +8911,7 @@ public class DbAdapter {
         return result;
     }
 
-    public boolean UpdateOrAddServerProductFast(List<Product> products) {
+    public boolean UpdateOrAddServerProductFast(List<Product> products, long rowVersion) {
         boolean result = false;
         mDb.beginTransaction();
         try {
@@ -8943,11 +8957,13 @@ public class DbAdapter {
                 initialvalue.put(DbSchema.Productschema.COLUMN_UpdateSyncId, product.getUpdateSyncId());
                 initialvalue.put(DbSchema.Productschema.COLUMN_RowVersion, product.getRowVersion());
                 initialvalue.put(DbSchema.Productschema.COLUMN_Deleted, product.getDeleted());
-
-
-                result = (mDb.update(DbSchema.Productschema.TABLE_NAME, initialvalue, DbSchema.Productschema.COLUMN_ProductId + "=? and " + DbSchema.Productschema.COLUMN_USER_ID + "=? ", new String[]{String.valueOf(product.getProductId()), String.valueOf(getPrefUserId())})) > 0;
-                if(!result)
+                if(rowVersion == 0)
                     mDb.insert(DbSchema.Productschema.TABLE_NAME, null, initialvalue);
+                else{
+                    result = (mDb.update(DbSchema.Productschema.TABLE_NAME, initialvalue, DbSchema.Productschema.COLUMN_ProductId + "=? and " + DbSchema.Productschema.COLUMN_USER_ID + "=? ", new String[]{String.valueOf(product.getProductId()), String.valueOf(getPrefUserId())})) > 0;
+                    if(!result)
+                        mDb.insert(DbSchema.Productschema.TABLE_NAME, null, initialvalue);
+                }
             }
             mDb.setTransactionSuccessful();
         } finally {
@@ -9226,7 +9242,7 @@ public class DbAdapter {
         return result;
     }
 
-    public boolean UpdateOrAddExtraInfo(List<ExtraData> extraDatas) {
+    public boolean UpdateOrAddExtraInfo(List<ExtraData> extraDatas, long rowVersion) {
 
         Person_Extra_Data person_extra_data = new Person_Extra_Data();
         Gson gson = new Gson();
@@ -9254,9 +9270,13 @@ public class DbAdapter {
                 initialvalue.put(DbSchema.ExtraDataSchema.COLUMN_UpdateSyncId, extraData.getUpdateSyncId());
                 initialvalue.put(DbSchema.ExtraDataSchema.COLUMN_RowVersion, extraData.getRowVersion());
 
-                result = (mDb.update(DbSchema.ExtraDataSchema.TABLE_NAME, initialvalue, DbSchema.ExtraDataSchema.COLUMN_MAHAK_ID + "=? and " + DbSchema.ExtraDataSchema.COLUMN_ItemId + "=? and " + DbSchema.ExtraDataSchema.COLUMN_DATABASE_ID + "=?", new String[]{String.valueOf(extraData.getMahakId()), String.valueOf(extraData.getItemId()), extraData.getDatabaseId()})) > 0;
-                if(!result)
+                if(rowVersion == 0){
                     mDb.insert(DbSchema.ExtraDataSchema.TABLE_NAME, null, initialvalue);
+                }else{
+                    result = (mDb.update(DbSchema.ExtraDataSchema.TABLE_NAME, initialvalue, DbSchema.ExtraDataSchema.COLUMN_MAHAK_ID + "=? and " + DbSchema.ExtraDataSchema.COLUMN_ItemId + "=? and " + DbSchema.ExtraDataSchema.COLUMN_DATABASE_ID + "=?", new String[]{String.valueOf(extraData.getMahakId()), String.valueOf(extraData.getItemId()), extraData.getDatabaseId()})) > 0;
+                    if(!result)
+                        mDb.insert(DbSchema.ExtraDataSchema.TABLE_NAME, null, initialvalue);
+                }
 
                 if(extraData.getItemType() == 101){
                     ContentValues initvalue = new ContentValues();
@@ -9457,7 +9477,7 @@ public class DbAdapter {
         return result;
     }
 
-    public boolean UpdateOrAddProductDetail(List<ProductDetail> productDetails) {
+    public boolean UpdateOrAddProductDetail(List<ProductDetail> productDetails, long rowVersion) {
         boolean result = false;
         mDb.beginTransaction();
         try {
@@ -9505,9 +9525,13 @@ public class DbAdapter {
                 initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_CustomerPrice, productDetail.getCustomerPrice());
                 initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Deleted, productDetail.isDeleted());
 
-                result = (mDb.update(DbSchema.ProductDetailSchema.TABLE_NAME, initialvalue, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + "=?", new String[]{String.valueOf(productDetail.getProductDetailId())})) > 0;
-                if(!result)
+                if(rowVersion == 0)
                     mDb.insert(DbSchema.ProductDetailSchema.TABLE_NAME, null, initialvalue);
+                else {
+                    result = (mDb.update(DbSchema.ProductDetailSchema.TABLE_NAME, initialvalue, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + "=?", new String[]{String.valueOf(productDetail.getProductDetailId())})) > 0;
+                    if(!result)
+                        mDb.insert(DbSchema.ProductDetailSchema.TABLE_NAME, null, initialvalue);
+                }
 
             }
             mDb.setTransactionSuccessful();

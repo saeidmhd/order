@@ -1117,7 +1117,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
             if (extraData != null)
                 if (extraData.size() > 0)
-                    arrayTime[15] = DataService.InsertExtraInfo(db, customerLists, extraData, ExtraDataMaxRowVersion);
+                    arrayTime[15] = DataService.InsertExtraInfo(db, extraData, ExtraDataMaxRowVersion);
 
             if (orders != null)
                 if (orders.size() > 0) {

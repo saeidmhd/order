@@ -250,7 +250,6 @@ public class PeopleListActivity extends BaseActivity {
                                                 });
                                             } else {
                                                 ReadALLCustomer();
-                                                //tvPageTitle.setText(getString(R.string.str_nav_customer_list) + "(" + CountCustomer + ")");
                                             }
                                         }
                                     }
@@ -1241,7 +1240,7 @@ public class PeopleListActivity extends BaseActivity {
                     DataService.InsertCustomerGroup(db, personGroupLists);
                 }
             if (extraDataList.size() > 0)
-                    DataService.InsertExtraInfo(db, customerLists , extraDataList, ExtraDataMaxRowVersion);
+                    DataService.InsertExtraInfo(db , extraDataList, ExtraDataMaxRowVersion);
             return 0;
         }
 
