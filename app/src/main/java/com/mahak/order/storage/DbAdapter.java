@@ -1744,8 +1744,8 @@ public class DbAdapter {
                 customer.setZone(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ZONE)));
                 customer.setTell(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PHONE)));
                 customer.setMobile(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MOBILE)));
-                customer.setLatitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
-                customer.setLongitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
+                customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
+                customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
                 customer.setShift(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_SHIFT)));
                 customer.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MODIFYDATE)));
                 customer.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PUBLISH)));
@@ -1830,8 +1830,8 @@ public class DbAdapter {
                 customer.setZone(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ZONE)));
                 customer.setTell(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PHONE)));
                 customer.setMobile(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MOBILE)));
-                customer.setLatitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
-                customer.setLongitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
+                customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
+                customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
                 customer.setShift(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_SHIFT)));
                 customer.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MODIFYDATE)));
                 customer.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PUBLISH)));
@@ -2172,8 +2172,8 @@ public class DbAdapter {
         customer.setZone(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ZONE)));
         customer.setTell(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PHONE)));
         customer.setMobile(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MOBILE)));
-        customer.setLatitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
-        customer.setLongitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
+        customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
+        customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
         customer.setShift(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_SHIFT)));
         customer.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MODIFYDATE)));
         customer.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PUBLISH)));

@@ -64,6 +64,7 @@ import com.mahak.order.common.request.SetAllDataResult.Objects;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
 import com.mahak.order.common.request.SetSign.setSignImage;
 import com.mahak.order.service.DataService;
+import com.mahak.order.service.ReadOfflinePicturesProducts;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.DbSchema;
 import com.mahak.order.tracking.TrackingConfig;
@@ -1374,7 +1375,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
             final String[] mMsg = {""};
 
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
             SetAllDataBody setAllDataBody = new SetAllDataBody();
             setAllDataBody.setUserToken(mUserToken);
             setAllDataBody.setPictures(picturesProducts);
