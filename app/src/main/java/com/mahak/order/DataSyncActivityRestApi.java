@@ -63,6 +63,7 @@ import com.mahak.order.common.request.SetAllDataResult.Objects;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
 import com.mahak.order.common.request.SetSign.setSignImage;
 import com.mahak.order.service.DataService;
+import com.mahak.order.service.ReadOfflinePicturesProducts;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.DbSchema;
 import com.mahak.order.tracking.TrackingConfig;
@@ -1416,10 +1417,80 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         break;
                 }
             }
-            new SendSignImageAsyncTask(mUserToken).execute();
+
+            new SendSignInfoAsyncTask(mUserToken).execute();
+
             pbLoading.setVisibility(View.GONE);
-            pd.dismiss();
+            dismissProgressDialog();
         }
+
+    }
+
+    class SendSignInfoAsyncTask extends AsyncTask<String, String, Integer> {
+
+        List<PicturesProduct> picturesProducts = new ArrayList<>();
+        String mUserToken;
+
+        SendSignInfoAsyncTask(String UserToken) {
+            mUserToken = UserToken;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pbLoading.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Integer doInBackground(String... arg0) {
+            db.open();
+            picturesProducts = db.getAllSignWithoutUrl();
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+
+            pbLoading.setVisibility(View.GONE);
+            pbLoading.setVisibility(View.VISIBLE);
+
+            final String[] mMsg = {""};
+
+            ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
+            SetAllDataBody setAllDataBody = new SetAllDataBody();
+            setAllDataBody.setUserToken(mUserToken);
+            setAllDataBody.setPictures(picturesProducts);
+            Call<SaveAllDataResult> saveAllDataResultCall = apiService.SaveAllData(setAllDataBody);
+
+            pd.setMessage(getString(R.string.sending_image));
+            pd.setCancelable(false);
+            pd.show();
+            saveAllDataResultCall.enqueue(new Callback<SaveAllDataResult>() {
+                @Override
+                public void onResponse(@NonNull Call<SaveAllDataResult> call, @NonNull Response<SaveAllDataResult> response) {
+                    dismissProgressDialog();
+                    if (response.body() != null && response.body().isResult()) {
+                        db.open();
+                        if (picturesProducts.size() > 0) {
+                            for (int i = 0; i < picturesProducts.size(); i++) {
+                                picturesProducts.get(i).setPictureId(response.body().getData().getObjects().getPictures().getResults().get(i).getEntityID());
+                                db.UpdatePicturesProductWithClientId(picturesProducts.get(i));
+                            }
+                        }
+                        pbLoading.setVisibility(View.GONE);
+                        db.close();
+
+                        new SendSignImageAsyncTask(mUserToken).execute();
+
+                    } else if (response.body() != null) {
+                        mMsg[0] = getString(R.string.send_error);
+                        //showDialog(response.body().getMessage());
+                        pbLoading.setVisibility(View.GONE);
+
+                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                        FirebaseCrashlytics.getInstance().log(response.body().getMessage());
+                    }
+                }
 
     }
 

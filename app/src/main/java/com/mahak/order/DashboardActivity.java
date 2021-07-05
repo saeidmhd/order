@@ -311,8 +311,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         });
 
-        update();
-
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
 
             public void onDrawerClosed(View view) {
@@ -373,7 +371,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
             @Override
             public void onClick(View v) {
-                InvoiceDetailActivity.orderDetails.clear();
                 if (mDrawerLayout.isDrawerOpen(mDrawerLeft))
                     mDrawerLayout.closeDrawers();
                 Type = ProjectInfo.TYPE_ORDER;
@@ -400,7 +397,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnAddNewInvoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InvoiceDetailActivity.orderDetails.clear();
                 if (mDrawerLayout.isDrawerOpen(mDrawerLeft))
                     mDrawerLayout.closeDrawers();
                 if(CanRegisterInvoiceOutOfZone()){
@@ -689,9 +685,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
         btnAddNewOrder = (Button) findViewById(R.id.btnAddNewOrder);
-        btnAddNewInvoice = (Button) findViewById(R.id.btnAddNewInvoice);
-
         btnAddNewReceipt = (Button) findViewById(R.id.btnAddNewReceipt);
+        btnAddNewInvoice = (Button) findViewById(R.id.btnAddNewInvoice);
         btnAddNewTransference = (Button) findViewById(R.id.btnAddNewTransference);
         btnZoomMapView = (ImageButton) findViewById(R.id.btnZoomMapView);
 
@@ -898,8 +893,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
             if (positions.size() != 0) {
                 for (int i = 0; i < positions.size(); i++) {
-                    if (arrayChecklist.get(i).getName() != null)
-                        mGoogleMap.addMarker(new MarkerOptions().position(positions.get(i)).title(arrayChecklist.get(i).getName()));
+                    mGoogleMap.addMarker(new MarkerOptions().position(positions.get(i)).title(arrayChecklist.get(i).getName()));
                 }
             }
 
@@ -1024,7 +1018,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             case R.id.btnNavDataSync:
                 mDrawerLayout.closeDrawers();
                 intent = new Intent(getApplicationContext(), DataSyncActivityRestApi.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_DATASYNC);
                 break;
             case R.id.btnNavContact:
                 mDrawerLayout.closeDrawers();
@@ -1175,12 +1169,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
 
             void Populate(CheckList checklist, int position) {
-                if (checklist.getName() != null)
-                    tvName.setText(checklist.getName().trim());
-
-                if (checklist.getAddress() != null)
-                    tvAddress.setText(checklist.getAddress().trim());
-
+                tvName.setText(checklist.getName().trim());
+                tvAddress.setText(checklist.getAddress().trim());
                 if (checklist.getDescription() != null)
                     tvDescription.setText(checklist.getDescription().trim());
 
@@ -1338,7 +1328,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                         Intent intent = new Intent(getApplicationContext(), DataSyncActivityRestApi.class);
-                        startActivity(intent);
+                        startActivityForResult(intent, REQUEST_DATASYNC);
                         dialog.dismiss();
                     }
                 })
@@ -1473,7 +1463,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 CustomerId = data.getIntExtra(CUSTOMERID_KEY, 0);
                 CustomerClientId = data.getLongExtra(CUSTOMER_CLIENT_ID_KEY, 0);
                 Type = data.getIntExtra(TYPE_KEY, 0);
-                GroupId = data.getLongExtra(CUSTOMER_GROUP_KEY, 0);
+                GroupId = data.getLongExtra("GroupId", 0);
 
                 if (Type == ProjectInfo.TYPE_INVOCIE) {
                     Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
@@ -1497,7 +1487,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_SEND_TRANSFERENCE);
                     intent.putExtra(MODE_PAGE, MODE_NEW);
                     intent.putExtra(CUSTOMERID_KEY, CustomerId);
-                    intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
+                    intent.putExtra("GroupId", GroupId);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(getApplicationContext(), ManageReceiptActivity.class);
@@ -1550,5 +1540,4 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         LocationService.removeEventLocation(this.getLocalClassName());
         super.onDestroy();
     }
-
 }
