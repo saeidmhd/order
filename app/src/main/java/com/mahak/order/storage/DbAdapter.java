@@ -4784,17 +4784,21 @@ public class DbAdapter {
         return TotalCount;
     }
 
-    public int getTotalCountProduct(long category , int asset) {
+    public int getTotalCountProduct(String searchStr , long CategoryId , int MODE_ASSET) {
         Cursor cursor;
-
+        String orderBy = BaseActivity.getPrefSortBase_product() + " " + BaseActivity.getPrefSortDirection();
+        if (ServiceTools.checkArabic(searchStr)){
+            searchStr = ServiceTools.replaceWithEnglish(searchStr);
+        }
+        String LikeStr = ServiceTools.getLikeString(searchStr);
         int TotalCount = 0;
         try {
-            cursor = mDb.rawQuery(
-                    "select count(*) from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId "
-                            + " where " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + 0
-                            + " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_MAHAK_ID + " = " + BaseActivity.getPrefMahakId()
-                            + " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_DATABASE_ID + " = " + BaseActivity.getPrefDatabaseId()
-                            + " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() + getProductCategoryStrnig(category)  +  getProductAssetStrnig(asset), null);
+            cursor = mDb.rawQuery(" select count(*) from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+                    " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and entitytype = 4 " +
+                    " where ( " + LikeStr + " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'"  + " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
+                    " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
+                    getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + " GROUP by Products.productId " +
+                    " order by " + orderBy, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {

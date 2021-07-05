@@ -280,7 +280,7 @@ public class ProductPickerListActivity extends BaseActivity {
                     ProductGroup productGroup = (ProductGroup) parent.getItemAtPosition(position);
                     CategoryId = productGroup.getProductCategoryId();
 
-                    CountProduct = db.getTotalCountProduct(CategoryId , MODE_ASSET);
+                    CountProduct = db.getTotalCountProduct(txtSearch.getText().toString(), CategoryId , MODE_ASSET);
                     setPageTitle(CountProduct);
 
                     //Clear Adapter/////////////////////////////////////
@@ -320,7 +320,7 @@ public class ProductPickerListActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 db.open();
-                CountProduct = db.getTotalCountProduct(CategoryId , position);
+                CountProduct = db.getTotalCountProduct(txtSearch.getText().toString(),CategoryId , position);
                 setPageTitle(CountProduct);
 
                 MODE_ASSET = position;

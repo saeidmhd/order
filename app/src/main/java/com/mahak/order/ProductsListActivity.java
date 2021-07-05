@@ -256,7 +256,7 @@ public class ProductsListActivity extends BaseActivity {
                     ProductGroup productGroup = (ProductGroup) parent.getItemAtPosition(position);
                     CategoryId = productGroup.getProductCategoryId();
                     db.open();
-                    CountProduct = db.getTotalCountProduct(CategoryId , MODE_ASSET);
+                    CountProduct = db.getTotalCountProduct(txtSearch.getText().toString(), CategoryId , MODE_ASSET);
                     setPageTitle(CountProduct);
                     //Read Product And Fill Adapter///////////////////////////////////////////
                     if (asyproduct != null) {
@@ -280,7 +280,7 @@ public class ProductsListActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 db.open();
-                CountProduct = db.getTotalCountProduct(CategoryId , position);
+                CountProduct = db.getTotalCountProduct(txtSearch.getText().toString() , CategoryId , position);
                 setPageTitle(CountProduct);
 
                 if (MODE_ASSET != position) {
