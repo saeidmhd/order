@@ -1,10 +1,15 @@
 package com.mahak.order.common;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.mahak.order.BaseActivity;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class TransactionsLog {
@@ -226,15 +231,6 @@ public class TransactionsLog {
         return DatabaseId;
     }
 
-    public void setTransactionDate(String transactionDate) {
-        TransactionDate = transactionDate;
-    }
-
-    public String getTransactionDate() {
-
-        return TransactionDate;
-    }
-
     public long getTransactionClientId() {
         return transactionClientId;
     }
@@ -290,4 +286,43 @@ public class TransactionsLog {
     public void setRowVersion(long rowVersion) {
         this.rowVersion = rowVersion;
     }
+
+    public String getTransactionDate(){
+        return TransactionDate;
+    }
+
+    public String getFormattedTransactionDate() {
+        String pattern = "yyyy-MM-dd'T'HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
+        try {
+            java.util.Date date = simpleDateFormat.parse(TransactionDate);
+            return ServiceTools.getDateForLong(date.getTime());
+        } catch (ParseException e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /*public void setTransactionDate(String transactionDate) {
+        String pattern = "yyyy-MM-ddTHH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
+        TransactionDate = simpleDateFormat.format(transactionDate);
+    }*/
+
+    public void setTransactionDate(String transactionDate) {
+        TransactionDate = transactionDate;
+    }
+
+   /* public void setTransactionDate(String transactionDate) {
+        TransactionDate = transactionDate;
+    }
+
+    public String getTransactionDate() {
+
+        return TransactionDate;
+    }*/
+
+
 }
