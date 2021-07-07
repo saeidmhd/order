@@ -169,10 +169,8 @@ public class Cheque {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
         try {
             java.util.Date date = simpleDateFormat.parse(Date);
-            return date.getTime();
+            return date != null ? date.getTime() : 0;
         } catch (ParseException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-            FirebaseCrashlytics.getInstance().recordException(e);
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();

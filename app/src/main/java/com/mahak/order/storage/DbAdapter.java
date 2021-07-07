@@ -791,7 +791,7 @@ public class DbAdapter {
         initialvalue.put(DbSchema.Transactionslogschema.COLUMN_MAHAK_ID, transactionlog.getMahakId());
         initialvalue.put(DbSchema.Transactionslogschema.COLUMN_DATABASE_ID, transactionlog.getDatabaseId());
         initialvalue.put(DbSchema.Transactionslogschema.COLUMN_TRANSACTIONID, transactionlog.getTransactionId());
-        initialvalue.put(DbSchema.Transactionslogschema.COLUMN_DATE, transactionlog.getTransactionDate());
+        initialvalue.put(DbSchema.Transactionslogschema.COLUMN_DATE, transactionlog.getFormattedTransactionDate());
         initialvalue.put(DbSchema.Transactionslogschema.COLUMN_TransactionClientId, transactionlog.getTransactionClientId());
         initialvalue.put(DbSchema.Transactionslogschema.COLUMN_DataHash, transactionlog.getDataHash());
         initialvalue.put(DbSchema.Transactionslogschema.COLUMN_CreateDate, transactionlog.getCreateDate());

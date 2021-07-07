@@ -13,16 +13,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.TransactionsLog;
 import com.mahak.order.storage.DbAdapter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class TransactionsActivity extends BaseActivity {
 
@@ -130,16 +126,7 @@ public class TransactionsActivity extends BaseActivity {
                 }
                 tvNumber.setText(String.valueOf(position + 1));
                 tvDescription.setText(transaction.getDescription());
-
-                String pattern = "yyyy-MM-dd'T'HH:mm:ss";
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-                try {
-                    Date date = simpleDateFormat.parse(transaction.getTransactionDate());
-                    tvDate.setText(before(transaction.getTransactionDate(), "T"));
-                } catch (ParseException e) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                    e.printStackTrace();
-                }
+                tvDate.setText(transaction.getTransactionDate());
             }
         }
 
