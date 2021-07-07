@@ -490,10 +490,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             FilterResults result = new FilterResults();
             if (constraint.toString().length() > 0) {
                 Set<Product> filterItem = new LinkedHashSet<>();
-                if(type == ProjectInfo.TYPE_INVOCIE){
-                    filterItem.addAll(dbAdapter.searchProduct(searchStr, Type , categoryId , 1));
-                }else
-                    filterItem.addAll(dbAdapter.searchProduct(searchStr, Type , categoryId , modeAsset));
+                filterItem.addAll(dbAdapter.searchProduct(searchStr, Type , categoryId , modeAsset));
                 result.values = new ArrayList<>(filterItem);
                 result.count = filterItem.size();
             } else {
