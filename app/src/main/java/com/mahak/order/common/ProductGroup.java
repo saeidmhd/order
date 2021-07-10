@@ -26,7 +26,7 @@ public class ProductGroup {
 
     @SerializedName("ProductCategoryCode")
     @Expose
-    private Long productCategoryCode;
+    private Long productGroupCode;
 
     @SerializedName("Color")
     @Expose
@@ -112,12 +112,12 @@ public class ProductGroup {
         ParentId = parentId;
     }
 
-    public Long getProductCategoryCode() {
-        return productCategoryCode;
+    public Long getProductGroupCode() {
+        return productGroupCode;
     }
 
-    public void setProductCategoryCode(Long productCategoryCode) {
-        this.productCategoryCode = productCategoryCode;
+    public void setProductGroupCode(Long productGroupCode) {
+        this.productGroupCode = productGroupCode;
     }
 
     public String getColor() {

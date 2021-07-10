@@ -66,7 +66,7 @@ public class GoodsEntityAdapter extends RecyclerView.Adapter<GoodsEntityAdapter.
                 break;
             case Promotion.EntityGroupGoods:
                 holder.entity_type.setText(R.string.product_group);
-                ProductGroup productGroup = db.GetPromoCategory(entitiesOfPromotions.get(position).getCodeEntity());
+                ProductGroup productGroup = db.GetPromoGroup(entitiesOfPromotions.get(position).getCodeEntity());
                 holder.entity_name.setText(productGroup.getName());
                 break;
 

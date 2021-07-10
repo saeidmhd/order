@@ -244,7 +244,7 @@ public class DbAdapter {
         try {
             ContentValues initialvalue = new ContentValues();
             for (Product product : products) {
-                initialvalue.put(DbSchema.Productschema.COLUMN_CATEGORYID, product.getProductCategoryId());
+                initialvalue.put(DbSchema.Productschema.COLUMN_CATEGORYID, product.getProductGroupId());
                 initialvalue.put(DbSchema.Productschema.COLUMN_NAME, product.getName());
 
                 initialvalue.put(DbSchema.Productschema.COLUMN_PUBLISH, product.getPublish());
@@ -449,10 +449,10 @@ public class DbAdapter {
         initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_COLOR, productGroup.getColor());
         initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_MODIFYDATE, productGroup.getModifyDate());
         initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_MAHAK_ID, productGroup.getMahakId());
-        initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_ProductCategoryCode, productGroup.getProductCategoryCode());
+        initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_ProductGroupCode, productGroup.getProductGroupCode());
         initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_DATABASE_ID, productGroup.getDatabaseId());
-        initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_ProductCategoryClientId, productGroup.getProductCategoryClientId());
-        initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_ProductCategoryId, productGroup.getProductCategoryId());
+        initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_ProductGroupClientId, productGroup.getProductCategoryClientId());
+        initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_ProductGroupId, productGroup.getProductCategoryId());
         initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_DataHash, productGroup.getDataHash());
         initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_CreateDate, productGroup.getCreateDate());
         initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_UpdateDate, productGroup.getUpdateDate());
@@ -2563,7 +2563,7 @@ public class DbAdapter {
         return picturesProduct.getPictureId();
     }
 
-    private ProductGroup GetCategory(long id) {
+    private ProductGroup getProductGroup(long id) {
         ProductGroup productGroup = new ProductGroup();
         Cursor cursor;
         try {
@@ -2573,15 +2573,15 @@ public class DbAdapter {
                 if (cursor.getCount() > 0) {
                     productGroup.setId(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ID)));
                     productGroup.setMahakId(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_MAHAK_ID)));
-                    productGroup.setProductCategoryCode(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ProductCategoryCode)));
+                    productGroup.setProductGroupCode(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ProductGroupCode)));
                     productGroup.setDatabaseId(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_DATABASE_ID)));
                     productGroup.setParentId(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_PARENTID)));
                     productGroup.setName(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_NAME)));
                     productGroup.setColor(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_COLOR)));
                     productGroup.setIcon(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ICON)));
                     productGroup.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_MODIFYDATE)));
-                    productGroup.setProductCategoryClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ProductCategoryClientId)));
-                    productGroup.setProductCategoryId(cursor.getInt(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ProductCategoryId)));
+                    productGroup.setProductCategoryClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ProductGroupClientId)));
+                    productGroup.setProductCategoryId(cursor.getInt(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ProductGroupId)));
                 }
                 cursor.close();
             }
@@ -2593,25 +2593,62 @@ public class DbAdapter {
         }
         return productGroup;
     }
-
-    public ProductGroup GetPromoCategory(long id) {
+    private ProductGroup getProductGroupFromCursor(Cursor cursor) {
         ProductGroup productGroup = new ProductGroup();
-        Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ProductGroupSchema.TABLE_NAME, null, DbSchema.ProductGroupSchema.COLUMN_ProductCategoryCode + "=?", new String[]{String.valueOf(id)}, null, null, null);
             if (cursor != null) {
-                cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
                     productGroup.setId(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ID)));
                     productGroup.setMahakId(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_MAHAK_ID)));
-                    productGroup.setProductCategoryCode(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ProductCategoryCode)));
+                    productGroup.setProductGroupCode(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ProductGroupCode)));
                     productGroup.setDatabaseId(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_DATABASE_ID)));
                     productGroup.setParentId(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_PARENTID)));
                     productGroup.setName(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_NAME)));
                     productGroup.setColor(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_COLOR)));
                     productGroup.setIcon(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ICON)));
                     productGroup.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_MODIFYDATE)));
+                    productGroup.setProductCategoryClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ProductGroupClientId)));
+                    productGroup.setProductCategoryId(cursor.getInt(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ProductGroupId)));
+                }
+            }
 
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorGetCategory", e.getMessage());
+        }
+        return productGroup;
+    }
+
+    public ProductGroup GetPromoGroup(long GroupCode) {
+        ProductGroup productGroup = new ProductGroup();
+        Cursor cursor;
+        try {
+            cursor = mDb.query(DbSchema.ProductGroupSchema.TABLE_NAME, null, DbSchema.ProductGroupSchema.COLUMN_ProductGroupCode + "=?", new String[]{String.valueOf(GroupCode)}, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                if (cursor.getCount() > 0) {
+                    productGroup = getProductGroupFromCursor(cursor);
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorGetCategory", e.getMessage());
+        }
+        return productGroup;
+    }
+    public ProductGroup getGroup(long GroupId) {
+        ProductGroup productGroup = new ProductGroup();
+        Cursor cursor;
+        try {
+            cursor = mDb.query(DbSchema.ProductGroupSchema.TABLE_NAME, null, DbSchema.ProductGroupSchema.COLUMN_ProductGroupId + "=?", new String[]{String.valueOf(GroupId)}, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                if (cursor.getCount() > 0) {
+                    productGroup = getProductGroupFromCursor(cursor);
                 }
                 cursor.close();
             }
@@ -6573,9 +6610,8 @@ public class DbAdapter {
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    productGroup = GetCategory(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ID)));
-                    if (productGroup != null)
-                        array.add(productGroup);
+                    productGroup = getProductGroupFromCursor(cursor);
+                    array.add(productGroup);
                     cursor.moveToNext();
                 }
                 cursor.close();
@@ -8872,7 +8908,7 @@ public class DbAdapter {
         boolean result;
 
         ContentValues initialvalue = new ContentValues();
-        initialvalue.put(DbSchema.Productschema.COLUMN_CATEGORYID, product.getProductCategoryId());
+        initialvalue.put(DbSchema.Productschema.COLUMN_CATEGORYID, product.getProductGroupId());
         initialvalue.put(DbSchema.Productschema.COLUMN_NAME, product.getName());
         initialvalue.put(DbSchema.Productschema.COLUMN_REALPRICE, product.getRealPrice());
         initialvalue.put(DbSchema.Productschema.COLUMN_TAGS, product.getTags());
@@ -8921,7 +8957,7 @@ public class DbAdapter {
             ContentValues initialvalue = new ContentValues();
             for (Product product : products) {
 
-                initialvalue.put(DbSchema.Productschema.COLUMN_CATEGORYID, product.getProductCategoryId());
+                initialvalue.put(DbSchema.Productschema.COLUMN_CATEGORYID, product.getProductGroupId());
                 initialvalue.put(DbSchema.Productschema.COLUMN_NAME, product.getName());
 
                 initialvalue.put(DbSchema.Productschema.COLUMN_PUBLISH, product.getPublish());
@@ -9569,17 +9605,17 @@ public class DbAdapter {
         initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_COLOR, productGroup.getColor());
         initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_MODIFYDATE, productGroup.getModifyDate());
         initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_MAHAK_ID, productGroup.getMahakId());
-        initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_ProductCategoryCode, productGroup.getProductCategoryCode());
+        initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_ProductGroupCode, productGroup.getProductGroupCode());
         initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_DATABASE_ID, productGroup.getDatabaseId());
-        initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_ProductCategoryClientId, productGroup.getProductCategoryClientId());
-        initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_ProductCategoryId, productGroup.getProductCategoryId());
+        initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_ProductGroupClientId, productGroup.getProductCategoryClientId());
+        initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_ProductGroupId, productGroup.getProductCategoryId());
         initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_DataHash, productGroup.getDataHash());
         initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_CreateDate, productGroup.getCreateDate());
         initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_UpdateDate, productGroup.getUpdateDate());
         initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_CreateSyncId, productGroup.getCreateSyncId());
         initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_UpdateSyncId, productGroup.getUpdateSyncId());
         initialvalue.put(DbSchema.ProductGroupSchema.COLUMN_RowVersion, productGroup.getRowVersion());
-        result = (mDb.update(DbSchema.ProductGroupSchema.TABLE_NAME, initialvalue, DbSchema.ProductGroupSchema.COLUMN_ProductCategoryId + " =? ", new String[]{String.valueOf(productGroup.getProductCategoryId())})) > 0;
+        result = (mDb.update(DbSchema.ProductGroupSchema.TABLE_NAME, initialvalue, DbSchema.ProductGroupSchema.COLUMN_ProductGroupId + " =? ", new String[]{String.valueOf(productGroup.getProductCategoryId())})) > 0;
         return result;
     }
 
@@ -9999,7 +10035,7 @@ public class DbAdapter {
     }
 
     public void DeleteCategory(ProductGroup productGroup) {
-        mDb.delete(DbSchema.ProductGroupSchema.TABLE_NAME, DbSchema.ProductGroupSchema.COLUMN_MAHAK_ID + "=? and " + DbSchema.ProductGroupSchema.COLUMN_ProductCategoryCode + "=? and " + DbSchema.ProductGroupSchema.COLUMN_DATABASE_ID + "=?", new String[]{productGroup.getMahakId(), String.valueOf(productGroup.getProductCategoryCode()), productGroup.getDatabaseId()});
+        mDb.delete(DbSchema.ProductGroupSchema.TABLE_NAME, DbSchema.ProductGroupSchema.COLUMN_MAHAK_ID + "=? and " + DbSchema.ProductGroupSchema.COLUMN_ProductGroupCode + "=? and " + DbSchema.ProductGroupSchema.COLUMN_DATABASE_ID + "=?", new String[]{productGroup.getMahakId(), String.valueOf(productGroup.getProductGroupCode()), productGroup.getDatabaseId()});
     }
 
     public boolean DeleteOrderDetail(long id) {
