@@ -288,6 +288,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         initUI();
 
+        update();
+
         isServiceRun = isMyServiceRunning(LocationService.class);
 
         if(!isServiceRun){
@@ -491,6 +493,55 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         };
     }//end of onCreate
+
+    public void update (){
+
+        if (db == null)
+            db = new DbAdapter(this);
+
+        db.open();
+
+        double TotalOrder = db.getTotalPriceOrder();
+        double TotalInvoice = db.getTotalPriceInvoice();
+        double TotalReceiveTransfer = db.getTotalReceiveTransfer();
+        double TotalReceipt = db.getTotalPriceReceipt();
+        double TotalCash = db.getTotalCashAmountReceipt();
+        double TotalCheque = db.getTotalChequeReceipt();
+        double TotalCashReceipt = db.getTotalCashReceipt();
+        double TotalDiscountOrder = db.getTotalDiscountOrder();
+        double TotalDiscountInvoice = db.getTotalDiscountInvoice();
+        double TotalChargeAndTaxOrder = db.getTotalChargeAndTaxOrder();
+        double TotalChargeAndTaxInvoice = db.getTotalChargeAndTaxInvoice();
+        double TotalPureOrder = db.getPurePriceOrder();
+        double TotalPureInvoice = db.getPurePriceInvoice();
+
+        tvSumOfOrders.setText(ServiceTools.formatPrice(TotalOrder));
+        tvSumOfOrders.setSelected(true);
+        tvSumOfInvoices.setText(ServiceTools.formatPrice(TotalInvoice));
+        tvSumOfInvoices.setSelected(true);
+        tvSumOfTransference.setText(ServiceTools.formatPrice(TotalReceiveTransfer));
+        tvSumOfTransference.setSelected(true);
+        tvSumOfReceipts.setText(ServiceTools.formatPrice((TotalReceipt)));
+        tvSumOfReceipts.setSelected(true);
+        tvSumOfCash.setText(ServiceTools.formatPrice(TotalCash));
+        tvSumOfCash.setSelected(true);
+        tvSumOfCheque.setText(ServiceTools.formatPrice(TotalCheque));
+        tvSumOfCheque.setSelected(true);
+        tvSumOfReceiptsAmount.setText(ServiceTools.formatPrice(TotalCashReceipt));
+        tvSumOfReceiptsAmount.setSelected(true);
+        tvSumOfDiscountOrder.setText(ServiceTools.formatPrice(TotalDiscountOrder));
+        tvSumOfDiscountOrder.setSelected(true);
+        tvSumOfDiscountInvoice.setText(ServiceTools.formatPrice(TotalDiscountInvoice));
+        tvSumOfDiscountInvoice.setSelected(true);
+        tvSumOfPureOrder.setText(ServiceTools.formatPrice(TotalPureOrder));
+        tvSumOfPureOrder.setSelected(true);
+        tvSumOfPureInvoice.setText(ServiceTools.formatPrice(TotalPureInvoice));
+        tvSumOfPureInvoice.setSelected(true);
+        tvSumOfChargeAndTaxOrder.setText(ServiceTools.formatPrice(TotalChargeAndTaxOrder));
+        tvSumOfChargeAndTaxOrder.setSelected(true);
+        tvSumOffChargeAndTaxInvoice.setText(ServiceTools.formatPrice(TotalChargeAndTaxInvoice));
+        tvSumOffChargeAndTaxInvoice.setSelected(true);
+    }
 
     public static void setTackingServiceText(boolean isChecked) {
         if (isChecked) {
