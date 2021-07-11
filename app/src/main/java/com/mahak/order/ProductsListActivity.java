@@ -242,10 +242,7 @@ public class ProductsListActivity extends BaseActivity {
         spnAssetProduct.setSelection(MODE_ASSET);
 
         db.open();
-
-        CountProduct = BaseActivity.getPrefProductCount(mContext);
-
-        getProducts(totalItem);
+        getProducts();
 
         spnCategory.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
@@ -255,15 +252,13 @@ public class ProductsListActivity extends BaseActivity {
                     //txtSearch.setText("");
                     ProductGroup productGroup = (ProductGroup) parent.getItemAtPosition(position);
                     CategoryId = productGroup.getProductCategoryId();
-                    db.open();
-                    CountProduct = db.getTotalCountProduct(txtSearch.getText().toString(), CategoryId , MODE_ASSET);
-                    setPageTitle(CountProduct);
+                    setPageTitle();
                     //Read Product And Fill Adapter///////////////////////////////////////////
                     if (asyproduct != null) {
                         if (asyproduct.getStatus() == Status.RUNNING)
                             asyproduct.cancel(true);
                     }
-                    getProducts(totalItem);
+                    getProducts();
                 }
             }
 
@@ -279,9 +274,7 @@ public class ProductsListActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                db.open();
-                CountProduct = db.getTotalCountProduct(txtSearch.getText().toString() , CategoryId , position);
-                setPageTitle(CountProduct);
+                setPageTitle();
 
                 if (MODE_ASSET != position) {
                     // RecyclerProductAdapter.products.clear();
@@ -292,7 +285,7 @@ public class ProductsListActivity extends BaseActivity {
                         if (asyproduct.getStatus() == Status.RUNNING)
                             asyproduct.cancel(true);
                     }
-                    getProducts(totalItem);
+                    getProducts();
                     /////////////////////////////////////////////////////////////////////////
                 }
             }
@@ -329,10 +322,7 @@ public class ProductsListActivity extends BaseActivity {
                                         productListFragment.getAdapter().getFilter(CategoryId,MODE_ASSET).filter(s, new FilterListener() {
                                             @Override
                                             public void onFilterComplete(int count) {
-                                                if(!s.toString().isEmpty())
-                                                    setPageTitle(count);
-                                                else
-                                                    setPageTitle(CountProduct);
+                                                setPageTitle();
                                                 productListFragment.getAdapter().notifyDataSetChanged();
 
                                             }
@@ -344,10 +334,7 @@ public class ProductsListActivity extends BaseActivity {
 
                                             @Override
                                             public void onFilterComplete(int count) {
-                                                if(!s.toString().isEmpty())
-                                                    setPageTitle(count);
-                                                else
-                                                    setPageTitle(CountProduct);
+                                                setPageTitle();
                                                 productGridFragment.getAdapter().notifyDataSetChanged();
                                             }
                                         });
@@ -358,10 +345,7 @@ public class ProductsListActivity extends BaseActivity {
 
                                             @Override
                                             public void onFilterComplete(int count) {
-                                                if(!s.toString().isEmpty())
-                                                    setPageTitle(count);
-                                                else
-                                                    setPageTitle(CountProduct);
+                                                setPageTitle();
                                                 placeholderGalleryListFragment.getAdapter().notifyDataSetChanged();
                                             }
                                         });
@@ -372,10 +356,7 @@ public class ProductsListActivity extends BaseActivity {
 
                                             @Override
                                             public void onFilterComplete(int count) {
-                                                if(!s.toString().isEmpty())
-                                                    setPageTitle(count);
-                                                else
-                                                    setPageTitle(CountProduct);
+                                                setPageTitle();
                                             }
                                         });
                                     }
@@ -390,8 +371,8 @@ public class ProductsListActivity extends BaseActivity {
 
     }// End of onCreate
 
-    public void getProducts(int totalItem) {
-        asyproduct = new AsynProduct(CategoryId, PAGE_STATE, MODE_ASSET, totalItem);
+    public void getProducts() {
+        asyproduct = new AsynProduct(CategoryId, PAGE_STATE, MODE_ASSET);
         asyproduct.execute();
     }
 
@@ -554,20 +535,12 @@ public class ProductsListActivity extends BaseActivity {
             Activity mContext;
             ArrayList<Product> arrayOrginal = new ArrayList<Product>();
             ArrayList<Product> arrayProduct = new ArrayList<Product>();
-            CustomFilterList Filter;
 
             public AdapterListProduct(Activity contaxt, ArrayList<Product> array) {
                 super(contaxt, android.R.layout.simple_list_item_1, array);
                 mContext = contaxt;
                 arrayOrginal.addAll(array);
                 arrayProduct.addAll(array);
-            }
-
-            @Override
-            public Filter getFilter() {
-                if (Filter == null)
-                    Filter = new CustomFilterList();
-                return Filter;
             }
 
             @Override
@@ -634,9 +607,6 @@ public class ProductsListActivity extends BaseActivity {
                     tvUnit.setText(product.getUnitName());
                     tvUnit2.setText(product.getUnitName2());
                     if (product.getPictures() != null && product.getPictures().size() > 0) {
-//                        ImageLoader.getInstance().displayImage(product.getPictures().get(0).getUrl(), imgProduct, options, ServiceTools.getImageLoaderListener(R.drawable.img_default_product));
-//                        Glide.with(mContext).load(product.getPictures().get(0).getUrl()).placeholder(R.drawable.image_empty_box).crossFade().listener(ServiceTools.getGlideListener(imgProduct))
-//                                .into(imgProduct);
                         ProductItemInitialize.loadImage(mContext, product.getPictures().get(0).getUrl(), imgProduct);
                     } else {
                         imgProduct.setImageDrawable(null);
@@ -654,49 +624,6 @@ public class ProductsListActivity extends BaseActivity {
                             mContext.startActivity(intent);
                         }
                     });
-                }
-            }
-
-            public class CustomFilterList extends Filter {
-                @Override
-                protected FilterResults performFiltering(CharSequence constraint) {
-
-                    constraint = constraint.toString().toLowerCase();
-                    FilterResults result = new FilterResults();
-                    String name = "";
-
-                    if (constraint != null && constraint.toString().length() > 0) {
-                        ArrayList<Product> filterItem = new ArrayList<Product>();
-                        for (int i = 0; i < arrayOrginal.size(); i++) {
-                            Product product = arrayOrginal.get(i);
-                            name = product.getName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name);
-                            //if(name.toLowerCase().contains(constraint))
-                            if (result_contain)
-                                filterItem.add(product);
-                        }
-                        result.values = filterItem;
-                        result.count = filterItem.size();
-                    } else {
-                        synchronized (this) {
-                            result.values = arrayOrginal;
-                            result.count = arrayOrginal.size();
-                        }
-                    }
-                    return result;
-                }
-
-                @SuppressWarnings("unchecked")
-                @Override
-                protected void publishResults(CharSequence constraint, FilterResults results) {
-
-                    arrayProduct = (ArrayList<Product>) results.values;
-                    notifyDataSetChanged();
-                    clear();
-                    for (int i = 0; i < arrayProduct.size(); i++) {
-                        add(arrayProduct.get(i));
-                        notifyDataSetInvalidated();
-                    }
                 }
             }
 
@@ -761,12 +688,11 @@ public class ProductsListActivity extends BaseActivity {
         public PlaceholderGridFragment() {
         }
 
-        public class AdapterGridProduct extends BaseAdapter implements Filterable {
+        public class AdapterGridProduct extends BaseAdapter {
 
             private LayoutInflater mInflater;
             private ArrayList<Product> arrayProduct = new ArrayList<Product>();
             private ArrayList<Product> arrayOrginal = new ArrayList<Product>();
-            private CustomFilterGrid Filter;
             private Activity mContext;
 
             public AdapterGridProduct(Activity context, ArrayList<Product> array) {
@@ -888,56 +814,6 @@ public class ProductsListActivity extends BaseActivity {
 
             }
 
-            public class CustomFilterGrid extends Filter {
-                @Override
-                protected FilterResults performFiltering(CharSequence constraint) {
-
-                    constraint = constraint.toString().toLowerCase();
-                    FilterResults result = new FilterResults();
-                    String name = "";
-
-                    if (constraint != null && constraint.toString().length() > 0) {
-                        ArrayList<Product> filterItem = new ArrayList<Product>();
-                        for (int i = 0; i < arrayOrginal.size(); i++) {
-                            Product product = arrayOrginal.get(i);
-                            name = product.getName();
-                            boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), name);
-                            //if(name.toLowerCase().contains(constraint))
-                            if (result_contain)
-                                filterItem.add(product);
-                        }
-                        result.values = filterItem;
-                        result.count = filterItem.size();
-                    } else {
-                        synchronized (this) {
-                            result.values = arrayOrginal;
-                            result.count = arrayOrginal.size();
-                        }
-                    }
-                    return result;
-                }
-
-                @SuppressWarnings("unchecked")
-                @Override
-                protected void publishResults(CharSequence constraint, FilterResults results) {
-
-                    arrayProduct = (ArrayList<Product>) results.values;
-                    if (results.count > 0) {
-                        adaptergrid.notifyDataSetChanged();
-                    } else {
-                        adaptergrid.notifyDataSetInvalidated();
-                    }
-                }
-            }
-
-            @Override
-            public Filter getFilter() {
-                if (Filter == null)
-                    Filter = new CustomFilterGrid();
-                return Filter;
-            }
-
-
         }// End Of AdapterGrid
 
         @Override
@@ -965,11 +841,6 @@ public class ProductsListActivity extends BaseActivity {
             if (mActivity != null) {
                 adaptergrid = new AdapterGridProduct(mActivity, array);
                 gvProduct.setAdapter(adaptergrid);
-                adaptergrid.getFilter().filter(ProductsListActivity.txtSearch.getText().toString(), new FilterListener() {
-                    @Override
-                    public void onFilterComplete(int count) {
-                    }
-                });
             }
             super.onActivityCreated(savedInstanceState);
         }
@@ -1114,14 +985,12 @@ public class ProductsListActivity extends BaseActivity {
         long Id;
         int StatePage;
         int ModeAssetProduct;
-        int totalItem;
 
-        public AsynProduct(long id, int statepage, int modeasset, int totalItem) {
+        public AsynProduct(long id, int statepage, int modeasset) {
 
             this.Id = id;
             this.StatePage = statepage;
             this.ModeAssetProduct = modeasset;
-            this.totalItem = totalItem;
         }
 
         @Override
@@ -1155,15 +1024,17 @@ public class ProductsListActivity extends BaseActivity {
             else if (PAGE_STATE == GALLERY_PAGE_STATE)
                 gotoGalleryPageView();
 
-            setPageTitle(CountProduct);
+            setPageTitle();
 
             super.onPostExecute(result);
         }
 
     }
 
-    public void setPageTitle(int count) {
-        tvPageTitle.setText(getString(R.string.str_nav_product_list) + "(" + count + ")");
+    public void setPageTitle() {
+        db.open();
+        CountProduct = db.getTotalCountProduct(txtSearch.getText().toString(), CategoryId , MODE_ASSET);
+        tvPageTitle.setText(getString(R.string.str_nav_product_list) + "(" + CountProduct + ")");
     }
 
 
@@ -1453,7 +1324,7 @@ public class ProductsListActivity extends BaseActivity {
     }
 
     public void sort() {
-        getProducts(totalItem);
+        getProducts();
     }
 
 }

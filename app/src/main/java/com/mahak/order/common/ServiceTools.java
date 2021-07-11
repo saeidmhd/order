@@ -1812,6 +1812,20 @@ FirebaseCrashlytics.getInstance().recordException(e);
         LikeString = removeLastAnd(LikeString);
         return LikeString;
     }
+
+
+    public static String getLikeStringCount(String searchStr) {
+        String[] searchArray = searchStr.split(" ");
+        String LikeString = "";
+        if(!searchStr.isEmpty()){
+            for (String search : searchArray){
+                LikeString += " name " +  " like " + " '%" + search + "%' " + " and ";
+            }
+            LikeString = removeLastAnd(LikeString);
+        }
+        return LikeString;
+    }
+
     public static String anyPartOfPersonNameLikeString(String searchStr) {
         String[] searchArray = searchStr.toString().split(" ");
         String LikeString = "";

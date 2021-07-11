@@ -831,7 +831,7 @@ public class DbAdapter {
         initialvalue.put(DbSchema.Transactionslogschema.COLUMN_MAHAK_ID, transactionlog.getMahakId());
         initialvalue.put(DbSchema.Transactionslogschema.COLUMN_DATABASE_ID, transactionlog.getDatabaseId());
         initialvalue.put(DbSchema.Transactionslogschema.COLUMN_TRANSACTIONID, transactionlog.getTransactionId());
-        initialvalue.put(DbSchema.Transactionslogschema.COLUMN_DATE, transactionlog.getTransactionDate());
+        initialvalue.put(DbSchema.Transactionslogschema.COLUMN_DATE, transactionlog.getFormattedTransactionDate());
         initialvalue.put(DbSchema.Transactionslogschema.COLUMN_TransactionClientId, transactionlog.getTransactionClientId());
         initialvalue.put(DbSchema.Transactionslogschema.COLUMN_DataHash, transactionlog.getDataHash());
         initialvalue.put(DbSchema.Transactionslogschema.COLUMN_CreateDate, transactionlog.getCreateDate());
@@ -4874,7 +4874,7 @@ public class DbAdapter {
             cursor = mDb.rawQuery(" select count(*) from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                     " where ( " + LikeStr + " or " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'"  + " ) and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_Deleted + " = " + " 0 " +
                     " and " + DbSchema.Productschema.TABLE_NAME + "." + DbSchema.Productschema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                    getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + " GROUP by Products.productId " +
+                    getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) +
                     " order by " + orderBy, null);
             if (cursor != null) {
                 cursor.moveToFirst();
