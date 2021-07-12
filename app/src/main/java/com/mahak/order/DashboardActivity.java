@@ -927,6 +927,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.btnNavReturnOfSale:
                 mDrawerLayout.closeDrawers();
+                InvoiceDetailActivity.orderDetails.clear();
                 intent = new Intent(getApplicationContext(), ReturnsListActivity.class);
                 intent.putExtra(PAGE, PAGE_DASHBORD);
                 intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_RETURN_OF_SALE);
