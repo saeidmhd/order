@@ -9221,7 +9221,7 @@ public class DbAdapter {
                     }
                     initvalue.put(DbSchema.Customerschema.COLUMN_BALANCE, amount);
                     mDb.update(DbSchema.Customerschema.TABLE_NAME, initvalue,
-                            DbSchema.Customerschema.COLUMN_PersonId + "=? and " + DbSchema.Customerschema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(extraData.getItemId()), String.valueOf(getPrefUserId())});
+                            DbSchema.Customerschema.COLUMN_PersonCode + "=? and " + DbSchema.Customerschema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(extraData.getItemId()), String.valueOf(getPrefUserId())});
                 } else if (extraData.getItemType() == BaseActivity.city_zone) {
                     add_city_zone(extraData);
                 } else if (extraData.getItemType() == BaseActivity.category) {
