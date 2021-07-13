@@ -109,7 +109,7 @@ public class ServiceTools {
         int DecimalPointNumber = ServiceTools.toInt(BaseActivity.getPrefPriceDecimalPoint());
         Locale locale = Locale.getDefault();
         DecimalFormat myFormatter = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
-        myFormatter.setRoundingMode(RoundingMode.FLOOR);
+        myFormatter.setRoundingMode(RoundingMode.HALF_UP);
         StringBuilder sb = new StringBuilder();
         if (DecimalPointNumber > 0) {
             for (int i = 0; i < DecimalPointNumber; i++) {

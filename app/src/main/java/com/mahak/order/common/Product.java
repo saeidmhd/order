@@ -382,7 +382,7 @@ public class Product implements Parcelable {
         Id = id;
     }
 
-    public long getProductCategoryId() {
+    public long getProductGroupId() {
         return productCategoryId;
     }
 

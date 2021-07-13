@@ -567,9 +567,9 @@ public class DbSchema {
         public static final String COLUMN_MODIFYDATE = "ModifyDate";
         public static final String COLUMN_MAHAK_ID = "MahakId";
         public static final String COLUMN_DATABASE_ID = "DatabaseId";
-        public static final String COLUMN_ProductCategoryCode = "ProductCategoryCode";
-        public static final String COLUMN_ProductCategoryId = "ProductCategoryId";
-        public static final String COLUMN_ProductCategoryClientId = "ProductCategoryClientId";
+        public static final String COLUMN_ProductGroupCode = "ProductCategoryCode";
+        public static final String COLUMN_ProductGroupId = "ProductCategoryId";
+        public static final String COLUMN_ProductGroupClientId = "ProductCategoryClientId";
         public static final String COLUMN_DataHash = "DataHash";
         public static final String COLUMN_CreateDate = "CreateDate";
         public static final String COLUMN_UpdateDate = "UpdateDate";

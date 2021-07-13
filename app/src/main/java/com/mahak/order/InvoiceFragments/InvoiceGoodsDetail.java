@@ -47,6 +47,7 @@ import com.mahak.order.common.OrderDetail;
 import com.mahak.order.common.PriceInputFilterMinMax;
 import com.mahak.order.common.Product;
 import com.mahak.order.common.ProductDetail;
+import com.mahak.order.common.ProductGroup;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.Promotion;
 import com.mahak.order.common.PromotionDetail;
@@ -56,7 +57,6 @@ import com.mahak.order.common.Visitor;
 import com.mahak.order.interfaces.FragmentLifecycle;
 import com.mahak.order.scan.SmallCaptureActivity;
 import com.mahak.order.storage.DbAdapter;
-import com.mahak.order.storage.DbSchema;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -73,7 +73,6 @@ import io.reactivex.annotations.NonNull;
 import static android.app.Activity.RESULT_OK;
 import static com.mahak.order.BaseActivity.CUSTOMERID_KEY;
 import static com.mahak.order.BaseActivity.CUSTOMER_GROUP_KEY;
-import static com.mahak.order.BaseActivity.MODE_EDIT;
 import static com.mahak.order.BaseActivity.MODE_NEW;
 import static com.mahak.order.BaseActivity.MODE_PAGE;
 import static com.mahak.order.BaseActivity.PAGE;
@@ -251,8 +250,8 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                         Discount = promoDiscount + calculatedPercentDiscount;
                         txtDiscountPercent.setText(String.valueOf(promoPercentDiscount));
                     } else {
-                        percentDiscount = roundDouble((discount * 100) / final_price);
-                        txtDiscountPercent.setText(String.valueOf(percentDiscount));
+                        percentDiscount = (discount * 100) / final_price;
+                        txtDiscountPercent.setText(formatPrice(percentDiscount));
                         Discount = ServiceTools.toDouble(txtDiscount.getText().toString());
                     }
                 }
@@ -933,8 +932,8 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             tvTotalOff.setText(ServiceTools.formatPrice(TotalOff));
 
             txtDiscount.setText(ServiceTools.formatPrice(Discount));
-            percentDiscount = roundDouble((Discount * 100) / (FinalPrice + Discount));
-            txtDiscountPercent.setText(String.valueOf(percentDiscount));
+            percentDiscount = (Discount * 100) / (FinalPrice + Discount);
+            txtDiscountPercent.setText(ServiceTools.formatPrice(percentDiscount));
             tvFinalPrice.setText(ServiceTools.formatPrice(FinalPrice));
 
             InvoiceDetailActivity.btnSave.setEnabled(OrderType != ProjectInfo.TYPE_INVOCIE || InvoiceDetailActivity.visitorHasCredit(FinalPrice));
@@ -1299,7 +1298,8 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                             for (OrderDetail orderDetail : orderDetails) {
                                 productDetail = db.getProductDetail(orderDetail.getProductDetailId());
                                 product = db.GetProductWithProductId(productDetail.getProductId());
-                                if ( promotion.getIsAllGood() == 1 || db.isInEntity( product.getProductCode(), promotion.getPromotionId(), Promotion.EntityGoods) || db.isInEntity(product.getProductCategoryId(), promotion.getPromotionId(), Promotion.EntityGroupGoods)) {
+                                ProductGroup productGroup = db.getGroup(product.getProductGroupId());
+                                if ( promotion.getIsAllGood() == 1 || db.isInEntity( product.getProductCode(), promotion.getPromotionId(), Promotion.EntityGoods) || db.isInEntity(productGroup.getProductGroupCode(), promotion.getPromotionId(), Promotion.EntityGroupGoods)) {
                                     double totalPrice = (orderDetail.getPrice()) * orderDetail.getSumCountBaJoz();
                                     arrayPromotionDetail = db.getPromotionDetails(promotion.getPromotionCode(), totalPrice);
                                     if (arrayPromotionDetail.size() > 0) {
@@ -1367,7 +1367,8 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                             for (OrderDetail orderDetail : orderDetails) {
                                 productDetail = db.getProductDetail(orderDetail.getProductDetailId());
                                 product = db.GetProductWithProductId(productDetail.getProductId());
-                                if (promotion.getIsAllGood() == 1 || db.isInEntity(product.getProductCode(), promotion.getPromotionId(), Promotion.EntityGoods) || db.isInEntity(product.getProductCategoryId(), promotion.getPromotionId(), Promotion.EntityGroupGoods)) {
+                                ProductGroup productGroup = db.getGroup(product.getProductGroupId());
+                                if (promotion.getIsAllGood() == 1 || db.isInEntity(product.getProductCode(), promotion.getPromotionId(), Promotion.EntityGoods) || db.isInEntity(productGroup.getProductGroupCode(), promotion.getPromotionId(), Promotion.EntityGroupGoods)) {
                                     arrayPromotionDetail = db.getPromotionDetails(promotion.getPromotionCode(), orderDetail.getSumCountBaJoz());
                                     if (arrayPromotionDetail.size() > 0) {
                                         switch (arrayPromotionDetail.get(0).getHowToPromotion()) {
@@ -1607,7 +1608,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
 
     private void wholeFactorPercentDiscount(double mpercentDiscount, int mPromoCode) {
         if (mpercentDiscount != 0) {
-            promoPercentDiscount = (roundDouble(mpercentDiscount));
+            promoPercentDiscount = (mpercentDiscount);
             orderPromotionCode = mPromoCode;
             orderGiftType = Promotion.Takhfif_Kole_Sefaresh;
             txtDiscountPercent.requestFocus();
