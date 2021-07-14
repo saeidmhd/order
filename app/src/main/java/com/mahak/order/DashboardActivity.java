@@ -507,7 +507,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnNavOrderList = (Button) findViewById(R.id.btnNavOrderList);
         btnNavOrderList.setCompoundDrawables(null, null, new IconicsDrawable(mContext, FontAwesome.Icon.faw_file).color(Color.WHITE).sizeDp(30), null);
         btnNavInvoiceList = (Button) findViewById(R.id.btnNavInvoiceList);
-        btnNavInvoiceList.setCompoundDrawables(null, null, new IconicsDrawable(mContext, FontAwesome.Icon.faw_file_alt2).color(Color.WHITE).sizeDp(30), null);
+        btnNavInvoiceList.setCompoundDrawables(null, null, new IconicsDrawable(mContext, FontAwesome.Icon.faw_file).color(Color.WHITE).sizeDp(30), null);
         btnNavDataSync = (Button) findViewById(R.id.btnNavDataSync);
         btnNavDataSync.setCompoundDrawables(null, null, new IconicsDrawable(mContext, Ionicons.Icon.ion_android_sync).color(Color.WHITE).sizeDp(30), null);
         btnNavContact = (Button) findViewById(R.id.btnNavContact);
