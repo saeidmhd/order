@@ -128,8 +128,12 @@ dependencies {
     implementation project(path: ':Rahyab_Hybrid_CPSDK_1.0.15')
 
     implementation 'com.microsoft.signalr:signalr:3.0.0'
-    implementation 'com.google.firebase:firebase-inappmessaging-display:19.1.5'
-    implementation 'com.google.firebase:firebase-messaging:21.1.0'
+
+    implementation "androidx.multidex:multidex:2.0.1"
+
+
+    implementation 'com.google.firebase:firebase-inappmessaging-display:20.0.0'
+    implementation 'com.google.firebase:firebase-messaging:22.0.0'
 
     implementation "androidx.multidex:multidex:2.0.1"
 
