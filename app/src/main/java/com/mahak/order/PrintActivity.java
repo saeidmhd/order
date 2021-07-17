@@ -491,8 +491,8 @@ public class PrintActivity extends BaseActivity {
     }//end of onCreate
 
     private void SetImageBitmap() {
-        //int w = (bPrint.getHeight() * 570) / bPrint.getWidth();
-        bPrint = publicclass.getResizedBitmap(bPrint, 570, bPrint.getHeight());
+        int height = (bPrint.getHeight() * 570) / bPrint.getWidth();
+        bPrint = publicclass.getResizedBitmap(bPrint, 570, height );
     }
 
 
