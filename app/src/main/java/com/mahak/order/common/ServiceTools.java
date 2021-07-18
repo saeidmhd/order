@@ -19,6 +19,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
@@ -30,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
 
 import androidx.core.content.FileProvider;
 
@@ -72,6 +74,8 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
@@ -526,17 +530,11 @@ public class ServiceTools {
         }
 
         int totalHeight = 0;
-
         if(listAdapter.getCount()>0){
             View listItem = listAdapter.getView(0, null, listView);
             listItem.measure(0, 0);
             totalHeight += listItem.getMeasuredHeight() * listAdapter.getCount();
         }
-        /*for (int i = 0; i < listAdapter.getCount(); i++) {
-            View listItem = listAdapter.getView(i, null, listView);
-            listItem.measure(0, 0);
-            totalHeight += listItem.getMeasuredHeight();
-        }*/
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
@@ -888,11 +886,20 @@ public class ServiceTools {
         return true;
     }
 
+
     public static boolean checkDate2(long serverTime) {
-        DateTime nowTehran = new DateTime(DateTimeZone.forID("Asia/Tehran"));
-        long lTehran = nowTehran.getMillis();
-        long diff = lTehran - serverTime;
-        return diff <= 780000 && diff >= -780000;
+        /*ZoneId zoneId = ZoneId.of("Asia/Tehran");
+        LocalDateTime dt = LocalDateTime.now();*/
+        DateTime nowTehran = null;
+        try {
+            nowTehran = new DateTime(DateTimeZone.forID("Asia/Tehran"));
+            long lTehran = nowTehran.getMillis();
+            long diff = lTehran - serverTime;
+            return diff <= 780000 && diff >= -780000;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 
@@ -1835,5 +1842,13 @@ FirebaseCrashlytics.getInstance().recordException(e);
             result = str.substring(0, str.length() - 5);
         }
         return result;
+    }
+
+    public static String formattedDate(long date) {
+        Date today = new Date();
+        today.setTime(date);
+        String pattern = "yyyy-MM-dd'T'HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
+        return simpleDateFormat.format(today);
     }
 }

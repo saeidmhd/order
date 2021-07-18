@@ -2,22 +2,29 @@ package com.mahak.order;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -61,25 +68,32 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.maps.android.PolyUtil;
 import com.mahak.order.common.CheckList;
 import com.mahak.order.common.Customer;
-import com.mahak.order.common.GPSTracker;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
-import com.mahak.order.common.SharedPreferencesHelper;
 import com.mahak.order.common.User;
-import com.mahak.order.gpsTracking.GpsTracking;
+import com.mahak.order.tracking.LocationService;
+import com.mahak.order.tracking.MapPolygon;
+import com.mahak.order.tracking.ShowPersonCluster;
+import com.mahak.order.tracking.TrackingConfig;
+import com.mahak.order.tracking.Utils;
 import com.mahak.order.service.ReadOfflinePicturesProducts;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.widget.FontAlertDialog;
+import com.mahak.order.widget.FontProgressDialog;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class DashboardActivity extends BaseActivity implements View.OnClickListener, GoogleMap.OnMarkerClickListener,
@@ -87,7 +101,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
     private static final int REQUEST_CUSTOMER_LIST = 2;
     private static int REQUEST_DATASYNC = 1;
-    private Context mContext;
+    private static Context mContext;
     private Activity mActivity;
     private DrawerLayout mDrawerLayout;
     private RelativeLayout mDrawerLeft;
@@ -96,6 +110,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     private static final int ACCESS_FINE_LOCATION = 113;
     private static final int ACCESS_COARSE_LOCATION = 114;
     private static final int REQUEST_WRITE_STORAGE = 115;
+    private boolean inZone = false;
     //nav buttons
     private Button
             btnNavProductList,
@@ -137,8 +152,9 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             tvSumOfChargeAndTaxOrder,
             tvSumOffChargeAndTaxInvoice,
             tvVersion,
-            tvSumOfTransference,
-            tvTrackingService;
+            tvSumOfTransference;
+    public static TextView tvTrackingService;
+
 
     private ListView lstCheckList;
 
@@ -165,17 +181,18 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
     private String TrackingState = "";
 
+    private static MapPolygon mapPolygon;
+
     //------------GCM------------
     String SENDER_ID = "779811760050";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private static final String TAG = "MainActivity";
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private boolean isReceiverRegistered;
     private PolylineOptions polylineOptions;
     private Marker marker;
     private Polyline polyline;
-    private GpsTracking gpsTracking;
-    private SwitchCompat btnTrackingService;
+    private LocationService locationService;
+    public static SwitchCompat btnTrackingService;
     private Menu menu;
     private int CustomerId;
     private long CustomerClientId;
@@ -183,24 +200,53 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     private boolean ACCESS_COARSE_LOCATION_Permission;
     private boolean ACCESS_FINE_LOCATION_Permission;
     private boolean hasWritePermission;
-    private AsynCustomer asyncustomer;
     SupportMapFragment mapFragment;
+    private static final int REQUEST_Location_ON = 1200;
 
-    int CountCustomer;
-    int CountProduct;
-    int CountOrder;
-    int CountInvoice;
-    int CountDeliverOrder;
-    int CountReceipt;
-    int CountPayable;
-    int CountReturnOfSales;
-    int CountNonRegisters;
-    int CountPromotion;
+
+    private static final String TAG = DashboardActivity.class.getSimpleName();
+
+    // Used in checking for runtime permissions.
+    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+
+    // A reference to the service used to get location updates.
+
+    // Tracks the bound state of the service.
+    private boolean mBound = false;
+
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            LocationService.LocalBinder binder = (LocationService.LocalBinder) service;
+            locationService = binder.getService(mContext , DashboardActivity.this);
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            locationService = null;
+            mBound = false;
+        }
+    };
+    private boolean isServiceRun = false;
+    private List<LatLng> latLngpoints = new ArrayList<>();
+    private FontProgressDialog pd;
+    private static LatLng lastPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        registerReceiverToCheckGpsOnOff();
+
         setContentView(R.layout.activity_dashboard);
+
+        if (Utils.requestingLocationUpdates(this)) {
+            if (!checkPermissions()) {
+                requestPermissions();
+            }
+        }
 
         ACCESS_COARSE_LOCATION_Permission = (ContextCompat.checkSelfPermission(DashboardActivity.this,
                 Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED);
@@ -240,9 +286,32 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         mContext = this;
         mActivity = this;
 
-        init();
+        initUI();
 
         update();
+
+        isServiceRun = isMyServiceRunning(LocationService.class);
+
+        if(!isServiceRun){
+            btnTrackingService.setChecked(false);
+            long masterUserId = BaseActivity.getPrefUserMasterId(mContext);
+            ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking + masterUserId, "0");
+        }
+
+        btnTrackingService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (locationService == null) locationService = new LocationService(mContext,DashboardActivity.this);
+                if (locationService.isRunService()) {
+                    locationService.stopTracking();
+                    locationService.stopNotificationServiceTracking();
+                    btnTrackingService.setChecked(false);
+
+                } else {
+                    startTracking();
+                }
+            }
+        });
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name, R.string.app_name) {
 
@@ -258,8 +327,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
-
-        //getCountForShowInDrawer();
 
         FillView();
         User user = db.getUser();
@@ -282,13 +349,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (isChecked && BaseActivity.getPrefAdminControl(mContext) == 0) {
-                    tvTrackingService.setText(R.string.tracking_system_is_active);
-                    suggestEnableGps();
-                } else if (!isChecked && BaseActivity.getPrefAdminControl(mContext) == 0) {
-                    tvTrackingService.setText(R.string.tracking_system_is_disabled);
-                }
-
+                setTackingServiceText(isChecked);
             }
         });
         new ReadOfflinePicturesProducts(this).readAllImages();
@@ -312,7 +373,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
             @Override
             public void onClick(View v) {
-                InvoiceDetailActivity.orderDetails.clear();
                 if (mDrawerLayout.isDrawerOpen(mDrawerLeft))
                     mDrawerLayout.closeDrawers();
                 Type = ProjectInfo.TYPE_ORDER;
@@ -337,28 +397,27 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         });
         btnAddNewInvoice.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                InvoiceDetailActivity.orderDetails.clear();
                 if (mDrawerLayout.isDrawerOpen(mDrawerLeft))
                     mDrawerLayout.closeDrawers();
-                Type = ProjectInfo.TYPE_INVOCIE;
-                Intent intent = new Intent(mContext, PeopleListActivity.class);
-                intent.putExtra(PAGE, PAGE_ADD_INVOICE);
-                startActivityForResult(intent, REQUEST_CUSTOMER_LIST);
+                if(CanRegisterInvoiceOutOfZone()){
+                    Type = ProjectInfo.TYPE_INVOCIE;
+                    Intent intent = new Intent(mContext, PeopleListActivity.class);
+                    intent.putExtra(PAGE, PAGE_ADD_INVOICE);
+                    startActivityForResult(intent, REQUEST_CUSTOMER_LIST);
+                }else {
+                    Toast.makeText(mContext, "خارج از منطقه یا خاموش بودن سامانه ردیابی ! امکان ثبت فاکتور وجود ندارد.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         btnZoomMapView.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(mContext, MapViewActivity.class);
                 intent.putParcelableArrayListExtra(COORDINATE, positions);
                 intent.putParcelableArrayListExtra(CustomerPositions, customerPositions);
                 startActivity(intent);
-
             }
         });
 
@@ -419,8 +478,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
             }
         });
-
-
         //on receive message from google gcm
         MyGcmListenerService.receiveMessag = new View.OnClickListener() {
             @Override
@@ -432,19 +489,227 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                             showBadgeNotification(menu);
                         }
                     });
-
                 }
             }
         };
-
-
     }//end of onCreate
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    public void update (){
+
+        if (db == null)
+            db = new DbAdapter(this);
+
+        db.open();
+
+        double TotalOrder = db.getTotalPriceOrder();
+        double TotalInvoice = db.getTotalPriceInvoice();
+        double TotalReceiveTransfer = db.getTotalReceiveTransfer();
+        double TotalReceipt = db.getTotalPriceReceipt();
+        double TotalCash = db.getTotalCashAmountReceipt();
+        double TotalCheque = db.getTotalChequeReceipt();
+        double TotalCashReceipt = db.getTotalCashReceipt();
+        double TotalDiscountOrder = db.getTotalDiscountOrder();
+        double TotalDiscountInvoice = db.getTotalDiscountInvoice();
+        double TotalChargeAndTaxOrder = db.getTotalChargeAndTaxOrder();
+        double TotalChargeAndTaxInvoice = db.getTotalChargeAndTaxInvoice();
+        double TotalPureOrder = db.getPurePriceOrder();
+        double TotalPureInvoice = db.getPurePriceInvoice();
+
+        tvSumOfOrders.setText(ServiceTools.formatPrice(TotalOrder));
+        tvSumOfOrders.setSelected(true);
+        tvSumOfInvoices.setText(ServiceTools.formatPrice(TotalInvoice));
+        tvSumOfInvoices.setSelected(true);
+        tvSumOfTransference.setText(ServiceTools.formatPrice(TotalReceiveTransfer));
+        tvSumOfTransference.setSelected(true);
+        tvSumOfReceipts.setText(ServiceTools.formatPrice((TotalReceipt)));
+        tvSumOfReceipts.setSelected(true);
+        tvSumOfCash.setText(ServiceTools.formatPrice(TotalCash));
+        tvSumOfCash.setSelected(true);
+        tvSumOfCheque.setText(ServiceTools.formatPrice(TotalCheque));
+        tvSumOfCheque.setSelected(true);
+        tvSumOfReceiptsAmount.setText(ServiceTools.formatPrice(TotalCashReceipt));
+        tvSumOfReceiptsAmount.setSelected(true);
+        tvSumOfDiscountOrder.setText(ServiceTools.formatPrice(TotalDiscountOrder));
+        tvSumOfDiscountOrder.setSelected(true);
+        tvSumOfDiscountInvoice.setText(ServiceTools.formatPrice(TotalDiscountInvoice));
+        tvSumOfDiscountInvoice.setSelected(true);
+        tvSumOfPureOrder.setText(ServiceTools.formatPrice(TotalPureOrder));
+        tvSumOfPureOrder.setSelected(true);
+        tvSumOfPureInvoice.setText(ServiceTools.formatPrice(TotalPureInvoice));
+        tvSumOfPureInvoice.setSelected(true);
+        tvSumOfChargeAndTaxOrder.setText(ServiceTools.formatPrice(TotalChargeAndTaxOrder));
+        tvSumOfChargeAndTaxOrder.setSelected(true);
+        tvSumOffChargeAndTaxInvoice.setText(ServiceTools.formatPrice(TotalChargeAndTaxInvoice));
+        tvSumOffChargeAndTaxInvoice.setSelected(true);
     }
 
+    public static void setTackingServiceText(boolean isChecked) {
+        if (isChecked) {
+            tvTrackingService.setText(R.string.tracking_system_is_active);
+        } else {
+            tvTrackingService.setText(R.string.tracking_system_is_disabled);
+        }
+        if (isChecked && BaseActivity.getPrefAdminControl(mContext)) {
+            tvTrackingService.setText(R.string.tracking_system_is_active_admin);
+        } else if (!isChecked && BaseActivity.getPrefAdminControl(mContext)) {
+            tvTrackingService.setText(R.string.tracking_system_is_disabled_admin);
+        }
+    }
+
+    public static boolean CanRegisterInvoiceOutOfZone() {
+        boolean canRegister = true;
+        String config = ServiceTools.getKeyFromSharedPreferences(mContext, ProjectInfo.pre_gps_config);
+        if (!ServiceTools.isNull(config)) {
+            try {
+                JSONObject obj = new JSONObject(config);
+                canRegister = obj.getBoolean(ProjectInfo._json_key_isRestricted);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(!canRegister)
+            if(mapPolygon != null){
+
+                return mapPolygon.checkPositionInZone(lastPosition);
+            }
+
+        return canRegister;
+    }
+
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setTrackingConfig();
+    }
+
+    private void registerReceiverToCheckGpsOnOff() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.location.PROVIDERS_CHANGED");
+        BroadcastReceiver receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().matches(LocationManager.PROVIDERS_CHANGED_ACTION)) {
+                    LocationManager service = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+                    if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
+                        boolean isGPSPROVIDEREnabled = service != null && service.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                        if (!isGPSPROVIDEREnabled) {
+                            long masterUserId = BaseActivity.getPrefUserMasterId(context);
+                            ServiceTools.setKeyInSharedPreferences(context, ProjectInfo.pre_is_tracking + masterUserId, "0");
+                            if (locationService == null) locationService = new LocationService(mContext, DashboardActivity.this);
+                            locationService.stopTracking();
+                            locationService.stopNotificationServiceTracking();
+                            btnTrackingService.setChecked(false);
+                        }
+                    }
+                }
+            }
+        };
+        this.getApplicationContext().registerReceiver(receiver, filter);
+    }
+
+
+    private boolean checkPermissions() {
+        return  PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+    }
+
+    private void requestPermissions() {
+        boolean shouldProvideRationale =
+                ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION);
+
+        // Provide an additional rationale to the user. This would happen if the user denied the
+        // request previously, but didn't check the "Don't ask again" checkbox.
+        if (shouldProvideRationale) {
+            Log.i(TAG, "Displaying permission rationale to provide additional context.");
+            Snackbar.make(
+                    findViewById(R.id.drawer_layout),
+                    R.string.permission_rationale,
+                    Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.ok, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // Request permission
+                            ActivityCompat.requestPermissions(DashboardActivity.this,
+                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                    REQUEST_PERMISSIONS_REQUEST_CODE);
+                        }
+                    })
+                    .show();
+        } else {
+            Log.i(TAG, "Requesting permission");
+            ActivityCompat.requestPermissions(DashboardActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_PERMISSIONS_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.i(TAG, "onRequestPermissionResult");
+        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
+            if (grantResults.length <= 0) {
+                // If user interaction was interrupted, the permission request is cancelled and you
+                // receive empty arrays.
+                Log.i(TAG, "User interaction was cancelled.");
+            } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission was granted.
+                locationService.startTracking();
+            } else {
+                btnTrackingService.setChecked(false);
+                Snackbar.make(
+                        findViewById(R.id.drawer_layout),
+                        R.string.permission_denied_explanation,
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction(R.string.settings, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // Build intent that displays the App settings screen.
+                                Intent intent = new Intent();
+                                intent.setAction(
+                                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package",
+                                        BuildConfig.APPLICATION_ID, null);
+                                intent.setData(uri);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
+            }
+        }
+    }
+
+    private void loadLastPoint() {
+        new loadingGpsLocation().execute();
+    }
+
+    private LatLng getLastPoint(){
+        LatLng latLng = null;
+        if(locationService != null){
+            JSONObject obj = locationService.getLastLocationJson(mContext);
+            if (obj != null) {
+                Location lastLocation = new Location("");
+                lastLocation.setLatitude(obj.optDouble(ProjectInfo._json_key_latitude));
+                lastLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_longitude));
+                latLng = new LatLng(lastLocation.getLatitude(),lastLocation.getLongitude());
+            }
+        }
+        return latLng;
+    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -454,12 +719,12 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     /**
      * Initializing Variables
      */
-    private void init() {
+    private void initUI() {
 
         db = new DbAdapter(mContext);
         db.open();
 
-        ServiceTools.setSettingPreferences(db, mContext);
+        loadLastPoint();
 
         mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
 
@@ -471,9 +736,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
         btnAddNewOrder = (Button) findViewById(R.id.btnAddNewOrder);
-        btnAddNewInvoice = (Button) findViewById(R.id.btnAddNewInvoice);
-
         btnAddNewReceipt = (Button) findViewById(R.id.btnAddNewReceipt);
+        btnAddNewInvoice = (Button) findViewById(R.id.btnAddNewInvoice);
         btnAddNewTransference = (Button) findViewById(R.id.btnAddNewTransference);
         btnZoomMapView = (ImageButton) findViewById(R.id.btnZoomMapView);
 
@@ -556,47 +820,24 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnNavPromotionList.setOnClickListener(this);
 
         btnTrackingService = (SwitchCompat) findViewById(R.id.btnTrackingService);
-        btnTrackingService.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!ACCESS_FINE_LOCATION_Permission) {
-                    ActivityCompat.requestPermissions(DashboardActivity.this,
-                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                            ACCESS_FINE_LOCATION);
-                }
-                if (gpsTracking == null) gpsTracking = new GpsTracking(mContext);
-                if (gpsTracking.isRunService()) {
-                    gpsTracking.stopTracking();
-                    gpsTracking.stopNotificationServiceTracking();
-                    btnTrackingService.setChecked(false);
-                    BaseActivity.setPrefTrackingControl(0);
-                } else {
-                    ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking_pause, "0");
-                    //gpsTrackingNewApi.setupSignalR(mContext);
-                    gpsTracking.startTracking();
-                    gpsTracking.showNotificationServiceRun();
-                    if (gpsTracking.isRunService()) {
-                        btnTrackingService.setChecked(true);
-                    } else {
-                        Toast.makeText(DashboardActivity.this, R.string.can_not_active_gps_tracking, Toast.LENGTH_SHORT).show();
-                        if (mTracker != null) {
-                            mTracker.send(new HitBuilders.ExceptionBuilder()
-                                    .setDescription("Can't Start GPS")
-                                    .setFatal(true)
-                                    .build());
-                        }
-                    }
-                }
-            }
-        });
 
 
         //Version/////////////////////////////////////////////////////
-        String version = ServiceTools.getVersionName(mContext);
-        tvVersion.setText(version);
-        //////////////////////////////////////////////////////////////
+        PackageInfo pInfo;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            String version = pInfo.versionName;
+            tvVersion.setText(version);
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }//end of init
+
+    private boolean checkIfInPolygon(LatLng position, List<LatLng> polygonPoints) {
+        return PolyUtil.containsLocation(position, polygonPoints, true);
+    }
+
 
     /**
      * Fill Adapter ShowCheckListArrayAdapter And Map
@@ -617,22 +858,20 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             } else {
                 customer = db.getCustomerWithPersonId(item.getPersonId());
                 if (customer != null) {
-
-                    item.setAddress(customer.getAddress());
                     item.setName(customer.getName());
                     item.setMarketName(customer.getOrganization());
+                    item.setAddress(customer.getAddress());
                     item.setLatitude(customer.getLatitude());
                     item.setLongitude(customer.getLongitude());
 
-                    double Latitude = ServiceTools.RegulartoDouble(customer.getLatitude());
-                    double Longitude = ServiceTools.RegulartoDouble(customer.getLongitude());
+                    double Latitude = customer.getLatitude();
+                    double Longitude = customer.getLongitude();
 
                     if (Latitude != 0 && Longitude != 0) {
-                        positions.add(new LatLng(ServiceTools.RegulartoDouble(customer.getLatitude()), ServiceTools.RegulartoDouble(customer.getLongitude())));
+                        positions.add(new LatLng(customer.getLatitude(), customer.getLongitude()));
                     }
                 }
             }
-
 
         }//End of for
 
@@ -650,174 +889,154 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 public void onMapReady(GoogleMap googleMap) {
                     if (googleMap != null)
                         mGoogleMap = googleMap;
+                    new ShowPersonCluster(mGoogleMap,mContext).showPeople();
+                    showCheckListPositon();
+                    mapPolygon = new MapPolygon(mGoogleMap,mContext);
+                    mapPolygon.showPolygon();
                     initMap();
+                    if(getLastPoint() != null)
+                        showMarkerOnMap(getLastPoint());
+
+                    if(polyline != null)
+                        polyline.setPoints(latLngpoints);
                 }
             });
         }
 
-        GpsTracking.addEventLocation(this.getLocalClassName(), new GpsTracking.EventLocation() {
+        LocationService.addEventLocation(this.getLocalClassName(), new LocationService.EventLocation() {
             @Override
-            public void onReceivePoint(final Location location) {
+            public void onReceivePoint(final Location location, boolean saveInDb) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (location == null) {
-                            if (gpsTracking == null)
-                                gpsTracking = new GpsTracking(getBaseContext());
-                            if (btnTrackingService != null)
-                                btnTrackingService.setChecked(gpsTracking.isRunService());
-                            return;
+                        if (locationService == null)
+                            locationService = new LocationService(getBaseContext(),DashboardActivity.this);
+                        if(location != null){
+                            lastPosition = new LatLng(location.getLatitude(), location.getLongitude());
+                            if(saveInDb)
+                                drawLineBetweenPoints(lastPosition);
+                            showMarkerOnMap(lastPosition);
                         }
-                        LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
-                        if (polyline != null) {
-                            List<LatLng> points = polyline.getPoints();
-                            points.add(position);
-                            polyline.setPoints(points);
-                        }
-                        if (marker != null) {
-                            marker.remove();
-                        }
-                        if (mGoogleMap != null) {
-                            marker = mGoogleMap.addMarker(new MarkerOptions().position(position));
-                            marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_visitor_3));
-                            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, mGoogleMap.getCameraPosition().zoom));
-                        }
-
                     }
                 });
             }
         });
-        /////////////////////////////////////////
+
+    }
+
+    private void showMarkerOnMap(LatLng position) {
+        if (marker != null) {
+            marker.remove();
+        }
+        if (mGoogleMap != null) {
+            if(position != null){
+                marker = mGoogleMap.addMarker(new MarkerOptions().position(position));
+                marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_visitor_3));
+                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(position.latitude, position.longitude), 15));
+            }
+        }
+    }
+
+    private void showCheckListPositon() {
         try {
             if (arrayChecklist.size() == 0)
                 positions.clear();
 
-            if (positions.size() == 0) {
-                GPSTracker gpsTracker = new GPSTracker(mContext);
-                double _Latitude, _Longitude;
-                if (gpsTracker.canGetLocation()) {
-                    _Latitude = gpsTracker.getLatitude();
-                    _Longitude = gpsTracker.getLongitude();
-                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(_Latitude, _Longitude), 10));
-                } else {
-                    if (SharedPreferencesHelper.getCurrentLanguage(mContext).equals("en"))
-                        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(ProjectInfo.DEFAULT_LATITUDE, ProjectInfo.DEFAULT_LONGITUDE), 8));
-                    else if (SharedPreferencesHelper.getCurrentLanguage(mContext).equals("de_DE")) {
-                        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(ProjectInfo.DEFAULT_LATITUDE_DE, ProjectInfo.DEFAULT_LONGITUDE_DE), 8));
-                    }
-                }
-            } else {
-                //setMapPoints(positions);
+            if (positions.size() != 0) {
                 for (int i = 0; i < positions.size(); i++) {
-                    if (arrayChecklist.get(i).getName() != null)
-                        mGoogleMap.addMarker(new MarkerOptions().position(positions.get(i)).title(arrayChecklist.get(i).getName()));
+                    mGoogleMap.addMarker(new MarkerOptions().position(positions.get(i)).title(arrayChecklist.get(i).getName()));
                 }
-                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(positions.get(positions.size() - 1), 14));
             }
+
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(positions.get(positions.size() - 1), 14));
+
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-            FirebaseCrashlytics.getInstance().recordException(e);
 
         }
-        /////////////////////////////////////////
-
-        //Fill btnNav___________________________________________________________________________
-
     }
 
-    public class AsynCustomer extends AsyncTask<String, String, Boolean> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+    private void drawLineBetweenPoints(LatLng position) {
+        if (polyline != null) {
+            List<LatLng> points = polyline.getPoints();
+            points.add(position);
+            polyline.setPoints(points);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        bindService(new Intent(this, LocationService.class), mServiceConnection,
+                Context.BIND_AUTO_CREATE);
+
+        setButtonsState(Utils.requestingLocationUpdates(this));
+    }
+
+    private void setButtonsState(boolean requestingLocationUpdates) {
+        btnTrackingService.setChecked(requestingLocationUpdates);
+    }
+
+    class loadingGpsLocation extends AsyncTask<String, String, Boolean> {
 
         @Override
-        protected Boolean doInBackground(String... arg0) {
-            customers = db.getAllOfCustomer();
+        protected Boolean doInBackground(String... strings) {
+            if (db == null) db = new DbAdapter(mContext);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            long userId = BaseActivity.getPrefUserMasterId(mContext);
+            db.open();
+            latLngpoints = db.getAllLatLngPointsFromDate(calendar.getTimeInMillis(), userId);
             return true;
         }
 
         @Override
-        protected void onPostExecute(Boolean result) {
-
-            addMarkerToMap();
-
-            super.onPostExecute(result);
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if(polyline != null)
+                polyline.setPoints(latLngpoints);
+            showMarkerOnMap(getLastPoint());
         }
     }
 
-    private void addMarkerToMap() {
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(googleMap -> {
-                if (googleMap != null)
-                    mGoogleMap = googleMap;
-
-                // Add Customer markers to the map.
-                addCustomerMarkersToMap();
-
-                // Set listener for marker click event.  See the bottom of this class for its behavior.
-                mGoogleMap.setOnMarkerClickListener(DashboardActivity.this);
-
-                // Set listener for map click event.  See the bottom of this class for its behavior.
-                mGoogleMap.setOnMapClickListener(DashboardActivity.this);
-
-                // Override the default content description on the view, for accessibility mode.
-                // Ideally this string would be localized.
-                googleMap.setContentDescription("");
-
-               /* LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                for (LatLng latLng : customerPositions){
-                    builder.include(latLng);
-                }
-                LatLngBounds bounds = builder.build();
-
-                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));*/
-
-                initMap();
-            });
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mBound) {
+            unbindService(mServiceConnection);
+            mBound = false;
         }
     }
 
-    private void addCustomerMarkersToMap() {
 
-        mGoogleMap.clear();
-
-        for (Customer customer : customers) {
-
-            if (customer.getOrderCount() > 0) {
-                mGoogleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(ServiceTools.RegulartoDouble(customer.getLatitude()), ServiceTools.RegulartoDouble(customer.getLongitude())))
-                        .title(customer.getName())
-                        .snippet(getString(R.string.order_has_been_registered))
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-            } else {
-                mGoogleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(ServiceTools.RegulartoDouble(customer.getLatitude()), ServiceTools.RegulartoDouble(customer.getLongitude())))
-                        .title(customer.getName())
-                        .snippet(getString(R.string.order_has_not_been_registered))
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            }
-        }
-
+    private void initMap() {
+        if (polyline != null)
+            polyline.remove();
+        PolylineOptions polylineOptions = new PolylineOptions();
+        polylineOptions.width(2);
+        polylineOptions.color(Color.RED);
+        polylineOptions.visible(true);
+        polyline = mGoogleMap.addPolyline(polylineOptions);
+        if (locationService == null)
+            locationService = new LocationService(getBaseContext(),DashboardActivity.this);
     }
+
 
     private void refreshCountInformation() {
         if (btnNavCustomerList == null)
             return;
 
-        CountCustomer = db.getTotalCountPeople();
-        CountProduct = db.getTotalCountProduct();
-        CountOrder = db.getTotalCountOrder();
-        CountInvoice = db.getTotalCountInvoice();
-        CountDeliverOrder = db.getTotalCountDeliveryOrder();
-        CountReceipt = db.getTotalCountReceipt();
-        CountPayable = db.getTotalCountPayable();
-        CountReturnOfSales = db.getTotalCountReturnOfSale();
-        CountNonRegisters = db.getTotalCountNonRegister();
-        CountPromotion = db.getTotalCountPromotion();
-
-        BaseActivity.setPrefProductCount(CountProduct);
-        BaseActivity.setPrefPersonCount(CountCustomer);
+        int CountCustomer = db.getTotalCountPeople();
+        int CountProduct = db.getTotalCountProduct();
+        int CountOrder = db.getTotalCountOrder();
+        int CountInvoice = db.getTotalCountInvoice();
+        int CountDeliverOrder = db.getTotalCountDeliveryOrder();
+        int CountReceipt = db.getTotalCountReceipt();
+        int CountPayable = db.getTotalCountPayable();
+        int CountReturnOfSales = db.getTotalCountReturnOfSale();
+        int CountNonRegisters = db.getTotalCountNonRegister();
+        int CountPromotion = db.getTotalCountPromotion();
 
 
         btnNavCustomerList.setText(getString(R.string.str_nav_customer_list) + "(" + CountCustomer + ")");
@@ -830,18 +1049,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnNavReturnOfSale.setText(getString(R.string.str_nav_returnOfSale_list) + "(" + CountReturnOfSales + ")");
         btnNavNonRegister.setText(getString(R.string.str_nav_nonRegister_list) + "(" + CountNonRegisters + ")");
         btnNavPromotionList.setText(getString(R.string.str_nav_promotion_list) + "(" + CountPromotion + ")");
-    }
-
-    private void initMap() {
-        if (polyline != null)
-            polyline.remove();
-        PolylineOptions polylineOptions = new PolylineOptions();
-        polylineOptions.width(2);
-        polylineOptions.color(Color.RED);
-        polylineOptions.visible(true);
-        polyline = mGoogleMap.addPolyline(polylineOptions);
-        gpsTracking = new GpsTracking(getBaseContext());
-        marker = gpsTracking.drawGoogleMap(mGoogleMap, marker, polyline);
     }
 
     @Override
@@ -862,7 +1069,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             case R.id.btnNavDataSync:
                 mDrawerLayout.closeDrawers();
                 intent = new Intent(getApplicationContext(), DataSyncActivityRestApi.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_DATASYNC);
                 break;
             case R.id.btnNavContact:
                 mDrawerLayout.closeDrawers();
@@ -963,11 +1170,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     public boolean onMarkerClick(Marker marker) {
         // The user has re-tapped on the marker which was already showing an info window.
         if (marker.equals(mSelectedMarker)) {
-            // The showing info window has already been closed - that's the first thing to happen
-            // when any marker is clicked.
-            // Return true to indicate we have consumed the event and that we do not want the
-            // the default behavior to occur (which is for the camera to move such that the
-            // marker is centered and for the marker's info window to open, if it has one).
             mSelectedMarker = null;
             return true;
         }
@@ -1018,12 +1220,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
 
             void Populate(CheckList checklist, int position) {
-                if (checklist.getName() != null)
-                    tvName.setText(checklist.getName().trim());
-
-                if (checklist.getAddress() != null)
-                    tvAddress.setText(checklist.getAddress().trim());
-
+                tvName.setText(checklist.getName().trim());
+                tvAddress.setText(checklist.getAddress().trim());
                 if (checklist.getDescription() != null)
                     tvDescription.setText(checklist.getDescription().trim());
 
@@ -1138,6 +1336,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                         RefreshPreferenceUser();
                         Intent intent = new Intent(DashboardActivity.this, LoginActivityRestApi.class);
                         startActivity(intent);
+                        setPrefSignalUserToken("");
                         dialog.dismiss();
                         finish();
                     }
@@ -1179,8 +1378,9 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     public void onClick(DialogInterface dialog, int which) {
 
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                        Intent intent = new Intent(getApplicationContext(), DataSyncActivityRestApi.class);
-                        startActivity(intent);
+                        Intent intent = new Intent(getApplicationContext(),DataSyncActivityRestApi.class);
+                        startActivityForResult(intent, REQUEST_DATASYNC);
+
                         dialog.dismiss();
                     }
                 })
@@ -1198,132 +1398,48 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         return dialog;
     }
 
-    public void update (){
-
-        if (db == null)
-            db = new DbAdapter(this);
-
-        db.open();
-
-        double TotalOrder = db.getTotalPriceOrder();
-        double TotalInvoice = db.getTotalPriceInvoice();
-        double TotalReceiveTransfer = db.getTotalReceiveTransfer();
-        double TotalReceipt = db.getTotalPriceReceipt();
-        double TotalCash = db.getTotalCashAmountReceipt();
-        double TotalCheque = db.getTotalChequeReceipt();
-        double TotalCashReceipt = db.getTotalCashReceipt();
-        double TotalDiscountOrder = db.getTotalDiscountOrder();
-        double TotalDiscountInvoice = db.getTotalDiscountInvoice();
-        double TotalChargeAndTaxOrder = db.getTotalChargeAndTaxOrder();
-        double TotalChargeAndTaxInvoice = db.getTotalChargeAndTaxInvoice();
-        double TotalPureOrder = db.getPurePriceOrder();
-        double TotalPureInvoice = db.getPurePriceInvoice();
-
-        tvSumOfOrders.setText(ServiceTools.formatPrice(TotalOrder));
-        tvSumOfOrders.setSelected(true);
-        tvSumOfInvoices.setText(ServiceTools.formatPrice(TotalInvoice));
-        tvSumOfInvoices.setSelected(true);
-        tvSumOfTransference.setText(ServiceTools.formatPrice(TotalReceiveTransfer));
-        tvSumOfTransference.setSelected(true);
-        tvSumOfReceipts.setText(ServiceTools.formatPrice((TotalReceipt)));
-        tvSumOfReceipts.setSelected(true);
-        tvSumOfCash.setText(ServiceTools.formatPrice(TotalCash));
-        tvSumOfCash.setSelected(true);
-        tvSumOfCheque.setText(ServiceTools.formatPrice(TotalCheque));
-        tvSumOfCheque.setSelected(true);
-        tvSumOfReceiptsAmount.setText(ServiceTools.formatPrice(TotalCashReceipt));
-        tvSumOfReceiptsAmount.setSelected(true);
-        tvSumOfDiscountOrder.setText(ServiceTools.formatPrice(TotalDiscountOrder));
-        tvSumOfDiscountOrder.setSelected(true);
-        tvSumOfDiscountInvoice.setText(ServiceTools.formatPrice(TotalDiscountInvoice));
-        tvSumOfDiscountInvoice.setSelected(true);
-        tvSumOfPureOrder.setText(ServiceTools.formatPrice(TotalPureOrder));
-        tvSumOfPureOrder.setSelected(true);
-        tvSumOfPureInvoice.setText(ServiceTools.formatPrice(TotalPureInvoice));
-        tvSumOfPureInvoice.setSelected(true);
-        tvSumOfChargeAndTaxOrder.setText(ServiceTools.formatPrice(TotalChargeAndTaxOrder));
-        tvSumOfChargeAndTaxOrder.setSelected(true);
-        tvSumOffChargeAndTaxInvoice.setText(ServiceTools.formatPrice(TotalChargeAndTaxInvoice));
-        tvSumOffChargeAndTaxInvoice.setSelected(true);
+    private boolean checkServiceLocationIsRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
-   /* @Override
-    protected void onResume() {
+    public void setTrackingConfig() {
+        btnTrackingService.setEnabled(!BaseActivity.getPrefAdminControl(mContext));
+        if(BaseActivity.getPrefTrackingControl(mContext) == 1)
+            startTracking();
+    }
 
-        if (db == null)
-            db = new DbAdapter(this);
-
-        db.open();
-
-
-        if (!ACCESS_FINE_LOCATION_Permission) {
-            ActivityCompat.requestPermissions(DashboardActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    ACCESS_FINE_LOCATION);
-        }
-
-        if (!ACCESS_COARSE_LOCATION_Permission) {
-            ActivityCompat.requestPermissions(DashboardActivity.this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    ACCESS_COARSE_LOCATION);
-        }
-
-        invalidateOptionsMenu();
-
-        refreshCountInformation();
-
-
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        if (mGoogleMap != null)
-            initMap();
-
-        if (gpsTracking == null) gpsTracking = new GpsTracking(this);
-        if (gpsTracking.isRunService()) {
-            btnTrackingService.setChecked(true);
-            gpsTracking.showNotificationServiceRun();
+    private void startTracking() {
+        if (!checkPermissions()) {
+            requestPermissions();
         } else {
-            btnTrackingService.setChecked(false);
-            gpsTracking.stopNotificationServiceTracking();
+            if (locationService == null) locationService = new LocationService(mContext,DashboardActivity.this);
+            ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking_pause, "0");
+            locationService.startTracking();
+            if (locationService.isRunService()) {
+                btnTrackingService.setChecked(true);
+            } else {
+                Toast.makeText(DashboardActivity.this, R.string.can_not_active_gps_tracking, Toast.LENGTH_SHORT).show();
+                if (mTracker != null) {
+                    mTracker.send(new HitBuilders.ExceptionBuilder()
+                            .setDescription("Can't Start GPS")
+                            .setFatal(true)
+                            .build());
+                }
+            }
         }
-
-        getTrackingconfig();
-
-        if (btnTrackingService.isChecked() && BaseActivity.getPrefAdminControl(mContext) == 1) {
-
-            tvTrackingService.setText(R.string.tracking_system_is_active_admin);
-            forceEnableGps();
-
-        } else if (!btnTrackingService.isChecked() && BaseActivity.getPrefAdminControl(mContext) == 1) {
-            tvTrackingService.setText(R.string.tracking_system_is_disabled_admin);
-        }
-
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        *//*asyncustomer = new AsynCustomer();
-        asyncustomer.execute();*//*
-
-
-        super.onResume();
-
-        //----------GCM------------
-        registerReceiver();
-    }*/
-
+    }
 
     private void forceEnableGps() {
         LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
         boolean isGPSPROVIDEREnabled = service != null && service.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (!isGPSPROVIDEREnabled) {
             buildAlertMessageNoGps();
-        }
-    }
-
-    private void suggestEnableGps() {
-        LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
-        boolean isGPSPROVIDEREnabled = service != null && service.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        boolean isNetworkEnabled = service != null && service.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        if (!isGPSPROVIDEREnabled && !isNetworkEnabled) {
-            buildAlertSuggestGpsEnable();
         }
     }
 
@@ -1370,66 +1486,36 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         alert.show();
     }
 
-    private void getTrackingconfig() {
-
-        if (BaseActivity.getPrefAdminControl(mContext) == 1 && BaseActivity.getPrefTrackingControl(mContext) == 1) {
-
-            if (gpsTracking == null) gpsTracking = new GpsTracking(mContext);
-            ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking_pause, "0");
-            gpsTracking.startTracking();
-            gpsTracking.showNotificationServiceRun();
-            if (gpsTracking.isRunService()) {
-                btnTrackingService.setChecked(true);
-            } else {
-                Toast.makeText(DashboardActivity.this, R.string.can_not_active_gps_tracking, Toast.LENGTH_SHORT).show();
-                if (mTracker != null) {
-                    mTracker.send(new HitBuilders.ExceptionBuilder()
-                            .setDescription("Can't Start GPS")
-                            .setFatal(true)
-                            .build());
-                }
-            }
-            btnTrackingService.setEnabled(false);
-        } else if (BaseActivity.getPrefAdminControl(mContext) == 1 && BaseActivity.getPrefTrackingControl(mContext) == 0) {
-
-            if (gpsTracking.isRunService()) {
-                gpsTracking.stopTracking();
-                gpsTracking.stopNotificationServiceTracking();
-                btnTrackingService.setChecked(false);
-            }
-            btnTrackingService.setEnabled(false);
-
-
-        } else if (BaseActivity.getPrefAdminControl(mContext) == 0 && BaseActivity.getPrefTrackingControl(mContext) == 1) {
-            if (gpsTracking == null) gpsTracking = new GpsTracking(mContext);
-            ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking_pause, "0");
-            gpsTracking.startTracking();
-            gpsTracking.showNotificationServiceRun();
-            if (gpsTracking.isRunService()) {
-                btnTrackingService.setChecked(true);
-            } else {
-                Toast.makeText(DashboardActivity.this, R.string.can_not_active_gps_tracking, Toast.LENGTH_SHORT).show();
-                if (mTracker != null) {
-                    mTracker.send(new HitBuilders.ExceptionBuilder()
-                            .setDescription("Can't Start GPS")
-                            .setFatal(true)
-                            .build());
-                }
-            }
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (resultCode == RESULT_OK) {
-
-            if (requestCode == REQUEST_CUSTOMER_LIST) {
-
+        if (requestCode == REQUEST_Location_ON) {
+            if(resultCode != RESULT_OK){
+                if (locationService.isRunService()) {
+                    locationService.stopTracking();
+                    locationService.stopNotificationServiceTracking();
+                    btnTrackingService.setChecked(false);
+                }
+            }else {
+                if (!checkPermissions()) {
+                    requestPermissions();
+                } else {
+                    if (locationService.isRunService()) {
+                        ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking_pause, "0");
+                        locationService.startTracking();
+                    }
+                }
+            }
+        }else if (requestCode == REQUEST_DATASYNC) {
+            if(resultCode == RESULT_OK){
+                FillView();
+            }
+        } else if (requestCode == REQUEST_CUSTOMER_LIST) {
+            if(resultCode == RESULT_OK){
                 CustomerId = data.getIntExtra(CUSTOMERID_KEY, 0);
                 CustomerClientId = data.getLongExtra(CUSTOMER_CLIENT_ID_KEY, 0);
                 Type = data.getIntExtra(TYPE_KEY, 0);
-                GroupId = data.getLongExtra(CUSTOMER_GROUP_KEY, 0);
+                GroupId = data.getLongExtra("GroupId", 0);
 
                 if (Type == ProjectInfo.TYPE_INVOCIE) {
                     Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
@@ -1453,7 +1539,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_SEND_TRANSFERENCE);
                     intent.putExtra(MODE_PAGE, MODE_NEW);
                     intent.putExtra(CUSTOMERID_KEY, CustomerId);
-                    intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
+                    intent.putExtra("GroupId", GroupId);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(getApplicationContext(), ManageReceiptActivity.class);
@@ -1464,7 +1550,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     intent.putExtra(MODE_PAGE, MODE_NEW);
                     startActivity(intent);
                 }
-
             }
         }
 
@@ -1504,8 +1589,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void onDestroy() {
-        GpsTracking.removeEventLocation(this.getLocalClassName());
+        LocationService.removeEventLocation(this.getLocalClassName());
         super.onDestroy();
     }
-
 }

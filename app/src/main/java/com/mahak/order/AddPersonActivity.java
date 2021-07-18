@@ -359,8 +359,8 @@ public class AddPersonActivity extends BaseActivity {
             txtTell.setText(customer.getTell());
             txtMobile.setText(customer.getMobile());
 
-            txtLatitude.setText(customer.getLatitude());
-            txtLongitude.setText(customer.getLongitude());
+            txtLatitude.setText(String.valueOf(customer.getLatitude()));
+            txtLongitude.setText(String.valueOf(customer.getLongitude()));
 
             //set selection spnCustomerGroup
             for (int i = 0; i < arrayCustomerGroup.size(); i++) {
@@ -410,8 +410,8 @@ public class AddPersonActivity extends BaseActivity {
         customer.setMobile(txtMobile.getText().toString());
         customer.setTell(txtTell.getText().toString());
         customer.setAddress(replaceWithEnglish(txtAddress.getText().toString()));
-        customer.setLatitude(txtLatitude.getText().toString());
-        customer.setLongitude(txtLongitude.getText().toString());
+        customer.setLatitude(ServiceTools.toDouble(txtLatitude.getText().toString()));
+        customer.setLongitude(ServiceTools.toDouble(txtLongitude.getText().toString()));
         customer.setCredit(0);
         customer.setBalance(0);
         customer.setUserId(BaseActivity.getPrefUserId());

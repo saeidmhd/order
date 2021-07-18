@@ -420,8 +420,8 @@ public class ManageCustomerActivity extends BaseActivity {
             txtTell.setText(customer.getMobile());
 
             txtShift.setText(customer.getShift());
-            txtLatitude.setText(customer.getLatitude());
-            txtLongitude.setText(customer.getLongitude());
+            txtLatitude.setText(String.valueOf(customer.getLatitude()));
+            txtLongitude.setText(String.valueOf(customer.getLongitude()));
 
             double amount = customer.getBalance();
             if (amount == 0) {
@@ -503,8 +503,8 @@ public class ManageCustomerActivity extends BaseActivity {
         customer.setTell(txtTell.getText().toString());
         customer.setAddress(txtAddress.getText().toString());
         customer.setShift(txtShift.getText().toString());
-        customer.setLatitude(txtLatitude.getText().toString());
-        customer.setLongitude(txtLongitude.getText().toString());
+        customer.setLatitude(ServiceTools.toDouble(txtLatitude.getText().toString()));
+        customer.setLongitude(ServiceTools.toDouble(txtLongitude.getText().toString()));
         customer.setRowVersion(0);
 
         if (Mode == MODE_NEW)

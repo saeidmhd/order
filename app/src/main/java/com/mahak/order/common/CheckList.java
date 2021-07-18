@@ -30,8 +30,8 @@ public class CheckList {
     private String Name;
     private String MarketName;
     private String Address;
-    private String Latitude;
-    private String Longitude;
+    private double Latitude;
+    private double Longitude;
 
     @SerializedName("PersonId")
     @Expose
@@ -99,8 +99,8 @@ public class CheckList {
         this.setName("");
         this.setMarketName("");
         this.setAddress("");
-        this.setLatitude("0");
-        this.setLongitude("0");
+        this.setLatitude(0);
+        this.setLongitude(0);
         this.setDescription("");
         this.setModifyDate(0);
         this.setPublish(ProjectInfo.DONT_PUBLISH);
@@ -208,19 +208,19 @@ public class CheckList {
         Address = address;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return Latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         Latitude = latitude;
     }
 
-    public String getLongitude() {
+    public double getLongitude() {
         return Longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         Longitude = longitude;
     }
 

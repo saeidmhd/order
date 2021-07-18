@@ -95,7 +95,7 @@
         android:visibility="gone">
 
         <FrameLayout
-            android:id="@+android:id/custom"
+            android:id="@+id/custom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </FrameLayout>

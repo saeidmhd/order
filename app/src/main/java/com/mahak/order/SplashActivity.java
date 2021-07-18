@@ -17,10 +17,8 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.SharedPreferencesHelper;
-import com.mahak.order.gpsTracking.GpsTracking;
 import com.mahak.order.libs.ZipManager;
 import com.mahak.order.service.ReadOfflinePicturesProducts;
-import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.webService.RequestSender;
 import com.mahak.order.webService.RunInternetService;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -88,10 +86,6 @@ public class SplashActivity extends BaseActivity {
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(Calendar.HOUR_OF_DAY, 0);
                     calendar.set(Calendar.MINUTE, 0);
-                   /* DbAdapter dba = new DbAdapter(SplashActivity.this);
-                    dba.open();
-                    dba.DeleteGpsTrackingToDateSending(calendar.getTimeInMillis() - 1);
-                    dba.close();*/
                     RefreshPreferenceUser();
                     intent = new Intent(SplashActivity.this, LoginActivityRestApi.class);
                     startActivity(intent);
@@ -117,11 +111,6 @@ public class SplashActivity extends BaseActivity {
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(Calendar.HOUR_OF_DAY, 0);
                     calendar.set(Calendar.MINUTE, 0);
-                 /*   DbAdapter dba = new DbAdapter(SplashActivity.this);
-                    dba.open();
-                    dba.DeleteGpsTrackingToDateSending(calendar.getTimeInMillis() - 1);
-                    dba.close();*/
-
                     BaseActivity.RefreshPreferenceUser();
                     intent = new Intent(SplashActivity.this, LoginActivityRestApi.class);
                 }
@@ -160,34 +149,6 @@ public class SplashActivity extends BaseActivity {
         config.tasksProcessingOrder(QueueProcessingType.LIFO);
         config.writeDebugLogs(); // Remove for release app
         ImageLoader.getInstance().init(config.build());
-    }
-
-    public void getConfigGpsAndBanks() {
-
-        RequestSender.ResponseReceiver receiver = new RequestSender.ResponseReceiver() {
-            @Override
-            public void gotResponse(Object sender, StringBuffer result, StringBuffer cookies) {
-                if (result == null || ServiceTools.isNull(result.toString()))
-                    return;
-                try {
-                    JSONObject obj = new JSONObject(result.toString());
-                    if (obj != null) {
-                        JSONObject gpsData = new JSONObject();
-                        gpsData.put(ProjectInfo._json_key_mingps_distance_change, obj.optString("Location_MinDistance"));
-                        gpsData.put(ProjectInfo._json_key_mingps_time_change, obj.optString("Location_MinTime"));
-                        ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_gps_config, gpsData.toString());
-                        ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo._json_key_banks, obj.optString(ProjectInfo._json_key_banks));
-                    }
-                } catch (Exception e) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                    FirebaseCrashlytics.getInstance().recordException(e);
-                }
-            }
-        };
-        HashMap<String, Object> params = new HashMap<>();
-        String methodName = "SetConfiguration";
-        String url = ProjectInfo.SOAP_ADDRESS;
-        new RunInternetService().Do(getApplicationContext(), "", url, methodName, params, receiver, null, 14000);
     }
 
     //region read offline pictures products

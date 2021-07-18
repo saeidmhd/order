@@ -10,6 +10,10 @@ import com.mahak.order.common.request.GetAllDataResult.GetDataResult;
 import com.mahak.order.common.request.SetAllDataBody;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
 import com.mahak.order.common.request.SetSign.setSignImage;
+import com.mahak.order.tracking.setting.SettingBody;
+import com.mahak.order.tracking.setting.TrackingSetting;
+import com.mahak.order.tracking.visitorZone.VisitorZoneLocation;
+import com.mahak.order.tracking.visitorZone.ZoneBody;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -24,6 +28,12 @@ public interface ApiInterface {
 
     @POST("login")
     Call<LoginResult> Login(@Body LoginBody body);
+
+    @POST("Setting/Get")
+    Call<TrackingSetting> GetTrackingSetting(@Header("token") String token, @Body SettingBody body);
+
+    @POST("zone/GetVisitorZoneLocations")
+    Call<VisitorZoneLocation> GetZoneLocation(@Body ZoneBody body);
 
     @POST("user/login")
     Call<SignalLoginResult> LoginSignalR(@Body SignalLoginBody body);

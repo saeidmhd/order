@@ -25,8 +25,6 @@ import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.User;
 import com.mahak.order.common.login.LoginBody;
 import com.mahak.order.common.login.LoginResult;
-import com.mahak.order.common.loginSignalr.SignalLoginBody;
-import com.mahak.order.common.loginSignalr.SignalLoginResult;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.DbSchema;
 import com.mahak.order.widget.FontAlertDialog;
@@ -165,7 +163,7 @@ public class LoginActivityRestApi extends BaseActivity {
         loginBody.setUserName(username);
         loginBody.setPassword(password);
 
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
         Call<LoginResult> call = apiService.Login(loginBody);
         pd = new FontProgressDialog(context);
         pd.setMessage(getString(R.string.reviewing_user_info));
