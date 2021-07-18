@@ -49,7 +49,6 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.CPAYSDK_PRINTER_MODULE" />
-
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
