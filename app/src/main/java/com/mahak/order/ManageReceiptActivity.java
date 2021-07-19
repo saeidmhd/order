@@ -665,7 +665,7 @@ public class ManageReceiptActivity extends BaseActivity {
         cheque.setModifyDate(date.getTime());
         cheque.setDate(date.getTime());
         if (arrayBank != null) {
-            cheque.setBankId(String.valueOf(arrayBank.get(posBankPosition).getId()));
+            cheque.setBankId(String.valueOf(arrayBank.get(posBankPosition).getBankId()));
         }
         cheque.setType(ProjectInfo.CASHRECEIPT_TYPE);
         arrayCheque.add(cheque);
