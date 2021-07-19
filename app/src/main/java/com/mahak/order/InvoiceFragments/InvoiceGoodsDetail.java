@@ -930,12 +930,11 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             tvTotalPrice.setText(ServiceTools.formatPrice(TotalPrice));
             tvTotalChargeAndTax.setText(ServiceTools.formatPrice(totalTaxAndCharge));
             tvTotalOff.setText(ServiceTools.formatPrice(TotalOff));
-
             txtDiscount.setText(ServiceTools.formatPrice(Discount));
-            percentDiscount = (Discount * 100) / (FinalPrice + Discount);
+            if((FinalPrice + Discount) != 0)
+                percentDiscount = (Discount * 100) / (FinalPrice + Discount);
             txtDiscountPercent.setText(ServiceTools.formatPrice(percentDiscount));
             tvFinalPrice.setText(ServiceTools.formatPrice(FinalPrice));
-
             InvoiceDetailActivity.btnSave.setEnabled(OrderType != ProjectInfo.TYPE_INVOCIE || InvoiceDetailActivity.visitorHasCredit(FinalPrice));
         }
     }
