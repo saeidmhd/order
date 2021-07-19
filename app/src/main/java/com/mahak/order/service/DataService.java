@@ -59,6 +59,7 @@ public class DataService {
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
+
     public static void InsertZone(DbAdapter db, Datum data) {
         db.open();
         db.AddZone(data);

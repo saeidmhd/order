@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.kishcore.sdk.hybrid.rahyab"
+    android:versionCode="15"
+    android:versionName="1.0.15" >
+
+    <uses-sdk
+        android:minSdkVersion="15"
+        android:targetSdkVersion="30" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CLOUDPOS_PRINTER" />
+    <uses-permission android:name="android.permission.CLOUDPOS_CONTACTLESS_CARD" />
+    <uses-permission android:name="android.permission.CLOUDPOS_MSR" />
+    <uses-permission android:name="android.permission.CLOUDPOS_BARCODE" />
+    <uses-permission android:name="android.permission.CLOUDPOS_SYSTEM_SETTIME" />
+    <uses-permission android:name="android.permission.CLOUDPOS_SYSTEM_GETCPOSDEVICEINFO" />
+    <uses-permission android:name="android.permission.ACCESS_CPOSSYSTEM" />
+    <uses-permission android:name="android.permission.CLOUDPOS_GET_DEVICE_INFO" />
+    <uses-permission android:name="com.kishcore.sdk.irankish.rahyab.CPSDK_USAGE" />
+    <uses-permission android:name="com.kishcore.sdk.fanava.rahyab.CPSDK_USAGE" />
+    <uses-permission android:name="com.kishcore.sdk.sayan.rahyab.CPSDK_USAGE" />
+    <uses-permission android:name="com.kishcore.sdk.navaco.rahyab.CPSDK_USAGE" />
+    <uses-permission android:name="com.kishcore.sdk.parsian.rahyab.CPSDK_USAGE" />
+    <uses-permission android:name="com.kishcore.sdk.mehrana.rahyab.CPSDK_USAGE" />
+    <uses-permission android:name="com.kishcore.sdk.sep.rahyab.CPSDK_USAGE" />
+    <uses-permission android:name="com.kishcore.sdk.sepIkcc.rahyab.CPSDK_USAGE" />
+    <uses-permission android:name="com.kishcore.sdk.sepehr.rahyab.CPSDK_USAGE" />
+
+    <application>
+        <receiver
+            android:name="com.kishcore.sdk.sep.rahyab.api.CallbackReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.kishcore.sdk.sep.rahyab.CPSDK_USAGE" >
+            <intent-filter>
+                <action android:name="com.kishcore.sdk.sep.rahyab.onPaymentSucceed" />
+                <action android:name="com.kishcore.sdk.sep.rahyab.onPaymentInitializationFailed" />
+                <action android:name="com.kishcore.sdk.sep.rahyab.onPaymentFailed" />
+                <action android:name="com.kishcore.sdk.sep.rahyab.onPaymentCancelled" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.kishcore.sdk.sepIkcc.rahyab.api.SDKManager$CallbackReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.kishcore.sdk.sepIkcc.rahyab.CPSDK_USAGE" >
+            <intent-filter>
+                <action android:name="com.kishcore.sdk.sepIkcc.rahyab.onPaymentSucceed" />
+                <action android:name="com.kishcore.sdk.sepIkcc.rahyab.onPaymentInitializationFailed" />
+                <action android:name="com.kishcore.sdk.sepIkcc.rahyab.onPaymentFailed" />
+                <action android:name="com.kishcore.sdk.sepIkcc.rahyab.onPaymentCancelled" />
+                <action android:name="com.kishcore.sdk.sepIkcc.rahyab.onPurchaseApprove" />
+                <action android:name="com.kishcore.sdk.sepIkcc.rahyab.onMultiplexingSucceed" />
+                <action android:name="com.kishcore.sdk.sepIkcc.rahyab.onInitializationFailed" />
+                <action android:name="com.kishcore.sdk.sepIkcc.rahyab.onMultiplexingFailed" />
+                <action android:name="com.kishcore.sdk.sepIkcc.rahyab.onMultiplexingCancelled" />
+                <action android:name="com.kishcore.sdk.sepIkcc.rahyab.onMerchantInfoInquiryInitializationFailed" />
+                <action android:name="com.kishcore.sdk.sepIkcc.rahyab.onMerchantInfoInquirySucceed" />
+                <action android:name="com.kishcore.sdk.sepIkcc.rahyab.onMerchantInfoInquiryFailed" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.kishcore.sdk.irankish.rahyab.api.SDKManager$CallbackReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.kishcore.sdk.irankish.rahyab.CPSDK_USAGE" >
+            <intent-filter>
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onPaymentSucceed" />
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onPaymentInitializationFailed" />
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onPaymentFailed" />
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onPaymentCancelled" />
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onPurchaseApprove" />
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onMultiplexingSucceed" />
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onInitializationFailed" />
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onMultiplexingFailed" />
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onMultiplexingCancelled" />
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onMerchantInfoInquiryInitializationFailed" />
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onMerchantInfoInquirySucceed" />
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onMerchantInfoInquiryFailed" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.kishcore.sdk.fanava.rahyab.api.SDKManager$CallbackReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.kishcore.sdk.fanava.rahyab.CPSDK_USAGE" >
+            <intent-filter>
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onPaymentSucceed" />
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onPaymentInitializationFailed" />
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onPaymentFailed" />
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onPaymentCancelled" />
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onMerchantInfoInquiryInitializationFailed" />
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onMerchantInfoInquirySucceed" />
+                <action android:name="com.kishcore.sdk.rahpos.rahyab.onMerchantInfoInquiryFailed" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.kishcore.sdk.sayan.rahyab.api.SDKManager$CallbackReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.kishcore.sdk.sayan.rahyab.CPSDK_USAGE" >
+            <intent-filter>
+                <action android:name="com.kishcore.sdk.sayan.rahyab.onPaymentSucceed" />
+                <action android:name="com.kishcore.sdk.sayan.rahyab.onPaymentInitializationFailed" />
+                <action android:name="com.kishcore.sdk.sayan.rahyab.onPaymentFailed" />
+                <action android:name="com.kishcore.sdk.sayan.rahyab.onPaymentCancelled" />
+                <action android:name="com.kishcore.sdk.sayan.rahyab.onPaymentCancelled" />
+                <action android:name="com.kishcore.sdk.sayan.rahyab.onMerchantInfoInquiryInitializationFailed" />
+                <action android:name="com.kishcore.sdk.sayan.rahyab.onMerchantInfoInquirySucceed" />
+                <action android:name="com.kishcore.sdk.sayan.rahyab.onMerchantInfoInquiryFailed" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.kishcore.sdk.navaco.rahyab.api.SDKManager$CallbackReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.kishcore.sdk.navaco.rahyab.CPSDK_USAGE" >
+            <intent-filter>
+                <action android:name="com.kishcore.sdk.navaco.rahyab.onPaymentSucceed" />
+                <action android:name="com.kishcore.sdk.navaco.rahyab.onPaymentInitializationFailed" />
+                <action android:name="com.kishcore.sdk.navaco.rahyab.onPaymentFailed" />
+                <action android:name="com.kishcore.sdk.navaco.rahyab.onPaymentCancelled" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.kishcore.sdk.parsian.rahyab.api.SDKManager$CallbackReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.kishcore.sdk.parsian.rahyab.CPSDK_USAGE" >
+            <intent-filter>
+                <action android:name="com.kishcore.sdk.parsian.rahyab.onPaymentSucceed" />
+                <action android:name="com.kishcore.sdk.parsian.rahyab.onPaymentInitializationFailed" />
+                <action android:name="com.kishcore.sdk.parsian.rahyab.onPaymentFailed" />
+                <action android:name="com.kishcore.sdk.parsian.rahyab.onPaymentCancelled" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.kishcore.sdk.mehrana.rahyab.api.SDKManager$CallbackReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.kishcore.sdk.mehrana.rahyab.CPSDK_USAGE" >
+            <intent-filter>
+                <action android:name="com.kishcore.sdk.mehrana.rahyab.onPaymentSucceed" />
+                <action android:name="com.kishcore.sdk.mehrana.rahyab.onPaymentInitializationFailed" />
+                <action android:name="com.kishcore.sdk.mehrana.rahyab.onPaymentFailed" />
+                <action android:name="com.kishcore.sdk.mehrana.rahyab.onPaymentCancelled" />
+                <action android:name="com.kishcore.sdk.mehrana.rahyab.onMerchantInfoInquiryInitializationFailed" />
+                <action android:name="com.kishcore.sdk.mehrana.rahyab.onMerchantInfoInquirySucceed" />
+                <action android:name="com.kishcore.sdk.mehrana.rahyab.onMerchantInfoInquiryFailed" />
+                <action android:name="com.kishcore.sdk.mehrana.rahyab.onInquiryInitializationFailed" />
+                <action android:name="com.kishcore.sdk.mehrana.rahyab.onInquirySucceed" />
+                <action android:name="com.kishcore.sdk.mehrana.rahyab.onInquiryFailed" />
+                <action android:name="com.kishcore.sdk.mehrana.rahyab.onInquiryCancelled" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.kishcore.sdk.sepehr.rahyab.api.SDKManager$CallbackReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.kishcore.sdk.sepehr.rahyab.CPSDK_USAGE" >
+            <intent-filter>
+                <action android:name="com.kishcore.sdk.sepehr.rahyab.onPaymentSucceed" />
+                <action android:name="com.kishcore.sdk.sepehr.rahyab.onPaymentInitializationFailed" />
+                <action android:name="com.kishcore.sdk.sepehr.rahyab.onPaymentFailed" />
+                <action android:name="com.kishcore.sdk.sepehr.rahyab.onPaymentCancelled" />
+                <action android:name="com.kishcore.sdk.sepehr.rahyab.onMerchantInfoInquiryInitializationFailed" />
+                <action android:name="com.kishcore.sdk.sepehr.rahyab.onMerchantInfoInquirySucceed" />
+                <action android:name="com.kishcore.sdk.sepehr.rahyab.onMerchantInfoInquiryFailed" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.kishcore.sdk.hybrid.api.MagneticCardReaderActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+    </application>
+
+</manifest>

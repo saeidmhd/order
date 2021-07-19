@@ -532,17 +532,11 @@ public class ServiceTools {
         }
 
         int totalHeight = 0;
-
         if(listAdapter.getCount()>0){
             View listItem = listAdapter.getView(0, null, listView);
             listItem.measure(0, 0);
             totalHeight += listItem.getMeasuredHeight() * listAdapter.getCount();
         }
-        /*for (int i = 0; i < listAdapter.getCount(); i++) {
-            View listItem = listAdapter.getView(i, null, listView);
-            listItem.measure(0, 0);
-            totalHeight += listItem.getMeasuredHeight();
-        }*/
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
@@ -1858,5 +1852,13 @@ FirebaseCrashlytics.getInstance().recordException(e);
             result = str.substring(0, str.length() - 5);
         }
         return result;
+    }
+
+    public static String formattedDate(long date) {
+        Date today = new Date();
+        today.setTime(date);
+        String pattern = "yyyy-MM-dd'T'HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
+        return simpleDateFormat.format(today);
     }
 }

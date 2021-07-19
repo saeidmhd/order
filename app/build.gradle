@@ -135,4 +135,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-inappmessaging-display:20.0.0'
     implementation 'com.google.firebase:firebase-messaging:22.0.0'
 
+    implementation "androidx.multidex:multidex:2.0.1"
+
+
+
 }
