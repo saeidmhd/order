@@ -35,7 +35,6 @@ import com.mahak.order.common.OrderDetail;
 import com.mahak.order.common.OrderDetailProperty;
 import com.mahak.order.common.Person_Extra_Data;
 import com.mahak.order.common.Printer;
-import com.mahak.order.common.Product;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ReceivedTransferProducts;
 import com.mahak.order.common.ReceivedTransfers;
@@ -79,7 +78,7 @@ public class OrderDetailActivity extends BaseActivity {
             tvDiscount,
             tvFinalPrice,
             tvDescription,
-            tvInvocieNumber,
+            tvInvoiceNumber,
             tvOrderType,
             tvPageTitle,
             tvTotalChargeAndTax,
@@ -454,7 +453,7 @@ public class OrderDetailActivity extends BaseActivity {
         tvDiscount = (TextView) findViewById(R.id.tvDiscount);
         tvTotalOff = (TextView) findViewById(R.id.tvTotalOff);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
-        tvInvocieNumber = (TextView) findViewById(R.id.tvInvocieNumber);
+        tvInvoiceNumber = (TextView) findViewById(R.id.tvInvocieNumber);
         tvOrderType = (TextView) findViewById(R.id.tvOrderType);
         tvTotalChargeAndTax = (TextView) findViewById(R.id.tvTotalChargeAndTax);
         tvTotalReccipt = (TextView) findViewById(R.id.tvTotalReceipt);
@@ -573,7 +572,7 @@ public class OrderDetailActivity extends BaseActivity {
             _tvType.setText(tvOrderType.getText().toString());
         _tvCustomerName.setText(tvCustomerName.getText().toString());
         _tvMarketName.setText(tvMarketName.getText().toString());
-        _tvInvocieNumber.setText(tvInvocieNumber.getText().toString());
+        _tvInvocieNumber.setText(tvInvoiceNumber.getText().toString());
         _tvOrderDate.setText(tvOrderDate.getText().toString());
         _tvTotalCount.setText(formatCount(TotalCount));
         _tvTotalItems.setText(formatCount(TotalItems));
@@ -751,7 +750,7 @@ public class OrderDetailActivity extends BaseActivity {
                 intent.putExtra(ProjectInfo._TAG_PAGE_NAME, ProjectInfo._pName_OrderDetail);
                 intent.putExtra(ProjectInfo._TAG_PATH, fPath);
                 intent.putExtra(ProjectInfo._TAG_Name, fName);
-                intent.putExtra("OrderCode", tvInvocieNumber.getText().toString());
+                intent.putExtra("OrderCode", tvInvoiceNumber.getText().toString());
                 intent.putExtra(ProjectInfo._TAG_Order_Type, order.getOrderType());
                 startActivity(intent);
             }
@@ -844,7 +843,7 @@ public class OrderDetailActivity extends BaseActivity {
             lltvDiscount.setVisibility(View.GONE);
 
             tvTotalPrice.setText("" + db.getTotalProductById(order.getId()));
-            tvInvocieNumber.setText(order.getCode());
+            tvInvoiceNumber.setText(order.getCode());
 
         } else {
             CalculateTotal();
@@ -875,7 +874,7 @@ public class OrderDetailActivity extends BaseActivity {
             tvDiscount.setText(ServiceTools.formatPrice(Discount));
             tvTotalChargeAndTax.setText(ServiceTools.formatPrice(TotalTaxAndCharge));
             tvFinalPrice.setText(ServiceTools.formatPrice(FinalPrice));
-            tvInvocieNumber.setText(order.getCode());
+            tvInvoiceNumber.setText(order.getCode());
             tvTotalReccipt.setText(ServiceTools.formatPrice(TotalReceipt));
             tvRemainingOrder.setText(ServiceTools.formatPrice(RemainigOrder));
 
