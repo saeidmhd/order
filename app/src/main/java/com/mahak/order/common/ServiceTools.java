@@ -1853,12 +1853,4 @@ FirebaseCrashlytics.getInstance().recordException(e);
         }
         return result;
     }
-
-    public static String formattedDate(long date) {
-        Date today = new Date();
-        today.setTime(date);
-        String pattern = "yyyy-MM-dd'T'HH:mm:ss";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
-        return simpleDateFormat.format(today);
-    }
 }
