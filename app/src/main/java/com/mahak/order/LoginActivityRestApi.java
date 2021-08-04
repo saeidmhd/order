@@ -237,25 +237,26 @@ public class LoginActivityRestApi extends BaseActivity {
     }
 
     private void addNewUser(Response<LoginResult> response, User user, String username, String password, Context context) {
-        user.setDatabaseId(String.valueOf(response.body().getData().getDatabaseId()));
-        user.setMahakId("1");
-        setPrefMahakId(user.getMahakId());
-        setPrefDatabaseId(user.getDatabaseId());
-        setPrefUserId(response.body().getData().getVisitorId());
-        setPrefSyncId(response.body().getData().getSyncId());
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setPackageSerial("1");
-        user.setMasterId((long) response.body().getData().getVisitorId());
-        user.setName(response.body().getData().getUserTitle());
-        user.setLoginDate(new Date().getTime());
-        user.setModifyDate(new Date().getTime());
-        user.setDateSync(new Date().getTime());
-        user.setSyncId(String.valueOf(response.body().getData().getSyncId()));
-        user.setServerUserID(String.valueOf(response.body().getData().getVisitorId()));
-        user.setUserToken(response.body().getData().getUserToken());
-        setPrefUserToken(response.body().getData().getUserToken());
-
+        if (response.body() != null) {
+            user.setDatabaseId(String.valueOf(response.body().getData().getDatabaseId()));
+            user.setMahakId(response.body().getData().getMahakId());
+            setPrefMahakId(user.getMahakId());
+            setPrefDatabaseId(user.getDatabaseId());
+            setPrefUserId(response.body().getData().getVisitorId());
+            setPrefSyncId(response.body().getData().getSyncId());
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setPackageSerial("1");
+            user.setMasterId((long) response.body().getData().getVisitorId());
+            user.setName(response.body().getData().getUserTitle());
+            user.setLoginDate(new Date().getTime());
+            user.setModifyDate(new Date().getTime());
+            user.setDateSync(new Date().getTime());
+            user.setSyncId(String.valueOf(response.body().getData().getSyncId()));
+            user.setServerUserID(String.valueOf(response.body().getData().getVisitorId()));
+            user.setUserToken(response.body().getData().getUserToken());
+            setPrefUserToken(response.body().getData().getUserToken());
+        }
         long add = mDb.AddUser(user);
         if (add >= 1) {
             long id = mDb.getMax(DbSchema.Userschema.TABLE_NAME, DbSchema.Userschema.COLUMN_ID);

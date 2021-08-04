@@ -3,19 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.mahak.order">
 
-    <!-- [START gcm_permission] -->
-    <permission
-        android:name="com.mahak.order.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="com.mahak.order.permission.C2D_MESSAGE" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!-- [END gcm_permission] -->
 
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -254,19 +247,6 @@
             android:name=".oscar_printer.IpAddressEdit"
             android:theme="@style/SortDialogStyle"  />
 
-        <!-- [START gcm_receiver] -->
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
-                <category android:name="com.mahak.order.gcm" />
-            </intent-filter>
-        </receiver>
-        <!-- [END gcm_receiver] -->
-
         <receiver android:name=".common.GPSTracker">
             <intent-filter>
                 <action android:name="android.location.PROVIDERS_CHANGED" />
@@ -275,24 +255,6 @@
             </intent-filter>
         </receiver>
 
-        <!-- [START gcm_listener] -->
-        <service
-            android:name=".MyGcmListenerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            </intent-filter>
-        </service>
-        <!-- [END gcm_listener] -->
-        <!-- [START instanceId_listener] -->
-        <service
-            android:name=".MyInstanceIDListenerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID" />
-            </intent-filter>
-        </service>
-        <!-- [END instanceId_listener] -->
         <service
             android:name=".RegistrationIntentService"
             android:exported="false" />
@@ -536,7 +498,7 @@
             android:value="${mapsApiKey}" />
 
         <service
-            android:name=".messaging.MyFirebaseMessagingService"
+            android:name="MyFcmListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
