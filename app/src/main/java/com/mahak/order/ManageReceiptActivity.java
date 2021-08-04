@@ -660,7 +660,7 @@ public class ManageReceiptActivity extends BaseActivity {
         Cheque cheque = new Cheque();
         cheque.setAmount(ServiceTools.toDouble(amount));
         cheque.setBranch("");
-        cheque.setDescription(txtDescription.getText().toString().trim());
+        cheque.setDescription(getString(R.string.smart_pos_payment_desc));
         cheque.setNumber(traceNumber);
         cheque.setModifyDate(date.getTime());
         cheque.setDate(date.getTime());
