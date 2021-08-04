@@ -68,6 +68,13 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.firebase.installations.FirebaseInstallations;
+import com.google.firebase.installations.InstallationTokenResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.android.PolyUtil;
 import com.mahak.order.common.CheckList;
@@ -478,8 +485,13 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
             }
         });
+
+        registerInBackground();
+
+
+
         //on receive message from google gcm
-        MyGcmListenerService.receiveMessag = new View.OnClickListener() {
+        MyFcmListenerService.receiveMessag = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (menu != null) {
@@ -654,6 +666,21 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     REQUEST_PERMISSIONS_REQUEST_CODE);
         }
     }
+
+    private void registerInBackground() {
+        FirebaseApp.initializeApp(DashboardActivity.this);
+        FirebaseMessaging.getInstance().subscribeToTopic("");
+        FirebaseInstallations.getInstance().getToken(true).addOnCompleteListener(new OnCompleteListener<InstallationTokenResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstallationTokenResult> task) {
+                String token = task.getResult().getToken();
+                Intent intent = new Intent(DashboardActivity.this, RegistrationIntentService.class);
+                intent.putExtra("token",token);
+                startService(intent);
+            }
+        });
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
