@@ -19,6 +19,21 @@
         android:singleLine="true"
         android:hint="@string/str_name_code_filter" />
 
+    <LinearLayout
+        android:id="@+id/llprogressBar"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progressBar3"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+
     <ExpandableListView
         android:id="@+id/explistReceipt"
         android:layout_width="fill_parent"

@@ -2,9 +2,12 @@ package com.mahak.order;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.MediaRouteButton;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,11 +19,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,15 +34,19 @@ import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
 import com.mahak.order.common.Cheque;
 import com.mahak.order.common.Customer;
+import com.mahak.order.common.Printer;
+import com.mahak.order.common.Product;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.Receipt;
 import com.mahak.order.common.ServiceTools;
+import com.mahak.order.common.SharedPreferencesHelper;
 import com.mahak.order.common.User;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.common.login.LoginBody;
 import com.mahak.order.common.login.LoginResult;
 import com.mahak.order.common.request.SetAllDataBody;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
+import com.mahak.order.fragment.RecyclerProductAdapter;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.widget.FontDialog;
 import com.mahak.order.widget.FontPopUp;
@@ -51,6 +60,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.mahak.order.common.ProjectInfo.Woosim_WSP_R341;
 import static com.mahak.order.common.ServiceTools.getDateAndTimeForLong;
 
 public class ReceiptsListActivity extends BaseActivity {
@@ -84,6 +94,9 @@ public class ReceiptsListActivity extends BaseActivity {
     private long GroupId;
     private FontProgressDialog pd;
     private int sortType = ProjectInfo.SortDesc;
+    private LinearLayout llprogressBar;
+    private LinearLayout ll;
+    int printerBrand;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +114,8 @@ public class ReceiptsListActivity extends BaseActivity {
 
         mContext = this;
         mActivty = this;
+
+        printerBrand = SharedPreferencesHelper.getPrefPrinterBrand(mContext);
 
         initialise();
         db.open();
@@ -138,6 +153,7 @@ public class ReceiptsListActivity extends BaseActivity {
      */
     private void initialise() {
         ExpandList = (ExpandableListView) findViewById(R.id.explistReceipt);
+        llprogressBar = (LinearLayout) findViewById(R.id.llprogressBar);
         Search = (EditText) findViewById(R.id.txtSearch);
         db = new DbAdapter(mContext);
         tvPageTitle.setText(getString(R.string.str_nav_receipt_list) + "(" + ExpandList.getCount() + ")");
@@ -282,7 +298,7 @@ public class ReceiptsListActivity extends BaseActivity {
 
                         PopupMenu popup = new PopupMenu(mContext, btnMenu);
                         MenuInflater inflater = popup.getMenuInflater();
-                        inflater.inflate(R.menu.pmenu_edit_delete, popup.getMenu());
+                        inflater.inflate(R.menu.pmenu_edit_delete_print, popup.getMenu());
 
                         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             @Override
@@ -291,7 +307,6 @@ public class ReceiptsListActivity extends BaseActivity {
                                     case R.id.mnuDelete:
                                         PositionArray = position;
                                         ReceiptId = receipt.getId();
-
                                         //مجموع تمام فاکتور ها چه ارسال شده یا نشده
                                         TotalPriceInvoice = db.getPurePriceInvoice();
                                         //مجموع تمام دریافتی ها چه ارسال شده یا نشده
@@ -328,6 +343,11 @@ public class ReceiptsListActivity extends BaseActivity {
                                         } else
                                             Toast.makeText(mContext, getResources().getString(R.string.str_message_publish_edit), Toast.LENGTH_SHORT).show();
                                         break;
+
+                                    case R.id.mnuPrint:
+                                        /*PreparePrinterData ppd = new PreparePrinterData();
+                                        ppd.execute();*/
+                                        break;
                                     case R.id.mnuSend:
                                         PositionArray = position;
                                         ReceiptId = receipt.getId();
@@ -351,6 +371,83 @@ public class ReceiptsListActivity extends BaseActivity {
                 });
             }
         }
+
+        /*private class PreparePrinterData extends AsyncTask<String, Integer, Boolean> {
+
+            Bitmap b = null;
+            String fName = "";
+            String fPath = ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_IMAGES + "/" + ProjectInfo.DIRECTORY_INVOICES;
+
+            @Override
+            protected void onPreExecute() {
+                llprogressBar.setVisibility(View.VISIBLE);
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Boolean doInBackground(String... params) {
+                Boolean status = false;
+
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                ll = new LinearLayout(mContext);
+
+
+                if (printerBrand == ProjectInfo.PRINTER_BABY_380_A || printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310 || printerBrand == ProjectInfo.PRINTER_DELTA_380_A) {
+                    inflater.inflate(R.layout.kala_print_template_80mm, ll, true);
+
+                } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
+                    inflater.inflate(R.layout.kala_print_template_50mm, ll, true);
+                } else if (printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII || printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW || printerBrand == ProjectInfo.UROVO_K319 || printerBrand == Woosim_WSP_R341) {
+
+                    ll.setDividerPadding(2);
+                    ll.setBackgroundColor(getResources().getColor(R.color.black));
+                    inflater.inflate(R.layout.kala_print_template_80mm_3parts, ll, true);
+                    LinearLayout _llPrint = (LinearLayout) ll.findViewById(R.id._llPrint);
+                    ChangePrintWidth(_llPrint);
+                } else {
+                    inflater.inflate(R.layout.kala_print_template_60mm, ll, true);
+                }
+
+                FillPrintView(ll);
+                ll.setDrawingCacheEnabled(true);
+                ll.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+                ll.layout(0, 0, ll.getMeasuredWidth(), ll.getMeasuredHeight());
+                ll.buildDrawingCache(true);
+                //b = Bitmap.createBitmap(ll.getDrawingCache());
+                b = Printer.CreateBitmap(ll);
+                ll.setDrawingCacheEnabled(false);
+
+                fName = GetFileName(dt.getTime());
+                if (b != null) {
+                    if (Printer.CreateFile(b, fName, fPath)) {
+                    }
+                }
+
+                if (b != null)
+                    status = true;
+
+                return status;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean result) {
+                super.onPostExecute(result);
+                if (result) {
+                    Intent intent = new Intent(this, PrintActivity.class);
+                    intent.putExtra(ProjectInfo._TAG_PAGE_NAME, ProjectInfo._pName_OrderDetail);
+                    intent.putExtra(ProjectInfo._TAG_PATH, fPath);
+                    intent.putExtra(ProjectInfo._TAG_Name, fName);
+                    startActivity(intent);
+                    llprogressBar.setVisibility(View.GONE);
+                } else {
+                }
+            }
+        }*/
+        
+        
+        
 
         public ExpandListAdapter(Context context, List<Receipt> groups) {
             this.context = context;
@@ -490,6 +587,85 @@ public class ReceiptsListActivity extends BaseActivity {
             tvPageTitle.setText(getString(R.string.str_nav_receipt_list) + "(" + ExpandList.getCount() + ")");
 
         }
+
+    }
+
+   /* public void FillPrintView(View view) {
+        //controls
+        ListView _lstProduct = (ListView) view.findViewById(R.id._lstProduct);
+        TextView _tvOrderDate = (TextView) view.findViewById(R.id._tvOrderDate);
+        TextView _tvUsername = (TextView) view.findViewById(R.id._tvUsername);
+        _tvOrderDate.setText(getDateAndTimeForLong(dt.getTime()));
+        if (BaseActivity.getAuthentication())
+            _tvUsername.setText(BaseActivity.getUserProfile().getName());
+        _adProduct = new AdapterListProductForPrint(mActivity, RecyclerProductAdapter.products);
+        _lstProduct.setDrawingCacheEnabled(true);
+        _lstProduct.setAdapter(_adProduct);
+        ServiceTools.setListViewHeightBasedOnChildren(_lstProduct);
+
+    }*/
+
+    /*public class AdapterListProductForPrint extends ArrayAdapter<Product> {
+        Activity mcontaxt;
+
+        public AdapterListProductForPrint(Activity contaxt, ArrayList<Product> array) {
+
+            super(contaxt, lst_print_kala, array);
+            mcontaxt = contaxt;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            View rowview = convertView;
+            AdapterListProductForPrint.Holder holder = null;
+            LayoutInflater inflater = null;
+
+            final Product product = getItem(position);
+
+            if (rowview == null) {
+                inflater = mcontaxt.getLayoutInflater();
+                rowview = inflater.inflate(lst_print_kala, null, false);
+                holder = new AdapterListProductForPrint.Holder(rowview);
+                rowview.setTag(holder);
+            } else
+                holder = (AdapterListProductForPrint.Holder) rowview.getTag();
+
+            holder.Populate(product, position);
+
+            return rowview;
+        }
+
+        public class Holder {
+            public TextView tvProductName, tvNumber, tvCount, tvKalaCode;
+            public LinearLayout llitem;
+
+            public Holder(View view) {
+
+                llitem = (LinearLayout) view.findViewById(R.id.llitem);
+                tvProductName = (TextView) view.findViewById(R.id.tvProductSpec);
+                tvCount = (TextView) view.findViewById(R.id.tvCount);
+                tvKalaCode = (TextView) view.findViewById(R.id.tvKalaCode);
+
+            }
+
+            public void Populate(Product product, int position) {
+                tvProductName.setText(product.getName());
+                tvCount.setText(ServiceTools.formatCount(product.getSumCount1()));
+                tvKalaCode.setText(String.valueOf(product.getProductCode()));
+            }
+        }
+
+    }*/
+
+    public void ChangePrintWidth(LinearLayout ll) {
+
+        LayoutParams param = ll.getLayoutParams();
+        final float scale = getResources().getDisplayMetrics().density;
+        //convert mm to dp
+        double Size = SharedPreferencesHelper.getCurrentWidthSize(mContext) * 6.3;
+        int converter = (int) (Size * scale + 0.5f);
+        param.width = converter;
+        ll.setLayoutParams(param);
 
     }
 
