@@ -54,6 +54,7 @@ import com.mahak.order.widget.FontProgressDialog;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -97,6 +98,8 @@ public class ReceiptsListActivity extends BaseActivity {
     private LinearLayout llprogressBar;
     private LinearLayout ll;
     int printerBrand;
+    private Date dt = new Date();
+  //  private AdapterListProductForPrint _adProduct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -345,8 +348,8 @@ public class ReceiptsListActivity extends BaseActivity {
                                         break;
 
                                     case R.id.mnuPrint:
-                                        /*PreparePrinterData ppd = new PreparePrinterData();
-                                        ppd.execute();*/
+                                        PreparePrinterData ppd = new PreparePrinterData();
+                                        ppd.execute();
                                         break;
                                     case R.id.mnuSend:
                                         PositionArray = position;
@@ -372,7 +375,7 @@ public class ReceiptsListActivity extends BaseActivity {
             }
         }
 
-        /*private class PreparePrinterData extends AsyncTask<String, Integer, Boolean> {
+        private class PreparePrinterData extends AsyncTask<String, Integer, Boolean> {
 
             Bitmap b = null;
             String fName = "";
@@ -435,16 +438,20 @@ public class ReceiptsListActivity extends BaseActivity {
             protected void onPostExecute(Boolean result) {
                 super.onPostExecute(result);
                 if (result) {
-                    Intent intent = new Intent(this, PrintActivity.class);
+                    /*Intent intent = new Intent(this, PrintActivity.class);
                     intent.putExtra(ProjectInfo._TAG_PAGE_NAME, ProjectInfo._pName_OrderDetail);
                     intent.putExtra(ProjectInfo._TAG_PATH, fPath);
                     intent.putExtra(ProjectInfo._TAG_Name, fName);
                     startActivity(intent);
-                    llprogressBar.setVisibility(View.GONE);
+                    llprogressBar.setVisibility(View.GONE)*/;
                 } else {
                 }
             }
-        }*/
+        }
+
+        public String GetFileName(long date) {
+            return ServiceTools.getFileName(date) + ".png";
+        }
         
         
         
@@ -590,7 +597,7 @@ public class ReceiptsListActivity extends BaseActivity {
 
     }
 
-   /* public void FillPrintView(View view) {
+    public void FillPrintView(View view) {
         //controls
         ListView _lstProduct = (ListView) view.findViewById(R.id._lstProduct);
         TextView _tvOrderDate = (TextView) view.findViewById(R.id._tvOrderDate);
@@ -598,14 +605,14 @@ public class ReceiptsListActivity extends BaseActivity {
         _tvOrderDate.setText(getDateAndTimeForLong(dt.getTime()));
         if (BaseActivity.getAuthentication())
             _tvUsername.setText(BaseActivity.getUserProfile().getName());
-        _adProduct = new AdapterListProductForPrint(mActivity, RecyclerProductAdapter.products);
+       // _adProduct = new AdapterListProductForPrint(mActivty, RecyclerProductAdapter.products);
         _lstProduct.setDrawingCacheEnabled(true);
-        _lstProduct.setAdapter(_adProduct);
+       // _lstProduct.setAdapter(_adProduct);
         ServiceTools.setListViewHeightBasedOnChildren(_lstProduct);
 
-    }*/
+    }
 
-    /*public class AdapterListProductForPrint extends ArrayAdapter<Product> {
+  /*  public class AdapterListProductForPrint extends ArrayAdapter<Product> {
         Activity mcontaxt;
 
         public AdapterListProductForPrint(Activity contaxt, ArrayList<Product> array) {
