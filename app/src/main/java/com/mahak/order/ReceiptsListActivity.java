@@ -34,7 +34,6 @@ import com.mahak.order.apiHelper.ApiInterface;
 import com.mahak.order.common.Cheque;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.Printer;
-import com.mahak.order.common.Product;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.Receipt;
 import com.mahak.order.common.ServiceTools;
@@ -45,7 +44,6 @@ import com.mahak.order.common.login.LoginBody;
 import com.mahak.order.common.login.LoginResult;
 import com.mahak.order.common.request.SetAllDataBody;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
-import com.mahak.order.fragment.RecyclerProductAdapter;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.widget.FontDialog;
 import com.mahak.order.widget.FontPopUp;
@@ -98,7 +96,7 @@ public class ReceiptsListActivity extends BaseActivity {
     private LinearLayout ll;
     int printerBrand;
     private Date dt = new Date();
-    //private AdapterReceiptForPrint _adReceipt;
+    private AdapterReceiptForPrint _adReceipt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -393,24 +391,16 @@ public class ReceiptsListActivity extends BaseActivity {
 
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 ll = new LinearLayout(mContext);
-                inflater.inflate(R.layout.receipt_print, ll, true);
 
-
-                /*if (printerBrand == ProjectInfo.PRINTER_BABY_380_A || printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310 || printerBrand == ProjectInfo.PRINTER_DELTA_380_A) {
-                    inflater.inflate(R.layout.kala_print_template_80mm, ll, true);
-
+                if (printerBrand == ProjectInfo.PRINTER_BABY_380_A || printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310 || printerBrand == ProjectInfo.PRINTER_DELTA_380_A) {
+                    inflater.inflate(R.layout.receipt_print80mm, ll, true);
                 } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
-                    inflater.inflate(R.layout.kala_print_template_50mm, ll, true);
+                    inflater.inflate(R.layout.receipt_print50mm, ll, true);
                 } else if (printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII || printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW || printerBrand == ProjectInfo.UROVO_K319 || printerBrand == Woosim_WSP_R341) {
-
-                    ll.setDividerPadding(2);
-                    ll.setBackgroundColor(getResources().getColor(R.color.black));
-                    inflater.inflate(R.layout.kala_print_template_80mm_3parts, ll, true);
-                    LinearLayout _llPrint = (LinearLayout) ll.findViewById(R.id._llPrint);
-                    ChangePrintWidth(_llPrint);
+                    inflater.inflate(R.layout.receipt_print80mm, ll, true);
                 } else {
-                    inflater.inflate(R.layout.kala_print_template_60mm, ll, true);
-                }*/
+                    inflater.inflate(R.layout.receipt_print, ll, true);
+                }
 
                 FillPrintView(ll);
                 ll.setDrawingCacheEnabled(true);
@@ -443,9 +433,9 @@ public class ReceiptsListActivity extends BaseActivity {
                     intent.putExtra(ProjectInfo._TAG_PAGE_NAME, ProjectInfo._pName_OrderDetail);
                     intent.putExtra(ProjectInfo._TAG_PATH, fPath);
                     intent.putExtra(ProjectInfo._TAG_Name, fName);
+                    intent.putExtra("OrderCode", String.valueOf(ReceiptId));
                     startActivity(intent);
                     llprogressBar.setVisibility(View.GONE);
-                } else {
                 }
             }
         }
@@ -601,12 +591,34 @@ public class ReceiptsListActivity extends BaseActivity {
     public void FillPrintView(View view) {
 
         Receipt receipt = db.GetReceipt(ReceiptId);
+        double CashAmount = receipt.getCashAmount();
+
+        Customer customer = new Customer();
+        if (receipt.getPersonId() == ProjectInfo.CUSTOMERID_GUEST) {
+            customer = db.getCustomerWithPersonClientId(receipt.getPersonClientId());
+            receipt.setCustomerName(customer.getName());
+        } else {
+            customer = db.getCustomerWithPersonId(receipt.getPersonId());
+            receipt.setCustomerName(customer.getName());
+        }
+
+        arrayCheque = db.getAllCheque(receipt.getId());
+        double totalCheque = 0, totalCashReceipt = 0, totalAmount = 0;
+        for (int i = 0; i < arrayCheque.size(); i++) {
+            if (arrayCheque.get(i).getType() == ProjectInfo.CHEQUE_TYPE)
+                totalCheque += arrayCheque.get(i).getAmount();
+            else if (arrayCheque.get(i).getType() == ProjectInfo.CASHRECEIPT_TYPE)
+                totalCashReceipt += arrayCheque.get(i).getAmount();
+        }
+        receipt.setTotalCheque(totalCheque);
+        receipt.setTotalCashReceipt(totalCashReceipt);
+        totalAmount = CashAmount + totalCashReceipt + totalCheque;
+        receipt.setTotalAmount(totalAmount);
+        receipt.setItems(arrayCheque);
 
         TextView _tvCustomerName, _tvDate, _tvCashAmount, _tvChequeAmount, _tvReceiptAmount, _tvTotalAmount, _tvDescription, _tvCode;
-
         //controls
-      //  ListView _lstProduct = (ListView) view.findViewById(R.id._lstProduct);
-
+         ListView _lstReceipt = (ListView) view.findViewById(R.id.listReceipt);
         _tvCustomerName = (TextView) view.findViewById(R.id._tvCustomerName);
         _tvDate = (TextView) view.findViewById(R.id._tvDate);
         _tvCashAmount = (TextView) view.findViewById(R.id._tvCashAmount);
@@ -627,27 +639,20 @@ public class ReceiptsListActivity extends BaseActivity {
         _tvDescription.setText(receipt.getDescription());
         _tvCode.setText(receipt.getTrackingCode());
 
-
-
-
-       /* _tvOrderDate.setText(getDateAndTimeForLong(dt.getTime()));
-        if (BaseActivity.getAuthentication())
-            _tvUsername.setText(BaseActivity.getUserProfile().getName());
-
-        _adReceipt = new AdapterReceiptForPrint(mActivty, RecyclerProductAdapter.products);
-        _lstProduct.setDrawingCacheEnabled(true);
-        _lstProduct.setAdapter(_adReceipt);
-        ServiceTools.setListViewHeightBasedOnChildren(_lstProduct);*/
+        _adReceipt = new AdapterReceiptForPrint(mActivty, receipt.getItems());
+        _lstReceipt.setDrawingCacheEnabled(true);
+        _lstReceipt.setAdapter(_adReceipt);
+        ServiceTools.setListViewHeightBasedOnChildren(_lstReceipt);
 
     }
 
-    /*public class AdapterReceiptForPrint extends ArrayAdapter<Product> {
-        Activity mcontaxt;
+    public class AdapterReceiptForPrint extends ArrayAdapter<Cheque> {
+        Activity mContext;
 
-        public AdapterReceiptForPrint(Activity contaxt, ArrayList<Product> array) {
+        public AdapterReceiptForPrint(Activity activity, List<Cheque> array) {
 
-            super(contaxt, lst_print_kala, array);
-            mcontaxt = contaxt;
+            super(activity, R.layout.list_cheque_receipt, array);
+            mContext = activity;
         }
 
         @Override
@@ -656,42 +661,48 @@ public class ReceiptsListActivity extends BaseActivity {
             AdapterReceiptForPrint.Holder holder = null;
             LayoutInflater inflater = null;
 
-            final Product product = getItem(position);
+            final Cheque cheque = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
-                rowview = inflater.inflate(lst_print_kala, null, false);
+                inflater = mContext.getLayoutInflater();
+                rowview = inflater.inflate(R.layout.list_cheque_receipt, null, false);
                 holder = new AdapterReceiptForPrint.Holder(rowview);
                 rowview.setTag(holder);
             } else
                 holder = (AdapterReceiptForPrint.Holder) rowview.getTag();
 
-            holder.Populate(product, position);
+            holder.Populate(cheque);
 
             return rowview;
         }
 
         public class Holder {
-            public TextView tvProductName, tvNumber, tvCount, tvKalaCode;
-            public LinearLayout llitem;
+            public TextView tvDate, tvChequeType, tvNumber, tvAmount, tvBank, tvDescription;
 
             public Holder(View view) {
-
-                llitem = (LinearLayout) view.findViewById(R.id.llitem);
-                tvProductName = (TextView) view.findViewById(R.id.tvProductSpec);
-                tvCount = (TextView) view.findViewById(R.id.tvCount);
-                tvKalaCode = (TextView) view.findViewById(R.id.tvKalaCode);
-
+                tvDate = (TextView) view.findViewById(R.id.tvDate);
+                tvNumber = (TextView) view.findViewById(R.id.tvNumber);
+                tvAmount = (TextView) view.findViewById(R.id.txtAmount);
+                tvBank = (TextView) view.findViewById(R.id.tvBank);
+                tvChequeType = (TextView) view.findViewById(R.id.tvChequeType);
+                tvDescription = (TextView) view.findViewById(R.id.tvDescription);
             }
 
-            public void Populate(Product product, int position) {
-                tvProductName.setText(product.getName());
-                tvCount.setText(ServiceTools.formatCount(product.getSumCount1()));
-                tvKalaCode.setText(String.valueOf(product.getProductCode()));
+            public void Populate(Cheque item) {
+                tvNumber.setText(item.getNumber());
+                tvAmount.setText(ServiceTools.formatPrice(item.getAmount()));
+                tvBank.setText(item.getBankName());
+                if (item.getType() == ProjectInfo.CHEQUE_TYPE)
+                    tvChequeType.setText(getResources().getString(R.string.str_cheque_type));
+                else if (item.getType() == ProjectInfo.CASHRECEIPT_TYPE)
+                    tvChequeType.setText(getResources().getString(R.string.str_cash_receipt_type));
+                lngDate = item.getDate();
+                tvDate.setText(getDateAndTimeForLong(lngDate));
+                tvDescription.setText(item.getDescription());
             }
         }
 
-    }*/
+    }
 
     public void ChangePrintWidth(LinearLayout ll) {
 

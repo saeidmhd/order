@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/ThinSize"
-    android:paddingLeft="@dimen/NormalSize"
-    android:paddingRight="@dimen/VeryVeryLargeSize"
+    android:gravity="center_vertical"
     android:paddingTop="@dimen/ThinSize">
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="120dp"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/report_item_min_height"
         android:background="@drawable/card_ui_bg_selector"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/NormalSize"
-        android:paddingLeft="@dimen/SmallSize"
-        android:paddingRight="@dimen/SmallSize"
-        android:paddingTop="@dimen/NormalSize">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -37,26 +33,20 @@
             <com.mahak.order.widget.FontTextView
                 android:id="@+id/tvNumber"
                 style="@style/forms_label_default"
-                android:layout_width="90dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/NormalSize"
                 android:gravity="right"
                 android:text="@string/sample_number" />
 
             <com.mahak.order.widget.FontTextView
-                style="@style/forms_label_default"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/SmallSize"
-                android:gravity="right"
-                android:text="@string/str_number" />
-
-            <com.mahak.order.widget.FontTextView
                 android:id="@+id/tvChequeType"
                 style="@style/forms_label_default"
-                android:layout_width="30dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
                 android:layout_height="wrap_content"
-                android:text="@string/str_cheque_type" />
+                android:text="چک شماره:" />
         </LinearLayout>
 
         <LinearLayout
@@ -79,7 +69,8 @@
             <com.mahak.order.widget.FontTextView
                 android:id="@+id/txtAmount"
                 style="@style/forms_label_default"
-                android:layout_width="90dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/NormalSize"
                 android:gravity="right"
@@ -87,7 +78,8 @@
 
             <com.mahak.order.widget.FontTextView
                 style="@style/forms_label_default"
-                android:layout_width="85dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
                 android:layout_height="wrap_content"
                 android:text="@string/str_amount" />
         </LinearLayout>
@@ -109,9 +101,9 @@
 
             <com.mahak.order.widget.FontTextView
                 style="@style/forms_label_default"
-                android:layout_width="80dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
                 android:layout_height="fill_parent"
-                android:layout_marginLeft="@dimen/NormalSize"
                 android:text="@string/str_description" />
         </LinearLayout>
     </LinearLayout>

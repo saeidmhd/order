@@ -539,7 +539,7 @@ public class ServiceTools {
         }*/
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        params.height = totalHeight;
         listView.setLayoutParams(params);
     }
 

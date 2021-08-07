@@ -853,19 +853,22 @@ public class ManageReceiptActivity extends BaseActivity {
                         Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
                         intent.putExtra("totalCashAndCheque", totalCashAndCheque());
                         setResult(RESULT_OK, intent);
-                        finish();
+                        //finish();
                     } else if (Page == PAGE_ORDER_DETAIL ) {
                         Intent intent = new Intent(getApplicationContext(), OrderDetailActivity.class);
                         intent.putExtra(PAGE, PAGE_Invoice_Detail_Activity);
                         intent.putExtra(ID, OrderId);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
-                        finish();
+                       // finish();
+                    }else if(Page == PAGE_RECEIPTLIST){
+                        Intent intent = new Intent(mContext, ReceiptsListActivity.class);
+                        setResult(RESULT_OK, intent);
                     }else {
                         Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
-                        finish();
+                       // finish();
                     }
                 }
                 Clear();

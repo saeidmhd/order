@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:id="@+id/_llPrint"
-        android:layout_width="@dimen/print_width"
+        android:layout_width="@dimen/print_width88mm"
         android:layout_height="match_parent"
         android:background="@android:color/white"
         android:gravity="center_horizontal"
