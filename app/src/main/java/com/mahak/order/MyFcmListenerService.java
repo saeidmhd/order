@@ -24,10 +24,13 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -62,6 +65,8 @@ public class MyFcmListenerService extends FirebaseMessagingService {
        /* String title = remoteMessage.getNotification().getTitle();
         String body = remoteMessage.getNotification().getBody();
         Map data = remoteMessage.getData(); */
+        
+        workOn();
 
         String from = remoteMessage.getFrom();
         Map data = remoteMessage.getData();
@@ -80,6 +85,12 @@ public class MyFcmListenerService extends FirebaseMessagingService {
 //        sendNotification(message);
         readMessage(remoteMessage);
         // [END_EXCLUDE]
+    }
+
+    private void workOn() {
+        ContextCompat.getMainExecutor(getApplicationContext()).execute(()  -> {
+            Toast.makeText(this, "message received", Toast.LENGTH_SHORT).show();
+        });
     }
     // [END receive_message]
 
