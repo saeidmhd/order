@@ -2,7 +2,6 @@ package com.mahak.order;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.MediaRouteButton;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -99,7 +98,7 @@ public class ReceiptsListActivity extends BaseActivity {
     private LinearLayout ll;
     int printerBrand;
     private Date dt = new Date();
-  //  private AdapterListProductForPrint _adProduct;
+    //private AdapterReceiptForPrint _adReceipt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -348,6 +347,7 @@ public class ReceiptsListActivity extends BaseActivity {
                                         break;
 
                                     case R.id.mnuPrint:
+                                        ReceiptId = receipt.getId();
                                         PreparePrinterData ppd = new PreparePrinterData();
                                         ppd.execute();
                                         break;
@@ -379,7 +379,7 @@ public class ReceiptsListActivity extends BaseActivity {
 
             Bitmap b = null;
             String fName = "";
-            String fPath = ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_IMAGES + "/" + ProjectInfo.DIRECTORY_INVOICES;
+            String fPath = ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_IMAGES + "/" + ProjectInfo.DIRECTORY_Receipt;
 
             @Override
             protected void onPreExecute() {
@@ -393,9 +393,10 @@ public class ReceiptsListActivity extends BaseActivity {
 
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 ll = new LinearLayout(mContext);
+                inflater.inflate(R.layout.receipt_print, ll, true);
 
 
-                if (printerBrand == ProjectInfo.PRINTER_BABY_380_A || printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310 || printerBrand == ProjectInfo.PRINTER_DELTA_380_A) {
+                /*if (printerBrand == ProjectInfo.PRINTER_BABY_380_A || printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310 || printerBrand == ProjectInfo.PRINTER_DELTA_380_A) {
                     inflater.inflate(R.layout.kala_print_template_80mm, ll, true);
 
                 } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
@@ -409,7 +410,7 @@ public class ReceiptsListActivity extends BaseActivity {
                     ChangePrintWidth(_llPrint);
                 } else {
                     inflater.inflate(R.layout.kala_print_template_60mm, ll, true);
-                }
+                }*/
 
                 FillPrintView(ll);
                 ll.setDrawingCacheEnabled(true);
@@ -438,12 +439,12 @@ public class ReceiptsListActivity extends BaseActivity {
             protected void onPostExecute(Boolean result) {
                 super.onPostExecute(result);
                 if (result) {
-                    /*Intent intent = new Intent(this, PrintActivity.class);
+                    Intent intent = new Intent(ReceiptsListActivity.this, PrintActivity.class);
                     intent.putExtra(ProjectInfo._TAG_PAGE_NAME, ProjectInfo._pName_OrderDetail);
                     intent.putExtra(ProjectInfo._TAG_PATH, fPath);
                     intent.putExtra(ProjectInfo._TAG_Name, fName);
                     startActivity(intent);
-                    llprogressBar.setVisibility(View.GONE)*/;
+                    llprogressBar.setVisibility(View.GONE);
                 } else {
                 }
             }
@@ -528,7 +529,7 @@ public class ReceiptsListActivity extends BaseActivity {
 
         public View getGroupView(int groupPosition, boolean isExpanded, View view, ViewGroup parent) {
 
-            Receipt group = (Receipt) getGroup(groupPosition);
+            Receipt receipt = (Receipt) getGroup(groupPosition);
             HolderGroup holdergroup = null;
             if (view == null) {
                 LayoutInflater inf = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -538,7 +539,7 @@ public class ReceiptsListActivity extends BaseActivity {
             } else {
                 holdergroup = (HolderGroup) view.getTag();
             }
-            holdergroup.Populate(group, isExpanded, groupPosition);
+            holdergroup.Populate(receipt, isExpanded, groupPosition);
 
             return view;
         }
@@ -598,24 +599,52 @@ public class ReceiptsListActivity extends BaseActivity {
     }
 
     public void FillPrintView(View view) {
+
+        Receipt receipt = db.GetReceipt(ReceiptId);
+
+        TextView _tvCustomerName, _tvDate, _tvCashAmount, _tvChequeAmount, _tvReceiptAmount, _tvTotalAmount, _tvDescription, _tvCode;
+
         //controls
-        ListView _lstProduct = (ListView) view.findViewById(R.id._lstProduct);
-        TextView _tvOrderDate = (TextView) view.findViewById(R.id._tvOrderDate);
-        TextView _tvUsername = (TextView) view.findViewById(R.id._tvUsername);
-        _tvOrderDate.setText(getDateAndTimeForLong(dt.getTime()));
+      //  ListView _lstProduct = (ListView) view.findViewById(R.id._lstProduct);
+
+        _tvCustomerName = (TextView) view.findViewById(R.id._tvCustomerName);
+        _tvDate = (TextView) view.findViewById(R.id._tvDate);
+        _tvCashAmount = (TextView) view.findViewById(R.id._tvCashAmount);
+        _tvChequeAmount = (TextView) view.findViewById(R.id._tvChequeAmount);
+        _tvReceiptAmount = (TextView) view.findViewById(R.id._tvReceiptAmount);
+        _tvTotalAmount = (TextView) view.findViewById(R.id._tvTotalAmount);
+        _tvDescription = (TextView) view.findViewById(R.id._tvDescription);
+        _tvCode = (TextView) view.findViewById(R.id._tvCode);
+
+        _tvCustomerName.setText(receipt.getCustomerName());
+        _tvCashAmount.setText(ServiceTools.formatPrice(receipt.getCashAmount()));
+        _tvChequeAmount.setText(ServiceTools.formatPrice((receipt.getTotalCheque())));
+        _tvReceiptAmount.setText(ServiceTools.formatPrice(receipt.getTotalCashReceipt()));
+        _tvTotalAmount.setText(ServiceTools.formatPrice(receipt.getTotalAmount()));
+        lngDate = receipt.getDate();
+        _tvDate.setText(getDateAndTimeForLong(lngDate));
+
+        _tvDescription.setText(receipt.getDescription());
+        _tvCode.setText(receipt.getTrackingCode());
+
+
+
+
+       /* _tvOrderDate.setText(getDateAndTimeForLong(dt.getTime()));
         if (BaseActivity.getAuthentication())
             _tvUsername.setText(BaseActivity.getUserProfile().getName());
-       // _adProduct = new AdapterListProductForPrint(mActivty, RecyclerProductAdapter.products);
+
+        _adReceipt = new AdapterReceiptForPrint(mActivty, RecyclerProductAdapter.products);
         _lstProduct.setDrawingCacheEnabled(true);
-       // _lstProduct.setAdapter(_adProduct);
-        ServiceTools.setListViewHeightBasedOnChildren(_lstProduct);
+        _lstProduct.setAdapter(_adReceipt);
+        ServiceTools.setListViewHeightBasedOnChildren(_lstProduct);*/
 
     }
 
-  /*  public class AdapterListProductForPrint extends ArrayAdapter<Product> {
+    /*public class AdapterReceiptForPrint extends ArrayAdapter<Product> {
         Activity mcontaxt;
 
-        public AdapterListProductForPrint(Activity contaxt, ArrayList<Product> array) {
+        public AdapterReceiptForPrint(Activity contaxt, ArrayList<Product> array) {
 
             super(contaxt, lst_print_kala, array);
             mcontaxt = contaxt;
@@ -624,7 +653,7 @@ public class ReceiptsListActivity extends BaseActivity {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             View rowview = convertView;
-            AdapterListProductForPrint.Holder holder = null;
+            AdapterReceiptForPrint.Holder holder = null;
             LayoutInflater inflater = null;
 
             final Product product = getItem(position);
@@ -632,10 +661,10 @@ public class ReceiptsListActivity extends BaseActivity {
             if (rowview == null) {
                 inflater = mcontaxt.getLayoutInflater();
                 rowview = inflater.inflate(lst_print_kala, null, false);
-                holder = new AdapterListProductForPrint.Holder(rowview);
+                holder = new AdapterReceiptForPrint.Holder(rowview);
                 rowview.setTag(holder);
             } else
-                holder = (AdapterListProductForPrint.Holder) rowview.getTag();
+                holder = (AdapterReceiptForPrint.Holder) rowview.getTag();
 
             holder.Populate(product, position);
 

@@ -1140,7 +1140,7 @@
     <string name="str_update_bluetooth_name">Set Bluetooth name prefix</string>
     <string name="str_disconnect">Disconnect</string>
     <string name="str_label_print">Label print</string>
-    <string name="str_receipt_print">Receipt print</string>
+    <string name="str_receipt_print">دریافتی</string>
     <string name="str_cpcl_print">CPCL print</string>
     <string name="str_bluetooth_connect">Bluetooth</string>
     <string name="str_usb_connect">USB</string>

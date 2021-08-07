@@ -11,6 +11,7 @@ public class ProjectInfo {
     public static String DIRECTORY_ORDER_SIGNS = "OrderSign";
     public static String DIRECTORY_PDF = "PDF";
     public static String DIRECTORY_INVOICES = "Invoices";
+    public static String DIRECTORY_Receipt = "Receipts";
     public static String DIRECTORY_REPORTS = "Reports";
     public static String DIRECTORY_PRODUCTS = "Products";
     public static String DIRECTORY_ASSETS = "Assets";
