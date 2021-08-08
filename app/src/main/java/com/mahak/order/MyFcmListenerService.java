@@ -62,10 +62,12 @@ public class MyFcmListenerService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
-       /* String title = remoteMessage.getNotification().getTitle();
-        String body = remoteMessage.getNotification().getBody();
+       /*
         Map data = remoteMessage.getData(); */
-        
+
+        String title = remoteMessage.getNotification().getTitle();
+        String body = remoteMessage.getNotification().getBody();
+
         workOn();
 
         String from = remoteMessage.getFrom();

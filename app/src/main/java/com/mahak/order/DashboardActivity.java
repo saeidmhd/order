@@ -65,6 +65,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.firebase.iid.internal.FirebaseInstanceIdInternal;
 import com.google.firebase.installations.FirebaseInstallations;
 import com.google.firebase.installations.InstallationTokenResult;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -452,7 +453,18 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     private void registerInBackground() {
         FirebaseApp.initializeApp(DashboardActivity.this);
         FirebaseMessaging.getInstance().subscribeToTopic("");
-        FirebaseInstallations.getInstance().getToken(true).addOnCompleteListener(new OnCompleteListener<InstallationTokenResult>() {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                String token = task.getResult();
+                Intent intent = new Intent(DashboardActivity.this, RegistrationIntentService.class);
+                intent.putExtra("token",token);
+                startService(intent);
+            }
+        });
+
+
+       /* FirebaseInstallations.getInstance().getToken(true).addOnCompleteListener(new OnCompleteListener<InstallationTokenResult>() {
             @Override
             public void onComplete(@NonNull Task<InstallationTokenResult> task) {
                 String token = task.getResult().getToken();
@@ -460,7 +472,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 intent.putExtra("token",token);
                 startService(intent);
             }
-        });
+        });*/
     }
 
 
