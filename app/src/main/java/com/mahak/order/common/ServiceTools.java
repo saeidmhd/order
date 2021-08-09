@@ -1,5 +1,6 @@
 package com.mahak.order.common;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
@@ -31,6 +32,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -84,6 +86,7 @@ import java.util.TimeZone;
 
 import static com.mahak.order.BaseActivity.baseUrlImage;
 import static com.mahak.order.BaseActivity.getPrefUsername;
+import static com.mahak.order.BaseActivity.mContext;
 import static com.mahak.order.common.ProjectInfo.DIRECTORY_ORDER_SIGNS;
 
 public class ServiceTools {
@@ -565,20 +568,13 @@ public class ServiceTools {
     }
 
     public static String getDeviceID(Context context) {
-        String DeviceId = "000000000000000";
+        String DeviceId = context.getResources().getString(R.string.error_device_id);
         try {
             DeviceId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.getMessage();
-        }
-        try {
-            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            if (!telephonyManager.getDeviceId().equals("000000000000000"))
-                DeviceId = telephonyManager.getDeviceId();
-        } catch (SecurityException e) {
-            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         return DeviceId;
     }
