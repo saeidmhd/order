@@ -89,6 +89,8 @@ import com.mikepenz.ionicons_typeface_library.Ionicons;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mahak.order.common.ServiceTools.writeLog;
+
 public class DashboardActivity extends BaseActivity implements View.OnClickListener, GoogleMap.OnMarkerClickListener,
         GoogleMap.OnMapClickListener {
 
@@ -457,6 +459,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onComplete(@NonNull Task<String> task) {
                 String token = task.getResult();
+                writeLog(token);
                 Intent intent = new Intent(DashboardActivity.this, RegistrationIntentService.class);
                 intent.putExtra("token",token);
                 startService(intent);

@@ -59,7 +59,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.RandomAccessFile;
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.channels.FileChannel;
@@ -1777,25 +1779,6 @@ FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 
-    public static void writeLog(String str) {
-        new StringBuffer();
-        try {
-            String path = Environment.getExternalStorageDirectory().getPath() + "/ORDER_LOG.txt";
-            File f = new File(path);
-            long seek = f.length();
-            RandomAccessFile raf = new RandomAccessFile(new File(path), "rw");
-            raf.seek(seek);
-            raf.write("\n----------------------------------\n".getBytes());
-            seek += (long) "\n----------------------------------\n".getBytes().length;
-            raf.seek(seek);
-            raf.writeUTF(str);
-            raf.close();
-        } catch (Exception var10) {
-            FirebaseCrashlytics.getInstance().recordException(var10);
-            var10.printStackTrace();
-        }
-    }
-
     public static String getLikeString(String searchStr) {
         String[] searchArray = searchStr.toString().split(" ");
         String LikeString = "";
@@ -1835,5 +1818,26 @@ FirebaseCrashlytics.getInstance().recordException(e);
             result = str.substring(0, str.length() - 5);
         }
         return result;
+    }
+
+    public static void writeLog(String str) {
+        // String version = String.format(getString(R.string.))
+        new StringBuffer();
+        try {
+            String path = Environment.getExternalStorageDirectory().getPath() + "/MAHAK_ORDER_LOG.txt";
+            File f = new File(path);
+            long seek = f.length();
+            RandomAccessFile raf = new RandomAccessFile(new File(path), "rw");
+            raf.seek(seek);
+            raf.write("\n----------------------------------\n".getBytes());
+            seek += (long) "\n----------------------------------\n".getBytes().length;
+            raf.seek(seek);
+            raf.writeUTF(str);
+            raf.close();
+        } catch (Exception var10) {
+            FirebaseCrashlytics.getInstance().recordException(var10);
+            var10.printStackTrace();
+        }
+
     }
 }

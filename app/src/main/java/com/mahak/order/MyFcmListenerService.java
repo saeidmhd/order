@@ -42,6 +42,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Random;
 
+import static com.mahak.order.common.ServiceTools.writeLog;
+
 public class MyFcmListenerService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFCMListenerService";
@@ -53,6 +55,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
+        writeLog(token);
         Intent intent = new Intent(this, RegistrationIntentService.class);
         intent.putExtra("token",token);
         startService(intent);
@@ -65,10 +68,10 @@ public class MyFcmListenerService extends FirebaseMessagingService {
        /*
         Map data = remoteMessage.getData(); */
 
-        String title = remoteMessage.getNotification().getTitle();
-        String body = remoteMessage.getNotification().getBody();
+        /*String title = remoteMessage.getNotification().getTitle();
+        String body = remoteMessage.getNotification().getBody();*/
 
-        workOn();
+        //workOn();
 
         String from = remoteMessage.getFrom();
         Map data = remoteMessage.getData();
@@ -129,7 +132,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
             long notificationId = db.AddNotification(noti);
             int count = db.getCountNotification(String.valueOf(userId));
             if (count > 99) {
-                Long Id = db.getMinNotificationId();
+                long Id = db.getMinNotificationId();
                 db.DeleteNotification(Id);
             }
 
