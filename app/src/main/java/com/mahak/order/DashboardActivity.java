@@ -429,10 +429,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         });
 
-        registerInBackground();
-
-
-
         //on receive message from google gcm
         MyFcmListenerService.receiveMessag = new View.OnClickListener() {
             @Override
@@ -451,32 +447,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
 
     }//end of onCreate
-
-    private void registerInBackground() {
-        FirebaseApp.initializeApp(DashboardActivity.this);
-        FirebaseMessaging.getInstance().subscribeToTopic("");
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                String token = task.getResult();
-                writeLog(token);
-                Intent intent = new Intent(DashboardActivity.this, RegistrationIntentService.class);
-                intent.putExtra("token",token);
-                startService(intent);
-            }
-        });
-
-
-       /* FirebaseInstallations.getInstance().getToken(true).addOnCompleteListener(new OnCompleteListener<InstallationTokenResult>() {
-            @Override
-            public void onComplete(@NonNull Task<InstallationTokenResult> task) {
-                String token = task.getResult().getToken();
-                Intent intent = new Intent(DashboardActivity.this, RegistrationIntentService.class);
-                intent.putExtra("token",token);
-                startService(intent);
-            }
-        });*/
-    }
 
 
     @Override
