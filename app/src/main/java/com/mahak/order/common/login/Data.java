@@ -32,6 +32,14 @@ public class Data {
     @Expose
     private String serverTime;
 
+    @SerializedName("MahakId")
+    @Expose
+    private String mahakId;
+
+    @SerializedName("CreditDay")
+    @Expose
+    private String creditDay;
+
     public String getUserToken() {
         return userToken;
     }
@@ -96,5 +104,21 @@ public class Data {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
         this.serverTime = simpleDateFormat.format(date);
 
+    }
+
+    public String getMahakId() {
+        return mahakId;
+    }
+
+    public void setMahakId(String mahakId) {
+        this.mahakId = mahakId;
+    }
+
+    public String getCreditDay() {
+        return creditDay;
+    }
+
+    public void setCreditDay(String creditDay) {
+        this.creditDay = creditDay;
     }
 }

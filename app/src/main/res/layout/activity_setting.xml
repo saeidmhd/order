@@ -433,6 +433,42 @@
                 android:layout_height="wrap_content"
                 android:background="@color/setting_title_bar_bg"
                 android:padding="@dimen/NormalSize"
+                android:text="شناسه دستگاه (DEVICE ID) " />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/LargeSize"
+                android:paddingLeft="@dimen/LargeSize"
+                android:paddingRight="@dimen/LargeSize"
+                android:paddingTop="@dimen/NormalSize">
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/deviceId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="device id"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <com.mahak.order.widget.FontTextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bar_bg"
+                android:padding="@dimen/NormalSize"
                 android:text="@string/str_setting_printer_option" />
 
             <View

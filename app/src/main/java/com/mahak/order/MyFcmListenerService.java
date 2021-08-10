@@ -22,64 +22,94 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
-import com.google.android.gms.gcm.GcmListenerService;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 import com.mahak.order.common.Notification;
 import com.mahak.order.service.NotificationService;
 import com.mahak.order.storage.DbAdapter;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Random;
 
-public class MyGcmListenerService extends GcmListenerService {
+import static com.mahak.order.common.ServiceTools.writeLog;
 
-    private static final String TAG = "MyGcmListenerService";
+public class MyFcmListenerService extends FirebaseMessagingService {
 
-    /**
-     * Called when message is received.
-     *
-     * @param from SenderID of the sender.
-     * @param data Data bundle containing message data as key/value pairs.
-     * For Set of keys use data.keySet().
-     */
+    private static final String TAG = "MyFCMListenerService";
+
 
     public static View.OnClickListener receiveMessag = null;
 
+
+    @Override
+    public void onNewToken(@NonNull String token) {
+        super.onNewToken(token);
+        writeLog(token);
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        intent.putExtra("token",token);
+        startService(intent);
+    }
+
     // [START receive_message]
     @Override
-    public void onMessageReceived(String from, Bundle data) {
-        String message = data.getString("message");
-        Log.d(TAG, "From: " + from);
+    public void onMessageReceived(RemoteMessage remoteMessage) {
+
+       /*
+        Map data = remoteMessage.getData(); */
+
+        /*String title = remoteMessage.getNotification().getTitle();
+        String body = remoteMessage.getNotification().getBody();*/
+
+        //workOn();
+
+        String from = remoteMessage.getFrom();
+        Map data = remoteMessage.getData();
+
+        data.get("mess");
+
+        String message = remoteMessage.getData().get("message");
+        Log.d(TAG, "From: " + remoteMessage.getFrom());
         Log.d(TAG, "Message: " + message);
 
-        if (from.startsWith("/topics/")) {
+        if (remoteMessage.getFrom().startsWith("/topics/")) {
             // message received from some topic.
         } else {
             // normal downstream message.
         }
 //        sendNotification(message);
-        readMessage(data);
+        readMessage(remoteMessage);
         // [END_EXCLUDE]
+    }
+
+    private void workOn() {
+        ContextCompat.getMainExecutor(getApplicationContext()).execute(()  -> {
+            Toast.makeText(this, "message received", Toast.LENGTH_SHORT).show();
+        });
     }
     // [END receive_message]
 
-    private void readMessage(Bundle bundle) {
-        if (!bundle.containsKey("message"))
+    private void readMessage(RemoteMessage remoteMessage) {
+        if (!remoteMessage.getData().containsKey("message"))
             return;
-        String title = bundle.getString("title");
-        String message = bundle.getString("message");
-        String fullMessage = bundle.getString("fullmessage");
-        String type = bundle.getString("type");
-        String data = bundle.getString("data");
+        String title = remoteMessage.getData().get("title");
+        String message = remoteMessage.getData().get("message");
+        String fullMessage = remoteMessage.getData().get("fullmessage");
+        String type = remoteMessage.getData().get("type");
+        String data = remoteMessage.getData().get("data");
         String sound = "";
-        if (bundle.containsKey("soundName")) {
-            sound = bundle.getString("soundName");
+        if (remoteMessage.getData().containsKey("soundName")) {
+            sound = remoteMessage.getData().get("soundName");
             sound = sound.substring(0, sound.lastIndexOf("."));
         } else {
             sound = "";
@@ -102,7 +132,7 @@ public class MyGcmListenerService extends GcmListenerService {
             long notificationId = db.AddNotification(noti);
             int count = db.getCountNotification(String.valueOf(userId));
             if (count > 99) {
-                Long Id = db.getMinNotificationId();
+                long Id = db.getMinNotificationId();
                 db.DeleteNotification(Id);
             }
 
@@ -178,7 +208,6 @@ public class MyGcmListenerService extends GcmListenerService {
                 else if (resId == 0)
                     ResSound = false;
             } catch (Exception e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
                 FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
                 FirebaseCrashlytics.getInstance().recordException(e);
                 ResSound = false;

@@ -1264,6 +1264,7 @@
     <string name="show_count">نمایش تعداداقلام</string>
     <string name="show_user_name">نمایش نام کاربری</string>
     <string name="smart_pos_payment_desc">پرداخت موفق از طریق اسمارت پوز</string>
+    <string name="error_device_id">خطا در دریافت شناسه دستگاه</string>
 
 
 </resources>

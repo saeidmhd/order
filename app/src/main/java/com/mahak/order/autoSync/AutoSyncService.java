@@ -34,6 +34,7 @@ import com.mahak.order.common.PromotionEntity;
 import com.mahak.order.common.PropertyDescription;
 import com.mahak.order.common.Reasons;
 import com.mahak.order.common.Receipt;
+import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.Setting;
 import com.mahak.order.common.TransactionsLog;
 import com.mahak.order.common.User;
@@ -174,7 +175,7 @@ public class AutoSyncService extends IntentService {
         loginBody.setAppId("MahakOrder");
         loginBody.setDatabaseId(0);
         loginBody.setLanguage("en-US");
-        loginBody.setDeviceId("");
+        loginBody.setDeviceId(ServiceTools.getDeviceID(mContext));
         loginBody.setDescription("login");
         loginBody.setUserName(user.getUsername());
         loginBody.setPassword(user.getPassword());

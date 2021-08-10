@@ -20,15 +20,16 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.google.android.gms.gcm.GcmPubSub;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
+
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.webService.RequestSender;
@@ -51,6 +52,14 @@ public class RegistrationIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        String token = "";
+        if (intent != null) {
+            Bundle bundle =  intent.getExtras();
+            if (bundle != null) {
+                token = bundle.getString("token");
+            }
+        }
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         try {
@@ -60,10 +69,12 @@ public class RegistrationIntentService extends IntentService {
             // R.string.gcm_defaultSenderId (the Sender ID) is typically derived from google-services.json.
             // See https://developers.google.com/cloud-messaging/android/start for details on this file.
             // [START get_token]
-            InstanceID instanceID = InstanceID.getInstance(this);
-            String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+
+            /*InstanceID instanceID = InstanceID.getInstance(this);
+            String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);*/
+
             // [END get_token]
-            Log.i(TAG, "GCM Registration Token: " + token);
+            Log.i(TAG, "FCM Registration Token: " + token);
 
             // TODO: Implement this method to send any registration to your app's servers.
             sendRegistrationToServer(token);
@@ -120,7 +131,7 @@ public class RegistrationIntentService extends IntentService {
 
 
     public String registerRequestPackage(Context ctx, String Token) {
-        String rPackage = "{\"deviceId\":\"" + ServiceTools.getDeviceID(ctx) + "\",\"deviceToken\":\"" + Token + "\",\"os\":\"android\",\"osVersion\":\"" + android.os.Build.VERSION.SDK_INT + "\",\"appId\":" + ProjectInfo.App_Id + ",\"appVersion\":\"" + ServiceTools.getVersionCode(ctx) + "\",\"timeZone\":\"" + getTimeZone() + "\",\"mahakId\":\"\"}";
+        String rPackage = "{\"deviceId\":\"" + ServiceTools.getDeviceID(ctx) + "\",\"deviceToken\":\"" + Token + "\",\"os\":\"android\",\"osVersion\":\"" + android.os.Build.VERSION.SDK_INT + "\",\"appId\":" + ProjectInfo.App_Id + ",\"appVersion\":\"" + ServiceTools.getVersionCode(ctx) + "\",\"timeZone\":\"" + getTimeZone()+ "\",\"mahakId\":\"" + BaseActivity.getPrefMahakId() + "\"}";
         return rPackage;
     }
 
@@ -143,10 +154,15 @@ public class RegistrationIntentService extends IntentService {
      */
     // [START subscribe_topics]
     private void subscribeTopics(String token) throws IOException {
-        GcmPubSub pubSub = GcmPubSub.getInstance(this);
+
+        FirebaseApp.initializeApp(this);
+        for (String topic : TOPICS) {
+            FirebaseMessaging.getInstance().subscribeToTopic(topic);
+        }
+        /*GcmPubSub pubSub = GcmPubSub.getInstance(this);
         for (String topic : TOPICS) {
             pubSub.subscribe(token, "/topics/" + topic, null);
-        }
+        }*/
     }
     // [END subscribe_topics]
 
