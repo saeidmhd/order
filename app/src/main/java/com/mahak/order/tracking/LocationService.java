@@ -677,7 +677,7 @@ public class LocationService extends Service {
         intent.putExtra(EXTRA_STARTED_FROM_NOTIFICATION, true);
         PendingIntent activityPendingIntent = PendingIntent.getActivity(mContext, 0,
                 new Intent(mContext, DashboardActivity.class), 0);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext,CHANNEL_ID)
                 .addAction(R.drawable.ic_launcher, mContext.getString(R.string.app_name),
                         activityPendingIntent)
                 .setContentText(text)
@@ -688,10 +688,6 @@ public class LocationService extends Service {
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setTicker(text)
                 .setWhen(System.currentTimeMillis());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder.setChannelId(CHANNEL_ID); // Channel ID
-        }
-
         return builder.build();
     }
 
