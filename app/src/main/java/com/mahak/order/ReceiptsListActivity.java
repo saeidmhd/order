@@ -266,7 +266,6 @@ public class ReceiptsListActivity extends BaseActivity {
                 tvTotalAmount.setText(ServiceTools.formatPrice(receipt.getTotalAmount()));
                 lngDate = receipt.getDate();
                 tvDate.setText(getDateAndTimeForLong(lngDate));
-
                 tvDescription.setText(receipt.getDescription());
                 //Check Publish________________________________________________________________
                 if (receipt.getPublish() == ProjectInfo.DONT_PUBLISH)

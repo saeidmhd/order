@@ -6,10 +6,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,24 +16,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
-import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.User;
 import com.mahak.order.common.login.LoginBody;
 import com.mahak.order.common.login.LoginResult;
-import com.mahak.order.common.loginSignalr.SignalLoginBody;
-import com.mahak.order.common.loginSignalr.SignalLoginResult;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.DbSchema;
 import com.mahak.order.widget.FontAlertDialog;
 import com.mahak.order.widget.FontProgressDialog;
-
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
 
 import java.util.Date;
 
@@ -276,11 +272,27 @@ public class LoginActivityRestApi extends BaseActivity {
     }
 
     private void gotoDashboard(User user) {
-            setPrefUserId(ServiceTools.toLong(user.getServerUserID()));
-            Intent intent = new Intent(LoginActivityRestApi.this, DashboardActivity.class);
-            intent.putExtra(Type_Login, bnd_Login_Splash);
-            startActivity(intent);
-            finish();
+        if (ServiceTools.checkPlayServices(LoginActivityRestApi.this)) {
+            getFcmTokenRegisterInBackground();
+        }
+        setPrefUserId(ServiceTools.toLong(user.getServerUserID()));
+        Intent intent = new Intent(LoginActivityRestApi.this, DashboardActivity.class);
+        intent.putExtra(Type_Login, bnd_Login_Splash);
+        startActivity(intent);
+        finish();
+    }
+
+    private void getFcmTokenRegisterInBackground() {
+        FirebaseApp.initializeApp(LoginActivityRestApi.this);
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                String token = task.getResult();
+                Intent intent = new Intent(LoginActivityRestApi.this, RegistrationIntentService.class);
+                intent.putExtra("token",token);
+                startService(intent);
+            }
+        });
     }
 
     @Override

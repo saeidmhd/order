@@ -1,6 +1,7 @@
 package com.mahak.order.common;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
@@ -39,6 +40,8 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.datatransport.runtime.dagger.multibindings.ElementsIntoSet;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.mahak.order.BaseActivity;
@@ -90,6 +93,8 @@ import static com.mahak.order.BaseActivity.mContext;
 import static com.mahak.order.common.ProjectInfo.DIRECTORY_ORDER_SIGNS;
 
 public class ServiceTools {
+
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000 ;
 
     public static String formatCount(double amountParam) {
         int DecimalPointNumber = ServiceTools.toInt(BaseActivity.getPrefCountDecimalPoint());
@@ -1834,6 +1839,20 @@ FirebaseCrashlytics.getInstance().recordException(e);
             FirebaseCrashlytics.getInstance().recordException(var10);
             var10.printStackTrace();
         }
+    }
 
+    // check for gcm
+    public static boolean checkPlayServices(Activity activity) {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(activity);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(activity, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i("GCM", "This device is not supported.");
+            }
+            return false;
+        }
+        return true;
     }
 }

@@ -54,9 +54,6 @@ public class SplashActivity extends BaseActivity {
         ServiceTools.scheduleAlarm(this);
 
         getSupportActionBar().hide();
-        if (checkPlayServices()) {
-            registerInBackground();
-        }
 
        // GpsTracking.setAlarmManager(getApplicationContext());
         ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_waiter, "0");
@@ -138,22 +135,6 @@ public class SplashActivity extends BaseActivity {
         }
 
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    // check for gcm
-    private boolean checkPlayServices() {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
-                        .show();
-            } else {
-                Log.i("GCM", "This device is not supported.");
-            }
-            return false;
-        }
-        return true;
     }
 
     public static void initImageLoader(Context context) {
@@ -240,20 +221,6 @@ public class SplashActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }
-    }
-
-    private void registerInBackground() {
-        FirebaseApp.initializeApp(SplashActivity.this);
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                String token = task.getResult();
-                writeLog(token);
-                Intent intent = new Intent(SplashActivity.this, RegistrationIntentService.class);
-                intent.putExtra("token",token);
-                startService(intent);
-            }
-        });
     }
 
     //endregion
