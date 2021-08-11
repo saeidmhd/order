@@ -16,12 +16,14 @@
 
 package com.mahak.order;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -103,7 +105,14 @@ public class MyFcmListenerService extends FirebaseMessagingService {
 
     private void sendNotification(String title, String message, String fullMessage, String type, String data, long id, String sound) {
 
+        String CHANNEL_ID = "order_notification";
         NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.app_name);
+            NotificationChannel mChannel =
+                    new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
+            mNotificationManager.createNotificationChannel(mChannel);
+        }
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, SplashActivity.class), 0);
 
@@ -154,7 +163,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                 ResSound = false;
             }
 
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this,CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_launcher)
                     .setContentTitle(title)
                     .setStyle(new NotificationCompat.BigTextStyle()
