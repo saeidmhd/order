@@ -163,9 +163,16 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                 ResSound = false;
             }
 
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this,CHANNEL_ID)
-                    .setSmallIcon(R.drawable.ic_launcher)
-                    .setContentTitle(title)
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this,CHANNEL_ID);
+            
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mBuilder.setSmallIcon(R.drawable.ic_launcher_noti);
+                mBuilder.setColor(getApplicationContext().getResources().getColor(R.color.notification_color));
+            } else {
+                mBuilder.setSmallIcon(R.drawable.ic_launcher);
+            }
+
+            mBuilder.setContentTitle(title)
                     .setStyle(new NotificationCompat.BigTextStyle()
                             .bigText(fullMessage))
                     .setContentText(message)
