@@ -28,10 +28,11 @@ public class PrintSettingActivity extends Activity {
     private ImageView imgLogo;
     private Bitmap myLogo;
     private CheckBox chkShowDescription, chkShowLogo, chkShowTitle;
-    private EditText txtDescription, txtTitle;
+    private EditText txtDescription, txtTitle,txtDescription1,txtDescription2;
     String fPath = ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_IMAGES + "/" + ProjectInfo.DIRECTORY_ASSETS;
     Context mContext;
     private String pageName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +79,44 @@ public class PrintSettingActivity extends Activity {
             }
         });
 
+        txtDescription1.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() != 0) {
+                    BaseActivity.setUnderPrintText1(mContext, pageName, s.toString());
+                } else {
+                    BaseActivity.setUnderPrintText1(mContext, pageName, "");
+                }
+            }
+        });
+        txtDescription2.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() != 0) {
+                    BaseActivity.setUnderPrintText2(mContext, pageName, s.toString());
+                } else {
+                    BaseActivity.setUnderPrintText2(mContext, pageName, "");
+                }
+            }
+        });
         txtDescription.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -140,7 +179,11 @@ public class PrintSettingActivity extends Activity {
     }//end of onCreate
 
     public void initData() {
+
         txtDescription.setText(BaseActivity.getUnderPrintText(mContext, pageName));
+        txtDescription1.setText(BaseActivity.getUnderPrintText1(mContext, pageName));
+        txtDescription2.setText(BaseActivity.getUnderPrintText2(mContext, pageName));
+
         txtTitle.setText(BaseActivity.getTitleText(mContext));
         chkShowDescription.setChecked(BaseActivity.getUnderPrintTextStatus(mContext, pageName));
         chkShowTitle.setChecked(BaseActivity.getTitleStatus(mContext));
@@ -161,6 +204,8 @@ public class PrintSettingActivity extends Activity {
         chkShowTitle = (CheckBox) findViewById(R.id.chkShowTitle);
         chkShowLogo = (CheckBox) findViewById(R.id.chkShowLogo);
         txtDescription = (EditText) findViewById(R.id.txtDescription);
+        txtDescription1 = (EditText) findViewById(R.id.txtDescription1);
+        txtDescription2 = (EditText) findViewById(R.id.txtDescription2);
         txtTitle = (EditText) findViewById(R.id.txtTitle);
     }
 

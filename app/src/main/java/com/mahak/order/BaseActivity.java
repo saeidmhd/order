@@ -146,6 +146,8 @@ public class BaseActivity extends AppCompatActivity {
     //////////////////////////sml
     public static String __pref_current_printer = "CurrentPrinter";
     public static String __pref_under_print_text = "UnderPrintText";
+    public static String __pref_under_print_text1 = "UnderPrintText1";
+    public static String __pref_under_print_text2 = "UnderPrintText2";
     public static String __pref_under_print_text_status = "UnderPrintTextStatus";
     public static String __pref_under_print_sign = "UnderPrintSign";
     public static String __pref_print_logo_status = "PrintLogoStatus";
@@ -786,10 +788,26 @@ public class BaseActivity extends AppCompatActivity {
         SharedPreferences spf = context.getSharedPreferences(BaseActivity.SharedPreferencesMahak, MODE_PRIVATE);
         spf.edit().putString(BaseActivity.__pref_under_print_text + "_" + pName, text.trim()).commit();
     }
+    public static void setUnderPrintText1(Context context, String pName, String text) {
+        SharedPreferences spf = context.getSharedPreferences(BaseActivity.SharedPreferencesMahak, MODE_PRIVATE);
+        spf.edit().putString(BaseActivity.__pref_under_print_text1 + "_" + pName, text.trim()).commit();
+    }
+    public static void setUnderPrintText2(Context context, String pName, String text) {
+        SharedPreferences spf = context.getSharedPreferences(BaseActivity.SharedPreferencesMahak, MODE_PRIVATE);
+        spf.edit().putString(BaseActivity.__pref_under_print_text2 + "_" + pName, text.trim()).commit();
+    }
 
     public static String getUnderPrintText(Context context, String pName) {
         SharedPreferences spf = context.getSharedPreferences(BaseActivity.SharedPreferencesMahak, MODE_PRIVATE);
         return spf.getString(BaseActivity.__pref_under_print_text + "_" + pName, "");
+    }
+    public static String getUnderPrintText1(Context context, String pName) {
+        SharedPreferences spf = context.getSharedPreferences(BaseActivity.SharedPreferencesMahak, MODE_PRIVATE);
+        return spf.getString(BaseActivity.__pref_under_print_text1 + "_" + pName, "");
+    }
+    public static String getUnderPrintText2(Context context, String pName) {
+        SharedPreferences spf = context.getSharedPreferences(BaseActivity.SharedPreferencesMahak, MODE_PRIVATE);
+        return spf.getString(BaseActivity.__pref_under_print_text2 + "_" + pName, "");
     }
 
     public static void setUnderPrintTextStatus(Context context, String pName, Boolean status) {

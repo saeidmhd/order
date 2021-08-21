@@ -107,15 +107,15 @@
             android:padding="@dimen/NormalSize">
 
             <CheckBox
-                android:id="@+id/chkShowDescription"
+                android:id="@+id/chkShowTitle"
                 style="@style/forms_checkbox_default"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="false"
-                android:text="@string/str_setting_under_text_title" />
+                android:text="@string/str_setting_title" />
 
             <EditText
-                android:id="@+id/txtDescription"
+                android:id="@+id/txtTitle"
                 style="@style/forms_edittext_default"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -134,15 +134,33 @@
             android:padding="@dimen/NormalSize">
 
             <CheckBox
-                android:id="@+id/chkShowTitle"
+                android:id="@+id/chkShowDescription"
                 style="@style/forms_checkbox_default"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="false"
-                android:text="@string/str_setting_title" />
+                android:text="@string/str_setting_under_text_title" />
 
             <EditText
-                android:id="@+id/txtTitle"
+                android:id="@+id/txtDescription"
+                style="@style/forms_edittext_default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right|center_vertical"
+                android:maxLength="1000"
+                android:selectAllOnFocus="true"
+                android:singleLine="true" />
+            <EditText
+                android:id="@+id/txtDescription1"
+                style="@style/forms_edittext_default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right|center_vertical"
+                android:maxLength="1000"
+                android:selectAllOnFocus="true"
+                android:singleLine="true" />
+            <EditText
+                android:id="@+id/txtDescription2"
                 style="@style/forms_edittext_default"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

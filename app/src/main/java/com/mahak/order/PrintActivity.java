@@ -28,6 +28,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -68,6 +69,7 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.PdfWriter;
 
 
+import com.itextpdf.text.pdf.StringUtils;
 import com.kishcore.sdk.hybrid.api.DataCallback;
 import com.kishcore.sdk.hybrid.api.SDKManager;
 import com.mahak.order.Baby380A.ConnMoreDevicesActivity;
@@ -703,42 +705,44 @@ public class PrintActivity extends BaseActivity {
             }
         }
 
+        String underText = getUnderText();
+
         if (getUnderPrintTextStatus(mContext, pageName)) {
-            if (!getUnderPrintText(mContext, pageName).trim().equals("")) {
+            if (!underText.equals("")) {
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                 if (printerBrand == ProjectInfo.PRINTER_BABY_380_A || printerBrand == ProjectInfo.PRINTER_DELTA_380_A) {
                     placeholder = inflater.inflate(R.layout.placeholder_plain_text80mm, null, false);
                     TextView tvText = (TextView) placeholder.findViewById(R.id.tvText);
-                    tvText.setText(getUnderPrintText(mContext, pageName).trim());
+                    tvText.setText(underText);
 
                 } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
                     placeholder = inflater.inflate(R.layout.placeholder_plain_text50mm, null, false);
                     TextView tvText = (TextView) placeholder.findViewById(R.id.tvText);
-                    tvText.setText(getUnderPrintText(mContext, pageName).trim());
+                    tvText.setText(underText);
 
                 } else if (printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII) {
                     placeholder = inflater.inflate(R.layout.placeholder_plain_text88mm, null, false);
                     TextView tvText = (TextView) placeholder.findViewById(R.id.tvText);
-                    tvText.setText(getUnderPrintText(mContext, pageName).trim());
+                    tvText.setText(underText);
                     LinearLayout _llPrint = (LinearLayout) placeholder.findViewById(R.id._llPrint);
                     ChangePrintWidth(_llPrint);
 
                 } else if (printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310) {
                     placeholder = inflater.inflate(R.layout.placeholder_plain_text80mm, null, false);
                     TextView tvText = (TextView) placeholder.findViewById(R.id.tvText);
-                    tvText.setText(getUnderPrintText(mContext, pageName).trim());
+                    tvText.setText(underText);
 
                 } else if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW || printerBrand == ProjectInfo.UROVO_K319 || printerBrand == Woosim_WSP_R341) {
                     placeholder = inflater.inflate(R.layout.placeholder_plain_text88mm, null, false);
                     TextView tvText = (TextView) placeholder.findViewById(R.id.tvText);
-                    tvText.setText(getUnderPrintText(mContext, pageName).trim());
+                    tvText.setText(underText);
                     LinearLayout _llPrint = (LinearLayout) placeholder.findViewById(R.id._llPrint);
                     ChangePrintWidth(_llPrint);
                 } else {
                     placeholder = inflater.inflate(R.layout.placeholder_plain_text, null, false);
                     TextView tvText = (TextView) placeholder.findViewById(R.id.tvText);
-                    tvText.setText(getUnderPrintText(mContext, pageName).trim());
+                    tvText.setText(underText);
                 }
                 placeholder.setDrawingCacheEnabled(true);
                 placeholder.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
@@ -838,6 +842,18 @@ public class PrintActivity extends BaseActivity {
             }
         });
         getShareIntent();
+    }
+
+    private String getUnderText() {
+        String result = "";
+        if(!TextUtils.isEmpty(getUnderPrintText(mContext, pageName)))
+            result = getUnderPrintText(mContext, pageName);
+        if(!TextUtils.isEmpty(getUnderPrintText1(mContext, pageName)))
+            result += "\n" + getUnderPrintText1(mContext, pageName);
+        if(!TextUtils.isEmpty(getUnderPrintText2(mContext, pageName)))
+            result += "\n" + getUnderPrintText2(mContext, pageName);
+
+        return result;
     }
 
 

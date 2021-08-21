@@ -106,6 +106,33 @@
             android:orientation="vertical"
             android:padding="@dimen/NormalSize">
 
+            <CheckBox
+                android:id="@+id/chkShowTitle"
+                style="@style/forms_checkbox_default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/str_setting_title" />
+
+            <EditText
+                android:id="@+id/txtTitle"
+                style="@style/forms_edittext_default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:maxLength="1000"
+                android:selectAllOnFocus="true"
+                android:singleLine="true" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="@dimen/NormalSize">
+
             <com.mahak.order.widget.FontCheckBox
                 android:id="@+id/chkShowDescription"
                 style="@style/forms_checkbox_default"
@@ -123,30 +150,21 @@
                 android:selectAllOnFocus="true"
                 android:singleLine="true" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:padding="@dimen/NormalSize">
-
-            <CheckBox
-                android:id="@+id/chkShowTitle"
-                style="@style/forms_checkbox_default"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="@string/str_setting_title" />
-
-            <EditText
-                android:id="@+id/txtTitle"
+            <com.mahak.order.widget.FontEditText
+                android:id="@+id/txtDescription1"
                 style="@style/forms_edittext_default"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left|center_vertical"
-                android:maxLength="1000"
+                android:selectAllOnFocus="true"
+                android:singleLine="true" />
+
+            <com.mahak.order.widget.FontEditText
+                android:id="@+id/txtDescription2"
+                style="@style/forms_edittext_default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
                 android:selectAllOnFocus="true"
                 android:singleLine="true" />
 

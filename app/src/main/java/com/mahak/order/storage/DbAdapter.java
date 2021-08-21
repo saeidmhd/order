@@ -74,6 +74,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import io.reactivex.annotations.NonNull;
 
@@ -599,6 +600,7 @@ public class DbAdapter {
 
     public long AddReceipt(Receipt receipt) {
         ContentValues initialvalue = new ContentValues();
+        initialvalue.put(DbSchema.Receiptschema.COLUMN_ID, receipt.getVisitorId() + ServiceTools.createID());
         initialvalue.put(DbSchema.Receiptschema.COLUMN_USER_ID, receipt.getVisitorId());
         initialvalue.put(DbSchema.Receiptschema.COLUMN_MAHAK_ID, receipt.getMahakId());
         initialvalue.put(DbSchema.Receiptschema.COLUMN_DATABASE_ID, receipt.getDatabaseId());
@@ -4746,8 +4748,8 @@ public class DbAdapter {
                             " or " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
                             " ) and " + groupIdScript(groupId)
                             + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_Deleted + " = " + 0
-                            + " and " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_MAHAK_ID + " = " + BaseActivity.getPrefMahakId()
-                            + " and " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_DATABASE_ID + " = " + BaseActivity.getPrefDatabaseId()
+                            + " and " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_MAHAK_ID + " = '" + BaseActivity.getPrefMahakId()
+                            + "' and " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_DATABASE_ID + " = " + BaseActivity.getPrefDatabaseId()
                             + " and " + DbSchema.Customerschema.TABLE_NAME + "." + DbSchema.Customerschema.COLUMN_USER_ID + " = " + getPrefUserId()
                             + " order by " + orderBy, null);
             if (cursor != null) {

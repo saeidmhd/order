@@ -86,6 +86,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.mahak.order.BaseActivity.baseUrlImage;
 import static com.mahak.order.BaseActivity.getPrefUsername;
@@ -1854,5 +1855,12 @@ FirebaseCrashlytics.getInstance().recordException(e);
             return false;
         }
         return true;
+    }
+
+    private static final AtomicInteger idCounter = new AtomicInteger();
+
+    public static int createID()
+    {
+        return idCounter.getAndIncrement();
     }
 }
