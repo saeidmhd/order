@@ -429,7 +429,7 @@ public class ReceiptsListActivity extends BaseActivity {
                 super.onPostExecute(result);
                 if (result) {
                     Intent intent = new Intent(ReceiptsListActivity.this, PrintActivity.class);
-                    intent.putExtra(ProjectInfo._TAG_PAGE_NAME, ProjectInfo._pName_OrderDetail);
+                    intent.putExtra(ProjectInfo._TAG_PAGE_NAME, ProjectInfo._pName_ReceiptList);
                     intent.putExtra(ProjectInfo._TAG_PATH, fPath);
                     intent.putExtra(ProjectInfo._TAG_Name, fName);
                     intent.putExtra("OrderCode", String.valueOf(ReceiptId));

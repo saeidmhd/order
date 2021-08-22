@@ -113,6 +113,7 @@ public class ProjectInfo {
 
     //Pages Name
     public static String _pName_OrderDetail = "orderdetail";
+    public static String _pName_ReceiptList = "receiptList";
     public static String _pName_DailyReport = "dailyreport";
     public static String _pName_CustomerReport = "customerreport";
     public static String _pName_ProductReport = "productreport";

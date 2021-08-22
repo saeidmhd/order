@@ -1455,7 +1455,7 @@ public class PrintActivity extends BaseActivity {
         MenuItem signItem = menu.findItem(R.id.menu_sign);
         MenuItem printa4 = menu.findItem(R.id.printa4);
         MenuItem deleteSign = menu.findItem(R.id.delete_sign);
-        if (!SharedPreferencesHelper.getSignUnderFactor(mContext)) {
+        if (!SharedPreferencesHelper.getSignUnderFactor(mContext) || pageName.equals(ProjectInfo._pName_ReceiptList)) {
             signItem.setVisible(false);
             deleteSign.setVisible(false);
             imgPrint.setOnClickListener(null);
@@ -1518,6 +1518,8 @@ public class PrintActivity extends BaseActivity {
         shareIntent.putExtra(Intent.EXTRA_STREAM, photoURI);
         return shareIntent;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

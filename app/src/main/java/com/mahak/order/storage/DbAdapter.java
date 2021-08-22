@@ -600,7 +600,7 @@ public class DbAdapter {
 
     public long AddReceipt(Receipt receipt) {
         ContentValues initialvalue = new ContentValues();
-        initialvalue.put(DbSchema.Receiptschema.COLUMN_ID, receipt.getVisitorId() + ServiceTools.createID());
+       // initialvalue.put(DbSchema.Receiptschema.COLUMN_ID, receipt.getVisitorId() + ServiceTools.createID());
         initialvalue.put(DbSchema.Receiptschema.COLUMN_USER_ID, receipt.getVisitorId());
         initialvalue.put(DbSchema.Receiptschema.COLUMN_MAHAK_ID, receipt.getMahakId());
         initialvalue.put(DbSchema.Receiptschema.COLUMN_DATABASE_ID, receipt.getDatabaseId());
