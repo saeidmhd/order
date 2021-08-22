@@ -72,6 +72,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.firebase.iid.internal.FirebaseInstanceIdInternal;
 import com.google.firebase.installations.FirebaseInstallations;
 import com.google.firebase.installations.InstallationTokenResult;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -102,6 +103,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import static com.mahak.order.common.ServiceTools.writeLog;
 
 public class DashboardActivity extends BaseActivity implements View.OnClickListener, GoogleMap.OnMarkerClickListener,
         GoogleMap.OnMapClickListener {
@@ -486,10 +489,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         });
 
-        registerInBackground();
-
-
-
         //on receive message from google gcm
         MyFcmListenerService.receiveMessag = new View.OnClickListener() {
             @Override
@@ -665,20 +664,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_PERMISSIONS_REQUEST_CODE);
         }
-    }
-
-    private void registerInBackground() {
-        FirebaseApp.initializeApp(DashboardActivity.this);
-        FirebaseMessaging.getInstance().subscribeToTopic("");
-        FirebaseInstallations.getInstance().getToken(true).addOnCompleteListener(new OnCompleteListener<InstallationTokenResult>() {
-            @Override
-            public void onComplete(@NonNull Task<InstallationTokenResult> task) {
-                String token = task.getResult().getToken();
-                Intent intent = new Intent(DashboardActivity.this, RegistrationIntentService.class);
-                intent.putExtra("token",token);
-                startService(intent);
-            }
-        });
     }
 
 

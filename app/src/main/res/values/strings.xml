@@ -1263,6 +1263,7 @@
     <string name="show_market_name">نمایش نام فروشگاه</string>
     <string name="show_count">نمایش تعداداقلام</string>
     <string name="show_user_name">نمایش نام کاربری</string>
+    <string name="error_device_id">خطا در دریافت شناسه دستگاه</string>
 
     <string name="launch_activity">Launch activity</string>
     <string name="location_unknown">Location unknown</string>

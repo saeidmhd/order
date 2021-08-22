@@ -1193,6 +1193,7 @@
     <string name="show_market_name">show market name</string>
     <string name="show_count">show count</string>
     <string name="show_user_name">show user name</string>
+    <string name="error_device_id">خطا در دریافت شناسه دستگاه</string>
 
     <string name="launch_activity">Launch activity</string>
     <string name="location_unknown">Location unknown</string>

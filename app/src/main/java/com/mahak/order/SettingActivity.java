@@ -44,7 +44,7 @@ public class SettingActivity extends AppCompatActivity {
     private DbAdapter db;
     private CheckBox chkReduceAsset, chkShowField, chkShowSign, chkShowBelow, chkShowBelowPrice, chkPrintCompact, chkTemplate2 , chk_tracking_code,chk_market_name,chk_customer_name,chk_count_product;
     private RelativeLayout rvReduceAsset;
-    private TextView tvReduceAsset;
+    private TextView tvReduceAsset,deviceId;
     private EditText txtChargePercent, txtTaxPercent;
     private Spinner spnPrinterBrand;
     private Context mContext;
@@ -415,6 +415,7 @@ public class SettingActivity extends AppCompatActivity {
         chkTemplate2 = (CheckBox) findViewById(R.id.chkTemplate2);
         rvReduceAsset = (RelativeLayout) findViewById(R.id.rvReduceAsset);
         tvReduceAsset = (TextView) findViewById(R.id.tvReduceAsset);
+        deviceId = (TextView) findViewById(R.id.deviceId);
         txtChargePercent = (EditText) findViewById(R.id.txtChargePercent);
         txtTaxPercent = (EditText) findViewById(R.id.txtTaxPercent);
         spnPrinterBrand = (Spinner) findViewById(R.id.spnPrinterBrand);
@@ -494,6 +495,8 @@ public class SettingActivity extends AppCompatActivity {
             txtChargePercent.setText(R.string.disabled);
             txtTaxPercent.setText(R.string.disabled);
         }
+
+        deviceId.setText(ServiceTools.getDeviceID(mContext));
 
         int prtPos = SharedPreferencesHelper.getPrefPrinterBrand(mContext);
         spnPrinterBrand.setSelection(prtPos);

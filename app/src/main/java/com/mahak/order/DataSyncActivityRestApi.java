@@ -261,11 +261,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
         int userDatabaseId = ServiceTools.toInt(user.getDatabaseId());
         int userId = ServiceTools.toInt(user.getServerUserID());
         LoginBody loginBody = new LoginBody();
-        //String DeviceID = ServiceTools.getDeviceID(mContext);
         loginBody.setAppId("MahakOrder");
         loginBody.setDatabaseId(0);
         loginBody.setLanguage("en-US");
-        loginBody.setDeviceId("");
+        loginBody.setDeviceId(ServiceTools.getDeviceID(mContext));
         loginBody.setDescription("login");
         loginBody.setUserName(user.getUsername());
         loginBody.setPassword(user.getPassword());

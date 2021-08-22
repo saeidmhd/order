@@ -1,6 +1,8 @@
 package com.mahak.order;
 
 
+import static com.mahak.order.common.ServiceTools.writeLog;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +13,15 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.SharedPreferencesHelper;
@@ -45,9 +53,7 @@ public class SplashActivity extends BaseActivity {
 
         getSupportActionBar().hide();
         if (checkPlayServices()) {
-            // Start IntentService to register this application with GCM.
-            /*Intent intent = new Intent(this, RegistrationIntentService.class);
-            startService(intent);*/
+            registerInBackground();
         }
 
        // GpsTracking.setAlarmManager(getApplicationContext());
@@ -195,6 +201,20 @@ public class SplashActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void registerInBackground() {
+        FirebaseApp.initializeApp(SplashActivity.this);
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                String token = task.getResult();
+                writeLog(token);
+                Intent intent = new Intent(SplashActivity.this, RegistrationIntentService.class);
+                intent.putExtra("token",token);
+                startService(intent);
+            }
+        });
     }
 
     //endregion

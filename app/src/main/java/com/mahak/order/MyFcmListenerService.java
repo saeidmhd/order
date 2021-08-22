@@ -24,10 +24,13 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -38,6 +41,8 @@ import com.mahak.order.storage.DbAdapter;
 import java.util.Date;
 import java.util.Map;
 import java.util.Random;
+
+import static com.mahak.order.common.ServiceTools.writeLog;
 
 public class MyFcmListenerService extends FirebaseMessagingService {
 
@@ -50,6 +55,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
+        writeLog(token);
         Intent intent = new Intent(this, RegistrationIntentService.class);
         intent.putExtra("token",token);
         startService(intent);
@@ -59,9 +65,13 @@ public class MyFcmListenerService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
-       /* String title = remoteMessage.getNotification().getTitle();
-        String body = remoteMessage.getNotification().getBody();
+       /*
         Map data = remoteMessage.getData(); */
+
+        /*String title = remoteMessage.getNotification().getTitle();
+        String body = remoteMessage.getNotification().getBody();*/
+
+        //workOn();
 
         String from = remoteMessage.getFrom();
         Map data = remoteMessage.getData();
@@ -80,6 +90,12 @@ public class MyFcmListenerService extends FirebaseMessagingService {
 //        sendNotification(message);
         readMessage(remoteMessage);
         // [END_EXCLUDE]
+    }
+
+    private void workOn() {
+        ContextCompat.getMainExecutor(getApplicationContext()).execute(()  -> {
+            Toast.makeText(this, "message received", Toast.LENGTH_SHORT).show();
+        });
     }
     // [END receive_message]
 
@@ -116,7 +132,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
             long notificationId = db.AddNotification(noti);
             int count = db.getCountNotification(String.valueOf(userId));
             if (count > 99) {
-                Long Id = db.getMinNotificationId();
+                long Id = db.getMinNotificationId();
                 db.DeleteNotification(Id);
             }
 

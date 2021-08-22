@@ -158,7 +158,7 @@ public class LoginActivityRestApi extends BaseActivity {
         loginBody.setAppId("MahakOrder");
         loginBody.setDatabaseId(0);
         loginBody.setLanguage("en-US");
-        loginBody.setDeviceId("");
+        loginBody.setDeviceId(ServiceTools.getDeviceID(mContext));
         loginBody.setDescription("login");
         loginBody.setUserName(username);
         loginBody.setPassword(password);
