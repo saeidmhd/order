@@ -12,6 +12,7 @@ build
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 .cxx
+.idea
 local.properties
 /app/release/
 release
