@@ -1,36 +1,19 @@
-/**
- * Copyright 2015 Google Inc. All Rights Reserved.
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 package com.mahak.order;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.util.Log;
+import android.os.Build;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -39,65 +22,27 @@ import com.mahak.order.service.NotificationService;
 import com.mahak.order.storage.DbAdapter;
 
 import java.util.Date;
-import java.util.Map;
 import java.util.Random;
-
-import static com.mahak.order.common.ServiceTools.writeLog;
 
 public class MyFcmListenerService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFCMListenerService";
-
-
     public static View.OnClickListener receiveMessag = null;
-
 
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-        writeLog(token);
         Intent intent = new Intent(this, RegistrationIntentService.class);
         intent.putExtra("token",token);
         startService(intent);
     }
 
-    // [START receive_message]
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
-       /*
-        Map data = remoteMessage.getData(); */
-
         /*String title = remoteMessage.getNotification().getTitle();
         String body = remoteMessage.getNotification().getBody();*/
-
-        //workOn();
-
-        String from = remoteMessage.getFrom();
-        Map data = remoteMessage.getData();
-
-        data.get("mess");
-
-        String message = remoteMessage.getData().get("message");
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
-        Log.d(TAG, "Message: " + message);
-
-        if (remoteMessage.getFrom().startsWith("/topics/")) {
-            // message received from some topic.
-        } else {
-            // normal downstream message.
-        }
-//        sendNotification(message);
         readMessage(remoteMessage);
-        // [END_EXCLUDE]
     }
-
-    private void workOn() {
-        ContextCompat.getMainExecutor(getApplicationContext()).execute(()  -> {
-            Toast.makeText(this, "message received", Toast.LENGTH_SHORT).show();
-        });
-    }
-    // [END receive_message]
 
     private void readMessage(RemoteMessage remoteMessage) {
         if (!remoteMessage.getData().containsKey("message"))
@@ -137,32 +82,21 @@ public class MyFcmListenerService extends FirebaseMessagingService {
             }
 
             db.close();
-            //Send Notification///////////////////////////////////////////
             sendNotification(title, message, fullMessage, type, data, notificationId, sound);
         }
 
     }
 
     private void sendNotification(String title, String message, String fullMessage, String type, String data, long id, String sound) {
-//        Intent intent = new Intent(this, getApplicationContext().getClass());
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
-//
-//        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-//                .setSmallIcon(R.drawable.ic_launcher)
-//                .setContentTitle(getString(R.string.str_notification_title))
-//                .setContentText(message)
-//                .setAutoCancel(true)
-//                .setSound(defaultSoundUri)
-//                .setContentIntent(pendingIntent);
-//
-//        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        int notify_id = new Random().nextInt(9999);
-//        notificationManager.notify(notify_id /* ID of notification */, notificationBuilder.build());
 
-
+        String CHANNEL_ID = "order_notification";
         NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.app_name);
+            NotificationChannel mChannel =
+                    new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
+            mNotificationManager.createNotificationChannel(mChannel);
+        }
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, SplashActivity.class), 0);
 
@@ -213,9 +147,16 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                 ResSound = false;
             }
 
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.ic_launcher)
-                    .setContentTitle(title)
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this,CHANNEL_ID);
+
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mBuilder.setSmallIcon(R.drawable.ic_launcher_noti);
+                mBuilder.setColor(getApplicationContext().getResources().getColor(R.color.notification_color));
+            } else {
+                mBuilder.setSmallIcon(R.drawable.ic_launcher);
+            }
+
+            mBuilder.setContentTitle(title)
                     .setStyle(new NotificationCompat.BigTextStyle()
                             .bigText(fullMessage))
                     .setContentText(message)
@@ -238,6 +179,5 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                 receiveMessag.onClick(null);
             }
         }
-
     }
 }
