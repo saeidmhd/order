@@ -1787,7 +1787,7 @@ FirebaseCrashlytics.getInstance().recordException(e);
     public static void writeLog(String str) {
         new StringBuffer();
         try {
-            String path = Environment.getExternalStorageDirectory().getPath() + "/ORDER_LOG.txt";
+            String path = Environment.getExternalStorageDirectory().getPath() + "/MAHAK_ORDER_LOG.txt";
             File f = new File(path);
             long seek = f.length();
             RandomAccessFile raf = new RandomAccessFile(new File(path), "rw");
