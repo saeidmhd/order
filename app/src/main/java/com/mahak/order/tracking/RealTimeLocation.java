@@ -110,6 +110,8 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
                     e.printStackTrace();
                 }
             }
+        } else {
+            signalSetup();
         }
     }
 }

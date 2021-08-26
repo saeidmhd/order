@@ -217,6 +217,8 @@ public class SplashActivity extends BaseActivity {
         });
     }
 
+
+
     //endregion
 
     // Setup a recurring alarm every half hour

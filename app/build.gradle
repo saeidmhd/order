@@ -16,8 +16,8 @@ android {
         applicationId "com.mahak.order"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 4201
-        versionName '4.201'
+        versionCode 4203
+        versionName '4.203'
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -124,6 +124,7 @@ dependencies {
     implementation files('libs/SmartPosLib_V3.1.2_20180205.jar')
     implementation files('libs/printersdkv1.jar')
     implementation files('libs/platform_sdk_v4.1.0326.jar')
+    implementation files('libs/ksoap2-android-2.5.2')
     implementation project(path: ':Rahyab_Hybrid_CPSDK_1.0.15')
 
     implementation 'com.microsoft.signalr:signalr:3.0.0'
