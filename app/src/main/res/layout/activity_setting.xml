@@ -3,11 +3,11 @@
     android:layout_height="match_parent"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
-    android:gravity="right"
     android:orientation="vertical">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
+        android:layout_weight="1"
         android:layout_height="match_parent">
 
         <LinearLayout
@@ -43,7 +43,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:checked="false" />
+                    android:checked="false"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp" />
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/tvReduceAsset"
@@ -77,7 +79,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:checked="false" />
+                    android:checked="false"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp" />
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/tvBelowPrice"
@@ -111,7 +115,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:checked="false" />
+                    android:checked="false"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp" />
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/tvShowField"
@@ -216,6 +222,7 @@
                     android:layout_toRightOf="@id/tvChargePercent"
                     android:enabled="false"
                     android:gravity="center"
+                    android:minHeight="48dp"
                     android:singleLine="true"
                     android:text="@string/sample_number" />
             </RelativeLayout>
@@ -262,6 +269,7 @@
                     android:layout_toRightOf="@id/tvTaxPercent"
                     android:enabled="false"
                     android:gravity="center"
+                    android:minHeight="48dp"
                     android:singleLine="true"
                     android:text="@string/sample_number" />
             </RelativeLayout>
@@ -298,6 +306,7 @@
                     android:enabled="false"
                     android:entries="@array/array_hour"
                     android:gravity="center"
+                    android:minHeight="48dp"
                     android:singleLine="true"
                     android:text="@string/sample_number"
                     android:textAlignment="center" />
@@ -319,6 +328,7 @@
                     android:enabled="false"
                     android:entries="@array/array_minute"
                     android:gravity="center|right"
+                    android:minHeight="48dp"
                     android:singleLine="true"
                     android:text="@string/sample_number"
                     android:textAlignment="center" />
@@ -352,6 +362,7 @@
                     android:layout_height="wrap_content"
                     android:entries="@array/array_hour"
                     android:gravity="center"
+                    android:minHeight="48dp"
                     android:singleLine="true"
                     android:text="@string/sample_number"
                     android:textAlignment="center" />
@@ -373,6 +384,7 @@
                     android:enabled="false"
                     android:entries="@array/array_minute"
                     android:gravity="center"
+                    android:minHeight="48dp"
                     android:singleLine="true"
                     android:text="@string/sample_number"
                     android:textAlignment="center" />
@@ -736,7 +748,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:checked="true"
                     android:text="@string/medium"
                     android:textSize="14sp"
                     android:layout_margin="@dimen/SmallSize" />
@@ -790,5 +801,22 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:padding="@dimen/SmallSize">
+
+        <com.mahak.order.widget.FontButtonView
+            android:id="@+id/btnSave_close"
+            style="@style/forms_btn_default"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:minHeight="48dp"
+            android:text="@string/save_setting_close" />
+    </LinearLayout>
 
 </LinearLayout>

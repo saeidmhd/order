@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -59,6 +60,7 @@ public class SettingActivity extends AppCompatActivity {
     private LinearLayout llPrinterSize;
     private RadioButton small, medium, large, persian, deutsch;
     private ArrayList<Bank> arrayBank;
+    private Button btnSave_close;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +92,6 @@ public class SettingActivity extends AppCompatActivity {
                 small.setChecked(false);
                 large.setChecked(false);
                 SharedPreferencesHelper.setCurrentFontSize(mContext, 14);
-
             }
         });
 
@@ -164,6 +165,13 @@ public class SettingActivity extends AppCompatActivity {
 
                 SharedPreferencesHelper.setSignUnderFactor(mContext, chkShowSign.isChecked());
 
+            }
+        });
+
+        btnSave_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 
@@ -358,10 +366,10 @@ public class SettingActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        if (PrinterSize.getText().toString() != null && !PrinterSize.getText().toString().isEmpty()) {
+        PrinterSize.getText().toString();
+        if (!PrinterSize.getText().toString().isEmpty()) {
             int size = ServiceTools.toInt(PrinterSize.getText().toString());
             SharedPreferencesHelper.setCurrentWidthSize(mContext, size);
-
         }
     }
 
@@ -404,6 +412,8 @@ public class SettingActivity extends AppCompatActivity {
         chkShowField = (CheckBox) findViewById(R.id.chkShowField);
         chkPrintCompact = (CheckBox) findViewById(R.id.chkPrintCompact);
         chkShowSign = (CheckBox) findViewById(R.id.chkShowSign);
+
+        btnSave_close = (Button) findViewById(R.id.btnSave_close);
 
         chk_tracking_code = (CheckBox) findViewById(R.id.chk_tracking_code);
         chk_market_name = (CheckBox) findViewById(R.id.chk_market_name);

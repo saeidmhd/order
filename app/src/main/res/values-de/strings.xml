@@ -1195,6 +1195,7 @@
     <string name="show_user_name">show user name</string>
     <string name="smart_pos_payment_desc">پرداخت موفق از طریق اسمارت پوز</string>
     <string name="error_device_id">خطا در دریافت شناسه دستگاه</string>
+    <string name="save_setting_close">save and close</string>
 
 
 </resources>
