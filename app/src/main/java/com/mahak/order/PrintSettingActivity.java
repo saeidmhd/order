@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -24,7 +21,7 @@ public class PrintSettingActivity extends Activity {
 
     private int PICK_FROM_GALLERY = 1001;
     private int PICTURE_CROP = 1002;
-    private Button btnBrowse, btnDelete;
+    private Button btnBrowse, btnDelete , btnSave_close;
     private ImageView imgLogo;
     private Bitmap myLogo;
     private CheckBox chkShowDescription, chkShowLogo, chkShowTitle;
@@ -52,7 +49,6 @@ public class PrintSettingActivity extends Activity {
         init();
         initData();
 
-
         btnBrowse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,88 +67,39 @@ public class PrintSettingActivity extends Activity {
             }
         });
 
-        txtDescription.setOnKeyListener(new View.OnKeyListener() {
+        btnSave_close.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+            public void onClick(View view) {
 
-                return false;
-            }
-        });
+                String description = txtDescription.getText().toString();
+                String description1 = txtDescription1.getText().toString();
+                String description2 = txtDescription2.getText().toString();
+                String txtTitleString = txtTitle.getText().toString();
 
-        txtDescription1.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() != 0) {
-                    BaseActivity.setUnderPrintText1(mContext, pageName, s.toString());
-                } else {
-                    BaseActivity.setUnderPrintText1(mContext, pageName, "");
-                }
-            }
-        });
-        txtDescription2.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() != 0) {
-                    BaseActivity.setUnderPrintText2(mContext, pageName, s.toString());
-                } else {
-                    BaseActivity.setUnderPrintText2(mContext, pageName, "");
-                }
-            }
-        });
-        txtDescription.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() != 0) {
-                    BaseActivity.setUnderPrintText(mContext, pageName, s.toString());
+                if (description.length() != 0) {
+                    BaseActivity.setUnderPrintText(mContext, pageName, description);
                 } else {
                     BaseActivity.setUnderPrintText(mContext, pageName, "");
                 }
-            }
-        });
-        txtTitle.addTextChangedListener(new TextWatcher() {
 
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
+                if (description1.length() != 0) {
+                    BaseActivity.setUnderPrintText1(mContext, pageName, description1);
+                } else {
+                    BaseActivity.setUnderPrintText1(mContext, pageName, "");
+                }
 
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+                if (description2.length() != 0) {
+                    BaseActivity.setUnderPrintText2(mContext, pageName, description2);
+                } else {
+                    BaseActivity.setUnderPrintText2(mContext, pageName, "");
+                }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() != 0) {
-                    BaseActivity.setTitleText(mContext, s.toString());
+                if (txtTitleString.length() != 0) {
+                    BaseActivity.setTitleText(mContext, txtTitleString);
                 } else {
                     BaseActivity.setTitleText(mContext, "");
                 }
+                finish();
             }
         });
 
@@ -198,6 +145,7 @@ public class PrintSettingActivity extends Activity {
     public void init() {
         btnBrowse = (Button) findViewById(R.id.btnBrowse);
         btnDelete = (Button) findViewById(R.id.btnDelete);
+        btnSave_close = (Button) findViewById(R.id.btnSave_close);
         btnDelete.setEnabled(false);
         imgLogo = (ImageView) findViewById(R.id.imgLogo);
         chkShowDescription = (CheckBox) findViewById(R.id.chkShowDescription);

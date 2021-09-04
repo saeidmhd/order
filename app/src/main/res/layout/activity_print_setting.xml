@@ -1,175 +1,198 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    tools:context="com.mahak.order.PrintSettingActivity">
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bar_bg"
+                android:padding="@dimen/NormalSize"
+                android:text="@string/str_setting_logo_title" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/NormalSize">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/NormalSize"
+                    android:background="@color/forms_seprator_line"
+                    android:padding="1dp">
+
+                    <ImageView
+                        android:id="@+id/imgLogo"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:background="@color/forms_alter_row" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btnBrowse"
+                        style="@style/forms_btn_default"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/str_choose_logo" />
+
+                    <Button
+                        android:id="@+id/btnDelete"
+                        style="@style/forms_btn_default"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/str_delete_logo" />
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/chkShowLogo"
+                    style="@style/forms_checkbox_default"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="@string/str_show_logo" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bar_bg"
+                android:padding="@dimen/NormalSize"
+                android:text="@string/str_setting_other_setting_title" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/setting_line_separator" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="@dimen/NormalSize">
+
+                <CheckBox
+                    android:id="@+id/chkShowTitle"
+                    style="@style/forms_checkbox_default"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/str_setting_title" />
+
+                <EditText
+                    android:id="@+id/txtTitle"
+                    style="@style/forms_edittext_default"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right|center_vertical"
+                    android:maxLength="1000"
+                    android:selectAllOnFocus="true"
+                    android:singleLine="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="@dimen/NormalSize">
+
+                <CheckBox
+                    android:id="@+id/chkShowDescription"
+                    style="@style/forms_checkbox_default"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/str_setting_under_text_title" />
+
+                <EditText
+                    android:id="@+id/txtDescription"
+                    style="@style/forms_edittext_default"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right|center_vertical"
+                    android:maxLength="1000"
+                    android:selectAllOnFocus="true"
+                    android:singleLine="true" />
+                <EditText
+                    android:id="@+id/txtDescription1"
+                    style="@style/forms_edittext_default"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right|center_vertical"
+                    android:maxLength="1000"
+                    android:selectAllOnFocus="true"
+                    android:singleLine="true" />
+                <EditText
+                    android:id="@+id/txtDescription2"
+                    style="@style/forms_edittext_default"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right|center_vertical"
+                    android:maxLength="1000"
+                    android:selectAllOnFocus="true"
+                    android:singleLine="true" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:padding="@dimen/SmallSize">
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/setting_line_separator" />
-
-        <TextView
+        <com.mahak.order.widget.FontButtonView
+            android:id="@+id/btnSave_close"
+            style="@style/forms_btn_default"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/setting_title_bar_bg"
-            android:padding="@dimen/NormalSize"
-            android:text="@string/str_setting_logo_title" />
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/setting_line_separator" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|center_vertical"
-            android:orientation="horizontal"
-            android:padding="@dimen/NormalSize">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/NormalSize"
-                android:background="@color/forms_seprator_line"
-                android:padding="1dp">
-
-                <ImageView
-                    android:id="@+id/imgLogo"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:background="@color/forms_alter_row" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal|center_vertical"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/btnBrowse"
-                    style="@style/forms_btn_default"
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/str_choose_logo" />
-
-                <Button
-                    android:id="@+id/btnDelete"
-                    style="@style/forms_btn_default"
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/str_delete_logo" />
-            </LinearLayout>
-
-            <CheckBox
-                android:id="@+id/chkShowLogo"
-                style="@style/forms_checkbox_default"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:checked="true"
-                android:text="@string/str_show_logo" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/setting_line_separator" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/setting_title_bar_bg"
-            android:padding="@dimen/NormalSize"
-            android:text="@string/str_setting_other_setting_title" />
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/setting_line_separator" />
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:padding="@dimen/NormalSize">
-
-            <CheckBox
-                android:id="@+id/chkShowTitle"
-                style="@style/forms_checkbox_default"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="@string/str_setting_title" />
-
-            <EditText
-                android:id="@+id/txtTitle"
-                style="@style/forms_edittext_default"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
-                android:maxLength="1000"
-                android:selectAllOnFocus="true"
-                android:singleLine="true" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:padding="@dimen/NormalSize">
-
-            <CheckBox
-                android:id="@+id/chkShowDescription"
-                style="@style/forms_checkbox_default"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="@string/str_setting_under_text_title" />
-
-            <EditText
-                android:id="@+id/txtDescription"
-                style="@style/forms_edittext_default"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
-                android:maxLength="1000"
-                android:selectAllOnFocus="true"
-                android:singleLine="true" />
-            <EditText
-                android:id="@+id/txtDescription1"
-                style="@style/forms_edittext_default"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
-                android:maxLength="1000"
-                android:selectAllOnFocus="true"
-                android:singleLine="true" />
-            <EditText
-                android:id="@+id/txtDescription2"
-                style="@style/forms_edittext_default"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
-                android:maxLength="1000"
-                android:selectAllOnFocus="true"
-                android:singleLine="true" />
-
-        </LinearLayout>
-
+            android:layout_weight="1"
+            android:minHeight="48dp"
+            android:text="@string/save_setting_close" />
     </LinearLayout>
-</ScrollView>
+
+</LinearLayout>
