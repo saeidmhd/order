@@ -8887,7 +8887,7 @@ public class DbAdapter {
                 initialvalue.put(DbSchema.Productschema.COLUMN_CreateSyncId, product.getCreateSyncId());
                 initialvalue.put(DbSchema.Productschema.COLUMN_UpdateSyncId, product.getUpdateSyncId());
                 initialvalue.put(DbSchema.Productschema.COLUMN_RowVersion, product.getRowVersion());
-                initialvalue.put(DbSchema.Productschema.COLUMN_Deleted, product.getDeleted());
+                //initialvalue.put(DbSchema.Productschema.COLUMN_Deleted, product.getDeleted());
                 if (rowVersion == 0)
                     mDb.insert(DbSchema.Productschema.TABLE_NAME, null, initialvalue);
                 else {
@@ -9467,10 +9467,11 @@ public class DbAdapter {
                 initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_ProductId, productDetail.getProductId());
                 initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Properties, productDetail.getProperties());
 
-                initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Count1, productDetail.getCount1());
-                initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Count2, productDetail.getCount2());
-                initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Barcode, productDetail.getBarcode());
+                //gets their value from visitor product
+                //initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Count1, productDetail.getCount1());
+                //initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Count2, productDetail.getCount2());
 
+                initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Barcode, productDetail.getBarcode());
                 initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Price1, productDetail.getPrice1());
                 initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Price2, productDetail.getPrice2());
                 initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Price3, productDetail.getPrice3());
@@ -9499,7 +9500,7 @@ public class DbAdapter {
                 initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_DefaultDiscountLevel, productDetail.getDefaultDiscountLevel());
                 initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_DiscountType, productDetail.getDiscountType());
                 initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_CustomerPrice, productDetail.getCustomerPrice());
-                initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Deleted, productDetail.isDeleted());
+                //initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Deleted, productDetail.isDeleted());
 
                 if (rowVersion == 0)
                     mDb.insert(DbSchema.ProductDetailSchema.TABLE_NAME, null, initialvalue);
