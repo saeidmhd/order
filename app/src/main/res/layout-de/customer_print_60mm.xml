@@ -19,7 +19,7 @@
             android:id="@+id/llTitle"
             android:layout_width="match_parent"
             android:layout_height="@dimen/box_title_height"
-            android:background="@android:color/black"
+            android:background="@color/black"
             android:orientation="vertical"
             android:padding="2dp">
 
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:text="@string/str_date"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/print_text_size" />
 
             <com.mahak.order.widget.FontTextView
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/print_number_size" />
 
 
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:text="@string/str_username"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/print_text_size" />
 
             <com.mahak.order.widget.FontTextView
@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/print_text_size" />
 
 
@@ -102,7 +102,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/black"
+            android:background="@color/black"
             android:orientation="vertical"
             android:padding="2dp">
 
@@ -119,13 +119,13 @@
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:text="@string/person_code"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
 
                 <View
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
-                    android:background="@android:color/black" />
+                    android:background="@color/black" />
 
 
                 <com.mahak.order.widget.FontTextView
@@ -134,13 +134,13 @@
                     android:gravity="center_horizontal"
                     android:layout_weight="0.5"
                     android:text="@string/person_name"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
 
                 <View
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
-                    android:background="@android:color/black" />
+                    android:background="@color/black" />
 
                 <com.mahak.order.widget.FontTextView
                     android:layout_width="50dp"
@@ -148,13 +148,13 @@
                     android:gravity="center_horizontal"
                     android:layout_weight="0.5"
                     android:text="@string/balance"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
 
                 <View
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
-                    android:background="@android:color/black" />
+                    android:background="@color/black" />
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/_txtPrice"
@@ -163,7 +163,7 @@
                     android:layout_weight="0.5"
                     android:gravity="center_horizontal"
                     android:text="@string/status"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
 
             </LinearLayout>
@@ -172,7 +172,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <ListView
                 android:id="@+id/_lstCustomer"
@@ -180,7 +180,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="0dip"
                 android:background="@android:color/white"
-                android:divider="@android:color/black"
+                android:divider="@color/black"
                 android:dividerHeight="0dp"
                 android:listSelector="@android:color/transparent"
                 android:padding="0dip" />

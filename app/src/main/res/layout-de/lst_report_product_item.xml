@@ -23,7 +23,7 @@
                 android:layout_weight="1"
                 android:gravity="left"
                 android:text="@string/sample_product"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View
@@ -44,7 +44,7 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="@string/str_asset_h"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/black" />
 
             <com.mahak.order.widget.FontTextView
                 android:layout_width="0dip"
@@ -52,7 +52,7 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="@string/str_net_sale_h"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/black" />
 
             <com.mahak.order.widget.FontTextView
                 android:layout_width="0dip"
@@ -60,7 +60,7 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="@string/str_discount_h"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/black" />
 
             <com.mahak.order.widget.FontTextView
                 android:layout_width="0dip"
@@ -68,7 +68,7 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="@string/str_sale_h"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/black" />
 
             <com.mahak.order.widget.FontTextView
                 android:layout_width="0dip"
@@ -76,7 +76,7 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="@string/str_count_h"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View
@@ -99,7 +99,7 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="@string/sample_number"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/black" />
 
             <View
                 android:layout_width="1dp"
@@ -113,7 +113,7 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="@string/sample_number"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/black" />
 
             <View
                 android:layout_width="1dp"
@@ -127,7 +127,7 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="@string/sample_number"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/black" />
 
             <View
                 android:layout_width="1dp"
@@ -141,7 +141,7 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="@string/sample_number"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/black" />
 
             <View
                 android:layout_width="1dp"
@@ -155,7 +155,7 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="@string/sample_number"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/black" />
 
 
         </LinearLayout>

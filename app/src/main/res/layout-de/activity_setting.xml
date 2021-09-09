@@ -54,7 +54,7 @@
                     android:layout_toLeftOf="@id/chkReduceAsset"
                     android:gravity="left"
                     android:text="@string/str_reduce_asset"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="15sp" />
             </RelativeLayout>
 
@@ -88,7 +88,7 @@
                     android:layout_toLeftOf="@id/chkBelowPrice"
                     android:gravity="left"
                     android:text="@string/str_message_show_below"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="15sp" />
             </RelativeLayout>
 
@@ -122,7 +122,7 @@
                     android:layout_toLeftOf="@id/chkShowField"
                     android:gravity="left"
                     android:text="@string/str_message_show_filde"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="15sp" />
             </RelativeLayout>
 
@@ -158,7 +158,7 @@
                     android:layout_toLeftOf="@id/chkPrintCompact"
                     android:gravity="right"
                     android:text="@string/str_message_print_compact"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="15sp" />
             </RelativeLayout>
 
@@ -193,7 +193,7 @@
                     android:layout_centerVertical="true"
                     android:gravity="right|center_vertical"
                     android:text="@string/str_charge"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/tvChargePercent"
@@ -204,7 +204,7 @@
                     android:layout_centerVertical="true"
                     android:gravity="right|center_vertical"
                     android:text="@string/percent"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="15sp" />
 
                 <com.mahak.order.widget.FontEditText
@@ -239,7 +239,7 @@
                     android:layout_centerVertical="true"
                     android:gravity="right|center_vertical"
                     android:text="@string/str_tax"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/tvTaxPercent"
@@ -250,7 +250,7 @@
                     android:layout_centerVertical="true"
                     android:gravity="right|center_vertical"
                     android:text="@string/percent"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="15sp" />
 
                 <com.mahak.order.widget.FontEditText
@@ -308,7 +308,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="right|center_vertical"
                     android:text="@string/colon"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="15sp" />
 
                 <Spinner
@@ -330,7 +330,7 @@
                     android:layout_weight="1"
                     android:gravity="right|center_vertical"
                     android:text="@string/str_from_time"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <View
@@ -362,7 +362,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="right|center_vertical"
                     android:text="@string/colon"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="15sp" />
 
                 <Spinner
@@ -384,7 +384,7 @@
                     android:layout_weight="1"
                     android:gravity="right|center_vertical"
                     android:text="@string/str_to_time"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <View

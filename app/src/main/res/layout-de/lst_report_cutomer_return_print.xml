@@ -11,7 +11,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,13 +27,13 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/sample_customer"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
 
         <LinearLayout
@@ -54,7 +54,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/total_return"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/tvSumReturnAmount"
@@ -63,14 +63,14 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/sample_number"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="2dp"
                 android:layout_height="match_parent"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -84,7 +84,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/str_sum_sale_f"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/tvFinalSum"
@@ -93,7 +93,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/sample_number"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 
@@ -103,7 +103,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -123,7 +123,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/deduct_from_return"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/tvDeduction"
@@ -132,20 +132,20 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/sample_number"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <View
                 android:layout_width="2dp"
                 android:layout_height="match_parent"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
     </LinearLayout>
 </LinearLayout>

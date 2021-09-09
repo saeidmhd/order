@@ -21,13 +21,13 @@
             android:gravity="center"
             android:text="وضعیت"
             android:paddingLeft="@dimen/SmallSize"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="10sp" />
 
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
 
         <com.mahak.order.widget.FontTextView
@@ -37,13 +37,13 @@
             android:gravity="center_horizontal"
             android:text="مانده"
             android:layout_weight="0.5"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="14sp" />
 
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
 
         <com.mahak.order.widget.FontTextView
@@ -53,13 +53,13 @@
             android:gravity="center_horizontal"
             android:text="نام شخص"
             android:layout_weight="0.5"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="14sp" />
 
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <com.mahak.order.widget.FontTextView
             android:id="@+id/tvCustomerCode"
@@ -70,12 +70,12 @@
             android:maxLines="2"
             android:text="کد شخص"
             android:paddingRight="@dimen/SmallSize"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="13sp" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@android:color/black" />
+        android:background="@color/black" />
 </LinearLayout>

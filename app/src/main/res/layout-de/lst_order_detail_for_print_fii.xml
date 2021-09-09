@@ -24,12 +24,12 @@
             android:maxLines="2"
             android:text="@string/sample_product"
             android:paddingLeft="@dimen/SmallSize"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/black" />
 
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <com.mahak.order.widget.FontTextView
             android:id="@+id/tvCount"
@@ -38,12 +38,12 @@
             android:layout_weight="0.75"
             android:gravity="center_horizontal"
             android:text="@string/sample_number"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/black" />
 
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <com.mahak.order.widget.FontTextView
             android:id="@+id/tvfii"
@@ -53,13 +53,13 @@
             android:gravity="left"
             android:layout_weight="1"
             android:text="@string/sample_number"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/black" />
 
 
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <com.mahak.order.widget.FontTextView
             android:id="@+id/tvPrice"
@@ -69,14 +69,14 @@
             android:gravity="left"
             android:text="@string/sample_number"
             android:paddingLeft="@dimen/marginSize"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/black" />
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@android:color/black" />
+        android:background="@color/black" />
 
     <LinearLayout
         android:id="@+id/llprop_item"
@@ -90,7 +90,7 @@
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <com.mahak.order.widget.FontTextView
             android:id="@+id/tvProductPropSpec"
@@ -100,7 +100,7 @@
             android:gravity="left"
             android:paddingRight="@dimen/SmallSize"
             android:text="@string/details"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -109,5 +109,5 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:visibility="gone"
-        android:background="@android:color/black" />
+        android:background="@color/black" />
 </LinearLayout>

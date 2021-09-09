@@ -22,13 +22,13 @@
             android:paddingLeft="@dimen/SmallSize"
             android:textStyle="bold"
             android:text="@string/sample_number"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="10sp" />
 
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
 
         <com.mahak.order.widget.PrintTextView
@@ -39,13 +39,13 @@
             android:layout_weight="0.5"
             android:textStyle="bold"
             android:text="@string/sample_number"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="10sp" />
 
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <com.mahak.order.widget.PrintTextView
             android:id="@+id/tvProductSpec"
@@ -57,14 +57,14 @@
             android:maxLines="2"
             android:paddingRight="@dimen/SmallSize"
             android:text="@string/sample_product"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="10sp" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@android:color/black" />
+        android:background="@color/black" />
 
     <LinearLayout
         android:id="@+id/llprop_item"
@@ -78,7 +78,7 @@
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <com.mahak.order.widget.PrintTextView
             android:id="@+id/tvProductPropSpec"
@@ -88,7 +88,7 @@
             android:gravity="right"
             android:paddingRight="@dimen/SmallSize"
             android:text="@string/details"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -97,6 +97,6 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:visibility="gone"
-        android:background="@android:color/black" />
+        android:background="@color/black" />
 
 </LinearLayout>

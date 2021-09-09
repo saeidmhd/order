@@ -21,12 +21,12 @@
             android:gravity="center"
             android:text="@string/quantity"
             android:paddingLeft="@dimen/SmallSize"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/black" />
 
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
 
         <com.mahak.order.widget.FontTextView
@@ -36,12 +36,12 @@
             android:gravity="center_horizontal"
             android:text="@string/sample_product"
             android:layout_weight="1"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/black" />
 
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <com.mahak.order.widget.FontTextView
             android:id="@+id/tvKalaCode"
@@ -52,11 +52,11 @@
             android:maxLines="2"
             android:text="@string/product_code"
             android:paddingRight="@dimen/SmallSize"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/black" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@android:color/black" />
+        android:background="@color/black" />
 </LinearLayout>

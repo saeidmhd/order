@@ -11,7 +11,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:gravity="right"
                 android:text="@string/sample_text"
                 android:textSize="12sp"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/black" />
 
             <com.mahak.order.widget.FontTextView
                 android:id="@+id/tvName"
@@ -36,14 +36,14 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 android:text="@string/sample_customer"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="12sp" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
 
         <LinearLayout
@@ -65,7 +65,7 @@
                     android:gravity="center"
                     android:text="@string/str_sum_receipt_f"
                     android:textSize="12sp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/tvSumReceiptAmount"
@@ -75,14 +75,14 @@
                     android:gravity="center"
                     android:text="@string/sample_number"
                     android:textSize="12sp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="2dp"
                 android:layout_height="match_parent"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -97,7 +97,7 @@
                     android:gravity="center"
                     android:text="@string/str_sum_sale_f"
                     android:textSize="12sp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/tvFinalSum"
@@ -107,7 +107,7 @@
                     android:gravity="center"
                     android:text="@string/sample_number"
                     android:textSize="12sp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 
@@ -117,7 +117,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -138,7 +138,7 @@
                     android:gravity="center"
                     android:text="@string/str_cash_receipt"
                     android:textSize="12sp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/tvCashReceipt"
@@ -148,13 +148,13 @@
                     android:gravity="center"
                     android:text="@string/sample_number"
                     android:textSize="12sp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <View
                 android:layout_width="2dp"
                 android:layout_height="match_parent"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -169,7 +169,7 @@
                     android:gravity="center"
                     android:text="@string/str_cheque_amount"
                     android:textSize="12sp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/tvCheque"
@@ -179,13 +179,13 @@
                     android:gravity="center"
                     android:text="@string/sample_number"
                     android:textSize="12sp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <View
                 android:layout_width="2dp"
                 android:layout_height="match_parent"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -200,7 +200,7 @@
                     android:gravity="center"
                     android:text="@string/str_cash_amount"
                     android:textSize="12sp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/tvCash"
@@ -210,14 +210,14 @@
                     android:gravity="center"
                     android:text="@string/sample_number"
                     android:textSize="12sp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
             </LinearLayout>
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
     </LinearLayout>
 </LinearLayout>

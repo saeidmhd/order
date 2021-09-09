@@ -15,7 +15,7 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <com.mahak.order.widget.FontTextView
             android:id="@+id/tvCount"
@@ -23,13 +23,13 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@string/sample_number"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="@dimen/txtSizeNormal" />
 
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <com.mahak.order.widget.FontTextView
             android:id="@+id/tvProductSpec"
@@ -40,12 +40,12 @@
             android:maxLines="2"
             android:text="@string/sample_product"
             android:paddingRight="@dimen/SmallSize"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="@dimen/txtSizeNormal" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/black" />
+        android:background="@color/black" />
 </LinearLayout>

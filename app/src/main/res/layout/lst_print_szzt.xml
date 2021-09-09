@@ -20,14 +20,14 @@
             android:layout_weight="1"
             android:padding="1dp"
             android:gravity="left"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="@dimen/print_text_size"
             android:text="0"/>
 
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <com.mahak.order.widget.PrintTextView
             android:id="@+id/tvfii"
@@ -37,13 +37,13 @@
             android:padding="1dp"
             android:text="@string/str_title_fii"
             android:gravity="left"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="@dimen/print_text_size" />
 
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <com.mahak.order.widget.PrintTextView
             android:id="@+id/tvCount"
@@ -52,14 +52,14 @@
             android:layout_weight="0.5"
             android:gravity="center_horizontal"
             android:text="@string/str_count"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="@dimen/print_text_size" />
 
 
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <com.mahak.order.widget.PrintTextView
             android:id="@+id/tvProductSpec"
@@ -69,14 +69,14 @@
             android:textSize="12sp"
             android:gravity="right"
             android:text="@string/sample_product"
-            android:textColor="@android:color/black"/>
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@android:color/black" />
+        android:background="@color/black" />
 
     <LinearLayout
         android:id="@+id/llprop_item"
@@ -90,7 +90,7 @@
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <com.mahak.order.widget.PrintTextView
             android:id="@+id/tvProductPropSpec"
@@ -100,7 +100,7 @@
             android:gravity="right"
             android:paddingRight="@dimen/SmallSize"
             android:text="@string/details"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -109,5 +109,5 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:visibility="gone"
-        android:background="@android:color/black" />
+        android:background="@color/black" />
 </LinearLayout>

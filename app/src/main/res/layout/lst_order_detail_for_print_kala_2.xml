@@ -10,7 +10,7 @@
         android:id="@+id/view3"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@android:color/black"
+        android:background="@color/black"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
@@ -26,7 +26,7 @@
             android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/black"
+            android:background="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
@@ -64,7 +64,7 @@
             android:id="@+id/view12"
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black"
+            android:background="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -106,7 +106,7 @@
             android:id="@+id/view13"
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            android:background="@android:color/black"
+            android:background="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -125,7 +125,7 @@
             android:id="@+id/view14"
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black"
+            android:background="@color/black"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -24,7 +24,7 @@
         android:padding="5dp"
         android:text="@string/return_to"
         android:layout_margin="10dp"
-        android:background="@android:color/black"
+        android:background="@color/black"
         android:textColor="@android:color/white"
         android:layout_alignParentBottom="true"
         android:textStyle="bold"

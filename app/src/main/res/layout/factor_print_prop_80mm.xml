@@ -39,7 +39,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/print_number_size" />
 
             <com.mahak.order.widget.PrintTextView
@@ -64,7 +64,7 @@
                 android:layout_marginLeft="@dimen/LargeSize"
                 android:gravity="right"
                 android:text="@string/str_date"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/print_text_size" />
         </LinearLayout>
 
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/print_number_size" />
 
             <com.mahak.order.widget.PrintTextView
@@ -92,7 +92,7 @@
                 android:layout_marginLeft="@dimen/LargeSize"
                 android:gravity="right"
                 android:text="@string/str_tracking_code"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/print_text_size" />
         </LinearLayout>
 
@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/print_text_size" />
 
             <com.mahak.order.widget.PrintTextView
@@ -121,7 +121,7 @@
                 android:layout_marginLeft="@dimen/LargeSize"
                 android:gravity="right"
                 android:text="@string/str_customer_name"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/print_text_size" />
         </LinearLayout>
 
@@ -140,7 +140,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/print_text_size" />
 
             <com.mahak.order.widget.PrintTextView
@@ -149,7 +149,7 @@
                 android:layout_marginLeft="@dimen/LargeSize"
                 android:gravity="right"
                 android:text="@string/str_market_name"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/print_text_size" />
         </LinearLayout>
 
@@ -168,7 +168,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/print_text_size" />
 
             <com.mahak.order.widget.PrintTextView
@@ -177,14 +177,14 @@
                 android:layout_marginLeft="@dimen/LargeSize"
                 android:gravity="right"
                 android:text="@string/str_username"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/print_text_size" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/black"
+            android:background="@color/black"
             android:orientation="vertical"
             android:padding="2dp">
 
@@ -202,26 +202,26 @@
                     android:layout_weight="0.5"
                     android:gravity="center_horizontal"
                     android:text="@string/str_price"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
 
                 <View
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
-                    android:background="@android:color/black" />
+                    android:background="@color/black" />
 
                 <com.mahak.order.widget.PrintTextView
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="@string/str_count"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
 
                 <View
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
-                    android:background="@android:color/black" />
+                    android:background="@color/black" />
 
                 <com.mahak.order.widget.PrintTextView
                     android:layout_width="0dip"
@@ -229,7 +229,7 @@
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:text="@string/str_product_name"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
             </LinearLayout>
 
@@ -237,7 +237,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <ListView
                 android:id="@+id/_lstProduct"
@@ -245,7 +245,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="0dip"
                 android:background="@android:color/white"
-                android:divider="@android:color/black"
+                android:divider="@color/black"
                 android:dividerHeight="0dp"
                 android:listSelector="@android:color/transparent"
                 android:padding="0dip" />
@@ -258,7 +258,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:background="@android:color/black"
+            android:background="@color/black"
             android:orientation="vertical"
             android:padding="2dp">
 
@@ -278,7 +278,7 @@
                     android:layout_weight="1"
                     android:gravity="left"
                     android:text="@string/sample_number"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
                 <com.mahak.order.widget.PrintTextView
@@ -288,7 +288,7 @@
                     android:layout_marginLeft="@dimen/LargeSize"
                     android:gravity="right"
                     android:text="@string/str_total_price"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="15sp" />
 
             </LinearLayout>
@@ -298,7 +298,7 @@
             android:id="@+id/_ll_Remain_Detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/black"
+            android:background="@color/black"
             android:orientation="vertical"
             android:padding="1dp">
 
@@ -309,7 +309,7 @@
                 android:layout_margin="0dip"
                 android:visibility="gone"
                 android:background="@android:color/white"
-                android:divider="@android:color/black"
+                android:divider="@color/black"
                 android:dividerHeight="0dp"
                 android:listSelector="@android:color/transparent"
                 android:padding="0dip" />
@@ -332,7 +332,7 @@
                     android:layout_marginLeft="@dimen/SmallSize"
                     android:gravity="left"
                     android:text="@string/sample_number"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
 
                 <com.mahak.order.widget.PrintTextView
                     android:id="@+id/_txtTotalItems"
@@ -342,7 +342,7 @@
                     android:layout_marginLeft="@dimen/LargeSize"
                     android:gravity="right"
                     android:text="@string/str_total_items"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <LinearLayout
@@ -362,7 +362,7 @@
                     android:layout_marginLeft="@dimen/SmallSize"
                     android:gravity="left"
                     android:text="@string/sample_number"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
 
                 <com.mahak.order.widget.PrintTextView
@@ -371,7 +371,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:text="@string/str_total_count"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
             </LinearLayout>
 
@@ -391,7 +391,7 @@
                     android:gravity="left"
                     android:layout_marginLeft="@dimen/SmallSize"
                     android:text="@string/sample_number"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
 
                 <com.mahak.order.widget.PrintTextView
@@ -400,7 +400,7 @@
                     android:layout_marginLeft="@dimen/LargeSize"
                     android:gravity="right"
                     android:text="@string/str_total_discount"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
             </LinearLayout>
 
@@ -420,7 +420,7 @@
                     android:gravity="left"
                     android:layout_marginLeft="@dimen/SmallSize"
                     android:text="@string/sample_number"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
 
                 <com.mahak.order.widget.PrintTextView
@@ -429,7 +429,7 @@
                     android:layout_marginLeft="@dimen/LargeSize"
                     android:gravity="right"
                     android:text="@string/str_total_tax_charge"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
             </LinearLayout>
 
@@ -449,7 +449,7 @@
                     android:gravity="left"
                     android:text="@string/sample_number"
                     android:layout_marginLeft="@dimen/SmallSize"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_number_size" />
 
                 <com.mahak.order.widget.PrintTextView
@@ -458,7 +458,7 @@
                     android:layout_marginLeft="@dimen/LargeSize"
                     android:gravity="right"
                     android:text="@string/str_discount"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
             </LinearLayout>
 
@@ -478,7 +478,7 @@
                     android:gravity="left"
                     android:text="@string/sample_number"
                     android:layout_marginLeft="@dimen/SmallSize"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_number_size" />
 
                 <com.mahak.order.widget.PrintTextView
@@ -487,7 +487,7 @@
                     android:layout_marginLeft="@dimen/LargeSize"
                     android:gravity="right"
                     android:text="@string/str_final_price"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
             </LinearLayout>
 
@@ -506,7 +506,7 @@
                     android:layout_weight="1"
                     android:gravity="left"
                     android:layout_marginLeft="@dimen/SmallSize"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_number_size" />
 
                 <com.mahak.order.widget.PrintTextView
@@ -515,7 +515,7 @@
                     android:layout_marginLeft="@dimen/LargeSize"
                     android:gravity="right"
                     android:text="@string/str_print_remaining_person"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
             </LinearLayout>
 
@@ -534,7 +534,7 @@
                     android:layout_weight="1"
                     android:gravity="left"
                     android:layout_marginLeft="@dimen/SmallSize"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_number_size" />
 
                 <com.mahak.order.widget.PrintTextView
@@ -543,7 +543,7 @@
                     android:layout_marginLeft="@dimen/LargeSize"
                     android:gravity="right"
                     android:text="@string/str_payable2"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
             </LinearLayout>
 
@@ -563,7 +563,7 @@
                     android:gravity="left"
                     android:text="@string/sample_number"
                     android:layout_marginLeft="@dimen/SmallSize"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_number_size" />
 
                 <com.mahak.order.widget.PrintTextView
@@ -572,7 +572,7 @@
                     android:layout_marginLeft="@dimen/LargeSize"
                     android:gravity="right"
                     android:text="@string/str_total_receipt"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
             </LinearLayout>
 
@@ -592,7 +592,7 @@
                     android:gravity="left"
                     android:text="@string/sample_number"
                     android:layout_marginLeft="@dimen/SmallSize"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_number_size" />
 
                 <com.mahak.order.widget.PrintTextView
@@ -601,14 +601,14 @@
                     android:layout_marginLeft="@dimen/LargeSize"
                     android:gravity="right"
                     android:text="@string/str_remaining_invoice"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@android:color/black"
+                android:background="@color/black"
                 android:orientation="vertical"
                 android:padding="2dp">
 
@@ -629,7 +629,7 @@
                         android:layout_marginLeft="@dimen/SmallSize"
                         android:layout_weight="1"
                         android:gravity="left"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/black"
                         android:textStyle="bold" />
 
                     <com.mahak.order.widget.PrintTextView
@@ -640,7 +640,7 @@
                         android:layout_marginRight="@dimen/SmallSize"
                         android:gravity="right"
                         android:text="@string/str_print_remaining_final_person"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/black"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
@@ -656,7 +656,7 @@
         android:scrollHorizontally="false"
         android:layout_width="match_parent"
         android:layout_height="110dp"
-        android:background="@android:color/black"
+        android:background="@color/black"
         android:orientation="vertical"
         android:padding="2dp">
 
@@ -675,7 +675,7 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 android:text="@string/print_footer_messages_part1"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/print_text_size" />
 
             <com.mahak.order.widget.PrintTextView
@@ -685,7 +685,7 @@
                 android:maxLines="2"
                 android:inputType="textMultiLine"
                 android:text="@string/print_sign"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/print_text_size" />
 
         </LinearLayout>

@@ -341,7 +341,7 @@ public class BaseActivity extends AppCompatActivity {
         mTracker = application.getDefaultTracker();
 
         //font_yekan = Typeface.createFromAsset(getAssets(), "fonts/IRANYekanRegularMobile(FaNum).ttf");
-        font_yekan = Typeface.createFromAsset(getAssets(), "fonts/IRANYekanMobileBold(FaNum).ttf");
+        font_yekan = Typeface.createFromAsset(getAssets(), "fonts/IRANYekanBold(FaNum).ttf");
         font_openSans = Typeface.createFromAsset(getAssets(), "fonts/OpenSans-Regular.ttf");
 
 

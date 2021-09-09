@@ -3,7 +3,7 @@
     <corners android:radius="5dp" />
     <solid android:color="@android:color/transparent" />
     <stroke
-        android:color="@android:color/black"
+        android:color="@color/black"
         android:dashWidth="5px"
         android:dashGap="10px"
         android:width="3dp" />

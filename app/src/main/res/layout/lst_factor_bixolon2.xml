@@ -20,7 +20,7 @@
             android:layout_weight="1.1"
             android:gravity="left"
             android:text="123,123,123,12"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="12sp"
             android:visibility="gone" />
 
@@ -32,13 +32,13 @@
             android:layout_weight="1"
             android:paddingLeft="@dimen/SmallSize"
             android:text="123,234,567,56"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="12sp" />
 
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -54,13 +54,13 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="0"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="12sp" />
 
             <!--<View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <com.mahak.order.widget.FontTextView
                 android:id="@+id/tvCount2"
@@ -69,7 +69,7 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="0"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:textSize="12sp" />-->
 
         </LinearLayout>
@@ -78,7 +78,7 @@
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <com.mahak.order.widget.FontTextView
             android:id="@+id/tvProductSpec"
@@ -89,7 +89,7 @@
             android:maxLines="3"
             android:text="مخابراتي طوسي 0.6*2*2"
             android:paddingRight="@dimen/SmallSize"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="12sp" />
 
 
@@ -98,7 +98,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@android:color/black" />
+        android:background="@color/black" />
 
     <LinearLayout
         android:id="@+id/llprop_item"
@@ -112,7 +112,7 @@
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <com.mahak.order.widget.FontTextView
             android:id="@+id/tvProductPropSpec"
@@ -122,7 +122,7 @@
             android:gravity="end"
             android:paddingRight="@dimen/SmallSize"
             android:text="جزییات"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -131,5 +131,5 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:visibility="gone"
-        android:background="@android:color/black" />
+        android:background="@color/black" />
 </LinearLayout>

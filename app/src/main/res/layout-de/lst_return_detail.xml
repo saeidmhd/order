@@ -61,7 +61,7 @@
             android:paddingRight="@dimen/SmallSize"
             android:text="@string/details"
             android:lineSpacingExtra="8dp"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="12sp" />
     </LinearLayout>
 

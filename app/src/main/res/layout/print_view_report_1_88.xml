@@ -16,7 +16,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                 android:paddingRight="@dimen/NormalSize">
 
                 <com.mahak.order.widget.FontTextView
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/str_daily_factor_report"
@@ -45,7 +45,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -72,7 +72,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -99,7 +99,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -126,7 +126,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -153,7 +153,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -180,7 +180,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -209,7 +209,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -226,7 +226,7 @@
                 android:paddingRight="@dimen/NormalSize">
 
                 <com.mahak.order.widget.FontTextView
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/str_daily_pre_factor_report"
@@ -237,7 +237,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -264,7 +264,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -291,7 +291,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -318,7 +318,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -345,7 +345,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -372,7 +372,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -400,7 +400,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/black" />
+            android:background="@color/black" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -416,7 +416,7 @@
                 android:paddingRight="@dimen/NormalSize">
 
                 <com.mahak.order.widget.FontTextView
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/str_daily_receipts_report"
@@ -427,7 +427,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -454,7 +454,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -481,7 +481,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -508,7 +508,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -542,7 +542,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -552,7 +552,7 @@
                 android:paddingRight="@dimen/NormalSize">
 
                 <com.mahak.order.widget.FontTextView
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/str_daily_payments_report"
@@ -563,7 +563,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -590,7 +590,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -617,7 +617,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -643,7 +643,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
         </LinearLayout>
 
@@ -657,7 +657,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -667,7 +667,7 @@
                 android:paddingRight="@dimen/NormalSize">
 
                 <com.mahak.order.widget.FontTextView
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/str_daily_remained"
@@ -678,7 +678,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@android:color/black" />
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
