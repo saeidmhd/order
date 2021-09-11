@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/llitem"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="55dp"
         android:gravity="center_vertical"
         android:minHeight="@dimen/lst_item_min_height_compact"
         android:orientation="horizontal">
@@ -65,9 +65,9 @@
         <com.mahak.order.widget.PrintTextView
             android:id="@+id/tvProductSpec"
             android:layout_width="0dip"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="2"
-            android:gravity="right"
+            android:gravity="right|center"
             android:maxLines="2"
             android:text="@string/sample_product"
             android:paddingRight="@dimen/SmallSize"
