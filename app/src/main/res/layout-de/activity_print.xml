@@ -35,7 +35,8 @@
                     style="@style/forms_btn_default"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/str_print" />
+                    android:text="@string/str_print"
+                    tools:ignore="TouchTargetSizeCheck" />
 
             </LinearLayout>
 
@@ -61,14 +62,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/str_connect_to_printer" />
+                    android:minHeight="48dp"
+                    android:text="@string/str_connect_to_printer"
+                    tools:ignore="TouchTargetSizeCheck" />
             </LinearLayout>
         </LinearLayout>
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            tools:ignore="SpeakableTextPresentCheck">
 
             <LinearLayout
                 android:layout_width="match_parent"
