@@ -25,6 +25,7 @@
             android:drawableRight="@drawable/ic_search_set_nav"
             android:gravity="left|center_vertical"
             android:hint="@string/str_name_product_code_filter"
+            android:minHeight="48dp"
             android:singleLine="true" />
     </LinearLayout>
     <LinearLayout
@@ -43,7 +44,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
             android:dropDownVerticalOffset="@dimen/spinner_dropdown_offset"
-            android:spinnerMode="dropdown" />
+            android:minHeight="48dp"
+            android:spinnerMode="dropdown"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <Spinner
             android:id="@+id/spnCategory"
@@ -52,7 +55,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
             android:dropDownVerticalOffset="@dimen/spinner_dropdown_offset"
-            android:spinnerMode="dropdown" />
+            android:minHeight="48dp"
+            android:spinnerMode="dropdown"
+            tools:ignore="SpeakableTextPresentCheck" />
 
     </LinearLayout>
 
@@ -82,6 +87,7 @@
             style="@style/forms_btn_default"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="48dp"
             android:padding="3dp"
             android:text="@string/str_add_shoppingcart"
             android:textSize="@dimen/txtSizeNormal" />
