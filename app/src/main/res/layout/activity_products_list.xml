@@ -23,7 +23,29 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/SmallSize"
+        android:layout_marginRight="@dimen/SmallSize"
+        android:layout_marginLeft="@dimen/SmallSize"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal">
+
+        <com.mahak.order.widget.FontEditText
+            android:id="@+id/txtSearch"
+            style="@style/forms_edittext_default"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.6"
+            android:drawableRight="@drawable/ic_search_set_nav"
+            android:gravity="right|center_vertical"
+            android:hint="@string/str_name_product_code_filter"
+            android:minHeight="48dp"
+            android:singleLine="true" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/SmallSize"
+        android:layout_marginLeft="@dimen/SmallSize"
         android:descendantFocusability="beforeDescendants"
         android:focusableInTouchMode="true"
         android:orientation="horizontal">
@@ -35,7 +57,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
             android:dropDownVerticalOffset="@dimen/spinner_dropdown_offset"
-            android:spinnerMode="dropdown" />
+            android:minHeight="48dp"
+            android:spinnerMode="dropdown"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <Spinner
             android:id="@+id/spnCategory"
@@ -44,18 +68,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
             android:dropDownVerticalOffset="@dimen/spinner_dropdown_offset"
-            android:spinnerMode="dropdown" />
+            android:minHeight="48dp"
+            android:spinnerMode="dropdown"
+            tools:ignore="SpeakableTextPresentCheck" />
 
-        <com.mahak.order.widget.FontEditText
-            android:id="@+id/txtSearch"
-            style="@style/forms_edittext_default"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.6"
-            android:drawableRight="@drawable/ic_search_set_nav"
-            android:gravity="right|center_vertical"
-            android:singleLine="true"
-            android:hint="@string/str_name_product_code_filter" />
     </LinearLayout>
 
     <FrameLayout

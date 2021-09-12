@@ -37,9 +37,11 @@
             style="@style/forms_spinner_default"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
+            android:layout_weight="0.3"
             android:dropDownVerticalOffset="@dimen/spinner_dropdown_offset"
-            android:spinnerMode="dropdown" />
+            android:minHeight="48dp"
+            android:spinnerMode="dropdown"
+            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
         <com.mahak.order.widget.FontEditText
             android:id="@+id/txtSearch"
@@ -50,6 +52,7 @@
             android:drawableRight="@drawable/ic_search_set_nav"
             android:gravity="left|center_vertical"
             android:hint="@string/str_name_filter"
+            android:minHeight="48dp"
             android:singleLine="true" />
     </LinearLayout>
 
