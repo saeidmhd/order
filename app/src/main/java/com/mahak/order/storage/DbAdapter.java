@@ -1194,6 +1194,11 @@ public class DbAdapter {
         return mDb.insert(DbSchema.ReceivedTransferProductsschema.TABLE_NAME, null, initialvalue);
     }
 
+
+
+
+    //QUERIES GET--------------------------------------------------------------------------------------------
+
     public String getBankNameFromBankID(String masterId) {
 
         Cursor cursor;
@@ -1213,13 +1218,10 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorGetUser", e.getMessage());
+            Log.e("getBankNameFromBankID", e.getMessage());
         }
         return BankName;
     }
-
-
-    //QUERIES GET--------------------------------------------------------------------------------------------
 
     public CityZone_Extra_Data getCityExtra(String zoneCode) {
         Cursor cursor;
@@ -1236,7 +1238,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorGetUser", e.getMessage());
+            Log.e("getCityExtra", e.getMessage());
         }
         return cityZone_extra_data;
     }
@@ -1256,7 +1258,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorGetChargePercent", e.getMessage());
+            Log.e("GetgroupIdFromCustomer", e.getMessage());
         }
         return groupId;
     }
@@ -1359,7 +1361,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrgetMorCustInfo", e.getMessage());
+            Log.e("getMoreCustomerInfo", e.getMessage());
         }
         return person_extra_data;
 
@@ -1381,7 +1383,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrgetMorCustInfo", e.getMessage());
+            Log.e("getProductExtraInfo", e.getMessage());
         }
         return product_extra_data;
     }
@@ -1411,7 +1413,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrgetMorCustInfo", e.getMessage());
+            Log.e("getTaxInSellExtra", e.getMessage());
         }
         return taxInSell_extra_data;
     }
@@ -1495,7 +1497,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorGetCustomer", e.getMessage());
+            Log.e("getCustomerWithPersonId", e.getMessage());
         }
 
         return customer;
@@ -1582,7 +1584,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorGetCustomer", e.getMessage());
+            Log.e("getCustomer", e.getMessage());
         }
 
         return customer;
@@ -1667,7 +1669,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorGetCustomer", e.getMessage());
+            Log.e("getCustomerWr", e.getMessage());
         }
 
         return customer;
@@ -1689,7 +1691,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("CustomerByBarcode", e.getMessage());
+            Log.e("getCustomerByBarcode", e.getMessage());
         }
         return customer;
     }
@@ -1710,7 +1712,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrProductWithProductId", e.getMessage());
+            Log.e("GetProductWithProductId", e.getMessage());
         }
         return product;
     }
@@ -1731,7 +1733,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorGetCustomer", e.getMessage());
+            Log.e("GetPromoCustomer", e.getMessage());
         }
         return customer;
     }
@@ -1752,7 +1754,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorGetCustomer", e.getMessage());
+            Log.e("getProductByMer", e.getMessage());
         }
         return product;
     }
@@ -1773,7 +1775,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrProdProdCode", e.getMessage());
+            Log.e("getProductWi", e.getMessage());
         }
         return product;
     }
@@ -1782,7 +1784,7 @@ public class DbAdapter {
         double asset1 = 0;
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " =? ", new String[]{masterId, String.valueOf(0)}, null, null, null);
+            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{masterId, String.valueOf(0) , String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -1793,7 +1795,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorProductAsset1", e.getMessage());
+            Log.e("getProductAsset1", e.getMessage());
         }
         return asset1;
     }
@@ -1802,7 +1804,7 @@ public class DbAdapter {
         double asset2 = 0;
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " =? ", new String[]{masterId, String.valueOf(0)}, null, null, null);
+            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{masterId, String.valueOf(0) , String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -1813,7 +1815,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorProductAsset2", e.getMessage());
+            Log.e("getProductAsset2", e.getMessage());
         }
         return asset2;
     }
@@ -1823,7 +1825,7 @@ public class DbAdapter {
         ProductDetail productDetail = new ProductDetail();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + " =? ", new String[]{String.valueOf(masterId)}, null, null, null);
+            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(masterId),String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -1845,7 +1847,7 @@ public class DbAdapter {
         ProductDetail productDetail = new ProductDetail();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " =? ", new String[]{String.valueOf(masterId), String.valueOf(0)}, null, null, null);
+            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(masterId), String.valueOf(0) , String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -1857,7 +1859,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorProductDetail12", e.getMessage());
+            Log.e("getProductDetail", e.getMessage());
         }
         return productDetail;
     }
@@ -1867,7 +1869,7 @@ public class DbAdapter {
         ProductDetail productDetail = new ProductDetail();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " =? ", new String[]{String.valueOf(productId), String.valueOf(0)}, null, null, null);
+            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(productId), String.valueOf(0), String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -1879,7 +1881,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrDetailWithProductId", e.getMessage());
+            Log.e("getProductDeilWi", e.getMessage());
         }
         return productDetail;
     }
@@ -2393,7 +2395,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorPictureId", e.getMessage());
+            Log.e("getPictureProductB", e.getMessage());
         }
         return picturesProduct;
     }
@@ -2414,7 +2416,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorPictureId", e.getMessage());
+            Log.e("getPictureWithPictureId", e.getMessage());
         }
         return picturesProduct;
     }
@@ -2435,7 +2437,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorPictureId", e.getMessage());
+            Log.e("getPictureIdWith", e.getMessage());
         }
         return picturesProduct.getPictureId();
     }
@@ -2466,7 +2468,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorGetCategory", e.getMessage());
+            Log.e("getProductGroup", e.getMessage());
         }
         return productGroup;
     }
@@ -2492,7 +2494,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorGetCategory", e.getMessage());
+            Log.e("getProductGror", e.getMessage());
         }
         return productGroup;
     }
@@ -2513,7 +2515,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorGetCategory", e.getMessage());
+            Log.e("GetPromoGroup", e.getMessage());
         }
         return productGroup;
     }
@@ -2533,7 +2535,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorGetCategory", e.getMessage());
+            Log.e("getGroup", e.getMessage());
         }
         return productGroup;
     }
@@ -2569,7 +2571,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorGetCategory", e.getMessage());
+            Log.e("productPriceLevelName", e.getMessage());
         }
         return productPriceLevelName;
     }
@@ -6357,7 +6359,7 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<ProductDetail> array = new ArrayList<>();
         try {
-            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " =? ", new String[]{String.valueOf(id), String.valueOf(0)}, null, null, null);
+            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(id), String.valueOf(0) , String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -6370,7 +6372,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("AllProductDetail1", e.getMessage());
+            Log.e("getAllProductDetail", e.getMessage());
         }
 
         return array;
@@ -6380,7 +6382,7 @@ public class DbAdapter {
         HashMap<String, Long> hashMap = new HashMap<>();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_Deleted + " =? ", new String[]{String.valueOf(0)}, null, null, null);
+            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_Deleted  + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(0),String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -6394,7 +6396,7 @@ public class DbAdapter {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("AllProductDetail1", e.getMessage());
+            Log.e("getMapProductIdBarcode", e.getMessage());
         }
 
         return hashMap;
@@ -7616,21 +7618,17 @@ public class DbAdapter {
         ReportProductDetail item;
         ArrayList<ReportProductDetail> items = new ArrayList<>();
 
-        String strSelect = "select Products.Name, SUM(OrderDetail.SumCountBaJoz), SUM(OrderDetail.Price * OrderDetail.SumCountBaJoz) as sump"
-                + " , ProductDetail.Count1, SUM((((OrderDetail.Price * OrderDetail.SumCountBaJoz) * OrderDetail.Discount) / 100)) as offamount,"
-                + " SUM(((OrderDetail.Price * OrderDetail.SumCountBaJoz) - (((OrderDetail.Price * OrderDetail.SumCountBaJoz) * OrderDetail.Discount) / 100))) as netsale from Orders "
-                + " INNER JOIN OrderDetail "
+        String strSelect = "select  OrderDetail.ProductId , SUM(OrderDetail.SumCountBaJoz), SUM(OrderDetail.Price * OrderDetail.SumCountBaJoz) as sump"
+                + " , SUM((((OrderDetail.Price * OrderDetail.SumCountBaJoz) * OrderDetail.Discount) / 100)) as offamount,"
+                + " SUM(((OrderDetail.Price * OrderDetail.SumCountBaJoz) - (((OrderDetail.Price * OrderDetail.SumCountBaJoz) * OrderDetail.Discount) / 100))) as netsale from OrderDetail "
+                + " INNER JOIN Orders "
                 + " ON Orders.Id = OrderDetail.OrderId "
-                + " INNER JOIN Products "
-                + " ON Products.ProductId = OrderDetail.ProductId"
-                + " INNER JOIN ProductDetail "
-                + " ON Products.ProductId = ProductDetail.ProductId"
                 + " Where " + DbSchema.Orderschema.TABLE_NAME + "." + DbSchema.Orderschema.COLUMN_ORDERDATE + " > " + startdate + " AND " + DbSchema.Orderschema.TABLE_NAME + "." + DbSchema.Orderschema.COLUMN_ORDERDATE + " <= " + enddate
                 + " AND " + DbSchema.Orderschema.TABLE_NAME + "." + DbSchema.Orderschema.COLUMN_TYPE + " == " + orderType
-                + " AND " + DbSchema.Orderschema.TABLE_NAME + "." + DbSchema.Orderschema.COLUMN_USER_ID + " = " + getPrefUserId()
+                + " AND " + DbSchema.OrderDetailSchema.TABLE_NAME + "." + DbSchema.OrderDetailSchema.COLUMN_USER_ID + " = " + getPrefUserId()
                 + " AND " + DbSchema.Orderschema.TABLE_NAME + "." + DbSchema.Orderschema.COLUMN_DATABASE_ID + " ='" + BaseActivity.getPrefDatabaseId() + "'"
                 + " AND " + DbSchema.Orderschema.TABLE_NAME + "." + DbSchema.Orderschema.COLUMN_MAHAK_ID + " ='" + BaseActivity.getPrefMahakId() + "'"
-                + " group by Products.ProductId";
+                + " group by OrderDetail.ProductId";
 
         try {
             cursor = mDb.rawQuery(strSelect, null);
@@ -7638,12 +7636,20 @@ public class DbAdapter {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     item = new ReportProductDetail();
-                    item.setName(cursor.getString(0));
+                    item.setName(ServiceTools.getProductName(cursor.getInt(0),mContext));
+                    item.setAsset(ServiceTools.getSumCount1(cursor.getInt(0),mContext));
+                    item.setCount(cursor.getDouble(1));
+                    item.setSale(cursor.getDouble(2));
+                    item.setDiscount(cursor.getDouble(3));
+                    item.setNetSale(cursor.getDouble(4));
+
+                    /*item.setName(cursor.getString(0));
                     item.setCount(cursor.getDouble(1));
                     item.setSale(cursor.getDouble(2));
                     item.setAsset(cursor.getDouble(3));
                     item.setDiscount(cursor.getDouble(4));
-                    item.setNetSale(cursor.getDouble(5));
+                    item.setNetSale(cursor.getDouble(5));*/
+
                     items.add(item);
                     cursor.moveToNext();
                 }
@@ -7656,6 +7662,7 @@ public class DbAdapter {
         }
         return items;
     }
+
 
     public ArrayList<GroupedTax> getGroupedTaxCharge(long Id) {
         ArrayList<GroupedTax> groupedTaxArrayList = new ArrayList<>();

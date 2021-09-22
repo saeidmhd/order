@@ -633,6 +633,12 @@ public class ServiceTools {
         return sum;
 
     }
+    public static String getProductName(int productId, Context context) {
+        DbAdapter db = new DbAdapter(context);
+        db.open();
+        Product product = db.GetProductWithProductId(productId);
+        return product.getName();
+    }
     public static double getSumCount11(ArrayList<ProductDetail> productDetails) {
         if(productDetails.size() == 1)
             return productDetails.get(0).getCount1();
