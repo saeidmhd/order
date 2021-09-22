@@ -94,7 +94,7 @@ public class SharedPreferencesHelper {
 
     public static void setPrefPrinterBrand(Context ctx, int value) {
 
-        PREF_PRINTER_BRAND = BaseActivity.getPrefUserId() + "_PrinterBrand";
+        PREF_PRINTER_BRAND = "_PrinterBrand";
         SharedPreferences perfs = ctx.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
         Editor editor = perfs.edit();
         editor.putInt(PREF_PRINTER_BRAND, value);
@@ -116,7 +116,7 @@ public class SharedPreferencesHelper {
     }
 
     public static int getPrefPrinterBrand(Context ctx) {
-        PREF_PRINTER_BRAND = BaseActivity.getPrefUserId() + "_PrinterBrand";
+        PREF_PRINTER_BRAND = "_PrinterBrand";
         return ctx.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE).getInt(PREF_PRINTER_BRAND, 0);
     }
 
