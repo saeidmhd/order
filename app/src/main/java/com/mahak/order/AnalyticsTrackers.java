@@ -14,6 +14,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.SharedPreferencesHelper;
 import com.yariksoffice.lingver.Lingver;
 
@@ -21,6 +22,8 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.io.StringWriter;
+import java.util.Calendar;
+import java.util.Date;
 
 
 public final class AnalyticsTrackers extends MultiDexApplication {
@@ -73,19 +76,31 @@ public final class AnalyticsTrackers extends MultiDexApplication {
         // String version = String.format(getString(R.string.))
         new StringBuffer();
         try {
+            Calendar calendar = Calendar.getInstance();
             String path = Environment.getExternalStorageDirectory().getPath() + "/MAHAK_ORDER_LOG.txt";
             File f = new File(path);
             long seek = f.length();
             RandomAccessFile raf = new RandomAccessFile(new File(path), "rw");
             raf.seek(seek);
-            raf.write("\n----------------------------------\n".getBytes());
-            seek += (long) "\n----------------------------------\n".getBytes().length;
+            Date date = new Date();
+            String rafStr= "\n@@@ date: " + ServiceTools.getDate(date)
+                    + " time: " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + "\n"
+                    + "@@@ version " + ServiceTools.getVersionCode(mContext);
+
+            raf.write(rafStr.getBytes());
+            seek += rafStr.getBytes().length;
             raf.seek(seek);
+
+            raf.write("\n----------------------------------\n".getBytes());
+            seek +="\n----------------------------------\n".getBytes().length;
+            raf.seek(seek);
+
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             ex.printStackTrace(pw);
             raf.writeUTF(sw.toString());
             raf.close();
+
         } catch (Exception var10) {
             FirebaseCrashlytics.getInstance().recordException(var10);
             var10.printStackTrace();

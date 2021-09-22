@@ -127,7 +127,7 @@
 
                 <LinearLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="32dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="@dimen/SmallSize">
@@ -146,7 +146,7 @@
                         android:id="@+id/tvName"
                         style="@style/forms_label_default"
                         android:layout_width="fill_parent"
-                        android:layout_height="30dp"
+                        android:layout_height="32dp"
                         android:gravity="center_vertical|right"
                         android:padding="@dimen/SmallSize"
                         android:singleLine="true"
@@ -156,7 +156,7 @@
 
                 <LinearLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="32dp"
                     android:background="@color/forms_alter_row"
                     android:gravity="right|center_vertical"
                     android:orientation="horizontal"
@@ -196,7 +196,7 @@
                 <LinearLayout
                     android:id="@+id/panelTotalAsset"
                     android:layout_width="fill_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="32dp"
                     android:gravity="right|center_vertical"
                     android:orientation="horizontal"
                     android:padding="@dimen/SmallSize"
@@ -240,7 +240,7 @@
 
                 <LinearLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="32dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="@dimen/SmallSize">
@@ -265,7 +265,7 @@
 
                 <LinearLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="32dp"
                     android:background="@color/forms_alter_row"
                     android:orientation="horizontal"
                     android:padding="@dimen/SmallSize">
@@ -290,7 +290,7 @@
 
                 <LinearLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:gravity="right|center_vertical"
                     android:orientation="horizontal"
                     android:padding="@dimen/SmallSize">

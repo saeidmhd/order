@@ -1869,4 +1869,17 @@ FirebaseCrashlytics.getInstance().recordException(e);
     {
         return idCounter.getAndIncrement();
     }
+
+    public static String getDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        int second = calendar.get(Calendar.SECOND);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        CivilDate cv = new CivilDate();
+        cv.setCalendar(calendar);
+        PersianDate persian = DateConverter.civilToPersian(cv);
+        return persian.getYear() + "/" + persian.getMonth() + "/" + persian.getDayOfMonth();
+    }
 }

@@ -263,7 +263,8 @@
                         style="@style/forms_btn_default"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/str_add_new_receipt" />
+                        android:text="@string/str_add_new_receipt"
+                        android:textSize="@dimen/button_text_size"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -416,7 +417,8 @@
                         style="@style/forms_btn_default"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/str_add_new_invoice" />
+                        android:text="@string/str_add_new_invoice"
+                        android:textSize="@dimen/button_text_size"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -464,7 +466,7 @@
                             android:layout_weight="1"
                             android:gravity="center|right"
                             android:text="@string/str_sum_of_orders"
-                            android:textSize="10sp" />
+                            android:textSize="12sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -568,7 +570,8 @@
                         style="@style/forms_btn_default"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/str_add_new_order" />
+                        android:text="@string/str_add_new_order"
+                        android:textSize="@dimen/button_text_size"/>
                 </LinearLayout>
 
                 <LinearLayout

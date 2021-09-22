@@ -155,7 +155,7 @@ public class DailyReportActivity extends BaseActivity {
         double dailyRemained = sumOfReceipt - sumOfPayment;
 
         tvDailyRemained.setText(ServiceTools.formatPrice(dailyRemained));
-        tvDailyRemainedVisitor.setText(getString(R.string.balance_value) + BaseActivity.getUserProfile().getName());
+        tvDailyRemainedVisitor.setText(getString(R.string.balance_value)+ " " + BaseActivity.getUserProfile().getName());
 
         db.close();
     }

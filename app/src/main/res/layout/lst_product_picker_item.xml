@@ -55,7 +55,7 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="30dp"
+                android:layout_height="36dp"
                 android:background="@color/forms_alter_row"
                 android:gravity="right|center_vertical"
                 android:orientation="horizontal"
@@ -63,7 +63,7 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="2"
                     android:gravity="left"
                     android:orientation="horizontal">
@@ -92,7 +92,7 @@
                     android:id="@+id/tvName1"
                     style="@style/forms_label_default"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="0.5"
                     android:singleLine="true"
                     android:text="@string/str_asset" />
@@ -101,7 +101,7 @@
             <LinearLayout
                 android:id="@+id/panelTotalAsset"
                 android:layout_width="fill_parent"
-                android:layout_height="30dp"
+                android:layout_height="36dp"
                 android:gravity="right|center_vertical"
                 android:orientation="horizontal"
                 android:padding="@dimen/SmallSize"
@@ -109,7 +109,7 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="2"
                     android:gravity="left"
                     android:orientation="horizontal">
@@ -138,7 +138,7 @@
                     android:id="@+id/tvName2"
                     style="@style/forms_label_default"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:singleLine="true"
                     android:layout_weight="0.5"
                     android:text="@string/str_asset2" />
@@ -146,7 +146,7 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="30dp"
+                android:layout_height="36dp"
                 android:gravity="center_vertical"
                 android:background="@color/forms_alter_row"
                 android:orientation="horizontal"
@@ -155,7 +155,7 @@
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/tvInbox"
                     style="@style/forms_label_default"
-                    android:layout_width="0dip"
+                    android:layout_width="match_parent"
                     android:layout_height="fill_parent"
                     android:layout_weight="2"
                     android:gravity="left|center_vertical"
@@ -165,14 +165,14 @@
                 <com.mahak.order.widget.FontTextView
                     style="@style/forms_label_default"
                     android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
+                    android:layout_height="match_parent"
                     android:singleLine="true"
                     android:text="@string/str_inbox" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="36dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:weightSum="2"
@@ -180,7 +180,7 @@
 
                 <LinearLayout
                     android:layout_width="0dip"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="left"
                     android:orientation="horizontal">
@@ -188,7 +188,7 @@
                     <com.mahak.order.widget.FontTextView
                         android:id="@+id/tvPrice"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:gravity="left|center"
                         android:text="@string/sample_number" />
                 </LinearLayout>
@@ -196,7 +196,7 @@
                 <LinearLayout
                     android:layout_width="0dip"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:gravity="right">
 
                     <com.mahak.order.widget.FontTextView
@@ -211,7 +211,7 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="36dp"
                 android:background="@color/forms_alter_row"
                 android:gravity="right|center_vertical"
                 android:orientation="horizontal"
@@ -233,7 +233,7 @@
                 <com.mahak.order.widget.FontTextView
                     style="@style/forms_label_default"
                     android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
+                    android:layout_height="match_parent"
                     android:gravity="center|right"
                     android:text="@string/str_customer_price" />
             </LinearLayout>
