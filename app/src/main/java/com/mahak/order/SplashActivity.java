@@ -27,18 +27,13 @@ import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.SharedPreferencesHelper;
 import com.mahak.order.libs.ZipManager;
 import com.mahak.order.service.ReadOfflinePicturesProducts;
-import com.mahak.order.webService.RequestSender;
-import com.mahak.order.webService.RunInternetService;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
-import org.json.JSONObject;
-
 import java.io.File;
 import java.util.Calendar;
-import java.util.HashMap;
 
 public class SplashActivity extends BaseActivity {
 

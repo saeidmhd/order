@@ -118,8 +118,6 @@ public class ProjectInfo {
 
     //web service
     public static String APPSIGN = "777E45E1-C80A-4D24-854F-DF8A75446B9B";
-    public static String SOAP_ADDRESS = "http://order.mahaksoft.com/orderservice.asmx";
-    //public static String SOAP_ADDRESS = "http://192.168.96.46/orderservice.asmx";
     public static String App_Id = "211003";
 
     //share Preference

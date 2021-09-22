@@ -1085,8 +1085,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.btnNavContact:
                 mDrawerLayout.closeDrawers();
-                intent = new Intent(getApplicationContext(), ContactActivity.class);
-                startActivity(intent);
+                /*intent = new Intent(getApplicationContext(), ContactActivity.class);
+                startActivity(intent);*/
                 break;
             case R.id.btnNavAbout:
                 mDrawerLayout.closeDrawers();

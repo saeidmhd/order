@@ -16,6 +16,8 @@
 
 package com.mahak.order;
 
+import static com.mahak.order.BaseActivity.setPrefSignalUserToken;
+
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +25,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -30,16 +33,22 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.mahak.order.apiHelper.ApiClient;
+import com.mahak.order.apiHelper.ApiInterface;
+import com.mahak.order.common.DeviceTokenModel.DeviceTokenBody;
+import com.mahak.order.common.DeviceTokenModel.DeviceTokenResponse;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
-import com.mahak.order.webService.RequestSender;
-import com.mahak.order.webService.RunInternetService;
+
 
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegistrationIntentService extends IntentService {
 
@@ -77,7 +86,7 @@ public class RegistrationIntentService extends IntentService {
             Log.i(TAG, "FCM Registration Token: " + token);
 
             // TODO: Implement this method to send any registration to your app's servers.
-            sendRegistrationToServer(token);
+            sendRegistrationToServer(getApplicationContext() , token);
 
             ServiceTools.setKeyInSharedPreferences(getApplicationContext(), ProjectInfo.pre_device_token, token);
 
@@ -110,7 +119,38 @@ public class RegistrationIntentService extends IntentService {
      *
      * @param token The new token.
      */
-    private void sendRegistrationToServer(String token) {
+
+
+    public void sendRegistrationToServer(Context context , String token) {
+        DeviceTokenBody deviceTokenBody = new DeviceTokenBody();
+        deviceTokenBody.setDeviceId(ServiceTools.getDeviceID(context));
+        deviceTokenBody.setAppId(ProjectInfo.App_Id);
+        deviceTokenBody.setDeviceToken(token);
+        deviceTokenBody.setOs("android");
+        deviceTokenBody.setOsVersion(String.valueOf(android.os.Build.VERSION.SDK_INT));
+        deviceTokenBody.setAppVersion(String.valueOf(ServiceTools.getVersionCode(context)));
+        deviceTokenBody.setTimezone(getTimeZone());
+        deviceTokenBody.setMahakId(BaseActivity.getPrefMahakId());
+        ApiInterface apiService = ApiClient.setDeviceTokenRetrofit().create(ApiInterface.class);
+        Call<DeviceTokenResponse> call = apiService.SetDeviceToken(deviceTokenBody);
+        call.enqueue(new Callback<DeviceTokenResponse>() {
+            @Override
+            public void onResponse(Call<DeviceTokenResponse> call, Response<DeviceTokenResponse> response) {
+                if (response.body() != null) {
+                    if (response.body().isSuccessed()) {
+                    }else
+                        Log.d("@TAG-Res", "error");
+                }
+            }
+            @Override
+            public void onFailure(Call<DeviceTokenResponse> call, Throwable t) {
+                Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    /*private void sendRegistrationToServer(String token) {
         // Add custom implementation, as needed.
         // Add custom implementation, as needed.
         Log.d("@TAG", token);
@@ -128,7 +168,7 @@ public class RegistrationIntentService extends IntentService {
         };
         new RunInternetService().Do(getApplicationContext(), "", url, methodName, params, receiver, null, 14000);
     }
-
+*/
 
     public String registerRequestPackage(Context ctx, String Token) {
         String rPackage = "{\"deviceId\":\"" + ServiceTools.getDeviceID(ctx) + "\",\"deviceToken\":\"" + Token + "\",\"os\":\"android\",\"osVersion\":\"" + android.os.Build.VERSION.SDK_INT + "\",\"appId\":" + ProjectInfo.App_Id + ",\"appVersion\":\"" + ServiceTools.getVersionCode(ctx) + "\",\"timeZone\":\"" + getTimeZone()+ "\",\"mahakId\":\"" + BaseActivity.getPrefMahakId() + "\"}";

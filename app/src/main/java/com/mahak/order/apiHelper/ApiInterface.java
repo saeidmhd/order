@@ -1,6 +1,8 @@
 package com.mahak.order.apiHelper;
 
 
+import com.mahak.order.common.DeviceTokenModel.DeviceTokenBody;
+import com.mahak.order.common.DeviceTokenModel.DeviceTokenResponse;
 import com.mahak.order.common.login.LoginBody;
 import com.mahak.order.common.login.LoginResult;
 import com.mahak.order.common.loginSignalr.SignalLoginBody;
@@ -43,6 +45,9 @@ public interface ApiInterface {
 
     @POST("SaveAllData")
     Call<SaveAllDataResult> SaveAllData(@Body SetAllDataBody body);
+
+    @POST("SetDeviceToken")
+    Call<DeviceTokenResponse> SetDeviceToken(@Body DeviceTokenBody body);
 
     @Multipart
     @POST("Upload")

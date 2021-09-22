@@ -16,13 +16,16 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.mahak.order.BaseActivity.baseUrlTracking;
+import static com.mahak.order.BaseActivity.setDeviceTokenUrl;
 
 
 public class ApiClient {
-    private static final String BASE_URL = BaseActivity.baseUrl;
+    private static final String BASE_URL = BaseActivity.baseUrlApi;
     private static Retrofit retrofit = null;
+    private static Retrofit DeviceTokenRetrofit = null;
     private static Retrofit Signalretrofit = null;
     public static HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
+
     private static OkHttpClient client = new OkHttpClient().newBuilder()
             .connectTimeout(300, TimeUnit.SECONDS)
             .readTimeout(300, TimeUnit.SECONDS)
@@ -65,5 +68,16 @@ public class ApiClient {
                     .build();
         }
         return Signalretrofit;
+    }
+
+    public static Retrofit setDeviceTokenRetrofit() {
+        if (DeviceTokenRetrofit == null) {
+            DeviceTokenRetrofit = new Retrofit.Builder()
+                    .baseUrl(setDeviceTokenUrl)
+                    .client(client)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .build();
+        }
+        return DeviceTokenRetrofit;
     }
 }

@@ -33,6 +33,8 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
 
     private void signalSetup() {
         hubConnection = HubConnectionBuilder.create("https://tracking.mahaksoft.com/TrackingHub?token=" + BaseActivity.getPrefSignalUserToken()).build();
+        hubConnection.setKeepAliveInterval(60000);
+        hubConnection.setServerTimeout(60000);
         listenOnConnected();
         listenReceiveAdminConnect();
         listenReceiveDisconnectAdmin();

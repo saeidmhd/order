@@ -3,9 +3,42 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../../layout/custom_preview.xml" value="0.3005128205128205" />
+        <entry key="app/src/main/res/layout-de/activity_customers_list.xml" value="0.16614583333333333" />
+        <entry key="app/src/main/res/layout-de/activity_good_detail_count.xml" value="0.266304347826087" />
         <entry key="app/src/main/res/layout-de/activity_orders_list.xml" value="0.1859375" />
+        <entry key="app/src/main/res/layout-de/activity_print.xml" value="0.15520833333333334" />
+        <entry key="app/src/main/res/layout-de/activity_print_setting.xml" value="0.21927083333333333" />
+        <entry key="app/src/main/res/layout-de/activity_product_picker_list.xml" value="0.16614583333333333" />
+        <entry key="app/src/main/res/layout-de/activity_products_list.xml" value="0.16614583333333333" />
+        <entry key="app/src/main/res/layout-de/activity_setting.xml" value="0.25" />
+        <entry key="app/src/main/res/layout-de/activity_setting2.xml" value="0.21927083333333333" />
+        <entry key="app/src/main/res/layout-de/fragment_item_product_gallery.xml" value="0.228125" />
+        <entry key="app/src/main/res/layout-de/lst_product_picker_item.xml" value="0.228125" />
+        <entry key="app/src/main/res/layout/activity_customers_list.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_good_detail_count.xml" value="0.266304347826087" />
+        <entry key="app/src/main/res/layout/activity_invoice_detail.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_order_detail.xml" value="0.5269320843091335" />
         <entry key="app/src/main/res/layout/activity_print.xml" value="0.21195652173913043" />
-        <entry key="app/src/main/res/layout/activity_print_setting.xml" value="0.161231884057971" />
+        <entry key="app/src/main/res/layout/activity_print_setting.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_product_picker_list.xml" value="0.16394927536231885" />
+        <entry key="app/src/main/res/layout/activity_products_list.xml" value="0.16394927536231885" />
+        <entry key="app/src/main/res/layout/activity_setting.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_setting2.xml" value="0.24592391304347827" />
+        <entry key="app/src/main/res/layout/factor_print_template_50mm_fii_compact.xml" value="0.20923913043478262" />
+        <entry key="app/src/main/res/layout/factor_print_template_80mm.xml" value="0.46153846153846156" />
+        <entry key="app/src/main/res/layout/factor_print_template_80mm_fii.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/factor_print_template_80mm_fii_compact.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_item_product_gallery.xml" value="0.228125" />
+        <entry key="app/src/main/res/layout/grv_product_picker_item.xml" value="0.228125" />
+        <entry key="app/src/main/res/layout/lst_order_detail_for_print_fii.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/lst_order_detail_for_print_prop.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/lst_product_item.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/lst_product_picker_gallery_item.xml" value="0.228125" />
+        <entry key="app/src/main/res/layout/lst_product_picker_item.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/lst_report_product_item.xml" value="0.4894613583138173" />
+        <entry key="app/src/main/res/menu/share_menu.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>
