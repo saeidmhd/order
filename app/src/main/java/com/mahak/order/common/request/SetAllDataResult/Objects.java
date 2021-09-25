@@ -22,6 +22,7 @@ import com.mahak.order.common.request.SetAllDataResult.Transactions.Transactions
 import com.mahak.order.common.request.SetAllDataResult.TransferStoreDetails.TransferStoreDetails;
 import com.mahak.order.common.request.SetAllDataResult.TransferStores.TransferStores;
 import com.mahak.order.common.request.SetAllDataResult.Visitors.Visitors;
+import com.mahak.order.common.request.SetAllDataResult.VisitorLocations.VisitorLocations;
 
 public class Objects {
 
@@ -88,6 +89,10 @@ public class Objects {
     @SerializedName("TransferStoreDetails")
     @Expose
     private TransferStoreDetails transferStoreDetails;
+
+    @SerializedName("VisitorLocations")
+    @Expose
+    private VisitorLocations VisitorLocations;
 
 
     public Banks getBanks() {
@@ -249,5 +254,13 @@ public class Objects {
 
     public void setTransferStoreDetails(TransferStoreDetails transferStoreDetails) {
         this.transferStoreDetails = transferStoreDetails;
+    }
+
+    public com.mahak.order.common.request.SetAllDataResult.VisitorLocations.VisitorLocations getVisitorLocations() {
+        return VisitorLocations;
+    }
+
+    public void setVisitorLocations(com.mahak.order.common.request.SetAllDataResult.VisitorLocations.VisitorLocations visitorLocations) {
+        VisitorLocations = visitorLocations;
     }
 }

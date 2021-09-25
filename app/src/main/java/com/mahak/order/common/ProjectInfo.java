@@ -120,8 +120,6 @@ public class ProjectInfo {
 
     //web service
     public static String APPSIGN = "777E45E1-C80A-4D24-854F-DF8A75446B9B";
-    public static String SOAP_ADDRESS = "http://order.mahaksoft.com/orderservice.asmx";
-    //public static String SOAP_ADDRESS = "http://192.168.96.46/orderservice.asmx";
     public static String App_Id = "211003";
 
     //share Preference
@@ -149,6 +147,10 @@ public class ProjectInfo {
     public static String _json_key_config = "result";
     public static String _json_key_mingps_time_change = "minGpsTimeChange";
     public static String _json_key_mingps_distance_change = "minGpsDistanceChange";
+    public static String _json_key_sendingPointsByAdmin = "sendingPointsByAdmin";
+    public static String _json_key_sendingPoints = "sendingPoints";
+    public static String _json_key_isRestricted = "isRestricted";
+    public static String _json_key_radius = "radius";
     public static String _json_key_banks = "BankNames";
 
     //Action

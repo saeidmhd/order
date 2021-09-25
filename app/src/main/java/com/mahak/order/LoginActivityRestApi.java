@@ -161,7 +161,7 @@ public class LoginActivityRestApi extends BaseActivity {
         loginBody.setUserName(username);
         loginBody.setPassword(password);
 
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
         Call<LoginResult> call = apiService.Login(loginBody);
         pd = new FontProgressDialog(context);
         pd.setMessage(getString(R.string.reviewing_user_info));

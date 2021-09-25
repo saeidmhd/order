@@ -175,10 +175,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ContactActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
             android:name=".ProductPickerListActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
@@ -281,6 +277,7 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".PrintSettingActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.Dialog"
             android:windowSoftInputMode="stateHidden" />
         <activity
@@ -308,25 +305,6 @@
         <activity
             android:name=".MapViewActivity"
             android:label="@string/title_activity_map_view" />
-
-        <!-- Gps Awake Service -->
-        <receiver android:name=".gpsTracking.OnBootReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".gpsTracking.OnAlarmReceiver" />
-
-        <service android:name=".gpsTracking.GpsTrackingService" />
-
-        <receiver android:name=".gpsTracking.NotificationReceiver">
-            <intent-filter>
-                <action android:name="actionYes" />
-                <action android:name="actionNo" />
-                <action android:name="actionStop" />
-                <action android:name="actionPause" />
-            </intent-filter>
-        </receiver>
 
         <activity
             android:name=".baby380_koohii_printer.PrintDemo"
@@ -495,6 +473,12 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${mapsApiKey}" />
+
+        <service
+            android:name=".tracking.LocationService"
+            android:enabled="true"
+            android:exported="true"
+            android:foregroundServiceType="location"/>
 
         <service
             android:name="MyFcmListenerService"

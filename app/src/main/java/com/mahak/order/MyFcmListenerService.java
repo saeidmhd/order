@@ -148,7 +148,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
             }
 
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this,CHANNEL_ID);
-            
+
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mBuilder.setSmallIcon(R.drawable.ic_launcher_noti);
                 mBuilder.setColor(getApplicationContext().getResources().getColor(R.color.notification_color));

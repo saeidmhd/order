@@ -3,7 +3,6 @@ package com.mahak.order.apiHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mahak.order.BaseActivity;
-import com.mahak.order.CheckListDetailFragment;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -16,15 +15,17 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.mahak.order.BaseActivity.loginSignalR;
+import static com.mahak.order.BaseActivity.baseUrlTracking;
+import static com.mahak.order.BaseActivity.setDeviceTokenUrl;
 
 
 public class ApiClient {
-    private static final String BASE_URL = BaseActivity.BaseUrl;
-
+    private static final String BASE_URL = BaseActivity.baseUrlApi;
     private static Retrofit retrofit = null;
-    private static Retrofit Signalretrofit;
+    private static Retrofit DeviceTokenRetrofit = null;
+    private static Retrofit Signalretrofit = null;
     public static HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
+
     private static OkHttpClient client = new OkHttpClient().newBuilder()
             .connectTimeout(300, TimeUnit.SECONDS)
             .readTimeout(300, TimeUnit.SECONDS)
@@ -48,8 +49,7 @@ public class ApiClient {
 
     private static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
 
-
-    public static Retrofit getClient() {
+    public static Retrofit orderRetrofitClient() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
@@ -59,15 +59,25 @@ public class ApiClient {
         }
         return retrofit;
     }
-
-    public static Retrofit getClientSignalr() {
+    public static Retrofit trackingRetrofitClient() {
         if (Signalretrofit == null) {
             Signalretrofit = new Retrofit.Builder()
-                    .baseUrl(loginSignalR)
+                    .baseUrl(baseUrlTracking)
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
         }
         return Signalretrofit;
+    }
+
+    public static Retrofit setDeviceTokenRetrofit() {
+        if (DeviceTokenRetrofit == null) {
+            DeviceTokenRetrofit = new Retrofit.Builder()
+                    .baseUrl(setDeviceTokenUrl)
+                    .client(client)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .build();
+        }
+        return DeviceTokenRetrofit;
     }
 }

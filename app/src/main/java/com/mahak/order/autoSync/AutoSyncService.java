@@ -180,7 +180,7 @@ public class AutoSyncService extends IntentService {
         loginBody.setUserName(user.getUsername());
         loginBody.setPassword(user.getPassword());
 
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
         Call<LoginResult> call = apiService.Login(loginBody);
         call.enqueue(new Callback<LoginResult>() {
             @Override
@@ -281,7 +281,7 @@ public class AutoSyncService extends IntentService {
 
             final String[] mMsg = {""};
 
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
 
             SetAllDataBody setAllDataBody = new SetAllDataBody();
             setAllDataBody.setUserToken(mUserToken);
@@ -459,7 +459,7 @@ public class AutoSyncService extends IntentService {
 
             final String[] mMsg = {""};
 
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
             Call<GetDataResult> getDataResultCall;
             getDataResultCall = apiService.GetAllData(getAllDataBody);
             getDataResultCall.enqueue(new Callback<GetDataResult>() {

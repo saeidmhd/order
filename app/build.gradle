@@ -16,8 +16,8 @@ android {
         applicationId "com.mahak.order"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 3344
-        versionName '3.344'
+        versionCode 4204
+        versionName '4.204'
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -67,7 +67,6 @@ repositories {
     flatDir {
         dirs 'libs'
     }
-    maven { url 'https://oss.sonatype.org/content/repositories/ksoap2-android-releases/' }
     maven { url "https://jitpack.io" }
 }
 
@@ -130,5 +129,11 @@ dependencies {
     implementation project(path: ':Rahyab_Hybrid_CPSDK_1.0.15')
 
     implementation 'com.microsoft.signalr:signalr:3.0.0'
+
+    implementation "androidx.multidex:multidex:2.0.1"
+
+
+    implementation 'com.google.firebase:firebase-inappmessaging-display:20.0.0'
+    implementation 'com.google.firebase:firebase-messaging:22.0.0'
 
 }

@@ -21,6 +21,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
@@ -32,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
@@ -79,6 +81,8 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
@@ -87,6 +91,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import io.reactivex.annotations.NonNull;
 
 import static com.mahak.order.BaseActivity.baseUrlImage;
 import static com.mahak.order.BaseActivity.getPrefUsername;
@@ -1785,6 +1791,33 @@ FirebaseCrashlytics.getInstance().recordException(e);
         } else {
             Toast.makeText(context, "File doesn't exists", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public static void writeLog(String str) {
+        new StringBuffer();
+        try {
+            String path = Environment.getExternalStorageDirectory().getPath() + "/MAHAK_ORDER_LOG.txt";
+            File f = new File(path);
+            long seek = f.length();
+            RandomAccessFile raf = new RandomAccessFile(new File(path), "rw");
+            raf.seek(seek);
+            raf.write("\n----------------------------------\n".getBytes());
+            seek += (long) "\n----------------------------------\n".getBytes().length;
+            raf.seek(seek);
+            raf.writeUTF(str);
+            raf.close();
+        } catch (Exception var10) {
+            FirebaseCrashlytics.getInstance().recordException(var10);
+            var10.printStackTrace();
+        }
+    }
+
+    public static String formattedDate(long date) {
+        Date today = new Date();
+        today.setTime(date);
+        String pattern = "yyyy-MM-dd'T'HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
+        return simpleDateFormat.format(today);
     }
 
     public static String getLikeString(String searchStr) {

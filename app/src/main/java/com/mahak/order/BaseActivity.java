@@ -37,8 +37,9 @@ public class BaseActivity extends AppCompatActivity {
     //public static final String BaseUrl ="http://192.168.89.31/mds/sync/" ;
     //public static final String BaseUrl ="http://order.mahaksoft.com:8085/sync/" ;
     //public static final String BaseUrl = "https://bazaraservices.mahaksoft.com/v3/sync/";
-    public static final String BaseUrl = "https://mahakacc.mahaksoft.com/api/v3/sync/";
-    public static final String loginSignalR = "https://tracking.mahaksoft.com/api/";
+    public static final String baseUrlApi = "https://mahakacc.mahaksoft.com/api/v3/sync/";
+    public static final String setDeviceTokenUrl = "https://mahakacc.mahaksoft.com/public/api/";
+    public static final String baseUrlTracking = "https://tracking.mahaksoft.com/api/";
     //public static final String BaseUrl ="http://bazaraservices.mahaksoft.com:444/sync/" ;
     public static final String baseUrlImage = "https://mahakacc.mahaksoft.com";
     public static String NegotiateToken = "";
@@ -171,7 +172,7 @@ public class BaseActivity extends AppCompatActivity {
     public static String DefaultUserToken = "";
     public static long DefaultMasterId = 0;
     public static String DefaultDatabaseId = "";
-    public static int DefaultAdminControl = 0;
+    public static boolean DefaultAdminControl = false;
     public static int DefaultUnit2Setting = 1;
     public static int DefaultTextView = 0;
     public static int DefaultTrackingControl = 0;
@@ -659,13 +660,13 @@ public class BaseActivity extends AppCompatActivity {
         return sh.getString(_Key_DatabaseId, DefaultDatabaseId);
     }
 
-    public static void setPrefAdminControl(int AdminControl) {
-        sh.edit().putInt(_Key_AdminControl, AdminControl).commit();
+    public static void setPrefAdminControl(boolean AdminControl) {
+        sh.edit().putBoolean(_Key_AdminControl, AdminControl).commit();
     }
 
-    public static int getPrefAdminControl(Context context) {
+    public static boolean getPrefAdminControl(Context context) {
         if (sh == null) sh = context.getSharedPreferences(SharedPreferencesMahak, MODE_PRIVATE);
-        return sh.getInt(_Key_AdminControl, DefaultAdminControl);
+        return sh.getBoolean(_Key_AdminControl, DefaultAdminControl);
     }
 
     public static void setPrefUnit2Setting(int Unit2Setting) {

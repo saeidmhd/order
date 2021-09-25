@@ -1,7 +1,9 @@
 package com.mahak.order;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -19,11 +21,17 @@ import com.mahak.order.common.Customer;
 import com.mahak.order.common.GPSTracker;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
-import com.mahak.order.gpsTracking.ClusterPoint;
-import com.mahak.order.gpsTracking.GpsTracking;
+import com.mahak.order.service.DataService;
+import com.mahak.order.tracking.ClusterPoint;
+import com.mahak.order.tracking.LocationService;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.tracking.MapPolygon;
+import com.mahak.order.tracking.ShowPersonCluster;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class MapViewActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
@@ -36,26 +44,24 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
     private Marker marker;
     private Polyline polyline;
     private Marker mSelectedMarker;
-    private DbAdapter db;
     private ArrayList<Customer> customers = new ArrayList<>();
     private ClusterManager<ClusterPoint> clusterManager;
+    Context context;
+    private MapPolygon mapPolygon;
+    private DbAdapter db;
+    private List<LatLng> latLngpoints = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_view);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-
-        db = new DbAdapter(this);
-
+        context = this;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             positions = extras.getParcelableArrayList(COORDINATE);
             customerPositions = extras.getParcelableArrayList(CustomerPositions);
         }
-
-        db.open();
-        //customers = db.getAllOfCustomer();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
@@ -63,8 +69,10 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
 
                 mMap = googleMap;
 
-                // Add Customer markers to the map.
-                // addMarkersToMap();
+                new ShowPersonCluster(mMap,context).showPeople();
+
+                mapPolygon = new MapPolygon(mMap,mContext);
+                mapPolygon.showPolygon();
 
                 // Set listener for marker click event.  See the bottom of this class for its behavior.
                 mMap.setOnMarkerClickListener(MapViewActivity.this);
@@ -72,128 +80,75 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
                 // Set listener for map click event.  See the bottom of this class for its behavior.
                 mMap.setOnMapClickListener(MapViewActivity.this);
 
+                if(getLastPoint()!=null)
+                    showMarkerOnMap(getLastPoint());
+
                 // Override the default content description on the view, for accessibility mode.
                 // Ideally this string would be localized.
                 googleMap.setContentDescription("");
 
-                GPSTracker gpsTracker = new GPSTracker(mContext);
+                GPSTracker gpsTracker = new GPSTracker(context);
                 double _Latitude, _Longitude;
                 for (int i = 0; i < positions.size(); i++) {
                     mMap.addMarker(new MarkerOptions().position(positions.get(i)));
                 }
                 if (positions.size() > 0) {
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(positions.get(0), 10));
-                } else if (gpsTracker.canGetLocation()) {
-                    _Latitude = gpsTracker.getLatitude();
-                    _Longitude = gpsTracker.getLongitude();
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(_Latitude, _Longitude), 10));
-                } else {
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(ProjectInfo.DEFAULT_LATITUDE, ProjectInfo.DEFAULT_LONGITUDE), 8));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(positions.get(0), 15));
                 }
                 initMap();
-                mMap.getUiSettings().setZoomControlsEnabled(true);
 
-                GpsTracking.addEventLocation(MapViewActivity.this.getLocalClassName(), new GpsTracking.EventLocation() {
+                LocationService.addEventLocation(this.getLocalClassName(), new LocationService.EventLocation() {
                     @Override
-                    public void onReceivePoint(final Location location) {
+                    public void onReceivePoint(final Location location, boolean saveInDb) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (location == null) {
-                                    return;
+                                if(location != null){
+                                    LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+                                    if(saveInDb)
+                                        drawLineBetweenPoints(position);
+                                    showMarkerOnMap(position);
                                 }
-                                LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
-                                if (polyline != null) {
-                                    List<LatLng> points = polyline.getPoints();
-                                    points.add(position);
-                                    polyline.setPoints(points);
-                                }
-                                if (marker != null) {
-                                    marker.remove();
-                                }
-                                marker = googleMap.addMarker(new MarkerOptions().position(position));
-                                marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_visitor_3));
-                                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, googleMap.getCameraPosition().zoom));
                             }
                         });
                     }
                 });
-                // setUpClusterer();
+
+                //setUpClusterer();
             });
         }
 
+        loadLastPoint();
 
     }
 
-    private void setUpClusterer() {
-        // Position the map.
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.503186, -0.126446), 10));
-
-        // Initialize the manager with the context and the map.
-        // (Activity extends context, so we can pass 'this' in the constructor.)
-        clusterManager = new ClusterManager<ClusterPoint>(mContext, mMap);
-
-        // Point the map's listeners at the listeners implemented by the cluster
-        // manager.
-        mMap.setOnCameraIdleListener(clusterManager);
-        mMap.setOnMarkerClickListener(clusterManager);
-
-        // Add cluster items (markers) to the cluster manager.
-        addItems();
-    }
-
-    private void addItems() {
-
-        // Set some lat/lng coordinates to start with.
-        double lat = 51.5145160;
-        double lng = -0.1270060;
-
-        // Add ten cluster items in close proximity, for purposes of this example.
-        for (int i = 0; i < 10; i++) {
-            double offset = i / 60d;
-            lat = lat + offset;
-            lng = lng + offset;
-            ClusterPoint offsetItem = new ClusterPoint(lat, lng, "Title " + i, "Snippet " + i);
-            clusterManager.addItem(offsetItem);
+    private void showMarkerOnMap(LatLng position) {
+        if (marker != null) {
+            marker.remove();
         }
-    }
-
-    private void addMarkersToMap() {
-
-        for (Customer customer : customers) {
-            if (customer.getOrderCount() > 0) {
-                mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(ServiceTools.RegulartoDouble(customer.getLatitude()), ServiceTools.RegulartoDouble(customer.getLongitude())))
-                        .title(customer.getName())
-                        .snippet(getString(R.string.order_has_been_registered))
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-            } else {
-                mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(ServiceTools.RegulartoDouble(customer.getLatitude()), ServiceTools.RegulartoDouble(customer.getLongitude())))
-                        .title(customer.getName())
-                        .snippet(getString(R.string.order_has_not_been_registered))
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        if (mMap != null) {
+            if(position != null){
+                marker = mMap.addMarker(new MarkerOptions().position(position));
+                marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_visitor_3));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(position.latitude, position.longitude), 15));
             }
         }
+    }
 
-
+    private void drawLineBetweenPoints(LatLng position) {
+        if (polyline != null) {
+            List<LatLng> points = polyline.getPoints();
+            points.add(position);
+            polyline.setPoints(points);
+        }
     }
 
     @Override
     protected void onDestroy() {
-        GpsTracking.removeEventLocation(this.getLocalClassName());
+        LocationService.removeEventLocation(this.getLocalClassName());
         super.onDestroy();
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
     }
@@ -206,7 +161,8 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
         polylineOptions.color(Color.RED);
         polylineOptions.visible(true);
         polyline = mMap.addPolyline(polylineOptions);
-        marker = new GpsTracking(getBaseContext()).drawGoogleMap(mMap, marker, polyline);
+        if(polyline != null)
+            polyline.setPoints(latLngpoints);
     }
 
     @Override
@@ -239,7 +195,6 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
 
         mSelectedMarker = marker;
 
-
         // Return false to indicate that we have not consumed the event and that we wish
         // for the default behavior to occur.
         return false;
@@ -247,6 +202,47 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-
     }
+
+    private LatLng getLastPoint(){
+        LatLng latLng = null;
+        LocationService locationService = new LocationService();
+        JSONObject obj = locationService.getLastLocationJson(context);
+        if (obj != null) {
+            Location lastLocation = new Location("");
+            lastLocation.setLatitude(obj.optDouble(ProjectInfo._json_key_latitude));
+            lastLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_longitude));
+            latLng = new LatLng(lastLocation.getLatitude(),lastLocation.getLongitude());
+        }
+        return latLng;
+    }
+
+    private void loadLastPoint() {
+        new loadingGpsLocation().execute();
+    }
+
+    class loadingGpsLocation extends AsyncTask<String, String, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            if (db == null) db = new DbAdapter(mContext);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            long userId = BaseActivity.getPrefUserMasterId(mContext);
+            db.open();
+            latLngpoints = db.getAllLatLngPointsFromDate(calendar.getTimeInMillis(), userId);
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if(polyline != null)
+                polyline.setPoints(latLngpoints);
+            showMarkerOnMap(getLastPoint());
+        }
+    }
+
+
 }

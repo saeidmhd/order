@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
@@ -26,7 +27,7 @@ import com.mahak.order.common.CityZone_Extra_Data;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.CustomerGroup;
 import com.mahak.order.common.ExtraData;
-import com.mahak.order.common.GpsPoint;
+import com.mahak.order.common.VisitorLocation;
 import com.mahak.order.common.GroupedTax;
 import com.mahak.order.common.NonRegister;
 import com.mahak.order.common.Notification;
@@ -65,6 +66,8 @@ import com.mahak.order.common.User;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.common.VisitorPeople;
 import com.mahak.order.common.VisitorProduct;
+import com.mahak.order.tracking.visitorZone.Datum;
+import com.mahak.order.tracking.visitorZone.ZoneLocation;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -233,6 +236,43 @@ public class DbAdapter {
                 initialvalue.put(DbSchema.Customerschema.COLUMN_Deleted, customer.getDeleted());
                 mDb.insert(DbSchema.Customerschema.TABLE_NAME, null, initialvalue);
             }
+            mDb.setTransactionSuccessful();
+        } finally {
+            mDb.endTransaction();
+        }
+    }
+    public void AddZoneLocation(List<ZoneLocation> data) {
+        mDb.beginTransaction();
+        try {
+            ContentValues initialvalue = new ContentValues();
+            for (ZoneLocation zoneLocation : data) {
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_id, zoneLocation.getId());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_zoneId, zoneLocation.getZoneId());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_latitude, zoneLocation.getLatitude());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_longitude, zoneLocation.getLongitude());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_createdBy, zoneLocation.getCreatedBy());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_created, zoneLocation.getCreated());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_lastModifiedBy, zoneLocation.getLastModifiedBy());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_lastModified, zoneLocation.getLastModified());
+                mDb.insert(DbSchema.ZoneLocationSchema.TABLE_NAME, null, initialvalue);
+            }
+            mDb.setTransactionSuccessful();
+        } finally {
+            mDb.endTransaction();
+        }
+    }
+    public void AddZone(Datum datum) {
+        mDb.beginTransaction();
+        try {
+            ContentValues initialvalue = new ContentValues();
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_zoneId, datum.getId());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_title, datum.getTitle());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_visitorId, getPrefUserId());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_createdBy, datum.getCreatedBy());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_created, datum.getCreated());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_lastModifiedBy, datum.getLastModified());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_lastModified, datum.getLastModifiedBy());
+            mDb.insert(DbSchema.ZoneSchema.TABLE_NAME, null, initialvalue);
             mDb.setTransactionSuccessful();
         } finally {
             mDb.endTransaction();
@@ -1126,15 +1166,27 @@ public class DbAdapter {
         mDb.insert(DbSchema.ProductCategorySchema.TABLE_NAME, null, contentValues);
     }
 
-    public long AddGpsTracking(GpsPoint gpsPoint) {
-
-        ContentValues initialvalue = new ContentValues();
-        initialvalue.put(DbSchema.GpsTrackingSchema.COLUMN_DATE, gpsPoint.getDate());
-        initialvalue.put(DbSchema.GpsTrackingSchema.COLUMN_LATITUDE, gpsPoint.getLatitude());
-        initialvalue.put(DbSchema.GpsTrackingSchema.COLUMN_LONGITUDE, gpsPoint.getLongitude());
-        initialvalue.put(DbSchema.GpsTrackingSchema.COLUMN_IS_SEND, gpsPoint.isSend() ? 1 : 0);
-        initialvalue.put(DbSchema.GpsTrackingSchema.COLUMN_USER_ID, gpsPoint.getVisitorId());
-        return mDb.insert(DbSchema.GpsTrackingSchema.TABLE_NAME, null, initialvalue);
+    public boolean AddGpsTracking(List<VisitorLocation> VisitorLocations) {
+        boolean result = false;
+        mDb.beginTransaction();
+        try {
+            ContentValues initialvalue = new ContentValues();
+            for (VisitorLocation visitorLocation : VisitorLocations) {
+                initialvalue.put(DbSchema.VisitorLocationSchema.COLUMN_Create_DATE, visitorLocation.getCreateDate());
+                initialvalue.put(DbSchema.VisitorLocationSchema.COLUMN_DATE, visitorLocation.getDate());
+                initialvalue.put(DbSchema.VisitorLocationSchema.COLUMN_LATITUDE, visitorLocation.getLatitude());
+                initialvalue.put(DbSchema.VisitorLocationSchema.COLUMN_uniqueID, visitorLocation.getUniqueID());
+                initialvalue.put(DbSchema.VisitorLocationSchema.COLUMN_VisitorLocationId, visitorLocation.getVisitorLocationId());
+                initialvalue.put(DbSchema.VisitorLocationSchema.COLUMN_RowVersion, visitorLocation.getRowVersion());
+                initialvalue.put(DbSchema.VisitorLocationSchema.COLUMN_LONGITUDE, visitorLocation.getLongitude());
+                initialvalue.put(DbSchema.VisitorLocationSchema.COLUMN_VISITOR_ID, visitorLocation.getVisitorId());
+                result =  mDb.insert(DbSchema.VisitorLocationSchema.TABLE_NAME, null, initialvalue) > 0;
+            }
+            mDb.setTransactionSuccessful();
+        } finally {
+            mDb.endTransaction();
+        }
+        return result;
     }
 
     public long AddNotification(Notification notification) {
@@ -1483,8 +1535,8 @@ public class DbAdapter {
                 customer.setZone(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ZONE)));
                 customer.setTell(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PHONE)));
                 customer.setMobile(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MOBILE)));
-                customer.setLatitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
-                customer.setLongitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
+                customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
+                customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
                 customer.setShift(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_SHIFT)));
                 customer.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MODIFYDATE)));
                 customer.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PUBLISH)));
@@ -1569,8 +1621,8 @@ public class DbAdapter {
                 customer.setZone(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ZONE)));
                 customer.setTell(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PHONE)));
                 customer.setMobile(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MOBILE)));
-                customer.setLatitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
-                customer.setLongitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
+                customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
+                customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
                 customer.setShift(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_SHIFT)));
                 customer.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MODIFYDATE)));
                 customer.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PUBLISH)));
@@ -1655,8 +1707,8 @@ public class DbAdapter {
                 customer.setZone(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ZONE)));
                 customer.setTell(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PHONE)));
                 customer.setMobile(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MOBILE)));
-                customer.setLatitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
-                customer.setLongitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
+                customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
+                customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
                 customer.setShift(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_SHIFT)));
                 customer.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MODIFYDATE)));
                 customer.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PUBLISH)));
@@ -1998,8 +2050,8 @@ public class DbAdapter {
         customer.setZone(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ZONE)));
         customer.setTell(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PHONE)));
         customer.setMobile(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MOBILE)));
-        customer.setLatitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
-        customer.setLongitude(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
+        customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LATITUDE)));
+        customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_LONGITUDE)));
         customer.setShift(cursor.getString(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_SHIFT)));
         customer.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_MODIFYDATE)));
         customer.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_PUBLISH)));
@@ -3160,6 +3212,7 @@ public class DbAdapter {
         return order;
     }
 
+
     public Order GetOrderWithOrderClientId(long clientId) {
         Order order = new Order();
         Cursor cursor;
@@ -3670,6 +3723,30 @@ public class DbAdapter {
         notification.setUserId(cursor.getLong(cursor.getColumnIndex(DbSchema.NotificationSchema.COLUMN_USER_ID)));
         return notification;
     }
+    private Datum getZoneFromCursor(Cursor cursor) {
+        Datum datum;
+        datum = new Datum();
+        datum.setId(cursor.getInt(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_zoneId)));
+        datum.setTitle(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_title)));
+        datum.setCreatedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_createdBy)));
+        datum.setCreated(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_created)));
+        datum.setLastModified(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_lastModifiedBy)));
+        datum.setLastModifiedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_lastModified)));
+        return datum;
+    }
+    private ZoneLocation getZoneLocationFromCursor(Cursor cursor) {
+        ZoneLocation zoneLocation;
+        zoneLocation = new ZoneLocation();
+        zoneLocation.setId(cursor.getInt(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_id)));
+        zoneLocation.setZoneId(cursor.getInt(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_zoneId)));
+        zoneLocation.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_latitude)));
+        zoneLocation.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_longitude)));
+        zoneLocation.setCreatedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_createdBy)));
+        zoneLocation.setCreated(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_created)));
+        zoneLocation.setLastModified(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_lastModifiedBy)));
+        zoneLocation.setLastModifiedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_lastModified)));
+        return zoneLocation;
+    }
 
     private TransactionsLog getTransactionslog(long id) {
         TransactionsLog transactionlog = new TransactionsLog();
@@ -4028,16 +4105,18 @@ public class DbAdapter {
         return picturesProduct;
     }
 
-    private GpsPoint getGpsPointFromCursor(Cursor cursor) {
-        GpsPoint gpsPoint = new GpsPoint();
-        gpsPoint.setDate(cursor.getLong(cursor.getColumnIndex(DbSchema.GpsTrackingSchema.COLUMN_DATE)));
-        gpsPoint.setLatitude(cursor.getString(cursor.getColumnIndex(DbSchema.GpsTrackingSchema.COLUMN_LATITUDE)));
-        gpsPoint.setLongitude(cursor.getString(cursor.getColumnIndex(DbSchema.GpsTrackingSchema.COLUMN_LONGITUDE)));
-        gpsPoint.setSend(cursor.getInt(cursor.getColumnIndex(DbSchema.GpsTrackingSchema.COLUMN_IS_SEND)) == 1);
-        gpsPoint.setVisitorId(cursor.getLong(cursor.getColumnIndex(DbSchema.GpsTrackingSchema.COLUMN_USER_ID)));
-        return gpsPoint;
+    private VisitorLocation getGpsPointFromCursor(Cursor cursor) {
+        VisitorLocation visitorLocation = new VisitorLocation();
+        visitorLocation.setCreateDate(cursor.getString(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_Create_DATE)));
+        visitorLocation.setDate(cursor.getLong(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_DATE)));
+        visitorLocation.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_LATITUDE)));
+        visitorLocation.setUniqueID(cursor.getString(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_uniqueID)));
+        visitorLocation.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_LONGITUDE)));
+        visitorLocation.setVisitorLocationId(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_VisitorLocationId)));
+        visitorLocation.setRowVersion(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_RowVersion)));
+        visitorLocation.setVisitorId(cursor.getLong(cursor.getColumnIndex(DbSchema.VisitorLocationSchema.COLUMN_VISITOR_ID)));
+        return visitorLocation;
     }
-
     public int getMax(String tablename, String column) {
         Cursor cursor;
         int Maxid = 0;
@@ -5678,6 +5757,53 @@ public class DbAdapter {
         }
         return order;
     }
+    public ArrayList<Datum> getAllZone() {
+        ArrayList<Datum> array = new ArrayList<>();
+        Datum datum = new Datum();
+        Cursor cursor;
+        try {
+            cursor = mDb.rawQuery("select * from zone where visitorid =? " ,new String[]{String.valueOf(getPrefUserId())});
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    datum = getZoneFromCursor(cursor);
+                    array.add(datum);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorGetTransfer", e.getMessage());
+        }
+        return array;
+    }
+
+    public ArrayList<ZoneLocation> getAllZoneLocation(int id) {
+        ArrayList<ZoneLocation> array = new ArrayList<>();
+        ZoneLocation zoneLocation = new ZoneLocation();
+        Cursor cursor;
+        try {
+            cursor = mDb.query(DbSchema.ZoneLocationSchema.TABLE_NAME,null,DbSchema.ZoneLocationSchema.COLUMN_zoneId + " =? ", new String[]{String.valueOf(id)},null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    zoneLocation = getZoneLocationFromCursor(cursor);
+                    array.add(zoneLocation);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorGetTransfer", e.getMessage());
+        }
+        return array;
+    }
 
     private Cursor getAllProductQuery(long id, String LIMIT, String orderBy, int modeasset, int defPriceLevel) {
         Cursor cursor;
@@ -6312,7 +6438,7 @@ public class DbAdapter {
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    customer = getCustomer(cursor.getLong(cursor.getColumnIndex(DbSchema.Customerschema.COLUMN_ID)));
+                    customer = getCustomerFromCursor(cursor);
                     if (customer != null)
                         array.add(customer);
                     cursor.moveToNext();
@@ -7869,17 +7995,39 @@ public class DbAdapter {
         return array;
     }
 
-    public List<LatLng> getAllLatLngPointsFromDate(long date, long userId) {
+
+    public List<VisitorLocation> getAllGpsPointsWithLimit(int index, int limit) {
         Cursor cursor;
-        ArrayList<LatLng> array = new ArrayList<>();
+        ArrayList<VisitorLocation> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("Select * from " + DbSchema.GpsTrackingSchema.TABLE_NAME + " Where date >=? and userId=?", new String[]{String.valueOf(date), String.valueOf(userId)});
+            cursor = mDb.rawQuery("Select * from " + DbSchema.VisitorLocationSchema.TABLE_NAME + " Where " + DbSchema.VisitorLocationSchema.COLUMN_VisitorLocationId + "= 0 order by Date Limit " + index + "," + limit, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    GpsPoint gpsPoint = getGpsPointFromCursor(cursor);
-                    if (gpsPoint != null)
-                        array.add(new LatLng(ServiceTools.RegulartoDouble(gpsPoint.getLatitude()), ServiceTools.RegulartoDouble(gpsPoint.getLongitude())));
+                    VisitorLocation visitorLocation = getGpsPointFromCursor(cursor);
+                    array.add(visitorLocation);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            Log.e("ErrAllGpsPoisLimi", e.getMessage());
+        }
+        return array;
+    }
+
+    public List<LatLng> getAllLatLngPointsFromDate(long date, long visitorId) {
+        Cursor cursor;
+        ArrayList<LatLng> array = new ArrayList<>();
+        try {
+            cursor = mDb.rawQuery("Select * from " + DbSchema.VisitorLocationSchema.TABLE_NAME + " Where Date >=? and VisitorId =? order by " + DbSchema.VisitorLocationSchema.COLUMN_DATE + " DESC", new String[]{String.valueOf(date), String.valueOf(visitorId)});
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    VisitorLocation visitorLocation = getGpsPointFromCursor(cursor);
+                    if (visitorLocation != null)
+                        array.add(new LatLng(visitorLocation.getLatitude(), visitorLocation.getLongitude()));
                     cursor.moveToNext();
                 }
                 cursor.close();
@@ -7891,51 +8039,22 @@ public class DbAdapter {
 
         return array;
     }
-
-    public List<GpsPoint> getAllGpsPointsWithLimit(int index, int limit) {
+    public List<VisitorLocation> getAllGpsPointsForSending() {
         Cursor cursor;
-        ArrayList<GpsPoint> array = new ArrayList<>();
+        ArrayList<VisitorLocation> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("Select * from " + DbSchema.GpsTrackingSchema.TABLE_NAME + " Where " + DbSchema.GpsTrackingSchema.COLUMN_IS_SEND + "=0 order by date Limit " + index + "," + limit, null);
+            cursor = mDb.rawQuery("Select * from " + DbSchema.VisitorLocationSchema.TABLE_NAME + " Where VisitorId =? and VisitorLocationId =?", new String[]{String.valueOf(BaseActivity.getPrefUserMasterId()), String.valueOf(0)});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    GpsPoint gpsPoint = getGpsPointFromCursor(cursor);
-                    if (gpsPoint != null)
-                        array.add(gpsPoint);
+                    VisitorLocation visitorLocation = getGpsPointFromCursor(cursor);
+                    array.add(visitorLocation);
                     cursor.moveToNext();
                 }
                 cursor.close();
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrAllGpsPoisLimi", e.getMessage());
-        }
-
-        return array;
-    }
-
-    public List<GpsPoint> getAllGpsPointsFromDate(long date, long userId) {
-        Cursor cursor;
-        ArrayList<GpsPoint> array = new ArrayList<>();
-        try {
-            cursor = mDb.rawQuery("Select * from " + DbSchema.GpsTrackingSchema.TABLE_NAME + " Where date >=? and userId=?", new String[]{String.valueOf(date), String.valueOf(userId)});
-            if (cursor != null) {
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    GpsPoint gpsPoint = getGpsPointFromCursor(cursor);
-                    if (gpsPoint != null)
-                        array.add(gpsPoint);
-                    cursor.moveToNext();
-                }
-                cursor.close();
-            }
-
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-            FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAlGpsPoinFroDate", e.getMessage());
         }
 
@@ -9904,30 +10023,30 @@ public class DbAdapter {
         boolean result;
         ContentValues initialvalue = new ContentValues();
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderDetailId, orderDetail.getOrderDetailId());
-        /*initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderDetailClientId, orderDetail.getOrderDetailClientId());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderClientId, orderDetail.getOrderClientId());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderId, orderDetail.getOrderId());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_ProductDetailId, orderDetail.getProductDetailId());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_USER_ID, BaseActivity.getPrefUserId());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_ProductId, orderDetail.getProductId());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Price, orderDetail.getPrice());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Count1, orderDetail.getCount1());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz, orderDetail.getSumCountBaJoz());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Count2, orderDetail.getCount2());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftCount1, orderDetail.getGiftCount1());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftCount2, orderDetail.getGiftCount2());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftType, orderDetail.getGiftType());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Description, orderDetail.getDescription());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_TaxPercent, orderDetail.getTaxPercent());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_ChargePercent, orderDetail.getChargePercent());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_DiscountType, orderDetail.getDiscountType());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_DataHash, orderDetail.getDataHash());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_CreateDate, orderDetail.getCreateDate());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_UpdateDate, orderDetail.getUpdateDate());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_CreateSyncId, orderDetail.getCreateSyncId());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_UpdateSyncId, orderDetail.getUpdateSyncId());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_RowVersion, orderDetail.getRowVersion());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_CostLevel, orderDetail.getCostLevel());*/
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderDetailClientId, orderDetail.getOrderDetailClientId());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderClientId, orderDetail.getOrderClientId());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderId, orderDetail.getOrderId());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_ProductDetailId, orderDetail.getProductDetailId());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_USER_ID, BaseActivity.getPrefUserId());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_ProductId, orderDetail.getProductId());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Price, orderDetail.getPrice());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Count1, orderDetail.getCount1());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz, orderDetail.getSumCountBaJoz());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Count2, orderDetail.getCount2());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftCount1, orderDetail.getGiftCount1());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftCount2, orderDetail.getGiftCount2());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftType, orderDetail.getGiftType());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Description, orderDetail.getDescription());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_TaxPercent, orderDetail.getTaxPercent());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_ChargePercent, orderDetail.getChargePercent());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_DiscountType, orderDetail.getDiscountType());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_DataHash, orderDetail.getDataHash());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_CreateDate, orderDetail.getCreateDate());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_UpdateDate, orderDetail.getUpdateDate());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_CreateSyncId, orderDetail.getCreateSyncId());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_UpdateSyncId, orderDetail.getUpdateSyncId());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_RowVersion, orderDetail.getRowVersion());
+//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_CostLevel, orderDetail.getCostLevel());
 
         result = (mDb.update(DbSchema.OrderDetailSchema.TABLE_NAME, initialvalue, DbSchema.OrderDetailSchema.COLUMN_ID + "=?", new String[]{String.valueOf(orderDetail.getId())})) > 0;
         return result;
@@ -9949,13 +10068,12 @@ public class DbAdapter {
         return result;
     }
 
-    public void updateGpsTrackingForSending(long date) {
+    public void updateGpsTrackingForSending(VisitorLocation visitorLocation) {
         ContentValues values = new ContentValues();
-        values.put(DbSchema.GpsTrackingSchema.COLUMN_IS_SEND, 1);
-        mDb.update(DbSchema.GpsTrackingSchema.TABLE_NAME, values, DbSchema.GpsTrackingSchema.COLUMN_DATE + "=?", new String[]{String.valueOf(date)});
-
+        values.put(DbSchema.VisitorLocationSchema.COLUMN_VisitorLocationId, visitorLocation.getVisitorLocationId());
+        values.put(DbSchema.VisitorLocationSchema.COLUMN_RowVersion, visitorLocation.getRowVersion());
+        mDb.update(DbSchema.VisitorLocationSchema.TABLE_NAME, values, DbSchema.VisitorLocationSchema.COLUMN_uniqueID + "=?", new String[]{visitorLocation.getUniqueID()});
     }
-
     public boolean DeleteOrderDetailProperty(long id) {
         return (mDb.delete(DbSchema.OrderDetailPropertySchema.TABLE_NAME, DbSchema.OrderDetailPropertySchema.COLUMN_OrderId + "=?", new String[]{String.valueOf(id)})) > 0;
     }
@@ -10040,9 +10158,8 @@ public class DbAdapter {
     }
 
     public boolean DeleteGpsTrackingToDateSending(long date) {
-        return (mDb.delete(DbSchema.GpsTrackingSchema.TABLE_NAME, DbSchema.GpsTrackingSchema.COLUMN_DATE + "<? and " + DbSchema.GpsTrackingSchema.COLUMN_IS_SEND + " = 1 ", new String[]{String.valueOf(date)})) > 0;
+        return (mDb.delete(DbSchema.VisitorLocationSchema.TABLE_NAME, DbSchema.VisitorLocationSchema.COLUMN_DATE + "<? " , new String[]{String.valueOf(date)})) > 0;
     }
-
     public boolean DeletePicturesProduct(long pictureId) {
         return (mDb.delete(DbSchema.PicturesProductSchema.TABLE_NAME, DbSchema.PicturesProductSchema.COLUMN_PICTURE_ID + " =? ", new String[]{String.valueOf(pictureId)})) > 0;
     }
@@ -10058,6 +10175,12 @@ public class DbAdapter {
 
     public boolean DeleteAllNotification() {
         return (mDb.delete(DbSchema.NotificationSchema.TABLE_NAME, null, null)) > 0;
+    }
+    public void DeleteAllZoneLocation() {
+        mDb.delete(DbSchema.ZoneLocationSchema.TABLE_NAME, null, null);
+    }
+    public void DeleteAllZone() {
+        mDb.delete(DbSchema.ZoneSchema.TABLE_NAME, null, null);
     }
 
     public boolean DeletePromotion(int id) {
@@ -10126,9 +10249,11 @@ public class DbAdapter {
         mDb.delete(DbSchema.CityZoneSchema.TABLE_NAME, null, null);
         mDb.delete(DbSchema.ProductCategorySchema.TABLE_NAME, null, null);
         mDb.delete(DbSchema.CategorySchema.TABLE_NAME, null, null);
+        mDb.delete(DbSchema.ZoneLocationSchema.TABLE_NAME, null, null);
+        mDb.delete(DbSchema.ZoneSchema.TABLE_NAME, null, null);
 
 
-        BaseActivity.setPrefAdminControl(0);
+        BaseActivity.setPrefAdminControl(false);
         BaseActivity.setPrefTrackingControl(0);
 
         //reset setting
@@ -10220,7 +10345,7 @@ public class DbAdapter {
 
                 if (oldVersion < 3) {
                     db.execSQL(DbSchema.PicturesProductSchema.CREATE_TABLE);
-                    db.execSQL(DbSchema.GpsTrackingSchema.CREATE_TABLE);
+                    db.execSQL(DbSchema.VisitorLocationSchema.CREATE_TABLE);
                 }
                 if (oldVersion < 4) {
                     db.execSQL(DbSchema.NotificationSchema.CREATE_TABLE);
