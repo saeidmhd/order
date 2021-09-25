@@ -3,12 +3,14 @@ package com.mahak.order.apiHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mahak.order.BaseActivity;
+import com.squareup.okhttp.internal.Util;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -30,6 +32,7 @@ public class ApiClient {
             .connectTimeout(300, TimeUnit.SECONDS)
             .readTimeout(300, TimeUnit.SECONDS)
             .writeTimeout(300, TimeUnit.SECONDS)
+            .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .build();
 
 

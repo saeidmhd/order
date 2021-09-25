@@ -1861,26 +1861,6 @@ FirebaseCrashlytics.getInstance().recordException(e);
         return result;
     }
 
-    public static void writeLog(String str) {
-        // String version = String.format(getString(R.string.))
-        new StringBuffer();
-        try {
-            String path = Environment.getExternalStorageDirectory().getPath() + "/MAHAK_ORDER_LOG.txt";
-            File f = new File(path);
-            long seek = f.length();
-            RandomAccessFile raf = new RandomAccessFile(new File(path), "rw");
-            raf.seek(seek);
-            raf.write("\n----------------------------------\n".getBytes());
-            seek += (long) "\n----------------------------------\n".getBytes().length;
-            raf.seek(seek);
-            raf.writeUTF(str);
-            raf.close();
-        } catch (Exception var10) {
-            FirebaseCrashlytics.getInstance().recordException(var10);
-            var10.printStackTrace();
-        }
-    }
-
     // check for gcm
     public static boolean checkPlayServices(Activity activity) {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();

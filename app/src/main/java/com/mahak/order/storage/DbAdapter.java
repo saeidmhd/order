@@ -6591,7 +6591,7 @@ public class DbAdapter {
 
     public ArrayList<Product> getAllProduct(long id, int modeasset, int totalItem) {
         Product product;
-        String LIMIT = totalItem + ",15";
+        String LIMIT = totalItem + ",10";
         Cursor cursor = null;
         String orderBy = BaseActivity.getPrefSortBase_product() + " " + BaseActivity.getPrefSortDirection();
         ArrayList<Product> array = new ArrayList<>();
