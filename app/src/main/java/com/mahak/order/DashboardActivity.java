@@ -315,7 +315,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     locationService.stopTracking();
                     locationService.stopNotificationServiceTracking();
                     btnTrackingService.setChecked(false);
-
                 } else {
                     startTracking();
                 }

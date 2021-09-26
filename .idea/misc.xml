@@ -17,6 +17,7 @@
         <entry key="app/src/main/res/layout-de/lst_product_picker_item.xml" value="0.228125" />
         <entry key="app/src/main/res/layout/activity_customers_list.xml" value="0.18" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_dialog_notification.xml" value="0.67" />
         <entry key="app/src/main/res/layout/activity_good_detail_count.xml" value="0.266304347826087" />
         <entry key="app/src/main/res/layout/activity_invoice_detail.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_order_detail.xml" value="0.5269320843091335" />

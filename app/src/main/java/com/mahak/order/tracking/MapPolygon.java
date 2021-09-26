@@ -152,10 +152,17 @@ public class MapPolygon {
         ArrayList<Datum> data = db.getAllZone();
         for(Datum datum : data){
             List<LatLng> polygonPoints = getPolygonPoints(datum);
-            if(polygonPoints.size()>0){
+            if(polygonPoints.size() > 0){
                 if(PolyUtil.isLocationOnEdge(position, polygonPoints, true, radius)){
                     return true;
                 }
+                if(PolyUtil.isLocationOnPath(position, polygonPoints, true, radius)){
+                    return true;
+                }
+                if(PolyUtil.containsLocation(position, polygonPoints,true)){
+                    return true;
+                }
+
             }
         }
         return false;

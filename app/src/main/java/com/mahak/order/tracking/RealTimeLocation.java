@@ -50,6 +50,10 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
     public void uncaughtException(Thread t, Throwable e) {
     }
 
+    public void stopRealTimeSend() {
+        hubConnection.stop();
+    }
+
     class HubConnectionTask extends AsyncTask<HubConnection, Void, Void> {
         @Override
         protected void onPreExecute() {
@@ -57,7 +61,7 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
         }
         @Override
         protected Void doInBackground(HubConnection... hubConnections) {
-            HubConnection hubConnection = hubConnections[0];
+            hubConnection = hubConnections[0];
             hubConnectionArrayList = hubConnections;
             try {
                 hubConnection.start().blockingAwait();

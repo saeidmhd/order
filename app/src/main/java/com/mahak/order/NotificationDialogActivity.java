@@ -40,7 +40,7 @@ public class NotificationDialogActivity extends Activity {
         ////////////////////////////////////////////////
         setTitle(bundle.getString("title"));
         tvMessage.setText(bundle.getString("message"));
-        if (bundle.getString("url").equals(""))
+        if (bundle.getString("url") == null)
             btnOK.setVisibility(View.GONE);
         else
             btnOK.setVisibility(View.VISIBLE);
