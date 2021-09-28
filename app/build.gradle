@@ -128,7 +128,7 @@ dependencies {
     implementation files('libs/platform_sdk_v4.1.0326.jar')
     implementation project(path: ':Rahyab_Hybrid_CPSDK_1.0.15')
 
-    implementation 'com.microsoft.signalr:signalr:3.0.0'
+    implementation 'com.microsoft.signalr:signalr:5.0.10'
 
     implementation "androidx.multidex:multidex:2.0.1"
 

@@ -395,7 +395,7 @@ public class LocationService extends Service {
         removeLocationUpdates();
     }
 
-    public boolean isRunService() {
+    public boolean isRunService(Context mContext) {
         long masterUserId = BaseActivity.getPrefUserMasterId(mContext);
         String sharedPreferences = ServiceTools.getKeyFromSharedPreferences(mContext, ProjectInfo.pre_is_tracking + masterUserId);
         return !ServiceTools.isNull(sharedPreferences) && sharedPreferences.equals("1");

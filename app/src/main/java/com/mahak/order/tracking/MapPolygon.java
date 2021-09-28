@@ -1,6 +1,9 @@
 package com.mahak.order.tracking;
 
 import android.content.Context;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Dash;
@@ -24,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MapPolygon {
+public class MapPolygon implements GoogleMap.OnPolygonClickListener {
 
     GoogleMap mGoogleMap;
     DbAdapter db;
@@ -101,6 +104,8 @@ public class MapPolygon {
         polygon.setStrokeWidth(POLYGON_STROKE_WIDTH_PX);
         polygon.setStrokeColor(strokeColor);
         polygon.setFillColor(fillColor);
+
+        polygon.setClickable(true);
     }
 
     public List<LatLng> getPolygonPoints(Datum datum){
@@ -122,7 +127,7 @@ public class MapPolygon {
                         .clickable(true)
                         .addAll(polygonPoints));
                 polygons.add(polygon);
-                polygon.setTag("alpha");
+                polygon.setTag(datum.getTitle());
                 stylePolygon(polygon);
             }
         }
@@ -168,4 +173,8 @@ public class MapPolygon {
         return false;
     }
 
+    @Override
+    public void onPolygonClick(@NonNull Polygon polygon) {
+        Toast.makeText(mContext, String.valueOf(polygon.getTag()), Toast.LENGTH_SHORT).show();
+    }
 }

@@ -9,10 +9,14 @@ import android.util.Log;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.common.GpsPointSignalR;
 import com.mahak.order.common.RecieveSignalR.ReceiveResult;
+import com.microsoft.signalr.Action1;
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
 
+import static com.mahak.order.BaseActivity.getPrefUserId;
 import static com.mahak.order.BaseActivity.setPrefSignalUserToken;
+
+import okhttp3.OkHttpClient;
 
 public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
 
@@ -39,6 +43,7 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
         listenReceiveAdminConnect();
         listenReceiveDisconnectAdmin();
         listenReceiveNewLocation();
+        listenDisconnectVisitor();
         try {
             new HubConnectionTask().execute(hubConnection);
         } catch (Exception e) {
@@ -51,7 +56,9 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
     }
 
     public void stopRealTimeSend() {
-        hubConnection.stop();
+        if(hubConnection != null)
+            hubConnection.stop();
+
     }
 
     class HubConnectionTask extends AsyncTask<HubConnection, Void, Void> {
@@ -62,7 +69,6 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
         @Override
         protected Void doInBackground(HubConnection... hubConnections) {
             hubConnection = hubConnections[0];
-            hubConnectionArrayList = hubConnections;
             try {
                 hubConnection.start().blockingAwait();
             } catch (Exception e) {
@@ -97,6 +103,12 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
             }
             Log.d("SignalRManage", String.valueOf(message));
         }, Integer.class);
+    }
+
+    private void listenDisconnectVisitor() {
+        hubConnection.on("ReceiveDisconnectVisitor", (ReceiveDisconnectVisitor) -> {
+            Log.d("SignalRManage", ReceiveDisconnectVisitor.errorMessage);
+        }, ReceiveDisconnectVisitor.class);
     }
 
     private void sendLocationSignalR(Location location) {

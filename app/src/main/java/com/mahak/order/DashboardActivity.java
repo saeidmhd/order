@@ -56,8 +56,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -68,14 +66,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.google.firebase.iid.internal.FirebaseInstanceIdInternal;
-import com.google.firebase.installations.FirebaseInstallations;
-import com.google.firebase.installations.InstallationTokenResult;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.android.PolyUtil;
 import com.mahak.order.common.CheckList;
@@ -86,7 +76,6 @@ import com.mahak.order.common.User;
 import com.mahak.order.tracking.LocationService;
 import com.mahak.order.tracking.MapPolygon;
 import com.mahak.order.tracking.ShowPersonCluster;
-import com.mahak.order.tracking.TrackingConfig;
 import com.mahak.order.tracking.Utils;
 import com.mahak.order.service.ReadOfflinePicturesProducts;
 import com.mahak.order.storage.DbAdapter;
@@ -311,7 +300,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 if (locationService == null) locationService = new LocationService(mContext,DashboardActivity.this);
-                if (locationService.isRunService()) {
+                if (locationService.isRunService(mContext)) {
                     locationService.stopTracking();
                     locationService.stopNotificationServiceTracking();
                     btnTrackingService.setChecked(false);
@@ -1346,6 +1335,13 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                         RefreshPreferenceUser();
                         Intent intent = new Intent(DashboardActivity.this, LoginActivityRestApi.class);
                         startActivity(intent);
+                        if (locationService != null){
+                            if (locationService.isRunService(mContext)) {
+                                locationService.stopTracking();
+                                locationService.stopNotificationServiceTracking();
+                                btnTrackingService.setChecked(false);
+                            }
+                        }
                         setPrefSignalUserToken("");
                         dialog.dismiss();
                         finish();
@@ -1430,7 +1426,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             if (locationService == null) locationService = new LocationService(mContext,DashboardActivity.this);
             ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking_pause, "0");
             locationService.startTracking();
-            if (locationService.isRunService()) {
+            if (locationService.isRunService(mContext)) {
                 btnTrackingService.setChecked(true);
             } else {
                 Toast.makeText(DashboardActivity.this, R.string.can_not_active_gps_tracking, Toast.LENGTH_SHORT).show();
@@ -1500,7 +1496,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         if (requestCode == REQUEST_Location_ON) {
             if(resultCode != RESULT_OK){
-                if (locationService.isRunService()) {
+                if (locationService.isRunService(mContext)) {
                     locationService.stopTracking();
                     locationService.stopNotificationServiceTracking();
                     btnTrackingService.setChecked(false);
@@ -1509,7 +1505,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 if (!checkPermissions()) {
                     requestPermissions();
                 } else {
-                    if (locationService.isRunService()) {
+                    if (locationService.isRunService(mContext)) {
                         ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking_pause, "0");
                         locationService.startTracking();
                     }
