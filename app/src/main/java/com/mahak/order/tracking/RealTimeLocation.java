@@ -9,6 +9,7 @@ import android.util.Log;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.common.GpsPointSignalR;
 import com.mahak.order.common.RecieveSignalR.ReceiveResult;
+import com.mahak.order.common.ServiceTools;
 import com.microsoft.signalr.Action1;
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
@@ -28,7 +29,6 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
     public RealTimeLocation(Context context, Activity activity){
         this.context = context;
         this.activity = activity;
-        signalSetup();
     }
 
     public void sendRealTimeLocation(Location location) {
@@ -57,7 +57,12 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
 
     public void stopRealTimeSend() {
         if(hubConnection != null)
-            hubConnection.stop();
+            try {
+                if(hubConnection.getConnectionState().toString().equals("CONNECTED"))
+                    hubConnection.stop();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
     }
 
@@ -71,7 +76,9 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
             hubConnection = hubConnections[0];
             try {
                 hubConnection.start().blockingAwait();
+
             } catch (Exception e) {
+                ServiceTools.writeLog(e.getMessage());
                 e.printStackTrace();
             }
             Log.d("SignalRManage",hubConnection.getConnectionState().toString());
@@ -112,8 +119,9 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
     }
 
     private void sendLocationSignalR(Location location) {
-        if(hubConnection.getConnectionState().toString().equals("CONNECTED") )
-        {
+        if(hubConnection == null) {
+            signalSetup();
+        }else if(hubConnection.getConnectionState().toString().equals("CONNECTED")){
             if(location != null){
                 GpsPointSignalR gpsPointSignalR = new GpsPointSignalR();
                 gpsPointSignalR.setLatitude(location.getLatitude());

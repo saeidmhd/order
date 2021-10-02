@@ -98,7 +98,7 @@ public class LocationService extends Service {
     private Location mCurrentLocation;
     private static final int REQUEST_Location_ON = 1200;
 
-    RealTimeLocation realTimeLocation;
+    public static RealTimeLocation realTimeLocation;
 
     private static final String PACKAGE_NAME =
             "com.mahak.order.gpsTracking";
@@ -333,8 +333,6 @@ public class LocationService extends Service {
     }
 
     public void startTracking() {
-        long masterUserId = BaseActivity.getPrefUserMasterId(mContext);
-        ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking + masterUserId, "1");
         createLocationCallback();
         createLocationRequest();
         buildLocationSettingsRequest();
@@ -386,8 +384,6 @@ public class LocationService extends Service {
     }
 
     public void stopTracking() {
-        long masterUserId = BaseActivity.getPrefUserMasterId(mContext);
-        ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking + masterUserId, "0");
         stopLocationUpdates();
     }
 
@@ -399,6 +395,11 @@ public class LocationService extends Service {
         long masterUserId = BaseActivity.getPrefUserMasterId(mContext);
         String sharedPreferences = ServiceTools.getKeyFromSharedPreferences(mContext, ProjectInfo.pre_is_tracking + masterUserId);
         return !ServiceTools.isNull(sharedPreferences) && sharedPreferences.equals("1");
+    }
+
+    public void setTrackingPrefOff(String s) {
+        long masterUserId = BaseActivity.getPrefUserMasterId(mContext);
+        ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking + masterUserId, s);
     }
 
     private void sendLocation(Location correctLocation) {
