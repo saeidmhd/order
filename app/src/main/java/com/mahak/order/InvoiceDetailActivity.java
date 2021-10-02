@@ -997,6 +997,7 @@ public class InvoiceDetailActivity extends BaseActivity {
         Tell = "";
         Address = "";
         CustomerId = 0;
+        InvoiceDetailActivity.orderDetails.clear();
         ProductPickerListActivity.HashMap_Product.clear();
         ProductPickerListActivity.Product_Delete.clear();
     }

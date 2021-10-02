@@ -1407,8 +1407,10 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
     public void setTrackingConfig() {
         btnTrackingService.setEnabled(!BaseActivity.getPrefAdminControl(mContext));
-        if(BaseActivity.getPrefTrackingControl(mContext) == 1)
+        if(BaseActivity.getPrefTrackingControl(mContext) == 1){
             btnTrackingService.setChecked(true);
+            startLocationUpdate();
+        }
     }
 
 
