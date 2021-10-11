@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,13 +22,12 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.GPSTracker;
 import com.mahak.order.common.ProjectInfo;
-import com.mahak.order.common.ServiceTools;
-import com.mahak.order.service.DataService;
 import com.mahak.order.tracking.ClusterPoint;
 import com.mahak.order.tracking.LocationService;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.tracking.MapPolygon;
 import com.mahak.order.tracking.ShowPersonCluster;
+import com.mahak.order.widget.FontProgressDialog;
 
 import org.json.JSONObject;
 
@@ -50,6 +51,9 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
     private MapPolygon mapPolygon;
     private DbAdapter db;
     private List<LatLng> latLngpoints = new ArrayList<>();
+    private static final int LOAD_POINT = Menu.FIRST;
+    private FontProgressDialog pd;
+    private boolean drawBetweenLine = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +109,7 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
                             public void run() {
                                 if(location != null){
                                     LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
-                                    if(saveInDb)
+                                    if(saveInDb && drawBetweenLine)
                                         drawLineBetweenPoints(position);
                                     showMarkerOnMap(position);
                                 }
@@ -118,7 +122,7 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
             });
         }
 
-        loadLastPoint();
+        //loadLastPoint();
 
     }
 
@@ -143,16 +147,6 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        LocationService.removeEventLocation(this.getLocalClassName());
-        super.onDestroy();
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-    }
-
     private void initMap() {
         if (polyline != null)
             polyline.remove();
@@ -161,8 +155,16 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
         polylineOptions.color(Color.RED);
         polylineOptions.visible(true);
         polyline = mMap.addPolyline(polylineOptions);
-        if(polyline != null)
-            polyline.setPoints(latLngpoints);
+    }
+
+    @Override
+    protected void onDestroy() {
+        LocationService.removeEventLocation(this.getLocalClassName());
+        super.onDestroy();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
     }
 
     @Override
@@ -224,6 +226,15 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
     class loadingGpsLocation extends AsyncTask<String, String, Boolean> {
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new FontProgressDialog(mContext);
+            pd.setMessage(getString(R.string.storing_info));
+            pd.setCancelable(false);
+            pd.show();
+        }
+
+        @Override
         protected Boolean doInBackground(String... strings) {
             if (db == null) db = new DbAdapter(mContext);
             Calendar calendar = Calendar.getInstance();
@@ -238,11 +249,26 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
+            pd.dismiss();
             if(polyline != null)
                 polyline.setPoints(latLngpoints);
             showMarkerOnMap(getLastPoint());
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        menu.add(0, LOAD_POINT, 0, R.string.fetch_gps_info_from_db).setIcon(R.drawable.ic_load_point)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        drawBetweenLine = true;
+        loadLastPoint();
+        return super.onOptionsItemSelected(item);
+    }
 
 }

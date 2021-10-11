@@ -870,6 +870,8 @@
     <string name="there_is_no_customer">Es gibt keinen Kunden mit diesem Barkode</string>
     <string name="there_is_no_customer_with_code">Es gibt keinen Kunden mit diesem Kode</string>
     <string name="reviewing_user_info">Benutzerinformationen überprüfen ....</string>
+    <string name="fetch_gps_info">در حال بازیابی نقاط از پایگاه داده....</string>
+    <string name="fetch_gps_info_from_db">بازیابی نقاط از پایگاه داده</string>
     <string name="recieiving_info">Informationen erhalten ....</string>
     <string name="storing_info">Informationen speichern ....</string>
     <string name="scan_cancelled">Scan wurde abgebrochen!</string>

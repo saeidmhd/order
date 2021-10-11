@@ -188,7 +188,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     private boolean isReceiverRegistered;
     private PolylineOptions polylineOptions;
     private Marker marker;
-    private Polyline polyline;
     private LocationService locationService;
     public SwitchCompat btnTrackingService;
     private Menu menu;
@@ -689,10 +688,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    private void loadLastPoint() {
-        new loadingGpsLocation().execute();
-    }
-
     private LatLng getLastPoint(){
         LatLng latLng = null;
         if(locationService != null){
@@ -719,8 +714,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         db = new DbAdapter(mContext);
         db.open();
-
-        loadLastPoint();
 
         mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
 
@@ -893,8 +886,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     if(getLastPoint() != null)
                         showMarkerOnMap(getLastPoint());
 
-                    if(polyline != null)
-                        polyline.setPoints(latLngpoints);
                 }
             });
         }
@@ -909,8 +900,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                             locationService = new LocationService(getBaseContext(),DashboardActivity.this);
                         if(location != null){
                             lastPosition = new LatLng(location.getLatitude(), location.getLongitude());
-                            if(saveInDb)
-                                drawLineBetweenPoints(lastPosition);
                             showMarkerOnMap(lastPosition);
                         }
                     }
@@ -951,13 +940,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    private void drawLineBetweenPoints(LatLng position) {
-        if (polyline != null) {
-            List<LatLng> points = polyline.getPoints();
-            points.add(position);
-            polyline.setPoints(points);
-        }
-    }
+
 
     @Override
     protected void onStart() {
@@ -974,28 +957,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnTrackingService.setChecked(requestingLocationUpdates);
     }
 
-    class loadingGpsLocation extends AsyncTask<String, String, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(String... strings) {
-            if (db == null) db = new DbAdapter(mContext);
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            long userId = BaseActivity.getPrefUserMasterId(mContext);
-            db.open();
-            latLngpoints = db.getAllLatLngPointsFromDate(calendar.getTimeInMillis(), userId);
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            super.onPostExecute(aBoolean);
-            if(polyline != null)
-                polyline.setPoints(latLngpoints);
-            showMarkerOnMap(getLastPoint());
-        }
-    }
 
     @Override
     protected void onStop() {
@@ -1008,13 +969,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
 
     private void initMap() {
-        if (polyline != null)
-            polyline.remove();
-        PolylineOptions polylineOptions = new PolylineOptions();
-        polylineOptions.width(2);
-        polylineOptions.color(Color.RED);
-        polylineOptions.visible(true);
-        polyline = mGoogleMap.addPolyline(polylineOptions);
         if (locationService == null)
             locationService = new LocationService(getBaseContext(),DashboardActivity.this);
     }
