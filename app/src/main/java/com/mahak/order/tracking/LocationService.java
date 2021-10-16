@@ -496,7 +496,13 @@ public class LocationService extends Service {
         boolean result = false;
         if (dba == null) dba = new DbAdapter(mContext);
         dba.open();
-        result = dba.AddGpsTracking(VisitorLocations);
+        try {
+            result = dba.AddGpsTracking(VisitorLocations);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if(e.getMessage() != null)
+                Log.e("saveInDb",e.getMessage());
+        }
         dba.close();
         return result;
     }

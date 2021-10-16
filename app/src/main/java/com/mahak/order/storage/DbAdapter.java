@@ -8,6 +8,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -10365,6 +10366,22 @@ public class DbAdapter {
                     db.execSQL("ALTER TABLE " + DbSchema.PromotionSchema.TABLE_NAME + " ADD " + DbSchema.PromotionSchema.COLUMN_Deleted + " INTEGER;");
                 }
             }
+        }
+
+        @Override
+        public void onOpen(SQLiteDatabase db) {
+
+            Cursor cursor = null;
+            try {
+                cursor = db.rawQuery("PRAGMA synchronous=OFF", null);
+            } finally {
+                if (cursor != null)
+                    cursor.close();
+            }
+            // From Honeycomb on, it's possible to run several db
+            // commands in parallel using multiple connections.
+            db.enableWriteAheadLogging();
+            db.setLockingEnabled(false);
         }
     }
 }
