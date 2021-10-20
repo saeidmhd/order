@@ -347,6 +347,7 @@
                 android:layout_marginStart="@dimen/NormalSize" />
 
             <ImageView
+                android:visibility="gone"
                 android:id="@+id/imgGift"
                 android:layout_width="30dp"
                 android:layout_height="30dp"

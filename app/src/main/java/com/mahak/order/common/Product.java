@@ -137,6 +137,8 @@ public class Product implements Parcelable {
     @Expose
     private double weight;
 
+    private String pictureUrl;
+
     public Product() {
         this.Tags = "";
         this.Name = "";
@@ -589,5 +591,13 @@ public class Product implements Parcelable {
 
     public void setPromotionId(int promotionId) {
         PromotionId = promotionId;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
     }
 }

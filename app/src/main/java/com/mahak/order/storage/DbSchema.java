@@ -7,7 +7,7 @@ public class DbSchema {
     public static final String DATABASE_NAME = "DB_MahakOrder";
     public static final int DATABASE_VERSION = 7;
 
-    public static class Userschema implements BaseColumns {
+    public static class UserSchema implements BaseColumns {
 
         public static final String TABLE_NAME = "User";
         public static final String COLUMN_ID = "Id";
@@ -27,24 +27,24 @@ public class DbSchema {
         public static final String COLUMN_USER_ID = "UserId";
         public static final String COLUMN_UserToken = "UserToken";
 
-        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
-                " (" + COLUMN_ID + " INTEGER PRIMARY KEY ," +
-                COLUMN_NAME + " TEXT," +
-                COLUMN_USERNAME + " TEXT," +
-                COLUMN_PASSWORD + " TEXT," +
-                COLUMN_TYPE + " NUMERIC," +
-                COLUMN_LOGINDATE + " NUMERIC," +
-                COLUMN_MAHAK_ID + " TEXT, " +
-                COLUMN_DATABASE_ID + " TEXT, " +
-                COLUMN_MASTER_ID + " NUMERIC," +
-                COLUMN_MODIFYDATE + " NUMERIC," +
-                COLUMN_PACKAGE_SERIAL + " TEXT," +
-                COLUMN_SYNC_ID + " TEXT, " +
-                COLUMN_DATE_SYNC + " NUMERIC, " +
-                COLUMN_StoreCode + " TEXT, " +
-                COLUMN_USER_ID + " TEXT, " +
-                COLUMN_UserToken + " NUMERIC )";
-
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"User\" (" +
+                "`DateSync` NUMERIC, " +
+                "`SyncId` TEXT, " +
+                "`PackageSerial` TEXT, " +
+                "`LoginDate` NUMERIC, " +
+                "`DatabaseId` TEXT, " +
+                "`MasterId` NUMERIC, " +
+                "`MahakId` TEXT, " +
+                "`ModifyDate` NUMERIC, " +
+                "`Id` INTEGER, " +
+                "`Name` TEXT, " +
+                "`UserName` TEXT, " +
+                "`Password` TEXT, " +
+                "`Type` NUMERIC, " +
+                "`StoreCode` TEXT, " +
+                "`UserId` TEXT, " +
+                "`UserToken` NUMERIC, " +
+                "PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
@@ -99,8 +99,53 @@ public class DbSchema {
         public static final String COLUMN_RowVersion = "RowVersion";
 
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
-        public static final String INSERT1 = "INSERT INTO  " + TABLE_NAME + "(" + COLUMN_NAME + ") VALUES ('Guest')";
-        public static final String DELETE = "DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = 1";
+        public static final String CREATE_TABLE =" CREATE TABLE IF NOT EXISTS \"Customers\" ( " +
+                "`Id` INTEGER, " +
+                "`PersonId` INTEGER, " +
+                "`PersonClientId` NUMERIC, " +
+                "`PersonCode` NUMERIC, " +
+                "`PersonGroupId` NUMERIC, " +
+                "`PersonGroupCode` NUMERIC, " +
+                "`PersonType` INTEGER, " +
+                "`FirstName` TEXT, " +
+                "`LastName` TEXT, " +
+                "`Organization` TEXT, " +
+                "`Gender` INTEGER, " +
+                "`NationalCode` TEXT, " +
+                "`Credit` TEXT, " +
+                "`Balance` TEXT, " +
+                "`Email` TEXT, " +
+                "`UserId` NUMERIC, " +
+                "`DatabaseId` TEXT, " +
+                "`MahakId` TEXT, " +
+                "`Publish` NUMERIC, " +
+                "`ModifyDate` NUMERIC, " +
+                "`Longitude` TEXT, " +
+                "`Latitude` TEXT, " +
+                "`Shift` TEXT, " +
+                "`Name` TEXT, " +
+                "`State` TEXT, " +
+                "`City` TEXT, " +
+                "`Address` TEXT, " +
+                "`Zone` TEXT, " +
+                "`Phone` TEXT, " +
+                "`Fax` TEXT, " +
+                "`Mobile` TEXT, " +
+                "`DiscountPercent` NUMERIC, " +
+                "`SellPriceLevel` TEXT, " +
+                "`HasOrder` INTEGER, " +
+                "`DataHash` text, " +
+                "`CreateDate` text, " +
+                "`UpdateDate` text, " +
+                "`CreateSyncId` numeric, " +
+                "`UpdateSyncId` numeric, " +
+                "`RowVersion` numeric, " +
+                "`UserName` TEXT, " +
+                "`Password` TEXT, " +
+                "`CityCode` TEXT, " +
+                "`Deleted` INTEGER, " +
+                "PRIMARY KEY(`Id`) )";
+
     }
 
     public static class Visitorschema implements BaseColumns {
@@ -139,10 +184,46 @@ public class DbSchema {
         public static final String COLUMN_UpdateSyncId = "UpdateSyncId";
         public static final String COLUMN_RowVersion = "RowVersion";
 
+        public static final String CREATE_TABLE =" CREATE TABLE IF NOT EXISTS \"Visitors\" ( " +
+                " `ID` INTEGER," +
+                " `VisitorCode` NUMERIC," +
+                " `ModifyDate` NUMERIC," +
+                " `Name` TEXT," +
+                " `UserName` TEXT," +
+                " `StoreCode` INTEGER," +
+                " `Tell` TEXT," +
+                " `BankCode` INTEGER," +
+                " `CashCode` INTEGER," +
+                " `DatabaseId` TEXT," +
+                " `MahakId` TEXT," +
+                " `PriceAccess` TEXT," +
+                " `CostLevelAccess` TEXT," +
+                " `Sell_DefaultCostLevel` INTEGER," +
+                " `SelectedCostLevels` TEXT," +
+                " `TotalCredit` INTEGER," +
+                " `ChequeCredit` INTEGER," +
+                " `UserId` NUMERIC," +
+                " `DataHash` text," +
+                " `CreateDate` text, " +
+                " `UpdateDate` text," +
+                " `CreateSyncId` numeric," +
+                " `UpdateSyncId` numeric," +
+                " `RowVersion` numeric," +
+                " `VisitorId` INTEGER," +
+                " `VisitorClientId` INTEGER," +
+                " `Password` TEXT, " +
+                " `PersonCode` INTEGER, " +
+                " `VisitorType` INTEGER," +
+                " `DeviceId` TEXT, " +
+                " `Active` INTEGER, " +
+                " `Color` TEXT," +
+                " PRIMARY KEY(`ID`) )";
 
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     }
+
+
 
     public static class VisitorProductSchema implements BaseColumns {
 
@@ -167,6 +248,25 @@ public class DbSchema {
         public static final String COLUMN_UpdateSyncId = "UpdateSyncId";
         public static final String COLUMN_RowVersion = "RowVersion";
 
+        public static final String CREATE_TABLE =" CREATE TABLE IF NOT EXISTS \"VisitorProduct\" ( " +
+                " `Id` INTEGER," +
+                " `DatabaseId` TEXT," +
+                " `VisitorProductId` INTEGER," +
+                " `ProductDetailId` NUMERIC," +
+                " `UserId` INTEGER, " +
+                " `Count1` NUMERIC," +
+                " `Count2` NUMERIC," +
+                " `Price` INTEGER," +
+                " `Serials` TEXT," +
+                " `Deleted` INTEGER," +
+                " `DataHash` text," +
+                " `CreateDate` text," +
+                " `UpdateDate` text," +
+                " `CreateSyncId` numeric," +
+                " `UpdateSyncId` numeric," +
+                " `RowVersion` numeric," +
+                "  PRIMARY KEY(`Id`) )";
+
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
@@ -186,6 +286,17 @@ public class DbSchema {
         public static final String COLUMN_CreateSyncId = "CreateSyncId";
         public static final String COLUMN_UpdateSyncId = "UpdateSyncId";
         public static final String COLUMN_RowVersion = "RowVersion";
+
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"VisitorPeople\" (" +
+                " `Id` INTEGER," +
+                " `VisitorPersonId` INTEGER," +
+                " `PersonId` INTEGER, `UserId` INTEGER," +
+                " `Deleted` INTEGER, `DataHash` text," +
+                " `CreateDate` text, `UpdateDate` text," +
+                " `CreateSyncId` numeric," +
+                " `UpdateSyncId` numeric," +
+                " `RowVersion` numeric," +
+                "  PRIMARY KEY(`Id`) )";
 
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
@@ -233,8 +344,50 @@ public class DbSchema {
         public static final String COLUMN_RowVersion = "RowVersion";
         public static final String COLUMN_Deleted = "Deleted";
 
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"Promotion\" ( \"Id\" INTEGER," +
+                " \"DatabaseId\" TEXT," +
+                " \"MahakId\" TEXT," +
+                " \"UserId\" NUMERIC," +
+                " \"ModifyDate\" NUMERIC," +
+                " \"NamePromotion\" TEXT NOT NULL," +
+                " \"PriorityPromotion\" INTEGER NOT NULL," +
+                " \"DateStart\" TEXT NOT NULL," +
+                " \"DateEnd\" TEXT NOT NULL," +
+                " \"TimeStart\" TEXT NOT NULL," +
+                " \"TimeEnd\" TEXT NOT NULL," +
+                " \"LevelPromotion\" INTEGER NOT NULL," +
+                " \"AccordingTo\" INTEGER NOT NULL," +
+                " \"IsCalcLinear\" INTEGER NOT NULL," +
+                " \"TypeTasvieh\" INTEGER," +
+                " \"DeadlineTasvieh\" INTEGER," +
+                " \"IsActive\" INTEGER NOT NULL," +
+                " \"DesPromotion\" TEXT," +
+                " \"IsAllCustomer\" INTEGER NOT NULL," +
+                " \"IsAllVisitor\" INTEGER NOT NULL, " +
+                "\"IsAllGood\" INTEGER NOT NULL," +
+                " \"IsAllStore\" INTEGER NOT NULL, " +
+                "\"AggregateWithOther\" INTEGER, " +
+                "\"CreatedBy\" TEXT, " +
+                "\"CreatedDate\" TEXT, " +
+                "\"ModifiedBy\" TEXT, " +
+                "\"PromotionId\" INTEGER, " +
+                "\"PromotionClientId\" NUMERIC, " +
+                "\"PromotionCode\" INTEGER, " +
+                "\"Visitors\" TEXT, " +
+                "\"Stores\" TEXT, " +
+                "\"DataHash\" TEXT, " +
+                "\"CreateDate\" TEXT, " +
+                "\"UpdateDate\" TEXT, " +
+                "\"CreateSyncId\" INTEGER, " +
+                "\"UpdateSyncId\" INTEGER, " +
+                "\"RowVersion\" NUMERIC, " +
+                "\"Deleted\" INTEGER, " +
+                "PRIMARY KEY(\"Id\") )";
+
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
+
+
 
     public static class PromotionDetailSchema implements BaseColumns {
 
@@ -276,6 +429,42 @@ public class DbSchema {
         public static final String COLUMN_UpdateSyncId = "UpdateSyncId";
         public static final String COLUMN_RowVersion = "RowVersion";
 
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"PromotionDetail\" ( " +
+                "`Id` INTEGER, " +
+                "`DatabaseId` TEXT, " +
+                "`MahakId` TEXT, " +
+                "`UserId` NUMERIC, " +
+                "`ModifyDate` NUMERIC, " +
+                "`PromotionDetailCode` INTEGER NOT NULL, " +
+                "`PromotionCode` INTEGER NOT NULL, " +
+                "`PromotionDetailId` INTEGER, " +
+                "`PromotionDetailClientId` NUMERIC, " +
+                "`PromotionId` INTEGER, " +
+                "`HowToPromotion` INTEGER NOT NULL, " +
+                "`IsCalcAdditive` INTEGER NOT NULL, " +
+                "`ReducedEffectOnPrice` INTEGER NOT NULL, " +
+                "`ToPayment` NUMERIC NOT NULL, " +
+                "`MeghdarPromotion` INTEGER NOT NULL, " +
+                "`StoreCode` INTEGER, " +
+                "`CodeGood` INTEGER, " +
+                "`tool` NUMERIC, " +
+                "`arz` NUMERIC, " +
+                "`tedad` INTEGER, " +
+                "`meghdar2` NUMERIC, " +
+                "`ghotr` NUMERIC, " +
+                "`ToolidCode` INTEGER, " +
+                "`meghdar` NUMERIC, " +
+                "`SyncID` TEXT, " +
+                "`CreatedBy` TEXT, " +
+                "`CreatedDate` TEXT, " +
+                "`ModifiedBy` TEXT, " +
+                "`DataHash` TEXT, " +
+                "`CreateDate` TEXT, " +
+                "`UpdateDate` TEXT, " +
+                "`CreateSyncId` INTEGER, " +
+                "`UpdateSyncId` INTEGER, " +
+                "`RowVersion` NUMERIC, " +
+                "PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
 
@@ -313,6 +502,31 @@ public class DbSchema {
         public static final String COLUMN_UpdateSyncId = "UpdateSyncId";
         public static final String COLUMN_RowVersion = "RowVersion";
 
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"PromotionEntity\" (" +
+                " \"Id\" INTEGER," +
+                " \"DatabaseId\" TEXT," +
+                "\"MahakId\" TEXT," +
+                " \"UserId\" NUMERIC," +
+                " \"SyncID\" TEXT," +
+                " \"ModifyDate\" NUMERIC," +
+                " \"CodeEntity\" NUMERIC," +
+                " \"CodePromotionEntity\" NUMERIC," +
+                " \"EntityType\" NUMERIC," +
+                " \"CodePromotion\" TEXT," +
+                " \"CreatedBy\" TEXT," +
+                " \"CreatedDate\" TEXT," +
+                " \"ModifiedBy\" TEXT," +
+                " \"DataHash\" TEXT," +
+                " \"CreateDate\" TEXT," +
+                " \"UpdateDate\" TEXT," +
+                " \"CreateSyncId\" INTEGER," +
+                " \"UpdateSyncId\" INTEGER," +
+                " \"RowVersion\" NUMERIC, " +
+                "\"PromotionEntityId\" INTEGER," +
+                " \"PromotionEntityClientId\" NUMERIC," +
+                " \"PromotionCode\" INTEGER," +
+                " \"PromotionId\" INTEGER," +
+                " PRIMARY KEY(\"Id\") )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
@@ -339,9 +553,32 @@ public class DbSchema {
         public static final String COLUMN_UpdateSyncId = "UpdateSyncId";
         public static final String COLUMN_RowVersion = "RowVersion";
 
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"CustomersGroups\" ( " +
+                "`DatabaseId` TEXT, " +
+                "`MahakId` TEXT, " +
+                "`PersonGroupCode` NUMERIC," +
+                " `PersonGroupId` INTEGER," +
+                " `PersonGroupClientId` INTEGER, " +
+                "`ModifyDate` NUMERIC," +
+                " `UserId` NUMERIC, " +
+                "`Id` INTEGER, " +
+                "`Name` TEXT, " +
+                "`Color` NUMERIC, " +
+                "`Icon` TEXT, " +
+                "`SellPriceLevel` TEXT," +
+                " `DataHash` text, " +
+                "`CreateDate` text, " +
+                "`UpdateDate` text, " +
+                "`CreateSyncId` numeric, " +
+                "`UpdateSyncId` numeric, " +
+                "`RowVersion` numeric, " +
+                "`DiscountPercent` NUMERIC," +
+                " PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     }
+
+
 
     public static class Productschema implements BaseColumns {
 
@@ -384,7 +621,46 @@ public class DbSchema {
         public static final String COLUMN_Height = "Height";
         public static final String COLUMN_Length = "Length";
 
-
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"Products\" ( " +
+                "`Charge` TEXT, " +
+                "`Tax` TEXT, " +
+                "`UnitName2` TEXT, " +
+                "`UnitName` TEXT, " +
+                "`DatabaseId` TEXT, " +
+                "`ProductCode` NUMERIC, " +
+                "`MahakId` TEXT," +
+                " `Asset2` NUMERIC, " +
+                "`UserId` NUMERIC, " +
+                "`Publish` NUMERIC, " +
+                "`ModifyDate` NUMERIC, " +
+                "`Min` NUMERIC, " +
+                "`Code` TEXT, " +
+                "`Image` TEXT, " +
+                "`CustomerPrice` TEXT, " +
+                "`Id` INTEGER, " +
+                "`CategoryId` NUMERIC, " +
+                "`Name` TEXT, " +
+                "`Asset` NUMERIC, " +
+                "`RealPrice` TEXT, " +
+                "`Tags` TEXT, " +
+                "`DiscountPercent` TEXT, " +
+                "`Barcode` TEXT, " +
+                "`Weight` NUMERIC, " +
+                "`Deleted` INTEGER, " +
+                "`DataHash` text, " +
+                "`CreateDate` text, " +
+                "`UpdateDate` text, " +
+                "`CreateSyncId` numeric, " +
+                "`UpdateSyncId` numeric, " +
+                "`RowVersion` numeric, " +
+                "`ProductId` INTEGER, " +
+                "`ProductClientId` NUMERIC, " +
+                "`ProductDetailId` NUMERIC, " +
+                "`UnitRatio` NUMERIC," +
+                " `Width` NUMERIC, " +
+                "`Height` NUMERIC, " +
+                "`Length` NUMERIC, " +
+                "PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
@@ -436,6 +712,44 @@ public class DbSchema {
         public static final String COLUMN_UpdateSyncId = "UpdateSyncId";
         public static final String COLUMN_RowVersion = "RowVersion";
 
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"ProductDetail\" ( " +
+                "`Id` INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "`ProductDetailId` INTEGER, " +
+                "`ProductDetailClientId` INTEGER, " +
+                "`ProductDetailCode` INTEGER, " +
+                "`ProductId` INTEGER, " +
+                "`Properties` TEXT, " +
+                "`Count1` TEXT," +
+                " `Count2` TEXT, " +
+                "`Barcode` TEXT, " +
+                "`Price1` TEXT, " +
+                "`Price2` TEXT, " +
+                "`Price3` TEXT, " +
+                "`Price4` TEXT, " +
+                "`Price5` TEXT, " +
+                "`Price6` TEXT," +
+                " `Price7` TEXT, " +
+                "`Price8` TEXT, " +
+                "`Price9` TEXT, " +
+                "`Price10` TEXT, " +
+                "`DefaultSellPriceLevel` INTEGER, " +
+                "`Discount` TEXT, " +
+                "`Serials` TEXT, " +
+                "`DataHash` TEXT, " +
+                "`CreateDate` TEXT, " +
+                "`UpdateDate` TEXT, " +
+                "`CreateSyncId` INTEGER, " +
+                "`UpdateSyncId` INTEGER, " +
+                "`Deleted` INTEGER, " +
+                "`UserId` NUMERIC, " +
+                "`RowVersion` NUMERIC, " +
+                "`Discount1` TEXT, " +
+                "`Discount2` TEXT, " +
+                "`Discount3` TEXT, " +
+                "`Discount4` TEXT, " +
+                "`DefaultDiscountLevel` INTEGER, " +
+                "`DiscountType` INTEGER, " +
+                "`CustomerPrice` TEXT )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
@@ -457,9 +771,26 @@ public class DbSchema {
         public static final String UpdateSyncId = "UpdateSyncId";
         public static final String RowVersion = "RowVersion";
 
-
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"PriceLevelNames\" ( " +
+                "`PriceLevelCode` TEXT, " +
+                "`PriceLevelName` TEXT, " +
+                "`SyncId` TEXT, " +
+                "`ModifyDate` NUMERIC, " +
+                "`UserId` NUMERIC, " +
+                "`Id` INTEGER," +
+                "`CostLevelNameId` INTEGER," +
+                "`CostLevelNameClientId` NUMERIC ," +
+                "`DataHash` text, " +
+                "`CreateDate` text, " +
+                "`UpdateDate` text, " +
+                "`CreateSyncId` numeric, " +
+                "`UpdateSyncId` numeric, " +
+                "`RowVersion` numeric," +
+                " PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
+
+
 
     public static class ReceivedTransfersschema implements BaseColumns {
 
@@ -490,21 +821,29 @@ public class DbSchema {
         public static final String COLUMN_ReceiverStoreCode = "ReceiverStoreCode";
 
 
-        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
-                " (" + COLUMN_DatabaseId + " TEXT ," +
-                COLUMN_MahakId + " TEXT," +
-                COLUMN_TransferStoreCode + " TEXT," +
-                COLUMN_ModifyDate + " TEXT," +
-                COLUMN_SyncId + " TEXT," +
-                COLUMN_TransferDate + " TEXT," +
-                COLUMN_TransferStoreId + " TEXT, " +
-                COLUMN_IsAccepted + " TEXT, " +
-                COLUMN_CreatedBy + " TEXT," +
-                COLUMN_SenderVisitorId + " TEXT," +
-                COLUMN_ModifiedBy + " TEXT," +
-                COLUMN_Description + " TEXT, " +
-                COLUMN_ReceiverVisitorId + " TEXT )";
-
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"ReceivedTransfers\" ( " +
+                "`DatabaseId` TEXT, " +
+                "`MahakId` TEXT, " +
+                "`TransferStoreCode` TEXT, " +
+                "`ModifyDate` TEXT, " +
+                "`SyncId` TEXT, " +
+                "`TransferDate` TEXT, " +
+                "`TransferStoreId` TEXT, " +
+                "`IsAccepted` INTEGER, " +
+                "`CreatedBy` TEXT, " +
+                "`SenderVisitorId` TEXT, " +
+                "`ModifiedBy` TEXT, " +
+                "`Description` TEXT, " +
+                "`ReceiverVisitorId` TEXT, " +
+                "`DataHash` text, " +
+                "`CreateDate` text, " +
+                "`UpdateDate` text, " +
+                "`CreateSyncId` numeric, " +
+                "`UpdateSyncId` numeric, " +
+                "`RowVersion` numeric, " +
+                "`TransferStoreClientId` NUMERIC, " +
+                "`SenderStoreCode` INTEGER, " +
+                "`ReceiverStoreCode` INTEGER )";
 
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
@@ -539,18 +878,29 @@ public class DbSchema {
         public static final String COLUMN_RowVersion = "RowVersion";
 
 
-        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
-                " (" + COLUMN_Id + " TEXT ," +
-                COLUMN_DatabaseId + " TEXT," +
-                COLUMN_MahakId + " TEXT," +
-                COLUMN_ModifyDate + " TEXT," +
-                COLUMN_ProductId + " TEXT," +
-                COLUMN_Count1 + " TEXT," +
-                COLUMN_Name + " TEXT, " +
-                COLUMN_TransferId + " TEXT, " +
-                COLUMN_CreatedDate + " TEXT," +
-                COLUMN_CreatedBy + " TEXT," +
-                COLUMN_Description + " TEXT )";
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"ReceivedTransferProducts\" ( " +
+                "`DatabaseId` TEXT, " +
+                "`MahakId` TEXT, " +
+                "`Id` TEXT, " +
+                "`ModifyDate` TEXT, " +
+                "`ProductId` TEXT, " +
+                "`Name` TEXT, " +
+                "`TransferId` TEXT, " +
+                "`CreatedDate` TEXT, " +
+                "`CreatedBy` TEXT, " +
+                "`Description` TEXT, " +
+                "`TransferStoreDetailId` INTEGER, " +
+                "`TransferStoreDetailClientId` NUMERIC, " +
+                "`TransferStoreId` INTEGER, " +
+                "`ProductDetailId` INTEGER, " +
+                "`Count1` TEXT, " +
+                "`Count2` TEXT, " +
+                "`DataHash` text, " +
+                "`CreateDate` text, " +
+                "`UpdateDate` text, " +
+                "`CreateSyncId` numeric," +
+                " `UpdateSyncId` numeric, " +
+                "`RowVersion` numeric )";
 
 
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -577,10 +927,29 @@ public class DbSchema {
         public static final String COLUMN_UpdateSyncId = "UpdateSyncId";
         public static final String COLUMN_RowVersion = "RowVersion";
 
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"ProductsGroups\" ( " +
+                "`Id` INTEGER, " +
+                "`DatabaseId` TEXT," +
+                " `ProductCategoryCode` NUMERIC," +
+                " `ProductCategoryId` INTEGER, " +
+                "`ProductCategoryClientId` NUMERIC, " +
+                "`MahakId` TEXT, `UserId` NUMERIC, " +
+                "`ModifyDate` NUMERIC, " +
+                "`Name` TEXT, " +
+                "`ParentId` NUMERIC, " +
+                "`Color` TEXT, " +
+                "`Icon` TEXT, " +
+                "`DataHash` text," +
+                " `CreateDate` text, " +
+                "`UpdateDate` text, " +
+                "`CreateSyncId` numeric," +
+                " `UpdateSyncId` numeric," +
+                " `RowVersion` numeric, " +
+                "PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
-
     }
+
 
     public static class Orderschema implements BaseColumns {
         public static final String TABLE_NAME = "Orders";
@@ -624,6 +993,43 @@ public class DbSchema {
         public static final String COLUMN_UpdateSyncId = "UpdateSyncId";
         public static final String COLUMN_RowVersion = "RowVersion";
 
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"Orders\" ( " +
+                "`Id` INTEGER," +
+                " `DatabaseId` TEXT," +
+                " `MahakId` TEXT," +
+                " `Publish` NUMERIC," +
+                " `ModifyDate` NUMERIC," +
+                " `Code` TEXT," +
+                " `Type` INTEGER," +
+                " `Immediate` NUMERIC," +
+                " `SettlementType` NUMERIC," +
+                " `Description` TEXT," +
+                " `Discount` TEXT, " +
+                "`DeliveryDate` NUMERIC," +
+                " `OrderDate` NUMERIC," +
+                " `UserId` NUMERIC," +
+                " `PersonId` NUMERIC," +
+                " `PromotionCode` INTEGER," +
+                " `GiftType` INTEGER," +
+                " `IsFinal` NUMERIC, " +
+                "`OrderCode` NUMERIC," +
+                " `OrderId` INTEGER," +
+                " `OrderClientId` NUMERIC," +
+                " `ReceiptId` INTEGER," +
+                " `ReturnReasonId` INTEGER," +
+                " `ReceiptClientId` NUMERIC," +
+                " `SendCost` NUMERIC," +
+                " `OtherCost` NUMERIC, " +
+                "`DataHash` TEXT, " +
+                "`CreateDate` TEXT," +
+                " `UpdateDate` TEXT, " +
+                "`CreateSyncId` INTEGER, " +
+                "`UpdateSyncId` INTEGER, " +
+                "`RowVersion` NUMERIC, " +
+                "`PersonClientId` NUMERIC, " +
+                "`latitude` NUMERIC, " +
+                "`longitude` NUMERIC, " +
+                "PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
@@ -658,6 +1064,36 @@ public class DbSchema {
         public static final String COLUMN_RowVersion = "RowVersion";
         public static final String COLUMN_CostLevel = "CostLevel";
         public static final String COLUMN_PROMOTION_CODE = "PromotionCode";
+
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"OrderDetail\" ( " +
+                "`Id` INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " `OrderDetailId` INTEGER," +
+                " `OrderDetailClientId` INTEGER," +
+                " `OrderId` INTEGER," +
+                " `ProductDetailId` INTEGER," +
+                " `ProductId` INTEGER," +
+                " `Price` TEXT," +
+                " `Count1` TEXT, " +
+                "`Count2` TEXT," +
+                " `SumCountBaJoz` TEXT," +
+                " `Description` TEXT," +
+                " `TaxPercent` TEXT," +
+                " `ChargePercent` TEXT," +
+                " `Discount` TEXT, " +
+                "`DiscountType` INTEGER," +
+                " `GiftCount1` NUMERIC," +
+                " `GiftCount2` NUMERIC," +
+                " `GiftType` INTEGER," +
+                " `DataHash` TEXT," +
+                " `CreateDate` TEXT, " +
+                "`UpdateDate` TEXT," +
+                " `CreateSyncId` INTEGER," +
+                " `UpdateSyncId` INTEGER," +
+                " `RowVersion` NUMERIC," +
+                " `OrderClientId` NUMERIC," +
+                " `CostLevel` INTEGER," +
+                " `PromotionCode` INTEGER, " +
+                "`UserId` NUMERIC )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
@@ -675,6 +1111,19 @@ public class DbSchema {
         public static final String COLUMN_SumCountBaJoz = "SumCountBaJoz";
         public static final String COLUMN_Max = "Max";
         public static final String COLUMN_ProductSpec = "ProductSpec";
+
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"OrderDetailProperty\" (" +
+                " `Id` INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "`OrderDetailClientId` NUMERIC," +
+                " `OrderId` INTEGER," +
+                " `ProductDetailId` INTEGER," +
+                " `ProductId` INTEGER," +
+                " `OrderDetailPropertyId` INTEGER," +
+                " `Count1` BLOB," +
+                " `Count2` TEXT," +
+                " `SumCountBaJoz` TEXT," +
+                " `Max` NUMERIC," +
+                " `ProductSpec` TEXT )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     }
@@ -706,6 +1155,30 @@ public class DbSchema {
         public static final String COLUMN_UpdateSyncId = "UpdateSyncId";
         public static final String COLUMN_RowVersion = "RowVersion";
 
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"NonRegisters\" ( " +
+                "`DatabaseId` TEXT," +
+                " `NotRegisterCode` NUMERIC," +
+                " `MahakId` TEXT," +
+                " `Publish` NUMERIC," +
+                " `ModifyDate` NUMERIC," +
+                " `Description` TEXT," +
+                " `NonRegisterDate` NUMERIC," +
+                " `UserId` NUMERIC," +
+                " `PersonId` NUMERIC," +
+                " `PersonClientId` NUMERIC," +
+                " `Id` INTEGER," +
+                " `Code` TEXT," +
+                " `CustomerName` TEXT," +
+                " `ReasonCode` INTEGER," +
+                " `NotRegisterId` INTEGER," +
+                " `NotRegisterClientId` NUMERIC," +
+                " `DataHash` text," +
+                " `CreateDate` text," +
+                " `UpdateDate` text," +
+                " `CreateSyncId` numeric," +
+                " `UpdateSyncId` numeric," +
+                " `RowVersion` numeric," +
+                " PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     }
@@ -729,6 +1202,30 @@ public class DbSchema {
         public static final String COLUMN_ReceiptId = "ReceiptId";
         public static final String COLUMN_ReceiptClientId = "ReceiptClientId";
 
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"Receipts\" ( " +
+                "`Code` TEXT," +
+                " `DatabaseId` TEXT," +
+                " `ReceiptCode` NUMERIC," +
+                " `MahakId` TEXT," +
+                " `PersonClientId` NUMERIC," +
+                " `PersonId` NUMERIC," +
+                " `Publish` NUMERIC," +
+                " `Date` NUMERIC," +
+                " `ReceiptId` INTEGER," +
+                " `ReceiptClientId` NUMERIC," +
+                " `ModifyDate` NUMERIC," +
+                " `Id` INTEGER," +
+                " `UserId` NUMERIC," +
+                " `CashAmount` TEXT," +
+                " `Description` TEXT," +
+                " `CashCode` TEXT," +
+                " `DataHash` TEXT," +
+                " `CreateDate` TEXT," +
+                " `UpdateDate` TEXT," +
+                " `CreateSyncId` NUMERIC," +
+                " `UpdateSyncId` NUMERIC," +
+                " `RowVersion` NUMERIC," +
+                " PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
@@ -760,20 +1257,29 @@ public class DbSchema {
         public static final String COLUMN_RowVersion = "RowVersion";
 
 
-        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
-                " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," +
-                COLUMN_TransferType + " INTEGER," +
-                COLUMN_TransferCode + " INTEGER," +
-                COLUMN_TransferDate + " INTEGER," +
-                COLUMN_Receiverid + " INTEGER," +
-                COLUMN_Comment + " TEXT," +
-                COLUMN_PayerId + " INTEGER, " +
-                COLUMN_VisitorId + " INTEGER, " +
-                COLUMN_DatabaseId + " TEXT," +
-                COLUMN_MahakId + " TEXT," +
-                COLUMN_USER_ID + " NUMERIC," +
-                COLUMN_PUBLISH + " NUMERIC, " +
-                COLUMN_Price + " INTEGER )";
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"Payables\" ( `TransferType` INTEGER, " +
+                "`TransferCode` INTEGER, " +
+                "`TransferDate` INTEGER, " +
+                "`Receiverid` INTEGER, " +
+                "`Comment` TEXT, " +
+                "`PayerId` INTEGER, " +
+                "`VisitorId` INTEGER, " +
+                "`DatabaseId` TEXT, " +
+                "`MahakId` TEXT," +
+                " `UserId` NUMERIC," +
+                " `Publish` NUMERIC," +
+                " `Id` INTEGER," +
+                " `Price` INTEGER," +
+                " `DataHash` text," +
+                " `CreateDate` text," +
+                " `UpdateDate` text," +
+                " `CreateSyncId` numeric," +
+                " `UpdateSyncId` numeric, " +
+                "`RowVersion` numeric," +
+                " `TransferAccountId` INTEGER," +
+                " `TransferAccountClientId` NUMERIC," +
+                " `TransferAccountCode` INTEGER," +
+                " PRIMARY KEY(`Id`) )";
 
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
@@ -800,6 +1306,32 @@ public class DbSchema {
         public static final String COLUMN_BankClientId = "BankClientId";
 
 
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"Cheques\" ( " +
+                "`BankId` NUMERIC, " +
+                "`DatabaseId` TEXT, " +
+                "`ChequeCode` NUMERIC, " +
+                "`MahakId` TEXT, " +
+                "`Publish` NUMERIC, " +
+                "`Type` NUMERIC, " +
+                "`Date` NUMERIC, " +
+                "`ModifyDate` NUMERIC, " +
+                "`Description` TEXT, " +
+                "`Id` INTEGER, " +
+                "`ReceiptId` NUMERIC, " +
+                "`ChequeClientId` NUMERIC," +
+                " `ReceiptClientId` NUMERIC, " +
+                "`BankClientId` NUMERIC, " +
+                "`Number` NUMERIC, " +
+                "`Bank` TEXT, " +
+                "`Branch` TEXT, " +
+                "`Amount` TEXT, " +
+                "`DataHash` text, " +
+                "`CreateDate` text, " +
+                "`UpdateDate` text, " +
+                "`CreateSyncId` numeric, " +
+                "`UpdateSyncId` numeric, " +
+                "`RowVersion` numeric, " +
+                "PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
@@ -826,6 +1358,28 @@ public class DbSchema {
         public static final String COLUMN_UpdateSyncId = "UpdateSyncId";
         public static final String COLUMN_RowVersion = "RowVersion";
 
+        static final String CREATE_TABLE =" CREATE TABLE IF NOT EXISTS \"CheckList\" ( " +
+                "`DatabaseId` TEXT, " +
+                "`CheckListCode` NUMERIC, " +
+                "`MahakId` TEXT, " +
+                "`Publish` NUMERIC, " +
+                "`ModifyDate` NUMERIC, " +
+                "`Description` TEXT, " +
+                "`Id` INTEGER, " +
+                "`UserId` NUMERIC, " +
+                "`Status` NUMERIC, " +
+                "`CustomerId` NUMERIC, " +
+                "`Type` NUMERIC, " +
+                "`DataHash` text, " +
+                "`CreateDate` text, " +
+                "`UpdateDate` text, " +
+                "`CreateSyncId` numeric, " +
+                "`UpdateSyncId` numeric, " +
+                "`RowVersion` numeric, " +
+                "`CheckListId` INTEGER, " +
+                "`CheckListClientId` NUMERIC, " +
+                "`VisitorId` INTEGER, " +
+                "PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
@@ -855,9 +1409,33 @@ public class DbSchema {
         public static final String COLUMN_UpdateSyncId = "UpdateSyncId";
         public static final String COLUMN_RowVersion = "RowVersion";
 
-
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"TransactionsLog\" ( " +
+                "`Id` INTEGER," +
+                " `PersonId` NUMERIC, " +
+                "`TransactionId` NUMERIC," +
+                " `Type` NUMERIC," +
+                " `DebitAmount` TEXT," +
+                " `CreditAmount` TEXT," +
+                " `Balance` TEXT," +
+                " `Status` TEXT," +
+                " `Date` TEXT," +
+                " `Description` TEXT," +
+                " `ModifyDate` NUMERIC," +
+                " `MahakId` TEXT, " +
+                "`DatabaseId` TEXT, " +
+                "`TransactionCode` NUMERIC, " +
+                "`TransactionClientId` NUMERIC, " +
+                "`DataHash` text, " +
+                "`CreateDate` text, " +
+                "`UpdateDate` text, " +
+                "`CreateSyncId` numeric, " +
+                "`UpdateSyncId` numeric, " +
+                "`RowVersion` numeric, " +
+                "`UserId` NUMERIC, " +
+                "PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
+
 
     public static class BanksSchema implements BaseColumns {
         public static final String TABLE_NAME = "Banks";
@@ -877,6 +1455,25 @@ public class DbSchema {
         public static final String COLUMN_CreateSyncId = "CreateSyncId";
         public static final String COLUMN_UpdateSyncId = "UpdateSyncId";
         public static final String COLUMN_RowVersion = "RowVersion";
+
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS Banks" +
+                "( `Id` INTEGER," +
+                " `MahakId` TEXT," +
+                " `DatabaseId` TEXT," +
+                " `Name` TEXT," +
+                " `Description` TEXT," +
+                " `UserId` NUMERIC," +
+                " `ModifyDate` NUMERIC," +
+                " `DataHash` text," +
+                " `CreateDate` text," +
+                " `UpdateDate` text," +
+                " `CreateSyncId` numeric," +
+                " `UpdateSyncId` numeric," +
+                " `RowVersion` numeric," +
+                " `BankId` INTEGER," +
+                " `BankClientId` NUMERIC," +
+                " `BankCode` INTEGER," +
+                " PRIMARY KEY(`Id`) )";
 
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
@@ -906,6 +1503,26 @@ public class DbSchema {
         public static final String COLUMN_UpdateSyncId = "UpdateSyncId";
         public static final String COLUMN_RowVersion = "RowVersion";
 
+        public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS PropertyDescription" +
+                "( `Id` INTEGER," +
+                " `DatabaseId` TEXT," +
+                " `PropertyDescriptionId` INTEGER," +
+                " `PropertyDescriptionClientId` NUMERIC," +
+                " `PropertyDescriptionCode` INTEGER," +
+                " `Name` TEXT, `Title` TEXT," +
+                " `EmptyTitle` TEXT," +
+                " `Description` TEXT," +
+                " `ExtraData` TEXT," +
+                " `DisplayType` INTEGER," +
+                " `DataType` INTEGER," +
+                " `DataHash` text," +
+                " `CreateDate` text," +
+                " `UpdateDate` text," +
+                " `CreateSyncId` numeric," +
+                " `UpdateSyncId` numeric," +
+                " `RowVersion` numeric," +
+                " PRIMARY KEY(`Id`) )";
+
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
@@ -929,7 +1546,24 @@ public class DbSchema {
         public static final String COLUMN_UpdateSyncId = "UpdateSyncId";
         public static final String COLUMN_RowVersion = "RowVersion";
 
-
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"Reasons\" ( " +
+                " `Id` INTEGER," +
+                " `MahakId` TEXT," +
+                " `ReturnReasonCode` NUMERIC," +
+                " `ReturnReasonId` INTEGER," +
+                " `ReturnReasonClientId` NUMERIC," +
+                " `DatabaseId` TEXT, " +
+                " `Name` TEXT," +
+                " `Type` INTEGER, " +
+                " `Description` TEXT," +
+                " `ModifyDate` NUMERIC, " +
+                " `DataHash` text," +
+                " `CreateDate` text," +
+                " `UpdateDate` text," +
+                " `CreateSyncId` numeric," +
+                " `UpdateSyncId` numeric," +
+                " `RowVersion` numeric," +
+                " PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
@@ -953,6 +1587,23 @@ public class DbSchema {
         public static final String COLUMN_UpdateSyncId = "UpdateSyncId";
         public static final String COLUMN_RowVersion = "RowVersion";
 
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"ExtraData\" ( " +
+                " `Id` INTEGER," +
+                " `DatabaseId` TEXT," +
+                " `MahakId` TEXT," +
+                " `ModifyDate` NUMERIC," +
+                " `UserId` NUMERIC," +
+                " `Data` TEXT," +
+                " `DataHash` text," +
+                " `CreateDate` text," +
+                " `UpdateDate` text," +
+                " `CreateSyncId` numeric," +
+                " `UpdateSyncId` numeric," +
+                " `RowVersion` numeric," +
+                " `ExtraDataId` INTEGER," +
+                " `ItemType` INTEGER," +
+                " `ItemId` INTEGER," +
+                " PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
@@ -964,6 +1615,12 @@ public class DbSchema {
         public static final String COLUMN_ProductCode = "ProductCode";
         public static final String COLUMN_USER_ID = "UserId";
 
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"ProductCategory\" ( " +
+                " `Id` INTEGER," +
+                " `CategoryCode` NUMERIC," +
+                " `UserId` NUMERIC ," +
+                " `ProductCode` NUMERIC," +
+                " PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
@@ -975,8 +1632,18 @@ public class DbSchema {
         public static final String COLUMN_ParentCode = "ParentCode";
         public static final String COLUMN_CategoryName = "CategoryName";
 
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"Category\" ( " +
+                " `Id` INTEGER," +
+                " `CategoryCode` NUMERIC," +
+                " `ParentCode` NUMERIC, " +
+                " `CategoryName` text," +
+                "  PRIMARY KEY(`Id`) )";
+
+
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
+
+
 
     public static class CityZoneSchema implements BaseColumns {
         public static final String TABLE_NAME = "CityZone";
@@ -984,6 +1651,13 @@ public class DbSchema {
         public static final String COLUMN_ZoneCode = "ZoneCode";
         public static final String COLUMN_ParentCode = "ParentCode";
         public static final String COLUMN_ZoneName = "ZoneName";
+
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"CityZone\" (" +
+                " `Id` INTEGER," +
+                " `ZoneCode` NUMERIC," +
+                " `ParentCode` NUMERIC," +
+                " `ZoneName` text," +
+                " PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
@@ -1001,6 +1675,24 @@ public class DbSchema {
         public static final String COLUMN_DESCRIPTION = "Description";
         public static final String COLUMN_MODIFY_DATE = "ModifyDate";
         public static final String COLUMN_CODE = "Code";
+
+        public static final String CREATE_TABLE =" CREATE TABLE IF NOT EXISTS Configs (Value TEXT," +
+                " Title TEXT," +
+                " Description TEXT," +
+                " Type TEXT," +
+                " Code TEXT," +
+                " MasterId NUMERIC," +
+                " UserId NUMERIC," +
+                " ModifyDate NUMERIC," +
+                " DatabaseId TEXT," +
+                " MahakId TEXT," +
+                " Id INTEGER PRIMARY KEY," +
+                " DataHash text null," +
+                " CreateDate text null," +
+                " UpdateDate text null, " +
+                " CreateSyncId numeric null," +
+                " UpdateSyncId numeric null, " +
+                " RowVersion numeric null)";
     }
 
     public static final class NotificationSchema implements BaseColumns {
@@ -1014,22 +1706,20 @@ public class DbSchema {
         public static final String COLUMN_DATE = "DateNotification";
         public static final String COLUMN_USER_ID = "UserId";
 
-        public static int[] COLUMNINDEXES;
-
-        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
-                " (" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," +
-                COLUMN_TITLE + " TEXT," +
-                COLUMN_MESSAGE + " TEXT," +
-                COLUMN_FULLMESSAGE + " TEXT," +
-                COLUMN_TYPE + " TEXT," +
-                COLUMN_DATA + " TEXT," +
-                COLUMN_ISREAD + " INTEGER, " +
-                COLUMN_USER_ID + " INTEGER, " +
-                COLUMN_DATE + " INTEGER )";
-
-
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"Notifications\" ( " +
+                "`_ID` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                " `Title` TEXT, " +
+                " `Message` TEXT, " +
+                " `FullMessage` TEXT, " +
+                " `Type` TEXT, " +
+                " `Data` TEXT, " +
+                " `IsRead` INTEGER," +
+                " `DateNotification` INTEGER," +
+                " `UserId` INTEGER )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
+
+
 
     public static final class PicturesProductSchema implements BaseColumns {
         public static final String TABLE_NAME = "PicturesProduct";
@@ -1064,20 +1754,31 @@ public class DbSchema {
         public static final String COLUMN_RowVersion = "RowVersion";
 
 
-        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-                _ID + " INTEGER PRIMARY KEY," +
-                COLUMN_PICTURE_ID + " INTEGER ," +
-                COLUMN_PRODUCT_ID + " INTEGER ," +
-                COLUMN_PRODUCT_ID + " INTEGER ," +
-                COLUMN_PictureCode + " INTEGER ," +
-                COLUMN_FILE_NAME + " TEXT ," +
-                COLUMN_TITLE + " TEXT ," +
-                COLUMN_URL + " TEXT ," +
-                COLUMN_FILE_SIZE + " INTEGER ," +
-                COLUMN_DATABASE_ID + " TEXT ," +
-                COLUMN_MAHAK_ID + " TEXT ," +
-                COLUMN_USER_ID + " TEXT ," +
-                COLUMN_LAST_UPDATE + " INTEGER );";
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"PicturesProduct\" ( " +
+                " `_id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                " `pictureId` INTEGER," +
+                " `productId` INTEGER, `ItemId` INTEGER, " +
+                " `ItemType` INTEGER, `PictureCode` INTEGER," +
+                " `PictureClientId` NUMERIC," +
+                " `fileName` TEXT," +
+                " `url` TEXT, " +
+                " `title` TEXT," +
+                " `fileSize` INTEGER, " +
+                " `lastUpdate` INTEGER," +
+                " `dataBaseId` TEXT," +
+                " `mahakId` TEXT, " +
+                " `UserId` INTEGER," +
+                " `DataHash` text, " +
+                " `Width` INTEGER, " +
+                " `Height` INTEGER, " +
+                " `DisplayOrder` INTEGER, " +
+                " `PictureHash` TEXT, " +
+                " `Format` TEXT, " +
+                " `CreateDate` text, " +
+                " `UpdateDate` text, " +
+                " `CreateSyncId` numeric, " +
+                " `UpdateSyncId` numeric, " +
+                " `RowVersion` numeric )";
 
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
@@ -1097,13 +1798,19 @@ public class DbSchema {
         public static final String COLUMN_skipCount = "skipCount";
         public static final String COLUMN_CreateSyncId = "CreateSyncId";
 
-        public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-                _ID + " INTEGER PRIMARY KEY," +
-                COLUMN_Create_DATE + " INTEGER ," +
-                COLUMN_LONGITUDE + " TEXT ," +
-                COLUMN_LATITUDE + " TEXT ," +
-                COLUMN_VISITOR_ID + " INTEGER ," +
-                COLUMN_IS_SEND + " INTEGER )";
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"VisitorLocation\" ( " +
+                "\"_id\" INTEGER NOT NULL," +
+                " \"uniqueID\" TEXT, " +
+                "\"Date\" NUMERIC, " +
+                "\"CreateDate\" INTEGER, " +
+                "\"latitude\" TEXT, " +
+                "\"longitude\" TEXT, " +
+                "\"VisitorId\" INTEGER, " +
+                "\"VisitorLocationId\" INTEGER, " +
+                "\"RowVersion\" NUMERIC, " +
+                "\"skipCount\" INTEGER, " +
+                "\"CreateSyncId\" INTEGER, UNIQUE(\"VisitorId\",\"latitude\",\"longitude\")," +
+                " PRIMARY KEY(\"_id\" AUTOINCREMENT) )";
 
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
@@ -1122,7 +1829,24 @@ public class DbSchema {
         public static final String COLUMN_CreateSyncId = "CreateSyncId";
         public static final String COLUMN_UpdateSyncId = "UpdateSyncId";
         public static final String COLUMN_RowVersion = "RowVersion";
+
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"Setting\" ( " +
+                "`Id` INTEGER, " +
+                "`SettingId` NUMERIC, " +
+                "`SettingCode` NUMERIC, " +
+                "`UserId` NUMERIC, " +
+                "`Value` TEXT, " +
+                "`Deleted` TEXT, " +
+                "`DataHash` text, " +
+                "`CreateDate` text, " +
+                "`UpdateDate` text, " +
+                "`CreateSyncId` numeric, " +
+                "`UpdateSyncId` numeric, " +
+                "`RowVersion` numeric, " +
+                "PRIMARY KEY(`Id`) )";
     }
+
+
 
     public static class ZoneSchema implements BaseColumns {
 
@@ -1134,6 +1858,16 @@ public class DbSchema {
         public static final String COLUMN_created = "created";
         public static final String COLUMN_lastModifiedBy = "lastModifiedBy";
         public static final String COLUMN_lastModified = "lastModified";
+
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"Zone\" ( " +
+                "\"zoneId\" INTEGER," +
+                " \"visitorId\" INTEGER," +
+                " \"title\" TEXT," +
+                " \"createdBy\" TEXT," +
+                " \"created\" TEXT," +
+                " \"lastModifiedBy\" TEXT," +
+                " \"lastModified\" TEXT," +
+                " PRIMARY KEY(zoneId , createdBy) )";
     }
     public static class ZoneLocationSchema implements BaseColumns {
 
@@ -1147,6 +1881,18 @@ public class DbSchema {
         public static final String COLUMN_created = "created";
         public static final String COLUMN_lastModifiedBy = "lastModifiedBy";
         public static final String COLUMN_lastModified = "lastModified";
+
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"ZoneLocation\" ( " +
+                "\"id\" INTEGER," +
+                " \"zoneId\" INTEGER," +
+                " \"visitorId\" INTEGER," +
+                " \"latitude\" TEXT," +
+                " \"longitude\" TEXT," +
+                " \"createdBy\" TEXT," +
+                " \"created\" TEXT," +
+                " \"lastModifiedBy\" TEXT," +
+                " \"lastModified\" TEXT," +
+                " PRIMARY KEY(id , createdBy) )";
     }
 
 }

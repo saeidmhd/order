@@ -510,7 +510,11 @@ public class LocationService extends Service {
     private void updateDb(VisitorLocation visitorLocation) {
         if (dba == null) dba = new DbAdapter(mContext);
         dba.open();
-        dba.updateGpsTrackingForSending(visitorLocation);
+        try {
+            dba.updateGpsTrackingForSending(visitorLocation);
+        } catch (Exception e) {
+            Log.e("saveInDb",e.getMessage());
+        }
         dba.close();
     }
 

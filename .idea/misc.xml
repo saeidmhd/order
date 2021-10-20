@@ -14,6 +14,8 @@
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.49297971918876754" />
         <entry key="app/src/main/res/layout/activity_map_view.xml" value="0.310515873015873" />
         <entry key="app/src/main/res/layout/dashboard_left_navigation_drawer.xml" value="0.42063492063492064" />
+        <entry key="app/src/main/res/layout/grv_product_picker_item.xml" value="0.2845873786407767" />
+        <entry key="app/src/main/res/layout/lst_product_picker_item.xml" value="0.2845873786407767" />
       </map>
     </option>
   </component>

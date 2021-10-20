@@ -51,6 +51,7 @@
 
             <ImageView
                 android:id="@+id/imgGift"
+                android:visibility="gone"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:scaleType="fitCenter"

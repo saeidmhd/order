@@ -255,7 +255,7 @@ public class LoginActivityRestApi extends BaseActivity {
         }
         long add = mDb.AddUser(user);
         if (add >= 1) {
-            long id = mDb.getMax(DbSchema.Userschema.TABLE_NAME, DbSchema.Userschema.COLUMN_ID);
+            long id = mDb.getMax(DbSchema.UserSchema.TABLE_NAME, DbSchema.UserSchema.COLUMN_ID);
             user.setId(id);
             setPrefUserMasterId(user.getMasterId());
             setPrefUsername(user.getUsername());

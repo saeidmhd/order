@@ -170,36 +170,25 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         promotionId = product.getPromotionId();
         customerPrice = product.getCustomerPrice();
 
-        db.open();
-        int count = db.getCountProductPromotionEntity();
-
-        if(count > 0){
-            if(promotionId > 0 )
+        if(promotionId > 0){
+            db.open();
+            int count = db.getCountProductPromotionEntity();
+            if(count > 0){
                 holder.imgGift.setVisibility(View.VISIBLE);
-            else
+            }else
                 holder.imgGift.setVisibility(View.GONE);
-        }else
-            holder.imgGift.setVisibility(View.GONE);
 
-
-        holder.imgGift.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                promotions = db.getAllPromotionCodeForSpecificGood(product.getProductCode());
-                show();
-            }
-        });
-
+            holder.imgGift.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view){
+                    promotions = db.getAllPromotionCodeForSpecificGood(product.getProductCode());
+                    show();
+                }
+            });
+        }
 
         if (type == 0) {
             holder.panelCount.setVisibility(View.GONE);
-        }
-
-        if (product.getPictures() == null) {
-            if (db == null) db = new DbAdapter(mContext);
-            db.open();
-            product.setPictures(db.getAllPictureByProductId(product.getProductCode()));
-            db.close();
         }
 
         Boolean res = false;
@@ -230,9 +219,8 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         if(holder.txtTotalCount2 != null)
             holder.txtTotalCount2.setText(product.getUnitName2());
 
-        if (product.getPictures() != null && product.getPictures().size() > 0) {
-            if (product.getPictures().get(0).getUrl() != null)
-                ProductItemInitialize.loadImage(mContext, product.getPictures().get(0).getUrl(), holder.imgProduct);
+        if (product.getPictureUrl() != null) {
+            ProductItemInitialize.loadImage(mContext, product.getPictureUrl(), holder.imgProduct);
         } else {
             holder.imgProduct.setImageResource(R.drawable.img_default_product);
             holder.imgProduct.setBackgroundResource(R.drawable.image_empty_box);
@@ -240,13 +228,13 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         holder.imgProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (product.getPictures() == null || product.getPictures().size() == 0)
-                    return;
-                Intent intent = new Intent(mContext, PhotoViewerActivity.class);
-                intent.putExtra(ProjectInfo._json_key_user_id, BaseActivity.getPrefUserId());
-                intent.putExtra(ProjectInfo._json_key_product_id, product.getProductCode());
-                intent.putExtra(ProjectInfo._json_key_index, 0);
-                ((Activity) mContext).startActivityForResult(intent, REQUEST_FOR_ACTIVITY_CODE);
+                if (product.getPictureUrl() != null){
+                    Intent intent = new Intent(mContext, PhotoViewerActivity.class);
+                    intent.putExtra(ProjectInfo._json_key_user_id, BaseActivity.getPrefUserId());
+                    intent.putExtra(ProjectInfo._json_key_product_id, product.getProductCode());
+                    intent.putExtra(ProjectInfo._json_key_index, 0);
+                    ((Activity) mContext).startActivityForResult(intent, REQUEST_FOR_ACTIVITY_CODE);
+                }
             }
         });
 
