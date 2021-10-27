@@ -102,6 +102,7 @@ public class BaseActivity extends AppCompatActivity {
     public static String _Key_productCount = "productCount";
     public static String _Key_personCount = "personCount";
     public static String _Key_Username = "Username";
+    public static String _Key_PrefArabicReceipt = "PrefArabicReceipt";
     public static String _Key_name = "name";
     public static String _Key_tell = "tell";
     public static String _Key_MahakId = "MahakId";
@@ -611,6 +612,14 @@ public class BaseActivity extends AppCompatActivity {
         sh.edit().putInt(_Key_personCount, count).commit();
     }
 
+    public static boolean getPrefArabicReceipt() {
+        return sh.getBoolean(_Key_PrefArabicReceipt, false);
+    }
+
+    public static void setPrefArabicReceipt(boolean value) {
+        sh.edit().putBoolean(_Key_PrefArabicReceipt, value).commit();
+    }
+
 
     public static String getPrefUsername() {
         return sh.getString(_Key_Username, "");
@@ -627,7 +636,6 @@ public class BaseActivity extends AppCompatActivity {
     public static void setPrefname(String name) {
         sh.edit().putString(_Key_name, name).commit();
     }
-
 
     public static String getPrefTell() {
         return sh.getString(_Key_tell, "");

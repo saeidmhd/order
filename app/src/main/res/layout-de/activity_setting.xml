@@ -501,13 +501,32 @@
                     android:entries="@array/array_printer_brand"
                     android:spinnerMode="dropdown" />
 
-                <com.mahak.order.widget.FontCheckBox
-                    android:id="@+id/chkTemplate2"
-                    style="@style/forms_checkbox_default"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:text="@string/str_setting_template2" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.mahak.order.widget.FontCheckBox
+                        android:id="@+id/chk_arabic_receipt"
+                        style="@style/forms_checkbox_default"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/arabic_receipt_print" />
+
+                    <com.mahak.order.widget.FontCheckBox
+                        android:id="@+id/chkTemplate2"
+                        android:layout_weight="1"
+                        style="@style/forms_checkbox_default"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="@string/str_setting_template2" />
+
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="fill_parent"
