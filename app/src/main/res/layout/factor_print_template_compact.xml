@@ -277,7 +277,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
 
-                <com.mahak.order.widget.PrintTextView
+                <com.mahak.order.widget.BoldPrintTextView
                     android:id="@+id/_tvTotalPrice"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
@@ -287,9 +287,9 @@
                     android:layout_marginLeft="@dimen/SmallSize"
                     android:text="@string/sample_number"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="18sp" />
 
-                <com.mahak.order.widget.PrintTextView
+                <com.mahak.order.widget.BoldPrintTextView
                     android:id="@+id/_txtTotalPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -298,7 +298,7 @@
                     android:textStyle="bold"
                     android:text="@string/str_total_price"
                     android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
         </LinearLayout>
@@ -667,7 +667,7 @@
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <com.mahak.order.widget.PrintTextView
+                    <com.mahak.order.widget.BoldPrintTextView
                         android:id="@+id/_tvCustomerStatus2"
                         android:textSize="16sp"
                         style="@style/forms_page_title_label_default380"
@@ -679,7 +679,7 @@
                         android:textColor="@color/black"
                         android:textStyle="bold" />
 
-                    <com.mahak.order.widget.PrintTextView
+                    <com.mahak.order.widget.BoldPrintTextView
                         style="@style/forms_page_title_label_default380"
                         android:textSize="16sp"
                         android:layout_width="wrap_content"

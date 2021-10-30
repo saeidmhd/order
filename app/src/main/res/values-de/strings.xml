@@ -1198,6 +1198,7 @@
     <string name="smart_pos_payment_desc">پرداخت موفق از طریق اسمارت پوز</string>
     <string name="error_device_id">خطا در دریافت شناسه دستگاه</string>
     <string name="save_setting_close">save and close</string>
+    <string name="arabic_receipt_print">arabic reciept print</string>
 
     <string name="launch_activity">Launch activity</string>
     <string name="location_unknown">Location unknown</string>

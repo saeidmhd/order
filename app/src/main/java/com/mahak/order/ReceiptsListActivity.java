@@ -60,6 +60,7 @@ import retrofit2.Response;
 
 import static com.mahak.order.common.ProjectInfo.Woosim_WSP_R341;
 import static com.mahak.order.common.ServiceTools.getDateAndTimeForLong;
+import static com.mahak.order.common.ServiceTools.getDateAndTimeMiladi;
 
 public class ReceiptsListActivity extends BaseActivity {
 
@@ -345,8 +346,13 @@ public class ReceiptsListActivity extends BaseActivity {
 
                                     case R.id.mnuPrint:
                                         ReceiptId = receipt.getId();
-                                        PreparePrinterData ppd = new PreparePrinterData();
-                                        ppd.execute();
+                                        if(BaseActivity.getPrefArabicReceipt()){
+                                            PreparePrinterDataArabic ppd = new PreparePrinterDataArabic();
+                                            ppd.execute();
+                                        }else {
+                                            PreparePrinterData ppd = new PreparePrinterData();
+                                            ppd.execute();
+                                        }
                                         break;
                                     case R.id.mnuSend:
                                         PositionArray = position;
@@ -399,6 +405,72 @@ public class ReceiptsListActivity extends BaseActivity {
                     inflater.inflate(R.layout.receipt_print80mm, ll, true);
                 } else {
                     inflater.inflate(R.layout.receipt_print, ll, true);
+                }
+
+                FillPrintView(ll);
+                ll.setDrawingCacheEnabled(true);
+                ll.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+                ll.layout(0, 0, ll.getMeasuredWidth(), ll.getMeasuredHeight());
+                ll.buildDrawingCache(true);
+                //b = Bitmap.createBitmap(ll.getDrawingCache());
+                b = Printer.CreateBitmap(ll);
+                ll.setDrawingCacheEnabled(false);
+
+                fName = GetFileName(dt.getTime());
+                if (b != null) {
+                    if (Printer.CreateFile(b, fName, fPath)) {
+                    }
+                }
+
+                if (b != null)
+                    status = true;
+
+                return status;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean result) {
+                super.onPostExecute(result);
+                if (result) {
+                    Intent intent = new Intent(ReceiptsListActivity.this, PrintActivity.class);
+                    intent.putExtra(ProjectInfo._TAG_PAGE_NAME, ProjectInfo._pName_ReceiptList);
+                    intent.putExtra(ProjectInfo._TAG_PATH, fPath);
+                    intent.putExtra(ProjectInfo._TAG_Name, fName);
+                    intent.putExtra("OrderCode", String.valueOf(ReceiptId));
+                    startActivity(intent);
+                    llprogressBar.setVisibility(View.GONE);
+                }
+            }
+        }
+        private class PreparePrinterDataArabic extends AsyncTask<String, Integer, Boolean> {
+
+            Bitmap b = null;
+            String fName = "";
+            String fPath = ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_IMAGES + "/" + ProjectInfo.DIRECTORY_Receipt;
+
+            @Override
+            protected void onPreExecute() {
+                llprogressBar.setVisibility(View.VISIBLE);
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Boolean doInBackground(String... params) {
+                Boolean status = false;
+
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                ll = new LinearLayout(mContext);
+
+                if (printerBrand == ProjectInfo.PRINTER_BABY_380_A || printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310 || printerBrand == ProjectInfo.PRINTER_DELTA_380_A) {
+                    inflater.inflate(R.layout.receipt_print_arabic80mm, ll, true);
+                } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
+                    inflater.inflate(R.layout.receipt_print_arabic50mm, ll, true);
+                } else if (printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII || printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW || printerBrand == ProjectInfo.UROVO_K319 || printerBrand == Woosim_WSP_R341) {
+                    inflater.inflate(R.layout.receipt_print_arabic80mm, ll, true);
+                } else {
+                    inflater.inflate(R.layout.receipt_print_arabic, ll, true);
                 }
 
                 FillPrintView(ll);
@@ -633,7 +705,32 @@ public class ReceiptsListActivity extends BaseActivity {
         _tvReceiptAmount.setText(ServiceTools.formatPrice(receipt.getTotalCashReceipt()));
         _tvTotalAmount.setText(ServiceTools.formatPrice(receipt.getTotalAmount()));
         lngDate = receipt.getDate();
-        _tvDate.setText(getDateAndTimeForLong(lngDate));
+
+        if(BaseActivity.getPrefArabicReceipt()){
+            TextView last_balance = (TextView) view.findViewById(R.id.last_balance);
+            TextView final_balance = (TextView) view.findViewById(R.id._tvfinalBalance);
+
+            double balance = customer.getBalance();
+            if(balance > 0)
+                last_balance.setText(ServiceTools.formatPrice(customer.getBalance()) + " (الدائن) ");
+            else if (balance < 0)
+                last_balance.setText(ServiceTools.formatPrice(customer.getBalance()) + " (مدين) ");
+            else
+                last_balance.setText(ServiceTools.formatPrice(customer.getBalance()));
+
+
+            double finalBalance = balance + receipt.getTotalAmount();
+            if(finalBalance > 0)
+                final_balance.setText(ServiceTools.formatPrice(finalBalance) + " (الدائن) ");
+            else if(finalBalance < 0)
+                final_balance.setText(ServiceTools.formatPrice(finalBalance) + " (مدين) ");
+            else
+                final_balance.setText(ServiceTools.formatPrice(finalBalance));
+
+            _tvDate.setText(getDateAndTimeMiladi(lngDate));
+        }else {
+            _tvDate.setText(getDateAndTimeForLong(lngDate));
+        }
 
         _tvDescription.setText(receipt.getDescription());
         _tvCode.setText(receipt.getTrackingCode());

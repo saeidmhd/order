@@ -43,7 +43,7 @@ public class SettingActivity extends AppCompatActivity {
 
     private static final int FOLDER_CODE = 131;
     private DbAdapter db;
-    private CheckBox chkReduceAsset, chkShowField, chkShowSign, chkShowBelow, chkShowBelowPrice, chkPrintCompact, chkTemplate2 , chk_tracking_code,chk_market_name,chk_customer_name,chk_count_product;
+    private CheckBox chkReduceAsset, chkShowField, chkShowSign, chkShowBelow, chkShowBelowPrice, chkPrintCompact, chkTemplate2 , chk_tracking_code,chk_market_name,chk_customer_name,chk_count_product,chk_arabic_receipt;
     private RelativeLayout rvReduceAsset;
     private TextView tvReduceAsset,deviceId;
     private EditText txtChargePercent, txtTaxPercent;
@@ -235,6 +235,12 @@ public class SettingActivity extends AppCompatActivity {
                 BaseActivity.setTemplate2Status(mContext, ProjectInfo._pName_OrderDetail, b);
             }
         });
+        chk_arabic_receipt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                BaseActivity.setPrefArabicReceipt(b);
+            }
+        });
 
         spnPrinterBrand.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -423,6 +429,7 @@ public class SettingActivity extends AppCompatActivity {
         chkShowBelow = (CheckBox) findViewById(R.id.chkShowBelow);
         chkShowBelowPrice = (CheckBox) findViewById(R.id.chkBelowPrice);
         chkTemplate2 = (CheckBox) findViewById(R.id.chkTemplate2);
+        chk_arabic_receipt = (CheckBox) findViewById(R.id.chk_arabic_receipt);
         rvReduceAsset = (RelativeLayout) findViewById(R.id.rvReduceAsset);
         tvReduceAsset = (TextView) findViewById(R.id.tvReduceAsset);
         deviceId = (TextView) findViewById(R.id.deviceId);
@@ -495,6 +502,7 @@ public class SettingActivity extends AppCompatActivity {
             deutsch.setChecked(true);
 
         chkTemplate2.setChecked(BaseActivity.getTemplate2Status(mContext, ProjectInfo._pName_OrderDetail));
+        chk_arabic_receipt.setChecked(BaseActivity.getPrefArabicReceipt());
         ////////////////////////////////////////////////////
         //Fill Tax And Charge
 

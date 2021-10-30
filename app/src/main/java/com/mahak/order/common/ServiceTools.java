@@ -361,6 +361,16 @@ public class ServiceTools {
         }
 
     }
+    public static String getDateAndTimeMiladi(long date) {
+        int day;
+        String DayofWeek = "";
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(date);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        return calendar.get(Calendar.YEAR) + "-" + month + "-" + calendar.get(Calendar.DAY_OF_MONTH) + " _ " + hour + ":" + minute;
+    }
 
     public static String getDateForLong(long date) {
         int day;
