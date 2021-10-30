@@ -42,6 +42,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -136,6 +137,21 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             btnAddNewTransference;
 
     private ImageButton btnZoomMapView;
+    private ProgressBar
+            tvSumOfReceiptsProgressBar,
+            tvSumOfOrdersProgressBar,
+            tvSumOfInvoicesProgressBar,
+            tvSumOfCashProgressBar,
+            tvSumOfChequeProgressBar,
+            tvSumOfReceiptsAmountProgressBar,
+            tvSumOfDiscountInvoiceProgressBar,
+            tvSumOfDiscountOrderProgressBar,
+            tvSumOfPureOrderProgressBar,
+            tvSumOfPureInvoiceProgressBar,
+            tvSumOfChargeAndTaxOrderProgressBar,
+            tvSumOfChargeAndTaxInvoiceProgressBar;
+
+
     private TextView
             tvSumOfReceipts,
             tvSumOfOrders,
@@ -197,6 +213,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     private boolean ACCESS_COARSE_LOCATION_Permission;
     private boolean ACCESS_FINE_LOCATION_Permission;
     private boolean hasWritePermission;
+    private AsynCustomer asyncustomer;
+    private AsyncReport asyncReport;
     SupportMapFragment mapFragment;
     private static final int REQUEST_Location_ON = 1200;
 
@@ -284,7 +302,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         initUI();
 
-        update();
+
 
         if(!isMyServiceRunning(LocationService.class)){
             if(btnTrackingService.isChecked())
@@ -479,181 +497,14 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         };
     }//end of onCreate
 
-    public void update (){
-
-        if (db == null)
-            db = new DbAdapter(this);
-
-        db.open();
-
-        double TotalOrder = db.getTotalPriceOrder();
-        double TotalInvoice = db.getTotalPriceInvoice();
-        double TotalReceiveTransfer = db.getTotalReceiveTransfer();
-        double TotalReceipt = db.getTotalPriceReceipt();
-        double TotalCash = db.getTotalCashAmountReceipt();
-        double TotalCheque = db.getTotalChequeReceipt();
-        double TotalCashReceipt = db.getTotalCashReceipt();
-        double TotalDiscountOrder = db.getTotalDiscountOrder();
-        double TotalDiscountInvoice = db.getTotalDiscountInvoice();
-        double TotalChargeAndTaxOrder = db.getTotalChargeAndTaxOrder();
-        double TotalChargeAndTaxInvoice = db.getTotalChargeAndTaxInvoice();
-        double TotalPureOrder = db.getPurePriceOrder();
-        double TotalPureInvoice = db.getPurePriceInvoice();
-
-        tvSumOfOrders.setText(ServiceTools.formatPrice(TotalOrder));
-        tvSumOfOrders.setSelected(true);
-        tvSumOfInvoices.setText(ServiceTools.formatPrice(TotalInvoice));
-        tvSumOfInvoices.setSelected(true);
-        tvSumOfTransference.setText(ServiceTools.formatPrice(TotalReceiveTransfer));
-        tvSumOfTransference.setSelected(true);
-        tvSumOfReceipts.setText(ServiceTools.formatPrice((TotalReceipt)));
-        tvSumOfReceipts.setSelected(true);
-        tvSumOfCash.setText(ServiceTools.formatPrice(TotalCash));
-        tvSumOfCash.setSelected(true);
-        tvSumOfCheque.setText(ServiceTools.formatPrice(TotalCheque));
-        tvSumOfCheque.setSelected(true);
-        tvSumOfReceiptsAmount.setText(ServiceTools.formatPrice(TotalCashReceipt));
-        tvSumOfReceiptsAmount.setSelected(true);
-        tvSumOfDiscountOrder.setText(ServiceTools.formatPrice(TotalDiscountOrder));
-        tvSumOfDiscountOrder.setSelected(true);
-        tvSumOfDiscountInvoice.setText(ServiceTools.formatPrice(TotalDiscountInvoice));
-        tvSumOfDiscountInvoice.setSelected(true);
-        tvSumOfPureOrder.setText(ServiceTools.formatPrice(TotalPureOrder));
-        tvSumOfPureOrder.setSelected(true);
-        tvSumOfPureInvoice.setText(ServiceTools.formatPrice(TotalPureInvoice));
-        tvSumOfPureInvoice.setSelected(true);
-        tvSumOfChargeAndTaxOrder.setText(ServiceTools.formatPrice(TotalChargeAndTaxOrder));
-        tvSumOfChargeAndTaxOrder.setSelected(true);
-        tvSumOffChargeAndTaxInvoice.setText(ServiceTools.formatPrice(TotalChargeAndTaxInvoice));
-        tvSumOffChargeAndTaxInvoice.setSelected(true);
-    }
-
-    public static void setTackingServiceText(boolean isChecked) {
-        if (isChecked) {
-            tvTrackingService.setText(R.string.tracking_system_is_active);
-        } else {
-            tvTrackingService.setText(R.string.tracking_system_is_disabled);
-        }
-        if (isChecked && BaseActivity.getPrefAdminControl(mContext)) {
-            tvTrackingService.setText(R.string.tracking_system_is_active_admin);
-        } else if (!isChecked && BaseActivity.getPrefAdminControl(mContext)) {
-            tvTrackingService.setText(R.string.tracking_system_is_disabled_admin);
-        }
-    }
-
-    public static boolean CanRegisterInvoiceOutOfZone() {
-        boolean canRegister = true;
-        String config = ServiceTools.getKeyFromSharedPreferences(mContext, ProjectInfo.pre_gps_config);
-        if (!ServiceTools.isNull(config)) {
-            try {
-                JSONObject obj = new JSONObject(config);
-                canRegister = obj.getBoolean(ProjectInfo._json_key_isRestricted);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if(!canRegister)
-            if(mapPolygon != null){
-
-                return mapPolygon.checkPositionInZone(lastPosition);
-            }
-
-        return canRegister;
-    }
-
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Override
     protected void onResume() {
+
+        asyncReport = new AsyncReport();
+        asyncReport.execute();
+
+        //update();
         super.onResume();
-        setTrackingConfig();
-    }
-
-    private void registerReceiverToCheckGpsOnOff() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.location.PROVIDERS_CHANGED");
-        BroadcastReceiver receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().matches(LocationManager.PROVIDERS_CHANGED_ACTION)) {
-                    LocationManager service = (LocationManager) context.getSystemService(LOCATION_SERVICE);
-                    if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
-                        boolean isGPSPROVIDEREnabled = service != null && service.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                        if (!isGPSPROVIDEREnabled) {
-                            stopLocationUpdate();
-                        }else {
-                            startLocationUpdate();
-                        }
-                    }
-                }
-            }
-        };
-        this.getApplicationContext().registerReceiver(receiver, filter);
-    }
-
-    private void startLocationUpdate() {
-        if (locationService == null) locationService = new LocationService(mContext, DashboardActivity.this);
-        if (!checkPermissions()) {
-            requestPermissions();
-        }else {
-            if(!btnTrackingService.isChecked()){
-                btnTrackingService.setChecked(true);
-            }
-            setTackingServiceText(true);
-            locationService.startTracking();
-            locationService.setTrackingPrefOff("1");
-        }
-    }
-
-    private void stopLocationUpdate() {
-        if(locationService.isRunService(mContext)){
-            locationService.stopTracking();
-            locationService.stopNotificationServiceTracking();
-        }
-        if(btnTrackingService.isChecked()){
-            btnTrackingService.setChecked(false);
-        }
-        setTackingServiceText(false);
-        locationService.setTrackingPrefOff("0");
-    }
-
-    private boolean checkPermissions() {
-        return  PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
-    }
-
-    private void requestPermissions() {
-        boolean shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION);
-        if (shouldProvideRationale) {
-            Snackbar.make(
-                    findViewById(R.id.drawer_layout),
-                    R.string.permission_rationale,
-                    Snackbar.LENGTH_INDEFINITE)
-                    .setAction(R.string.ok, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            // Request permission
-                            ActivityCompat.requestPermissions(DashboardActivity.this,
-                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                    REQUEST_PERMISSIONS_REQUEST_CODE);
-                        }
-                    })
-                    .show();
-        } else {
-            Log.i(TAG, "Requesting permission");
-            ActivityCompat.requestPermissions(DashboardActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_PERMISSIONS_REQUEST_CODE);
-        }
     }
 
     @Override
@@ -716,6 +567,19 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         db.open();
 
         mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
+
+        tvSumOfReceiptsProgressBar = (ProgressBar) findViewById(R.id.tvSumOfReceiptsProgressBar);
+        tvSumOfOrdersProgressBar = findViewById(R.id.tvSumOfOrdersProgressBar);
+        tvSumOfInvoicesProgressBar = findViewById(R.id.tvSumOfInvoicesProgressBar);
+        tvSumOfCashProgressBar = findViewById(R.id.tvSumOfCashProgressBar);
+        tvSumOfChequeProgressBar = findViewById(R.id.tvSumOfChequeProgressBar);
+        tvSumOfReceiptsAmountProgressBar = findViewById(R.id.tvSumOfReceiptsAmountProgressBar);
+        tvSumOfDiscountInvoiceProgressBar = findViewById(R.id.tvSumOfDiscountInvoiceProgressBar);
+        tvSumOfDiscountOrderProgressBar = findViewById(R.id.tvSumOfDiscountOrderProgressBar);
+        tvSumOfPureOrderProgressBar = findViewById(R.id.tvSumOfPureOrderProgressBar);
+        tvSumOfPureInvoiceProgressBar = findViewById(R.id.tvSumOfPureInvoiceProgressBar);
+        tvSumOfChargeAndTaxOrderProgressBar = findViewById(R.id.tvSumOfChargeAndTaxOrderProgressBar);
+        tvSumOfChargeAndTaxInvoiceProgressBar = findViewById(R.id.tvSumOfChargeAndTaxInvoiceProgressBar);
 
         tvSumOfOrders = (TextView) findViewById(R.id.tvSumOfOrders);
         tvSumOfReceipts = (TextView) findViewById(R.id.tvSumOfReceipts);
@@ -1349,6 +1213,163 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         return dialog;
     }
 
+
+    public class AsyncReport extends AsyncTask<String, String, Boolean> {
+
+        double TotalOrder;
+        double TotalInvoice;
+        double TotalReceiveTransfer;
+        double TotalReceipt;
+        double TotalCash;
+        double TotalCheque;
+        double TotalCashReceipt;
+        double TotalDiscountOrder;
+        double TotalDiscountInvoice;
+        double TotalChargeAndTaxOrder;
+        double TotalChargeAndTaxInvoice;
+        double TotalPureOrder;
+        double TotalPureInvoice;
+
+        @Override
+        protected void onPreExecute() {
+
+            tvSumOfReceipts.setVisibility(View.GONE);
+            tvSumOfOrders.setVisibility(View.GONE);
+            tvSumOfInvoices.setVisibility(View.GONE);
+            tvSumOfCash.setVisibility(View.GONE);
+            tvSumOfCheque.setVisibility(View.GONE);
+            tvSumOfReceiptsAmount.setVisibility(View.GONE);
+            tvSumOfDiscountInvoice.setVisibility(View.GONE);
+            tvSumOfDiscountOrder.setVisibility(View.GONE);
+            tvSumOfPureOrder.setVisibility(View.GONE);
+            tvSumOfPureInvoice.setVisibility(View.GONE);
+            tvSumOfChargeAndTaxOrder.setVisibility(View.GONE);
+            tvSumOffChargeAndTaxInvoice.setVisibility(View.GONE);
+            tvSumOfTransference.setVisibility(View.GONE);
+
+
+            tvSumOfReceiptsProgressBar.setVisibility(View.VISIBLE);
+            tvSumOfOrdersProgressBar.setVisibility(View.VISIBLE);
+            tvSumOfInvoicesProgressBar.setVisibility(View.VISIBLE);
+            tvSumOfCashProgressBar.setVisibility(View.VISIBLE);
+            tvSumOfChequeProgressBar.setVisibility(View.VISIBLE);
+            tvSumOfReceiptsAmountProgressBar.setVisibility(View.VISIBLE);
+            tvSumOfDiscountInvoiceProgressBar.setVisibility(View.VISIBLE);
+            tvSumOfDiscountOrderProgressBar.setVisibility(View.VISIBLE);
+            tvSumOfPureOrderProgressBar.setVisibility(View.VISIBLE);
+            tvSumOfPureInvoiceProgressBar.setVisibility(View.VISIBLE);
+            tvSumOfChargeAndTaxOrderProgressBar.setVisibility(View.VISIBLE);
+            tvSumOfChargeAndTaxInvoiceProgressBar.setVisibility(View.VISIBLE);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... arg0) {
+             TotalOrder = db.getTotalPriceOrder();
+             TotalInvoice = db.getTotalPriceInvoice();
+             TotalReceiveTransfer = db.getTotalReceiveTransfer();
+             TotalReceipt = db.getTotalPriceReceipt();
+             TotalCash = db.getTotalCashAmountReceipt();
+             TotalCheque = db.getTotalChequeReceipt();
+             TotalCashReceipt = db.getTotalCashReceipt();
+             TotalDiscountOrder = db.getTotalDiscountOrder();
+             TotalDiscountInvoice = db.getTotalDiscountInvoice();
+             TotalChargeAndTaxOrder = db.getTotalChargeAndTaxOrder();
+             TotalChargeAndTaxInvoice = db.getTotalChargeAndTaxInvoice();
+             TotalPureOrder = db.getPurePriceOrder();
+             TotalPureInvoice = db.getPurePriceInvoice();
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+
+            tvSumOfReceiptsProgressBar.setVisibility(View.GONE);
+            tvSumOfOrdersProgressBar.setVisibility(View.GONE);
+            tvSumOfInvoicesProgressBar.setVisibility(View.GONE);
+            tvSumOfCashProgressBar.setVisibility(View.GONE);
+            tvSumOfChequeProgressBar.setVisibility(View.GONE);
+            tvSumOfReceiptsAmountProgressBar.setVisibility(View.GONE);
+            tvSumOfDiscountInvoiceProgressBar.setVisibility(View.GONE);
+            tvSumOfDiscountOrderProgressBar.setVisibility(View.GONE);
+            tvSumOfPureOrderProgressBar.setVisibility(View.GONE);
+            tvSumOfPureInvoiceProgressBar.setVisibility(View.GONE);
+            tvSumOfChargeAndTaxOrderProgressBar.setVisibility(View.GONE);
+            tvSumOfChargeAndTaxInvoiceProgressBar.setVisibility(View.GONE);
+
+            tvSumOfReceipts.setVisibility(View.VISIBLE);
+            tvSumOfOrders.setVisibility(View.VISIBLE);
+            tvSumOfInvoices.setVisibility(View.VISIBLE);
+            tvSumOfCash.setVisibility(View.VISIBLE);
+            tvSumOfCheque.setVisibility(View.VISIBLE);
+            tvSumOfReceiptsAmount.setVisibility(View.VISIBLE);
+            tvSumOfDiscountInvoice.setVisibility(View.VISIBLE);
+            tvSumOfDiscountOrder.setVisibility(View.VISIBLE);
+            tvSumOfPureOrder.setVisibility(View.VISIBLE);
+            tvSumOfPureInvoice.setVisibility(View.VISIBLE);
+            tvSumOfChargeAndTaxOrder.setVisibility(View.VISIBLE);
+            tvSumOffChargeAndTaxInvoice.setVisibility(View.VISIBLE);
+            tvSumOfTransference.setVisibility(View.VISIBLE);
+
+
+            tvSumOfOrders.setText(ServiceTools.formatPrice(TotalOrder));
+            tvSumOfOrders.setSelected(true);
+            tvSumOfInvoices.setText(ServiceTools.formatPrice(TotalInvoice));
+            tvSumOfInvoices.setSelected(true);
+            tvSumOfTransference.setText(ServiceTools.formatPrice(TotalReceiveTransfer));
+            tvSumOfTransference.setSelected(true);
+            tvSumOfReceipts.setText(ServiceTools.formatPrice((TotalReceipt)));
+            tvSumOfReceipts.setSelected(true);
+            tvSumOfCash.setText(ServiceTools.formatPrice(TotalCash));
+            tvSumOfCash.setSelected(true);
+            tvSumOfCheque.setText(ServiceTools.formatPrice(TotalCheque));
+            tvSumOfCheque.setSelected(true);
+            tvSumOfReceiptsAmount.setText(ServiceTools.formatPrice(TotalCashReceipt));
+            tvSumOfReceiptsAmount.setSelected(true);
+            tvSumOfDiscountOrder.setText(ServiceTools.formatPrice(TotalDiscountOrder));
+            tvSumOfDiscountOrder.setSelected(true);
+            tvSumOfDiscountInvoice.setText(ServiceTools.formatPrice(TotalDiscountInvoice));
+            tvSumOfDiscountInvoice.setSelected(true);
+            tvSumOfPureOrder.setText(ServiceTools.formatPrice(TotalPureOrder));
+            tvSumOfPureOrder.setSelected(true);
+            tvSumOfPureInvoice.setText(ServiceTools.formatPrice(TotalPureInvoice));
+            tvSumOfPureInvoice.setSelected(true);
+            tvSumOfChargeAndTaxOrder.setText(ServiceTools.formatPrice(TotalChargeAndTaxOrder));
+            tvSumOfChargeAndTaxOrder.setSelected(true);
+            tvSumOffChargeAndTaxInvoice.setText(ServiceTools.formatPrice(TotalChargeAndTaxInvoice));
+            tvSumOffChargeAndTaxInvoice.setSelected(true);
+
+            super.onPostExecute(result);
+        }
+    }
+
+
+
+
+
+    public void update (){
+
+        if (db == null)
+            db = new DbAdapter(this);
+
+        db.open();
+
+
+    }
+
+   /* @Override
+    protected void onResume() {
+
+        if (db == null)
+            db = new DbAdapter(this);
+
+        db.open();
+
+
+        if (!ACCESS_FINE_LOCATION_Permission) {
+            ActivityCompat.requestPermissions(DashboardActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    ACCESS_FINE_LOCATION);
     private boolean checkServiceLocationIsRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -1483,6 +1504,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         isReceiverRegistered = false;
+        if(asyncReport != null)
+            asyncReport.cancel(true);
         super.onPause();
 
     }

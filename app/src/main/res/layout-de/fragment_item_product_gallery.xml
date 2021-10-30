@@ -23,6 +23,16 @@
             android:scaleType="fitCenter"
             android:src="@drawable/img_default_product" />
 
+        <ImageView
+            android:id="@+id/imgGift"
+            android:layout_marginTop="@dimen/NormalSize"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginBottom="2dp"
+            android:scaleType="fitCenter"
+            android:layout_gravity="right"
+            app:srcCompat="@drawable/ic_gifts" />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerImage"

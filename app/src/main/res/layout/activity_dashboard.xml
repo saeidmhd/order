@@ -31,7 +31,7 @@
                 android:layout_alignParentRight="true"
                 android:background="@drawable/forms_btn_circle_selector"
                 android:src="@drawable/ic_point_selector"
-                tools:ignore="SpeakableTextPresentCheck" />
+                tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
 
         </RelativeLayout>
@@ -41,33 +41,27 @@
             android:layout_height="wrap_content"
             android:background="@drawable/panel_bg"
             android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:gravity="center"
             android:padding="7dp">
+
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/btnTrackingService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
+                android:layout_margin="2dp"
                 tools:ignore="TouchTargetSizeCheck" />
+
 
             <com.mahak.order.widget.FontTextView
                 android:id="@+id/tvTrackingService"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:text="@string/str_tracking_description" />
-            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center">
-            </LinearLayout>
-
+                android:layout_weight="1"
+                android:padding="3dp"
+                android:gravity="right"
+                android:text="@string/str_tracking_description" />
         </LinearLayout>
+
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -114,19 +108,21 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="180dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:id="@+id/llReceipt"
                     android:layout_width="0dip"
-                    android:layout_height="wrap_content"
+                    android:layout_height="fill_parent"
                     android:layout_marginBottom="@dimen/SmallSize"
                     android:layout_marginLeft="@dimen/SmallSize"
+                    android:layout_marginRight="@dimen/SmallSize"
                     android:layout_marginTop="@dimen/SmallSize"
                     android:layout_weight="1"
                     android:background="@drawable/panel_bg"
+                    android:gravity="bottom"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/SmallSize"
                     android:paddingLeft="@dimen/SmallSize"
@@ -143,7 +139,14 @@
                         android:paddingLeft="@dimen/SmallSize"
                         android:paddingRight="@dimen/SmallSize">
 
+                        <ProgressBar
+                            android:visibility="gone"
+                            android:id="@+id/tvSumOfCashProgressBar"
+                            android:layout_width="12dp"
+                            android:layout_height="fill_parent"/>
+
                         <com.mahak.order.widget.FontTextView
+                            android:visibility="visible"
                             android:id="@+id/tvSumOfCash"
                             style="@style/forms_label_default"
                             android:layout_width="0dp"
@@ -174,6 +177,11 @@
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/SmallSize"
                         android:paddingRight="@dimen/SmallSize">
+                        <ProgressBar
+                            android:visibility="gone"
+                            android:id="@+id/tvSumOfChequeProgressBar"
+                            android:layout_width="12dp"
+                            android:layout_height="fill_parent"/>
 
                         <com.mahak.order.widget.FontTextView
                             android:id="@+id/tvSumOfCheque"
@@ -207,6 +215,12 @@
                         android:paddingLeft="@dimen/SmallSize"
                         android:paddingRight="@dimen/SmallSize">
 
+                        <ProgressBar
+                            android:visibility="gone"
+                            android:id="@+id/tvSumOfReceiptsAmountProgressBar"
+                            android:layout_width="12dp"
+                            android:layout_height="fill_parent"/>
+
                         <com.mahak.order.widget.FontTextView
                             android:id="@+id/tvSumOfReceiptsAmount"
                             style="@style/forms_label_default"
@@ -238,6 +252,11 @@
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/SmallSize"
                         android:paddingRight="@dimen/SmallSize">
+                        <ProgressBar
+                            android:visibility="gone"
+                            android:id="@+id/tvSumOfReceiptsProgressBar"
+                            android:layout_width="12dp"
+                            android:layout_height="fill_parent"/>
 
                         <com.mahak.order.widget.FontTextView
                             android:id="@+id/tvSumOfReceipts"
@@ -301,6 +320,12 @@
                         android:paddingLeft="@dimen/SmallSize"
                         android:paddingRight="@dimen/SmallSize">
 
+                        <ProgressBar
+                            android:visibility="gone"
+                            android:id="@+id/tvSumOfInvoicesProgressBar"
+                            android:layout_width="12dp"
+                            android:layout_height="fill_parent"/>
+
                         <com.mahak.order.widget.FontTextView
                             android:id="@+id/tvSumOfInvoices"
                             style="@style/forms_label_default"
@@ -332,6 +357,12 @@
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/SmallSize"
                         android:paddingRight="@dimen/SmallSize">
+
+                        <ProgressBar
+                            android:visibility="gone"
+                            android:id="@+id/tvSumOfDiscountInvoiceProgressBar"
+                            android:layout_width="12dp"
+                            android:layout_height="fill_parent"/>
 
                         <com.mahak.order.widget.FontTextView
                             android:id="@+id/tvSumOfDiscountInvoice"
@@ -365,6 +396,12 @@
                         android:paddingLeft="@dimen/SmallSize"
                         android:paddingRight="@dimen/SmallSize">
 
+                        <ProgressBar
+                            android:visibility="gone"
+                            android:id="@+id/tvSumOfChargeAndTaxInvoiceProgressBar"
+                            android:layout_width="12dp"
+                            android:layout_height="fill_parent"/>
+
                         <com.mahak.order.widget.FontTextView
                             android:id="@+id/tvSumOfChargeAndTaxInvoice"
                             style="@style/forms_label_default"
@@ -396,6 +433,12 @@
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/SmallSize"
                         android:paddingRight="@dimen/SmallSize">
+
+                        <ProgressBar
+                            android:visibility="gone"
+                            android:id="@+id/tvSumOfPureInvoiceProgressBar"
+                            android:layout_width="12dp"
+                            android:layout_height="fill_parent"/>
 
                         <com.mahak.order.widget.FontTextView
                             android:id="@+id/tvSumOfPureInvoice"
@@ -455,6 +498,12 @@
                         android:paddingLeft="@dimen/SmallSize"
                         android:paddingRight="@dimen/SmallSize">
 
+                        <ProgressBar
+                            android:visibility="gone"
+                            android:id="@+id/tvSumOfOrdersProgressBar"
+                            android:layout_width="12dp"
+                            android:layout_height="fill_parent"/>
+
                         <com.mahak.order.widget.FontTextView
                             android:id="@+id/tvSumOfOrders"
                             style="@style/forms_label_default"
@@ -486,6 +535,11 @@
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/SmallSize"
                         android:paddingRight="@dimen/SmallSize">
+                        <ProgressBar
+                            android:visibility="gone"
+                            android:id="@+id/tvSumOfDiscountOrderProgressBar"
+                            android:layout_width="12dp"
+                            android:layout_height="fill_parent"/>
 
                         <com.mahak.order.widget.FontTextView
                             android:id="@+id/tvSumOfDiscountOrder"
@@ -518,6 +572,11 @@
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/SmallSize"
                         android:paddingRight="@dimen/SmallSize">
+                        <ProgressBar
+                            android:visibility="gone"
+                            android:id="@+id/tvSumOfChargeAndTaxOrderProgressBar"
+                            android:layout_width="12dp"
+                            android:layout_height="fill_parent"/>
 
                         <com.mahak.order.widget.FontTextView
                             android:id="@+id/tvSumOfChargeAndTaxOrder"
@@ -550,6 +609,11 @@
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/SmallSize"
                         android:paddingRight="@dimen/SmallSize">
+                        <ProgressBar
+                            android:visibility="gone"
+                            android:id="@+id/tvSumOfPureOrderProgressBar"
+                            android:layout_width="12dp"
+                            android:layout_height="fill_parent"/>
 
                         <com.mahak.order.widget.FontTextView
                             android:id="@+id/tvSumOfPureOrder"
