@@ -79,7 +79,7 @@ public class LocationService extends Service {
     static final int TYPE_END_TRACKING = 1;
     private static final int ID_NOTIFICATION_START_END = 1078;
 
-    private static long MIN_DISPALCEMENT_CHANGE_FOR_UPDATES = 1; // 1 meters
+    private static long MIN_DISPALCEMENT_CHANGE_FOR_UPDATES = 15; // 1 meters
     // The minimum time between updates in milliseconds
     private static long MIN_TIME_INTERVAL_UPDATES = 120000; // 2 min
     private static int radius = 1; // 2 min
@@ -757,6 +757,8 @@ public class LocationService extends Service {
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setFastestInterval(5000)
                 .setInterval(10000);
+        // TODO: 10/30/21 change this according to trackiing setting
+        locationRequest.setSmallestDisplacement(MIN_DISPALCEMENT_CHANGE_FOR_UPDATES);
         /*locationRequest.setInterval(MIN_TIME_INTERVAL_UPDATES);
         locationRequest.setSmallestDisplacement(MIN_DISPALCEMENT_CHANGE_FOR_UPDATES);*/
     }

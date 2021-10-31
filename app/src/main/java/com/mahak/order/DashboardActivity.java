@@ -213,7 +213,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     private boolean ACCESS_COARSE_LOCATION_Permission;
     private boolean ACCESS_FINE_LOCATION_Permission;
     private boolean hasWritePermission;
-    private AsynCustomer asyncustomer;
     private AsyncReport asyncReport;
     SupportMapFragment mapFragment;
     private static final int REQUEST_Location_ON = 1200;
@@ -497,14 +496,139 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         };
     }//end of onCreate
 
+
+    public static void setTackingServiceText(boolean isChecked) {
+        if (isChecked) {
+            tvTrackingService.setText(R.string.tracking_system_is_active);
+        } else {
+            tvTrackingService.setText(R.string.tracking_system_is_disabled);
+        }
+        if (isChecked && BaseActivity.getPrefAdminControl(mContext)) {
+            tvTrackingService.setText(R.string.tracking_system_is_active_admin);
+        } else if (!isChecked && BaseActivity.getPrefAdminControl(mContext)) {
+            tvTrackingService.setText(R.string.tracking_system_is_disabled_admin);
+        }
+    }
+
+    public static boolean CanRegisterInvoiceOutOfZone() {
+        boolean canRegister = true;
+        String config = ServiceTools.getKeyFromSharedPreferences(mContext, ProjectInfo.pre_gps_config);
+        if (!ServiceTools.isNull(config)) {
+            try {
+                JSONObject obj = new JSONObject(config);
+                canRegister = obj.getBoolean(ProjectInfo._json_key_isRestricted);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(!canRegister)
+            if(mapPolygon != null){
+
+                return mapPolygon.checkPositionInZone(lastPosition);
+            }
+
+        return canRegister;
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     protected void onResume() {
 
         asyncReport = new AsyncReport();
         asyncReport.execute();
 
+        setTrackingConfig();
+
         //update();
         super.onResume();
+    }
+
+    private void registerReceiverToCheckGpsOnOff() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.location.PROVIDERS_CHANGED");
+        BroadcastReceiver receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().matches(LocationManager.PROVIDERS_CHANGED_ACTION)) {
+                    LocationManager service = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+                    if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
+                        boolean isGPSPROVIDEREnabled = service != null && service.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                        if (!isGPSPROVIDEREnabled) {
+                            stopLocationUpdate();
+                        }else {
+                            startLocationUpdate();
+                        }
+                    }
+                }
+            }
+        };
+        this.getApplicationContext().registerReceiver(receiver, filter);
+    }
+
+    private void startLocationUpdate() {
+        if (locationService == null) locationService = new LocationService(mContext, DashboardActivity.this);
+        if (!checkPermissions()) {
+            requestPermissions();
+        }else {
+            if(!btnTrackingService.isChecked()){
+                btnTrackingService.setChecked(true);
+            }
+            setTackingServiceText(true);
+            locationService.startTracking();
+            locationService.setTrackingPrefOff("1");
+        }
+    }
+
+    private void stopLocationUpdate() {
+        if(locationService.isRunService(mContext)){
+            locationService.stopTracking();
+            locationService.stopNotificationServiceTracking();
+        }
+        if(btnTrackingService.isChecked()){
+            btnTrackingService.setChecked(false);
+        }
+        setTackingServiceText(false);
+        locationService.setTrackingPrefOff("0");
+    }
+
+    private boolean checkPermissions() {
+        return  PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+    }
+
+    private void requestPermissions() {
+        boolean shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        if (shouldProvideRationale) {
+            Snackbar.make(
+                    findViewById(R.id.drawer_layout),
+                    R.string.permission_rationale,
+                    Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.ok, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // Request permission
+                            ActivityCompat.requestPermissions(DashboardActivity.this,
+                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                    REQUEST_PERMISSIONS_REQUEST_CODE);
+                        }
+                    })
+                    .show();
+        } else {
+            Log.i(TAG, "Requesting permission");
+            ActivityCompat.requestPermissions(DashboardActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_PERMISSIONS_REQUEST_CODE);
+        }
     }
 
     @Override
@@ -1344,32 +1468,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     }
 
 
-
-
-
-    public void update (){
-
-        if (db == null)
-            db = new DbAdapter(this);
-
-        db.open();
-
-
-    }
-
-   /* @Override
-    protected void onResume() {
-
-        if (db == null)
-            db = new DbAdapter(this);
-
-        db.open();
-
-
-        if (!ACCESS_FINE_LOCATION_Permission) {
-            ActivityCompat.requestPermissions(DashboardActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    ACCESS_FINE_LOCATION);
     private boolean checkServiceLocationIsRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -1504,8 +1602,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         isReceiverRegistered = false;
-        if(asyncReport != null)
-            asyncReport.cancel(true);
         super.onPause();
 
     }

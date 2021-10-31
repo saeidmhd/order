@@ -3,19 +3,25 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/drawable-anydpi/ic_load_point.xml" value="0.5407239819004525" />
-        <entry key="app/src/main/res/drawable-anydpi/ic_load_point2.xml" value="0.5871040723981901" />
-        <entry key="app/src/main/res/drawable-anydpi/ic_track_setting.xml" value="0.5407239819004525" />
-        <entry key="app/src/main/res/drawable-anydpi/ic_tracking_setting.xml" value="0.5407239819004525" />
-        <entry key="app/src/main/res/drawable/btn_style_green.xml" value="0.36533957845433257" />
-        <entry key="app/src/main/res/layout-de/activity_dashboard.xml" value="0.3864168618266979" />
-        <entry key="app/src/main/res/layout-sw600dp/activity_dashboard.xml" value="0.25" />
-        <entry key="app/src/main/res/layout-sw600dp/activity_transactions.xml" value="0.12890625" />
-        <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.49297971918876754" />
-        <entry key="app/src/main/res/layout/activity_map_view.xml" value="0.310515873015873" />
-        <entry key="app/src/main/res/layout/dashboard_left_navigation_drawer.xml" value="0.42063492063492064" />
-        <entry key="app/src/main/res/layout/grv_product_picker_item.xml" value="0.2845873786407767" />
-        <entry key="app/src/main/res/layout/lst_product_picker_item.xml" value="0.2845873786407767" />
+        <entry key="app/src/main/res/layout-de/activity_dashboard.xml" value="0.1" />
+        <entry key="app/src/main/res/layout-de/activity_setting.xml" value="0.33" />
+        <entry key="app/src/main/res/layout-de/fragment_item_product_gallery.xml" value="0.2296875" />
+        <entry key="app/src/main/res/layout-de/grv_product_picker_item.xml" value="0.2296875" />
+        <entry key="app/src/main/res/layout-de/lst_product_picker_item.xml" value="0.2296875" />
+        <entry key="app/src/main/res/layout-de/receipt_print_arabic.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_data_sync.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_setting.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/fragment_item_product_gallery.xml" value="0.2296875" />
+        <entry key="app/src/main/res/layout/grv_product_picker_item.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/list_cheque_receipt.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/lst_product_picker_item.xml" value="0.2296875" />
+        <entry key="app/src/main/res/layout/receipt_print.xml" value="0.43356643356643354" />
+        <entry key="app/src/main/res/layout/receipt_print50mm.xml" value="0.27063106796116504" />
+        <entry key="app/src/main/res/layout/receipt_print80mm.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/receipt_print_arabic.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/receipt_print_arabic50mm.xml" value="0.67" />
+        <entry key="app/src/main/res/layout/receipt_print_arabic80mm.xml" value="0.5" />
       </map>
     </option>
   </component>

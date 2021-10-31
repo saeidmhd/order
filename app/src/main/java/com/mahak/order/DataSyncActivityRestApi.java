@@ -1487,7 +1487,8 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
             SetDate();
             ShowDate();
-            new TrackingConfig(mContext,DataSyncActivityRestApi.this).getSignalTokenAndSetting();
+            // TODO: 10/30/21 uncomment on tracking version
+            //new TrackingConfig(mContext,DataSyncActivityRestApi.this).getSignalTokenAndSetting();
             new ReadOfflinePicturesProducts(mContext).readAllImages();
 
         }
