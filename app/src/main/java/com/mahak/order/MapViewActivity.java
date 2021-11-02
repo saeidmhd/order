@@ -229,7 +229,7 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
         protected void onPreExecute() {
             super.onPreExecute();
             pd = new FontProgressDialog(mContext);
-            pd.setMessage(getString(R.string.storing_info));
+            pd.setMessage(getString(R.string.fetch_gps_info_from_db));
             pd.setCancelable(false);
             pd.show();
         }

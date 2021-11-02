@@ -40,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/panel_bg"
+            android:layout_gravity="center"
             android:orientation="horizontal"
             android:padding="7dp">
 
@@ -48,6 +49,8 @@
                 android:id="@+id/btnTrackingService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
                 android:layout_margin="2dp"
                 tools:ignore="TouchTargetSizeCheck" />
 
@@ -58,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="3dp"
-                android:gravity="right"
+                android:gravity="center"
                 android:text="@string/str_tracking_description" />
         </LinearLayout>
 

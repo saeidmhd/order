@@ -47,7 +47,6 @@ import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.CustomerGroup;
-import com.mahak.order.common.Person_Extra_Data;
 import com.mahak.order.common.Printer;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
@@ -1166,9 +1165,9 @@ public class PeopleListActivity extends BaseActivity {
             getAllDataBody = new GetAllDataBody();
             getAllDataBody.setUserToken(mUserToken);
 
-            CustomerMaxRowVersion = db.getMaxRowVersion(DbSchema.Customerschema.TABLE_NAME);
+            CustomerMaxRowVersion = db.getMaxRowVersion(DbSchema.PersonSchema.TABLE_NAME);
             ExtraDataMaxRowVersion = db.getMaxRowVersion(DbSchema.ExtraDataSchema.TABLE_NAME);
-            CustomersGroupRowVersion = db.getMaxRowVersion(DbSchema.CustomersGroupschema.TABLE_NAME);
+            CustomersGroupRowVersion = db.getMaxRowVersion(DbSchema.PersonGroupSchema.TABLE_NAME);
 
             getAllDataBody.setFromPersonVersion(CustomerMaxRowVersion);
             getAllDataBody.setFromPersonGroupVersion(CustomersGroupRowVersion);

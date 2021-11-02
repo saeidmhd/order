@@ -839,7 +839,7 @@ public class ManageReceiptActivity extends BaseActivity {
                 }
                 result = db.AddReceipt(receipt);
                 if (result > 0) {
-                    long ReceiptId = db.getMax(DbSchema.Receiptschema.TABLE_NAME, DbSchema.Receiptschema.COLUMN_ID);
+                    long ReceiptId = db.getMax(DbSchema.ReceiptSchema.TABLE_NAME, DbSchema.ReceiptSchema.COLUMN_ID);
                     for (Cheque item : arrayCheque) {
                         item.setReceiptId(ReceiptId);
                         item.setChequeClientId(ServiceTools.toLong(ServiceTools.getGenerationCode()) + arrayCheque.indexOf(item) + 1);

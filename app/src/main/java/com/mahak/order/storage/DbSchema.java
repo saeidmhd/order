@@ -5,7 +5,7 @@ import android.provider.BaseColumns;
 public class DbSchema {
 
     public static final String DATABASE_NAME = "DB_MahakOrder";
-    public static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 8;
 
     public static class UserSchema implements BaseColumns {
 
@@ -148,7 +148,7 @@ public class DbSchema {
 
     }
 
-    public static class Visitorschema implements BaseColumns {
+    public static class VisitorSchema implements BaseColumns {
 
         public static final String TABLE_NAME = "Visitors";
         public static final String COLUMN_ID = "ID";
@@ -222,8 +222,6 @@ public class DbSchema {
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     }
-
-
 
     public static class VisitorProductSchema implements BaseColumns {
 
@@ -386,8 +384,6 @@ public class DbSchema {
 
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
-
-
 
     public static class PromotionDetailSchema implements BaseColumns {
 
@@ -578,9 +574,7 @@ public class DbSchema {
 
     }
 
-
-
-    public static class Productschema implements BaseColumns {
+    public static class ProductSchema implements BaseColumns {
 
         public static final String TABLE_NAME = "Products";
         public static final String COLUMN_ID = "Id";
@@ -790,9 +784,7 @@ public class DbSchema {
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
-
-
-    public static class ReceivedTransfersschema implements BaseColumns {
+    public static class ReceivedTransfersSchema implements BaseColumns {
 
         public static final String TABLE_NAME = "ReceivedTransfers";
 
@@ -848,7 +840,7 @@ public class DbSchema {
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
-    public static class ReceivedTransferProductsschema implements BaseColumns {
+    public static class ReceivedTransferProductsSchema implements BaseColumns {
 
         public static final String TABLE_NAME = "ReceivedTransferProducts";
         public static final String COLUMN_Id = "Id";
@@ -950,8 +942,7 @@ public class DbSchema {
 
     }
 
-
-    public static class Orderschema implements BaseColumns {
+    public static class OrderSchema implements BaseColumns {
         public static final String TABLE_NAME = "Orders";
         public static final String COLUMN_ID = "Id";
         public static final String COLUMN_PersonId = "PersonId";
@@ -1183,7 +1174,7 @@ public class DbSchema {
 
     }
 
-    public static class Receiptschema implements BaseColumns {
+    public static class ReceiptSchema implements BaseColumns {
         public static final String TABLE_NAME = "Receipts";
         public static final String COLUMN_ID = "Id";
         public static final String PERSON_ID = "PersonId";
@@ -1284,7 +1275,7 @@ public class DbSchema {
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
-    public static class Chequeschema implements BaseColumns {
+    public static class ChequeSchema implements BaseColumns {
         public static final String TABLE_NAME = "Cheques";
         public static final String COLUMN_ID = "Id";
         public static final String COLUMN_RECEIPTID = "ReceiptId";
@@ -1335,7 +1326,7 @@ public class DbSchema {
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
-    public static class CheckListschema implements BaseColumns {
+    public static class CheckListSchema implements BaseColumns {
         public static final String TABLE_NAME = "CheckList";
         public static final String COLUMN_ID = "Id";
         public static final String COLUMN_USER_ID = "UserId";
@@ -1383,7 +1374,7 @@ public class DbSchema {
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
-    public static class Transactionslogschema implements BaseColumns {
+    public static class TransactionsLogSchema implements BaseColumns {
         public static final String TABLE_NAME = "TransactionsLog";
         public static final String COLUMN_ID = "Id";
         public static final String COLUMN_PersonId = "PersonId";
@@ -1435,7 +1426,6 @@ public class DbSchema {
                 "PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
-
 
     public static class BanksSchema implements BaseColumns {
         public static final String TABLE_NAME = "Banks";
@@ -1643,8 +1633,6 @@ public class DbSchema {
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
-
-
     public static class CityZoneSchema implements BaseColumns {
         public static final String TABLE_NAME = "CityZone";
         public static final String COLUMN_ID = "Id";
@@ -1695,7 +1683,7 @@ public class DbSchema {
                 " RowVersion numeric null)";
     }
 
-    public static final class NotificationSchema implements BaseColumns {
+    public static class NotificationSchema implements BaseColumns {
         public static final String TABLE_NAME = "Notifications";
         public static final String COLUMN_TITLE = "Title";
         public static final String COLUMN_MESSAGE = "Message";
@@ -1719,9 +1707,7 @@ public class DbSchema {
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
-
-
-    public static final class PicturesProductSchema implements BaseColumns {
+    public static class PicturesProductSchema implements BaseColumns {
         public static final String TABLE_NAME = "PicturesProduct";
 
         public static final String COLUMN_MAHAK_ID = "mahakId";
@@ -1783,7 +1769,7 @@ public class DbSchema {
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
-    public static final class VisitorLocationSchema implements BaseColumns {
+    public static class VisitorLocationSchema implements BaseColumns {
 
         public static final String TABLE_NAME = "VisitorLocation";
         public static final String COLUMN_uniqueID = "uniqueID";
@@ -1846,8 +1832,6 @@ public class DbSchema {
                 "PRIMARY KEY(`Id`) )";
     }
 
-
-
     public static class ZoneSchema implements BaseColumns {
 
         public static final String TABLE_NAME = "Zone";
@@ -1869,6 +1853,7 @@ public class DbSchema {
                 " \"lastModified\" TEXT," +
                 " PRIMARY KEY(zoneId , createdBy) )";
     }
+
     public static class ZoneLocationSchema implements BaseColumns {
 
         public static final String TABLE_NAME = "ZoneLocation";

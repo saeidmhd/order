@@ -242,16 +242,6 @@ public class LocationService extends Service {
     public LocationService(Context context , Activity activity) {
         this.mContext = context;
         this.activity = activity;
-        String config = ServiceTools.getKeyFromSharedPreferences(mContext, ProjectInfo.pre_gps_config);
-        if (!ServiceTools.isNull(config)) {
-            try {
-                JSONObject obj = new JSONObject(config);
-                MIN_DISPALCEMENT_CHANGE_FOR_UPDATES = obj.getLong(ProjectInfo._json_key_mingps_distance_change) ;
-                MIN_TIME_INTERVAL_UPDATES = obj.getLong(ProjectInfo._json_key_mingps_time_change) * 60 * 1000;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public interface EventLocation {
@@ -400,6 +390,18 @@ public class LocationService extends Service {
     public void setTrackingPrefOff(String s) {
         long masterUserId = BaseActivity.getPrefUserMasterId(mContext);
         ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking + masterUserId, s);
+    }
+    public void setTrackingConfig(Context context) {
+        String config = ServiceTools.getKeyFromSharedPreferences(context, ProjectInfo.pre_gps_config);
+        if (!ServiceTools.isNull(config)) {
+            try {
+                JSONObject obj = new JSONObject(config);
+                MIN_DISPALCEMENT_CHANGE_FOR_UPDATES = obj.getLong(ProjectInfo._json_key_mingps_distance_change) ;
+                MIN_TIME_INTERVAL_UPDATES = obj.getLong(ProjectInfo._json_key_mingps_time_change) * 60 * 1000;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void sendLocation(Location correctLocation) {
@@ -593,7 +595,8 @@ public class LocationService extends Service {
     private void updateUI() {
         if (mCurrentLocation != null) {
             executeEventLocations(mCurrentLocation,false);
-            performSignalOperation();
+            // TODO: 11/2/21 uncomment on tracking version 
+            //performSignalOperation();
             Location correctLocation = getCorrectLocation(mCurrentLocation);
             if (correctLocation != null) {
                 sendLocation(correctLocation);
@@ -757,8 +760,9 @@ public class LocationService extends Service {
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setFastestInterval(5000)
                 .setInterval(10000);
-        // TODO: 10/30/21 change this according to trackiing setting
-        locationRequest.setSmallestDisplacement(MIN_DISPALCEMENT_CHANGE_FOR_UPDATES);
+        // TODO: 10/30/21 uncomment on tracking version
+        locationRequest.setSmallestDisplacement(15);
+        //locationRequest.setSmallestDisplacement(MIN_DISPALCEMENT_CHANGE_FOR_UPDATES);
         /*locationRequest.setInterval(MIN_TIME_INTERVAL_UPDATES);
         locationRequest.setSmallestDisplacement(MIN_DISPALCEMENT_CHANGE_FOR_UPDATES);*/
     }

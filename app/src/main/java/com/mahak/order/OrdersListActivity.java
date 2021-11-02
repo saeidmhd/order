@@ -1519,7 +1519,7 @@ public class OrdersListActivity extends BaseActivity {
         getAllDataBody = new GetAllDataBody();
         getAllDataBody.setUserToken(user.getUserToken());
         apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
-        getAllDataBody.setFromTransferStoreVersion(db.getMaxRowVersion(DbSchema.ReceivedTransfersschema.TABLE_NAME));
+        getAllDataBody.setFromTransferStoreVersion(db.getMaxRowVersion(DbSchema.ReceivedTransfersSchema.TABLE_NAME));
         getDataResultCall = apiService.GetAllData(getAllDataBody);
         getDataResultCall.enqueue(new Callback<GetDataResult>() {
             @Override
@@ -1712,8 +1712,8 @@ public class OrdersListActivity extends BaseActivity {
         getAllDataBody.setUserToken(user.getUserToken());
         apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
 
-        getAllDataBody.setFromTransferStoreVersion(db.getMaxRowVersion(DbSchema.ReceivedTransfersschema.TABLE_NAME));
-        getAllDataBody.setFromTransferStoreDetailVersion(db.getMaxRowVersion(DbSchema.ReceivedTransferProductsschema.TABLE_NAME));
+        getAllDataBody.setFromTransferStoreVersion(db.getMaxRowVersion(DbSchema.ReceivedTransfersSchema.TABLE_NAME));
+        getAllDataBody.setFromTransferStoreDetailVersion(db.getMaxRowVersion(DbSchema.ReceivedTransferProductsSchema.TABLE_NAME));
 
         getDataResultCall = apiService.GetAllData(getAllDataBody);
         getDataResultCall.enqueue(new Callback<GetDataResult>() {

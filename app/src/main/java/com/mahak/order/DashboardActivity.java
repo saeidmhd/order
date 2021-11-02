@@ -583,6 +583,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 btnTrackingService.setChecked(true);
             }
             setTackingServiceText(true);
+            locationService.setTrackingConfig(mContext);
             locationService.startTracking();
             locationService.setTrackingPrefOff("1");
         }
@@ -937,7 +938,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         bindService(new Intent(this, LocationService.class), mServiceConnection,
                 Context.BIND_AUTO_CREATE);
         if(Utils.requestingLocationUpdates(this))
-            startLocationUpdate();
+            setButtonsState(true);
 
     }
 

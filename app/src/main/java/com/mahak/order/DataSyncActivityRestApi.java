@@ -67,7 +67,6 @@ import com.mahak.order.service.DataService;
 import com.mahak.order.service.ReadOfflinePicturesProducts;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.DbSchema;
-import com.mahak.order.tracking.TrackingConfig;
 import com.mahak.order.widget.FontAlertDialog;
 import com.mahak.order.widget.FontProgressDialog;
 
@@ -886,17 +885,17 @@ public class DataSyncActivityRestApi extends BaseActivity {
             getAllDataBody.setUserToken(mUserToken);
 
             //CustomerMaxRowVersion = db.getMaxRowVersion(DbSchema.Customerschema.TABLE_NAME);
-            CustomerMaxRowVersion = db.getMaxRowVersion(DbSchema.Customerschema.TABLE_NAME);
-            CustomersGroupMaxRowVersion = db.getMaxRowVersion(DbSchema.CustomersGroupschema.TABLE_NAME);
+            CustomerMaxRowVersion = db.getMaxRowVersion(DbSchema.PersonSchema.TABLE_NAME);
+            CustomersGroupMaxRowVersion = db.getMaxRowVersion(DbSchema.PersonGroupSchema.TABLE_NAME);
             VisitorPersonMaxRowVersion = db.getMaxRowVersion(DbSchema.VisitorPeopleSchema.TABLE_NAME);
 
             BankMaxRowVersion = db.getMaxRowVersion(DbSchema.BanksSchema.TABLE_NAME);
-            VisitorMaxRowVersion = db.getMaxRowVersion(DbSchema.Visitorschema.TABLE_NAME);
+            VisitorMaxRowVersion = db.getMaxRowVersion(DbSchema.VisitorSchema.TABLE_NAME);
 
-            CheckListMaxRowVersion = db.getMaxRowVersion(DbSchema.CheckListschema.TABLE_NAME);
-            TransactionslogMaxRowVersion = db.getMaxRowVersion(DbSchema.Transactionslogschema.TABLE_NAME);
+            CheckListMaxRowVersion = db.getMaxRowVersion(DbSchema.CheckListSchema.TABLE_NAME);
+            TransactionslogMaxRowVersion = db.getMaxRowVersion(DbSchema.TransactionsLogSchema.TABLE_NAME);
 
-            OrderRowMaxVersion = db.getMaxRowVersion(DbSchema.Orderschema.TABLE_NAME);
+            OrderRowMaxVersion = db.getMaxRowVersion(DbSchema.OrderSchema.TABLE_NAME);
             OrderDetailMaxRowVersion = db.getMaxRowVersion(DbSchema.OrderDetailSchema.TABLE_NAME);
 
             ReasonMaxRowVersion = db.getMaxRowVersion(DbSchema.ReasonsSchema.TABLE_NAME);
@@ -910,7 +909,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             VisitorProductMaxRowVersion = db.getMaxRowVersion(DbSchema.VisitorProductSchema.TABLE_NAME);
             PriceLevelMaxRowVersion = db.getMaxRowVersion(DbSchema.PriceLevelNameSchema.TABLE_NAME);
             CategoryMaxRowVersion = db.getMaxRowVersion(DbSchema.ProductGroupSchema.TABLE_NAME);
-            ProductMaxRowVersion = db.getMaxRowVersion(DbSchema.Productschema.TABLE_NAME);
+            ProductMaxRowVersion = db.getMaxRowVersion(DbSchema.ProductSchema.TABLE_NAME);
             ProductDetailMaxRowVersion = db.getMaxRowVersion(DbSchema.ProductDetailSchema.TABLE_NAME);
 
             SettingMaxRowVersion = db.getMaxRowVersion(DbSchema.SettingSchema.TABLE_NAME);

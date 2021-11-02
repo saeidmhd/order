@@ -16,7 +16,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -584,7 +583,7 @@ public class InvoiceDetailActivity extends BaseActivity {
                     if (Mode == MODE_NEW) {
                         res = db.AddOrder(order);
                         if (res > 0) {
-                            OrderId = db.getMax(DbSchema.Orderschema.TABLE_NAME, DbSchema.Orderschema.COLUMN_ID);
+                            OrderId = db.getMax(DbSchema.OrderSchema.TABLE_NAME, DbSchema.OrderSchema.COLUMN_ID);
                             deleteOrderDetail(order);
                             for (OrderDetail item : orderDetails) {
                                 OrderDetailClientId++;
