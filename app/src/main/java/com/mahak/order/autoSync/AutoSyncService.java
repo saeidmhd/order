@@ -114,6 +114,7 @@ public class AutoSyncService extends IntentService {
     private long ProductMaxRowVersion;
     private long ProductDetailMaxRowVersion;
     private long SettingMaxRowVersion;
+    private long PhotoGalleryMaxRowVersion;
 
 
     public AutoSyncService() {
@@ -164,7 +165,6 @@ public class AutoSyncService extends IntentService {
         return orderDetailSend;
 
     }
-
 
     public void SendReceive() {
 
@@ -391,8 +391,8 @@ public class AutoSyncService extends IntentService {
             getAllDataBody = new GetAllDataBody();
             getAllDataBody.setUserToken(mUserToken);
 
-            CustomerMaxRowVersion = db.getMaxRowVersion(DbSchema.PersonSchema.TABLE_NAME);
-            CustomersGroupMaxRowVersion = db.getMaxRowVersion(DbSchema.PersonGroupSchema.TABLE_NAME);
+            CustomerMaxRowVersion = db.getMaxRowVersion(DbSchema.CustomerSchema.TABLE_NAME);
+            CustomersGroupMaxRowVersion = db.getMaxRowVersion(DbSchema.CustomersGroupSchema.TABLE_NAME);
             BankMaxRowVersion = db.getMaxRowVersion(DbSchema.BanksSchema.TABLE_NAME);
             VisitorMaxRowVersion = db.getMaxRowVersion(DbSchema.VisitorSchema.TABLE_NAME);
 
@@ -408,6 +408,7 @@ public class AutoSyncService extends IntentService {
             PromotionEntityMaxRowVersion = db.getMaxRowVersion(DbSchema.PromotionEntitySchema.TABLE_NAME);
 
             PicturesMaxRowVersion = db.getMaxRowVersion(DbSchema.PicturesProductSchema.TABLE_NAME);
+            PhotoGalleryMaxRowVersion = db.getMaxRowVersion(DbSchema.PhotoGallerySchema.TABLE_NAME);
             ExtraDataMaxRowVersion = db.getMaxRowVersion(DbSchema.ExtraDataSchema.TABLE_NAME);
             PropertyDescriptionMaxRowVersion = db.getMaxRowVersion(DbSchema.PropertyDescriptionSchema.TABLE_NAME);
             VisitorProductMaxRowVersion = db.getMaxRowVersion(DbSchema.VisitorProductSchema.TABLE_NAME);
@@ -441,6 +442,7 @@ public class AutoSyncService extends IntentService {
             getAllDataBody.setFromPromotionEntityVersion(PromotionEntityMaxRowVersion);
 
             getAllDataBody.setFromPictureVersion(PicturesMaxRowVersion);
+            getAllDataBody.setFromPhotoGalleryVersion(PicturesMaxRowVersion);
             getAllDataBody.setFromExtraDataVersion(ExtraDataMaxRowVersion);
             getAllDataBody.setFromPropertyDescriptionVersion(PropertyDescriptionMaxRowVersion);
             getAllDataBody.setFromVisitorProductVersion(VisitorProductMaxRowVersion);

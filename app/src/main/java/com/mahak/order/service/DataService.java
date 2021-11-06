@@ -13,6 +13,7 @@ import com.mahak.order.common.CustomerGroup;
 import com.mahak.order.common.ExtraData;
 import com.mahak.order.common.Order;
 import com.mahak.order.common.OrderDetail;
+import com.mahak.order.common.PhotoGallery;
 import com.mahak.order.common.PicturesProduct;
 import com.mahak.order.common.Product;
 import com.mahak.order.common.ProductDetail;
@@ -256,6 +257,17 @@ public class DataService {
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
+    }
+
+    public static double InsertPhotoGallery(DbAdapter db, List<PhotoGallery> data ,long rowVersion) {
+
+        long startTime = System.nanoTime();
+        db.open();
+        db.UpdateOrAddPhotoGalary(data,rowVersion);
+        db.close();
+        long endTime = System.nanoTime();
+        return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
+
     }
 
     public static double InsertPropertyDescription(DbAdapter db, List<PropertyDescription> data) {

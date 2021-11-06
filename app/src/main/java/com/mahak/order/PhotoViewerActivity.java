@@ -65,7 +65,7 @@ public class PhotoViewerActivity extends BaseActivity {
                 userId = bundle.getLong(ProjectInfo._json_key_user_id);
             }
             if (bundle.containsKey(ProjectInfo._json_key_product_id)) {
-                productId = bundle.getLong(ProjectInfo._json_key_product_id);
+                productId = bundle.getInt(ProjectInfo._json_key_product_id);
             }
             if (bundle.containsKey(ProjectInfo._json_key_index)) {
                 index = bundle.getInt(ProjectInfo._json_key_index);
@@ -123,12 +123,12 @@ public class PhotoViewerActivity extends BaseActivity {
 
         @Override
         public View instantiateItem(ViewGroup container, int position) {
-            PicturesProduct product = picturesProducts.get(position);
+            PicturesProduct picturesProduct = picturesProducts.get(position);
             PhotoView photoView = new PhotoView(container.getContext());
 
-//            Glide.with(getBaseContext()).load(product.getUrl()).placeholder(R.drawable.image_empty_box).crossFade().listener(ServiceTools.getGlideListener(photoView))
+//            Glide.with(getBaseContext()).load(picturesProduct.getUrl()).placeholder(R.drawable.image_empty_box).crossFade().listener(ServiceTools.getGlideListener(photoView))
 //                    .into(photoView);
-            ProductItemInitialize.loadImage(mContext, product.getUrl(), photoView);
+            ProductItemInitialize.loadImage(mContext, picturesProduct.getUrl(), photoView);
 
 
             // Now just add PhotoView to ViewPager and return it

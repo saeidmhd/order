@@ -101,6 +101,10 @@ public class GetAllDataBody {
     @Expose
     private long fromVisitorPersonVersion;
 
+    @SerializedName("FromPhotoGalleryVersion")
+    @Expose
+    private long fromPhotoGalleryVersion;
+
 
     public String getUserToken() {
         return userToken;
@@ -324,5 +328,13 @@ public class GetAllDataBody {
 
     public void setFromVisitorPersonVersion(long fromVisitorPersonVersion) {
         this.fromVisitorPersonVersion = fromVisitorPersonVersion;
+    }
+
+    public long getFromPhotoGalleryVersion() {
+        return fromPhotoGalleryVersion;
+    }
+
+    public void setFromPhotoGalleryVersion(long fromPhotoGalleryVersion) {
+        this.fromPhotoGalleryVersion = fromPhotoGalleryVersion;
     }
 }

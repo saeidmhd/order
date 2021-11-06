@@ -2,6 +2,9 @@ package com.mahak.order.storage;
 
 import android.provider.BaseColumns;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class DbSchema {
 
     public static final String DATABASE_NAME = "DB_MahakOrder";
@@ -48,7 +51,7 @@ public class DbSchema {
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
-    public static class Customerschema implements BaseColumns {
+    public static class CustomerSchema implements BaseColumns {
 
         public static final String TABLE_NAME = "Customers";
         public static final String COLUMN_ID = "Id";
@@ -144,7 +147,7 @@ public class DbSchema {
                 "`Password` TEXT, " +
                 "`CityCode` TEXT, " +
                 "`Deleted` INTEGER, " +
-                "PRIMARY KEY(`Id`) )";
+                " PRIMARY KEY(`Id`) )";
 
     }
 
@@ -526,7 +529,7 @@ public class DbSchema {
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
-    public static class CustomersGroupschema implements BaseColumns {
+    public static class CustomersGroupSchema implements BaseColumns {
 
         public static final String TABLE_NAME = "CustomersGroups";
         public static final String COLUMN_ID = "Id";
@@ -1878,6 +1881,43 @@ public class DbSchema {
                 " \"lastModifiedBy\" TEXT," +
                 " \"lastModified\" TEXT," +
                 " PRIMARY KEY(id , createdBy) )";
+    }
+
+    public static class PhotoGallerySchema implements BaseColumns {
+
+        public static final String TABLE_NAME = "PhotoGallery";
+        public static final String COLUMN_id = "id";
+        public static final String COLUMN_userId = "userId";
+        public static final String COLUMN_photoGalleryId = "photoGalleryId";
+        public static final String COLUMN_pictureId = "pictureId";
+        public static final String COLUMN_entityType = "entityType";
+        public static final String COLUMN_itemCode = "itemCode";
+        public static final String COLUMN_itemType = "itemType";
+        public static final String COLUMN_deleted = "deleted";
+        public static final String COLUMN_createDate = "createDate";
+        public static final String COLUMN_updateDate = "updateDate";
+        public static final String COLUMN_createSyncId = "createSyncId";
+        public static final String COLUMN_updateSyncId = "updateSyncId";
+        public static final String COLUMN_rowVersion = "rowVersion";
+        public static final String COLUMN_dataHash = "dataHash";
+
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"PhotoGallery\" ( " +
+                " \"id\" INTEGER," +
+                " \"photoGalleryId\" INTEGER," +
+                " \"pictureId\" INTEGER," +
+                " \"entityType\" INTEGER," +
+                " \"itemCode\" INTEGER," +
+                " \"itemType\" INTEGER," +
+                " \"deleted\" TEXT," +
+                " \"dataHash\" TEXT," +
+                " \"createDate\" TEXT," +
+                " \"updateDate\" TEXT," +
+                " \"createSyncId\" INTEGER," +
+                " \"updateSyncId\" INTEGER," +
+                " \"userId\" NUMERIC," +
+                " \"rowVersion\" INTEGER," +
+                " PRIMARY KEY(id))";
+
     }
 
 }
