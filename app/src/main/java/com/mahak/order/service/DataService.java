@@ -14,6 +14,7 @@ import com.mahak.order.common.ExtraData;
 import com.mahak.order.common.Order;
 import com.mahak.order.common.OrderDetail;
 import com.mahak.order.common.PhotoGallery;
+import com.mahak.order.common.Region;
 import com.mahak.order.common.PicturesProduct;
 import com.mahak.order.common.Product;
 import com.mahak.order.common.ProductDetail;
@@ -40,7 +41,6 @@ import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.tracking.visitorZone.Datum;
 import com.mahak.order.tracking.visitorZone.ZoneLocation;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -263,7 +263,17 @@ public class DataService {
 
         long startTime = System.nanoTime();
         db.open();
-        db.UpdateOrAddPhotoGalary(data,rowVersion);
+        db.UpdateOrAddPhotoGallery(data,rowVersion);
+        db.close();
+        long endTime = System.nanoTime();
+        return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
+
+    }
+    public static double InsertRegion(DbAdapter db, List<Region> data ,long rowVersion) {
+
+        long startTime = System.nanoTime();
+        db.open();
+        db.UpdateOrAddRegion(data,rowVersion);
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;

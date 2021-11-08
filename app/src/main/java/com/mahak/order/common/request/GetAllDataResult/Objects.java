@@ -13,6 +13,7 @@ import com.mahak.order.common.Order;
 import com.mahak.order.common.OrderDetail;
 import com.mahak.order.common.PayableTransfer;
 import com.mahak.order.common.PhotoGallery;
+import com.mahak.order.common.Region;
 import com.mahak.order.common.PicturesProduct;
 import com.mahak.order.common.Product;
 import com.mahak.order.common.ProductDetail;
@@ -68,6 +69,10 @@ public class Objects {
     @SerializedName("PhotoGalleries")
     @Expose
     private List<PhotoGallery> photoGalleries = new ArrayList<>();
+
+    @SerializedName("Regions")
+    @Expose
+    private List<Region> regions = new ArrayList<>();
 
     @SerializedName("ProductCategories")
     @Expose
@@ -349,5 +354,13 @@ public class Objects {
 
     public void setPhotoGalleries(List<PhotoGallery> photoGalleries) {
         this.photoGalleries = photoGalleries;
+    }
+
+    public List<Region> getRegions() {
+        return regions;
+    }
+
+    public void setRegions(List<Region> regions) {
+        this.regions = regions;
     }
 }

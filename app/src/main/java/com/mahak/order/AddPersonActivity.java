@@ -27,11 +27,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.mahak.order.common.CityZone_Extra_Data;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.CustomerGroup;
 import com.mahak.order.common.GPSTracker;
-import com.mahak.order.common.Person_Extra_Data;
+import com.mahak.order.common.Region;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.storage.DbAdapter;
 
@@ -92,7 +91,8 @@ public class AddPersonActivity extends BaseActivity {
     private Customer customer;
     private String[] states, cities, CitiesOnState;
     private ArrayList<String> arrayCity;
-    private ArrayList<CityZone_Extra_Data> cityZone_extra_data_list;
+    private ArrayList<Region> stateRegions;
+    private ArrayList<Region> cityRegions;
     private ArrayList<CustomerGroup> arrayCustomerGroup;
     private String StateName = "", CityName = "",cityCode = "";
     private boolean FirstLoadspnState;
@@ -242,13 +242,14 @@ public class AddPersonActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (FirstLoadspnState) {
-                    CityZone_Extra_Data cityZone_extra_data = cityZone_extra_data_list.get(position);
-                    ArrayList<CityZone_Extra_Data> cityWithZoneCodeList = db.cityWithZoneCode(cityZone_extra_data.getZoneCode());
-                    AdapterSpnCity adCity = new AdapterSpnCity(mActivity, cityWithZoneCodeList);
+                    Region region = stateRegions.get(position);
+                    cityRegions = db.getCities(region.getProvinceID());
+                    AdapterSpnCity adCity = new AdapterSpnCity(mActivity, cityRegions);
                     spnCity.setAdapter(adCity);
                     spnCity.setSelection(0);
-                    StateName = cityZone_extra_data.getZoneName();
-                    cityCode = String.valueOf(cityZone_extra_data.getZoneCode());
+                    StateName = region.getProvinceName();
+                    // TODO: 11/6/21 bug
+                    //cityCode = String.valueOf(cityZone_extra_data.getZoneCode());
 
                 }
                 FirstLoadspnState = true;
@@ -262,9 +263,11 @@ public class AddPersonActivity extends BaseActivity {
         spnCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                CityZone_Extra_Data cityZoneExtraData = (CityZone_Extra_Data) parent.getItemAtPosition(position);
-                CityName = cityZoneExtraData.getZoneName();
-                cityCode = String.valueOf(cityZoneExtraData.getZoneCode());
+                Region region = cityRegions.get(position);
+                CityName = region.getCityName();
+                //CityZone_Extra_Data cityZoneExtraData = (CityZone_Extra_Data) parent.getItemAtPosition(position);
+                //CityName = cityZoneExtraData.getZoneName();
+               // cityCode = String.valueOf(cityZoneExtraData.getZoneCode());
             }
 
             @Override
@@ -326,15 +329,16 @@ public class AddPersonActivity extends BaseActivity {
         spnCustomerGroup.setAdapter(adcustomergroup);
         //________________________________________________________________________________________________________________
         //Fill spnState
-        cityZone_extra_data_list = db.getStates();
-        AdapterSpnState adState = new AdapterSpnState(mActivity, cityZone_extra_data_list);
+        //cityZone_extra_data_list = db.getStates();
+        stateRegions = db.getStates2();
+        AdapterSpnState adState = new AdapterSpnState(mActivity, stateRegions);
         spnState.setAdapter(adState);
         //_________________________________________________________________________________________________________________
         //Fill spnCity
-        if (cityZone_extra_data_list.size() > 0) {
-            CityZone_Extra_Data cityZone_extra_data = cityZone_extra_data_list.get(0);
-            ArrayList<CityZone_Extra_Data> cityWithZoneCodeList = db.cityWithZoneCode(cityZone_extra_data.getZoneCode());
-            AdapterSpnCity adCity = new AdapterSpnCity(mActivity, cityWithZoneCodeList);
+        if (stateRegions.size() > 0) {
+            Region region = stateRegions.get(0);
+            cityRegions = db.getCities(region.getProvinceID());
+            AdapterSpnCity adCity = new AdapterSpnCity(mActivity, cityRegions);
             spnCity.setAdapter(adCity);
             spnCity.setSelection(0);
         }
@@ -370,23 +374,30 @@ public class AddPersonActivity extends BaseActivity {
                 }
             }//End of for i
             //set selection spnState And spnCity
-            for (int i = 0; i < cityZone_extra_data_list.size(); i++) {
-                if (cityZone_extra_data_list.get(i).getZoneName().equals(customer.getState())) {
-                    spnState.setSelection(i);
+            if(customer.getState() != null){
 
-                    ArrayList<CityZone_Extra_Data> cityWithZoneCodeList = db.cityWithZoneCode(cityZone_extra_data_list.get(i).getZoneCode());
-                    AdapterSpnCity adspncity = new AdapterSpnCity(mActivity, cityWithZoneCodeList);
+                for (int i = 0; i < stateRegions.size(); i++) {
 
-                    spnCity.setAdapter(adspncity);
-                    for (int j = 0; j < cityWithZoneCodeList.size(); j++) {
-                        if (cityWithZoneCodeList.get(j).getZoneName().equals(customer.getCity())) {
-                            spnCity.setSelection(j);
-                            break;
-                        }//End of if
-                    }//End of for j
-                    break;
-                }// End of if
-            }// End of for i
+                    Region region = stateRegions.get(i);
+                    if (stateRegions.get(i).getProvinceName().equals(customer.getState())) {
+                        spnState.setSelection(i);
+                        StateName = customer.getState();
+
+                        cityRegions = db.getCities(region.getProvinceID());
+                        AdapterSpnCity adspncity = new AdapterSpnCity(mActivity, cityRegions);
+                        spnCity.setAdapter(adspncity);
+
+                        for (int j = 0; j < cityRegions.size(); j++) {
+                            if (cityRegions.get(j).getCityName().equals(customer.getCity())) {
+                                spnCity.setSelection(j);
+                                CityName = customer.getCity();
+                                break;
+                            }//End of if
+                        }//End of for j
+                        break;
+                    }// End of if
+                }// End of for i
+            }
         }
     }
 
@@ -478,10 +489,10 @@ public class AddPersonActivity extends BaseActivity {
 
     }
 
-    public class AdapterSpnState extends ArrayAdapter<CityZone_Extra_Data> {
+    public class AdapterSpnState extends ArrayAdapter<Region> {
         Activity context;
 
-        public AdapterSpnState(Activity context, List<CityZone_Extra_Data> array) {
+        public AdapterSpnState(Activity context, List<Region> array) {
             super(context, android.R.layout.simple_spinner_dropdown_item, array);
             this.context = context;
         }
@@ -500,7 +511,7 @@ public class AddPersonActivity extends BaseActivity {
 
             View rowview = convertView;
             TextView tvName = null;
-            CityZone_Extra_Data item = getItem(position);
+            Region item = getItem(position);
             if (rowview == null) {
                 LayoutInflater lf = context.getLayoutInflater();
                 rowview = lf.inflate(R.layout.item_custom_spinner, null, false);
@@ -510,17 +521,17 @@ public class AddPersonActivity extends BaseActivity {
             } else
                 tvName = (TextView) rowview.getTag();
             if (item != null) {
-                tvName.setText(item.getZoneName());
+                tvName.setText(item.getProvinceName());
             }
             return rowview;
         }
 
     }
 
-    public class AdapterSpnCity extends ArrayAdapter<CityZone_Extra_Data> {
+    public class AdapterSpnCity extends ArrayAdapter<Region> {
         Activity context;
 
-        public AdapterSpnCity(Activity context, ArrayList<CityZone_Extra_Data> array) {
+        public AdapterSpnCity(Activity context, ArrayList<Region> array) {
             super(context, android.R.layout.simple_spinner_dropdown_item, array);
             this.context = context;
         }
@@ -539,7 +550,7 @@ public class AddPersonActivity extends BaseActivity {
 
             View rowview = convertView;
             TextView tvName = null;
-            CityZone_Extra_Data item = getItem(position);
+            Region item = getItem(position);
             if (rowview == null) {
                 LayoutInflater lf = context.getLayoutInflater();
                 rowview = lf.inflate(R.layout.item_custom_spinner, null, false);
@@ -547,7 +558,7 @@ public class AddPersonActivity extends BaseActivity {
                 rowview.setTag(tvName);
             } else
                 tvName = (TextView) rowview.getTag();
-            tvName.setText(item.getZoneName());
+            tvName.setText(item.getCityName());
             return rowview;
         }
     }

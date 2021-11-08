@@ -28,6 +28,7 @@ import com.mahak.order.common.Customer;
 import com.mahak.order.common.CustomerGroup;
 import com.mahak.order.common.ExtraData;
 import com.mahak.order.common.PhotoGallery;
+import com.mahak.order.common.Region;
 import com.mahak.order.common.VisitorLocation;
 import com.mahak.order.common.GroupedTax;
 import com.mahak.order.common.NonRegister;
@@ -1454,6 +1455,17 @@ public class DbAdapter {
         cityZone_extra_data.setZoneName(cursor.getString(cursor.getColumnIndex(DbSchema.CityZoneSchema.COLUMN_ZoneName)));
         cityZone_extra_data.setParentCode(cursor.getInt(cursor.getColumnIndex(DbSchema.CityZoneSchema.COLUMN_ParentCode)));
         return cityZone_extra_data;
+    }
+
+    private Region getRegionFromCursor(Cursor cursor) {
+        Region region = new Region();
+        region.setCityName(cursor.getString(cursor.getColumnIndex(DbSchema.RegionSchema.COLUMN_CityName)));
+        region.setCityID(cursor.getInt(cursor.getColumnIndex(DbSchema.RegionSchema.COLUMN_CityID)));
+        region.setProvinceName(cursor.getString(cursor.getColumnIndex(DbSchema.RegionSchema.COLUMN_ProvinceName)));
+        region.setProvinceID(cursor.getInt(cursor.getColumnIndex(DbSchema.RegionSchema.COLUMN_ProvinceID)));
+        region.setRowVersion(cursor.getInt(cursor.getColumnIndex(DbSchema.RegionSchema.COLUMN_RowVersion)));
+
+        return region;
     }
 
     public TaxInSell_Extra_Data getTaxInSellExtra(long id) {
@@ -7858,6 +7870,52 @@ public class DbAdapter {
         }
         return cityZoneExtraDataArrayList;
     }
+    public ArrayList<Region> getStates2() {
+        Region region = new Region();
+        ArrayList<Region> regions = new ArrayList<>();
+        Cursor cursor;
+        try {
+            cursor = mDb.rawQuery("select * from Region where (CityID % 100000)  = 0 or ProvinceID = 0" , null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    region = getRegionFromCursor(cursor);
+                    regions.add(region);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrgetMorCustInfo", e.getMessage());
+        }
+        return regions;
+    }
+    public ArrayList<Region> getCities(int ProvinceID) {
+        Region region = new Region();
+        ArrayList<Region> regions = new ArrayList<>();
+        Cursor cursor;
+        try {
+            cursor = mDb.rawQuery("select * from Region where ProvinceID =? " , new String[]{String.valueOf(ProvinceID)});
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    region = getRegionFromCursor(cursor);
+                    regions.add(region);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrgetMorCustInfo", e.getMessage());
+        }
+        return regions;
+    }
 
     public ArrayList<CityZone_Extra_Data> cityWithZoneCode(long zoneCode) {
         CityZone_Extra_Data cityZone_extra_data = new CityZone_Extra_Data();
@@ -8934,7 +8992,7 @@ public class DbAdapter {
         return result;
     }
 
-    public boolean UpdateOrAddPhotoGalary(List<PhotoGallery> photoGalleries, long rowVersion) {
+    public boolean UpdateOrAddPhotoGallery(List<PhotoGallery> photoGalleries, long rowVersion) {
         boolean result = false;
         mDb.beginTransaction();
         try {
@@ -8961,6 +9019,35 @@ public class DbAdapter {
                     result = (mDb.update(DbSchema.PhotoGallerySchema.TABLE_NAME, initialvalue, DbSchema.PhotoGallerySchema.COLUMN_photoGalleryId + " =? ", new String[]{String.valueOf(photoGallery.getPhotoGalleryId())})) > 0;
                     if (!result)
                         mDb.insert(DbSchema.PhotoGallerySchema.TABLE_NAME, null, initialvalue);
+                }
+            }
+            mDb.setTransactionSuccessful();
+        } finally {
+            mDb.endTransaction();
+        }
+        return result;
+    }
+    public boolean UpdateOrAddRegion(List<Region> regions, long rowVersion) {
+        boolean result = false;
+        mDb.beginTransaction();
+        try {
+            ContentValues initialvalue = new ContentValues();
+            for (Region region : regions) {
+
+                initialvalue.put(DbSchema.RegionSchema.COLUMN_CityID, region.getCityID());
+                initialvalue.put(DbSchema.RegionSchema.COLUMN_CityName, region.getCityName());
+                initialvalue.put(DbSchema.RegionSchema.COLUMN_ProvinceID, region.getProvinceID());
+                initialvalue.put(DbSchema.RegionSchema.COLUMN_ProvinceName, region.getProvinceName());
+                initialvalue.put(DbSchema.RegionSchema.COLUMN_MapCode, region.getMapCode());
+                initialvalue.put(DbSchema.RegionSchema.COLUMN_RowVersion, region.getRowVersion());
+                initialvalue.put(DbSchema.RegionSchema.COLUMN_userId, getPrefUserId());
+
+                if (rowVersion == 0)
+                    mDb.insert(DbSchema.RegionSchema.TABLE_NAME, null, initialvalue);
+                else {
+                    result = (mDb.update(DbSchema.RegionSchema.TABLE_NAME, initialvalue, DbSchema.RegionSchema.COLUMN_ProvinceID + " =? ", new String[]{String.valueOf(region.getProvinceID())})) > 0;
+                    if (!result)
+                        mDb.insert(DbSchema.RegionSchema.TABLE_NAME, null, initialvalue);
                 }
             }
             mDb.setTransactionSuccessful();
@@ -10436,6 +10523,7 @@ public class DbAdapter {
             db.execSQL(DbSchema.ZoneLocationSchema.CREATE_TABLE);
             
             db.execSQL(DbSchema.PhotoGallerySchema.CREATE_TABLE);
+            db.execSQL(DbSchema.RegionSchema.CREATE_TABLE);
 
             db.execSQL("CREATE INDEX " + INDEX_Product + " ON " + DbSchema.ProductSchema.TABLE_NAME + "(" + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + ")");
 

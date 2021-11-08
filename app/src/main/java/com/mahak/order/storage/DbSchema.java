@@ -1919,5 +1919,28 @@ public class DbSchema {
                 " PRIMARY KEY(id))";
 
     }
+    public static class RegionSchema implements BaseColumns {
+
+        public static final String TABLE_NAME = "Region";
+        public static final String COLUMN_id = "id";
+        public static final String COLUMN_userId = "userId";
+        public static final String COLUMN_CityID = "CityID";
+        public static final String COLUMN_CityName = "CityName";
+        public static final String COLUMN_ProvinceID = "ProvinceID";
+        public static final String COLUMN_ProvinceName = "ProvinceName";
+        public static final String COLUMN_MapCode = "MapCode";
+        public static final String COLUMN_RowVersion = "RowVersion";
+
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"Region\" ( " +
+                " \"id\" INTEGER," +
+                " \"userId\" NUMERIC," +
+                " \"CityID\" number," +
+                " \"CityName\" TEXT," +
+                " \"ProvinceID\" INTEGER," +
+                " \"ProvinceName\" TEXT," +
+                " \"RowVersion\" INTEGER," +
+                " \"MapCode\" INTEGER," +
+                " PRIMARY KEY(id))";
+    }
 
 }

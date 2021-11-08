@@ -11,6 +11,7 @@
         <entry key="app/src/main/res/layout-de/receipt_print_arabic.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_data_sync.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_manage_customer.xml" value="0.20104166666666667" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_item_product_gallery.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout/grv_product_picker_item.xml" value="0.5" />

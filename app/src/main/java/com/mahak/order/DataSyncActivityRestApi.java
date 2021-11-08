@@ -36,6 +36,7 @@ import com.mahak.order.common.OrderDetail;
 import com.mahak.order.common.OrderDetailProperty;
 import com.mahak.order.common.PayableTransfer;
 import com.mahak.order.common.PhotoGallery;
+import com.mahak.order.common.Region;
 import com.mahak.order.common.PicturesProduct;
 import com.mahak.order.common.Product;
 import com.mahak.order.common.ProductDetail;
@@ -159,6 +160,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
     List<Setting> settings = new ArrayList<>();
     List<PhotoGallery> photoGalleries = new ArrayList<>();
+    List<Region> regions = new ArrayList<>();
 
     private final boolean[] arrayCheckUpdate = new boolean[24];
     private final double[] arrayTime = new double[24];
@@ -187,6 +189,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
     private long ProductDetailMaxRowVersion;
     private long SettingMaxRowVersion;
     private long PhotoGalleryMaxRowVersion;
+    private long RegionMaxRowVersion;
     private File[] files;
 
     @Override
@@ -908,6 +911,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
             PicturesMaxRowVersion = db.getMaxRowVersion(DbSchema.PicturesProductSchema.TABLE_NAME);
             PhotoGalleryMaxRowVersion = db.getMaxRowVersion(DbSchema.PhotoGallerySchema.TABLE_NAME);
+            RegionMaxRowVersion = db.getMaxRowVersion(DbSchema.RegionSchema.TABLE_NAME);
 
             ExtraDataMaxRowVersion = db.getMaxRowVersion(DbSchema.ExtraDataSchema.TABLE_NAME);
             PropertyDescriptionMaxRowVersion = db.getMaxRowVersion(DbSchema.PropertyDescriptionSchema.TABLE_NAME);
@@ -923,6 +927,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             getAllDataBody.setFromPersonGroupVersion(CustomersGroupMaxRowVersion);
             getAllDataBody.setFromVisitorPersonVersion(VisitorPersonMaxRowVersion);
             getAllDataBody.setFromPhotoGalleryVersion(PhotoGalleryMaxRowVersion);
+            getAllDataBody.setFromRegionVersion(RegionMaxRowVersion);
 
 
             getAllDataBody.setFromBankVersion(BankMaxRowVersion);
@@ -1002,6 +1007,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             extraData = response.body().getData().getObjects().getExtraData();
                             picturesProducts = response.body().getData().getObjects().getPictures();
                             photoGalleries = response.body().getData().getObjects().getPhotoGalleries();
+                            regions = response.body().getData().getObjects().getRegions();
                             propertyDescriptions = response.body().getData().getObjects().getPropertyDescriptions();
                             visitorProducts = response.body().getData().getObjects().getVisitorProducts();
                             productPriceLevelNames = response.body().getData().getObjects().getCostLevelNames();
@@ -1157,6 +1163,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
             if (photoGalleries != null)
                 if (photoGalleries.size() > 0) {
                     arrayTime[21] = DataService.InsertPhotoGallery(db, photoGalleries,PhotoGalleryMaxRowVersion);
+                }
+            if (regions != null)
+                if (regions.size() > 0) {
+                    arrayTime[22] = DataService.InsertRegion(db, regions,RegionMaxRowVersion);
                 }
             db.close();
             return 0;
