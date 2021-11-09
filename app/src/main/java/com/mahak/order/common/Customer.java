@@ -181,6 +181,14 @@ public class Customer {
     @Expose
     private long rowVersion;
 
+    @SerializedName("Prifix")
+    @Expose
+    private String prefix;
+
+    @SerializedName("PersonGroupClientId")
+    @Expose
+    private int personGroupClientId;
+
     public Customer() {
         this.setGroup("");
         this.setOrganization("");
@@ -588,5 +596,21 @@ public class Customer {
 
     public void setPromotionId(int promotionId) {
         this.promotionId = promotionId;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public int getPersonGroupClientId() {
+        return personGroupClientId;
+    }
+
+    public void setPersonGroupClientId(int personGroupClientId) {
+        this.personGroupClientId = personGroupClientId;
     }
 }

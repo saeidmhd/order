@@ -57,6 +57,7 @@ public class DbSchema {
         public static final String COLUMN_ID = "Id";
         public static final String COLUMN_PersonId = "PersonId";
         public static final String COLUMN_PersonClientId = "PersonClientId";
+        public static final String COLUMN_PersonGroupClientId = "PersonGroupClientId";
         public static final String COLUMN_PersonCode = "PersonCode";
         public static final String COLUMN_PersonGroupId = "PersonGroupId";
         public static final String COLUMN_PersonGroupCode = "PersonGroupCode";
@@ -64,6 +65,7 @@ public class DbSchema {
         public static final String COLUMN_NAME = "Name";
         public static final String COLUMN_FirstName = "FirstName";
         public static final String COLUMN_LastName = "LastName";
+        public static final String COLUMN_Prefix = "prefix";
         public static final String COLUMN_ORGANIZATION = "Organization";
         public static final String COLUMN_Gender = "Gender";
         public static final String COLUMN_NationalCode = "NationalCode";
@@ -106,12 +108,14 @@ public class DbSchema {
                 "`Id` INTEGER, " +
                 "`PersonId` INTEGER, " +
                 "`PersonClientId` NUMERIC, " +
+                "`PersonGroupClientId` NUMERIC, " +
                 "`PersonCode` NUMERIC, " +
                 "`PersonGroupId` NUMERIC, " +
                 "`PersonGroupCode` NUMERIC, " +
                 "`PersonType` INTEGER, " +
                 "`FirstName` TEXT, " +
                 "`LastName` TEXT, " +
+                "`Prefix` TEXT, " +
                 "`Organization` TEXT, " +
                 "`Gender` INTEGER, " +
                 "`NationalCode` TEXT, " +

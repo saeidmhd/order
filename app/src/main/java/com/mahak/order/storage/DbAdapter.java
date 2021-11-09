@@ -138,13 +138,16 @@ public class DbAdapter {
             customer.setFirstName("");
         if (customer.getLastName() == null)
             customer.setLastName("");
-        customer.setName(customer.getFirstName() + " " + customer.getLastName());
+        if (customer.getPrefix() == null)
+            customer.setPrefix("");
+        customer.setName(customer.getPrefix() + " " + customer.getFirstName() + " " + customer.getLastName());
         ContentValues initialvalue = new ContentValues();
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_PersonGroupId, customer.getPersonGroupId());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_PersonGroupCode, customer.getPersonGroupCode());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_NAME, customer.getName());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_FirstName, customer.getFirstName());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_LastName, customer.getLastName());
+        initialvalue.put(DbSchema.CustomerSchema.COLUMN_Prefix, customer.getPrefix());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_ORGANIZATION, customer.getOrganization());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_CREDIT, customer.getCredit());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_BALANCE, customer.getBalance());
@@ -198,12 +201,15 @@ public class DbAdapter {
                     customer.setFirstName("");
                 if (customer.getLastName() == null)
                     customer.setLastName("");
-                customer.setName(customer.getFirstName() + " " + customer.getLastName());
+                if (customer.getPrefix() == null)
+                    customer.setPrefix("");
+                customer.setName(customer.getPrefix() + " " + customer.getFirstName() + " " + customer.getLastName());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_PersonGroupId, customer.getPersonGroupId());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_PersonGroupCode, customer.getPersonGroupCode());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_NAME, customer.getName());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_FirstName, customer.getFirstName());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_LastName, customer.getLastName());
+                initialvalue.put(DbSchema.CustomerSchema.COLUMN_Prefix, customer.getPrefix());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_ORGANIZATION, customer.getOrganization());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_CREDIT, customer.getCredit());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_BALANCE, customer.getBalance());
@@ -1496,6 +1502,7 @@ public class DbAdapter {
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_NAME + " as " + DbSchema.CustomerSchema.COLUMN_NAME +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_FirstName + " as " + DbSchema.CustomerSchema.COLUMN_FirstName +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_LastName + " as " + DbSchema.CustomerSchema.COLUMN_LastName +
+                "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_Prefix + " as " + DbSchema.CustomerSchema.COLUMN_Prefix +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_MAHAK_ID + " as " + DbSchema.CustomerSchema.COLUMN_MAHAK_ID +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + " as " + DbSchema.CustomerSchema.COLUMN_DATABASE_ID +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonCode + " as " + DbSchema.CustomerSchema.COLUMN_PersonCode +
@@ -1544,6 +1551,7 @@ public class DbAdapter {
                 customer.setName(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_NAME)));
                 customer.setFirstName(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_FirstName)));
                 customer.setLastName(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LastName)));
+                customer.setPrefix(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_Prefix)));
                 customer.setOrganization(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_ORGANIZATION)));
                 customer.setCredit(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CREDIT)));
                 customer.setCityCode(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CityCode)));
@@ -1581,6 +1589,7 @@ public class DbAdapter {
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_NAME + " as " + DbSchema.CustomerSchema.COLUMN_NAME +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_FirstName + " as " + DbSchema.CustomerSchema.COLUMN_FirstName +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_LastName + " as " + DbSchema.CustomerSchema.COLUMN_LastName +
+                "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_Prefix + " as " + DbSchema.CustomerSchema.COLUMN_Prefix +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_MAHAK_ID + " as " + DbSchema.CustomerSchema.COLUMN_MAHAK_ID +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + " as " + DbSchema.CustomerSchema.COLUMN_DATABASE_ID +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonCode + " as " + DbSchema.CustomerSchema.COLUMN_PersonCode +
@@ -1630,6 +1639,7 @@ public class DbAdapter {
                 customer.setName(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_NAME)));
                 customer.setFirstName(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_FirstName)));
                 customer.setLastName(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LastName)));
+                customer.setPrefix(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_Prefix)));
                 customer.setOrganization(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_ORGANIZATION)));
                 customer.setCredit(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CREDIT)));
                 customer.setCityCode(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CityCode)));
@@ -1668,6 +1678,7 @@ public class DbAdapter {
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_NAME + " as " + DbSchema.CustomerSchema.COLUMN_NAME +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_FirstName + " as " + DbSchema.CustomerSchema.COLUMN_FirstName +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_LastName + " as " + DbSchema.CustomerSchema.COLUMN_LastName +
+                "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_Prefix + " as " + DbSchema.CustomerSchema.COLUMN_Prefix +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_MAHAK_ID + " as " + DbSchema.CustomerSchema.COLUMN_MAHAK_ID +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + " as " + DbSchema.CustomerSchema.COLUMN_DATABASE_ID +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonCode + " as " + DbSchema.CustomerSchema.COLUMN_PersonCode +
@@ -1716,6 +1727,7 @@ public class DbAdapter {
                 customer.setName(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_NAME)));
                 customer.setFirstName(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_FirstName)));
                 customer.setLastName(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LastName)));
+                customer.setPrefix(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_Prefix)));
                 customer.setOrganization(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_ORGANIZATION)));
                 customer.setCredit(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CREDIT)));
                 customer.setCityCode(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CityCode)));
@@ -2060,6 +2072,7 @@ public class DbAdapter {
         customer.setName(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_NAME)));
         customer.setFirstName(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_FirstName)));
         customer.setLastName(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LastName)));
+        customer.setPrefix(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_Prefix)));
         customer.setOrganization(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_ORGANIZATION)));
         customer.setCredit(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CREDIT)));
         customer.setCityCode(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CityCode)));
@@ -8846,6 +8859,7 @@ public class DbAdapter {
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_NAME, customer.getName());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_FirstName, customer.getFirstName());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_LastName, customer.getLastName());
+        initialvalue.put(DbSchema.CustomerSchema.COLUMN_Prefix, customer.getPrefix());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_ORGANIZATION, customer.getOrganization());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_CREDIT, customer.getCredit());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_BALANCE, customer.getBalance());
@@ -8907,6 +8921,7 @@ public class DbAdapter {
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_NAME, customer.getName());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_FirstName, customer.getFirstName());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_LastName, customer.getLastName());
+        initialvalue.put(DbSchema.CustomerSchema.COLUMN_Prefix, customer.getPrefix());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_ORGANIZATION, customer.getOrganization());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_CREDIT, customer.getCredit());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_BALANCE, customer.getBalance());
@@ -8939,12 +8954,16 @@ public class DbAdapter {
                     customer.setFirstName("");
                 if (customer.getLastName() == null)
                     customer.setLastName("");
-                customer.setName(customer.getFirstName() + " " + customer.getLastName());
+                if (customer.getPrefix() == null)
+                    customer.setPrefix("");
+                customer.setName(customer.getPrefix() + " " + customer.getFirstName() + " " + customer.getLastName());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_PersonGroupId, customer.getPersonGroupId());
+                initialvalue.put(DbSchema.CustomerSchema.COLUMN_PersonGroupClientId, customer.getPersonGroupClientId());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_PersonGroupCode, customer.getPersonGroupCode());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_NAME, customer.getName());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_FirstName, customer.getFirstName());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_LastName, customer.getLastName());
+                initialvalue.put(DbSchema.CustomerSchema.COLUMN_Prefix, customer.getPrefix());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_ORGANIZATION, customer.getOrganization());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_CREDIT, customer.getCredit());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_BALANCE, customer.getBalance());
