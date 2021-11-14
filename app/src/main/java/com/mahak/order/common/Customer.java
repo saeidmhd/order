@@ -156,7 +156,7 @@ public class Customer {
 
     @SerializedName("CityCode")
     @Expose
-    private String cityCode;
+    private int cityCode;
 
     @SerializedName("Fax")
     @Expose
@@ -502,11 +502,11 @@ public class Customer {
         this.password = password;
     }
 
-    public String getCityCode() {
+    public int getCityCode() {
         return cityCode;
     }
 
-    public void setCityCode(String cityCode) {
+    public void setCityCode(int cityCode) {
         this.cityCode = cityCode;
     }
 

@@ -106,8 +106,11 @@ public class ManageCustomerActivity extends BaseActivity {
     private Person_Extra_Data extraData;
     private ArrayList<CustomerGroup> arrayCustomerGroup;
     private ArrayList<Region> stateRegions;
+    private Region customerRegion;
     private ArrayList<Region> cityRegions;
-    private String StateName, CityName,cityCode = "";
+    private String StateName;
+    private String CityName;
+    private int cityCode;
     private boolean FirstLoadspnState;
     private GPSTracker gpsTracker;
     private ArrayList<LatLng> positions = new ArrayList<>();
@@ -129,13 +132,12 @@ public class ManageCustomerActivity extends BaseActivity {
         mContext = this;
         mActivity = this;
 
+        initialise();
+
         Extras = getIntent().getExtras();
         if (Extras != null) {
             Mode = Extras.getInt(MODE_PAGE);
         }
-
-        initialise();
-        Fillspinner();
 
         if (Mode == MODE_EDIT) {
             personId = Extras.getInt(CUSTOMERID_KEY);
@@ -143,7 +145,11 @@ public class ManageCustomerActivity extends BaseActivity {
 
         }
 
+        Fillspinner();
         FillValues();
+
+
+
         ///////////////////////////////////////////////////////
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -265,6 +271,7 @@ public class ManageCustomerActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Region region = cityRegions.get(position);
                 CityName = region.getCityName();
+                cityCode = region.getCityID();
             }
 
             @Override
@@ -383,6 +390,11 @@ public class ManageCustomerActivity extends BaseActivity {
 
 
         if (customer != null) {
+
+            if(customer.getCityCode() != -1){
+                customerRegion = db.getRegionWithCityId(customer.getCityCode());
+            }
+
             txtCustomerName.setText(customer.getName());
             txtMarketName.setText(customer.getOrganization());
 
@@ -422,23 +434,21 @@ public class ManageCustomerActivity extends BaseActivity {
             }//End of for i
             //set selection spnState And spnCity
 
-            if(customer.getState() != null){
-
+            if(customer.getCityCode() != -1){
                 for (int i = 0; i < stateRegions.size(); i++) {
-
                     Region region = stateRegions.get(i);
-                    if (stateRegions.get(i).getProvinceName().equals(customer.getState())) {
+                    if (region.getProvinceID() == customerRegion.getProvinceID()) {
                         spnState.setSelection(i);
-                        StateName = customer.getState();
+                        StateName = region.getProvinceName();
 
                         cityRegions = db.getCities(region.getProvinceID());
                         AdapterSpnCity adspncity = new AdapterSpnCity(mActivity, cityRegions);
                         spnCity.setAdapter(adspncity);
-
                         for (int j = 0; j < cityRegions.size(); j++) {
-                            if (cityRegions.get(j).getCityName().equals(customer.getCity())) {
+                            if (cityRegions.get(j).getCityID() == customerRegion.getCityID()) {
                                 spnCity.setSelection(j);
-                                CityName = customer.getCity();
+                                CityName = cityRegions.get(j).getCityName();
+                                cityCode = cityRegions.get(j).getCityID();
                                 break;
                             }//End of if
                         }//End of for j
@@ -495,7 +505,6 @@ public class ManageCustomerActivity extends BaseActivity {
             db.AddCustomer(customer);
         else if (Mode == MODE_EDIT)
             db.UpdateCustomer(customer);
-
 
     }
 

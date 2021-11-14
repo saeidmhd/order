@@ -475,6 +475,7 @@ public class DbAdapter {
         ContentValues initialvalue = new ContentValues();
         initialvalue.put(DbSchema.PropertyDescriptionSchema.COLUMN_PropertyDescriptionId, propertyDescription.getPropertyDescriptionId());
         initialvalue.put(DbSchema.PropertyDescriptionSchema.COLUMN_DATABASE_ID, propertyDescription.getDatabaseId());
+        initialvalue.put(DbSchema.PropertyDescriptionSchema.COLUMN_UserId, getPrefUserId());
         initialvalue.put(DbSchema.PropertyDescriptionSchema.COLUMN_PropertyDescriptionClientId, propertyDescription.getPropertyDescriptionClientId());
         initialvalue.put(DbSchema.PropertyDescriptionSchema.COLUMN_PropertyDescriptionCode, propertyDescription.getPropertyDescriptionCode());
         initialvalue.put(DbSchema.PropertyDescriptionSchema.COLUMN_NAME, propertyDescription.getName());
@@ -1015,6 +1016,7 @@ public class DbAdapter {
         initialvalue.put(DbSchema.ReasonsSchema.COLUMN_RowVersion, reasons.getRowVersion());
 
         initialvalue.put(DbSchema.ReasonsSchema.COLUMN_DATABASE_ID, reasons.getDatabaseId());
+        initialvalue.put(DbSchema.ReasonsSchema.COLUMN_UserId, getPrefUserId());
         initialvalue.put(DbSchema.ReasonsSchema.COLUMN_MODIFYDATE, reasons.getModifyDate());
         initialvalue.put(DbSchema.ReasonsSchema.COLUMN_ID, reasons.getId());
 
@@ -1554,7 +1556,7 @@ public class DbAdapter {
                 customer.setPrefix(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_Prefix)));
                 customer.setOrganization(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_ORGANIZATION)));
                 customer.setCredit(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CREDIT)));
-                customer.setCityCode(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CityCode)));
+                customer.setCityCode(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CityCode)));
                 customer.setBalance(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_BALANCE)));
                 customer.setState(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_STATE)));
                 customer.setCity(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CITY)));
@@ -1642,7 +1644,7 @@ public class DbAdapter {
                 customer.setPrefix(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_Prefix)));
                 customer.setOrganization(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_ORGANIZATION)));
                 customer.setCredit(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CREDIT)));
-                customer.setCityCode(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CityCode)));
+                customer.setCityCode(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CityCode)));
                 customer.setBalance(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_BALANCE)));
                 customer.setState(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_STATE)));
                 customer.setCity(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CITY)));
@@ -1730,7 +1732,7 @@ public class DbAdapter {
                 customer.setPrefix(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_Prefix)));
                 customer.setOrganization(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_ORGANIZATION)));
                 customer.setCredit(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CREDIT)));
-                customer.setCityCode(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CityCode)));
+                customer.setCityCode(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CityCode)));
                 customer.setBalance(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_BALANCE)));
                 customer.setState(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_STATE)));
                 customer.setCity(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CITY)));
@@ -2075,7 +2077,7 @@ public class DbAdapter {
         customer.setPrefix(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_Prefix)));
         customer.setOrganization(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_ORGANIZATION)));
         customer.setCredit(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CREDIT)));
-        customer.setCityCode(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CityCode)));
+        customer.setCityCode(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CityCode)));
         customer.setBalance(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_BALANCE)));
         customer.setState(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_STATE)));
         customer.setCity(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CITY)));
@@ -7888,7 +7890,7 @@ public class DbAdapter {
         ArrayList<Region> regions = new ArrayList<>();
         Cursor cursor;
         try {
-            cursor = mDb.rawQuery("select * from Region where (CityID % 100000)  = 0 or ProvinceID = 0" , null);
+            cursor = mDb.rawQuery("select * from Region where (CityID % 100000)  = 0 or ProvinceID = 0 order by ProvinceName" , null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -7906,12 +7908,32 @@ public class DbAdapter {
         }
         return regions;
     }
+    public Region getRegionWithCityId(int cityId) {
+        Region region = new Region();
+        Cursor cursor;
+        try {
+            cursor = mDb.rawQuery("select * from Region where CityID =? " , new String[]{String.valueOf(cityId)});
+            if (cursor != null) {
+                cursor.moveToFirst();
+                if (cursor.getCount() > 0) {
+                    region = getRegionFromCursor(cursor);
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrgetMorCustInfo", e.getMessage());
+        }
+        return region;
+    }
     public ArrayList<Region> getCities(int ProvinceID) {
         Region region = new Region();
         ArrayList<Region> regions = new ArrayList<>();
         Cursor cursor;
         try {
-            cursor = mDb.rawQuery("select * from Region where ProvinceID =? " , new String[]{String.valueOf(ProvinceID)});
+            cursor = mDb.rawQuery("select * from Region where ProvinceID =? order by CityName " , new String[]{String.valueOf(ProvinceID)});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {

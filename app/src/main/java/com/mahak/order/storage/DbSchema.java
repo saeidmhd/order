@@ -149,7 +149,7 @@ public class DbSchema {
                 "`RowVersion` numeric, " +
                 "`UserName` TEXT, " +
                 "`Password` TEXT, " +
-                "`CityCode` TEXT, " +
+                "`CityCode` INTEGER, " +
                 "`Deleted` INTEGER, " +
                 " PRIMARY KEY(`Id`) )";
 
@@ -1480,6 +1480,7 @@ public class DbSchema {
         public static final String TABLE_NAME = "PropertyDescription";
         public static final String COLUMN_ID = "Id";
         public static final String COLUMN_DATABASE_ID = "DatabaseId";
+        public static final String COLUMN_UserId = "UserId";
 
         public static final String COLUMN_PropertyDescriptionId = "PropertyDescriptionId";
         public static final String COLUMN_PropertyDescriptionClientId = "PropertyDescriptionClientId";
@@ -1503,6 +1504,7 @@ public class DbSchema {
         public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS PropertyDescription" +
                 "( `Id` INTEGER," +
                 " `DatabaseId` TEXT," +
+                " `UserId` NUMERIC," +
                 " `PropertyDescriptionId` INTEGER," +
                 " `PropertyDescriptionClientId` NUMERIC," +
                 " `PropertyDescriptionCode` INTEGER," +
@@ -1525,9 +1527,12 @@ public class DbSchema {
 
     public static class ReasonsSchema implements BaseColumns {
         public static final String TABLE_NAME = "Reasons";
+
         public static final String COLUMN_ID = "Id";
         public static final String COLUMN_MAHAK_ID = "MahakId";
         public static final String COLUMN_DATABASE_ID = "DatabaseId";
+        public static final String COLUMN_UserId = "UserId";
+
         public static final String COLUMN_ReturnReasonCode = "ReturnReasonCode";
         public static final String COLUMN_NAME = "Name";
         public static final String COLUMN_TYPE = "Type";
@@ -1546,6 +1551,7 @@ public class DbSchema {
         public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"Reasons\" ( " +
                 " `Id` INTEGER," +
                 " `MahakId` TEXT," +
+                " `UserId` NUMERIC," +
                 " `ReturnReasonCode` NUMERIC," +
                 " `ReturnReasonId` INTEGER," +
                 " `ReturnReasonClientId` NUMERIC," +

@@ -94,12 +94,15 @@ public class AddPersonActivity extends BaseActivity {
     private ArrayList<Region> stateRegions;
     private ArrayList<Region> cityRegions;
     private ArrayList<CustomerGroup> arrayCustomerGroup;
-    private String StateName = "", CityName = "",cityCode = "";
+    private String StateName = "";
+    private String CityName = "";
+    private int cityCode;
     private boolean FirstLoadspnState;
     private GPSTracker gpsTracker;
     private ArrayList<LatLng> positions = new ArrayList<>();
     private boolean hasContactPermission;
     private static final int REQUEST_CONTACT = 113;
+    private Region customerRegion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -265,9 +268,7 @@ public class AddPersonActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Region region = cityRegions.get(position);
                 CityName = region.getCityName();
-                //CityZone_Extra_Data cityZoneExtraData = (CityZone_Extra_Data) parent.getItemAtPosition(position);
-                //CityName = cityZoneExtraData.getZoneName();
-               // cityCode = String.valueOf(cityZoneExtraData.getZoneCode());
+                cityCode = region.getCityID();
             }
 
             @Override
@@ -355,6 +356,11 @@ public class AddPersonActivity extends BaseActivity {
         db.close();
 
         if (customer != null) {
+
+            if(customer.getCityCode() != -1){
+                customerRegion = db.getRegionWithCityId(customer.getCityCode());
+            }
+            
             txtAddress.setText(customer.getAddress());
             txtFirstName.setText(customer.getFirstName());
             txtLastName.setText(customer.getLastName());
@@ -374,23 +380,21 @@ public class AddPersonActivity extends BaseActivity {
                 }
             }//End of for i
             //set selection spnState And spnCity
-            if(customer.getState() != null){
-
+            if(customer.getCityCode() != -1){
                 for (int i = 0; i < stateRegions.size(); i++) {
-
                     Region region = stateRegions.get(i);
-                    if (stateRegions.get(i).getProvinceName().equals(customer.getState())) {
+                    if (region.getProvinceID() == customerRegion.getProvinceID()) {
                         spnState.setSelection(i);
-                        StateName = customer.getState();
+                        StateName = region.getProvinceName();
 
                         cityRegions = db.getCities(region.getProvinceID());
                         AdapterSpnCity adspncity = new AdapterSpnCity(mActivity, cityRegions);
                         spnCity.setAdapter(adspncity);
-
                         for (int j = 0; j < cityRegions.size(); j++) {
-                            if (cityRegions.get(j).getCityName().equals(customer.getCity())) {
+                            if (cityRegions.get(j).getCityID() == customerRegion.getCityID()) {
                                 spnCity.setSelection(j);
-                                CityName = customer.getCity();
+                                CityName = cityRegions.get(j).getCityName();
+                                cityCode = cityRegions.get(j).getCityID();
                                 break;
                             }//End of if
                         }//End of for j

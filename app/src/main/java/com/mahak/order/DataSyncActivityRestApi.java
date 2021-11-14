@@ -57,8 +57,6 @@ import com.mahak.order.common.Visitor;
 import com.mahak.order.common.VisitorLocation;
 import com.mahak.order.common.VisitorPeople;
 import com.mahak.order.common.VisitorProduct;
-import com.mahak.order.common.login.LoginBody;
-import com.mahak.order.common.login.LoginResult;
 import com.mahak.order.common.request.GetAllDataBody;
 import com.mahak.order.common.request.GetAllDataResult.GetDataResult;
 import com.mahak.order.common.request.SetAllDataBody;
@@ -260,78 +258,11 @@ public class DataSyncActivityRestApi extends BaseActivity {
     }
 
     public void SendReceive() {
-
-        db.open();
-        final User user = db.getUser();
-        int userDatabaseId = ServiceTools.toInt(user.getDatabaseId());
-        int userId = ServiceTools.toInt(user.getServerUserID());
-        LoginBody loginBody = new LoginBody();
-        loginBody.setAppId("MahakOrder");
-        loginBody.setDatabaseId(0);
-        loginBody.setLanguage("en-US");
-        loginBody.setDeviceId(ServiceTools.getDeviceID(mContext));
-        loginBody.setDescription("login");
-        loginBody.setUserName(user.getUsername());
-        loginBody.setPassword(user.getPassword());
-
-        ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
-        Call<LoginResult> call = apiService.Login(loginBody);
         pd = new FontProgressDialog(mContext);
-        pd.setMessage(getString(R.string.reviewing_user_info));
+        pd.setMessage(getString(R.string.sending_info));
         pd.setCancelable(false);
         pd.show();
-        call.enqueue(new Callback<LoginResult>() {
-            @Override
-            public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
-                dismissProgressDialog();
-                if (response.body() != null) {
-                    if (response.body().isResult()) {
-                        if (userDatabaseId == response.body().getData().getDatabaseId() && userId == response.body().getData().getVisitorId()) {
-                            BaseActivity.setPrefUserToken(response.body().getData().getUserToken());
-                            setPrefSyncId(response.body().getData().getSyncId());
-                            //Save db
-                            db.open();
-                            user.setSyncId(response.body().getData().getSyncId());
-                            user.setUserToken(response.body().getData().getUserToken());
-                            db.UpdateUser(user);
-                            db.close();
-                            new SendAsyncTask(response.body().getData().getUserToken()).execute();
-                        } else {
-                            ServiceTools.Backup(mContext);
-                            db.open();
-                            db.DeleteAllData();
-                            db.DeleteUser(userId);
-                            db.close();
-                            Toast.makeText(DataSyncActivityRestApi.this, R.string.visitor_changed_login_again, Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(DataSyncActivityRestApi.this, LoginActivityRestApi.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            finish();
-                        }
-                        //setAndGetRequest(response.body().getData().getUserToken());
-                    } else {
-                        ServiceTools.Backup(mContext);
-                        db.open();
-                        db.DeleteUser(userId);
-                        db.close();
-                        Toast.makeText(DataSyncActivityRestApi.this, R.string.visitor_changed_login_again, Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(DataSyncActivityRestApi.this, LoginActivityRestApi.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        finish();
-                        dismissProgressDialog();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoginResult> call, Throwable t) {
-                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                FirebaseCrashlytics.getInstance().log(t.getMessage());
-                dismissProgressDialog();
-            }
-        });
+        new SendAsyncTask().execute();
     }
 
     private OrderDetail createOrderDetail(OrderDetailProperty orderDetailProperty, OrderDetail orderDetail) {
@@ -572,11 +503,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
         List<Customer> Customers = new ArrayList<>();
         List<Customer> newCustomers = new ArrayList<>();
         List<VisitorLocation> visitorLocation = new ArrayList<>();
-        String mUserToken;
-
-        SendAsyncTask(String UserToken) {
-            mUserToken = UserToken;
-        }
 
         @Override
         protected void onPreExecute() {
@@ -646,7 +572,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
             ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
 
             SetAllDataBody setAllDataBody = new SetAllDataBody();
-            setAllDataBody.setUserToken(mUserToken);
             setAllDataBody.setOrderDetails(arrayInvoiceDetail);
             setAllDataBody.setOrders(arrayInvoice);
             setAllDataBody.setReceipts(arrayReceipt);
@@ -658,10 +583,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
             setAllDataBody.setChecklists(checkLists);
             setAllDataBody.setVisitorLocations(visitorLocation);
             Call<SaveAllDataResult> saveAllDataResultCall = apiService.SaveAllData(setAllDataBody);
-
-            pd.setMessage(getString(R.string.sending_info));
-            pd.setCancelable(false);
-            pd.show();
             saveAllDataResultCall.enqueue(new Callback<SaveAllDataResult>() {
                 @Override
                 public void onResponse(@NonNull Call<SaveAllDataResult> call, @NonNull Response<SaveAllDataResult> response) {
@@ -784,7 +705,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         pbLoading.setVisibility(View.GONE);
                         db.close();
 
-                        new ReceiveAsyncTask(mUserToken).execute();
+                        new ReceiveAsyncTask().execute();
 
 
                     } else if (response.body() != null) {
@@ -813,8 +734,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     setTextSendErrorResult();
                 }
             });
-
-
         }
     }
 
@@ -868,12 +787,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
     }
 
     class ReceiveAsyncTask extends AsyncTask<String, String, Integer> {
-        String mUserToken;
         GetAllDataBody getAllDataBody;
-
-        ReceiveAsyncTask(String UserToken) {
-            mUserToken = UserToken;
-        }
 
         @Override
         protected void onPreExecute() {
@@ -888,7 +802,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
             clearArraysForRecieve();
 
             getAllDataBody = new GetAllDataBody();
-            getAllDataBody.setUserToken(mUserToken);
 
             //CustomerMaxRowVersion = db.getMaxRowVersion(DbSchema.Customerschema.TABLE_NAME);
             CustomerMaxRowVersion = db.getMaxRowVersion(DbSchema.CustomerSchema.TABLE_NAME);
@@ -968,7 +881,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
             pbLoading.setVisibility(View.GONE);
             pbLoading.setVisibility(View.VISIBLE);
-            pd = new FontProgressDialog(mContext);
 
             final String[] mMsg = {""};
 
@@ -1021,7 +933,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
                             double a = (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
 
-                            new SaveAsyncTask(mUserToken).execute();
+                            new SaveAsyncTask().execute();
                         }
                         pbLoading.setVisibility(View.GONE);
                     } else if (response.body() != null) {
@@ -1048,17 +960,12 @@ public class DataSyncActivityRestApi extends BaseActivity {
     }
 
     class SaveAsyncTask extends AsyncTask<String, String, Integer> {
-        String mUserToken;
 
-        SaveAsyncTask(String userToken) {
-            mUserToken = userToken;
-        }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             pbLoading.setVisibility(View.VISIBLE);
-            pd = new FontProgressDialog(mContext);
             pd.setMessage(getString(R.string.storing_info));
             pd.setCancelable(false);
             pd.show();
@@ -1353,7 +1260,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 }
             }
 
-            new SendSignInfoAsyncTask(mUserToken).execute();
+            new SendSignInfoAsyncTask().execute();
 
             pbLoading.setVisibility(View.GONE);
             dismissProgressDialog();
@@ -1364,11 +1271,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
     class SendSignInfoAsyncTask extends AsyncTask<String, String, Integer> {
 
         List<PicturesProduct> picturesProducts = new ArrayList<>();
-        String mUserToken;
 
-        SendSignInfoAsyncTask(String UserToken) {
-            mUserToken = UserToken;
-        }
 
         @Override
         protected void onPreExecute() {
@@ -1393,7 +1296,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
             ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
             SetAllDataBody setAllDataBody = new SetAllDataBody();
-            setAllDataBody.setUserToken(mUserToken);
             setAllDataBody.setPictures(picturesProducts);
             Call<SaveAllDataResult> saveAllDataResultCall = apiService.SaveAllData(setAllDataBody);
 
@@ -1415,7 +1317,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         pbLoading.setVisibility(View.GONE);
                         db.close();
 
-                        new SendSignImageAsyncTask(mUserToken).execute();
+                        new SendSignImageAsyncTask().execute();
 
                     } else if (response.body() != null) {
                         mMsg[0] = getString(R.string.send_error);
@@ -1441,11 +1343,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
     }
 
     class SendSignImageAsyncTask extends AsyncTask<String, String, Integer> {
-        String mUserToken;
 
-        SendSignImageAsyncTask(String UserToken) {
-            mUserToken = UserToken;
-        }
 
         @Override
         protected Integer doInBackground(String... arg0) {
@@ -1465,7 +1363,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         MultipartBody.Part mpfile = MultipartBody.Part.createFormData("file", mFile.getName(), filePart);
                         ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
 
-                        Call<setSignImage> mSetSignImageResult = apiService.uploadSignImage(mpfile, pictureId, mFile.getName(), mUserToken);
+                        Call<setSignImage> mSetSignImageResult = apiService.uploadSignImage(mpfile, pictureId, mFile.getName(), getPrefUserToken());
                         pd.setMessage(getString(R.string.send_image) + mFile.getName());
                         pd.setCancelable(false);
                         pd.show();
