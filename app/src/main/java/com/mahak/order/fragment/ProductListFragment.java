@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -36,9 +34,7 @@ import com.multilevelview.MultiLevelAdapter;
 import com.multilevelview.MultiLevelRecyclerView;
 import com.multilevelview.models.RecyclerViewItem;
 
-import java.nio.file.OpenOption;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -142,12 +138,12 @@ public class ProductListFragment extends Fragment {
         multiLevelRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
         ArrayList<ProductCategory> productCategories = db.getAllProductCategory();
 
-        /*if (productCategories.size() > 0)
+        if (productCategories.size() > 0)
             addAllRelatedCategory();
         else
-            ll_category.setVisibility(View.GONE);*/
+            ll_category.setVisibility(View.GONE);
 
-        ll_category.setVisibility(View.GONE);
+        //ll_category.setVisibility(View.GONE);
 
         show_all_product.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -259,9 +255,9 @@ public class ProductListFragment extends Fragment {
 
                             if((firstVisibleItem + visibleItemCount) >= totalItemCount){
                                 if (type == ProjectInfo.TYPE_INVOCIE)
-                                    getAdapter().addAll(db.getAllProduct(CategoryId,ProjectInfo.ASSET_EXIST_PRODUCT,totalItemCount));
+                                    getAdapter().addAll(db.getAllProduct(0,CategoryId,ProjectInfo.ASSET_EXIST_PRODUCT,totalItemCount));
                                 else
-                                    getAdapter().addAll(db.getAllProduct(CategoryId,MODE_ASSET,totalItemCount));
+                                    getAdapter().addAll(db.getAllProduct(0,CategoryId,MODE_ASSET,totalItemCount));
                             }
                         }
                     }
@@ -385,12 +381,12 @@ public class ProductListFragment extends Fragment {
                         db.open();
                         getAdapter().clear();
                         if (type == ProjectInfo.TYPE_INVOCIE)
-                            getAdapter().addAll(db.getAllProduct(CategoryId,ProjectInfo.ASSET_EXIST_PRODUCT,totalItemCount));
+                            getAdapter().addAll(db.getAllProduct(clickedItemCategoryCode,CategoryId,ProjectInfo.ASSET_EXIST_PRODUCT,totalItemCount));
                         else
-                            getAdapter().addAll(db.getAllProduct(CategoryId,MODE_ASSET,totalItemCount));
+                            getAdapter().addAll(db.getAllProduct(clickedItemCategoryCode,CategoryId,MODE_ASSET,totalItemCount));
 
 
-                        Set<Product> products = new HashSet<>();
+                        /*Set<Product> products = new HashSet<>();
                         Set<Category> categories = new HashSet<>(mListItems.get(getAdapterPosition()).getCategoryChildren());
 
                         Set<Category> childCategories = new HashSet<>(addAllChild(new ArrayList<>(categories)));
@@ -408,7 +404,7 @@ public class ProductListFragment extends Fragment {
                                     products.add(product);
                             }
                         }
-                        refreshRecyclerview(new ArrayList<>(products));
+                        refreshRecyclerview(new ArrayList<>(products));*/
                     }
                 });
 

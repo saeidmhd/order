@@ -6635,7 +6635,7 @@ public class DbAdapter {
         return array;
     }
 
-    public ArrayList<Product> getAllProduct(long id, int modeasset, int totalItem) {
+    public ArrayList<Product> getAllProduct(long categoryCode , long id, int modeasset, int totalItem) {
         Product product;
         String LIMIT = totalItem + ",100";
         Cursor cursor = null;
@@ -6643,7 +6643,7 @@ public class DbAdapter {
         ArrayList<Product> array = new ArrayList<>();
         int defPriceLevel = BaseActivity.getPrefDefSellPrice();
         try {
-            cursor = getAllProductQuery(135 ,id, LIMIT, orderBy, modeasset, defPriceLevel);
+            cursor = getAllProductQuery(categoryCode ,id, LIMIT, orderBy, modeasset, defPriceLevel);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {

@@ -747,7 +747,7 @@ public class ProductPickerListActivity extends BaseActivity {
         //////////////////////////////////////////////////////////////////
         if (mode == MODE_EDIT) {
             ArrayList<Product> arrayproduct;
-            arrayproduct = db.getAllProduct(categoryid, modeasset, 0);
+            arrayproduct = db.getAllProduct(0,categoryid, modeasset, 0);
             //Set Correct Asset______________________________________________
             for (OrderDetail object : InvoiceDetailActivity.orderDetailArrayList) {
                 for (Product item : arrayproduct) {
@@ -766,7 +766,7 @@ public class ProductPickerListActivity extends BaseActivity {
             //____________________________________________________________________
         }//End of if
         else if (mode == MODE_NEW) {
-            arrayProductMain = db.getAllProduct(categoryid, modeasset, 0);
+            arrayProductMain = db.getAllProduct(0,categoryid, modeasset, 0);
         }
         db.close();
     }

@@ -257,9 +257,9 @@ public class PlaceholderListGalleryFragment extends Fragment {
 
                             if((firstVisibleItem + visibleItemCount) >= totalItemCount){
                                 if (type == ProjectInfo.TYPE_INVOCIE)
-                                    getAdapter().addAll(db.getAllProduct(CategoryId,ProjectInfo.ASSET_EXIST_PRODUCT,totalItemCount));
+                                    getAdapter().addAll(db.getAllProduct(0,CategoryId,ProjectInfo.ASSET_EXIST_PRODUCT,totalItemCount));
                                 else
-                                    getAdapter().addAll(db.getAllProduct(CategoryId,MODE_ASSET,totalItemCount));
+                                    getAdapter().addAll(db.getAllProduct(0,CategoryId,MODE_ASSET,totalItemCount));
                             }
                         }
                     }
