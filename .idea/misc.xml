@@ -3,20 +3,25 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-anydpi/ic_forward.xml" value="0.259375" />
         <entry key="app/src/main/res/layout-de/activity_dashboard.xml" value="0.1" />
         <entry key="app/src/main/res/layout-de/activity_setting.xml" value="0.33" />
         <entry key="app/src/main/res/layout-de/fragment_item_product_gallery.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout-de/grv_product_picker_item.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout-de/lst_product_picker_item.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout-de/receipt_print_arabic.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_category.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_data_sync.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_manage_customer.xml" value="0.20104166666666667" />
+        <entry key="app/src/main/res/layout/activity_product_picker_list.xml" value="0.17572463768115942" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_item_product_gallery.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout/grv_product_picker_item.xml" value="0.5" />
         <entry key="app/src/main/res/layout/list_cheque_receipt.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/lst_category_item.xml" value="0.33" />
         <entry key="app/src/main/res/layout/lst_product_picker_item.xml" value="0.2296875" />
+        <entry key="app/src/main/res/layout/lst_promotion_item.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/layout/receipt_print.xml" value="0.43356643356643354" />
         <entry key="app/src/main/res/layout/receipt_print50mm.xml" value="0.27063106796116504" />
         <entry key="app/src/main/res/layout/receipt_print80mm.xml" value="0.5" />
@@ -26,5 +31,5 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_15" project-jdk-name="15" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_15_PREVIEW" project-jdk-name="15" project-jdk-type="JavaSDK" />
 </project>
