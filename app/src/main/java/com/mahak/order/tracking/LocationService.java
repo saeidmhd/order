@@ -70,6 +70,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.mahak.order.BaseActivity.isRadaraActive;
 import static com.mahak.order.BaseActivity.setPrefSignalUserToken;
 
 public class LocationService extends Service {
@@ -595,8 +596,9 @@ public class LocationService extends Service {
     private void updateUI() {
         if (mCurrentLocation != null) {
             executeEventLocations(mCurrentLocation,false);
-            // TODO: 11/2/21 uncomment on tracking version 
-            //performSignalOperation();
+            // TODO: 11/2/21 uncomment on tracking version
+            if(isRadaraActive())
+                performSignalOperation();
             Location correctLocation = getCorrectLocation(mCurrentLocation);
             if (correctLocation != null) {
                 sendLocation(correctLocation);
@@ -761,10 +763,11 @@ public class LocationService extends Service {
                 .setFastestInterval(5000)
                 .setInterval(10000);
         // TODO: 10/30/21 uncomment on tracking version
-        locationRequest.setSmallestDisplacement(15);
-        //locationRequest.setSmallestDisplacement(MIN_DISPALCEMENT_CHANGE_FOR_UPDATES);
-        /*locationRequest.setInterval(MIN_TIME_INTERVAL_UPDATES);
-        locationRequest.setSmallestDisplacement(MIN_DISPALCEMENT_CHANGE_FOR_UPDATES);*/
+        if(isRadaraActive())
+            locationRequest.setSmallestDisplacement(MIN_DISPALCEMENT_CHANGE_FOR_UPDATES);
+        else
+            locationRequest.setSmallestDisplacement(15);
+        //locationRequest.setInterval(MIN_TIME_INTERVAL_UPDATES);
     }
 
     /**

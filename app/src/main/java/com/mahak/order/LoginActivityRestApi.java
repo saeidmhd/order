@@ -55,6 +55,9 @@ public class LoginActivityRestApi extends BaseActivity {
     private String username;
     private String password;
 
+    private boolean HasRadara;
+    private boolean WithDataTransfer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -173,6 +176,10 @@ public class LoginActivityRestApi extends BaseActivity {
                 dismissProgressDialog();
                 if (response.body() != null) {
                     if (response.body().isResult()) {
+
+                        HasRadara = response.body().getData().isHasRadara();
+                        WithDataTransfer = response.body().getData().isWithDataTransfer();
+
                         if (!ServiceTools.checkDate2(response.body().getData().getServerTime())) {
                             dismissProgressDialog();
                             Dialog dialog = Dialog(getString(R.string.str_message_date));
@@ -276,6 +283,7 @@ public class LoginActivityRestApi extends BaseActivity {
             getFcmTokenRegisterInBackground();
         }
         setPrefUserId(ServiceTools.toLong(user.getServerUserID()));
+        setRadaraActive(HasRadara || WithDataTransfer);
         Intent intent = new Intent(LoginActivityRestApi.this, DashboardActivity.class);
         intent.putExtra(Type_Login, bnd_Login_Splash);
         startActivity(intent);

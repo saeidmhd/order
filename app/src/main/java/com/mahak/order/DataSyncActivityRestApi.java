@@ -69,6 +69,7 @@ import com.mahak.order.service.DataService;
 import com.mahak.order.service.ReadOfflinePicturesProducts;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.DbSchema;
+import com.mahak.order.tracking.TrackingConfig;
 import com.mahak.order.widget.FontAlertDialog;
 import com.mahak.order.widget.FontProgressDialog;
 
@@ -1508,7 +1509,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
             SetDate();
             ShowDate();
             // TODO: 10/30/21 uncomment on tracking version
-            //new TrackingConfig(mContext,DataSyncActivityRestApi.this).getSignalTokenAndSetting();
+            if(isRadaraActive())
+                new TrackingConfig(mContext,DataSyncActivityRestApi.this).getSignalTokenAndSetting();
+
             new ReadOfflinePicturesProducts(mContext).readAllImages();
 
         }

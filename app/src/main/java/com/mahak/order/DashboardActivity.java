@@ -905,7 +905,9 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         if (mGoogleMap != null) {
             if(position != null){
                 marker = mGoogleMap.addMarker(new MarkerOptions().position(position));
-                marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_visitor_3));
+                if (marker != null) {
+                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_visitor_3));
+                }
                 mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(position.latitude, position.longitude), 15));
             }
         }

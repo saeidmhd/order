@@ -1678,6 +1678,7 @@ FirebaseCrashlytics.getInstance().recordException(e);
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
+            Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
             return false;
         }
     }

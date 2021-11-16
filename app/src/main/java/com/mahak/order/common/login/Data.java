@@ -31,14 +31,18 @@ public class Data {
     @SerializedName("ServerTime")
     @Expose
     private String serverTime;
-
     @SerializedName("MahakId")
     @Expose
     private String mahakId;
-
     @SerializedName("CreditDay")
     @Expose
-    private String creditDay;
+    private int creditDay;
+    @SerializedName("HasRadara")
+    @Expose
+    private boolean hasRadara;
+    @SerializedName("WithDataTransfer")
+    @Expose
+    private boolean withDataTransfer;
 
     public String getUserToken() {
         return userToken;
@@ -114,11 +118,27 @@ public class Data {
         this.mahakId = mahakId;
     }
 
-    public String getCreditDay() {
+    public int getCreditDay() {
         return creditDay;
     }
 
-    public void setCreditDay(String creditDay) {
+    public void setCreditDay(int creditDay) {
         this.creditDay = creditDay;
+    }
+
+    public boolean isHasRadara() {
+        return hasRadara;
+    }
+
+    public void setHasRadara(boolean hasRadara) {
+        this.hasRadara = hasRadara;
+    }
+
+    public boolean isWithDataTransfer() {
+        return withDataTransfer;
+    }
+
+    public void setWithDataTransfer(boolean withDataTransfer) {
+        this.withDataTransfer = withDataTransfer;
     }
 }

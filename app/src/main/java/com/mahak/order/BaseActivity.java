@@ -104,6 +104,7 @@ public class BaseActivity extends AppCompatActivity {
     public static String _Key_personCount = "personCount";
     public static String _Key_Username = "Username";
     public static String _Key_PrefArabicReceipt = "PrefArabicReceipt";
+    public static String _Key_PrefRadara = "PrefRadara";
     public static String _Key_name = "name";
     public static String _Key_tell = "tell";
     public static String _Key_MahakId = "MahakId";
@@ -619,6 +620,14 @@ public class BaseActivity extends AppCompatActivity {
 
     public static void setPrefArabicReceipt(boolean value) {
         sh.edit().putBoolean(_Key_PrefArabicReceipt, value).commit();
+    }
+
+    public static boolean isRadaraActive() {
+        return sh.getBoolean(_Key_PrefRadara, false);
+    }
+
+    public static void setRadaraActive(boolean value) {
+        sh.edit().putBoolean(_Key_PrefRadara, value).commit();
     }
 
 
