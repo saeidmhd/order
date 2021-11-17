@@ -9018,13 +9018,12 @@ public class DbAdapter {
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_CityCode, customer.getCityCode());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_Fax, customer.getFax());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_RowVersion, customer.getRowVersion());
-                if (rowVersion == 0)
-                    mDb.insert(DbSchema.CustomerSchema.TABLE_NAME, null, initialvalue);
-                else {
+                if(customer.getPersonClientId() == 0)
                     result = (mDb.update(DbSchema.CustomerSchema.TABLE_NAME, initialvalue, DbSchema.CustomerSchema.COLUMN_PersonId + "=? and " + DbSchema.CustomerSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(customer.getPersonId()), String.valueOf(getPrefUserId())})) > 0;
-                    if (!result)
-                        mDb.insert(DbSchema.CustomerSchema.TABLE_NAME, null, initialvalue);
-                }
+                else
+                    result = (mDb.update(DbSchema.CustomerSchema.TABLE_NAME, initialvalue, DbSchema.CustomerSchema.COLUMN_PersonClientId + "=? and " + DbSchema.CustomerSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(customer.getPersonClientId()), String.valueOf(getPrefUserId())})) > 0;
+                if (!result)
+                    mDb.insert(DbSchema.CustomerSchema.TABLE_NAME, null, initialvalue);
             }
             mDb.setTransactionSuccessful();
         } finally {

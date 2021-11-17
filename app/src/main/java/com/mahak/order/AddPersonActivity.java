@@ -1,5 +1,6 @@
 package com.mahak.order;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -23,10 +25,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.snackbar.Snackbar;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.CustomerGroup;
 import com.mahak.order.common.GPSTracker;
@@ -41,6 +45,7 @@ import static com.mahak.order.common.ServiceTools.replaceWithEnglish;
 
 public class AddPersonActivity extends BaseActivity {
 
+    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     private static int PICK_CONTACT_REQUEST = 1;
     private static final Uri URI = ContactsContract.Contacts.CONTENT_URI;
     private static final Uri PURI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
@@ -196,33 +201,13 @@ public class AddPersonActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                double Latitude = 0;
-                double Longitude = 0;
-                gpsTracker = new GPSTracker(mContext);
-                if (gpsTracker.canGetLocation()) {
-                    Latitude = gpsTracker.getLatitude();
-                    Longitude = gpsTracker.getLongitude();
+                if (!checkPermissions()) {
+                    requestPermissions();
+                }else {
+                    getLatLang();
+                }
 
-                    if (Latitude == 0 && Longitude == 0)
-                        Toast.makeText(mContext, getResources().getString(R.string.str_message_dont_connect_gps), Toast.LENGTH_SHORT).show();
-                    else {
-                        db.open();
-                        db.UpdateLocationCustomer(customer.getId(), String.valueOf(Latitude), String.valueOf(Longitude));
-                        db.close();
 
-                        LatLng pos = new LatLng(Latitude, Longitude);
-                        positions = new ArrayList<>();
-                        positions.add(pos);
-
-                        txtLatitude.setText(String.valueOf(Latitude));
-                        txtLongitude.setText(String.valueOf(Longitude));
-
-                        Intent intent = new Intent(mContext, MapViewActivity.class);
-                        intent.putParcelableArrayListExtra(COORDINATE, positions);
-                        startActivity(intent);
-                    }
-                } else
-                    Toast.makeText(mContext, getResources().getString(R.string.str_message_dont_connect_gps), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -284,6 +269,97 @@ public class AddPersonActivity extends BaseActivity {
             }
         });
     }//End of OnCreate
+
+    private void getLatLang() {
+        double Latitude = 0;
+        double Longitude = 0;
+        gpsTracker = new GPSTracker(mContext);
+        if (gpsTracker.canGetLocation()) {
+            Latitude = gpsTracker.getLatitude();
+            Longitude = gpsTracker.getLongitude();
+
+            if (Latitude == 0 && Longitude == 0)
+                Toast.makeText(mContext, getResources().getString(R.string.str_message_dont_connect_gps), Toast.LENGTH_SHORT).show();
+            else {
+                db.open();
+                db.UpdateLocationCustomer(customer.getId(), String.valueOf(Latitude), String.valueOf(Longitude));
+                db.close();
+
+                LatLng pos = new LatLng(Latitude, Longitude);
+                positions = new ArrayList<>();
+                positions.add(pos);
+
+                txtLatitude.setText(String.valueOf(Latitude));
+                txtLongitude.setText(String.valueOf(Longitude));
+
+                Intent intent = new Intent(mContext, MapViewActivity.class);
+                intent.putParcelableArrayListExtra(COORDINATE, positions);
+                startActivity(intent);
+            }
+        } else
+            Toast.makeText(mContext, getResources().getString(R.string.str_message_dont_connect_gps), Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean checkPermissions() {
+        return  PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+    }
+
+    private void requestPermissions() {
+        boolean shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        if (shouldProvideRationale) {
+            Snackbar.make(
+                    findViewById(R.id.drawer_layout),
+                    R.string.permission_rationale,
+                    Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.ok, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // Request permission
+                            ActivityCompat.requestPermissions(AddPersonActivity.this,
+                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                    REQUEST_PERMISSIONS_REQUEST_CODE);
+                        }
+                    })
+                    .show();
+        } else {
+            ActivityCompat.requestPermissions(AddPersonActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_PERMISSIONS_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
+            if (grantResults.length <= 0) {
+            } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLatLang();
+            } else {
+                Snackbar.make(
+                        findViewById(R.id.drawer_layout),
+                        R.string.permission_denied_explanation,
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction(R.string.settings, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // Build intent that displays the App settings screen.
+                                Intent intent = new Intent();
+                                intent.setAction(
+                                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package",
+                                        BuildConfig.APPLICATION_ID, null);
+                                intent.setData(uri);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        }).show();
+            }
+        }
+    }
+
 
     /**
      * Initializing Variables
