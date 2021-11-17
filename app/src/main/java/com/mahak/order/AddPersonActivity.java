@@ -343,6 +343,26 @@ public class AddPersonActivity extends BaseActivity {
             spnCity.setAdapter(adCity);
             spnCity.setSelection(0);
         }
+
+        for (int i = 0; i < stateRegions.size(); i++) {
+            Region region = stateRegions.get(i);
+            if (region.getCityID() == -1) {
+                spnState.setSelection(i);
+                StateName = region.getProvinceName();
+                cityRegions = db.getCities(region.getProvinceID());
+                AdapterSpnCity adspncity = new AdapterSpnCity(mActivity, cityRegions);
+                spnCity.setAdapter(adspncity);
+                for (int j = 0; j < cityRegions.size(); j++) {
+                    if (cityRegions.get(j).getCityID() == -1) {
+                        spnCity.setSelection(j);
+                        CityName = cityRegions.get(j).getCityName();
+                        cityCode = cityRegions.get(j).getCityID();
+                        break;
+                    }//End of if
+                }//End of for j
+                break;
+            }// End of if
+        }// End of for i
     }
 
     /**

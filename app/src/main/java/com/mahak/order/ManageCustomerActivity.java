@@ -391,9 +391,7 @@ public class ManageCustomerActivity extends BaseActivity {
 
         if (customer != null) {
 
-            if(customer.getCityCode() != -1){
-                customerRegion = db.getRegionWithCityId(customer.getCityCode());
-            }
+            customerRegion = db.getRegionWithCityId(customer.getCityCode());
 
             txtCustomerName.setText(customer.getName());
             txtMarketName.setText(customer.getOrganization());
@@ -434,7 +432,6 @@ public class ManageCustomerActivity extends BaseActivity {
             }//End of for i
             //set selection spnState And spnCity
 
-            if(customer.getCityCode() != -1){
                 for (int i = 0; i < stateRegions.size(); i++) {
                     Region region = stateRegions.get(i);
                     if (region.getProvinceID() == customerRegion.getProvinceID()) {
@@ -455,7 +452,6 @@ public class ManageCustomerActivity extends BaseActivity {
                         break;
                     }// End of if
                 }// End of for i
-            }
 
             if (customer.getPersonCode() != 0) {
 
