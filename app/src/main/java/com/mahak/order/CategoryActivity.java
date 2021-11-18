@@ -28,6 +28,7 @@ public class CategoryActivity extends BaseActivity {
     private DbAdapter db;
     private Context mContext;
     private ArrayList<Category> categories = new ArrayList<>();
+    private ArrayList<Category> existedCategories = new ArrayList<>();
     private TextView tvPageTitle;
 
     @Override
@@ -52,6 +53,10 @@ public class CategoryActivity extends BaseActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        existedCategories = db.getAllExistedCategory();
+
+        //addAllParentCategory();
+
         categories = db.getAllCategoryWithParentCode(0);
 
         menu.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +78,20 @@ public class CategoryActivity extends BaseActivity {
             }
         });
 
+    }
+
+    private void addAllParentCategory(int id) {
+
+        for (Category existed_category : existedCategories)
+            if(existed_category.getParentCode() != 0){
+                categories.addAll(db.getAllParentCategory(existed_category.getParentCode()));
+            }
+
+
+
+        for (Category existed_category : existedCategories)
+            if(existed_category.getParentCode() != 0)
+                addAllParentCategory(existed_category.getParentCode());
     }
 
     private void initialise() {

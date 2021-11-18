@@ -6033,6 +6033,50 @@ public class DbAdapter {
         }
         return categories;
     }
+    public ArrayList<Category> getAllExistedCategory() {
+        Category category;
+        Cursor cursor;
+        ArrayList<Category> categories = new ArrayList<>();
+        try {
+            cursor = mDb.rawQuery(" SELECT Category.* from products left join  ProductCategory on ProductCategory.ProductCode = Products.ProductCode left join Category on ProductCategory.CategoryCode = Category.CategoryCode where Category.CategoryCode is not null GROUP by ParentCode order by ParentCode ", null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    category = categoryFromCursor(cursor);
+                    categories.add(category);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorReasonByTypet", e.getMessage());
+        }
+        return categories;
+    }
+    public ArrayList<Category> getAllParentCategory(int categoryCode) {
+        Category category;
+        Cursor cursor;
+        ArrayList<Category> categories = new ArrayList<>();
+        try {
+            cursor = mDb.rawQuery(" SELECT * from Category where CategoryCode =? ", new String[]{String.valueOf(categoryCode)});
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    category = categoryFromCursor(cursor);
+                    categories.add(category);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorReasonByTypet", e.getMessage());
+        }
+        return categories;
+    }
 
     public ArrayList<Promotion> getAllPromotion() {
         Promotion promotion;

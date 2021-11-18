@@ -9,6 +9,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -107,9 +108,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lastCategoryCode = categories.get(position).getParentCode();
-                categories = db.getAllCategoryWithParentCode(categories.get(position).getCategoryCode());
-                notifyDataSetChanged();
+                if(categories.size() > 0 ){
+                    categories = db.getAllCategoryWithParentCode(categories.get(position).getCategoryCode());
+                    if(categories.size() > 0 )
+                        notifyDataSetChanged();
+                    else
+                        Toast.makeText(context, "زیر مجموعه ای ندارد!", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(context, "زیر مجموعه ای ندارد!", Toast.LENGTH_SHORT).show();
+
+
+
             }
         });
     }
