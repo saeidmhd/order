@@ -10496,6 +10496,7 @@ public class DbAdapter {
         ServiceTools.scheduleAlarm(mCtx);
     }
 
+
     private static class DatabaseHelper extends SQLiteOpenHelper {
         private static final String INDEX_Product = "products_index";
         private static final String INDEX_ProductDetail= "productDertail_index";
@@ -10667,5 +10668,7 @@ public class DbAdapter {
             db.enableWriteAheadLogging();
             db.setLockingEnabled(false);
         }
+
     }
+
 }

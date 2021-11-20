@@ -116,9 +116,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                         Toast.makeText(context, "زیر مجموعه ای ندارد!", Toast.LENGTH_SHORT).show();
                 } else
                     Toast.makeText(context, "زیر مجموعه ای ندارد!", Toast.LENGTH_SHORT).show();
-
-
-
             }
         });
     }

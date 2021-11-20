@@ -16,6 +16,8 @@ import com.mahak.order.common.Category;
 import com.mahak.order.storage.DbAdapter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CategoryActivity extends BaseActivity {
 
@@ -27,8 +29,10 @@ public class CategoryActivity extends BaseActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private DbAdapter db;
     private Context mContext;
-    private ArrayList<Category> categories = new ArrayList<>();
+    private Set<Category> categories = new HashSet<>();
+    private Set<Integer> ids = new HashSet<>();
     private ArrayList<Category> existedCategories = new ArrayList<>();
+    private ArrayList<Category> rootCategories = new ArrayList<>();
     private TextView tvPageTitle;
 
     @Override
@@ -54,16 +58,22 @@ public class CategoryActivity extends BaseActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         existedCategories = db.getAllExistedCategory();
-
-        //addAllParentCategory();
-
-        categories = db.getAllCategoryWithParentCode(0);
+        categories.addAll(existedCategories);
+        for (Category existed_category : existedCategories)
+            if(existed_category.getParentCode() != 0){
+                addAllParentCategory(existed_category.getParentCode());
+            }else
+                rootCategories.add(existed_category);
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                categories = db.getAllCategoryWithParentCode(0);
+                /*categories = db.getAllCategoryWithParentCode(0);
                 mAdapter = new CategoryAdapter(categories, mContext , db);
+                mRecyclerView.setAdapter(mAdapter);*/
+
+                ArrayList<Category> categoryArrayList = new ArrayList<>(rootCategories);
+                mAdapter = new CategoryAdapter(categoryArrayList, mContext , db);
                 mRecyclerView.setAdapter(mAdapter);
             }
         });
@@ -71,27 +81,26 @@ public class CategoryActivity extends BaseActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                categories.clear();
+               /* categories.clear();
                 categories = db.getAllCategoryWithParentCode(CategoryAdapter.lastCategoryCode);
                 mAdapter = new CategoryAdapter(categories, mContext , db);
-                mRecyclerView.setAdapter(mAdapter);
+                mRecyclerView.setAdapter(mAdapter);*/
             }
         });
 
     }
 
+
     private void addAllParentCategory(int id) {
-
-        for (Category existed_category : existedCategories)
-            if(existed_category.getParentCode() != 0){
-                categories.addAll(db.getAllParentCategory(existed_category.getParentCode()));
-            }
-
-
-
-        for (Category existed_category : existedCategories)
-            if(existed_category.getParentCode() != 0)
-                addAllParentCategory(existed_category.getParentCode());
+        if(ids.add(id)){
+            ArrayList<Category> parentCategories =  db.getAllParentCategory(id);
+            categories.addAll(parentCategories);
+            for (Category parentCategory : parentCategories)
+                if(parentCategory.getParentCode() != 0){
+                    addAllParentCategory(parentCategory.getCategoryCode());
+                }else
+                    rootCategories.add(parentCategory);
+        }
     }
 
     private void initialise() {
