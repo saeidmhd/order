@@ -72,8 +72,8 @@ public class CategoryActivity extends BaseActivity {
                 mAdapter = new CategoryAdapter(categories, mContext , db);
                 mRecyclerView.setAdapter(mAdapter);*/
 
-                ArrayList<Category> categoryArrayList = new ArrayList<>(rootCategories);
-                mAdapter = new CategoryAdapter(categoryArrayList, mContext , db);
+                ArrayList<Category> categoryArrayList = new ArrayList<>(categories);
+                mAdapter = new CategoryAdapter(rootCategories,categoryArrayList, mContext , db);
                 mRecyclerView.setAdapter(mAdapter);
             }
         });

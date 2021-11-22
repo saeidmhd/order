@@ -22,22 +22,16 @@ import com.mahak.order.storage.DbAdapter;
 
 import java.util.ArrayList;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> implements Filterable {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
     private ArrayList<Category> categories;
+    private ArrayList<Category> rootCategories;
     private LayoutInflater mInflater;
     private ArrayList<Category> arrayOriginal = new ArrayList<>();
-    private CustomFilterList Filter;
     private Context context;
     private DbAdapter db;
     public static int lastCategoryCode;
 
-    @Override
-    public Filter getFilter() {
-        if (Filter == null)
-            Filter = new CustomFilterList();
-        return Filter;
-    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -49,51 +43,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         }
     }
 
-    public CategoryAdapter(ArrayList<Category> categories, Context context , DbAdapter db) {
+    public CategoryAdapter(ArrayList<Category> rootCategories, ArrayList<Category> categories, Context context, DbAdapter db) {
 
         this.categories = categories;
+        this.rootCategories = rootCategories;
         this.mInflater = LayoutInflater.from(context);
         arrayOriginal.addAll(categories);
         this.context = context;
         this.db = db;
     }
 
-    public class CustomFilterList extends Filter {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-
-            constraint = constraint.toString().toLowerCase();
-            FilterResults result = new FilterResults();
-            String CategoryName;
-
-            if (constraint.toString().length() > 0) {
-                ArrayList<Category> filterItem = new ArrayList<>();
-                for (int i = 0; i < arrayOriginal.size(); i++) {
-                    Category category = arrayOriginal.get(i);
-                    CategoryName = category.getCategoryName();
-                    boolean result_contain = ServiceTools.CheckContainsWithSimillar(constraint.toString(), CategoryName);
-                    if (result_contain) {
-                        filterItem.add(category);
-                    }
-                }//End of for
-                result.values = filterItem;
-                result.count = filterItem.size();
-            } else {
-                synchronized (this) {
-                    result.values = arrayOriginal;
-                    result.count = arrayOriginal.size();
-                }
-            }
-            return result;
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            categories = (ArrayList<Category>) results.values;
-            notifyDataSetChanged();
-        }
-    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent,
@@ -104,24 +63,34 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.category_name.setText(categories.get(position).getCategoryName());
+        holder.category_name.setText(rootCategories.get(position).getCategoryName());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(categories.size() > 0 ){
+                ArrayList<Category> temp = new ArrayList<>();
+                for (Category category : categories){
+                    if(category.getParentCode() == rootCategories.get(position).getCategoryCode())
+                        temp.add(category);
+                }
+                if(temp.size() > 0 ){
+                    rootCategories = temp;
+                    notifyDataSetChanged();
+                }
+
+                /*if(categories.size() > 0 ){
                     categories = db.getAllCategoryWithParentCode(categories.get(position).getCategoryCode());
                     if(categories.size() > 0 )
                         notifyDataSetChanged();
                     else
                         Toast.makeText(context, "زیر مجموعه ای ندارد!", Toast.LENGTH_SHORT).show();
                 } else
-                    Toast.makeText(context, "زیر مجموعه ای ندارد!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "زیر مجموعه ای ندارد!", Toast.LENGTH_SHORT).show();*/
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return categories.size();
+        return rootCategories.size();
     }
 }

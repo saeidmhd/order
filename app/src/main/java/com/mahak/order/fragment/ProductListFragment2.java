@@ -17,9 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.collection.ArraySet;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,7 +44,7 @@ import java.util.Set;
  */
 
 
-public class ProductListFragment extends Fragment {
+public class ProductListFragment2 extends Fragment {
 
     private RecyclerView lstProduct;
     private RecyclerProductAdapter adapterlistProduct;
@@ -88,8 +86,8 @@ public class ProductListFragment extends Fragment {
     private CategoryAdapter mAdapter;
 
 
-    public static ProductListFragment newInstance(int type, int customerId, long groupId, int mode, long orderId, int countProduct) {
-        ProductListFragment frag = new ProductListFragment();
+    public static ProductListFragment2 newInstance(int type, int customerId, long groupId, int mode, long orderId, int countProduct) {
+        ProductListFragment2 frag = new ProductListFragment2();
         Bundle args = new Bundle();
         args.putInt("type", type);
         args.putInt("mode", mode);
@@ -520,14 +518,14 @@ public class ProductListFragment extends Fragment {
 
 
         @Override
-        public CategoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+        public ViewHolder onCreateViewHolder(ViewGroup parent,
                                                                                      int viewType) {
             View view = mInflater.inflate(R.layout.lst_category_item, parent, false);
-            return new CategoryAdapter.ViewHolder(view);
+            return new ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(CategoryAdapter.ViewHolder holder, final int position) {
+        public void onBindViewHolder(ViewHolder holder, final int position) {
 
             holder.category_name.setText(rootCategories.get(position).getCategoryName());
             holder.category_name.setOnClickListener(new View.OnClickListener() {
