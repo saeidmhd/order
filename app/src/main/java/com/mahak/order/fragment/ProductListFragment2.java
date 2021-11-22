@@ -4,20 +4,22 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,7 +36,9 @@ import com.multilevelview.MultiLevelAdapter;
 import com.multilevelview.MultiLevelRecyclerView;
 import com.multilevelview.models.RecyclerViewItem;
 
+import java.nio.file.OpenOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -69,9 +73,10 @@ public class ProductListFragment2 extends Fragment {
     private int totalItem;
     private DbAdapter db;
     private int CountProduct;
-    private LinearLayout  ll_category;
+    private LinearLayout show_all_product, ll_category;
     ArrayList<Product> products = new ArrayList<>();
 
+    MultiLevelRecyclerView multiLevelRecyclerView;
 
     int clickedItemCategoryCode = 0;
     int hasItemCategoryCode = 0;
@@ -83,8 +88,6 @@ public class ProductListFragment2 extends Fragment {
     private Set<Category> categories = new HashSet<>();
     private Set<Integer> ids = new HashSet<>();
     private ArrayList<Category> rootCategories = new ArrayList<>();
-    private CategoryAdapter mAdapter;
-
 
     public static ProductListFragment2 newInstance(int type, int customerId, long groupId, int mode, long orderId, int countProduct) {
         ProductListFragment2 frag = new ProductListFragment2();
@@ -140,46 +143,33 @@ public class ProductListFragment2 extends Fragment {
         layoutManager = new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false);
         lstProduct.setLayoutManager(layoutManager);
 
-        category_list = (RecyclerView) rootView.findViewById(R.id.category_list);
-        //category_menu = (ImageView) rootView.findViewById(R.id.menu);
+        multiLevelRecyclerView = (MultiLevelRecyclerView) rootView.findViewById(R.id.rv_list);
+        show_all_product = (LinearLayout) rootView.findViewById(R.id.show_all_product);
         ll_category = (LinearLayout) rootView.findViewById(R.id.ll_category);
 
-       // multiLevelRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
+        multiLevelRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
         ArrayList<ProductCategory> productCategories = db.getAllProductCategory();
 
-        if (productCategories.size() > 0)
+        /*if (productCategories.size() > 0)
             addAllRelatedCategory();
         else
-            ll_category.setVisibility(View.GONE);
+            ll_category.setVisibility(View.GONE);*/
 
-        //ll_category.setVisibility(View.GONE);
+        ll_category.setVisibility(View.GONE);
 
+        show_all_product.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                refreshRecyclerview(arrayTemp);
+            }
+        });
 
         return rootView;
     }
 
 
     private void addAllRelatedCategory() {
-
-        category_list.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL, false);
-        mLayoutManager.setReverseLayout(true);
-        category_list.setLayoutManager(mLayoutManager);
-
-        existedCategories = db.getAllExistedCategory();
-        categories.addAll(existedCategories);
-        for (Category existed_category : existedCategories)
-            if(existed_category.getParentCode() != 0){
-                addAllParentCategory(existed_category.getParentCode());
-            }else
-                rootCategories.add(existed_category);
-
-        ArrayList<Category> categoryArrayList = new ArrayList<>(categories);
-        mAdapter = new CategoryAdapter(rootCategories,categoryArrayList, mContext , db);
-        category_list.setAdapter(mAdapter);
-
-
-       /* ArrayList<Category> rootCategories;
+        ArrayList<Category> rootCategories;
         rootCategories = db.getAllRootCategories();
 
         multiLevelRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
@@ -188,20 +178,8 @@ public class ProductListFragment2 extends Fragment {
 
         multiLevelRecyclerView.setAdapter(myAdapter);
         multiLevelRecyclerView.setToggleItemOnClick(false);
-        multiLevelRecyclerView.setAccordion(false);*/
+        multiLevelRecyclerView.setAccordion(false);
 
-    }
-
-    private void addAllParentCategory(int id) {
-        if(ids.add(id)){
-            ArrayList<Category> parentCategories =  db.getAllParentCategory(id);
-            categories.addAll(parentCategories);
-            for (Category parentCategory : parentCategories)
-                if(parentCategory.getParentCode() != 0){
-                    addAllParentCategory(parentCategory.getCategoryCode());
-                }else
-                    rootCategories.add(parentCategory);
-        }
     }
 
 
@@ -234,8 +212,8 @@ public class ProductListFragment2 extends Fragment {
             arrayTemp.addAll(ProductPickerListActivity.arrayProductMain);
             txtSearch = ProductPickerListActivity.txtSearch;
 
-             MODE_ASSET = ProductPickerListActivity.MODE_ASSET;
-             CategoryId = ProductPickerListActivity.CategoryId;
+            MODE_ASSET = ProductPickerListActivity.MODE_ASSET;
+            CategoryId = ProductPickerListActivity.CategoryId;
 
         } else if (productsListActivity != null) {
             array.addAll(ProductsListActivity.arrayProductMain);
@@ -411,10 +389,16 @@ public class ProductListFragment2 extends Fragment {
                 ll_category.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        clickedItemCategoryCode = mListItems.get(getAdapterPosition()).getCategoryCode();
+                        db.open();
+                        getAdapter().clear();
+                        if (type == ProjectInfo.TYPE_INVOCIE)
+                            getAdapter().addAll(db.getAllProduct(hasItemCategoryCode,CategoryId,ProjectInfo.ASSET_EXIST_PRODUCT,totalItemCount));
+                        else
+                            getAdapter().addAll(db.getAllProduct(hasItemCategoryCode,CategoryId,MODE_ASSET,totalItemCount));
 
 
-
-                        /*Set<Product> products = new HashSet<>();
+                        Set<Product> products = new HashSet<>();
                         Set<Category> categories = new HashSet<>(mListItems.get(getAdapterPosition()).getCategoryChildren());
 
                         Set<Category> childCategories = new HashSet<>(addAllChild(new ArrayList<>(categories)));
@@ -432,7 +416,7 @@ public class ProductListFragment2 extends Fragment {
                                     products.add(product);
                             }
                         }
-                        refreshRecyclerview(new ArrayList<>(products));*/
+                        refreshRecyclerview(new ArrayList<>(products));
                     }
                 });
 
@@ -484,95 +468,6 @@ public class ProductListFragment2 extends Fragment {
         lstProduct.setAdapter(adapterlistProduct);
         adapterlistProduct.notifyDataSetChanged();
     }
-
-    class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
-
-        private ArrayList<Category> categories;
-        private ArrayList<Category> rootCategories;
-        private LayoutInflater mInflater;
-        private ArrayList<Category> arrayOriginal = new ArrayList<>();
-        private Context context;
-        private DbAdapter db;
-        public  int lastCategoryCode;
-
-
-        public  class ViewHolder extends RecyclerView.ViewHolder {
-
-            public Button category_name;
-
-            ViewHolder(View itemView) {
-                super(itemView);
-                category_name = (Button) itemView.findViewById(R.id.categoryName);
-            }
-        }
-
-        public CategoryAdapter(ArrayList<Category> rootCategories, ArrayList<Category> categories, Context context, DbAdapter db) {
-
-            this.categories = categories;
-            this.rootCategories = rootCategories;
-            this.mInflater = LayoutInflater.from(context);
-            arrayOriginal.addAll(categories);
-            this.context = context;
-            this.db = db;
-        }
-
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                                     int viewType) {
-            View view = mInflater.inflate(R.layout.lst_category_item, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, final int position) {
-
-            holder.category_name.setText(rootCategories.get(position).getCategoryName());
-            holder.category_name.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ArrayList<Product> products;
-                    clickedItemCategoryCode = rootCategories.get(position).getCategoryCode();
-                    db.open();
-                    if (type == ProjectInfo.TYPE_INVOCIE){
-                        products = db.getAllProduct(clickedItemCategoryCode,CategoryId,ProjectInfo.ASSET_EXIST_PRODUCT,totalItemCount);
-                    }else
-                        products = db.getAllProduct(clickedItemCategoryCode,CategoryId,MODE_ASSET,totalItemCount);
-
-                    if(products.size() > 0){
-                        getAdapter().clear();
-                        getAdapter().addAll(products);
-                        hasItemCategoryCode = clickedItemCategoryCode;
-                    }
-
-                    ArrayList<Category> temp = new ArrayList<>();
-                    for (Category category : categories){
-                        if(category.getParentCode() == rootCategories.get(position).getCategoryCode())
-                            temp.add(category);
-                    }
-                    if(temp.size() > 0 ){
-                        rootCategories = temp;
-                        notifyDataSetChanged();
-                    }
-
-                /*if(categories.size() > 0 ){
-                    categories = db.getAllCategoryWithParentCode(categories.get(position).getCategoryCode());
-                    if(categories.size() > 0 )
-                        notifyDataSetChanged();
-                    else
-                        Toast.makeText(context, "زیر مجموعه ای ندارد!", Toast.LENGTH_SHORT).show();
-                } else
-                    Toast.makeText(context, "زیر مجموعه ای ندارد!", Toast.LENGTH_SHORT).show();*/
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return rootCategories.size();
-        }
-    }
-
 
 
 }
