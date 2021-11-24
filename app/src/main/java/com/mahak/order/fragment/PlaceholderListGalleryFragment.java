@@ -160,7 +160,18 @@ public class PlaceholderListGalleryFragment extends Fragment {
             calculateSelectedProduct();
             productAdapter = new RecyclerProductAdapter(mContext, array, productPickerListActivity, R.layout.fragment_item_product_gallery, type, customerId, GroupId, mode, OrderId);
             lstProduct.setAdapter(productAdapter);
+
+            if (txtSearch != null) {
+                productAdapter.getFilter(CategoryId,MODE_ASSET).filter(txtSearch.getText().toString(), new Filter.FilterListener() {
+                    @Override
+                    public void onFilterComplete(int count) {
+                        //tvPageTitle.setText(getString(R.string.str_nav_product_list)+"("+count+")");
+                    }
+                });
+            }
         }
+
+
 
         final TextView finalTxtSearch = txtSearch;
         lstProduct.addOnScrollListener(new RecyclerView.OnScrollListener() {

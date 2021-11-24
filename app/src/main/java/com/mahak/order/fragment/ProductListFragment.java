@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -137,6 +138,14 @@ public class ProductListFragment extends Fragment {
                     customerId,
                     GroupId, mode, OrderId);
             lstProduct.setAdapter(adapterlistProduct);
+            if (txtSearch != null) {
+                adapterlistProduct.getFilter(CategoryId,MODE_ASSET).filter(txtSearch.getText().toString(), new Filter.FilterListener() {
+                    @Override
+                    public void onFilterComplete(int count) {
+                        //tvPageTitle.setText(getString(R.string.str_nav_product_list)+"("+count+")");
+                    }
+                });
+            }
         }
 
         final TextView finalTxtSearch = txtSearch;

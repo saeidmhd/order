@@ -437,6 +437,7 @@ public class ProductGridFragment extends Fragment {
 //            gvProduct.setAdapter(adapterlistProduct);
             productAdapter = new RecyclerProductAdapter(mContext, array, productPickerListActivity, R.layout.grv_product_picker_item, type, customerId, GroupId, mode, OrderId);
             lstProduct.setAdapter(productAdapter);
+
             if (txtSearch != null) {
                 productAdapter.getFilter(CategoryId,MODE_ASSET).filter(txtSearch.getText().toString(), new Filter.FilterListener() {
                     @Override
