@@ -11,6 +11,7 @@
         <entry key="app/src/main/res/layout-de/activity_setting.xml" value="0.33" />
         <entry key="app/src/main/res/layout-de/fragment_item_product_gallery.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout-de/fragment_products_grid2.xml" value="0.19270833333333334" />
+        <entry key="app/src/main/res/layout-de/fragment_products_list.xml" value="0.14375" />
         <entry key="app/src/main/res/layout-de/fragment_products_list2.xml" value="0.19270833333333334" />
         <entry key="app/src/main/res/layout-de/grv_product_picker_item.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout-de/lst_product_picker_item.xml" value="0.2296875" />
