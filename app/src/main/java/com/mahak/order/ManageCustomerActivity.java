@@ -511,27 +511,26 @@ public class ManageCustomerActivity extends BaseActivity {
             }//End of for i
             //set selection spnState And spnCity
 
-                for (int i = 0; i < stateRegions.size(); i++) {
+            for (int i = 0; i < stateRegions.size(); i++) {
+                Region region = stateRegions.get(i);
+                if (region.getProvinceID() == customerRegion.getProvinceID()) {
+                    spnState.setSelection(i);
+                    StateName = region.getProvinceName();
 
-                    Region region = stateRegions.get(i);
-                    if (stateRegions.get(i).getProvinceName().equals(customer.getState())) {
-                        spnState.setSelection(i);
-                        StateName = customer.getState();
-
-                        cityRegions = db.getCities(region.getProvinceID());
-                        AdapterSpnCity adspncity = new AdapterSpnCity(mActivity, cityRegions);
-                        spnCity.setAdapter(adspncity);
-
-                        for (int j = 0; j < cityRegions.size(); j++) {
-                            if (cityRegions.get(j).getCityName().equals(customer.getCity())) {
-                                spnCity.setSelection(j);
-                                CityName = customer.getCity();
-                                break;
-                            }//End of if
-                        }//End of for j
-                        break;
-                    }// End of if
-                }// End of for i
+                    cityRegions = db.getCities(region.getProvinceID());
+                    AdapterSpnCity adspncity = new AdapterSpnCity(mActivity, cityRegions);
+                    spnCity.setAdapter(adspncity);
+                    for (int j = 0; j < cityRegions.size(); j++) {
+                        if (cityRegions.get(j).getCityID() == customerRegion.getCityID()) {
+                            spnCity.setSelection(j);
+                            CityName = cityRegions.get(j).getCityName();
+                            cityCode = cityRegions.get(j).getCityID();
+                            break;
+                        }//End of if
+                    }//End of for j
+                    break;
+                }// End of if
+            }// End of for i
 
             if (customer.getPersonCode() != 0) {
 
