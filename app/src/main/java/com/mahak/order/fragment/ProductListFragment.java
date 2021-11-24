@@ -2,24 +2,18 @@ package com.mahak.order.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Filter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.collection.ArraySet;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,8 +26,6 @@ import com.mahak.order.common.ProductCategory;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.threeLevelAdapter.Item;
-import com.multilevelview.MultiLevelAdapter;
-import com.multilevelview.MultiLevelRecyclerView;
 import com.multilevelview.models.RecyclerViewItem;
 
 import java.util.ArrayList;
@@ -74,10 +66,8 @@ public class ProductListFragment extends Fragment {
     private LinearLayout  ll_category;
     ArrayList<Product> products = new ArrayList<>();
 
-
     int clickedItemCategoryCode = 0;
     int hasItemCategoryCode = 0;
-
 
     private RecyclerView category_list;
     private LinearLayoutManager mLayoutManager;
@@ -86,7 +76,6 @@ public class ProductListFragment extends Fragment {
     private Set<Integer> ids = new HashSet<>();
     private ArrayList<Category> rootCategories = new ArrayList<>();
     private CategoryAdapter mAdapter;
-
 
     public static ProductListFragment newInstance(int type, int customerId, long groupId, int mode, long orderId, int countProduct) {
         ProductListFragment frag = new ProductListFragment();
@@ -137,7 +126,7 @@ public class ProductListFragment extends Fragment {
 
         db.open();
         //View rootView = inflater.inflate(R.layout.fragment_products_list, container, false);
-        View rootView = inflater.inflate(R.layout.fragment_products_list2, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_products_list3, container, false);
         lstProduct = (RecyclerView) rootView.findViewById(R.id.lstProduct);
         layoutManager = new LinearLayoutManager(mContext, RecyclerView.VERTICAL, false);
         lstProduct.setLayoutManager(layoutManager);
@@ -146,15 +135,12 @@ public class ProductListFragment extends Fragment {
         //category_menu = (ImageView) rootView.findViewById(R.id.menu);
         ll_category = (LinearLayout) rootView.findViewById(R.id.ll_category);
 
-       // multiLevelRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
         ArrayList<ProductCategory> productCategories = db.getAllProductCategory();
 
         if (productCategories.size() > 0)
             addAllRelatedCategory();
         else
             ll_category.setVisibility(View.GONE);
-
-        //ll_category.setVisibility(View.GONE);
 
 
         return rootView;
@@ -179,18 +165,6 @@ public class ProductListFragment extends Fragment {
         ArrayList<Category> categoryArrayList = new ArrayList<>(categories);
         mAdapter = new CategoryAdapter(rootCategories,categoryArrayList, mContext , db);
         category_list.setAdapter(mAdapter);
-
-
-       /* ArrayList<Category> rootCategories;
-        rootCategories = db.getAllRootCategories();
-
-        multiLevelRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        List<Item> itemList = (List<Item>) recursivePopulateData(rootCategories.size(), rootCategories);
-        MyLevelCategoryAdapter myAdapter = new MyLevelCategoryAdapter(mContext, itemList, multiLevelRecyclerView, getAdapter());
-
-        multiLevelRecyclerView.setAdapter(myAdapter);
-        multiLevelRecyclerView.setToggleItemOnClick(false);
-        multiLevelRecyclerView.setAccordion(false);*/
 
     }
 
@@ -264,11 +238,6 @@ public class ProductListFragment extends Fragment {
                     }
                 });
             }
-            //Set CountProducts ___________________________________________________
-           /* if (productPickerListActivity != null)
-                ProductPickerListActivity.tvPageTitle.setText(getString(R.string.str_nav_product_list) + "(" + array.size() + ")");
-            if (productsListActivity != null)
-                ProductsListActivity.tvPageTitle.setText(getString(R.string.str_nav_product_list) + "(" + array.size() + ")");*/
         }
 
         final TextView finalTxtSearch = txtSearch;
@@ -305,186 +274,6 @@ public class ProductListFragment extends Fragment {
 
     public RecyclerProductAdapter getAdapter() {
         return adapterlistProduct;
-    }
-
-    public class MyLevelCategoryAdapter extends MultiLevelAdapter {
-
-        private Holder mViewHolder;
-        private Context mContext;
-        private List<Item> mListItems = new ArrayList<>();
-        private Item mItem;
-        private MultiLevelRecyclerView mMultiLevelRecyclerView;
-        private RecyclerProductAdapter adapter;
-        private DbAdapter db;
-
-        public MyLevelCategoryAdapter(Context mContext, List<Item> mListItems, MultiLevelRecyclerView mMultiLevelRecyclerView, RecyclerProductAdapter adapter) {
-            super(mListItems);
-            this.mListItems = mListItems;
-            this.mContext = mContext;
-            this.mMultiLevelRecyclerView = mMultiLevelRecyclerView;
-            this.adapter = adapter;
-            db = new DbAdapter(mContext);
-        }
-
-        private void setExpandButton(ImageView expandButton, boolean isExpanded) {
-            expandButton.setImageResource(isExpanded ? R.drawable.ic_keyboard_arrow_up_black_24dp : R.drawable.ic_keyboard_arrow_down_black_24dp);
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            mViewHolder = (Holder) holder;
-            mItem = mListItems.get(position);
-
-            if (mItem.hasChildren())
-                holder.itemView.setBackgroundColor(Color.parseColor("#efefef"));
-            else {
-                holder.itemView.setBackgroundColor(Color.parseColor("#dedede"));
-                mViewHolder.mTitle.setTextSize(16);
-            }
-
-
-        /*switch (getItemViewType(position)) {
-            case 1:
-                holder.itemView.setBackgroundColor(Color.parseColor("#efefef"));
-                break;
-            case 2:
-                holder.itemView.setBackgroundColor(Color.parseColor("#dedede"));
-                break;
-            default:
-                holder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
-                break;
-        }*/
-            mViewHolder.mTitle.setText(mItem.getText());
-
-            if (mItem.hasChildren() && mItem.getChildren().size() > 0) {
-                // setExpandButton(mViewHolder.mExpandIcon, mItem.isExpanded());
-                mViewHolder.mExpandButton.setVisibility(View.VISIBLE);
-            } else {
-                mViewHolder.mExpandButton.setVisibility(View.GONE);
-            }
-
-            Log.e("MuditLog", mItem.getLevel() + " " + mItem.getPosition() + " " + mItem.isExpanded() + "");
-
-            // indent child items
-            // Note: the parent item should start at zero to have no indentation
-            // e.g. in populateFakeData(); the very first Item shold be instantiate like this: Item item = new Item(0);
-        /*float density = mContext.getResources().getDisplayMetrics().density;
-        ((ViewGroup.MarginLayoutParams) mViewHolder.mTextBox.getLayoutParams()).rightMargin = (int) ((getItemViewType(position) * 20) * density + 0.5f);*/
-            /*float textSize = mViewHolder.mTitle.getTextSize();
-             */
-        }
-
-
-        private class Holder extends RecyclerView.ViewHolder {
-
-            TextView mTitle;
-            ImageView mExpandIcon;
-            LinearLayout mTextBox, mExpandButton, ll_category;
-
-            Holder(View itemView) {
-                super(itemView);
-                mTitle = (TextView) itemView.findViewById(R.id.title);
-                mExpandIcon = (ImageView) itemView.findViewById(R.id.image_view);
-                mTextBox = (LinearLayout) itemView.findViewById(R.id.text_box);
-                ll_category = (LinearLayout) itemView.findViewById(R.id.ll_category);
-                mExpandButton = (LinearLayout) itemView.findViewById(R.id.expand_field);
-
-
-                // The following code snippets are only necessary if you set multiLevelRecyclerView.removeItemClickListeners(); in MainActivity.java
-                // this enables more than one click event on an item (e.g. Click Event on the item itself and click event on the expand button)
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //set click event on item here
-
-                        // Toast.makeText(mContext, String.format(Locale.ENGLISH, "Item at position %d was clicked!", getAdapterPosition()), Toast.LENGTH_SHORT).show();
-                        Toast.makeText(mContext, mListItems.get(getAdapterPosition()).getText(), Toast.LENGTH_SHORT).show();
-
-
-                    }
-                });
-
-
-                ll_category.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-
-
-                        /*Set<Product> products = new HashSet<>();
-                        Set<Category> categories = new HashSet<>(mListItems.get(getAdapterPosition()).getCategoryChildren());
-
-                        Set<Category> childCategories = new HashSet<>(addAllChild(new ArrayList<>(categories)));
-
-                        categories.addAll(childCategories);
-
-                        //ArrayList<ProductCategory> productCategories = new ArrayList<>(db.getAllProductCategoryWithCategoryCode(clickedItemCategoryCode));
-                        Set<ProductCategory> productCategories = new HashSet<>(db.getAllProductCategoryWithCategoryCode(clickedItemCategoryCode));
-                        for (Category category : categories)
-                            productCategories.addAll(db.getAllProductCategoryWithCategoryCode(category.getCategoryCode()));
-
-                        for (ProductCategory productCategory : productCategories) {
-                            for (Product product : arrayTemp) {
-                                if (productCategory.getProductCode() == product.getProductCode())
-                                    products.add(product);
-                            }
-                        }
-                        refreshRecyclerview(new ArrayList<>(products));*/
-                    }
-                });
-
-                //set click listener on LinearLayout because the click area is bigger than the ImageView
-                mExpandButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        //adapter.getFilter().filter();
-
-                        // set click event on expand button here
-                        mMultiLevelRecyclerView.toggleItemsGroup(getAdapterPosition());
-                        mExpandIcon.animate().rotation(mListItems.get(getAdapterPosition()).isExpanded() ? -180 : 0).start();
-                        // refreshRecyclerview(arrayTemp);
-
-                        // setExpandButton(mExpandIcon, mListItems.get(getAdapterPosition()).isExpanded());
-
-                        //Toast.makeText(mContext, String.format(Locale.ENGLISH, "Item at position %d is expanded: %s", getAdapterPosition(), mItem.isExpanded()), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        }
-
-    }
-
-    private ArrayList<Category> addAllChild(ArrayList<Category> categories) {
-        ArrayList<Category> childCategories = new ArrayList<>();
-        for (Category category : categories) {
-            if (db.getAllCategoryWithParentCode(category.getCategoryCode()).size() > 0) {
-                childCategories.addAll(db.getAllCategoryWithParentCode(category.getCategoryCode()));
-                addAllChild(childCategories);
-            }
-        }
-        return childCategories;
-    }
-
-    private void refreshRecyclerview(ArrayList<Product> arrayTemp) {
-        adapterlistProduct = new RecyclerProductAdapter(
-                mActivity,
-                arrayTemp,
-                productPickerListActivity,
-                R.layout.lst_product_picker_item,
-                type,
-                customerId,
-                GroupId,
-                mode,
-                OrderId);
-
-        lstProduct.setAdapter(adapterlistProduct);
-        adapterlistProduct.notifyDataSetChanged();
     }
 
     class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
@@ -556,15 +345,6 @@ public class ProductListFragment extends Fragment {
                         rootCategories = temp;
                         notifyDataSetChanged();
                     }
-
-                /*if(categories.size() > 0 ){
-                    categories = db.getAllCategoryWithParentCode(categories.get(position).getCategoryCode());
-                    if(categories.size() > 0 )
-                        notifyDataSetChanged();
-                    else
-                        Toast.makeText(context, "زیر مجموعه ای ندارد!", Toast.LENGTH_SHORT).show();
-                } else
-                    Toast.makeText(context, "زیر مجموعه ای ندارد!", Toast.LENGTH_SHORT).show();*/
                 }
             });
         }
