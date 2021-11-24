@@ -20,6 +20,7 @@
             android:id="@+id/imgProduct"
             android:layout_width="match_parent"
             android:layout_height="@dimen/product_gallery_image_height"
+            android:layout_margin="@dimen/small_text_size"
             android:background="@drawable/image_empty_box"
             android:scaleType="fitCenter"
             android:src="@drawable/img_default_product" />
@@ -27,15 +28,15 @@
         <ImageView
             android:visibility="gone"
             android:id="@+id/imgGift"
-            android:layout_marginTop="@dimen/NormalSize"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:layout_marginBottom="2dp"
+            android:layout_margin="2dp"
             android:scaleType="fitCenter"
             android:layout_gravity="right"
             app:srcCompat="@drawable/ic_gifts" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:visibility="gone"
             android:id="@+id/recyclerImage"
             android:layout_width="match_parent"
             android:layout_height="@dimen/product_gallery_other_image_height"
@@ -129,6 +130,7 @@
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="32dp"
+                    android:background="@color/forms_alter_row"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="@dimen/SmallSize">
@@ -154,11 +156,9 @@
                         android:text="@string/sample_product" />
                 </LinearLayout>
 
-
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="32dp"
-                    android:background="@color/forms_alter_row"
                     android:gravity="right|center_vertical"
                     android:orientation="horizontal"
                     android:padding="@dimen/SmallSize">
@@ -198,6 +198,7 @@
                     android:id="@+id/panelTotalAsset"
                     android:layout_width="fill_parent"
                     android:layout_height="32dp"
+                    android:background="@color/forms_alter_row"
                     android:gravity="right|center_vertical"
                     android:orientation="horizontal"
                     android:padding="@dimen/SmallSize"
@@ -364,8 +365,8 @@
                 </LinearLayout>
 
             </LinearLayout>
-        </LinearLayout>
 
+        </LinearLayout>
 
     </LinearLayout>
 

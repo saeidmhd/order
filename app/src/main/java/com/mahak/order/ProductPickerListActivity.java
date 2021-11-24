@@ -711,8 +711,6 @@ public class ProductPickerListActivity extends BaseActivity {
 
         }// End of While
         tvTotalCount.setText(formatCount(TotalCount));
-
-        //////////////////////////////////////////////
     }
 
     /**
@@ -1517,24 +1515,7 @@ public class ProductPickerListActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
-
-      /*  getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        if (Type != ProjectInfo.TYPE_RETURN_OF_SALE)
-            CalculationTotal();
-        else
-            CalculationTotalReturn();
-
-        if (PAGE_STATE == LIST_STATE && productListFragment != null && productListFragment.getAdapter() != null)
-            productListFragment.refresh("");
-        if (PAGE_STATE == GRID_STATE && productGridFragment != null && productGridFragment.getAdapter() != null)
-            productGridFragment.refresh("");
-        if (PAGE_STATE == GALLERY_STATE && placeholderListGalleryFragment != null)
-            placeholderListGalleryFragment.refresh("");
-        if (PAGE_STATE == GALLERY_PAGE_STATE && productPageGalleryFragment != null)
-            productPageGalleryFragment.refresh("");
-        if (PAGE_STATE == GALLERY_GRID_STATE && productGridGalleryFragment != null)
-            productGridGalleryFragment.refresh("");*/
-
+        CalculationTotal();
         super.onResume();
     }
 

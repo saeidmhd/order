@@ -190,6 +190,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
 
         if (type == 0) {
             holder.panelCount.setVisibility(View.GONE);
+            holder.panelTotalCount.setVisibility(View.GONE);
         }
 
         Boolean res = false;

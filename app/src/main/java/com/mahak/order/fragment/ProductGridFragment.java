@@ -229,10 +229,13 @@ public class ProductGridFragment extends Fragment {
                 txtTotalCount = (TextView) view.findViewById(R.id.txtTotalCount);
                 panelTotalAsset = view.findViewById(R.id.panelTotalAsset);
                 panelTotalCount = view.findViewById(R.id.panelTotalCount);
-                if (productPickerListActivity == null)
+                if (productPickerListActivity == null){
                     view.findViewById(R.id.panelCount).setVisibility(View.GONE);
-                else
+                    view.findViewById(R.id.panelTotalCount).setVisibility(View.GONE);
+                }else{
                     view.findViewById(R.id.panelCount).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.panelTotalCount).setVisibility(View.VISIBLE);
+                }
             }
 
             @SuppressWarnings("rawtypes")
