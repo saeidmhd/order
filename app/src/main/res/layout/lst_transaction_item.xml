@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="right"
     android:orientation="vertical">
@@ -125,11 +125,10 @@
 
         <com.mahak.order.widget.FontTextView
             style="@style/forms_label_default"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/NormalSize"
             android:layout_weight="1"
-            android:maxLines="4"
             android:id="@+id/tvDescription" />
 
         <com.mahak.order.widget.FontTextView

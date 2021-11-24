@@ -68,8 +68,8 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="40dip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="right|center_vertical"
         android:orientation="horizontal"
         android:paddingRight="20dip"
@@ -77,7 +77,7 @@
 
         <com.mahak.order.widget.FontTextView
             style="@style/forms_label_default"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/NormalSize"
             android:layout_weight="1"

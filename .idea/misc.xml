@@ -16,6 +16,7 @@
         <entry key="app/src/main/res/layout-de/grv_product_picker_item.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout-de/lst_product_picker_item.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout-de/receipt_print_arabic.xml" value="0.5" />
+        <entry key="app/src/main/res/layout-sw600dp/lst_transaction_item.xml" value="0.265625" />
         <entry key="app/src/main/res/layout/activity_category.xml" value="0.18659420289855072" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_data_sync.xml" value="0.25" />
@@ -33,6 +34,7 @@
         <entry key="app/src/main/res/layout/list_cheque_receipt.xml" value="0.33" />
         <entry key="app/src/main/res/layout/lst_category_item.xml" value="0.33" />
         <entry key="app/src/main/res/layout/lst_product_picker_item.xml" value="0.2296875" />
+        <entry key="app/src/main/res/layout/lst_transaction_item.xml" value="0.265625" />
         <entry key="app/src/main/res/layout/receipt_print.xml" value="0.43356643356643354" />
         <entry key="app/src/main/res/layout/receipt_print50mm.xml" value="0.27063106796116504" />
         <entry key="app/src/main/res/layout/receipt_print80mm.xml" value="0.5" />
