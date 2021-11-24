@@ -3,25 +3,19 @@ package com.mahak.order.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mahak.order.BaseActivity;
@@ -30,23 +24,15 @@ import com.mahak.order.ProductItemInitialize;
 import com.mahak.order.ProductPickerListActivity;
 import com.mahak.order.ProductsListActivity;
 import com.mahak.order.R;
-import com.mahak.order.common.Category;
 import com.mahak.order.common.OrderDetail;
 import com.mahak.order.common.Product;
-import com.mahak.order.common.ProductCategory;
 import com.mahak.order.common.ProductDetail;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.storage.DbAdapter;
-import com.mahak.order.threeLevelAdapter.Item;
-import com.multilevelview.MultiLevelAdapter;
-import com.multilevelview.MultiLevelRecyclerView;
-import com.multilevelview.models.RecyclerViewItem;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -391,7 +377,7 @@ public class ProductGridFragment extends Fragment {
 
         db.open();
         //View rootView = inflater.inflate(R.layout.fragment_products_grid, container, false);
-        View rootView = inflater.inflate(R.layout.fragment_products_grid2, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_products_grid, container, false);
         lstProduct = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         gridLayoutManager = new GridLayoutManager(mContext, 2);
         lstProduct.setLayoutManager(gridLayoutManager);
