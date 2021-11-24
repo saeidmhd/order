@@ -4816,7 +4816,7 @@ public class DbAdapter {
         return TotalCount;
     }
 
-    public int getTotalCountProduct(String searchStr, long CategoryId, int MODE_ASSET) {
+    public int getTotalCountProduct(String searchStr, long categoryCode , long CategoryId, int MODE_ASSET) {
         Cursor cursor;
         String orderBy = BaseActivity.getPrefSortBase_product() + " " + BaseActivity.getPrefSortDirection();
         if (ServiceTools.checkArabic(searchStr)) {
@@ -4825,10 +4825,12 @@ public class DbAdapter {
         String LikeStr = ServiceTools.getLikeString(searchStr);
         int TotalCount = 0;
         try {
-            cursor = mDb.rawQuery(" select count(*) from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+            cursor = mDb.rawQuery(" select count(*) from Products " +
+                    " inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+                    " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode " +
                     " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_Deleted + " = " + " 0 and " + DbSchema.ProductDetailSchema.TABLE_NAME + "." + DbSchema.ProductDetailSchema.COLUMN_Deleted + " = " + " 0 " +
                     " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                    getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) +
+                    getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + getCategoryStrnig(categoryCode) +
                     " order by " + orderBy, null);
             if (cursor != null) {
                 cursor.moveToFirst();
@@ -6422,7 +6424,7 @@ public class DbAdapter {
         return array;
     }
 
-    public ArrayList<Product> searchProduct(String searchStr, int type, long CategoryId, int MODE_ASSET) {
+    public ArrayList<Product> searchProduct(String searchStr, long categoryCode ,int type, long CategoryId, int MODE_ASSET) {
         Product product;
         Cursor cursor;
         String orderBy = BaseActivity.getPrefSortBase_product() + " " + BaseActivity.getPrefSortDirection();
@@ -6434,7 +6436,7 @@ public class DbAdapter {
         ArrayList<Product> array = new ArrayList<>();
         try {
             if (defPriceLevel == 0) {
-                cursor = mDb.rawQuery(" SELECT Products.ProductId , productcode , products.name , UnitRatio , DefaultSellPriceLevel , PromotionId ,UnitName2 , UnitName , url , " +
+                cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName , url , " +
                         " case DefaultSellPriceLevel  " +
                         " when 1 then Price1 " +
                         " when 2 then Price2 " +
@@ -6449,12 +6451,13 @@ public class DbAdapter {
                         " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                         " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4 " +
                         " LEFT join PhotoGallery on Products.productId = PhotoGallery.itemCode left join PicturesProduct on PicturesProduct.pictureId = PhotoGallery.pictureId " +
+                        " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode " +
                         " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_Deleted + " = " + " 0 " + " and " + DbSchema.ProductDetailSchema.TABLE_NAME + " . " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " = " + 0 +
                         " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                        getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + " GROUP by Products.productId " +
+                        getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + getCategoryStrnig(categoryCode)  + " GROUP by Products.productId " +
                         " order by " + orderBy, null);
             } else {
-                cursor = mDb.rawQuery(" SELECT Products.ProductId , productcode , products.name , UnitRatio , DefaultSellPriceLevel , PromotionId , UnitName2 , UnitName , url , " +
+                cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName , url , " +
                         " case  " + defPriceLevel +
                         " when 1 then Price1 " +
                         " when 2 then Price2 " +
@@ -6469,9 +6472,10 @@ public class DbAdapter {
                         " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                         " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4 " +
                         " LEFT join PhotoGallery on Products.productId = PhotoGallery.itemCode left join PicturesProduct on PicturesProduct.pictureId = PhotoGallery.pictureId " +
+                        " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode " +
                         " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_Deleted + " = " + " 0 " + " and " + DbSchema.ProductDetailSchema.TABLE_NAME + " . " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " = " + 0 +
                         " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                        getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + " GROUP by Products.productId " +
+                        getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + getCategoryStrnig(categoryCode) + " GROUP by Products.productId " +
                         " order by " + orderBy, null);
             }
 

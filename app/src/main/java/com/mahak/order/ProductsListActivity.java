@@ -288,7 +288,7 @@ public class ProductsListActivity extends BaseActivity {
                             public void run() {
                                 if (PAGE_STATE == LIST_STATE) {
                                     if (productListFragment != null && productListFragment.getAdapter() != null) {
-                                        productListFragment.getAdapter().getFilter(CategoryId,MODE_ASSET).filter(s, new FilterListener() {
+                                        productListFragment.getAdapter().getFilter(clickedItemCategoryCode,CategoryId,MODE_ASSET).filter(s, new FilterListener() {
                                             @Override
                                             public void onFilterComplete(int count) {
                                                 setPageTitle();
@@ -299,7 +299,7 @@ public class ProductsListActivity extends BaseActivity {
                                     }
                                 } else if (PAGE_STATE == GRID_STATE) {
                                     if (productGridFragment != null && productGridFragment.getAdapter() != null) {
-                                        productGridFragment.getAdapter().getFilter(CategoryId,MODE_ASSET).filter(s, new FilterListener() {
+                                        productGridFragment.getAdapter().getFilter(clickedItemCategoryCode,CategoryId,MODE_ASSET).filter(s, new FilterListener() {
 
                                             @Override
                                             public void onFilterComplete(int count) {
@@ -310,7 +310,7 @@ public class ProductsListActivity extends BaseActivity {
                                     }
                                 } else if (PAGE_STATE == GALLERY_STATE) {
                                     if (placeholderGalleryListFragment != null && placeholderGalleryListFragment.getAdapter() != null) {
-                                        placeholderGalleryListFragment.getAdapter().getFilter(CategoryId,MODE_ASSET).filter(s, new FilterListener() {
+                                        placeholderGalleryListFragment.getAdapter().getFilter(clickedItemCategoryCode,CategoryId,MODE_ASSET).filter(s, new FilterListener() {
 
                                             @Override
                                             public void onFilterComplete(int count) {
@@ -1069,7 +1069,7 @@ public class ProductsListActivity extends BaseActivity {
 
     public void setPageTitle() {
         db.open();
-        CountProduct = db.getTotalCountProduct(txtSearch.getText().toString(), CategoryId , MODE_ASSET);
+        CountProduct = db.getTotalCountProduct(txtSearch.getText().toString(), clickedItemCategoryCode , CategoryId , MODE_ASSET);
         tvPageTitle.setText(getString(R.string.str_nav_product_list) + "(" + CountProduct + ")");
     }
 

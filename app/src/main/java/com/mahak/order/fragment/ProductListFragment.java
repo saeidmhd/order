@@ -139,7 +139,7 @@ public class ProductListFragment extends Fragment {
                     GroupId, mode, OrderId);
             lstProduct.setAdapter(adapterlistProduct);
             if (txtSearch != null) {
-                adapterlistProduct.getFilter(CategoryId,MODE_ASSET).filter(txtSearch.getText().toString(), new Filter.FilterListener() {
+                adapterlistProduct.getFilter(clickedItemCategoryCode,CategoryId,MODE_ASSET).filter(txtSearch.getText().toString(), new Filter.FilterListener() {
                     @Override
                     public void onFilterComplete(int count) {
                         //tvPageTitle.setText(getString(R.string.str_nav_product_list)+"("+count+")");
