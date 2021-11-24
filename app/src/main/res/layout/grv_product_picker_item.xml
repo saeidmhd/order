@@ -46,6 +46,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small_text_size"
             android:orientation="horizontal"
             android:layout_gravity="center">
 
@@ -85,6 +86,7 @@
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/forms_alter_row"
                     android:gravity="center_vertical|right"
                     android:orientation="horizontal"
                     android:padding="@dimen/SmallSize">
@@ -96,6 +98,7 @@
                         android:layout_height="fill_parent"
                         android:ellipsize="marquee"
                         android:gravity="left"
+                        android:paddingRight="@dimen/NormalSize"
                         android:marqueeRepeatLimit="marquee_forever"
                         android:singleLine="true"
                         android:text="@string/count"
@@ -124,46 +127,48 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/panelAsset2"
+                    android:id="@+id/panelTotalAsset"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/forms_alter_row"
-                    android:gravity="center_vertical|right"
+                    android:layout_height="36dp"
+                    android:gravity="right|center_vertical"
                     android:orientation="horizontal"
                     android:padding="@dimen/SmallSize"
-                    android:visibility="gone">
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:gravity="left"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvUnit2"
+                            style="@style/forms_label_default"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="right|center"
+                            android:paddingRight="@dimen/NormalSize"
+                            android:singleLine="true"
+                            android:text="@string/count" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvAsset2"
+                            style="@style/forms_label_default"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="left|center_vertical"
+                            android:singleLine="true"
+                            android:text="@string/sample_number" />
+                    </LinearLayout>
 
                     <com.mahak.order.widget.FontTextView
-                        android:id="@+id/tvUnit2"
+                        android:id="@+id/tvName2"
                         style="@style/forms_label_default"
                         android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:ellipsize="marquee"
-                        android:gravity="center|right"
-                        android:marqueeRepeatLimit="marquee_forever"
+                        android:layout_height="match_parent"
                         android:singleLine="true"
-                        android:text="@string/count"
-                        />
-
-                    <com.mahak.order.widget.FontTextView
-                        android:id="@+id/tvAsset2"
-                        style="@style/forms_label_default"
-                        android:layout_width="0dp"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="1"
-                        android:ellipsize="marquee"
-                        android:gravity="center|left"
-                        android:marqueeRepeatLimit="marquee_forever"
-                        android:singleLine="true"
-                        android:text="@string/sample_number"
-                        />
-
-                    <com.mahak.order.widget.FontTextView
-                        style="@style/forms_label_default"
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:gravity="center|right"
-                        android:textSize="10sp"
+                        android:layout_weight="0.5"
                         android:text="@string/str_asset2" />
                 </LinearLayout>
 
@@ -254,35 +259,6 @@
                         android:text="@string/str_customer_price" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/panelTotalAsset"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical|right"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/SmallSize">
-
-                    <com.mahak.order.widget.FontTextView
-                        android:id="@+id/tvTotalAsset"
-                        style="@style/forms_label_default"
-                        android:layout_width="0dp"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="1"
-                        android:ellipsize="marquee"
-                        android:gravity="left"
-                        android:marqueeRepeatLimit="marquee_forever"
-                        android:singleLine="true"
-                        android:text="@string/sample_number"
-                        />
-
-                    <com.mahak.order.widget.FontTextView
-                        style="@style/forms_label_default"
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:gravity="center|right"
-                        android:text="@string/str_total_inventory"
-                        />
-                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 

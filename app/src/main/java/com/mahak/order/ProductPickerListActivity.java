@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
@@ -20,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -28,9 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Filter;
 import android.widget.Filter.FilterListener;
-import android.widget.Filterable;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -42,43 +40,35 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.kishcore.sdk.hybrid.api.SDKManager;
-import com.mahak.order.apiHelper.ApiClient;
-import com.mahak.order.apiHelper.ApiInterface;
+import com.mahak.order.common.Category;
 import com.mahak.order.common.OrderDetail;
-import com.mahak.order.common.PicturesProduct;
 import com.mahak.order.common.Product;
+import com.mahak.order.common.ProductCategory;
 import com.mahak.order.common.ProductDetail;
 import com.mahak.order.common.ProductGroup;
-import com.mahak.order.common.ProductPriceLevelName;
 import com.mahak.order.common.ProjectInfo;
-import com.mahak.order.common.PropertyDescription;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.SharedPreferencesHelper;
-import com.mahak.order.common.User;
-import com.mahak.order.common.VisitorProduct;
-import com.mahak.order.common.login.LoginBody;
-import com.mahak.order.common.login.LoginResult;
-import com.mahak.order.common.request.GetAllDataBody;
-import com.mahak.order.common.request.GetAllDataResult.GetDataResult;
 import com.mahak.order.fragment.PlaceholderListGalleryFragment;
 import com.mahak.order.fragment.ProductGridFragment;
 import com.mahak.order.fragment.ProductGridGalleryFragment;
 import com.mahak.order.fragment.ProductListFragment;
 import com.mahak.order.fragment.ProductPagerFragment;
-import com.mahak.order.scan.SmallCaptureActivity;
-import com.mahak.order.service.DataService;
 import com.mahak.order.storage.DbAdapter;
-import com.mahak.order.storage.DbSchema;
+import com.mahak.order.threeLevelAdapter.Item;
 import com.mahak.order.widget.FontAlertDialog;
-import com.mahak.order.widget.FontProgressDialog;
 import com.mahak.order.widget.SortDialogActivity;
+import com.multilevelview.MultiLevelAdapter;
+import com.multilevelview.MultiLevelRecyclerView;
+import com.multilevelview.models.RecyclerViewItem;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
@@ -87,7 +77,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -96,16 +85,9 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import static com.mahak.order.common.ServiceTools.formatCount;
 
-//import com.mahak.order.common.ProductInOrder;
 
-
-//Modified by saeid.mhd@gmail.com
 public class ProductPickerListActivity extends BaseActivity {
 
     private static final String MODE = "Mode";
@@ -163,7 +145,13 @@ public class ProductPickerListActivity extends BaseActivity {
     private int totalItem = 0;
     private int printerBrand;
 
-    //private static Config config = new Config();
+    private ImageView show_category;
+    private ImageView close_category;
+    private LinearLayout ll_category;
+    private LinearLayout show_all_product;
+    private MultiLevelRecyclerView multiLevelRecyclerView;
+    public static int clickedItemCategoryCode = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -256,7 +244,7 @@ public class ProductPickerListActivity extends BaseActivity {
                 MODE_ASSET = ProjectInfo.ASSET_ALL_PRODUCT;
 
             spnAssetProduct.setSelection(MODE_ASSET);
-            asynproduct = new AsyncProduct(CategoryId, PAGE_STATE, Mode, MODE_ASSET);
+            asynproduct = new AsyncProduct(clickedItemCategoryCode ,CategoryId, PAGE_STATE, Mode, MODE_ASSET);
             asynproduct.execute();
         } else {
 
@@ -342,7 +330,7 @@ public class ProductPickerListActivity extends BaseActivity {
                             public void run() {
                                 if (PAGE_STATE == LIST_STATE) {
                                     if (productListFragment != null && productListFragment.getAdapter() != null) {
-                                        productListFragment.getAdapter().getFilter(CategoryId,MODE_ASSET).filter(s, new FilterListener() {
+                                        productListFragment.getAdapter().getFilter(clickedItemCategoryCode,CategoryId,MODE_ASSET).filter(s, new FilterListener() {
                                             @Override
                                             public void onFilterComplete(int count) {
                                                 setPageTitle();
@@ -352,7 +340,7 @@ public class ProductPickerListActivity extends BaseActivity {
                                     }
                                 } else if (PAGE_STATE == GRID_STATE) {
                                     if (productGridFragment != null && productGridFragment.getAdapter() != null) {
-                                        productGridFragment.getAdapter().getFilter(CategoryId,MODE_ASSET).filter(s, new FilterListener() {
+                                        productGridFragment.getAdapter().getFilter(clickedItemCategoryCode,CategoryId,MODE_ASSET).filter(s, new FilterListener() {
 
                                             @Override
                                             public void onFilterComplete(int count) {
@@ -363,7 +351,7 @@ public class ProductPickerListActivity extends BaseActivity {
                                     }
                                 } else if (PAGE_STATE == GALLERY_STATE) {
                                     if (placeholderListGalleryFragment != null && placeholderListGalleryFragment.getAdapter() != null) {
-                                        placeholderListGalleryFragment.getAdapter().getFilter(CategoryId,MODE_ASSET).filter(s, new FilterListener() {
+                                        placeholderListGalleryFragment.getAdapter().getFilter(clickedItemCategoryCode,CategoryId,MODE_ASSET).filter(s, new FilterListener() {
 
                                             @Override
                                             public void onFilterComplete(int count) {
@@ -427,7 +415,7 @@ public class ProductPickerListActivity extends BaseActivity {
     }// End Of OnCreate
 
     private void getProducts() {
-        asynproduct = new AsyncProduct(CategoryId, PAGE_STATE, Mode, MODE_ASSET);
+        asynproduct = new AsyncProduct(clickedItemCategoryCode,CategoryId, PAGE_STATE, Mode, MODE_ASSET);
         asynproduct.execute();
     }
 
@@ -440,7 +428,7 @@ public class ProductPickerListActivity extends BaseActivity {
 
     public void setPageTitle() {
         db.open();
-        CountProduct = db.getTotalCountProduct(txtSearch.getText().toString(), CategoryId , MODE_ASSET);
+        CountProduct = db.getTotalCountProduct(txtSearch.getText().toString(), clickedItemCategoryCode ,CategoryId , MODE_ASSET);
         tvPageTitle.setText(getString(R.string.str_nav_product_list) + "(" + CountProduct + ")");
     }
 
@@ -472,6 +460,74 @@ public class ProductPickerListActivity extends BaseActivity {
 
         ArrayAssetProduct = getResources().getStringArray(R.array.array_asset_product);
         db = new DbAdapter(mContext);
+
+        multiLevelRecyclerView = (MultiLevelRecyclerView) findViewById(R.id.rv_list);
+        show_all_product = (LinearLayout) findViewById(R.id.show_all_product);
+        ll_category = (LinearLayout) findViewById(R.id.ll_category);
+        show_category = (ImageView) findViewById(R.id.show_category);
+        close_category = (ImageView) findViewById(R.id.close_category);
+
+        multiLevelRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
+
+        db.open();
+        ArrayList<ProductCategory> productCategories = db.getAllProductCategory();
+        show_category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (productCategories.size() > 0){
+
+                    close_category.setVisibility(View.VISIBLE);
+                    show_category.setVisibility(View.GONE);
+                    ll_category.setVisibility(View.VISIBLE);
+
+                    addAllRelatedCategory();
+                }
+            }
+        });
+        close_category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                close_category.setVisibility(View.GONE);
+                show_category.setVisibility(View.VISIBLE);
+                ll_category.setVisibility(View.GONE);
+            }
+        });
+
+        show_all_product.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickedItemCategoryCode = 0;
+                getProducts();
+            }
+        });
+    }
+
+    private void addAllRelatedCategory() {
+        ArrayList<Category> rootCategories;
+        rootCategories = db.getAllRootCategories();
+
+        multiLevelRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        List<Item> itemList = (List<Item>) recursivePopulateData(rootCategories.size(), rootCategories);
+        MyLevelCategoryAdapter myAdapter = new MyLevelCategoryAdapter(mContext, itemList, multiLevelRecyclerView);
+
+        multiLevelRecyclerView.setAdapter(myAdapter);
+        multiLevelRecyclerView.setToggleItemOnClick(false);
+        multiLevelRecyclerView.setAccordion(false);
+
+    }
+
+    private List<?> recursivePopulateData(int depth, ArrayList<Category> rootCategories) {
+        List<RecyclerViewItem> itemList = new ArrayList<>();
+        for (int i = 0; i < depth; i++) {
+            Item item = new Item(i);
+            item.setText(rootCategories.get(i).getCategoryName());
+            item.setCategoryCode(rootCategories.get(i).getCategoryCode());
+            ArrayList<Category> LevelCategories = db.getAllCategoryWithParentCode(rootCategories.get(i).getCategoryCode());
+            item.setCategoryChildren(LevelCategories);
+            item.addChildren((List<RecyclerViewItem>) recursivePopulateData(LevelCategories.size(), LevelCategories));
+            itemList.add(item);
+        }
+        return itemList;
     }
 
     /**
@@ -655,8 +711,6 @@ public class ProductPickerListActivity extends BaseActivity {
 
         }// End of While
         tvTotalCount.setText(formatCount(TotalCount));
-
-        //////////////////////////////////////////////
     }
 
     /**
@@ -734,7 +788,7 @@ public class ProductPickerListActivity extends BaseActivity {
      * @param mode
      * @param categoryid
      */
-    public void FillArrayProduct(int mode, long categoryid, int modeasset) {
+    public void FillArrayProduct(int CategoryCode , int mode, long categoryid, int modeasset) {
         totalItem = 0;
         //Read Tax And Charge From Config //////////////////////////////////
         if (db == null) db = new DbAdapter(mContext);
@@ -747,7 +801,7 @@ public class ProductPickerListActivity extends BaseActivity {
         //////////////////////////////////////////////////////////////////
         if (mode == MODE_EDIT) {
             ArrayList<Product> arrayproduct;
-            arrayproduct = db.getAllProduct(categoryid, modeasset, 0);
+            arrayproduct = db.getAllProduct(CategoryCode,categoryid, modeasset, 0);
             //Set Correct Asset______________________________________________
             for (OrderDetail object : InvoiceDetailActivity.orderDetailArrayList) {
                 for (Product item : arrayproduct) {
@@ -766,7 +820,7 @@ public class ProductPickerListActivity extends BaseActivity {
             //____________________________________________________________________
         }//End of if
         else if (mode == MODE_NEW) {
-            arrayProductMain = db.getAllProduct(categoryid, modeasset, 0);
+            arrayProductMain = db.getAllProduct(CategoryCode,categoryid, modeasset, 0);
         }
         db.close();
     }
@@ -1341,13 +1395,15 @@ public class ProductPickerListActivity extends BaseActivity {
         final int StatePage;
         final int ModePage;
         final int ModeAsset;
+        int CategoryCode;
 
-        AsyncProduct(Long id, int statepage, int modepage, int modeasset) {
+        AsyncProduct(int CategoryCode ,Long id, int statepage, int modepage, int modeasset) {
 
             this.Id = id;
             this.StatePage = statepage;
             this.ModePage = modepage;
             this.ModeAsset = modeasset;
+            this.CategoryCode = CategoryCode;
         }
 
         @Override
@@ -1358,25 +1414,25 @@ public class ProductPickerListActivity extends BaseActivity {
         @Override
         protected Boolean doInBackground(String... arg0) {
 
-            FillArrayProduct(ModePage, Id, ModeAsset);
+            FillArrayProduct(CategoryCode , ModePage, Id, ModeAsset);
             return true;
         }
 
         @Override
         protected void onPostExecute(Boolean result) {
 
-            if (StatePage == LIST_STATE)
-                gotoListView();
-            else if (PAGE_STATE == GRID_STATE)
-                gotoGridView();
-            else if (PAGE_STATE == GALLERY_STATE)
-                gotoGalleryView();
-            else if (PAGE_STATE == GALLERY_GRID_STATE)
-                gotoGalleryGridView();
-            else if (PAGE_STATE == GALLERY_PAGE_STATE)
-                gotoGalleryPageView();
+                if (StatePage == LIST_STATE)
+                    gotoListView();
+                else if (PAGE_STATE == GRID_STATE)
+                    gotoGridView();
+                else if (PAGE_STATE == GALLERY_STATE)
+                    gotoGalleryView();
+                else if (PAGE_STATE == GALLERY_GRID_STATE)
+                    gotoGalleryGridView();
+                else if (PAGE_STATE == GALLERY_PAGE_STATE)
+                    gotoGalleryPageView();
 
-            setPageTitle();
+                setPageTitle();
 
             super.onPostExecute(result);
         }
@@ -1459,29 +1515,12 @@ public class ProductPickerListActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
-
-      /*  getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        if (Type != ProjectInfo.TYPE_RETURN_OF_SALE)
-            CalculationTotal();
-        else
-            CalculationTotalReturn();
-
-        if (PAGE_STATE == LIST_STATE && productListFragment != null && productListFragment.getAdapter() != null)
-            productListFragment.refresh("");
-        if (PAGE_STATE == GRID_STATE && productGridFragment != null && productGridFragment.getAdapter() != null)
-            productGridFragment.refresh("");
-        if (PAGE_STATE == GALLERY_STATE && placeholderListGalleryFragment != null)
-            placeholderListGalleryFragment.refresh("");
-        if (PAGE_STATE == GALLERY_PAGE_STATE && productPageGalleryFragment != null)
-            productPageGalleryFragment.refresh("");
-        if (PAGE_STATE == GALLERY_GRID_STATE && productGridGalleryFragment != null)
-            productGridGalleryFragment.refresh("");*/
-
+        CalculationTotal();
         super.onResume();
     }
 
     private void sortProductList() {
-        asynproduct = new AsyncProduct(CategoryId, PAGE_STATE, Mode, MODE_ASSET);
+        asynproduct = new AsyncProduct(clickedItemCategoryCode , CategoryId, PAGE_STATE, Mode, MODE_ASSET);
         asynproduct.execute();
 
     }
@@ -1599,5 +1638,83 @@ public class ProductPickerListActivity extends BaseActivity {
         return dialog;
     }
 
+    public class MyLevelCategoryAdapter extends MultiLevelAdapter {
 
+        private MyLevelCategoryAdapter.Holder mViewHolder;
+        private Context mContext;
+        private List<Item> mListItems = new ArrayList<>();
+        private Item mItem;
+        private MultiLevelRecyclerView mMultiLevelRecyclerView;
+
+        public MyLevelCategoryAdapter(Context mContext, List<Item> mListItems, MultiLevelRecyclerView mMultiLevelRecyclerView) {
+            super(mListItems);
+            this.mListItems = mListItems;
+            this.mContext = mContext;
+            this.mMultiLevelRecyclerView = mMultiLevelRecyclerView;
+        }
+
+        private void setExpandButton(ImageView expandButton, boolean isExpanded) {
+            expandButton.setImageResource(isExpanded ? R.drawable.ic_keyboard_arrow_up_black_24dp : R.drawable.ic_keyboard_arrow_down_black_24dp);
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new MyLevelCategoryAdapter.Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            mViewHolder = (MyLevelCategoryAdapter.Holder) holder;
+            mItem = mListItems.get(position);
+
+            if (mItem.hasChildren())
+                holder.itemView.setBackgroundColor(Color.parseColor("#efefef"));
+            else {
+                holder.itemView.setBackgroundColor(Color.parseColor("#dedede"));
+                mViewHolder.mTitle.setTextSize(14);
+            }
+
+            mViewHolder.mTitle.setText(mItem.getText());
+
+            if (mItem.hasChildren() && mItem.getChildren().size() > 0) {
+                mViewHolder.mExpandButton.setVisibility(View.VISIBLE);
+            } else {
+                mViewHolder.mExpandButton.setVisibility(View.GONE);
+            }
+        }
+
+
+        private class Holder extends RecyclerView.ViewHolder {
+
+            TextView mTitle;
+            ImageView mExpandIcon;
+            LinearLayout mTextBox, mExpandButton, ll_category;
+
+            Holder(View itemView) {
+                super(itemView);
+                mTitle = (TextView) itemView.findViewById(R.id.title);
+                mExpandIcon = (ImageView) itemView.findViewById(R.id.image_view);
+                mTextBox = (LinearLayout) itemView.findViewById(R.id.text_box);
+                ll_category = (LinearLayout) itemView.findViewById(R.id.ll_category);
+                mExpandButton = (LinearLayout) itemView.findViewById(R.id.expand_field);
+
+                ll_category.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ArrayList<Product> productArrayList;
+                        clickedItemCategoryCode = mListItems.get(getAdapterPosition()).getCategoryCode();
+                        getProducts();
+                    }
+                });
+                mExpandButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mMultiLevelRecyclerView.toggleItemsGroup(getAdapterPosition());
+                        mExpandIcon.animate().rotation(mListItems.get(getAdapterPosition()).isExpanded() ? -180 : 0).start();
+                    }
+                });
+            }
+        }
+
+    }
 }

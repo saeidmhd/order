@@ -72,6 +72,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
     private static TextView txtTotalCount;
     public static View row;
     static long categoryId;
+    static long categoryCode;
     static int modeAsset;
     public static double mCount = 0;
     private final String description = "";
@@ -189,6 +190,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
 
         if (type == 0) {
             holder.panelCount.setVisibility(View.GONE);
+            holder.panelTotalCount.setVisibility(View.GONE);
         }
 
         Boolean res = false;
@@ -443,10 +445,11 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         mContext.startActivity(intent);
     }
 
-    public Filter getFilter(long CategoryId,int MODE_ASSET) {
+    public Filter getFilter(long CategoryCode , long CategoryId,int MODE_ASSET) {
         if (db == null) db = new DbAdapter(mContext);
         db.open();
         categoryId = CategoryId;
+        categoryCode = CategoryCode;
         modeAsset = MODE_ASSET;
         if (Filter == null)
             Filter = new ProductFilterDB2(db,type);
@@ -478,7 +481,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             FilterResults result = new FilterResults();
             if (constraint.toString().length() > 0) {
                 Set<Product> filterItem = new LinkedHashSet<>();
-                filterItem.addAll(dbAdapter.searchProduct(searchStr, Type , categoryId , modeAsset));
+                filterItem.addAll(dbAdapter.searchProduct(searchStr,categoryCode, Type , categoryId , modeAsset));
                 result.values = new ArrayList<>(filterItem);
                 result.count = filterItem.size();
             } else {

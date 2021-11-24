@@ -512,19 +512,20 @@ public class ManageCustomerActivity extends BaseActivity {
             //set selection spnState And spnCity
 
                 for (int i = 0; i < stateRegions.size(); i++) {
+
                     Region region = stateRegions.get(i);
-                    if (region.getProvinceID() == customerRegion.getProvinceID()) {
+                    if (stateRegions.get(i).getProvinceName().equals(customer.getState())) {
                         spnState.setSelection(i);
-                        StateName = region.getProvinceName();
+                        StateName = customer.getState();
 
                         cityRegions = db.getCities(region.getProvinceID());
                         AdapterSpnCity adspncity = new AdapterSpnCity(mActivity, cityRegions);
                         spnCity.setAdapter(adspncity);
+
                         for (int j = 0; j < cityRegions.size(); j++) {
-                            if (cityRegions.get(j).getCityID() == customerRegion.getCityID()) {
+                            if (cityRegions.get(j).getCityName().equals(customer.getCity())) {
                                 spnCity.setSelection(j);
-                                CityName = cityRegions.get(j).getCityName();
-                                cityCode = cityRegions.get(j).getCityID();
+                                CityName = customer.getCity();
                                 break;
                             }//End of if
                         }//End of for j
