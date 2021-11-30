@@ -5488,58 +5488,41 @@ public class DbAdapter {
         return promotion;
     }
 
-    public PromotionDetail getPromotionDetail(long aLong) {
-
+    public PromotionDetail getPromotionDetail(Cursor cursor) {
         PromotionDetail promotionDetail = new PromotionDetail();
-        Cursor cursor;
-        try {
-            cursor = mDb.query(DbSchema.PromotionDetailSchema.TABLE_NAME, null, DbSchema.PromotionDetailSchema.COLUMN_ID + "=? and " + DbSchema.PromotionDetailSchema.COLUMN_MahakId + "=? and " + DbSchema.PromotionDetailSchema.COLUMN_DatabaseId + "=?", new String[]{String.valueOf(aLong), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId()}, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                if (cursor.getCount() > 0) {
 
-                    promotionDetail.setId(cursor.getLong(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_ID)));
-                    promotionDetail.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_MODIFYDATE)));
-                    promotionDetail.setCreatedBy(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_CreatedBy)));
-                    promotionDetail.setCreatedDate(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_CreatedDate)));
-                    promotionDetail.setModifiedBy(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_ModifiedBy)));
-                    promotionDetail.setPromotionDetailCode(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_PromotionDetailCode)));
+        promotionDetail.setId(cursor.getLong(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_ID)));
+        promotionDetail.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_MODIFYDATE)));
+        promotionDetail.setCreatedBy(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_CreatedBy)));
+        promotionDetail.setCreatedDate(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_CreatedDate)));
+        promotionDetail.setModifiedBy(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_ModifiedBy)));
+        promotionDetail.setPromotionDetailCode(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_PromotionDetailCode)));
 
-                    promotionDetail.setHowToPromotion(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_HowToPromotion)));
-                    promotionDetail.setIsCalcAdditive(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_IsCalcAdditive)));
-                    promotionDetail.setReducedEffectOnPrice(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_ReducedEffectOnPrice)));
-                    promotionDetail.setStoreCode(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_StoreCode)));
-                    promotionDetail.setCodeGood(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_CodeGood)));
-                    promotionDetail.setTedad(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_tedad)));
-                    promotionDetail.setToolidCode(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_ToolidCode)));
-                    promotionDetail.setToPayment(cursor.getDouble(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_ToPayment)));
-                    promotionDetail.setTool(cursor.getDouble(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_tool)));
-                    promotionDetail.setArz(cursor.getDouble(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_arz)));
-                    promotionDetail.setMeghdar(cursor.getDouble(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_meghdar)));
-                    promotionDetail.setMeghdar2(cursor.getDouble(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_meghdar2)));
-                    promotionDetail.setMeghdarPromotion(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_MeghdarPromotion)));
-                    promotionDetail.setGhotr(cursor.getDouble(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_ghotr)));
+        promotionDetail.setHowToPromotion(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_HowToPromotion)));
+        promotionDetail.setIsCalcAdditive(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_IsCalcAdditive)));
+        promotionDetail.setReducedEffectOnPrice(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_ReducedEffectOnPrice)));
+        promotionDetail.setStoreCode(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_StoreCode)));
+        promotionDetail.setCodeGood(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_CodeGood)));
+        promotionDetail.setTedad(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_tedad)));
+        promotionDetail.setToolidCode(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_ToolidCode)));
+        promotionDetail.setToPayment(cursor.getDouble(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_ToPayment)));
+        promotionDetail.setTool(cursor.getDouble(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_tool)));
+        promotionDetail.setArz(cursor.getDouble(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_arz)));
+        promotionDetail.setMeghdar(cursor.getDouble(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_meghdar)));
+        promotionDetail.setMeghdar2(cursor.getDouble(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_meghdar2)));
+        promotionDetail.setMeghdarPromotion(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_MeghdarPromotion)));
+        promotionDetail.setGhotr(cursor.getDouble(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_ghotr)));
 
-                    promotionDetail.setPromotionDetailId(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_PromotionDetailId)));
-                    promotionDetail.setPromotionDetailClientId(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_PromotionDetailClientId)));
-                    promotionDetail.setPromotionCode(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_PromotionCode)));
-                    promotionDetail.setDataHash(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_DataHash)));
-                    promotionDetail.setCreateDate(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_CreateDate)));
-                    promotionDetail.setUpdateDate(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_UpdateDate)));
-                    promotionDetail.setCreateSyncId(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_CreateSyncId)));
-                    promotionDetail.setUpdateSyncId(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_UpdateSyncId)));
-                    promotionDetail.setRowVersion(cursor.getLong(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_RowVersion)));
+        promotionDetail.setPromotionDetailId(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_PromotionDetailId)));
+        promotionDetail.setPromotionDetailClientId(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_PromotionDetailClientId)));
+        promotionDetail.setPromotionCode(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_PromotionCode)));
+        promotionDetail.setDataHash(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_DataHash)));
+        promotionDetail.setCreateDate(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_CreateDate)));
+        promotionDetail.setUpdateDate(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_UpdateDate)));
+        promotionDetail.setCreateSyncId(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_CreateSyncId)));
+        promotionDetail.setUpdateSyncId(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_UpdateSyncId)));
+        promotionDetail.setRowVersion(cursor.getLong(cursor.getColumnIndex(DbSchema.PromotionDetailSchema.COLUMN_RowVersion)));
 
-
-                }
-                cursor.close();
-            }
-
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorGetUser", e.getMessage());
-        }
         return promotionDetail;
     }
 
@@ -5995,7 +5978,7 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<Category> categories = new ArrayList<>();
         try {
-            cursor = mDb.query(DbSchema.CategorySchema.TABLE_NAME, null, DbSchema.CategorySchema.COLUMN_ParentCode + " =? ", new String[]{String.valueOf(0)}, null, null, null);
+            cursor = mDb.rawQuery("select * from Category where Category.ParentCode = 0 order by Category.CategoryCode", null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -6018,7 +6001,7 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<Category> categories = new ArrayList<>();
         try {
-            cursor = mDb.query(DbSchema.CategorySchema.TABLE_NAME, null, DbSchema.CategorySchema.COLUMN_ParentCode + " =? ", new String[]{String.valueOf(parentCode)}, null, null, null);
+            cursor = mDb.rawQuery("select * from Category where Category.ParentCode = ? order by Category.CategoryCode", new String[]{String.valueOf(parentCode)});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -6185,12 +6168,11 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<PromotionDetail> array = new ArrayList<>();
         try {
-            cursor = mDb.query(DbSchema.PromotionDetailSchema.TABLE_NAME, null,
-                    DbSchema.PromotionDetailSchema.COLUMN_MahakId + "=? and " + DbSchema.PromotionDetailSchema.COLUMN_USER_ID + "=? and " + DbSchema.PromotionDetailSchema.COLUMN_DatabaseId + "=? and " + DbSchema.PromotionDetailSchema.COLUMN_ToPayment + " <=? and " + DbSchema.PromotionDetailSchema.COLUMN_PromotionCode + " =? ", new String[]{BaseActivity.getPrefMahakId(), String.valueOf(getPrefUserId()), BaseActivity.getPrefDatabaseId(), String.valueOf(meghdar), codePromotion}, null, null, orderBy);
+            cursor = mDb.rawQuery("SELECT * FROM PromotionDetail WHERE MahakId=? and UserId=? and DatabaseId=? and ToPayment <=? and PromotionCode =?  ORDER BY ToPayment DESC",new String[]{BaseActivity.getPrefMahakId(), String.valueOf(getPrefUserId()), BaseActivity.getPrefDatabaseId(), String.valueOf(meghdar), codePromotion});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    promotionDetail = getPromotionDetail(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_ID)));
+                    promotionDetail = getPromotionDetail(cursor);
                     if (promotionDetail != null)
                         array.add(promotionDetail);
                     cursor.moveToNext();
@@ -6218,7 +6200,7 @@ public class DbAdapter {
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    promotionDetail = getPromotionDetail(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_ID)));
+                    promotionDetail = getPromotionDetail(cursor);
                     if (promotionDetail != null)
                         array.add(promotionDetail);
                     cursor.moveToNext();

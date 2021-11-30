@@ -167,7 +167,6 @@ public class LocationService extends Service {
      */
     private Location mLocation;
 
-
     @Override
     public void onCreate() {
 
@@ -392,6 +391,7 @@ public class LocationService extends Service {
         long masterUserId = BaseActivity.getPrefUserMasterId(mContext);
         ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking + masterUserId, s);
     }
+
     public void setTrackingConfig(Context context) {
         String config = ServiceTools.getKeyFromSharedPreferences(context, ProjectInfo.pre_gps_config);
         if (!ServiceTools.isNull(config)) {
@@ -597,11 +597,12 @@ public class LocationService extends Service {
         if (mCurrentLocation != null) {
             executeEventLocations(mCurrentLocation,false);
             // TODO: 11/2/21 uncomment on tracking version
-            if(isRadaraActive())
+            if(isRadaraActive()){
                 performSignalOperation();
-            Location correctLocation = getCorrectLocation(mCurrentLocation);
-            if (correctLocation != null) {
-                sendLocation(correctLocation);
+                Location correctLocation = getCorrectLocation(mCurrentLocation);
+                if (correctLocation != null) {
+                    sendLocation(correctLocation);
+                }
             }
         }
     }
@@ -763,10 +764,10 @@ public class LocationService extends Service {
                 .setFastestInterval(5000)
                 .setInterval(10000);
         // TODO: 10/30/21 uncomment on tracking version
-        if(isRadaraActive())
+       /* if(isRadaraActive())
             locationRequest.setSmallestDisplacement(MIN_DISPALCEMENT_CHANGE_FOR_UPDATES);
         else
-            locationRequest.setSmallestDisplacement(15);
+            locationRequest.setSmallestDisplacement(15);*/
         //locationRequest.setInterval(MIN_TIME_INTERVAL_UPDATES);
     }
 

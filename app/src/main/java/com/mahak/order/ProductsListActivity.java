@@ -367,6 +367,15 @@ public class ProductsListActivity extends BaseActivity {
 
         db.open();
         ArrayList<ProductCategory> productCategories = db.getAllProductCategory();
+
+        if(clickedItemCategoryCode != 0){
+
+            close_category.setVisibility(View.VISIBLE);
+            show_category.setVisibility(View.GONE);
+            ll_category.setVisibility(View.VISIBLE);
+
+            addAllRelatedCategory();
+        }
         show_category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1411,17 +1420,17 @@ public class ProductsListActivity extends BaseActivity {
 
             TextView mTitle;
             ImageView mExpandIcon;
-            LinearLayout mTextBox, mExpandButton, ll_category;
+            LinearLayout mTextBox, mExpandButton, item_category;
 
             Holder(View itemView) {
                 super(itemView);
                 mTitle = (TextView) itemView.findViewById(R.id.title);
                 mExpandIcon = (ImageView) itemView.findViewById(R.id.image_view);
                 mTextBox = (LinearLayout) itemView.findViewById(R.id.text_box);
-                ll_category = (LinearLayout) itemView.findViewById(R.id.ll_category);
+                item_category = (LinearLayout) itemView.findViewById(R.id.item_category);
                 mExpandButton = (LinearLayout) itemView.findViewById(R.id.expand_field);
 
-                ll_category.setOnClickListener(new View.OnClickListener() {
+                item_category.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         ArrayList<Product> productArrayList;

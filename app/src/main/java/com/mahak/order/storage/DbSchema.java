@@ -65,7 +65,7 @@ public class DbSchema {
         public static final String COLUMN_NAME = "Name";
         public static final String COLUMN_FirstName = "FirstName";
         public static final String COLUMN_LastName = "LastName";
-        public static final String COLUMN_Prefix = "prefix";
+        public static final String COLUMN_Prefix = "Prefix";
         public static final String COLUMN_ORGANIZATION = "Organization";
         public static final String COLUMN_Gender = "Gender";
         public static final String COLUMN_NationalCode = "NationalCode";

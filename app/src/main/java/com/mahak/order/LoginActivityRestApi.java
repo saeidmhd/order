@@ -280,7 +280,8 @@ public class LoginActivityRestApi extends BaseActivity {
 
     private void gotoDashboard(User user) {
         if (ServiceTools.checkPlayServices(LoginActivityRestApi.this)) {
-            getFcmTokenRegisterInBackground();
+            if(ServiceTools.isNetworkAvailable(mContext))
+                getFcmTokenRegisterInBackground();
         }
         setPrefUserId(ServiceTools.toLong(user.getServerUserID()));
         setRadaraActive(HasRadara || WithDataTransfer);
@@ -295,10 +296,15 @@ public class LoginActivityRestApi extends BaseActivity {
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
-                String token = task.getResult();
-                Intent intent = new Intent(LoginActivityRestApi.this, RegistrationIntentService.class);
-                intent.putExtra("token",token);
-                startService(intent);
+                try {
+                    String token = task.getResult();
+                    Intent intent = new Intent(LoginActivityRestApi.this, RegistrationIntentService.class);
+                    intent.putExtra("token",token);
+                    startService(intent);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
         });
     }

@@ -301,17 +301,23 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         initUI();
 
-
-
         if(!isMyServiceRunning(LocationService.class)){
-            if(btnTrackingService.isChecked())
+            if(btnTrackingService.isChecked()){
                 btnTrackingService.setChecked(false);
+                setTackingServiceText(false);
+            }
+        }else {
+            if(!btnTrackingService.isChecked()){
+                btnTrackingService.setChecked(true);
+                setTackingServiceText(true);
+            }
         }
-
 
         btnTrackingService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!isRadaraActive())
+                    Toast.makeText(mContext, "افزونه رادارا غیر فعال است!", Toast.LENGTH_LONG).show();
                 if (locationService == null) locationService = new LocationService(mContext, DashboardActivity.this);
                 if(locationService.isRunService(mContext) && !btnTrackingService.isChecked()){
                     stopLocationUpdate();

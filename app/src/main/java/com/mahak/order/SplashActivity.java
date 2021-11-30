@@ -184,11 +184,16 @@ public class SplashActivity extends BaseActivity {
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
-                String token = task.getResult();
-                writeLog(token);
-                Intent intent = new Intent(SplashActivity.this, RegistrationIntentService.class);
-                intent.putExtra("token",token);
-                startService(intent);
+                try {
+                    String token = task.getResult();
+                    writeLog(token);
+                    Intent intent = new Intent(SplashActivity.this, RegistrationIntentService.class);
+                    intent.putExtra("token",token);
+                    startService(intent);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
         });
     }
