@@ -448,7 +448,6 @@ public class PriceCountSelectActivity extends BaseActivity {
     }
 
     private void handleUnitOne() {
-        txtCount.requestFocus();
         imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
             imm.showSoftInput(txtCount, InputMethodManager.SHOW_FORCED);
@@ -1215,8 +1214,6 @@ public class PriceCountSelectActivity extends BaseActivity {
     @SuppressLint("SetTextI18n")
     public void setValue() {
 
-
-
         switch (BaseActivity.getPrefUnit2Setting(context)) {
             case MODE_MeghdarJoz:
                 setContentView(R.layout.activity_good_detail_kol_joz);
@@ -1261,11 +1258,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                 unitName2.setText("( " + product.getUnitName2() + " )");
                 txtRetailCountExist.setText(getString(R.string.asset_amount) + formatCount(maxValueRetail) + " " + product.getUnitName());
                 txtRetailCount2Exist.setText(getString(R.string.asset_amount) + formatCount(maxValueRetail2) + " " + product.getUnitName2());
-                if (type == ProjectInfo.TYPE_INVOCIE) {
-                    txtCount1.setFilters(new InputFilter[]{new CountInputFilterMinMax(0, maxValueRetail)});
-                    if (product.getUnitRatio() > 0)
-                        txtCount2.setFilters(new InputFilter[]{new CountInputFilterMinMax(0, maxValueRetail2)});
-                }
+
                 break;
             case MODE_YekVahedi:
                 setContentView(R.layout.activity_good_detail_count);
@@ -1281,26 +1274,52 @@ public class PriceCountSelectActivity extends BaseActivity {
                 txtRetailCountExist.setText(getString(R.string.asset_amount) + formatCount(maxValueRetail) + " " + product.getUnitName());
                 txtCount.setText(count1);
                 txtCount.requestFocus();
-                txtCount.setSelectAllOnFocus(true);
                 txtCount.selectAll();
-                if (type == ProjectInfo.TYPE_INVOCIE) {
-                    txtCount.setFilters(new InputFilter[]{new CountInputFilterMinMax(0, maxValueRetail)});
-                }
                 break;
         }
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (BaseActivity.getPrefUnit2Setting(context) == MODE_MeghdarJoz && type == ProjectInfo.TYPE_INVOCIE) {
-                    if (!CalculateJozKolSum()) {
-                        Dialog(getString(R.string.str_negative_asset)).show();
-                        FontAlertDialog.FontDialog(Dialog(getString(R.string.str_negative_asset)));
-                    } else {
-                        returnCountPrice();
-                        finish();
-                    }
-                } else {
+
+                switch (BaseActivity.getPrefUnit2Setting(context)) {
+                    case MODE_YekVahedi:
+                        count1 = txtCount.getText().toString();
+                        sumCountBaJoz = ServiceTools.toDouble(count1);
+                        break;
+                    case MODE_MeghdarJoz:
+                        txtCountKol.setError(null);
+                        count1 = txtCountJoz.getText().toString();
+                        count2 = txtCountKol.getText().toString();
+                        CalculateJozKolSum();
+                        try {
+                            sumCountBaJoz = ServiceTools.toDouble(txtSumCount12.getText().toString());
+                        } catch (NumberFormatException e) {
+                            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                            FirebaseCrashlytics.getInstance().recordException(e);
+                            e.printStackTrace();
+                        }
+                        if (TextUtils.isEmpty(count1)) {
+                            txtCountKol.setError(getString(R.string.error_field_required));
+                        }
+                        break;
+                    case Mode_DoVahedi:
+                        count1 = txtCount1.getText().toString();
+                        count2 = txtCount2.getText().toString();
+                        try {
+                            sumCountBaJoz = ServiceTools.toDouble(count1);
+                        } catch (NumberFormatException e) {
+                            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                            FirebaseCrashlytics.getInstance().recordException(e);
+                            e.printStackTrace();
+                        }
+                        break;
+                }
+
+                if(type == ProjectInfo.TYPE_INVOCIE && sumCountBaJoz > maxValueRetail){
+                    Dialog(getString(R.string.str_negative_asset)).show();
+                    FontAlertDialog.FontDialog(Dialog(getString(R.string.str_negative_asset)));
+                }else {
                     returnCountPrice();
                     finish();
                 }

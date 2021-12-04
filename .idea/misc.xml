@@ -3,42 +3,25 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="../../../../../../layout/custom_preview.xml" value="0.2046875" />
-        <entry key="app/src/main/res/drawable-anydpi/ic_menu.xml" value="0.28854166666666664" />
-        <entry key="app/src/main/res/drawable/sub_category_item.xml" value="0.21927083333333333" />
-        <entry key="app/src/main/res/drawable/sub_category_selected_item.xml" value="0.21927083333333333" />
         <entry key="app/src/main/res/layout-de/activity_dashboard.xml" value="0.1" />
-        <entry key="app/src/main/res/layout-de/activity_product_picker_list.xml" value="0.17" />
-        <entry key="app/src/main/res/layout-de/activity_products_list.xml" value="0.17" />
         <entry key="app/src/main/res/layout-de/activity_setting.xml" value="0.33" />
         <entry key="app/src/main/res/layout-de/fragment_item_product_gallery.xml" value="0.2296875" />
-        <entry key="app/src/main/res/layout-de/fragment_products_grid2.xml" value="0.19270833333333334" />
-        <entry key="app/src/main/res/layout-de/fragment_products_list.xml" value="0.14375" />
-        <entry key="app/src/main/res/layout-de/fragment_products_list2.xml" value="0.19270833333333334" />
         <entry key="app/src/main/res/layout-de/grv_product_picker_item.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout-de/lst_product_picker_item.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout-de/receipt_print_arabic.xml" value="0.5" />
-        <entry key="app/src/main/res/layout-sw600dp/lst_transaction_item.xml" value="0.265625" />
-        <entry key="app/src/main/res/layout/activity_category.xml" value="0.18659420289855072" />
-        <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.30113636363636365" />
+        <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_data_sync.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_manage_customer.xml" value="0.20104166666666667" />
-        <entry key="app/src/main/res/layout/activity_product_picker_list.xml" value="0.21" />
-        <entry key="app/src/main/res/layout/activity_products_list.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_good_detail_count.xml" value="0.17" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/dialog_payment_way.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/fragment_item_product_gallery.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_products_grid2.xml" value="0.19479166666666667" />
-        <entry key="app/src/main/res/layout/fragment_products_list.xml" value="0.19270833333333334" />
-        <entry key="app/src/main/res/layout/fragment_products_list2.xml" value="0.18659420289855072" />
-        <entry key="app/src/main/res/layout/fragment_products_list3.xml" value="0.18" />
-        <entry key="app/src/main/res/layout/fragment_promo_terms.xml" value="0.18" />
-        <entry key="app/src/main/res/layout/grv_product_picker_item.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/item_layout.xml" value="0.30106209150326796" />
+        <entry key="app/src/main/res/layout/fragment_item_product_gallery.xml" value="0.2296875" />
+        <entry key="app/src/main/res/layout/grv_product_picker_item.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/kala_print_template_50mm.xml" value="0.25" />
         <entry key="app/src/main/res/layout/list_cheque_receipt.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/lst_category_item.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/lst_order_detail_for_print_kala.xml" value="0.16286727456940223" />
+        <entry key="app/src/main/res/layout/lst_order_detail_for_print_kala_2.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/lst_order_detail_for_print_kala_2_compact.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/lst_order_detail_for_print_kala_compact.xml" value="0.26838235294117646" />
         <entry key="app/src/main/res/layout/lst_product_picker_item.xml" value="0.2296875" />
-        <entry key="app/src/main/res/layout/lst_transaction_item.xml" value="0.265625" />
         <entry key="app/src/main/res/layout/receipt_print.xml" value="0.43356643356643354" />
         <entry key="app/src/main/res/layout/receipt_print50mm.xml" value="0.27063106796116504" />
         <entry key="app/src/main/res/layout/receipt_print80mm.xml" value="0.5" />

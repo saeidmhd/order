@@ -410,8 +410,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                         }
                     }
                     break;
-
-
             }
         }
     }
