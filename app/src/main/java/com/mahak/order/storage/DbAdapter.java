@@ -1036,8 +1036,8 @@ public class DbAdapter {
         initialvalue.put(DbSchema.PromotionDetailSchema.COLUMN_CreatedDate, promotionDetail.getCreatedDate());
         initialvalue.put(DbSchema.PromotionDetailSchema.COLUMN_ModifiedBy, promotionDetail.getModifiedBy());
 
-        initialvalue.put(DbSchema.PromotionDetailSchema.COLUMN_IsCalcAdditive, promotionDetail.getIsCalcAdditive());
-        initialvalue.put(DbSchema.PromotionDetailSchema.COLUMN_ReducedEffectOnPrice, promotionDetail.getReducedEffectOnPrice());
+        initialvalue.put(DbSchema.PromotionDetailSchema.COLUMN_IsCalcAdditive, promotionDetailOtherFields.isIsCalcAdditive());
+        initialvalue.put(DbSchema.PromotionDetailSchema.COLUMN_ReducedEffectOnPrice, promotionDetailOtherFields.isReducedEffectOnPrice());
 
         initialvalue.put(DbSchema.PromotionDetailSchema.COLUMN_ToPayment, promotionDetailOtherFields.getToPayment());
         initialvalue.put(DbSchema.PromotionDetailSchema.COLUMN_HowToPromotion, promotionDetailOtherFields.getHowToPromotion());
@@ -9443,8 +9443,8 @@ public class DbAdapter {
         initialvalue.put(DbSchema.PromotionDetailSchema.COLUMN_CreatedDate, promotionDetail.getCreatedDate());
         initialvalue.put(DbSchema.PromotionDetailSchema.COLUMN_ModifiedBy, promotionDetail.getModifiedBy());
 
-        initialvalue.put(DbSchema.PromotionDetailSchema.COLUMN_IsCalcAdditive, promotionDetail.getIsCalcAdditive());
-        initialvalue.put(DbSchema.PromotionDetailSchema.COLUMN_ReducedEffectOnPrice, promotionDetail.getReducedEffectOnPrice());
+        initialvalue.put(DbSchema.PromotionDetailSchema.COLUMN_IsCalcAdditive, promotionDetailOtherFields.isIsCalcAdditive());
+        initialvalue.put(DbSchema.PromotionDetailSchema.COLUMN_ReducedEffectOnPrice, promotionDetailOtherFields.isReducedEffectOnPrice());
 
         initialvalue.put(DbSchema.PromotionDetailSchema.COLUMN_ToPayment, promotionDetailOtherFields.getToPayment());
         initialvalue.put(DbSchema.PromotionDetailSchema.COLUMN_HowToPromotion, promotionDetailOtherFields.getHowToPromotion());
