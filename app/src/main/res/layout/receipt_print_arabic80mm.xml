@@ -41,11 +41,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/card_ui_bg_selector"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingBottom="@dimen/NormalSize"
-            android:paddingLeft="@dimen/SmallSize"
-            android:paddingRight="@dimen/SmallSize"
-            android:paddingTop="@dimen/NormalSize">
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/llGroup"
@@ -58,7 +54,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:background="@color/forms_alter_row"
                     android:padding="@dimen/SmallSize">
 
                     <com.mahak.order.widget.FontTextView
@@ -77,6 +72,10 @@
                         android:layout_height="wrap_content"
                         android:text="اسم المشتریع" />
                 </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/black" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -99,11 +98,15 @@
                         android:layout_height="wrap_content"
                         android:text="@string/str_date" />
                 </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/black" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/forms_alter_row"
+
                     android:orientation="horizontal"
                     android:padding="@dimen/SmallSize">
 
@@ -122,6 +125,10 @@
                         android:layout_height="wrap_content"
                         android:text="رقم حساب" />
                 </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/black" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -144,11 +151,14 @@
                         android:layout_height="wrap_content"
                         android:text="مبلغ القدیم" />
                 </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/black" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/forms_alter_row"
                     android:orientation="horizontal"
                     android:padding="@dimen/SmallSize">
 
@@ -168,6 +178,10 @@
                         android:gravity="right"
                         android:text="@string/str_cash_amount" />
                 </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/black" />
 
                 <LinearLayout
                     android:id="@+id/llChequeAmount"
@@ -191,11 +205,15 @@
                         android:layout_height="fill_parent"
                         android:text="@string/str_cheque_amount" />
                 </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/black" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/forms_alter_row"
+
                     android:orientation="horizontal"
                     android:padding="@dimen/SmallSize">
 
@@ -215,6 +233,10 @@
                         android:gravity="right"
                         android:text="@string/str_receipt_amount" />
                 </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/black" />
 
                 <LinearLayout
                     android:id="@+id/llTotalAmount"
@@ -238,12 +260,15 @@
                         android:layout_height="fill_parent"
                         android:text="@string/str_total_amount" />
                 </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/black" />
 
                 <LinearLayout
                     android:id="@+id/finalBalance"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/forms_alter_row"
                     android:orientation="horizontal"
                     android:padding="@dimen/SmallSize">
 
@@ -262,6 +287,10 @@
                         android:layout_height="fill_parent"
                         android:text="مبلغ نهایی" />
                 </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/black" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
