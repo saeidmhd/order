@@ -5,17 +5,26 @@
       <map>
         <entry key="app/src/main/res/layout-de/activity_dashboard.xml" value="0.1" />
         <entry key="app/src/main/res/layout-de/activity_setting.xml" value="0.33" />
+        <entry key="app/src/main/res/layout-de/factor_print_template.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/layout-de/fragment_item_product_gallery.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout-de/grv_product_picker_item.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout-de/lst_product_picker_item.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout-de/receipt_print_arabic.xml" value="0.5" />
         <entry key="app/src/main/res/layout-de/receipt_print_arabic50mm.xml" value="0.67" />
         <entry key="app/src/main/res/layout-de/receipt_print_arabic80mm.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_add_person.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_data_sync.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_good_detail_count.xml" value="0.17" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/factor_print_template_80mm_fii.xml" value="0.37083333333333335" />
+        <entry key="app/src/main/res/layout/factor_print_template.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/factor_print_template_50mm_fii.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/factor_print_template_50mm_fii_compact.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/factor_print_template_80mm.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/factor_print_template_80mm_compact.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/factor_print_template_80mm_fii.xml" value="0.9002890173410405" />
+        <entry key="app/src/main/res/layout/factor_print_template_80mm_fii_compact.xml" value="0.67" />
+        <entry key="app/src/main/res/layout/factor_print_template_compact.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/layout/fragment_item_product_gallery.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout/fragment_products_list3.xml" value="0.16286727456940223" />
         <entry key="app/src/main/res/layout/grv_product_picker_item.xml" value="0.5" />

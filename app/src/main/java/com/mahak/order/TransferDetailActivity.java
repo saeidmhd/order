@@ -248,19 +248,19 @@ public class TransferDetailActivity extends BaseActivity {
 
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             if (printerBrand == ProjectInfo.PRINTER_BABY_380_A || printerBrand == ProjectInfo.PRINTER_DELTA_380_A) {
-                ll = inflater.inflate(R.layout.factor_print_template_80mm_compact, null, false);
+                ll = inflater.inflate(R.layout.factor_print_template_80mm, null, false);
             } else if (printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII) {
-                ll = inflater.inflate(R.layout.factor_print_template_80mm_compact, null, false);
+                ll = inflater.inflate(R.layout.factor_print_template_80mm, null, false);
                 LinearLayout _llPrint = (LinearLayout) ll.findViewById(R.id._llPrint);
                 ChangePrintWidth(_llPrint);
             } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
                 ll = inflater.inflate(R.layout.factor_print_template_50mm_fii_compact, null, false);
             } else if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW || printerBrand == ProjectInfo.UROVO_K319 || printerBrand == Woosim_WSP_R341) {
-                ll = inflater.inflate(R.layout.factor_print_template_80mm_compact, null, false);
+                ll = inflater.inflate(R.layout.factor_print_template_80mm, null, false);
                 LinearLayout _llPrint = (LinearLayout) ll.findViewById(R.id._llPrint);
                 ChangePrintWidth(_llPrint);
             } else if (printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310) {
-                ll = inflater.inflate(R.layout.factor_print_template_80mm_compact, null, false);
+                ll = inflater.inflate(R.layout.factor_print_template_80mm, null, false);
             } else {
                 ll = inflater.inflate(R.layout.factor_print_template_compact, null, false);
             }
