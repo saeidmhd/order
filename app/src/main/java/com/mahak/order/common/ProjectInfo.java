@@ -15,6 +15,7 @@ public class ProjectInfo {
     public static String DIRECTORY_REPORTS = "Reports";
     public static String DIRECTORY_PRODUCTS = "Products";
     public static String DIRECTORY_ASSETS = "Assets";
+    public static String DIRECTORY_LOGS = "Logs";
     public static String PRINT_LOGO_FILE_NAME = "img_print_logo.png";
 
     public static int IMMEDIATE = 1;

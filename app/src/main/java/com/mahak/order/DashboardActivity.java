@@ -32,12 +32,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -56,7 +56,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -65,7 +64,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.android.PolyUtil;
@@ -91,7 +89,6 @@ import com.mikepenz.ionicons_typeface_library.Ionicons;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 
@@ -217,7 +214,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     SupportMapFragment mapFragment;
     private static final int REQUEST_Location_ON = 1200;
 
-
     private static final String TAG = DashboardActivity.class.getSimpleName();
 
     // Used in checking for runtime permissions.
@@ -254,6 +250,11 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         registerReceiverToCheckGpsOnOff();
 
         setContentView(R.layout.activity_dashboard);
+
+        mContext = this;
+        mActivity = this;
+
+        initUI();
 
         if (Utils.requestingLocationUpdates(this)) {
             if (!checkPermissions()) {
@@ -296,11 +297,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         //_______________________________________________________________
 
-        mContext = this;
-        mActivity = this;
-
-        initUI();
-
         if(!isMyServiceRunning(LocationService.class)){
             if(btnTrackingService.isChecked()){
                 btnTrackingService.setChecked(false);
@@ -316,13 +312,17 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnTrackingService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!isRadaraActive())
-                    Toast.makeText(mContext, "افزونه رادارا غیر فعال است!", Toast.LENGTH_LONG).show();
-                if (locationService == null) locationService = new LocationService(mContext, DashboardActivity.this);
-                if(locationService.isRunService(mContext) && !btnTrackingService.isChecked()){
-                    stopLocationUpdate();
+                if(!isRadaraActive()){
+                    showDialogRadara();
+                    if(btnTrackingService.isChecked())
+                        btnTrackingService.setChecked(false);
                 }else {
-                    startLocationUpdate();
+                    if (locationService == null) locationService = new LocationService(mContext, DashboardActivity.this);
+                    if(locationService.isRunService(mContext) && !btnTrackingService.isChecked()){
+                        stopLocationUpdate();
+                    }else {
+                        startLocationUpdate();
+                    }
                 }
             }
         });
@@ -552,7 +552,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         asyncReport = new AsyncReport();
         asyncReport.execute();
 
-        setTrackingConfig();
+        if(isRadaraActive())
+            setTrackingConfig();
 
         //update();
         super.onResume();
@@ -805,7 +806,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         btnTrackingService = (SwitchCompat) findViewById(R.id.btnTrackingService);
 
-
         //Version/////////////////////////////////////////////////////
         PackageInfo pInfo;
         try {
@@ -945,7 +945,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         bindService(new Intent(this, LocationService.class), mServiceConnection,
                 Context.BIND_AUTO_CREATE);
-        if(Utils.requestingLocationUpdates(this))
+        if(Utils.requestingLocationUpdates(this) && checkServiceLocationIsRunning(mContext))
             setButtonsState(true);
 
     }
@@ -1477,11 +1477,15 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     }
 
 
-    private boolean checkServiceLocationIsRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
+    private boolean checkServiceLocationIsRunning(Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(
+                Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(
+                Integer.MAX_VALUE)) {
+            if (getClass().getName().equals(service.service.getClassName())) {
+                if (service.foreground) {
+                    return true;
+                }
             }
         }
         return false;
@@ -1626,5 +1630,26 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     protected void onDestroy() {
         LocationService.removeEventLocation(this.getLocalClassName());
         super.onDestroy();
+    }
+
+    private void showDialogRadara() {
+        Dialog dialog = new Dialog(mContext);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dialog_radara);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+
+        Button dialog_btn_data = dialog.findViewById(R.id.dialog_btn_ok);
+
+        dialog_btn_data.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }

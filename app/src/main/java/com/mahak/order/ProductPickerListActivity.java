@@ -148,6 +148,7 @@ public class ProductPickerListActivity extends BaseActivity {
     private ImageView show_category;
     private ImageView close_category;
     private LinearLayout ll_category;
+    private LinearLayout category_layout;
     private LinearLayout show_all_product;
     private MultiLevelRecyclerView multiLevelRecyclerView;
     public static int clickedItemCategoryCode = 0;
@@ -465,12 +466,17 @@ public class ProductPickerListActivity extends BaseActivity {
         show_all_product = (LinearLayout) findViewById(R.id.show_all_product);
         ll_category = (LinearLayout) findViewById(R.id.ll_category);
         show_category = (ImageView) findViewById(R.id.show_category);
+        category_layout = (LinearLayout) findViewById(R.id.category_layout);
         close_category = (ImageView) findViewById(R.id.close_category);
 
         multiLevelRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
 
         db.open();
         ArrayList<ProductCategory> productCategories = db.getAllProductCategory();
+
+        if (productCategories.size() == 0){
+            category_layout.setVisibility(View.GONE);
+        }
 
        /* if(clickedItemCategoryCode != 0){
 

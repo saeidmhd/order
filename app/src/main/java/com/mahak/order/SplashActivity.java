@@ -10,18 +10,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.SharedPreferencesHelper;
@@ -178,30 +170,5 @@ public class SplashActivity extends BaseActivity {
             }
         }
     }
-
-    private void registerInBackground() {
-        FirebaseApp.initializeApp(SplashActivity.this);
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                try {
-                    String token = task.getResult();
-                    writeLog(token);
-                    Intent intent = new Intent(SplashActivity.this, RegistrationIntentService.class);
-                    intent.putExtra("token",token);
-                    startService(intent);
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-
-            }
-        });
-    }
-
-
-
-    //endregion
-
-    // Setup a recurring alarm every half hour
 
 }

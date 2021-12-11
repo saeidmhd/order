@@ -19,8 +19,7 @@ public class Utils {
      * @param context The {@link Context}.
      */
     public static boolean requestingLocationUpdates(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(KEY_REQUESTING_LOCATION_UPDATES, false);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(KEY_REQUESTING_LOCATION_UPDATES, false);
     }
 
     /**

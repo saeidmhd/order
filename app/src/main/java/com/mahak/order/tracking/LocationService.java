@@ -676,11 +676,13 @@ public class LocationService extends Service {
     public void removeLocationUpdates() {
         Log.i(TAG, "Removing location updates");
         try {
-            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
-            Utils.setRequestingLocationUpdates(mContext, false);
-            stopSelf();
-            if(realTimeLocation != null)
-                realTimeLocation.stopRealTimeSend();
+            if(mLocationCallback != null){
+                mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+                Utils.setRequestingLocationUpdates(mContext, false);
+                stopSelf();
+                if(realTimeLocation != null)
+                    realTimeLocation.stopRealTimeSend();
+            }
         } catch (SecurityException unlikely) {
             Utils.setRequestingLocationUpdates(mContext, true);
             Log.e(TAG, "Lost location permission. Could not remove updates. " + unlikely);

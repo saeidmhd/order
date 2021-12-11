@@ -134,6 +134,7 @@ public class ProductsListActivity extends BaseActivity {
     private ImageView show_category;
     private ImageView close_category;
     private LinearLayout ll_category;
+    private LinearLayout category_layout;
     private LinearLayout show_all_product;
     private MultiLevelRecyclerView multiLevelRecyclerView;
     public static int clickedItemCategoryCode = 0;
@@ -354,6 +355,7 @@ public class ProductsListActivity extends BaseActivity {
         multiLevelRecyclerView = (MultiLevelRecyclerView) findViewById(R.id.rv_list);
         show_all_product = (LinearLayout) findViewById(R.id.show_all_product);
         ll_category = (LinearLayout) findViewById(R.id.ll_category);
+        category_layout = (LinearLayout) findViewById(R.id.category_layout);
         show_category = (ImageView) findViewById(R.id.show_category);
         close_category = (ImageView) findViewById(R.id.close_category);
 
@@ -367,6 +369,10 @@ public class ProductsListActivity extends BaseActivity {
 
         db.open();
         ArrayList<ProductCategory> productCategories = db.getAllProductCategory();
+
+        if(productCategories.size() == 0){
+            category_layout.setVisibility(View.GONE);
+        }
 
         if(clickedItemCategoryCode != 0){
 
@@ -550,9 +556,7 @@ public class ProductsListActivity extends BaseActivity {
             productPageGalleryFragment = new ProductPagerFragment();
             ft.replace(R.id.flContent, productPageGalleryFragment);
             ft.commit();
-
         }
-
     }
 
     /**

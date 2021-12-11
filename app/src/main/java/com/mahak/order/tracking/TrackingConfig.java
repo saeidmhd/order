@@ -95,7 +95,7 @@ public class TrackingConfig {
         settingBody.setVisitorId(0);
         Call<TrackingSetting> call = apiService.GetTrackingSetting(getPrefSignalUserToken(),settingBody);
         pd = new FontProgressDialog(mContext);
-        pd.setMessage("در حال دریافت تنظیمات ردیابی ویزیتور");
+        pd.setMessage("در حال دریافت تنظیمات رادارا");
         pd.setCancelable(false);
         pd.show();
         call.enqueue(new Callback<TrackingSetting>() {

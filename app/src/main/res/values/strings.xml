@@ -479,7 +479,7 @@
     <string name="str_tracking_pause_header">سرویس ردیابی متوقف شده است</string>
     <string name="str_play">اجرا</string>
     <string name="str_tracking">ردیابی</string>
-    <string name="str_tracking_description">سامانه ردیابی ویزیتور غیر فعال است! </string>
+    <string name="str_tracking_description">سامانه رادارا غیر فعال است! </string>
     <string name="str_tracking_active">فعال است</string>
     <string name="str_tracking_inactive">غیر فعال است</string>
     <string name="str_name_filter"> نام ، کد شخص و آدرس</string>
@@ -1004,12 +1004,12 @@
     <string name="sending_image">در حال ارسال اطلاعات تصاویر ....</string>
     <string name="send_image">در حال ارسال تصویر</string>
     <string name="balance_value">میزان مانده</string>
-    <string name="tracking_system_is_active">سامانه ردیابی ویزیتور فعال است!</string>
-    <string name="tracking_system_is_disabled">سامانه ردیابی ویزیتور غیرفعال است!</string>
+    <string name="tracking_system_is_active">سامانه رادارا فعال است!</string>
+    <string name="tracking_system_is_disabled">سامانه رادارا غیرفعال است!</string>
     <string name="order_has_been_registered">برای این شخص سفارش ثبت شده است</string>
     <string name="order_has_not_been_registered">برای این شخص سفارشی ثبت نشده است</string>
-    <string name="tracking_system_is_active_admin">سامانه ردیابی ویزیتور فعال است (کنترل توسط مدیر)</string>
-    <string name="tracking_system_is_disabled_admin">سامانه ردیابی ویزیتور غیرفعال است (کنترل توسط مدیر)</string>
+    <string name="tracking_system_is_active_admin">سامانه رادارا فعال است (کنترل توسط مدیر)</string>
+    <string name="tracking_system_is_disabled_admin">سامانه رادارا غیرفعال است (کنترل توسط مدیر)</string>
     <string name="gps_must_be_activated">برای ادامه کار با نرم افزار باید سامانه GPS فعال شود</string>
     <string name="suggest_gps_activated">موقعیت مکانی شما غیر فعال است.آیا مایلید آن را فعال کنید؟</string>
     <string name="yes">بله</string>
