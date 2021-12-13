@@ -104,6 +104,8 @@ public class DataService {
         long startTime = System.nanoTime();
         db.open();
         db.UpdateOrAddServerVisitor(data);
+        Visitor visitor = db.getVisitor();
+        BaseActivity.setRadaraActive(visitor.HasRadara());
         db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;

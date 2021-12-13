@@ -54,6 +54,10 @@ public class Visitor {
     @Expose
     private boolean hasPriceLevelAccess;
 
+    @SerializedName("HasRadara")
+    @Expose
+    private boolean hasRadara;
+
     @SerializedName("SellPriceLevel")
     @Expose
     private int sellPriceLevel;
@@ -415,5 +419,13 @@ public class Visitor {
 
     public void setRowVersion(long rowVersion) {
         this.rowVersion = rowVersion;
+    }
+
+    public boolean HasRadara() {
+        return hasRadara;
+    }
+
+    public void setHasRadara(boolean hasRadara) {
+        this.hasRadara = hasRadara;
     }
 }

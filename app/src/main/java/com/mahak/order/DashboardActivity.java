@@ -72,6 +72,7 @@ import com.mahak.order.common.Customer;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.User;
+import com.mahak.order.common.Visitor;
 import com.mahak.order.tracking.LocationService;
 import com.mahak.order.tracking.MapPolygon;
 import com.mahak.order.tracking.ShowPersonCluster;
@@ -183,6 +184,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     public static ArrayList<CheckList> arrayChecklist = new ArrayList<>();
     private ShowCheckListArrayAdapter adChecklist;
     private Customer customer;
+    private Visitor visitor;
     private Dialog dialog;
     private ArrayList<LatLng> positions = new ArrayList<>();
     private ArrayList<LatLng> customerPositions = new ArrayList<>();
@@ -408,13 +410,23 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             public void onClick(View v) {
                 if (mDrawerLayout.isDrawerOpen(mDrawerLeft))
                     mDrawerLayout.closeDrawers();
-                if(CanRegisterInvoiceOutOfZone()){
+                if(isRadaraActive()){
+                    if(!btnTrackingService.isChecked()){
+                        showDialogRequest();
+                    }else if(CanRegisterInvoiceOutOfZone()){
+                        Type = ProjectInfo.TYPE_INVOCIE;
+                        Intent intent = new Intent(mContext, PeopleListActivity.class);
+                        intent.putExtra(PAGE, PAGE_ADD_INVOICE);
+                        startActivityForResult(intent, REQUEST_CUSTOMER_LIST);
+
+                    }else {
+                        Toast.makeText(mContext, "خارج از منطقه یا خاموش بودن سامانه رادارا ! امکان ثبت فاکتور وجود ندارد.", Toast.LENGTH_SHORT).show();
+                    }
+                }else {
                     Type = ProjectInfo.TYPE_INVOCIE;
                     Intent intent = new Intent(mContext, PeopleListActivity.class);
                     intent.putExtra(PAGE, PAGE_ADD_INVOICE);
                     startActivityForResult(intent, REQUEST_CUSTOMER_LIST);
-                }else {
-                    Toast.makeText(mContext, "خارج از منطقه یا خاموش بودن سامانه ردیابی ! امکان ثبت فاکتور وجود ندارد.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -502,7 +514,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         };
     }//end of onCreate
 
-
     public static void setTackingServiceText(boolean isChecked) {
         if (isChecked) {
             tvTrackingService.setText(R.string.tracking_system_is_active);
@@ -582,17 +593,19 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void startLocationUpdate() {
-        if (locationService == null) locationService = new LocationService(mContext, DashboardActivity.this);
-        if (!checkPermissions()) {
-            requestPermissions();
-        }else {
-            if(!btnTrackingService.isChecked()){
-                btnTrackingService.setChecked(true);
+        if(isRadaraActive()){
+            if (locationService == null) locationService = new LocationService(mContext, DashboardActivity.this);
+            if (!checkPermissions()) {
+                requestPermissions();
+            }else {
+                if(!btnTrackingService.isChecked()){
+                    btnTrackingService.setChecked(true);
+                }
+                setTackingServiceText(true);
+                locationService.setTrackingConfig(mContext);
+                locationService.startTracking();
+                locationService.setTrackingPrefOff("1");
             }
-            setTackingServiceText(true);
-            locationService.setTrackingConfig(mContext);
-            locationService.startTracking();
-            locationService.setTrackingPrefOff("1");
         }
     }
 
@@ -830,6 +843,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         arrayChecklist = new ArrayList<>();
         arrayChecklist = db.getAllChecklistNotPublished();
+        visitor = db.getVisitor();
         customer = new Customer();
         //Coordinate coordinate;
 
@@ -937,8 +951,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -953,7 +965,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     private void setButtonsState(boolean requestingLocationUpdates) {
         btnTrackingService.setChecked(requestingLocationUpdates);
     }
-
 
     @Override
     protected void onStop() {
@@ -1639,6 +1650,26 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.dialog_radara);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+
+        Button dialog_btn_data = dialog.findViewById(R.id.dialog_btn_ok);
+
+        dialog_btn_data.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+    private void showDialogRequest() {
+        Dialog dialog = new Dialog(mContext);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dialog_request_gps);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
 

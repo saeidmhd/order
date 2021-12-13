@@ -152,6 +152,7 @@ public class ProjectInfo {
     public static String _json_key_sendingPoints = "sendingPoints";
     public static String _json_key_isRestricted = "isRestricted";
     public static String _json_key_radius = "radius";
+    public static String _json_sendPointsBasedMeter = "sendPointsBasedMeter";
     public static String _json_key_banks = "BankNames";
 
     //Action

@@ -1,6 +1,6 @@
 package com.mahak.order.common;
 
-import android.annotation.SuppressLint;
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -21,10 +20,8 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings.Secure;
-import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +32,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
@@ -45,8 +43,11 @@ import com.google.android.datatransport.runtime.dagger.multibindings.ElementsInt
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.mahak.order.AddPersonActivity;
 import com.mahak.order.BaseActivity;
+import com.mahak.order.BuildConfig;
 import com.mahak.order.ProductPickerListActivity;
 import com.mahak.order.R;
 import com.mahak.order.autoSync.SyncAlarmReceiver;
@@ -91,8 +92,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import io.reactivex.annotations.NonNull;
 
 import static com.mahak.order.BaseActivity.baseUrlImage;
 import static com.mahak.order.BaseActivity.getPrefUsername;
@@ -1807,15 +1806,27 @@ FirebaseCrashlytics.getInstance().recordException(e);
     public static void writeLog(String str) {
         new StringBuffer();
         try {
-            String path = Environment.getExternalStorageDirectory().getPath() + "/MAHAK_ORDER_LOG.txt";
+            Calendar calendar = Calendar.getInstance();
+            String path = Environment.getExternalStorageDirectory().getPath() + "/Tracking_LOG.txt";
             File f = new File(path);
             long seek = f.length();
             RandomAccessFile raf = new RandomAccessFile(new File(path), "rw");
             raf.seek(seek);
-            raf.write("\n----------------------------------\n".getBytes());
-            seek += (long) "\n----------------------------------\n".getBytes().length;
+            Date date = new Date();
+            String rafStr= "\n@@@ date: " + ServiceTools.getDate(date)
+                    + " time: " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + "\n"
+                    + "@@@ version " + ServiceTools.getVersionCode(mContext);
+
+            raf.write(rafStr.getBytes());
+            seek += rafStr.getBytes().length;
             raf.seek(seek);
+
             raf.writeUTF(str);
+
+            raf.write("\n----------------------------------\n".getBytes());
+            seek +="\n----------------------------------\n".getBytes().length;
+            raf.seek(seek);
+
             raf.close();
         } catch (Exception var10) {
             FirebaseCrashlytics.getInstance().recordException(var10);

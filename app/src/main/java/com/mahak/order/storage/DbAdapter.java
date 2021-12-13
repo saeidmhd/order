@@ -538,6 +538,7 @@ public class DbAdapter {
                     initialvalue.put(DbSchema.VisitorSchema.COLUMN_MahakId, BaseActivity.getPrefMahakId());
                     initialvalue.put(DbSchema.VisitorSchema.COLUMN_PriceAccess, visitor.isHasPriceAccess());
                     initialvalue.put(DbSchema.VisitorSchema.COLUMN_CostLevelAccess, visitor.isHasPriceLevelAccess());
+                    initialvalue.put(DbSchema.VisitorSchema.COLUMN_HasRadara, visitor.HasRadara());
                     initialvalue.put(DbSchema.VisitorSchema.COLUMN_Sell_DefaultCostLevel, visitor.getSellPriceLevel());
                     initialvalue.put(DbSchema.VisitorSchema.COLUMN_SelectedCostLevels, visitor.getSelectedPriceLevels());
                     initialvalue.put(DbSchema.VisitorSchema.COLUMN_ChequeCredit, visitor.getChequeCredit());
@@ -5256,6 +5257,7 @@ public class DbAdapter {
                     visitor.setStoreCode(cursor.getLong(cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_STORECODE)));
                     visitor.setHasPriceAccess(cursor.getInt((cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_PriceAccess))) > 0);
                     visitor.setHasPriceLevelAccess(cursor.getInt((cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_CostLevelAccess))) > 0);
+                    visitor.setHasRadara(cursor.getInt((cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_HasRadara))) > 0);
                     visitor.setSellPriceLevel(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_Sell_DefaultCostLevel)));
                     visitor.setSelectedPriceLevels(cursor.getString(cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_SelectedCostLevels)));
                     visitor.setChequeCredit(cursor.getDouble(cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_ChequeCredit)));
@@ -5592,6 +5594,7 @@ public class DbAdapter {
                     visitor.setSelectedPriceLevels(cursor.getString(cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_SelectedCostLevels)));
                     visitor.setHasPriceAccess(cursor.getInt((cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_PriceAccess))) > 0);
                     visitor.setHasPriceLevelAccess(cursor.getInt((cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_CostLevelAccess))) > 0);
+                    visitor.setHasRadara(cursor.getInt((cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_HasRadara))) > 0);
                     visitor.setChequeCredit(cursor.getDouble(cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_ChequeCredit)));
                     visitor.setTotalCredit(cursor.getDouble(cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_TotalCredit)));
                     visitor.setUserId(cursor.getLong(cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_USER_ID)));
@@ -5644,6 +5647,7 @@ public class DbAdapter {
                     visitor.setStoreCode(cursor.getLong(cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_STORECODE)));
                     visitor.setHasPriceAccess(cursor.getInt((cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_PriceAccess))) > 0);
                     visitor.setHasPriceLevelAccess(cursor.getInt((cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_CostLevelAccess))) > 0);
+                    visitor.setHasRadara(cursor.getInt((cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_HasRadara))) > 0);
                     visitor.setSellPriceLevel(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_Sell_DefaultCostLevel)));
                     visitor.setSelectedPriceLevels(cursor.getString(cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_SelectedCostLevels)));
                     visitor.setChequeCredit(cursor.getDouble(cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_ChequeCredit)));
@@ -5697,6 +5701,7 @@ public class DbAdapter {
                     visitor.setStoreCode(cursor.getLong(cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_STORECODE)));
                     visitor.setHasPriceAccess(cursor.getInt((cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_PriceAccess))) > 0);
                     visitor.setHasPriceLevelAccess(cursor.getInt((cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_CostLevelAccess))) > 0);
+                    visitor.setHasRadara(cursor.getInt((cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_HasRadara))) > 0);
                     visitor.setSellPriceLevel(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_Sell_DefaultCostLevel)));
                     visitor.setSelectedPriceLevels(cursor.getString(cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_SelectedCostLevels)));
                     visitor.setChequeCredit(cursor.getDouble(cursor.getColumnIndex(DbSchema.VisitorSchema.COLUMN_ChequeCredit)));
@@ -9273,6 +9278,7 @@ public class DbAdapter {
                     initialvalue.put(DbSchema.VisitorSchema.COLUMN_MahakId, BaseActivity.getPrefMahakId());
                     initialvalue.put(DbSchema.VisitorSchema.COLUMN_PriceAccess, visitor.isHasPriceAccess());
                     initialvalue.put(DbSchema.VisitorSchema.COLUMN_CostLevelAccess, visitor.isHasPriceLevelAccess());
+                    initialvalue.put(DbSchema.VisitorSchema.COLUMN_HasRadara, visitor.HasRadara());
                     initialvalue.put(DbSchema.VisitorSchema.COLUMN_Sell_DefaultCostLevel, visitor.getSellPriceLevel());
                     initialvalue.put(DbSchema.VisitorSchema.COLUMN_SelectedCostLevels, visitor.getSelectedPriceLevels());
                     initialvalue.put(DbSchema.VisitorSchema.COLUMN_ChequeCredit, visitor.getChequeCredit());

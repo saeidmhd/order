@@ -47,8 +47,9 @@ public class TrackingConfig {
     private final DbAdapter db;
     JSONObject gpsData = new JSONObject();
 
-    public TrackingConfig(Context context , Activity activity){
+    public TrackingConfig(Context context, Activity activity, FontProgressDialog pd){
         mContext = context;
+        this.pd = pd;
         db = new DbAdapter(mContext);
 
     }
@@ -66,12 +67,16 @@ public class TrackingConfig {
         loginBody.setDescription("login");
         loginBody.setUserName(user.getUsername());
         loginBody.setPassword(user.getPassword());
-
         ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
         Call<SignalLoginResult> call = apiService.LoginSignalR(loginBody);
+
+        pd.setMessage("در حال دریافت توکن رادارا");
+        pd.setCancelable(false);
+        pd.show();
         call.enqueue(new Callback<SignalLoginResult>() {
             @Override
             public void onResponse(Call<SignalLoginResult> call, Response<SignalLoginResult> response) {
+                dismissProgressDialog();
                 if (response.body() != null) {
                     if (response.body().isResult()) {
                         setPrefSignalUserToken(response.body().getUserToken());
@@ -83,6 +88,7 @@ public class TrackingConfig {
             }
             @Override
             public void onFailure(Call<SignalLoginResult> call, Throwable t) {
+                dismissProgressDialog();
                 Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -94,22 +100,22 @@ public class TrackingConfig {
         SettingBody settingBody = new SettingBody();
         settingBody.setVisitorId(0);
         Call<TrackingSetting> call = apiService.GetTrackingSetting(getPrefSignalUserToken(),settingBody);
-        pd = new FontProgressDialog(mContext);
         pd.setMessage("در حال دریافت تنظیمات رادارا");
         pd.setCancelable(false);
         pd.show();
         call.enqueue(new Callback<TrackingSetting>() {
             @Override
             public void onResponse(Call<TrackingSetting> call, Response<TrackingSetting> response) {
-                pd.dismiss();
+                dismissProgressDialog();
                 if (response.body() != null) {
                     if (response.body().isSucceeded()) {
 
-                        long MIN_DISTANCE_CHANGE_FOR_UPDATES = ServiceTools.toLong(response.body().getData().getSendPointsPerMeter());
-                        long MIN_TIME_BW_UPDATES = ServiceTools.toLong(response.body().getData().getSendPointsEveryMinute());
-                        int radius = ServiceTools.toInt(response.body().getData().getRadius());
+                        int MIN_DISTANCE_CHANGE_FOR_UPDATES = response.body().getData().getSendPointsPerMeter();
+                        int MIN_TIME_BW_UPDATES = response.body().getData().getSendPointsEveryMinute();
+                        int radius = response.body().getData().getRadius();
                         boolean sendingPointsByAdmin = response.body().getData().isControlSendingPointsByAdmin();
                         boolean sendingPoints = response.body().getData().isSendingPoints();
+                        boolean sendPointsBasedMeter = response.body().getData().isSendPointsBasedMeter();
 
                         BaseActivity.setPrefAdminControl(sendingPointsByAdmin);
                         if(sendingPoints)
@@ -123,13 +129,12 @@ public class TrackingConfig {
                             gpsData.put(ProjectInfo._json_key_sendingPointsByAdmin, sendingPointsByAdmin);
                             gpsData.put(ProjectInfo._json_key_sendingPoints, sendingPoints);
                             gpsData.put(ProjectInfo._json_key_radius, radius);
+                            gpsData.put(ProjectInfo._json_sendPointsBasedMeter, sendPointsBasedMeter);
                             ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_gps_config, gpsData.toString());
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(mContext, "تنظیمات ردیابی دریافت گردید", Toast.LENGTH_LONG).show();
-
                         new getTrackingZoneAsync().execute();
 
                     }else {
@@ -139,7 +144,7 @@ public class TrackingConfig {
             }
             @Override
             public void onFailure(Call<TrackingSetting> call, Throwable t) {
-                pd.dismiss();
+                dismissProgressDialog();
                 Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -164,13 +169,12 @@ public class TrackingConfig {
 
         @Override
         protected void onPostExecute(Integer result) {
-            pd = new FontProgressDialog(mContext);
             final String[] mMsg = {""};
 
             ZoneBody zoneBody = new ZoneBody();
             zoneBody.setVisitorId(visitorId);
             ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
-            pd.setMessage(mContext.getString(R.string.recieiving_info));
+            pd.setMessage("در حال دریافت محدوده ها");
             pd.setCancelable(false);
             pd.show();
 
@@ -178,7 +182,7 @@ public class TrackingConfig {
             call.enqueue(new Callback<VisitorZoneLocation>() {
                 @Override
                 public void onResponse(Call<VisitorZoneLocation> call, Response<VisitorZoneLocation> response) {
-                    pd.dismiss();
+                    dismissProgressDialog();
                     if (response.body() != null) {
                         if (response.body().isSucceeded()) {
                             List<Datum> data =  response.body().getData();
@@ -194,7 +198,6 @@ public class TrackingConfig {
 
                         }else {
                             if (response.body() != null) {
-                                pd.dismiss();
                                 mMsg[0] = response.body().getMessage();
                             }
                         }
@@ -202,9 +205,9 @@ public class TrackingConfig {
                 }
                 @Override
                 public void onFailure(Call<VisitorZoneLocation> call, Throwable t) {
+                    dismissProgressDialog();
                     FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
                     FirebaseCrashlytics.getInstance().log(t.getMessage());
-                    pd.dismiss();
                     mMsg[0] = t.toString();
                 }
             });
@@ -222,7 +225,6 @@ public class TrackingConfig {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pd = new FontProgressDialog(mContext);
             pd.setMessage(mContext.getString(R.string.storing_info));
             pd.setCancelable(false);
             pd.show();
@@ -247,9 +249,15 @@ public class TrackingConfig {
 
         @Override
         protected void onPostExecute(Integer result) {
-            pd.dismiss();
+            dismissProgressDialog();
         }
 
+    }
+
+    private void dismissProgressDialog() {
+        if (pd != null && pd.isShowing()) {
+            pd.dismiss();
+        }
     }
 
 }

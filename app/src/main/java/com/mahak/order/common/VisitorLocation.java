@@ -1,23 +1,11 @@
 package com.mahak.order.common;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.mahak.order.BaseActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.UUID;
-
-/**
- * Created by mostafavi on 7/12/2016.
- * modified by Saeid.mhd@gmail.com
- */
 public class VisitorLocation {
 
     private String uniqueID ;

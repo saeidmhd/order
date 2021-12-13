@@ -184,6 +184,7 @@ public class DbSchema {
         public static final String COLUMN_DeviceId = "DeviceId";
         public static final String COLUMN_Active = "Active";
         public static final String COLUMN_Color = "Color";
+        public static final String COLUMN_HasRadara = "HasRadara";
         public static final String COLUMN_DataHash = "DataHash";
         public static final String COLUMN_CreateDate = "CreateDate";
         public static final String COLUMN_UpdateDate = "UpdateDate";
@@ -223,6 +224,7 @@ public class DbSchema {
                 " `VisitorType` INTEGER," +
                 " `DeviceId` TEXT, " +
                 " `Active` INTEGER, " +
+                " `HasRadara` INTEGER, " +
                 " `Color` TEXT," +
                 " PRIMARY KEY(`ID`) )";
 

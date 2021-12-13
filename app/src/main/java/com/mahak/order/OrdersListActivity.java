@@ -422,7 +422,6 @@ public class OrdersListActivity extends BaseActivity {
 
     }
 
-
     public class AdapterReceivedTransfer extends ArrayAdapter<ReceivedTransfers> {
         Activity mcontaxt;
         ArrayList<ReceivedTransfers> arrayorgin;
@@ -1472,7 +1471,7 @@ public class OrdersListActivity extends BaseActivity {
                     intent.putExtra(PAGE, PAGE_ADD_NON_REGISTER);
                     startActivityForResult(intent, REQUEST_CUSTOMER_LIST);
                 }else {
-                    Toast.makeText(mContext, "خارج از منطقه یا خاموش بودن سامانه ردیابی ! امکان ثبت فاکتور وجود ندارد.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "خارج از منطقه یا خاموش بودن سامانه رادارا ! امکان ثبت فاکتور وجود ندارد.", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case android.R.id.home:

@@ -26,6 +26,7 @@ import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.User;
+import com.mahak.order.common.Visitor;
 import com.mahak.order.common.login.LoginBody;
 import com.mahak.order.common.login.LoginResult;
 import com.mahak.order.storage.DbAdapter;
@@ -106,6 +107,8 @@ public class LoginActivityRestApi extends BaseActivity {
 
                             //set LoginDate in db
                             mDb.open();
+                            Visitor visitor = mDb.getVisitor();
+                            BaseActivity.setRadaraActive(visitor.HasRadara());
                             user.setLoginDate(new Date().getTime());
                             mDb.UpdateUser(user);
                             mDb.close();
@@ -284,6 +287,10 @@ public class LoginActivityRestApi extends BaseActivity {
                 getFcmTokenRegisterInBackground();
         }
         setPrefUserId(ServiceTools.toLong(user.getServerUserID()));
+        mDb.open();
+        Visitor visitor = mDb.getVisitor();
+        HasRadara = visitor.HasRadara();
+        mDb.close();
         setRadaraActive(HasRadara || WithDataTransfer);
         Intent intent = new Intent(LoginActivityRestApi.this, DashboardActivity.class);
         intent.putExtra(Type_Login, bnd_Login_Splash);

@@ -18,9 +18,11 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -76,14 +78,11 @@ import static com.mahak.order.BaseActivity.setPrefSignalUserToken;
 public class LocationService extends Service {
 
     private static final int ID_NOTIFICATION_TRACKING = 1090;
-    static final int TYPE_START_TRACKING = 0;
-    static final int TYPE_END_TRACKING = 1;
-    private static final int ID_NOTIFICATION_START_END = 1078;
 
-    private static long MIN_DISPALCEMENT_CHANGE_FOR_UPDATES = 15; // 1 meters
-    // The minimum time between updates in milliseconds
+    private static int MIN_DISPALCEMENT_CHANGE_FOR_UPDATES = 15; // 1 meters
     private static long MIN_TIME_INTERVAL_UPDATES = 120000; // 2 min
-    private static int radius = 1; // 2 min
+
+    private static boolean sendPointsBasedMeter = false;
     public Context mContext;
 
     boolean isLogging = false;
@@ -249,9 +248,8 @@ public class LocationService extends Service {
     }
 
     private Location getCorrectLocation(Location location) {
-        if(location.getAccuracy() < 20){
-            if(checkDistanceSpeed(location))
-                saveInJsonFile(location);
+        if(checkDistanceSpeed(location)){
+            saveInJsonFile(location);
             return location;
         }
         return null;
@@ -266,10 +264,13 @@ public class LocationService extends Service {
         Location lasLocation = new Location("");
         lasLocation.setLatitude(obj.optDouble(ProjectInfo._json_key_latitude));
         lasLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_longitude));
-        long time = (System.currentTimeMillis() - obj.optLong(ProjectInfo._json_key_date)) / 1000;
-        double mDistanse = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), location.getLatitude(), location.getLongitude(), "K") * 1000;
-        double speed = mDistanse / time;//m/s
-        return mDistanse > 1 && speed < 42;//42m/s = 150km/h
+        lasLocation.setTime(obj.optLong(ProjectInfo._json_key_date));
+        long diff_time = (System.currentTimeMillis() - obj.optLong(ProjectInfo._json_key_date));
+        double mDistance = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), location.getLatitude(), location.getLongitude(), "K") * 1000;
+        if(sendPointsBasedMeter)
+            return mDistance > MIN_DISPALCEMENT_CHANGE_FOR_UPDATES;
+        else
+            return diff_time > MIN_TIME_INTERVAL_UPDATES ;
     }
 
     private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
@@ -397,8 +398,10 @@ public class LocationService extends Service {
         if (!ServiceTools.isNull(config)) {
             try {
                 JSONObject obj = new JSONObject(config);
-                MIN_DISPALCEMENT_CHANGE_FOR_UPDATES = obj.getLong(ProjectInfo._json_key_mingps_distance_change) ;
-                MIN_TIME_INTERVAL_UPDATES = obj.getLong(ProjectInfo._json_key_mingps_time_change) * 60 * 1000;
+                MIN_DISPALCEMENT_CHANGE_FOR_UPDATES = obj.getInt(ProjectInfo._json_key_mingps_distance_change) ;
+                sendPointsBasedMeter = obj.getBoolean(ProjectInfo._json_sendPointsBasedMeter);
+                int time = obj.getInt(ProjectInfo._json_key_mingps_time_change);
+                MIN_TIME_INTERVAL_UPDATES = (long) time * 60 * 1000;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -521,23 +524,6 @@ public class LocationService extends Service {
         dba.close();
     }
 
-    void sendOldPoints() {
-        if (dba == null) dba = new DbAdapter(mContext);
-        try {
-            waiter();
-            dba.open();
-            List<VisitorLocation> VisitorLocations = dba.getAllGpsPointsWithLimit(0, 200);
-            dba.close();
-            if (VisitorLocations != null && VisitorLocations.size() > 0) {
-                sendToServer(VisitorLocations);
-            } else {
-                ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_waiter, "0");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private void waiter() {
         String wait = ServiceTools.getKeyFromSharedPreferences(mContext, ProjectInfo.pre_waiter);
         while (wait.equals("1")) {
@@ -596,7 +582,6 @@ public class LocationService extends Service {
     private void updateUI() {
         if (mCurrentLocation != null) {
             executeEventLocations(mCurrentLocation,false);
-            // TODO: 11/2/21 uncomment on tracking version
             if(isRadaraActive()){
                 performSignalOperation();
                 Location correctLocation = getCorrectLocation(mCurrentLocation);
@@ -621,52 +606,6 @@ public class LocationService extends Service {
             }
             realTimeLocation.sendRealTimeLocation(mCurrentLocation);
         }
-    }
-
-    /**
-     * Makes a request for location updates. Note that in this sample we merely log the
-     * {@link SecurityException}.
-     */
-    public void requestLocationUpdates() {
-        Log.i(TAG, "Requesting location updates");
-        mSettingsClient.checkLocationSettings(mLocationSettingsRequest)
-                .addOnSuccessListener(new OnSuccessListener<LocationSettingsResponse>() {
-                    @Override
-                    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                        try {
-                            mFusedLocationClient.requestLocationUpdates(mLocationRequest,
-                                    mLocationCallback, Looper.myLooper());
-                            updateUI();
-                        } catch (SecurityException unlikely) {
-                            Utils.setRequestingLocationUpdates(mContext, false);
-                            Log.e(TAG, "Lost location permission. Could not request updates. " + unlikely);
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        int statusCode = ((ApiException) e).getStatusCode();
-                        switch (statusCode) {
-                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                                // Log.i(TAG, "Location settings are not satisfied. Attempting to upgrade " + "location settings ");
-                                try {
-                                    ResolvableApiException rae = (ResolvableApiException) e;
-                                    if(activity != null)
-                                        rae.startResolutionForResult(activity, REQUEST_Location_ON);
-                                } catch (IntentSender.SendIntentException sie) {
-                                    //Log.i(TAG, "PendingIntent unable to execute request.");
-                                }
-                                break;
-                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                                String errorMessage = "Location settings are inadequate, and cannot be " +
-                                        "fixed here. Fix in Settings.";
-                                //Log.e(TAG, errorMessage);
-                                Toast.makeText(mContext, errorMessage, Toast.LENGTH_LONG).show();
-                        }
-                        updateUI();
-                    }
-                });
     }
 
     /**
@@ -712,20 +651,6 @@ public class LocationService extends Service {
         return builder.build();
     }
 
-    public void createNotificationChannel(Context context) {
-        if (Build.VERSION.SDK_INT < 26) {
-            return;
-        }
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
-                "Foreground Service Channel",
-                NotificationManager.IMPORTANCE_HIGH);
-        channel.setDescription("Channel description");
-
-        NotificationManager notificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.createNotificationChannel(channel);
-    }
-
     private void getLastLocation() {
         if(mFusedLocationClient!=null){
             try {
@@ -753,7 +678,7 @@ public class LocationService extends Service {
         intent.putExtra(EXTRA_LOCATION, location);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         if (serviceIsRunningInForeground(mContext)) {
-            mNotificationManager.notify(NOTIFICATION_ID, getNotification());
+            //mNotificationManager.notify(NOTIFICATION_ID, getNotification());
         }
     }
 
@@ -765,12 +690,6 @@ public class LocationService extends Service {
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setFastestInterval(5000)
                 .setInterval(10000);
-        // TODO: 10/30/21 uncomment on tracking version
-       /* if(isRadaraActive())
-            locationRequest.setSmallestDisplacement(MIN_DISPALCEMENT_CHANGE_FOR_UPDATES);
-        else
-            locationRequest.setSmallestDisplacement(15);*/
-        //locationRequest.setInterval(MIN_TIME_INTERVAL_UPDATES);
     }
 
     /**

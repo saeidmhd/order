@@ -18,16 +18,25 @@ public class Data {
     private boolean sendingPoints;
     @SerializedName("sendPointsEveryMinute")
     @Expose
-    private String sendPointsEveryMinute;
+    private int sendPointsEveryMinute;
     @SerializedName("sendPointsPerMeter")
     @Expose
-    private String sendPointsPerMeter;
+    private int sendPointsPerMeter;
     @SerializedName("radius")
     @Expose
-    private String radius;
-    @SerializedName("geofencingSetting")
+    private int radius;
+    @SerializedName("sendPointsBasedMeter")
     @Expose
-    private List<GeofencingSetting> geofencingSetting = null;
+    private boolean sendPointsBasedMeter;
+    @SerializedName("userDemoTitle")
+    @Expose
+    private String userDemoTitle;
+    @SerializedName("latitude")
+    @Expose
+    private double latitude;
+    @SerializedName("longitude")
+    @Expose
+    private double longitude;
 
     public int getId() {
         return id;
@@ -53,36 +62,60 @@ public class Data {
         this.sendingPoints = sendingPoints;
     }
 
-    public String getSendPointsEveryMinute() {
+    public int getSendPointsEveryMinute() {
         return sendPointsEveryMinute;
     }
 
-    public void setSendPointsEveryMinute(String sendPointsEveryMinute) {
+    public void setSendPointsEveryMinute(int sendPointsEveryMinute) {
         this.sendPointsEveryMinute = sendPointsEveryMinute;
     }
 
-    public String getSendPointsPerMeter() {
+    public int getSendPointsPerMeter() {
         return sendPointsPerMeter;
     }
 
-    public void setSendPointsPerMeter(String sendPointsPerMeter) {
+    public void setSendPointsPerMeter(int sendPointsPerMeter) {
         this.sendPointsPerMeter = sendPointsPerMeter;
     }
 
-    public String getRadius() {
+    public int getRadius() {
         return radius;
     }
 
-    public void setRadius(String radius) {
+    public void setRadius(int radius) {
         this.radius = radius;
     }
 
-    public List<GeofencingSetting> getGeofencingSetting() {
-        return geofencingSetting;
+    public boolean isSendPointsBasedMeter() {
+        return sendPointsBasedMeter;
     }
 
-    public void setGeofencingSetting(List<GeofencingSetting> geofencingSetting) {
-        this.geofencingSetting = geofencingSetting;
+    public void setSendPointsBasedMeter(boolean sendPointsBasedMeter) {
+        this.sendPointsBasedMeter = sendPointsBasedMeter;
+    }
+
+    public String getUserDemoTitle() {
+        return userDemoTitle;
+    }
+
+    public void setUserDemoTitle(String userDemoTitle) {
+        this.userDemoTitle = userDemoTitle;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
 }

@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.tabs.TabLayout;
 import com.mahak.order.adapter.InvoicePagerAdapter;
 import com.mahak.order.adapter.OrderPagerAdapter;
@@ -40,6 +42,7 @@ import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.DbSchema;
+import com.mahak.order.tracking.LocationService;
 import com.mahak.order.widget.FontProgressDialog;
 
 import java.util.ArrayList;
@@ -49,6 +52,8 @@ import java.util.LinkedHashMap;
 import static com.mahak.order.common.ProjectInfo.TYPE_Delivery;
 import static com.mahak.order.common.ProjectInfo.TYPE_SEND_TRANSFERENCE;
 import static com.mahak.order.common.ServiceTools.getDateForLong;
+
+import org.json.JSONObject;
 
 @SuppressLint("ValidFragment")
 public class InvoiceDetailActivity extends BaseActivity {
@@ -113,6 +118,9 @@ public class InvoiceDetailActivity extends BaseActivity {
 
 
     private FontProgressDialog pd;
+
+    double Latitude = 0;
+    double Longitude = 0;
 
     /////////////////
 
@@ -299,8 +307,6 @@ public class InvoiceDetailActivity extends BaseActivity {
         });
     }
 
-
-
     private void SaveAndReceiptBasedOnOrder() {
         if (validateAsset()) {
             if (orderDetails.size() > 0) {
@@ -319,7 +325,6 @@ public class InvoiceDetailActivity extends BaseActivity {
 
 
     }
-
 
     public static boolean visitorHasCredit(double finalPrice) {
 
@@ -540,8 +545,9 @@ public class InvoiceDetailActivity extends BaseActivity {
             order.setMahakId(BaseActivity.getPrefMahakId());
             order.setDatabaseId(BaseActivity.getPrefDatabaseId());
             order.setVisitorId(BaseActivity.getPrefUserId());
-            order.setLatitude(ServiceTools.getLatLang(mContext).latitude);
-            order.setLongitude(ServiceTools.getLatLang(mContext).longitude);
+            getLastPoint();
+            order.setLatitude(Latitude);
+            order.setLongitude(Longitude);
 
             if (Discount != 0) {
                 order.setDiscount(Discount);
@@ -833,9 +839,6 @@ public class InvoiceDetailActivity extends BaseActivity {
         }
 
     }
-
-
-
 
     private void deleteOrderDetail(Order order) {
         db.open();
@@ -1142,6 +1145,17 @@ public class InvoiceDetailActivity extends BaseActivity {
     protected void onResume() {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         super.onResume();
+    }
+
+    private LatLng getLastPoint(){
+        LatLng latLng = null;
+        LocationService locationService = new LocationService();
+        JSONObject obj = locationService.getLastLocationJson(mContext);
+        if (obj != null) {
+            Latitude =  obj.optDouble(ProjectInfo._json_key_latitude);
+            Longitude =  obj.optDouble(ProjectInfo._json_key_longitude);
+        }
+        return latLng;
     }
 
 }
