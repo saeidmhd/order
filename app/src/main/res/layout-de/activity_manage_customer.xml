@@ -70,7 +70,7 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/str_market_name" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtMarketName"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
@@ -134,7 +134,7 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/str_customer_name" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtCustomerName"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
@@ -171,7 +171,7 @@
                                 style="@style/forms_spinner_default"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:enabled="false"
+                                
                                 android:clickable="false"
                                 android:dropDownVerticalOffset="@dimen/spinner_dropdown_offset"
                                 android:entries="@array/array_customer_status"
@@ -193,12 +193,11 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/str_remained" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtRemained"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:enabled="false"
                                 android:gravity="left|center_vertical"
                                 android:inputType="number"
                                 android:singleLine="true" />
@@ -219,12 +218,12 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/str_credit" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtCredit"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:enabled="false"
+                                
                                 android:gravity="left|center_vertical"
                                 android:inputType="number"
                                 android:singleLine="true" />
@@ -334,7 +333,7 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/str_zone" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtZone"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
@@ -358,7 +357,7 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/str_tell" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtTell"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
@@ -383,7 +382,7 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/str_mobile" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtMobile"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
@@ -408,7 +407,7 @@
                             android:padding="@dimen/SmallSize"
                             android:text="@string/str_address" />
 
-                        <com.mahak.order.widget.FontEditText
+                        <com.mahak.order.widget.FontTextView
                             android:id="@+id/txtAddress"
                             style="@style/forms_edittext_default"
                             android:layout_width="fill_parent"
@@ -440,7 +439,7 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/str_shift1" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtShift"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
@@ -504,10 +503,10 @@
                                 android:singleLine="true"
                                 android:text="@string/str_longitude" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtLongitude"
                                 style="@style/forms_edittext_default"
-                                android:enabled="false"
+                                
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="left|center_vertical"
@@ -530,9 +529,9 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/str_latitude" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtLatitude"
-                                android:enabled="false"
+                                
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
@@ -596,14 +595,14 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/discount_average" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtInvoiceAVGDiscount"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="left|center_vertical"
                                 android:inputType="number"
-                                android:enabled="false"
+                                
                                 android:singleLine="true" />
                         </LinearLayout>
 
@@ -622,14 +621,14 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/InvoiceAVGAmount" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtInvoiceAVGAmount"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="left|center_vertical"
                                 android:inputType="number"
-                                android:enabled="false"
+                                
                                 android:singleLine="true" />
                         </LinearLayout>
                     </LinearLayout>
@@ -656,12 +655,12 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/LastInvoiceDate" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtLastInvoiceDate"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:enabled="false"
+                                
                                 android:gravity="left|center_vertical"
                                 android:inputType="number"
                                 android:singleLine="true" />
@@ -682,12 +681,12 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/LastInvoiceAmount" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtLastInvoiceAmount"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:enabled="false"
+                                
                                 android:gravity="left|center_vertical"
                                 android:inputType="number"
                                 android:singleLine="true" />
@@ -760,12 +759,12 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/AvailableChequeCount" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtAvailableChequeCount"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:enabled="false"
+                                
                                 android:gravity="left|center_vertical"
                                 android:inputType="number"
                                 android:singleLine="true" />
@@ -786,12 +785,12 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/AvailableChequeAmount" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtAvailableChequeAmount"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:enabled="false"
+                                
                                 android:gravity="left|center_vertical"
                                 android:inputType="number"
                                 android:singleLine="true" />
@@ -820,12 +819,12 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/InReceiptChequeCount" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtInReceiptChequeCount"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:enabled="false"
+                                
                                 android:gravity="left|center_vertical"
                                 android:inputType="number"
                                 android:singleLine="true" />
@@ -846,7 +845,7 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/InReceiptChequeAmount" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtInReceiptChequeAmount"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
@@ -854,7 +853,7 @@
                                 android:gravity="left|center_vertical"
                                 android:inputType="number"
                                 android:singleLine="true"
-                                android:enabled="false" />
+                                 />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -880,7 +879,7 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/SpentChequeCount" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtSpentChequeCount"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
@@ -888,7 +887,7 @@
                                 android:gravity="left|center_vertical"
                                 android:inputType="number"
                                 android:singleLine="true"
-                                android:enabled="false" />
+                                 />
                         </LinearLayout>
 
                         <LinearLayout
@@ -906,7 +905,7 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/SpentChequeAmount" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtSpentChequeAmount"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
@@ -914,7 +913,7 @@
                                 android:gravity="left|center_vertical"
                                 android:inputType="number"
                                 android:singleLine="true"
-                                android:enabled="false" />
+                                 />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -940,7 +939,7 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/ReturnChequeCount" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtReturnChequeCount"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
@@ -948,7 +947,7 @@
                                 android:gravity="left|center_vertical"
                                 android:inputType="number"
                                 android:singleLine="true"
-                                android:enabled="false" />
+                                 />
                         </LinearLayout>
 
                         <LinearLayout
@@ -966,7 +965,7 @@
                                 android:padding="@dimen/SmallSize"
                                 android:text="@string/ReturnChequeAmount" />
 
-                            <com.mahak.order.widget.FontEditText
+                            <com.mahak.order.widget.FontTextView
                                 android:id="@+id/txtReturnChequeAmount"
                                 style="@style/forms_edittext_default"
                                 android:layout_width="fill_parent"
@@ -974,7 +973,7 @@
                                 android:gravity="left|center_vertical"
                                 android:inputType="number"
                                 android:singleLine="true"
-                                android:enabled="false" />
+                                 />
                         </LinearLayout>
                     </LinearLayout>
 

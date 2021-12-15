@@ -24,11 +24,11 @@
     <dimen name="default_radius">3dp</dimen>
     <dimen name="panel_bg_corner_raius">2dp</dimen>
     <dimen name="button_corner_raius">@dimen/default_radius</dimen>
-    <dimen name="button_height">45dp</dimen>
+    <dimen name="button_height">48dp</dimen>
     <dimen name="edittext_corner_raius">@dimen/default_radius</dimen>
-    <dimen name="edittext_height">45dp</dimen>
+    <dimen name="edittext_height">48dp</dimen>
     <dimen name="spinner_corner_raius">@dimen/default_radius</dimen>
-    <dimen name="spinner_height">45dp</dimen>
+    <dimen name="spinner_height">48dp</dimen>
     <dimen name="spinner_dropdown_offset">1dp</dimen>
 
     <!--Products Gallery View -->

@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/forms_spinner_selector.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/layout-de/activity_dashboard.xml" value="0.1" />
+        <entry key="app/src/main/res/layout-de/activity_manage_customer.xml" value="0.33" />
         <entry key="app/src/main/res/layout-de/activity_setting.xml" value="0.33" />
         <entry key="app/src/main/res/layout-de/factor_print_template.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/layout-de/fragment_item_product_gallery.xml" value="0.2296875" />
@@ -51,5 +53,5 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_15" project-jdk-name="15" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_15_PREVIEW" project-jdk-name="15" project-jdk-type="JavaSDK" />
 </project>

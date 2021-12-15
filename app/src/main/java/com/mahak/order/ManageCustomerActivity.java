@@ -78,7 +78,7 @@ public class ManageCustomerActivity extends BaseActivity {
     private Activity mActivity;
     private DbAdapter db;
 
-    private EditText
+    private TextView
             txtCustomerName,
             txtMarketName,
             txtRemained,
@@ -219,7 +219,6 @@ public class ManageCustomerActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0)// CustomerTest type = Incalculable
                 {
-                    txtRemained.setEnabled(false);
                     txtRemained.setText(ServiceTools.formatPrice(0));
                 }
 
@@ -376,38 +375,50 @@ public class ManageCustomerActivity extends BaseActivity {
     private void initialise() {
 
         //Find Views
-        txtCustomerName = (EditText) findViewById(R.id.txtCustomerName);
-        txtMarketName = (EditText) findViewById(R.id.txtMarketName);
-        txtRemained = (EditText) findViewById(R.id.txtRemained);
-        txtTell = (EditText) findViewById(R.id.txtTell);
-        txtMobile = (EditText) findViewById(R.id.txtMobile);
-        txtCredit = (EditText) findViewById(R.id.txtCredit);
-        txtAddress = (EditText) findViewById(R.id.txtAddress);
-        txtZone = (EditText) findViewById(R.id.txtZone);
-        txtShift = (EditText) findViewById(R.id.txtShift);
+        txtCustomerName =  findViewById(R.id.txtCustomerName);
+        txtMarketName =  findViewById(R.id.txtMarketName);
+        txtRemained =  findViewById(R.id.txtRemained);
+        txtTell =  findViewById(R.id.txtTell);
+        txtMobile =  findViewById(R.id.txtMobile);
+        txtCredit =  findViewById(R.id.txtCredit);
+        txtAddress =  findViewById(R.id.txtAddress);
+        txtZone =  findViewById(R.id.txtZone);
+        txtShift =  findViewById(R.id.txtShift);
 
-        txtInvoiceAVGAmount = (EditText) findViewById(R.id.txtInvoiceAVGAmount);
-        txtInvoiceAVGDiscount = (EditText) findViewById(R.id.txtInvoiceAVGDiscount);
-        txtLastInvoiceAmount = (EditText) findViewById(R.id.txtLastInvoiceAmount);
-        txtLastInvoiceDate = (EditText) findViewById(R.id.txtLastInvoiceDate);
-        txtAvailableChequeAmount = (EditText) findViewById(R.id.txtAvailableChequeAmount);
-        txtAvailableChequeCount = (EditText) findViewById(R.id.txtAvailableChequeCount);
-        txtInReceiptChequeAmount = (EditText) findViewById(R.id.txtInReceiptChequeAmount);
-        txtInReceiptChequeCount = (EditText) findViewById(R.id.txtInReceiptChequeCount);
-        txtSpentChequeAmount = (EditText) findViewById(R.id.txtSpentChequeAmount);
-        txtSpentChequeCount = (EditText) findViewById(R.id.txtSpentChequeCount);
-        txtReturnChequeAmount = (EditText) findViewById(R.id.txtReturnChequeAmount);
-        txtReturnChequeCount = (EditText) findViewById(R.id.txtReturnChequeCount);
+        txtInvoiceAVGAmount =  findViewById(R.id.txtInvoiceAVGAmount);
+        txtInvoiceAVGDiscount =  findViewById(R.id.txtInvoiceAVGDiscount);
+        txtLastInvoiceAmount =  findViewById(R.id.txtLastInvoiceAmount);
+        txtLastInvoiceDate =  findViewById(R.id.txtLastInvoiceDate);
+        txtAvailableChequeAmount =  findViewById(R.id.txtAvailableChequeAmount);
+        txtAvailableChequeCount =  findViewById(R.id.txtAvailableChequeCount);
+        txtInReceiptChequeAmount =  findViewById(R.id.txtInReceiptChequeAmount);
+        txtInReceiptChequeCount =  findViewById(R.id.txtInReceiptChequeCount);
+        txtSpentChequeAmount =  findViewById(R.id.txtSpentChequeAmount);
+        txtSpentChequeCount =  findViewById(R.id.txtSpentChequeCount);
+        txtReturnChequeAmount =  findViewById(R.id.txtReturnChequeAmount);
+        txtReturnChequeCount =  findViewById(R.id.txtReturnChequeCount);
 
-        txtLatitude = (EditText) findViewById(R.id.txtLatitude);
-        txtLongitude = (EditText) findViewById(R.id.txtLongitude);
+        txtLatitude =  findViewById(R.id.txtLatitude);
+        txtLongitude =  findViewById(R.id.txtLongitude);
 
         btnGetLoction = (Button) findViewById(R.id.btnGetGeographicallocation);
         btnShowlocation = (Button) findViewById(R.id.btnShowGeographicallocation);
+
         spnCustomerGroup = (Spinner) findViewById(R.id.spnCustomerGroup);
+        spnCustomerGroup.setClickable(false);
+        spnCustomerGroup.setEnabled(false);
+
         spnCity = (Spinner) findViewById(R.id.spnCity);
+        spnCity.setClickable(false);
+        spnCity.setEnabled(false);
+
+
         spnState = (Spinner) findViewById(R.id.spnState);
+        spnState.setClickable(false);
+        spnState.setEnabled(false);
+
         spnCustomerType = (Spinner) findViewById(R.id.spnCustomerType);
+        spnCustomerType.setClickable(false);
         spnCustomerType.setEnabled(false);
 
         btnSave = (Button) findViewById(R.id.btnSave);
