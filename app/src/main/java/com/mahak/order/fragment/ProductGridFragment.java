@@ -117,18 +117,18 @@ public class ProductGridFragment extends Fragment {
     }
 
     public class AdapterListProduct extends ArrayAdapter<Product> {
-        Activity mcontaxt;
+        Activity mContext;
         ArrayList<Product> arrayOrginal = new ArrayList<Product>();
         ArrayList<Product> arrayProduct = new ArrayList<Product>();
         CustomFilterList Filter;
         DbAdapter db;
 
-        public AdapterListProduct(Activity contaxt, ArrayList<Product> array) {
-            super(contaxt, android.R.layout.simple_list_item_1, array);
-            mcontaxt = contaxt;
+        public AdapterListProduct(Activity context, ArrayList<Product> array) {
+            super(context, android.R.layout.simple_list_item_1, array);
+            mContext = context;
             arrayOrginal.addAll(array);
             arrayProduct.addAll(array);
-            db = new DbAdapter(mcontaxt);
+            db = new DbAdapter(mContext);
         }
 
         @Override
@@ -150,7 +150,7 @@ public class ProductGridFragment extends Fragment {
                 db.close();
             }
             if (view == null) {
-                LayoutInflater mInflater = (LayoutInflater) mcontaxt.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 view = mInflater.inflate(R.layout.grv_product_picker_item, parent, false);
                 holder = new Holder(view);
                 view.setTag(holder);

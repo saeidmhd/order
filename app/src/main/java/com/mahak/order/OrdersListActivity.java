@@ -423,14 +423,14 @@ public class OrdersListActivity extends BaseActivity {
     }
 
     public class AdapterReceivedTransfer extends ArrayAdapter<ReceivedTransfers> {
-        Activity mcontaxt;
+        Activity mContext;
         ArrayList<ReceivedTransfers> arrayorgin;
         ArrayList<ReceivedTransfers> arrayReceivedTransfers;
         CustomReceivedFilterList Filter;
 
-        public AdapterReceivedTransfer(Activity contaxt, ArrayList<ReceivedTransfers> array) {
-            super(contaxt, android.R.layout.simple_list_item_1, array);
-            mcontaxt = contaxt;
+        public AdapterReceivedTransfer(Activity context, ArrayList<ReceivedTransfers> array) {
+            super(context, android.R.layout.simple_list_item_1, array);
+            mContext = context;
             arrayorgin = new ArrayList<ReceivedTransfers>();
             arrayReceivedTransfers = new ArrayList<ReceivedTransfers>();
             arrayReceivedTransfers.addAll(array);
@@ -445,7 +445,7 @@ public class OrdersListActivity extends BaseActivity {
             final ReceivedTransfers receivedTransfers = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
                 rowview = inflater.inflate(R.layout.lst_order_recieve_item, null, false);
                 holder = new Holder(rowview);
                 rowview.setTag(holder);
@@ -459,7 +459,7 @@ public class OrdersListActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
 
-                    PopupMenu popup = new PopupMenu(mcontaxt, btnMenu);
+                    PopupMenu popup = new PopupMenu(mContext, btnMenu);
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.pmenu_edit_delete, popup.getMenu());
 
@@ -479,7 +479,7 @@ public class OrdersListActivity extends BaseActivity {
                     Menu menu = popup.getMenu();
                     for (int i = 0; i < menu.size(); i++) {
                         MenuItem mi = menu.getItem(i);
-                        FontPopUp.applyFontToMenuItem(mi, mcontaxt);
+                        FontPopUp.applyFontToMenuItem(mi, mContext);
                     }
 
                 }
@@ -712,14 +712,14 @@ public class OrdersListActivity extends BaseActivity {
     }
 
     public class AdapterListOrder extends ArrayAdapter<Order> {
-        Activity mcontaxt;
+        Activity mContext;
         ArrayList<Order> arrayorginal;
         ArrayList<Order> arrayorder;
         CustomFilterList Filter;
 
-        public AdapterListOrder(Activity contaxt, ArrayList<Order> array) {
-            super(contaxt, android.R.layout.simple_list_item_1, array);
-            mcontaxt = contaxt;
+        public AdapterListOrder(Activity context, ArrayList<Order> array) {
+            super(context, android.R.layout.simple_list_item_1, array);
+            mContext = context;
             arrayorginal = new ArrayList<Order>();
             arrayorder = new ArrayList<Order>();
             arrayorder.addAll(array);
@@ -735,7 +735,7 @@ public class OrdersListActivity extends BaseActivity {
             final Order order = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
                 if (Type == ProjectInfo.TYPE_SEND_TRANSFERENCE) {
                     rowview = inflater.inflate(R.layout.lst_order_send_item, null, false);
                 } else {
@@ -754,7 +754,7 @@ public class OrdersListActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
 
-                    PopupMenu popup = new PopupMenu(mcontaxt, btnMenu);
+                    PopupMenu popup = new PopupMenu(mContext, btnMenu);
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.pmenu_edit_delete, popup.getMenu());
 
@@ -773,7 +773,7 @@ public class OrdersListActivity extends BaseActivity {
                                     break;
                                 case R.id.mnuEdit:
                                     if (order.getPublish() == ProjectInfo.DONT_PUBLISH) {
-                                        Intent intent = new Intent(mcontaxt, InvoiceDetailActivity.class);
+                                        Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
                                         intent.putExtra(BaseActivity.CUSTOMERID_KEY, order.getPersonId());
                                         intent.putExtra(BaseActivity.CUSTOMER_CLIENT_ID_KEY, order.getPersonClientId());
                                         intent.putExtra(BaseActivity.TYPE_KEY, order.getOrderType());
@@ -807,7 +807,7 @@ public class OrdersListActivity extends BaseActivity {
                     Menu menu = popup.getMenu();
                     for (int i = 0; i < menu.size(); i++) {
                         MenuItem mi = menu.getItem(i);
-                        FontPopUp.applyFontToMenuItem(mi, mcontaxt);
+                        FontPopUp.applyFontToMenuItem(mi, mContext);
                     }
 
                 }

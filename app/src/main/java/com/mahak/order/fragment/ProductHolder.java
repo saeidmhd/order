@@ -1,6 +1,7 @@
 package com.mahak.order.fragment;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,7 +17,8 @@ public class ProductHolder extends RecyclerView.ViewHolder {
     public TextView tvName;
     public TextView tvProductCode;
     public TextView tvCustomerPrice;
-    public LinearLayout panelCount;
+    public LinearLayout panelCount , inboxLayout;
+    public Button plus , minus , plus_count2 , minus_count2;
     public View panelTotalCount, panelTotalAsset;
 
     ProductHolder(View view) {
@@ -41,5 +43,12 @@ public class ProductHolder extends RecyclerView.ViewHolder {
         txtTotalCount1 = (TextView) view.findViewById(R.id.txtTotalCount1);
         panelTotalAsset = view.findViewById(R.id.panelTotalAsset);
         panelTotalCount = view.findViewById(R.id.panelTotalCount);
+        inboxLayout = view.findViewById(R.id.inboxLayout);
+
+        plus = view.findViewById(R.id.plus);
+        plus_count2 = view.findViewById(R.id.plus_count2);
+
+        minus = view.findViewById(R.id.minus);
+        minus_count2 = view.findViewById(R.id.minus_count2);
     }
 }

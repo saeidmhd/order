@@ -223,7 +223,7 @@ public class VisitorListActivity extends BaseActivity {
     }
 
     private class AdapterVisitor extends ArrayAdapter<Visitor> {
-        Activity mcontaxt;
+        Activity mContext;
         ArrayList<Visitor> arrayorginal;
         ArrayList<Visitor> arrayVisitor;
         CustomFilterList Filter;
@@ -324,9 +324,9 @@ public class VisitorListActivity extends BaseActivity {
             return Filter;
         }
 
-        public AdapterVisitor(Activity contaxt, ArrayList<Visitor> array) {
-            super(contaxt, android.R.layout.simple_list_item_1, array);
-            mcontaxt = contaxt;
+        public AdapterVisitor(Activity context, ArrayList<Visitor> array) {
+            super(context, android.R.layout.simple_list_item_1, array);
+            mContext = context;
             arrayVisitor = new ArrayList<Visitor>();
             arrayorginal = new ArrayList<Visitor>();
             arrayVisitor.addAll(array);
@@ -342,7 +342,7 @@ public class VisitorListActivity extends BaseActivity {
             final Visitor visitor = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
                 rowview = inflater.inflate(R.layout.lst_customer_item, null, false);
                 holder = new Holder(rowview);
                 rowview.setTag(holder);
@@ -354,7 +354,7 @@ public class VisitorListActivity extends BaseActivity {
 
                 @Override
                 public void onClick(View v) {
-                    PopupMenu popup = new PopupMenu(mcontaxt, btnMenu);
+                    PopupMenu popup = new PopupMenu(mContext, btnMenu);
                     MenuInflater inflater = popup.getMenuInflater();
                     //if (customer.getMobile().equals("")	&& customer.getMobile().equals(""))
                     //	 inflater.inflate(R.menu.pmenu_delete, popup.getMenu());
@@ -365,7 +365,7 @@ public class VisitorListActivity extends BaseActivity {
                     Menu menu = popup.getMenu();
                     for (int i = 0; i < menu.size(); i++) {
                         MenuItem mi = menu.getItem(i);
-                        FontPopUp.applyFontToMenuItem(mi, mcontaxt);
+                        FontPopUp.applyFontToMenuItem(mi, mContext);
                     }
 
                 }

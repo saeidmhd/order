@@ -343,13 +343,13 @@ public class PeopleListActivity extends BaseActivity {
     }
 
     private class AdapterCustomer extends ArrayAdapter<Customer> {
-        Activity mcontaxt;
+        Activity mContext;
         CustomFilterList Filter;
         ArrayList<Customer> originalCustomers;
 
-        public AdapterCustomer(Activity contaxt) {
-            super(contaxt, android.R.layout.simple_list_item_1,arrayCustomer);
-            mcontaxt = contaxt;
+        public AdapterCustomer(Activity context) {
+            super(context, android.R.layout.simple_list_item_1,arrayCustomer);
+            mContext = context;
             originalCustomers = arrayCustomer;
         }
 
@@ -451,7 +451,7 @@ public class PeopleListActivity extends BaseActivity {
             Customer customer = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
                 rowview = inflater.inflate(R.layout.lst_customer_item, null, false);
                 holder = new Holder(rowview);
                 rowview.setTag(holder);
@@ -526,7 +526,7 @@ public class PeopleListActivity extends BaseActivity {
 
                 @Override
                 public void onClick(View v) {
-                    PopupMenu popup = new PopupMenu(mcontaxt, btnMenu);
+                    PopupMenu popup = new PopupMenu(mContext, btnMenu);
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.pmenu_call, popup.getMenu());
 
@@ -591,7 +591,7 @@ public class PeopleListActivity extends BaseActivity {
                     Menu menu = popup.getMenu();
                     for (int i = 0; i < menu.size(); i++) {
                         MenuItem mi = menu.getItem(i);
-                        FontPopUp.applyFontToMenuItem(mi, mcontaxt);
+                        FontPopUp.applyFontToMenuItem(mi, mContext);
                     }
 
                 }
@@ -982,12 +982,12 @@ public class PeopleListActivity extends BaseActivity {
     }
 
     public class AdapterListCustomerForPrint extends ArrayAdapter<Customer> {
-        Activity mcontaxt;
+        Activity mContext;
 
-        public AdapterListCustomerForPrint(Activity contaxt, ArrayList<Customer> array) {
+        public AdapterListCustomerForPrint(Activity context, ArrayList<Customer> array) {
 
-            super(contaxt, R.layout.lst_print_customer, array);
-            mcontaxt = contaxt;
+            super(context, R.layout.lst_print_customer, array);
+            mContext = context;
         }
 
         @Override
@@ -999,7 +999,7 @@ public class PeopleListActivity extends BaseActivity {
             final Customer customer = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
                 rowview = inflater.inflate(R.layout.lst_print_customer, null, false);
                 holder = new Holder(rowview);
                 rowview.setTag(holder);

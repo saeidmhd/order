@@ -145,6 +145,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/inboxLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="36dp"
                 android:gravity="center_vertical"
@@ -242,62 +243,124 @@
                 android:id="@+id/panelCount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
-
-                    <com.mahak.order.widget.FontTextView
-                        android:id="@+id/txtTotalCount1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:text="@string/str_count_retail" />
-
-                    <com.mahak.order.widget.FontTextView
-                        android:id="@+id/txtCount"
-                        style="@style/forms_edittext_default2"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/sample_number" />
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
 
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/txtTotalCount1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/str_count_retail" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/txtCount"
+                            style="@style/forms_edittext_default2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/sample_number" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/panel_plus"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+
+                        <com.mahak.order.widget.FontButtonView
+                            android:id="@+id/minus"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="-" />
+
+                        <com.mahak.order.widget.FontButtonView
+                            android:id="@+id/plus"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="+" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/panelTotalCount"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
-
-                    <com.mahak.order.widget.FontTextView
-                        android:id="@+id/txtTotalCount2"
-                        style="@style/forms_label_default"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:text="@string/str_count_package" />
-
-                    <com.mahak.order.widget.FontTextView
-                        android:id="@+id/txtTotalCount"
-                        style="@style/forms_edittext_default2"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/sample_number" />
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/txtTotalCount2"
+                            style="@style/forms_label_default"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/str_count_package" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/txtTotalCount"
+                            style="@style/forms_edittext_default2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/sample_number" />
 
 
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/panel_plus_count2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+
+                        <com.mahak.order.widget.FontButtonView
+                            android:id="@+id/minus_count2"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="-" />
+
+                        <com.mahak.order.widget.FontButtonView
+                            android:id="@+id/plus_count2"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="+" />
+
+                    </LinearLayout>
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:id="@+id/llgift"

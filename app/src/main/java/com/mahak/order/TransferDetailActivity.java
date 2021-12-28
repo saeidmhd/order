@@ -369,11 +369,11 @@ public class TransferDetailActivity extends BaseActivity {
     }
 
     public class AdapterListProduct extends ArrayAdapter<ReceivedTransferProducts> {
-        Activity mcontaxt;
+        Activity mContext;
 
-        public AdapterListProduct(Activity contaxt, ArrayList<ReceivedTransferProducts> array) {
-            super(contaxt, android.R.layout.simple_list_item_1, array);
-            mcontaxt = contaxt;
+        public AdapterListProduct(Activity context, ArrayList<ReceivedTransferProducts> array) {
+            super(context, android.R.layout.simple_list_item_1, array);
+            mContext = context;
         }
 
         @Override
@@ -384,7 +384,7 @@ public class TransferDetailActivity extends BaseActivity {
             final ReceivedTransferProducts product = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
                 rowview = inflater.inflate(R.layout.lst_transfer_detail, null, false);
                 holder = new Holder(rowview);
                 rowview.setTag(holder);
@@ -448,11 +448,11 @@ public class TransferDetailActivity extends BaseActivity {
     }// End of AdapterListProduct
 
     public class AdapterListProductForPrint extends ArrayAdapter<ReceivedTransferProducts> {
-        Activity mcontaxt;
+        Activity mContext;
 
-        public AdapterListProductForPrint(Activity contaxt, ArrayList<ReceivedTransferProducts> array) {
-            super(contaxt, R.layout.lst_order_detail_for_print, array);
-            mcontaxt = contaxt;
+        public AdapterListProductForPrint(Activity context, ArrayList<ReceivedTransferProducts> array) {
+            super(context, R.layout.lst_order_detail_for_print, array);
+            mContext = context;
         }
 
         @Override
@@ -464,7 +464,7 @@ public class TransferDetailActivity extends BaseActivity {
             final ReceivedTransferProducts product = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
                 rowview = inflater.inflate(R.layout.lst_order_detail_for_print, null, false);
                 holder = new Holder(rowview);
                 rowview.setTag(holder);

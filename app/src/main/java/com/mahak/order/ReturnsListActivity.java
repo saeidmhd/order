@@ -227,14 +227,14 @@ public class ReturnsListActivity extends BaseActivity {
     }
 
     public class AdapterListReturns extends ArrayAdapter<Order> {
-        Activity mcontaxt;
+        Activity mContext;
         ArrayList<Order> arrayorginal;
         ArrayList<Order> arrayReturnSale;
         CustomFilterList Filter;
 
-        public AdapterListReturns(Activity contaxt, ArrayList<Order> array) {
-            super(contaxt, android.R.layout.simple_list_item_1, array);
-            mcontaxt = contaxt;
+        public AdapterListReturns(Activity context, ArrayList<Order> array) {
+            super(context, android.R.layout.simple_list_item_1, array);
+            mContext = context;
             arrayorginal = new ArrayList<Order>();
             arrayReturnSale = new ArrayList<Order>();
             arrayReturnSale.addAll(array);
@@ -249,7 +249,7 @@ public class ReturnsListActivity extends BaseActivity {
             final Order order = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
                 rowview = inflater.inflate(R.layout.lst_order_item, null, false);
 
                 holder = new Holder(rowview);
@@ -264,7 +264,7 @@ public class ReturnsListActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
 
-                    PopupMenu popup = new PopupMenu(mcontaxt, btnMenu);
+                    PopupMenu popup = new PopupMenu(mContext, btnMenu);
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.pmenu_edit_delete, popup.getMenu());
 
@@ -282,7 +282,7 @@ public class ReturnsListActivity extends BaseActivity {
                                     break;
                                 case R.id.mnuEdit:
                                     if (order.getPublish() == ProjectInfo.DONT_PUBLISH) {
-                                        Intent intent = new Intent(mcontaxt, InvoiceDetailActivity.class);
+                                        Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
                                         intent.putExtra(BaseActivity.CUSTOMERID_KEY, order.getPersonId());
                                         intent.putExtra(BaseActivity.CUSTOMER_CLIENT_ID_KEY, order.getPersonClientId());
                                         intent.putExtra(BaseActivity.MODE_PAGE, BaseActivity.MODE_EDIT);
@@ -309,7 +309,7 @@ public class ReturnsListActivity extends BaseActivity {
                     Menu menu = popup.getMenu();
                     for (int i = 0; i < menu.size(); i++) {
                         MenuItem mi = menu.getItem(i);
-                        FontPopUp.applyFontToMenuItem(mi, mcontaxt);
+                        FontPopUp.applyFontToMenuItem(mi, mContext);
                     }
                 }
             });

@@ -11,11 +11,12 @@
     <dimen name="VeryLargeSize">25dip</dimen>
     <dimen name="VeryVeryLargeSize">32dp</dimen>
     <dimen name="SmallSize">5dip</dimen>
+    <dimen name="VerySmallSize">3dip</dimen>
     <dimen name="marginSize">8dip</dimen>
     <dimen name="txtSize">10sp</dimen>
 
     <dimen name="txtSizelarge">18sp</dimen>
-    <dimen name="txtSizeNormal">14sp</dimen>
+    <dimen name="txtSizeNormal">13sp</dimen>
     <dimen name="txtSizeSmall">12sp</dimen>
 
 
@@ -48,11 +49,10 @@
     <dimen name="print_width88mm">385dp</dimen>
     <dimen name="print_width50mm">32dp</dimen>
     <dimen name="item_number_placeholder_size">30dp</dimen>
+
     <dimen name="small_text_size">12sp</dimen>
     <dimen name="smaller_text_size">10sp</dimen>
-
-
     <dimen name="dialog_width">300dp</dimen>
     <dimen name="text_font_size_medium">16sp</dimen>
-    <dimen name="button_text_size">14sp</dimen>
+    <dimen name="button_text_size">13.5sp</dimen>
 </resources>

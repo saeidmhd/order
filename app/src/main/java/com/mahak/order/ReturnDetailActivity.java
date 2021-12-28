@@ -368,11 +368,11 @@ FirebaseCrashlytics.getInstance().recordException(e);
 	}*/
 
     public class AdapterListProduct extends ArrayAdapter<OrderDetail> {
-        Activity mcontaxt;
+        Activity mContext;
 
-        public AdapterListProduct(Activity contaxt, ArrayList<OrderDetail> array) {
-            super(contaxt, android.R.layout.simple_list_item_1, array);
-            mcontaxt = contaxt;
+        public AdapterListProduct(Activity context, ArrayList<OrderDetail> array) {
+            super(context, android.R.layout.simple_list_item_1, array);
+            mContext = context;
         }
 
         @Override
@@ -383,7 +383,7 @@ FirebaseCrashlytics.getInstance().recordException(e);
             final OrderDetail product = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
                 rowview = inflater.inflate(R.layout.lst_return_detail, null, false);
                 holder = new Holder(rowview);
                 rowview.setTag(holder);
@@ -438,12 +438,12 @@ FirebaseCrashlytics.getInstance().recordException(e);
     }// End of AdapterListProduct
 
     public class AdapterListProductForPrint extends ArrayAdapter<OrderDetail> {
-        Activity mcontaxt;
+        Activity mContext;
 
-        public AdapterListProductForPrint(Activity contaxt, ArrayList<OrderDetail> array) {
+        public AdapterListProductForPrint(Activity context, ArrayList<OrderDetail> array) {
 
-            super(contaxt, lst_order_detail_for_print, array);
-            mcontaxt = contaxt;
+            super(context, lst_order_detail_for_print, array);
+            mContext = context;
         }
 
         @Override
@@ -455,7 +455,7 @@ FirebaseCrashlytics.getInstance().recordException(e);
             final OrderDetail product = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
                 rowview = inflater.inflate(lst_order_detail_for_print, null, false);
                 holder = new Holder(rowview);
                 rowview.setTag(holder);
@@ -478,7 +478,7 @@ FirebaseCrashlytics.getInstance().recordException(e);
 
             public void Populate(OrderDetail orderDetail, int position) {
 
-			    /*float size = SharedPreferencesHelper.getCurrentFontSize(mcontaxt);
+			    /*float size = SharedPreferencesHelper.getCurrentFontSize(mContext);
                 tvProductName.setTextSize(size);
                 tvPrice.setTextSize(size);
                 tvCount.setTextSize(size);*/

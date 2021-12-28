@@ -148,14 +148,14 @@ public class DeliveryOrdersListActivity extends BaseActivity {
     }
 
     public class AdapterListDeliveryOrder extends ArrayAdapter<Order> {
-        Activity mcontaxt;
+        Activity mContext;
         ArrayList<Order> arrayorginal;
         ArrayList<Order> arraydeliveryorder;
         CustomFilterList Filter;
 
-        public AdapterListDeliveryOrder(Activity contaxt, ArrayList<Order> array) {
-            super(contaxt, android.R.layout.simple_list_item_1, array);
-            mcontaxt = contaxt;
+        public AdapterListDeliveryOrder(Activity context, ArrayList<Order> array) {
+            super(context, android.R.layout.simple_list_item_1, array);
+            mContext = context;
             arrayorginal = new ArrayList<Order>();
             arraydeliveryorder = new ArrayList<Order>();
             arraydeliveryorder.addAll(array);
@@ -170,7 +170,7 @@ public class DeliveryOrdersListActivity extends BaseActivity {
             final Order deliveryorder = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
                 rowview = inflater.inflate(R.layout.lst_deliveryorder_item, null, false);
                 holder = new Holder(rowview);
                 rowview.setTag(holder);

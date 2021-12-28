@@ -138,6 +138,7 @@ public class Product implements Parcelable {
     private double weight;
 
     private String pictureUrl;
+    private int productDetailId;
 
     public Product() {
         this.Tags = "";
@@ -599,5 +600,13 @@ public class Product implements Parcelable {
 
     public String getPictureUrl() {
         return pictureUrl;
+    }
+
+    public void setProductDetailId(int productDetailId) {
+        this.productDetailId = productDetailId;
+    }
+
+    public int getProductDetailId() {
+        return productDetailId;
     }
 }

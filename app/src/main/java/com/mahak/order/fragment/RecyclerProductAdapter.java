@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import android.widget.Filter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -80,6 +81,14 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
     public static HashMap<Integer, ArrayList<ProductDetail>> HashMap_productDetail = new LinkedHashMap<>();
     private static ArrayList<Promotion> promotions;
 
+    double total_count2;
+    double asset_count2;
+
+    double total_count1;
+    double asset_count1;
+
+
+
     public RecyclerProductAdapter(
             Context mContext,
             List<Product> products,
@@ -119,11 +128,12 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
 
     @Override
     public void onBindViewHolder(ProductHolder holder, int position) {
-        Product product = products.get(position);
+        int pos = holder.getAbsoluteAdapterPosition();
+        Product product = products.get(pos);
         if (product == null)
-            product = arrayOrginal.get(position);
+            product = arrayOrginal.get(pos);
         if (product != null) {
-            initHolder(product, holder, position, mCount);
+            initHolder(product, holder, pos, mCount);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -140,7 +150,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                                 type,
                                 customerId,
                                 groupId,
-                                products.get(position).getProductId(),
+                                products.get(pos).getProductId(),
                                 description,
                                 mode,
                                 orderId);
@@ -191,6 +201,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         if (type == 0) {
             holder.panelCount.setVisibility(View.GONE);
             holder.panelTotalCount.setVisibility(View.GONE);
+            holder.inboxLayout.setVisibility(View.GONE);
         }
 
         Boolean res = false;
@@ -201,6 +212,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         } else {
             holder.panelTotalCount.setVisibility(View.GONE);
             holder.panelTotalAsset.setVisibility(View.GONE);
+            holder.inboxLayout.setVisibility(View.GONE);
         }
         holder.tvName.setText(product.getName());
         holder.tvCustomerPrice.setText(ServiceTools.formatPrice(customerPrice));
@@ -240,6 +252,134 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             }
         });
 
+        holder.plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                double sum = 0;
+
+                String total1 = holder.txtCount.getText().toString();
+                String asset1 = holder.tvAsset.getText().toString();
+
+                String total2 = holder.txtTotalCount.getText().toString();
+                String asset2 = holder.tvAsset2.getText().toString();
+
+
+                total_count1 = ServiceTools.toDouble(total1);
+                asset_count1 = ServiceTools.toDouble(asset1);
+
+                total_count2 = ServiceTools.toDouble(total2);
+                asset_count2 = ServiceTools.toDouble(asset2);
+
+                total_count1++;
+
+                if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)
+                    sum = total_count1 + (total_count2 * product.getUnitRatio());
+                else
+                    sum = total_count1;
+
+                if(sum > asset_count1 && type == ProjectInfo.TYPE_INVOCIE){
+                    Toast.makeText(mContext, "موجودی کالا منفی می شود، ادامه عملیات امکان پذیر نیست!", Toast.LENGTH_SHORT).show();
+                }else {
+                    holder.txtCount.setText(ServiceTools.formatCount(total_count1));
+                    return_value_recycler2(String.valueOf(total_count2) , String.valueOf(total_count1) , product.getPrice(), position, sum);
+                }
+            }
+        });
+        holder.minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                double sum = 0;
+                String total1 = holder.txtCount.getText().toString();
+                String asset1 = holder.tvAsset.getText().toString();
+
+                String total2 = holder.txtTotalCount.getText().toString();
+                String asset2 = holder.tvAsset2.getText().toString();
+
+
+                total_count1 = ServiceTools.toDouble(total1);
+                asset_count1 = ServiceTools.toDouble(asset1);
+
+                total_count2 = ServiceTools.toDouble(total2);
+                asset_count2 = ServiceTools.toDouble(asset2);
+
+                if(total_count1 > 0){
+                    total_count1--;
+                    if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)
+                        sum = total_count1 + (total_count2 * product.getUnitRatio());
+                    else
+                        sum = total_count1;
+
+                    holder.txtCount.setText(ServiceTools.formatCount(total_count1));
+                }
+                return_value_recycler2(String.valueOf(total_count2),String.valueOf(total_count1) , product.getPrice(), position, sum);
+            }
+        });
+
+
+        holder.plus_count2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                double sum = 0;
+
+                String total1 = holder.txtCount.getText().toString();
+                String asset1 = holder.tvAsset.getText().toString();
+
+                String total2 = holder.txtTotalCount.getText().toString();
+                String asset2 = holder.tvAsset2.getText().toString();
+
+
+                total_count1 = ServiceTools.toDouble(total1);
+                asset_count1 = ServiceTools.toDouble(asset1);
+
+                total_count2 = ServiceTools.toDouble(total2);
+                asset_count2 = ServiceTools.toDouble(asset2);
+
+                total_count2++;
+
+                if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)
+                    sum = total_count1 + (total_count2 * product.getUnitRatio());
+                else
+                    sum = total_count1;
+
+                if(sum > asset_count1 && type == ProjectInfo.TYPE_INVOCIE){
+                    Toast.makeText(mContext, "موجودی کالا منفی می شود، ادامه عملیات امکان پذیر نیست!", Toast.LENGTH_SHORT).show();
+                }else {
+                    holder.txtTotalCount.setText(ServiceTools.formatCount(total_count2));
+                    return_value_recycler2(String.valueOf(total_count2),String.valueOf(total_count1) , product.getPrice(), position, sum);
+                }
+            }
+        });
+        holder.minus_count2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                double sum =0;
+                String total1 = holder.txtCount.getText().toString();
+                String asset1 = holder.tvAsset.getText().toString();
+
+                String total2 = holder.txtTotalCount.getText().toString();
+                String asset2 = holder.tvAsset2.getText().toString();
+
+                total_count1 = ServiceTools.toDouble(total1);
+                asset_count1 = ServiceTools.toDouble(asset1);
+
+                total_count2 = ServiceTools.toDouble(total2);
+                asset_count2 = ServiceTools.toDouble(asset2);
+
+                if(total_count2 > 0){
+                    total_count2--;
+
+                    if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)
+                        sum = total_count1 + (total_count2 * product.getUnitRatio());
+                    else
+                        sum = total_count1;
+
+                    holder.txtTotalCount.setText(ServiceTools.formatCount(total_count2));
+                }
+                return_value_recycler2(String.valueOf(total_count2),String.valueOf(total_count1) , product.getPrice(), position, sum);
+            }
+        });
+
         if (productPickerListActivity != null) {
             Set mapSet = ProductPickerListActivity.HashMap_Product.entrySet();
             Iterator mapIterator = mapSet.iterator();
@@ -253,8 +393,10 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     db.open();
                     OrderDetail orderDetail = db.GetOrderDetailWithId(item.getId());
                     if (type == ProjectInfo.TYPE_INVOCIE || (type == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext))) {
-                        holder.tvAsset.setText(ServiceTools.formatCount(orderDetail.getCount1() + orderDetail.getGiftCount1() + SumCount1));
-                        holder.tvAsset2.setText(ServiceTools.formatCount(orderDetail.getCount2() + orderDetail.getGiftCount1() + SumCount2));
+                        SumCount1 += orderDetail.getCount1() + orderDetail.getGiftCount1();
+                        SumCount2 += orderDetail.getCount2() + orderDetail.getGiftCount1();
+                        holder.tvAsset.setText(ServiceTools.formatCount(SumCount1));
+                        holder.tvAsset2.setText(ServiceTools.formatCount(SumCount2));
                     } else {
                         holder.tvAsset.setText(ServiceTools.formatCount(SumCount1));
                         holder.tvAsset2.setText(ServiceTools.formatCount(SumCount2));
@@ -289,6 +431,143 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         return products == null ? 0 : products.size();
     }
 
+    public void return_value_recycler2(
+            String countPackage,
+            String count,
+            double price,
+            final int position,
+            double sumCountBaJoz) {
+
+
+        double count2 = 0;
+        double count1 = 0;
+        Product product = products.get(position);
+
+        //Price.setText(ServiceTools.formatPrice(price));
+        if (!TextUtils.isEmpty(count)) {
+            count1 = ServiceTools.toDouble(count);
+           // Count.setText(count);
+        }
+        if (!TextUtils.isEmpty(countPackage) && BaseActivity.getPrefUnit2Setting(mContext) != BaseActivity.MODE_YekVahedi) {
+            //txtTotalCount.setText(countPackage);
+            count2 = ServiceTools.toDouble(countPackage);
+        }
+
+        Set mapSet = ProductPickerListActivity.HashMap_Product.entrySet();
+        Iterator mapIterator = mapSet.iterator();
+        OrderDetail item;
+        boolean res = false;
+        //double RealPrice = ServiceTools.toDouble(String.valueOf(ServiceTools.getPriceFromPriceLevel(productDetail.getProductDetailId(), mContext)));
+        //validPromotionList(count1 , ServiceTools.MoneyFormatToNumber(price) , product , products);
+        while (mapIterator.hasNext()) {
+            Map.Entry mapEntry = (Map.Entry) mapIterator.next();
+            int keyValue = (int) mapEntry.getKey();
+            if (product.getProductId() == keyValue) {
+                item = (OrderDetail) mapEntry.getValue();
+                if (!TextUtils.isEmpty(countPackage) && BaseActivity.getPrefUnit2Setting(mContext) != BaseActivity.MODE_YekVahedi) {
+                    item.setCount2(count2);
+                }
+                item.setCount1(count1);
+                item.setCount2(count2);
+                item.setSumCountBaJoz(sumCountBaJoz);
+
+                if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible)) {
+                    double d = ServiceTools.RegulartoDouble(BaseActivity.getPrefRowDiscountIsActive());
+                    item.setDiscountType((long) d);
+                }
+                item.setPrice(String.valueOf(price));
+
+                /*if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible))
+                    item.setDiscount(ServiceTools.toDouble(discount));*/
+
+                //item.setCostLevel(selectedItemPosition);
+                item.setDescription(description);
+
+                if (BaseActivity.getPrefTaxAndChargeIsActive().equals(BaseActivity.Active))
+                    item.setTaxPercent(ServiceTools.getTax(product));
+                else
+                    item.setTaxPercent(0);
+
+                if (BaseActivity.getPrefTaxAndChargeIsActive().equals(BaseActivity.Active))
+                    item.setChargePercent(ServiceTools.getCharge(product));
+                else
+                    item.setChargePercent(0);
+
+                if (ProductPickerListActivity.Type != ProjectInfo.TYPE_RETURN_OF_SALE) {
+                    double FinalPrice = ServiceTools.getCalculateFinalPrice(item, mContext);
+                    item.setFinalPrice(String.valueOf(FinalPrice));
+                }
+                if(item.getSumCountBaJoz() > 0)
+                    ProductPickerListActivity.HashMap_Product.put(product.getProductId(), item);
+                else{
+                    ProductPickerListActivity.HashMap_Product.remove(product.getProductId());
+                    InvoiceDetailActivity.orderDetails.remove(item);
+                    ProductPickerListActivity.Product_Delete.add(item);
+                }
+
+                res = true;
+                break;
+            }// End of if
+        }// End of While
+        product.setSelectedCount(count1);
+        if (!res) {
+            if (count1 > 0 || count2 > 0) {
+                OrderDetail object = new OrderDetail();
+                object.setCount1(count1);
+                if (!TextUtils.isEmpty(countPackage) && BaseActivity.getPrefUnit2Setting(mContext) != BaseActivity.MODE_YekVahedi) {
+                    object.setCount2(count2);
+                }
+                object.setSumCountBaJoz(sumCountBaJoz);
+                if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible)) {
+                    double d = ServiceTools.RegulartoDouble(BaseActivity.getPrefRowDiscountIsActive());
+                    object.setDiscountType((long) d);
+                }
+                object.setProductDetailId(product.getProductDetailId());
+                object.setProductId(product.getProductId());
+                //object.setProductMasterId(product.getProductCode());
+                object.setProductName(product.getName());
+                object.setPrice(String.valueOf(price));
+                object.setMin((int) product.getMin());
+
+                /*if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible))
+                    object.setDiscount(ServiceTools.toDouble(discount));*/
+
+                object.setDescription(description);
+               // object.setCostLevel(selectedItemPosition);
+
+                if (BaseActivity.getPrefTaxAndChargeIsActive().equals(BaseActivity.Active))
+                    object.setTaxPercent(ServiceTools.getTax(product));
+                else
+                    object.setTaxPercent(0);
+
+                if (BaseActivity.getPrefTaxAndChargeIsActive().equals(BaseActivity.Active))
+                    object.setChargePercent(ServiceTools.getCharge(product));
+                else
+                    object.setChargePercent(0);
+
+                //////////////////////////////////////////////////////////////
+                double FinalPrice = ServiceTools.getCalculateFinalPrice(object, mContext);
+                object.setFinalPrice(String.valueOf(FinalPrice));
+                ProductPickerListActivity.HashMap_Product.put(product.getProductId(), object);
+                InvoiceDetailActivity.orderDetails.add(object);
+            }//End of if
+        }//End of if
+        //Calculate Count and Final Price////////////////////////
+        if (ProductPickerListActivity.Type != ProjectInfo.TYPE_RETURN_OF_SALE) {
+            if (productPickerListActivity != null) {
+                ProductPickerListActivity.CalculationTotal();
+                if (productPickerListActivity.productGridGalleryFragment != null)
+                    productPickerListActivity.productGridGalleryFragment.dismissDialog();
+            }
+        } else {
+            if (productPickerListActivity != null) {
+                ProductPickerListActivity.CalculationTotalReturn();
+                if (productPickerListActivity.productGridGalleryFragment != null)
+                    productPickerListActivity.productGridGalleryFragment.dismissDialog();
+            }
+        }
+    }
+
     @Override
     public void return_value_recycler(
             String countPackage,
@@ -316,8 +595,6 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             txtTotalCount.setText(countPackage);
             count2 = ServiceTools.toDouble(countPackage);
         }
-
-
 
         Set mapSet = ProductPickerListActivity.HashMap_Product.entrySet();
         Iterator mapIterator = mapSet.iterator();

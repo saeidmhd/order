@@ -9,10 +9,10 @@
     <com.mahak.order.widget.FontTextView
         android:id="@+id/actionbar_title"
         style="@style/forms_label_default"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        android:textSize="14sp" />
 
 </LinearLayout>

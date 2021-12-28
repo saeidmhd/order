@@ -1022,11 +1022,11 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     public class AdapterListProduct extends ArrayAdapter<OrderDetail> {
-        Activity mcontaxt;
+        Activity mContext;
 
-        public AdapterListProduct(Activity contaxt, ArrayList<OrderDetail> array) {
-            super(contaxt, android.R.layout.simple_list_item_1, array);
-            mcontaxt = contaxt;
+        public AdapterListProduct(Activity context, ArrayList<OrderDetail> array) {
+            super(context, android.R.layout.simple_list_item_1, array);
+            mContext = context;
         }
 
         @Override
@@ -1037,7 +1037,7 @@ public class OrderDetailActivity extends BaseActivity {
             final OrderDetail product = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
 
                 rowview = inflater.inflate(R.layout.lst_order_detail, null, false);
 
@@ -1168,11 +1168,11 @@ public class OrderDetailActivity extends BaseActivity {
     }// End of AdapterListProduct
 
     public class AdapterListProductForPrint extends ArrayAdapter<OrderDetail> {
-        Activity mcontaxt;
+        Activity mContext;
 
-        public AdapterListProductForPrint(Activity contaxt, ArrayList<OrderDetail> array) {
-            super(contaxt, lst_order_detail_for_print, array);
-            mcontaxt = contaxt;
+        public AdapterListProductForPrint(Activity context, ArrayList<OrderDetail> array) {
+            super(context, lst_order_detail_for_print, array);
+            mContext = context;
         }
 
         @Override
@@ -1184,7 +1184,7 @@ public class OrderDetailActivity extends BaseActivity {
             final OrderDetail product = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
                 rowview = inflater.inflate(lst_order_detail_for_print, null, false);
                 holder = new Holder(rowview);
                 rowview.setTag(holder);
@@ -1228,7 +1228,7 @@ public class OrderDetailActivity extends BaseActivity {
 
             public void Populate(OrderDetail orderDetail, int position) {
 
-                /*float size = SharedPreferencesHelper.getCurrentFontSize(mcontaxt);
+                /*float size = SharedPreferencesHelper.getCurrentFontSize(mContext);
                 tvProductName.setTextSize(size);
                 tvPrice.setTextSize(size);
                 tvCount.setTextSize(size);
@@ -1324,11 +1324,11 @@ public class OrderDetailActivity extends BaseActivity {
     }// End of AdapterListProduct
 
     public class AdapterGroupedTaxForPrint extends ArrayAdapter<GroupedTax> {
-        Activity mcontaxt;
+        Activity mContext;
 
-        public AdapterGroupedTaxForPrint(Activity contaxt, ArrayList<GroupedTax> array) {
-            super(contaxt, R.layout.lst_grouped_tax_for_print, array);
-            mcontaxt = contaxt;
+        public AdapterGroupedTaxForPrint(Activity context, ArrayList<GroupedTax> array) {
+            super(context, R.layout.lst_grouped_tax_for_print, array);
+            mContext = context;
         }
 
         @Override
@@ -1341,7 +1341,7 @@ public class OrderDetailActivity extends BaseActivity {
             final GroupedTax groupedTax = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
                 rowview = inflater.inflate(R.layout.lst_grouped_tax_for_print, null, false);
                 holder = new Holder(rowview);
                 rowview.setTag(holder);
@@ -1360,7 +1360,7 @@ public class OrderDetailActivity extends BaseActivity {
             }
 
             public void Populate(GroupedTax groupedTax, int position) {
-                /*float size = SharedPreferencesHelper.getCurrentFontSize(mcontaxt);
+                /*float size = SharedPreferencesHelper.getCurrentFontSize(mContext);
                 tvTaxValue.setTextSize(size);
                 tvPriceValue.setTextSize(size);*/
 

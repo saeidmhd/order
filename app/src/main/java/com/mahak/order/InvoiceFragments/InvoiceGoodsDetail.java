@@ -337,6 +337,9 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mnuAddProduct:
+                if(ProductPickerListActivity.HashMap_Product != null){
+                    ProductPickerListActivity.HashMap_Product.clear();
+                }
                 Intent intent = new Intent(getActivity(), ProductPickerListActivity.class);
                 intent.putExtra(TYPE_KEY, OrderType);
                 intent.putExtra(PAGE, PAGE_ORDERLIST);
@@ -551,11 +554,11 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
     }
 
     public class AdapterGroupedTaxForPrint extends ArrayAdapter<GroupedTax> {
-        Activity mcontaxt;
+        Activity mContext;
 
-        public AdapterGroupedTaxForPrint(Activity contaxt, ArrayList<GroupedTax> array) {
-            super(contaxt, R.layout.lst_grouped_tax_for_print, array);
-            mcontaxt = contaxt;
+        public AdapterGroupedTaxForPrint(Activity context, ArrayList<GroupedTax> array) {
+            super(context, R.layout.lst_grouped_tax_for_print, array);
+            mContext = context;
         }
 
         @Override
@@ -568,7 +571,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             final GroupedTax groupedTax = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
                 rowview = inflater.inflate(R.layout.lst_grouped_tax_for_print, null, false);
                 holder = new Holder(rowview);
                 rowview.setTag(holder);
@@ -587,7 +590,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             }
 
             public void Populate(GroupedTax groupedTax, int position) {
-                /*float size = SharedPreferencesHelper.getCurrentFontSize(mcontaxt);
+                /*float size = SharedPreferencesHelper.getCurrentFontSize(mContext);
                 tvTaxValue.setTextSize(size);
                 tvPriceValue.setTextSize(size);*/
 

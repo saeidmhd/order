@@ -586,9 +586,9 @@ public class ProductsListActivity extends BaseActivity {
             ArrayList<Product> arrayOrginal = new ArrayList<Product>();
             ArrayList<Product> arrayProduct = new ArrayList<Product>();
 
-            public AdapterListProduct(Activity contaxt, ArrayList<Product> array) {
-                super(contaxt, android.R.layout.simple_list_item_1, array);
-                mContext = contaxt;
+            public AdapterListProduct(Activity context, ArrayList<Product> array) {
+                super(context, android.R.layout.simple_list_item_1, array);
+                mContext = context;
                 arrayOrginal.addAll(array);
                 arrayProduct.addAll(array);
             }
@@ -1204,12 +1204,12 @@ public class ProductsListActivity extends BaseActivity {
     }
 
     public class AdapterListProductForPrint extends ArrayAdapter<Product> {
-        Activity mcontaxt;
+        Activity mContext;
 
-        public AdapterListProductForPrint(Activity contaxt, ArrayList<Product> array) {
+        public AdapterListProductForPrint(Activity context, ArrayList<Product> array) {
 
-            super(contaxt, lst_print_kala, array);
-            mcontaxt = contaxt;
+            super(context, lst_print_kala, array);
+            mContext = context;
         }
 
         @Override
@@ -1221,7 +1221,7 @@ public class ProductsListActivity extends BaseActivity {
             final Product product = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
                 rowview = inflater.inflate(lst_print_kala, null, false);
                 holder = new Holder(rowview);
                 rowview.setTag(holder);

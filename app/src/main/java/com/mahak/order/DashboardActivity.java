@@ -38,6 +38,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -131,8 +132,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             btnNavInvoiceList,
             btnDeliveryOrderList,
             btnAddNewInvoice,
-            btnNavReportsList,
-            btnAddNewTransference;
+            btnNavReportsList;
 
     private ImageButton btnZoomMapView;
     private ProgressBar
@@ -163,8 +163,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             tvSumOfPureInvoice,
             tvSumOfChargeAndTaxOrder,
             tvSumOffChargeAndTaxInvoice,
-            tvVersion,
-            tvSumOfTransference;
+            tvVersion;
     public static TextView tvTrackingService;
 
 
@@ -173,10 +172,10 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     private LinearLayout
             llInvoice,
             llOrder,
-            llReceipt,
-            llTransference;
-
+            llReceipt;
     private Marker mSelectedMarker;
+
+    private HorizontalScrollView horizontalScrollView;
 
 
     private int DefaultMapZoom = 14;
@@ -363,21 +362,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         new ReadOfflinePicturesProducts(this).readAllImages();
         ///////////////////
-        btnAddNewTransference.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mDrawerLayout.isDrawerOpen(mDrawerLeft))
-                    mDrawerLayout.closeDrawers();
-                BaseActivity.TransferenceFlag = 1;
-                Intent intent = new Intent(getApplicationContext(), ProductPickerListActivity.class);
-                intent.putExtra(PAGE, PAGE_DASHBORD);
-                intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_SEND_TRANSFERENCE);
-                intent.putExtra(MODE_PAGE, MODE_NEW);
-                intent.putExtra(CUSTOMERID_KEY, ProjectInfo.CUSTOMERID_GUEST);
-                startActivity(intent);
-
-            }
-        });
         btnAddNewOrder.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -476,16 +460,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         });
 
-        llTransference.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), OrdersListActivity.class);
-                intent.putExtra(PAGE, PAGE_DASHBORD);
-                intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_SEND_TRANSFERENCE);
-                startActivity(intent);
-            }
-        });
 
         llReceipt.setOnClickListener(new View.OnClickListener() {
 
@@ -497,6 +471,14 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
             }
         });
+
+
+        horizontalScrollView.postDelayed(new Runnable() {
+            public void run() {
+                horizontalScrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+            }
+        }, 1L);
+
 
         //on receive message from google gcm
         MyFcmListenerService.receiveMessag = new View.OnClickListener() {
@@ -736,7 +718,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnAddNewOrder = (Button) findViewById(R.id.btnAddNewOrder);
         btnAddNewReceipt = (Button) findViewById(R.id.btnAddNewReceipt);
         btnAddNewInvoice = (Button) findViewById(R.id.btnAddNewInvoice);
-        btnAddNewTransference = (Button) findViewById(R.id.btnAddNewTransference);
         btnZoomMapView = (ImageButton) findViewById(R.id.btnZoomMapView);
 
         tvSumOfOrders = (TextView) findViewById(R.id.tvSumOfOrders);
@@ -752,12 +733,13 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         tvSumOfPureInvoice = (TextView) findViewById(R.id.tvSumOfPureInvoice);
         tvSumOfChargeAndTaxOrder = (TextView) findViewById(R.id.tvSumOfChargeAndTaxOrder);
         tvSumOffChargeAndTaxInvoice = (TextView) findViewById(R.id.tvSumOfChargeAndTaxInvoice);
-        tvSumOfTransference = (TextView) findViewById(R.id.tvSumOfTransference);
         tvVersion = (TextView) findViewById(R.id.tvVersion);
         llReceipt = (LinearLayout) findViewById(R.id.llReceipt);
         llOrder = (LinearLayout) findViewById(R.id.llOrder);
         llInvoice = (LinearLayout) findViewById(R.id.llInvoice);
-        llTransference = (LinearLayout) findViewById(R.id.llTransference);
+
+
+        horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScrollView);
 
         //nav buttons
         btnNavProductList = (Button) findViewById(R.id.btnNavProductList);
@@ -1389,7 +1371,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             tvSumOfPureInvoice.setVisibility(View.GONE);
             tvSumOfChargeAndTaxOrder.setVisibility(View.GONE);
             tvSumOffChargeAndTaxInvoice.setVisibility(View.GONE);
-            tvSumOfTransference.setVisibility(View.GONE);
 
 
             tvSumOfReceiptsProgressBar.setVisibility(View.VISIBLE);
@@ -1453,15 +1434,12 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             tvSumOfPureInvoice.setVisibility(View.VISIBLE);
             tvSumOfChargeAndTaxOrder.setVisibility(View.VISIBLE);
             tvSumOffChargeAndTaxInvoice.setVisibility(View.VISIBLE);
-            tvSumOfTransference.setVisibility(View.VISIBLE);
 
 
             tvSumOfOrders.setText(ServiceTools.formatPrice(TotalOrder));
             tvSumOfOrders.setSelected(true);
             tvSumOfInvoices.setText(ServiceTools.formatPrice(TotalInvoice));
             tvSumOfInvoices.setSelected(true);
-            tvSumOfTransference.setText(ServiceTools.formatPrice(TotalReceiveTransfer));
-            tvSumOfTransference.setSelected(true);
             tvSumOfReceipts.setText(ServiceTools.formatPrice((TotalReceipt)));
             tvSumOfReceipts.setSelected(true);
             tvSumOfCash.setText(ServiceTools.formatPrice(TotalCash));

@@ -91,7 +91,7 @@ public class TransactionsActivity extends BaseActivity {
     }
 
     private class AdapterTransaction extends ArrayAdapter<TransactionsLog> {
-        Activity mcontaxt;
+        Activity mContext;
 
         private class Holder {
             public TextView tvStatus, tvRemainedAmount, tvCreditAmount, tvDebitAmount, tvNumber, tvDescription, tvDate;
@@ -130,9 +130,9 @@ public class TransactionsActivity extends BaseActivity {
             }
         }
 
-        AdapterTransaction(Activity contaxt, ArrayList<TransactionsLog> array) {
-            super(contaxt, android.R.layout.simple_list_item_1, array);
-            mcontaxt = contaxt;
+        AdapterTransaction(Activity context, ArrayList<TransactionsLog> array) {
+            super(context, android.R.layout.simple_list_item_1, array);
+            mContext = context;
         }
 
         @Override
@@ -143,7 +143,7 @@ public class TransactionsActivity extends BaseActivity {
             final TransactionsLog transaction = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
                 rowview = inflater.inflate(R.layout.lst_transaction_item, null, false);
                 holder = new Holder(rowview);
                 rowview.setTag(holder);

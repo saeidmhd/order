@@ -861,9 +861,9 @@ public class ProductPickerListActivity extends BaseActivity {
             final ArrayList<Product> arrayOrginal = new ArrayList<>();
             ArrayList<Product> arrayProduct = new ArrayList<>();
 
-            public AdapterListProduct(Activity contaxt, ArrayList<Product> array) {
-                super(contaxt, android.R.layout.simple_list_item_1, array);
-                mContext = contaxt;
+            public AdapterListProduct(Activity context, ArrayList<Product> array) {
+                super(context, android.R.layout.simple_list_item_1, array);
+                mContext = context;
                 arrayOrginal.addAll(array);
                 arrayProduct.addAll(array);
             }

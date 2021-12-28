@@ -688,9 +688,6 @@ public class ServiceTools {
 
     }
 
-
-
-
     public static double getSumCount1prop(int productId, ArrayList<OrderDetailProperty> orderDetailProperties, Context context) {
         DbAdapter db = new DbAdapter(context);
         db.open();
@@ -733,7 +730,6 @@ public class ServiceTools {
     public static double getExistSumCountProp(OrderDetailProperty orderDetailProperty, ProductDetail productDetail) {
         return orderDetailProperty.getSumCountBaJoz() + productDetail.getCount2();
     }
-
 
 
     public static String computeMD5Hash(String password) {

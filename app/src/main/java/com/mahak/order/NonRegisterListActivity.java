@@ -215,14 +215,14 @@ public class NonRegisterListActivity extends BaseActivity {
     }
 
     public class AdapterListNonRegister extends ArrayAdapter<NonRegister> {
-        Activity mcontaxt;
+        Activity mContext;
         ArrayList<NonRegister> arrayorginal;
         ArrayList<NonRegister> arrayNonRegister;
         CustomFilterList Filter;
 
-        public AdapterListNonRegister(Activity contaxt, ArrayList<NonRegister> array) {
-            super(contaxt, android.R.layout.simple_list_item_1, array);
-            mcontaxt = contaxt;
+        public AdapterListNonRegister(Activity context, ArrayList<NonRegister> array) {
+            super(context, android.R.layout.simple_list_item_1, array);
+            mContext = context;
             arrayorginal = new ArrayList<NonRegister>();
             arrayNonRegister = new ArrayList<NonRegister>();
             arrayNonRegister.addAll(array);
@@ -237,7 +237,7 @@ public class NonRegisterListActivity extends BaseActivity {
             final NonRegister nonRegister = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
                 rowview = inflater.inflate(R.layout.lst_order_item, null, false);
 
                 holder = new Holder(rowview);
@@ -252,7 +252,7 @@ public class NonRegisterListActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
 
-                    PopupMenu popup = new PopupMenu(mcontaxt, btnMenu);
+                    PopupMenu popup = new PopupMenu(mContext, btnMenu);
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.pmenu_edit_delete, popup.getMenu());
 
@@ -270,7 +270,7 @@ public class NonRegisterListActivity extends BaseActivity {
                                     break;
                                 case R.id.mnuEdit:
                                     if (nonRegister.getPublish() == ProjectInfo.DONT_PUBLISH) {
-                                        Intent intent = new Intent(mcontaxt, NonRegisterActivity.class);
+                                        Intent intent = new Intent(mContext, NonRegisterActivity.class);
                                         intent.putExtra(BaseActivity.CUSTOMERID_KEY, nonRegister.getPersonId());
                                         intent.putExtra(BaseActivity.CUSTOMER_CLIENT_ID_KEY, nonRegister.getPersonClientId());
                                         intent.putExtra(BaseActivity.MODE_PAGE, BaseActivity.MODE_EDIT);
@@ -299,7 +299,7 @@ public class NonRegisterListActivity extends BaseActivity {
                     Menu menu = popup.getMenu();
                     for (int i = 0; i < menu.size(); i++) {
                         MenuItem mi = menu.getItem(i);
-                        FontPopUp.applyFontToMenuItem(mi, mcontaxt);
+                        FontPopUp.applyFontToMenuItem(mi, mContext);
                     }
 
 

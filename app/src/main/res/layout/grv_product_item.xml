@@ -148,6 +148,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/inboxLayout"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/forms_alter_row"

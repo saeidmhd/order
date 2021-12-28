@@ -935,11 +935,11 @@ public class ManageReceiptActivity extends BaseActivity {
     }
 
     private class AdapterCheque extends ArrayAdapter<Cheque> {
-        Activity mcontaxt;
+        Activity mContext;
 
-        public AdapterCheque(Activity contaxt, ArrayList<Cheque> array) {
-            super(contaxt, android.R.layout.simple_list_item_1, array);
-            mcontaxt = contaxt;
+        public AdapterCheque(Activity context, ArrayList<Cheque> array) {
+            super(context, android.R.layout.simple_list_item_1, array);
+            mContext = context;
         }
 
         public class Holder {
@@ -974,7 +974,7 @@ public class ManageReceiptActivity extends BaseActivity {
             final Cheque cheque = getItem(position);
 
             if (rowview == null) {
-                inflater = mcontaxt.getLayoutInflater();
+                inflater = mContext.getLayoutInflater();
                 rowview = inflater.inflate(R.layout.lst_cheque_item, null, false);
                 holder = new Holder(rowview);
                 rowview.setTag(holder);

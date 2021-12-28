@@ -2034,6 +2034,7 @@ public class DbAdapter {
         product.setPrice(cursor.getDouble(cursor.getColumnIndex("price")));
         product.setPromotionId(cursor.getInt(cursor.getColumnIndex("PromotionId")));
         product.setPictureUrl(cursor.getString(cursor.getColumnIndex("url")));
+        product.setProductDetailId(cursor.getInt(cursor.getColumnIndex(DbSchema.ProductDetailSchema.COLUMN_ProductDetailId)));
         // product.setPriceVisitor(cursor.getDouble(cursor.getColumnIndex("priceVisitor")));
 
         return product;
@@ -4831,7 +4832,7 @@ public class DbAdapter {
                     " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode " +
                     " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_Deleted + " = " + " 0 and " + DbSchema.ProductDetailSchema.TABLE_NAME + "." + DbSchema.ProductDetailSchema.COLUMN_Deleted + " = " + " 0 " +
                     " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                    getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + getCategoryStrnig(categoryCode) +
+                    getProductCategoryString(CategoryId) + getProductAssetStrnig(MODE_ASSET) + getCategoryString(categoryCode) +
                     " order by " + orderBy, null);
             if (cursor != null) {
                 cursor.moveToFirst();
@@ -5833,7 +5834,7 @@ public class DbAdapter {
     private Cursor getAllProductQuery(long categoryCode , long id, String LIMIT, String orderBy, int modeasset, int defPriceLevel) {
         Cursor cursor;
         if (defPriceLevel == 0) {
-            cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName , url , " +
+            cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName , url , ProductDetail.productDetailId , " +
                     " case DefaultSellPriceLevel  " +
                     " when 1 then Price1 " +
                     " when 2 then Price2 " +
@@ -5853,9 +5854,9 @@ public class DbAdapter {
                     " and " + DbSchema.ProductSchema.TABLE_NAME + " . " + DbSchema.ProductSchema.COLUMN_Deleted + " = " + 0 +
                     " and " + DbSchema.ProductDetailSchema.TABLE_NAME + " . " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " = " + 0 +
                     getProductAssetStrnig(modeasset) +
-                    getProductCategoryStrnig(id) + getCategoryStrnig(categoryCode) + " GROUP by Products.productId " + " order by " + orderBy  + " LIMIT " + LIMIT, null);
+                    getProductCategoryString(id) + getCategoryString(categoryCode) + " GROUP by Products.productId " + " order by " + orderBy  + " LIMIT " + LIMIT, null);
         } else {
-            cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel , PromotionId, UnitName2 , UnitName , url , " +
+            cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel , PromotionId, UnitName2 , UnitName , url , ProductDetail.productDetailId , " +
                     " case  " + defPriceLevel +
                     " when 1 then Price1 " +
                     " when 2 then Price2 " +
@@ -5875,7 +5876,7 @@ public class DbAdapter {
                     " and " + DbSchema.ProductSchema.TABLE_NAME + " . " + DbSchema.ProductSchema.COLUMN_Deleted + " = " + 0 +
                     " and " + DbSchema.ProductDetailSchema.TABLE_NAME + " . " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " = " + 0 +
                     getProductAssetStrnig(modeasset) +
-                    getProductCategoryStrnig(id) + getCategoryStrnig(categoryCode) + " GROUP by Products.productId " + " order by " + orderBy + " LIMIT " + LIMIT , null);
+                    getProductCategoryString(id) + getCategoryString(categoryCode) + " GROUP by Products.productId " + " order by " + orderBy + " LIMIT " + LIMIT , null);
         }
 
         return cursor;
@@ -6423,7 +6424,7 @@ public class DbAdapter {
         ArrayList<Product> array = new ArrayList<>();
         try {
             if (defPriceLevel == 0) {
-                cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName , url , " +
+                cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName , url , ProductDetail.productDetailId , " +
                         " case DefaultSellPriceLevel  " +
                         " when 1 then Price1 " +
                         " when 2 then Price2 " +
@@ -6441,10 +6442,10 @@ public class DbAdapter {
                         " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode " +
                         " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_Deleted + " = " + " 0 " + " and " + DbSchema.ProductDetailSchema.TABLE_NAME + " . " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " = " + 0 +
                         " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                        getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + getCategoryStrnig(categoryCode)  + " GROUP by Products.productId " +
+                        getProductCategoryString(CategoryId) + getProductAssetStrnig(MODE_ASSET) + getCategoryString(categoryCode)  + " GROUP by Products.productId " +
                         " order by " + orderBy, null);
             } else {
-                cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName , url , " +
+                cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName , url , ProductDetail.productDetailId , " +
                         " case  " + defPriceLevel +
                         " when 1 then Price1 " +
                         " when 2 then Price2 " +
@@ -6462,7 +6463,7 @@ public class DbAdapter {
                         " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode " +
                         " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_Deleted + " = " + " 0 " + " and " + DbSchema.ProductDetailSchema.TABLE_NAME + " . " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " = " + 0 +
                         " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                        getProductCategoryStrnig(CategoryId) + getProductAssetStrnig(MODE_ASSET) + getCategoryStrnig(categoryCode) + " GROUP by Products.productId " +
+                        getProductCategoryString(CategoryId) + getProductAssetStrnig(MODE_ASSET) + getCategoryString(categoryCode) + " GROUP by Products.productId " +
                         " order by " + orderBy, null);
             }
 
@@ -6483,12 +6484,12 @@ public class DbAdapter {
         return array;
     }
 
-    private String getProductCategoryStrnig(long categoryId) {
+    private String getProductCategoryString(long categoryId) {
         if (categoryId != 0)
             return " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_CATEGORYID + " = " + categoryId;
         else return "";
     }
-    private String getCategoryStrnig(long categoryCode) {
+    private String getCategoryString(long categoryCode) {
         if (categoryCode != 0)
             return " and " + DbSchema.ProductCategorySchema.TABLE_NAME + "." + DbSchema.ProductCategorySchema.COLUMN_CategoryCode + " = " + categoryCode;
         else return "";
