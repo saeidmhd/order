@@ -79,6 +79,7 @@ import static com.mahak.order.BaseActivity.PAGE;
 import static com.mahak.order.BaseActivity.PAGE_ORDERLIST;
 import static com.mahak.order.BaseActivity.RETURN_ASSET_KEY;
 import static com.mahak.order.BaseActivity.TYPE_KEY;
+import static com.mahak.order.BaseActivity.eshantion_dasti;
 import static com.mahak.order.InvoiceDetailActivity.CommitPromoCode;
 import static com.mahak.order.InvoiceDetailActivity.CustomerId;
 import static com.mahak.order.InvoiceDetailActivity.Discount;
@@ -350,6 +351,23 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                 intent.putExtra(RETURN_ASSET_KEY, true);
                 startActivityForResult(intent, REQUEST_PRODUCT_LIST);
                 return true;
+
+            case R.id.mnuAddEshantion:
+                if(ProductPickerListActivity.HashMap_Product != null){
+                    ProductPickerListActivity.HashMap_Product.clear();
+                }
+                Intent intent2 = new Intent(getActivity(), ProductPickerListActivity.class);
+                intent2.putExtra(TYPE_KEY, OrderType);
+                intent2.putExtra(eshantion_dasti, 1);
+                intent2.putExtra(PAGE, PAGE_ORDERLIST);
+                intent2.putExtra(CUSTOMERID_KEY, CustomerId);
+                intent2.putExtra(CUSTOMER_GROUP_KEY, GroupId);
+                intent2.putExtra(MODE_PAGE, Mode);
+                intent2.putExtra("OrderId", InvoiceDetailActivity.OrderId);
+                intent2.putExtra(RETURN_ASSET_KEY, true);
+                startActivityForResult(intent2, REQUEST_PRODUCT_LIST);
+                return true;
+
             case R.id.mnuBarcode:
                 if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
                     try {
@@ -631,9 +649,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             holder.btnCount.setTag(R.id.ProductId, orderDetail != null ? orderDetail.getProductId() : 0);
             holder.btnCount.setTag(R.id.Product, orderDetail);
             holder.btnCount.setTag(R.id.Position, position);
-            holder.txtTotalGift.setTag(R.id.ProductId, orderDetail != null ? orderDetail.getProductId() : 0);
-            holder.txtTotalGift.setTag(R.id.Product, orderDetail);
-            holder.txtTotalGift.setTag(R.id.Position, position);
             holder.btnDelete.setTag(orderDetail);
             if (orderDetail != null) {
                 if (orderDetail.getCount1() == 0 && orderDetail.getCount2() == 0 && orderDetail.getSumCountBaJoz() == 0) {
@@ -690,7 +705,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             final TextView tvChargeAndTax;
             final TextView tvFinalPriceProduct;
             final TextView btnCount;
-            final TextView txtTotalGift;
             final LinearLayout btnDelete;
             final LinearLayout llDescription;
             final LinearLayout llcartDiscount;
@@ -706,7 +720,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                 btnDelete = (LinearLayout) view.findViewById(R.id.btnDelete);
                 tvNumber = (TextView) view.findViewById(R.id.tvNumber);
                 btnCount = (TextView) view.findViewById(R.id.txtCountKol);
-                txtTotalGift = (TextView) view.findViewById(R.id.txtTotalGift);
                 llDescription = (LinearLayout) view.findViewById(R.id.llDescription);
                 llcartDiscount = (LinearLayout) view.findViewById(R.id.llcartDiscount);
                 tvProductName.setSelected(true);
@@ -714,8 +727,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
 
             void Populate(OrderDetail orderDetail, int position) {
 
-                if (OrderType == ProjectInfo.TYPE_ORDER)
-                    txtTotalGift.setVisibility(View.GONE);
 
                 if (OrderType == ProjectInfo.TYPE_SEND_TRANSFERENCE || OrderType == ProjectInfo.TYPE_RETURN_OF_SALE) {
 
@@ -725,7 +736,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                     tvFinalPriceProduct.setVisibility(View.GONE);
                     tvNumber.setText(String.valueOf(position + 1));
                     btnCount.setText(formatCount(orderDetail.getSumCountBaJoz()));
-                    txtTotalGift.setVisibility(View.GONE);
                     tvDescription.setText(orderDetail.getDescription());
                     tvOff.setVisibility(View.GONE);
                     tvChargeAndTax.setVisibility(View.GONE);
@@ -757,7 +767,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                     tvFinalPriceProduct.setText(ServiceTools.formatPrice(Price));
                     tvNumber.setText(String.valueOf(position + 1));
                     btnCount.setText(formatCount(orderDetail.getSumCountBaJoz()));
-                    txtTotalGift.setText(formatCount(ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), mcontext)));
                     tvDescription.setText(orderDetail.getDescription());
                     tvOff.setText(ServiceTools.formatPrice(off));
                     tvChargeAndTax.setText(ServiceTools.formatPrice(TaxAndCharge));
@@ -1479,7 +1488,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         ProductDetail promoProductDetail = db.getProductDetailWithProductId(promoProduct.getProductId());
         if (mGiftCount1 != 0) {
             if (promoProduct.getProductId() == productDetail.getProductId()) {
-
                 mGiftCount1 += ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).getGiftCount1();
                 mGiftCount2 += ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).getGiftCount2();
 

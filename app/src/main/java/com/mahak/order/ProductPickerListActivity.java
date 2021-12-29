@@ -139,6 +139,7 @@ public class ProductPickerListActivity extends BaseActivity {
     private ProductListFragment productListFragment;
     private ProductGridFragment productGridFragment;
     private long OrderId;
+    private int eshantion_dasti;
 
     AdapterSpnAssetProduct adspnAssetProduct;
 
@@ -190,6 +191,7 @@ public class ProductPickerListActivity extends BaseActivity {
         Extras = getIntent().getExtras();
         if (Extras != null) {
 
+            eshantion_dasti = Extras.getInt("eshantion_dasti");
             Mode = Extras.getInt(MODE_PAGE);
             page = Extras.getInt(PAGE);
             OrderId = Extras.getLong("OrderId");
@@ -586,6 +588,7 @@ public class ProductPickerListActivity extends BaseActivity {
             args.putLong("OrderId", OrderId);
             args.putLong(CUSTOMER_GROUP_KEY, GroupId);
             args.putInt("CountProduct", CountProduct);
+            args.putInt("eshantion_dasti", eshantion_dasti);
             productListFragment.setArguments(args);
             ft.replace(R.id.flContent, productListFragment);
             try {
@@ -615,6 +618,7 @@ public class ProductPickerListActivity extends BaseActivity {
         args.putInt("CustomerId", CustomerId);
         args.putLong(CUSTOMER_GROUP_KEY, GroupId);
         args.putInt("CountProduct", CountProduct);
+        args.putInt("eshantion_dasti", eshantion_dasti);
         productGridFragment.setArguments(args);
         ft.replace(R.id.flContent, productGridFragment);
         try {
@@ -640,6 +644,7 @@ public class ProductPickerListActivity extends BaseActivity {
         args.putLong("OrderId", OrderId);
         args.putLong("CustomerId", CustomerId);
         args.putInt("CountProduct", CountProduct);
+        args.putInt("eshantion_dasti", eshantion_dasti);
         placeholderListGalleryFragment.setArguments(args);
         ft.replace(R.id.flContent, placeholderListGalleryFragment);
         try {

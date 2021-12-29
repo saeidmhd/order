@@ -87,6 +87,8 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
     double total_count1;
     double asset_count1;
 
+    int eshantion_dasti;
+
 
 
     public RecyclerProductAdapter(
@@ -98,7 +100,8 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             int customerId,
             long groupId,
             int mode,
-            long orderId) {
+            long orderId,
+            int eshantion_dasti) {
         RecyclerProductAdapter.mContext = mContext;
         RecyclerProductAdapter.productPickerListActivity = productPickerListActivity;
         this.idLayout = idLayout;
@@ -111,11 +114,11 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         this.orderId = orderId;
         this.customerId = customerId;
         this.groupId = groupId;
+        this.eshantion_dasti = eshantion_dasti;
     }
 
     public RecyclerProductAdapter() {
     }
-
 
 
     @Override
@@ -467,15 +470,22 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                 if (!TextUtils.isEmpty(countPackage) && BaseActivity.getPrefUnit2Setting(mContext) != BaseActivity.MODE_YekVahedi) {
                     item.setCount2(count2);
                 }
+
                 item.setCount1(count1);
-                item.setCount2(count2);
                 item.setSumCountBaJoz(sumCountBaJoz);
+
+                if(eshantion_dasti == 1){
+                    item.setGiftType(Promotion.Eshantion_Dasti);
+                    item.setPrice("0");
+                }else {
+                    item.setPrice(String.valueOf(price));
+                }
+                item.setProductName(product.getName());
 
                 if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible)) {
                     double d = ServiceTools.RegulartoDouble(BaseActivity.getPrefRowDiscountIsActive());
                     item.setDiscountType((long) d);
                 }
-                item.setPrice(String.valueOf(price));
 
                 /*if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible))
                     item.setDiscount(ServiceTools.toDouble(discount));*/
@@ -497,7 +507,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     double FinalPrice = ServiceTools.getCalculateFinalPrice(item, mContext);
                     item.setFinalPrice(String.valueOf(FinalPrice));
                 }
-                if(item.getSumCountBaJoz() > 0)
+                if(item.getSumCountBaJoz() > 0 || item.getGiftCount1() > 0)
                     ProductPickerListActivity.HashMap_Product.put(product.getProductId(), item);
                 else{
                     ProductPickerListActivity.HashMap_Product.remove(product.getProductId());
@@ -518,15 +528,21 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     object.setCount2(count2);
                 }
                 object.setSumCountBaJoz(sumCountBaJoz);
+
+                if(eshantion_dasti == 1){
+                    object.setPrice("0");
+                    object.setGiftType(Promotion.Eshantion_Dasti);
+                }else {
+                    object.setPrice(String.valueOf(price));
+                }
+                object.setProductName(product.getName());
+
                 if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible)) {
                     double d = ServiceTools.RegulartoDouble(BaseActivity.getPrefRowDiscountIsActive());
                     object.setDiscountType((long) d);
                 }
                 object.setProductDetailId(product.getProductDetailId());
                 object.setProductId(product.getProductId());
-                //object.setProductMasterId(product.getProductCode());
-                object.setProductName(product.getName());
-                object.setPrice(String.valueOf(price));
                 object.setMin((int) product.getMin());
 
                 /*if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible))
@@ -611,14 +627,20 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     item.setCount2(count2);
                 }
                 item.setCount1(count1);
-                item.setCount2(count2);
                 item.setSumCountBaJoz(sumCountBaJoz);
+
+                if(eshantion_dasti == 1){
+                    item.setPrice("0");
+                    item.setGiftType(Promotion.Eshantion_Dasti);
+                }else {
+                    item.setPrice(String.valueOf(price));
+                }
+                item.setProductName(product.getName());
 
                 if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible)) {
                     double d = ServiceTools.RegulartoDouble(BaseActivity.getPrefRowDiscountIsActive());
                     item.setDiscountType((long) d);
                 }
-                item.setPrice(String.valueOf(price));
 
                 if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible))
                     item.setDiscount(ServiceTools.toDouble(discount));
@@ -662,9 +684,15 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                 }
                 object.setProductDetailId(productDetail.getProductDetailId());
                 object.setProductId(product.getProductId());
-                //object.setProductMasterId(product.getProductCode());
+
+                if(eshantion_dasti == 1){
+                    object.setPrice("0");
+                    object.setGiftType(Promotion.Eshantion_Dasti);
+                }else {
+                    object.setPrice(String.valueOf(price));
+                }
                 object.setProductName(product.getName());
-                object.setPrice(String.valueOf(price));
+
                 object.setMin((int) product.getMin());
 
                 if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible))

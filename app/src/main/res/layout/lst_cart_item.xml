@@ -58,16 +58,6 @@
             android:singleLine="true"
             android:text="@string/sample_number" />
 
-        <com.mahak.order.widget.FontTextView
-            android:id="@+id/txtTotalGift"
-            style="@style/forms_edittext_default2"
-            android:layout_width="55dp"
-            android:layout_height="wrap_content"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:gravity="center"
-            android:text="@string/sample_number"
-            android:visibility="visible" />
 
         <com.mahak.order.widget.FontTextView
             android:id="@+id/txtCountKol"

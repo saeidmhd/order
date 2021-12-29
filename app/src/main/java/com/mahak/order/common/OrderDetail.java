@@ -321,6 +321,9 @@ public class OrderDetail implements Parcelable {
     }
 
     public void setProductName(String productName) {
+        if(getGiftType() == Promotion.Eshantion_Dasti || getGiftType() == Promotion.Eshantion_Tarhi ){
+            productName = " *اشانتیون*- " + productName;
+        }
         this.productName = productName;
     }
 

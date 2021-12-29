@@ -43,6 +43,7 @@ public class ProductListFragment extends Fragment {
     private static long CategoryId;
     private static int clickedItemCategoryCode;
     private long OrderId;
+    private int eshantion_dasti;
     private int visibleItemCount;
     private int totalItemCount;
     private int firstVisibleItem;
@@ -68,6 +69,7 @@ public class ProductListFragment extends Fragment {
             customerId = bundle.getInt("CustomerId");
             GroupId = bundle.getLong("GroupId");
             OrderId = bundle.getLong("OrderId");
+            eshantion_dasti = bundle.getInt("eshantion_dasti");
             type = bundle.getInt("type");
             mode = bundle.getInt("Mode");
             MODE_ASSET = 0;
@@ -136,7 +138,7 @@ public class ProductListFragment extends Fragment {
                     R.layout.lst_product_picker_item,
                     type,
                     customerId,
-                    GroupId, mode, OrderId);
+                    GroupId, mode, OrderId,eshantion_dasti);
             lstProduct.setAdapter(adapterlistProduct);
             if (txtSearch != null) {
                 adapterlistProduct.getFilter(clickedItemCategoryCode,CategoryId,MODE_ASSET).filter(txtSearch.getText().toString(), new Filter.FilterListener() {

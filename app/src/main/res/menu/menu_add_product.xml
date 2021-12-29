@@ -7,6 +7,14 @@
         android:name="@string/str_add_Product"
         app:showAsAction="always"
         android:title="@string/str_add_Product" />
+
+    <item
+        android:id="@+id/mnuAddEshantion"
+        android:icon="@drawable/ic_add_gift"
+        android:orderInCategory="101"
+        android:name="@string/str_add_Product"
+        app:showAsAction="always"
+        android:title="@string/str_add_Product" />
     <item
         android:id="@+id/mnuBarcode"
         android:icon="@drawable/ic_barcode_scan_white_48dp"

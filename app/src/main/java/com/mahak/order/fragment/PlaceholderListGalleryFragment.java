@@ -75,6 +75,7 @@ public class PlaceholderListGalleryFragment extends Fragment {
     private int firstVisibleItem;
     private int totalItem;
     private int CountProduct;
+    private int eshantion_dasti;
     private static int MODE_ASSET;
     private static long CategoryId;
     private int clickedItemCategoryCode;
@@ -116,6 +117,7 @@ public class PlaceholderListGalleryFragment extends Fragment {
             GroupId = bundle.getInt(CUSTOMER_GROUP_KEY);
             OrderId = bundle.getLong("OrderId");
             CountProduct = bundle.getInt("CountProduct");
+            eshantion_dasti = bundle.getInt("eshantion_dasti");
             MODE_ASSET = 0;
             CategoryId = 0;
             clickedItemCategoryCode = 0;
@@ -158,7 +160,7 @@ public class PlaceholderListGalleryFragment extends Fragment {
         }
         if (mActivity != null) {
             calculateSelectedProduct();
-            productAdapter = new RecyclerProductAdapter(mContext, array, productPickerListActivity, R.layout.fragment_item_product_gallery, type, customerId, GroupId, mode, OrderId);
+            productAdapter = new RecyclerProductAdapter(mContext, array, productPickerListActivity, R.layout.fragment_item_product_gallery, type, customerId, GroupId, mode, OrderId,eshantion_dasti);
             lstProduct.setAdapter(productAdapter);
 
             if (txtSearch != null) {
