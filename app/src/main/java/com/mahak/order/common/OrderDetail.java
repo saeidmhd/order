@@ -133,8 +133,6 @@ public class OrderDetail implements Parcelable {
         this.setCount2(0);
         this.setCount1(0);
         this.setSumCountBaJoz(0);
-        this.setGiftCount2(0);
-        this.setGiftCount1(0);
         this.setOrderDetailId(0);
     }
 
@@ -397,8 +395,6 @@ public class OrderDetail implements Parcelable {
         dest.writeDouble(getTaxPercent());
         dest.writeDouble(getDiscount());
         dest.writeInt(getProductId());
-        dest.writeDouble(getGiftCount1());
-        dest.writeDouble(getGiftCount2());
     }
 
     public long getOrderClientId() {
@@ -434,8 +430,6 @@ public class OrderDetail implements Parcelable {
         updateSyncId = in.readInt();
         rowVersion = in.readLong();
         productId = in.readInt();
-        giftCount1 = BigDecimal.valueOf(in.readDouble());
-        giftCount2 = BigDecimal.valueOf(in.readDouble());
     }
 
 

@@ -1039,11 +1039,6 @@ public class OrdersListActivity extends BaseActivity {
                 if (orderDetailProperties.size() > 0) {
                     for (OrderDetailProperty orderDetailProperty : orderDetailProperties) {
                         productDetail = db.getProductDetail(orderDetailProperty.getProductDetailId());
-                        if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), mContext) > 0) {
-                            productDetail.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail) + (orderDetail.getGiftCount1()));
-                            productDetail.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail) + (orderDetail.getGiftCount2()));
-                        }
-
                         productDetail.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail));
                         productDetail.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail));
 
@@ -1051,10 +1046,6 @@ public class OrdersListActivity extends BaseActivity {
                     }
                     db.DeleteOrderDetailProperty(order.getId());
                 } else {
-                    if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), mContext) > 0) {
-                        productDetail.setCount1(productDetail.getCount1() + orderDetail.getGiftCount1());
-                        productDetail.setCount2(productDetail.getCount2() + orderDetail.getGiftCount2());
-                    }
                     productDetail.setCount1(productDetail.getCount1() + orderDetail.getSumCountBaJoz());
                     productDetail.setCount2(productDetail.getCount2() + orderDetail.getCount2());
 
@@ -1110,8 +1101,6 @@ public class OrdersListActivity extends BaseActivity {
         orderDetailSend.setDiscountType(orderDetail.getDiscountType());
         orderDetailSend.setDiscount(orderDetail.getDiscount());
         orderDetailSend.setPrice("" + orderDetail.getPrice());
-        orderDetailSend.setGiftCount1(orderDetail.getGiftCount1());
-        orderDetailSend.setGiftCount2(orderDetail.getGiftCount2());
         orderDetailSend.setGiftType(orderDetail.getGiftType());
         orderDetailSend.setTaxPercent(orderDetail.getTaxPercent());
         orderDetailSend.setChargePercent(orderDetail.getChargePercent());
@@ -1546,7 +1535,7 @@ public class OrdersListActivity extends BaseActivity {
                                         for (OrderDetail item : orderDetails) {
                                             productDetail = db.getProductDetail(item.getProductDetailId());
                                             product = db.GetProductWithProductId(productDetail.getProductId());
-                                            productDetail.setCount1(productDetail.getCount1() - (item.getSumCountBaJoz() + ServiceTools.getSumGiftCount12(item.getGiftCount1(), item.getGiftCount2(), mContext)));
+                                            productDetail.setCount1(productDetail.getCount1() - (item.getSumCountBaJoz()));
                                             db.UpdateProduct(product);
                                             db.UpdateProductDetail(productDetail);
                                         }

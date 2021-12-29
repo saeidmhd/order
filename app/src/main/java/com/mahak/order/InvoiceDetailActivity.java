@@ -433,23 +433,7 @@ public class InvoiceDetailActivity extends BaseActivity {
             mCurrentPrice = ServiceTools.getCalculateFinalPrice(item, mContext);
             item.setFinalPrice(String.valueOf(mCurrentPrice));
             if (order.getOrderType() == TYPE_SEND_TRANSFERENCE || order.getOrderType() == ProjectInfo.TYPE_INVOCIE || order.getOrderType() == ProjectInfo.TYPE_RETURN_OF_SALE || (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext)))
-                if (item.getGiftCount2() != 0 || item.getGiftCount1() != 0) {
 
-                    mGiftCount1 = item.getGiftCount1();
-                    mGiftCount2 = item.getGiftCount2();
-
-                    giftProductId = item.getProductDetailId();
-                    if (ProductPickerListActivity.HashMap_Product.get(giftProductId) != null) {
-
-                        ProductPickerListActivity.HashMap_Product.get(giftProductId).setCount1(mGiftCount1);
-                        ProductPickerListActivity.HashMap_Product.get(giftProductId).setCount2(mGiftCount2);
-
-                    } else
-                        ProductPickerListActivity.HashMap_Product.put(item.getProductId(), item);
-                    continue;
-                }
-            if (item.getProductDetailId() == giftProductId)
-                item.setGiftCount1(mGiftCount1);
             ProductPickerListActivity.HashMap_Product.put(item.getProductId(), item);
         }
         //________________________________________________________
@@ -602,7 +586,7 @@ public class InvoiceDetailActivity extends BaseActivity {
                                         db.UpdateOrderDetailPropertyWithOrderid(0, orderDetailProperty);
                                     }
                                 }
-                                if ((item.getCount1() > 0 || item.getCount2() > 0) && (item.getGiftCount1() == 0 && item.getGiftCount2() == 0)) {
+                                if ((item.getCount1() > 0 || item.getCount2() > 0)) {
                                     item.setOrderId((int) OrderId);
                                     OrderDetailClientId++;
                                     item.setOrderDetailClientId(OrderDetailClientId);
@@ -611,77 +595,6 @@ public class InvoiceDetailActivity extends BaseActivity {
                                     if (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext)) {
                                         reduceAsset(item, orderDetailProperties);
                                     } else if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE) {
-                                        reduceAsset(item, orderDetailProperties);
-                                    }
-                                } else if ((item.getCount1() > 0 || item.getCount2() > 0) && (item.getGiftCount1() > 0 || item.getGiftCount2() > 0)) {
-
-                                    item.setOrderId((int) OrderId);
-                                    OrderDetailClientId++;
-
-                                    double count1 = item.getCount1();
-                                    double count2 = item.getCount2();
-                                    double price = item.getPrice();
-                                    double sumCountBaJoz = item.getSumCountBaJoz();
-                                    double discount = item.getDiscount();
-
-                                    //insert gift
-                                    OrderDetailClientId++;
-                                    item.setOrderDetailClientId(OrderDetailClientId);
-                                    item.setOrderClientId(OrderClientId);
-                                    mGiftCount1 = item.getGiftCount1();
-                                    mGiftCount2 = item.getGiftCount2();
-                                    item.setGiftCount1(mGiftCount1);
-                                    item.setGiftCount2(mGiftCount2);
-                                    item.setCount1(0);
-                                    item.setCount2(0);
-                                    item.setPrice("0");
-                                    item.setSumCountBaJoz(0);
-                                    item.setDiscount(0);
-                                    db.AddOrderDetail(item);
-
-                                    OrderDetailClientId++;
-                                    item.setOrderDetailClientId(OrderDetailClientId);
-                                    item.setOrderClientId(OrderClientId);
-                                    item.setCount1(count1);
-                                    item.setCount2(count2);
-                                    item.setSumCountBaJoz(sumCountBaJoz);
-                                    item.setDiscount(discount);
-                                    item.setPrice("" + price);
-                                    item.setGiftCount1(0);
-                                    item.setGiftCount2(0);
-                                    item.setGiftType(0);
-                                    db.AddOrderDetail(item);
-
-                                    //for reduce
-                                    item.setCount1(count1);
-                                    item.setCount2(count2);
-                                    item.setGiftCount1(mGiftCount1);
-                                    item.setGiftCount2(mGiftCount2);
-
-                                    if (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext)) {
-                                        reduceAsset(item, orderDetailProperties);
-                                    } else if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE) {
-                                        reduceAsset(item, orderDetailProperties);
-                                    }
-
-                                } else if ((item.getCount1() == 0 && item.getCount2() == 0) && (item.getGiftCount1() > 0 || item.getGiftCount2() > 0)) {
-                                    item.setOrderId((int) OrderId);
-                                    OrderDetailClientId++;
-                                    item.setOrderDetailClientId(OrderDetailClientId);
-                                    item.setOrderClientId(OrderClientId);
-
-                                    mGiftCount1 = item.getGiftCount1();
-                                    mGiftCount2 = item.getGiftCount2();
-
-                                    item.setGiftCount1(mGiftCount1);
-                                    item.setGiftCount2(mGiftCount2);
-
-                                    item.setCount1(0);
-                                    item.setCount2(0);
-                                    item.setPrice("0");
-
-                                    db.AddOrderDetail(item);
-                                    if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE) {
                                         reduceAsset(item, orderDetailProperties);
                                     }
                                 }
@@ -701,7 +614,7 @@ public class InvoiceDetailActivity extends BaseActivity {
                                 product = db.GetProductWithProductId(productDetail.getProductId());
                                 orderDetailProperties = db.getAllOrderDetailProperty(order.getId(), product.getProductId());
                                 //////////////////////////
-                                if ((item.getCount1() > 0 || item.getCount2() > 0) && (item.getGiftCount1() == 0 && item.getGiftCount2() == 0)) {
+                                if ((item.getCount1() > 0 || item.getCount2() > 0)) {
                                     OrderDetailClientId++;
                                     item.setOrderDetailClientId(OrderDetailClientId);
                                     item.setOrderId((int) order.getId());
@@ -710,76 +623,6 @@ public class InvoiceDetailActivity extends BaseActivity {
                                     if (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext)) {
                                         reduceAsset(item, orderDetailProperties);
                                     } else if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE) {
-                                        reduceAsset(item, orderDetailProperties);
-                                    }
-                                } else if ((item.getCount1() > 0 || item.getCount2() > 0) && (item.getGiftCount1() > 0 || item.getGiftCount2() > 0)) {
-
-                                    double count1 = item.getCount1();
-                                    double count2 = item.getCount2();
-                                    double price = item.getPrice();
-                                    mGiftCount1 = item.getGiftCount1();
-                                    mGiftCount2 = item.getGiftCount2();
-                                    double discount = item.getDiscount();
-                                    double sumCountBaJoz = item.getSumCountBaJoz();
-
-                                    //insert gift
-                                    OrderDetailClientId++;
-                                    item.setOrderDetailClientId(OrderDetailClientId);
-                                    item.setOrderClientId(OrderClientId);
-                                    item.setGiftCount1(mGiftCount1);
-                                    item.setGiftCount2(mGiftCount2);
-                                    item.setCount1(0);
-                                    item.setCount2(0);
-                                    item.setPrice("0");
-                                    item.setDiscount(0);
-                                    item.setSumCountBaJoz(0);
-                                    db.AddOrderDetail(item);
-
-                                    OrderDetailClientId++;
-                                    item.setOrderDetailClientId(OrderDetailClientId);
-                                    item.setOrderClientId(OrderClientId);
-                                    item.setCount1(count1);
-                                    item.setCount2(count2);
-                                    item.setPrice("" + price);
-                                    item.setSumCountBaJoz(sumCountBaJoz);
-                                    item.setGiftCount1(0);
-                                    item.setGiftCount2(0);
-                                    item.setGiftType(0);
-                                    item.setDiscount(discount);
-                                    item.setOrderId((int) order.getId());
-                                    db.AddOrderDetail(item);
-
-                                    //for reduce
-                                    item.setCount1(count1);
-                                    item.setCount2(count2);
-                                    item.setGiftCount1(mGiftCount1);
-                                    item.setGiftCount2(mGiftCount2);
-
-                                    if (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext)) {
-                                        reduceAsset(item, orderDetailProperties);
-                                    } else if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE) {
-                                        reduceAsset(item, orderDetailProperties);
-                                    }
-
-                                } else if ((item.getCount1() == 0 && item.getCount2() == 0) && (item.getGiftCount1() > 0 || item.getGiftCount2() > 0)) {
-
-                                    OrderDetailClientId++;
-                                    item.setOrderDetailClientId(OrderDetailClientId);
-                                    item.setOrderId((int) order.getId());
-                                    item.setOrderClientId(OrderClientId);
-
-                                    mGiftCount1 = item.getGiftCount1();
-                                    mGiftCount2 = item.getGiftCount2();
-
-                                    item.setGiftCount1(mGiftCount1);
-                                    item.setGiftCount2(mGiftCount2);
-
-                                    item.setCount1(0);
-                                    item.setCount2(0);
-                                    item.setPrice("0");
-
-                                    db.AddOrderDetail(item);
-                                    if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE) {
                                         reduceAsset(item, orderDetailProperties);
                                     }
                                 }
@@ -851,10 +694,6 @@ public class InvoiceDetailActivity extends BaseActivity {
             if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE || (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext))) {
                 if (orderDetailProperties.size() > 0) {
                     for (OrderDetailProperty orderDetailProperty : orderDetailProperties) {
-                        if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), mContext) > 0) {
-                            productDetail.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail) + (orderDetail.getGiftCount1()));
-                            productDetail.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail) + (orderDetail.getGiftCount2()));
-                        }
 
                         productDetail.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail) + orderDetailProperty.getCount1());
                         productDetail.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail) + orderDetailProperty.getCount2());
@@ -862,10 +701,6 @@ public class InvoiceDetailActivity extends BaseActivity {
                         db.UpdateProductDetail(productDetail);
                     }
                     db.DeleteOrderDetailProperty(order.getId());
-                }
-                if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), mContext) > 0) {
-                    productDetail.setCount1(productDetail.getCount1() + orderDetail.getGiftCount1());
-                    productDetail.setCount2(productDetail.getCount2() + orderDetail.getGiftCount2());
                 }
 
                 productDetail.setCount1(productDetail.getCount1() + orderDetail.getSumCountBaJoz());
@@ -892,8 +727,8 @@ public class InvoiceDetailActivity extends BaseActivity {
                 } else
                     db.UpdateOrderDetailPropertyWithOrderid(OrderId, orderDetailProperty);
 
-                remainCount1 = productDetail.getCount1() - (item.getGiftCount1() + orderDetailProperty.getSumCountBaJoz());
-                remainCount2 = productDetail.getCount2() - (item.getGiftCount2() + orderDetailProperty.getCount2());
+                remainCount1 = productDetail.getCount1() - ( orderDetailProperty.getSumCountBaJoz());
+                remainCount2 = productDetail.getCount2() - ( orderDetailProperty.getCount2());
 
                 productDetail.setCount1(remainCount1);
                 productDetail.setCount2(remainCount2);
@@ -903,8 +738,8 @@ public class InvoiceDetailActivity extends BaseActivity {
             }
         } else {
             productDetail = db.getProductDetail(item.getProductDetailId());
-            productDetail.setCount1(productDetail.getCount1() - (item.getGiftCount1() + item.getSumCountBaJoz()));
-            productDetail.setCount2(productDetail.getCount2() - (item.getGiftCount2() + item.getCount2()));
+            productDetail.setCount1(productDetail.getCount1() - ( item.getSumCountBaJoz()));
+            productDetail.setCount2(productDetail.getCount2() - ( item.getCount2()));
             db.UpdateProductDetail(productDetail);
         }
     }
@@ -933,23 +768,11 @@ public class InvoiceDetailActivity extends BaseActivity {
             }
         } else {
             productDetail = db.getProductDetail(item.getProductDetailId());
-            if (ServiceTools.getSumGiftCount12(item.getGiftCount1(), item.getGiftCount2(), mContext) > 0) {
+            remainCount1 = productDetail.getCount1() - item.getSumCountBaJoz();
+            remainCount2 = productDetail.getCount2() - item.getCount2();
 
-                remainCount1 = productDetail.getCount1() - (item.getSumCountBaJoz() + ServiceTools.getSumGiftCount12(item.getGiftCount1(), item.getGiftCount2(), mContext));
-                remainCount2 = productDetail.getCount2() - item.getCount2();
-
-                productDetail.setCount1(remainCount1);
-                productDetail.setCount2(remainCount2);
-
-
-            } else {
-
-                remainCount1 = productDetail.getCount1() - item.getSumCountBaJoz();
-                remainCount2 = productDetail.getCount2() - item.getCount2();
-
-                productDetail.setCount1(remainCount1);
-                productDetail.setCount2(remainCount2);
-            }
+            productDetail.setCount1(remainCount1);
+            productDetail.setCount2(remainCount2);
         }
         if (BaseActivity.getPrefUnit2Setting(mContext) == MODE_YekVahedi)
             return remainCount1 >= 0;
@@ -964,8 +787,8 @@ public class InvoiceDetailActivity extends BaseActivity {
         for (OrderDetail item : orderDetails) {
             productDetail = db.getProductDetail(item.getProductDetailId());
             product = db.GetProductWithProductId(productDetail.getProductId());
-            if (item.getSumCountBaJoz() + ServiceTools.getSumGiftCount12(item.getGiftCount1(), item.getGiftCount2(), mContext) > 0) {
-                if (productDetail.getCount1() - (item.getSumCountBaJoz() + ServiceTools.getSumGiftCount12(item.getGiftCount1(), item.getGiftCount2(), mContext)) >= 0) {
+            if (item.getSumCountBaJoz()  > 0) {
+                if (productDetail.getCount1() - (item.getSumCountBaJoz()) >= 0) {
                     return true;
                 }
             }

@@ -151,6 +151,8 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
     private ListView _lstGroupedTax;
     private int printerBrand;
 
+    int promoKalaCode = 0;
+
     private static boolean promotionAvailable = false;
 
     public InvoiceGoodsDetail() {
@@ -552,7 +554,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         db.close();
     }
 
-    @Override
+    /*@Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (this.isVisible()) {
@@ -560,7 +562,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                 refreshCalculation();
             }
         }
-    }
+    }*/
 
     private void refreshCalculation() {
         CalculationTotal();
@@ -911,7 +913,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             //TotalWeightWithoutGift += product.getWeight() * orderDetail.getSumCountBaJoz();
             TotalOff += off;
             totalTaxAndCharge += TaxAndCharge;
-            TotalCount += orderDetail.getSumCountBaJoz() + ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), getActivity());
+            TotalCount += orderDetail.getSumCountBaJoz() ;
             TotalCountWithoutGift += orderDetail.getSumCountBaJoz();
 
             if (OrderType != ProjectInfo.TYPE_RETURN_OF_SALE) {
@@ -1067,7 +1069,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 CommitPromoCode.add(mPromoCode);
-                                                giftFromSameProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                             case Promotion.eshantion_Az_kalahaye_digar:
                                                 //gift az kalaye digar.
@@ -1081,7 +1083,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 CommitPromoCode.add(mPromoCode);
-                                                giftFromAnotherProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                         }
                                     }
@@ -1140,7 +1142,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 CommitPromoCode.add(mPromoCode);
-                                                giftFromSameProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                             case Promotion.eshantion_Az_kalahaye_digar:
                                                 //gift az kalaye digar.
@@ -1154,7 +1156,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 CommitPromoCode.add(mPromoCode);
-                                                giftFromAnotherProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                         }
                                     }
@@ -1210,7 +1212,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 CommitPromoCode.add(mPromoCode);
-                                                giftFromSameProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                             case Promotion.eshantion_Az_kalahaye_digar:
                                                 //gift az kalaye digar.
@@ -1224,7 +1226,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 CommitPromoCode.add(mPromoCode);
-                                                giftFromAnotherProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                         }
                                     }
@@ -1287,7 +1289,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 CommitPromoCode.add(mPromoCode);
-                                                giftFromSameProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                             case Promotion.eshantion_Az_kalahaye_digar:
                                                 //gift az kalaye digar.
@@ -1301,7 +1303,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 CommitPromoCode.add(mPromoCode);
-                                                giftFromAnotherProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                         }
                                     }
@@ -1359,7 +1361,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 CommitPromoCode.add(mPromoCode);
-                                                giftFromSameProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                             case Promotion.eshantion_Az_kalahaye_digar:
                                                 //gift az kalaye digar.
@@ -1371,7 +1373,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 CommitPromoCode.add(mPromoCode);
-                                                giftFromAnotherProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                         }
                                     }
@@ -1421,7 +1423,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 CommitPromoCode.add(mPromoCode);
-                                                giftFromSameProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                             case Promotion.eshantion_Az_kalahaye_digar:
                                                 //gift az kalaye digar.
@@ -1433,7 +1435,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 CommitPromoCode.add(mPromoCode);
-                                                giftFromAnotherProduct(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                         }
                                     }
@@ -1482,99 +1484,26 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         return customerPromotions;
     }
 
-    private void giftFromSameProduct(int mGiftCount1, int mGiftCount2, int kalaCode, int mPromoCode, ProductDetail productDetail) {
-        Product promoProduct;
-        promoProduct = db.getProductWithProductCode(kalaCode);
-        ProductDetail promoProductDetail = db.getProductDetailWithProductId(promoProduct.getProductId());
-        if (mGiftCount1 != 0) {
-            if (promoProduct.getProductId() == productDetail.getProductId()) {
-                mGiftCount1 += ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).getGiftCount1();
-                mGiftCount2 += ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).getGiftCount2();
-
-                ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).setGiftCount1(mGiftCount1);
-                ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).setGiftCount2(mGiftCount2);
-
-                ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).setPromotionCode(mPromoCode);
-                ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).setGiftType(Promotion.Eshantion_Tarhi);
-            } else {
-                if (ProductPickerListActivity.HashMap_Product.get(promoProduct.getProductId()) != null) {
-
-                    mGiftCount1 += ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).getGiftCount1();
-                    mGiftCount2 += ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).getGiftCount2();
-
-                    ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).setGiftCount1(mGiftCount1);
-                    ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).setGiftCount2(mGiftCount2);
-
-                    ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).setPromotionCode(mPromoCode);
-                    ProductPickerListActivity.HashMap_Product.get(promoProduct.getProductId()).setGiftType(Promotion.Eshantion_Tarhi);
-                } else {
-                    mGiftCount1 += mPromoObject.getGiftCount1();
-                    mGiftCount2 += mPromoObject.getGiftCount2();
-                    mPromoObject.setProductDetailId((int) promoProductDetail.getProductDetailId());
-                    mPromoObject.setProductId((int) promoProduct.getProductId());
-                    mPromoObject.setProductName(promoProduct.getName());
-                    mPromoObject.setMin((int) promoProduct.getMin());
-                    //mPromoObject.setMax((int)promoProduct.getAsset());
-                    mPromoObject.setPrice(String.valueOf(ServiceTools.getPriceFromPriceLevel(productDetail.getProductDetailId(), activity)));
-
-                    mPromoObject.setGiftCount1(mGiftCount1);
-                    mPromoObject.setGiftCount2(mGiftCount2);
-
-                    mPromoObject.setPromotionCode(mPromoCode);
-                    ProductPickerListActivity.HashMap_Product.put((int) promoProduct.getProductId(), mPromoObject);
-                    ProductPickerListActivity.HashMap_Product.get(promoProduct.getProductId()).setGiftType(Promotion.Eshantion_Tarhi);
-                    ProductPickerListActivity.HashMap_Product.put((int) promoProduct.getProductId(), mPromoObject);
-                    InvoiceDetailActivity.orderDetails.add(mPromoObject);
-                }
-            }
-        } else {
-            mGiftCount1 += ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).getGiftCount1();
-            mGiftCount2 += ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).getGiftCount2();
-
-            ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).setGiftCount1(mGiftCount1);
-            ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).setGiftCount2(mGiftCount2);
-
-            ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).setGiftType(0);
-            ProductPickerListActivity.HashMap_Product.get(productDetail.getProductId()).setPromotionCode(0);
+    private void productGift(int mGiftCount1, int mGiftCount2, int kalaCode, int mPromoCode, ProductDetail productDetail) {
+        if (promoKalaCode != kalaCode) {
+            promoKalaCode = kalaCode;
+            Product promoProduct;
+            promoProduct = db.getProductWithProductCode(kalaCode);
+            ProductDetail promoProductDetail = db.getProductDetailWithProductId(promoProduct.getProductId());
+            mPromoObject.setGiftType(Promotion.Eshantion_Tarhi);
+            mPromoObject.setProductDetailId( promoProductDetail.getProductDetailId());
+            mPromoObject.setProductId(promoProduct.getProductId());
+            mPromoObject.setProductName(promoProduct.getName());
+            mPromoObject.setMin((int) promoProduct.getMin());
+            mPromoObject.setPrice("0");
+            mPromoObject.setCount1(mGiftCount1);
+            mPromoObject.setSumCountBaJoz(mGiftCount1);
+            mPromoObject.setCount2(mGiftCount2);
+            mPromoObject.setPromotionCode(mPromoCode);
+            InvoiceDetailActivity.orderDetails.add(mPromoObject);
         }
     }
 
-    private void giftFromAnotherProduct(int mGiftCount1, int mGiftCount2, int kalaCode, int mPromoCode, ProductDetail productDetail) {
-        Product promoProduct;
-        promoProduct = db.getProductWithProductCode(kalaCode);
-        ProductDetail promoProductDetail = db.getProductDetailWithProductId(promoProduct.getProductId());
-        if (mGiftCount1 != 0) {
-            if (ProductPickerListActivity.HashMap_Product.get(promoProduct.getProductId()) != null) {
-                mGiftCount1 += ProductPickerListActivity.HashMap_Product.get(promoProduct.getProductId()).getGiftCount1();
-                mGiftCount2 += ProductPickerListActivity.HashMap_Product.get(promoProduct.getProductId()).getGiftCount2();
-
-                ProductPickerListActivity.HashMap_Product.get(promoProduct.getProductId()).setGiftCount1(mGiftCount1);
-                ProductPickerListActivity.HashMap_Product.get(promoProduct.getProductId()).setGiftCount2(mGiftCount2);
-
-                ProductPickerListActivity.HashMap_Product.get(promoProduct.getProductId()).setPromotionCode(mPromoCode);
-                ProductPickerListActivity.HashMap_Product.get(promoProduct.getProductId()).setGiftType(Promotion.Eshantion_Tarhi);
-            } else {
-
-                mGiftCount1 += mPromoObject.getGiftCount1();
-                mGiftCount2 += mPromoObject.getGiftCount2();
-
-                mPromoObject.setProductDetailId((int) promoProductDetail.getProductDetailId());
-                mPromoObject.setProductId((int) promoProduct.getProductId());
-                mPromoObject.setProductName(promoProduct.getName());
-                mPromoObject.setMin((int) promoProduct.getMin());
-                mPromoObject.setPrice(String.valueOf(ServiceTools.getPriceFromPriceLevel(productDetail.getProductDetailId(), activity)));
-
-                mPromoObject.setGiftCount1(mGiftCount1);
-                mPromoObject.setGiftCount2(mGiftCount2);
-
-                mPromoObject.setPromotionCode(mPromoCode);
-                ProductPickerListActivity.HashMap_Product.put((int) promoProduct.getProductId(), mPromoObject);
-                ProductPickerListActivity.HashMap_Product.get(promoProduct.getProductId()).setGiftType(Promotion.Eshantion_Tarhi);
-                ProductPickerListActivity.HashMap_Product.put((int) promoProduct.getProductId(), mPromoObject);
-                InvoiceDetailActivity.orderDetails.add(mPromoObject);
-            }
-        }
-    }
 
     private void rowPercentOff(double offPercent, int mPromoCode, Product product) {
         OrderDetail orderDetail = ProductPickerListActivity.HashMap_Product.get(product.getProductId());
@@ -1648,8 +1577,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             for (Object aMapSet : mapSet) {
                 Map.Entry mapEntry = (Map.Entry) aMapSet;
                 OrderDetail object = (OrderDetail) mapEntry.getValue();
-                object.setGiftCount1(0);
-                object.setGiftCount2(0);
             }// End of While
         }
         CommitPromoCode.clear();
@@ -1683,8 +1610,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         while (mapIterator.hasNext()) {
             Map.Entry mapEntry = (Map.Entry) mapIterator.next();
             OrderDetail orderDetail = (OrderDetail) mapEntry.getValue();
-            orderDetail.setGiftCount1(0);
-            orderDetail.setGiftCount2(0);
             if (orderDetail.getCount1() == 0 && orderDetail.getCount2() == 0 && orderDetail.getSumCountBaJoz() == 0) {
                 mapIterator.remove();
                 ProductPickerListActivity.Product_Delete.add(orderDetail);
@@ -1700,7 +1625,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         while (mapIterator.hasNext()) {
             Map.Entry mapEntry = (Map.Entry) mapIterator.next();
             OrderDetail orderDetail = (OrderDetail) mapEntry.getValue();
-            if (orderDetail.getCount1() == 0 && ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), getActivity()) == 0 && orderDetail.getCount2() == 0 && orderDetail.getSumCountBaJoz() == 0) {
+            if (orderDetail.getCount1() == 0 && orderDetail.getCount2() == 0 && orderDetail.getSumCountBaJoz() == 0) {
                 mapIterator.remove();
                 InvoiceDetailActivity.orderDetails.remove(orderDetail);
             }
@@ -1715,21 +1640,11 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             while (mapIterator.hasNext()) {
                 Map.Entry mapEntry = (Map.Entry) mapIterator.next();
                 OrderDetail orderDetail = (OrderDetail) mapEntry.getValue();
-                if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), getActivity()) != 0)
                     if (orderDetail.getCount1() == 0 && orderDetail.getCount2() == 0 && orderDetail.getSumCountBaJoz() == 0) {
                         mapIterator.remove();
                         ProductPickerListActivity.Product_Delete.add(orderDetail);
                         InvoiceDetailActivity.orderDetails.remove(orderDetail);
-                    } else {
-                        orderDetail.setGiftCount1(0);
-                        orderDetail.setGiftCount2(0);
                     }
-
-                if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), getActivity()) == 0 && orderDetail.getCount1() == 0 && orderDetail.getCount2() == 0 && orderDetail.getSumCountBaJoz() == 0) {
-                    mapIterator.remove();
-                    ProductPickerListActivity.Product_Delete.add(orderDetail);
-                    InvoiceDetailActivity.orderDetails.remove(orderDetail);
-                }
             }// End of While
             /////////////////////////////////////////////////////////
     }

@@ -10,7 +10,9 @@
         <entry key="app/src/main/res/layout-de/factor_print_template.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/layout-de/fragment_item_product_gallery.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout-de/grv_product_picker_item.xml" value="0.2296875" />
+        <entry key="app/src/main/res/layout-de/lst_order_detail.xml" value="0.33" />
         <entry key="app/src/main/res/layout-de/lst_product_picker_item.xml" value="0.2296875" />
+        <entry key="app/src/main/res/layout-de/promotion_picker_item.xml" value="0.33" />
         <entry key="app/src/main/res/layout-de/receipt_print_arabic.xml" value="0.5" />
         <entry key="app/src/main/res/layout-de/receipt_print_arabic50mm.xml" value="0.67" />
         <entry key="app/src/main/res/layout-de/receipt_print_arabic80mm.xml" value="0.33" />

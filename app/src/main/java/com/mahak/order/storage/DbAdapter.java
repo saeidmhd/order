@@ -747,8 +747,6 @@ public class DbAdapter {
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Count2, orderDetail.getCount2());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderDetailClientId, orderDetail.getOrderDetailClientId());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderClientId, orderDetail.getOrderClientId());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftCount1, orderDetail.getGiftCount1());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftCount2, orderDetail.getGiftCount2());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftType, orderDetail.getGiftType());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Description, orderDetail.getDescription());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_TaxPercent, orderDetail.getTaxPercent());
@@ -922,8 +920,6 @@ public class DbAdapter {
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Count1, orderDetail.getCount1());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Count2, orderDetail.getCount2());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz, orderDetail.getSumCountBaJoz());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftCount1, orderDetail.getGiftCount1());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftCount2, orderDetail.getGiftCount2());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftType, orderDetail.getGiftType());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Description, orderDetail.getDescription());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_TaxPercent, orderDetail.getTaxPercent());
@@ -2912,8 +2908,6 @@ public class DbAdapter {
                     orderDetail.setSumCountBaJoz(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz)));
                     // orderDetail.setCount2(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PackageCount)));
                     orderDetail.setPrice(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Price)));
-                    orderDetail.setGiftCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftCount1)));
-                    orderDetail.setGiftCount2(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftCount2)));
                     orderDetail.setGiftType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftType)));
                     orderDetail.setDescription(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Description)));
                     //orderDetail.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PUBLISH)));
@@ -2966,8 +2960,6 @@ public class DbAdapter {
                     orderDetail.setSumCountBaJoz(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz)));
                     // orderDetail.setCount2(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PackageCount)));
                     orderDetail.setPrice(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Price)));
-                    orderDetail.setGiftCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftCount1)));
-                    orderDetail.setGiftCount2(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftCount2)));
                     orderDetail.setGiftType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftType)));
                     orderDetail.setDescription(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Description)));
                     //orderDetail.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PUBLISH)));
@@ -3017,8 +3009,6 @@ public class DbAdapter {
                     orderDetail.setSumCountBaJoz(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz)));
                     // orderDetail.setCount2(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PackageCount)));
                     orderDetail.setPrice(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Price)));
-                    orderDetail.setGiftCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftCount1)));
-                    orderDetail.setGiftCount2(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftCount2)));
                     orderDetail.setGiftType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftType)));
                     orderDetail.setDescription(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Description)));
                     //orderDetail.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PUBLISH)));
@@ -3094,8 +3084,6 @@ public class DbAdapter {
                     orderDetail.setSumCountBaJoz(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz)));
                     // orderDetail.setCount2(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PackageCount)));
                     orderDetail.setPrice(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Price)));
-                    orderDetail.setGiftCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftCount1)));
-                    orderDetail.setGiftCount2(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftCount2)));
                     orderDetail.setGiftType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftType)));
                     orderDetail.setDescription(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Description)));
                     //orderDetail.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PUBLISH)));
@@ -3974,8 +3962,6 @@ public class DbAdapter {
                     orderDetail.setCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Count1)));
                     orderDetail.setCount2(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Count2)));
                     orderDetail.setSumCountBaJoz(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz)));
-                    orderDetail.setGiftCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftCount1)));
-                    orderDetail.setGiftCount2(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftCount2)));
                     orderDetail.setGiftType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftType)));
                     orderDetail.setDescription(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Description)));
                     orderDetail.setTaxPercent(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_TaxPercent)));
@@ -4056,8 +4042,6 @@ public class DbAdapter {
                     orderDetail.setCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Count1)));
                     orderDetail.setCount2(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Count2)));
                     orderDetail.setSumCountBaJoz(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz)));
-                    orderDetail.setGiftCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftCount1)));
-                    orderDetail.setGiftCount2(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftCount2)));
                     orderDetail.setGiftType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftType)));
                     orderDetail.setDescription(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Description)));
                     orderDetail.setTaxPercent(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_TaxPercent)));
@@ -10184,8 +10168,6 @@ public class DbAdapter {
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Price, orderDetail.getPrice());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Count1, orderDetail.getCount1());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Count2, orderDetail.getCount2());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftCount2, orderDetail.getGiftCount2());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftCount1, orderDetail.getGiftCount1());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftType, orderDetail.getGiftType());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Description, orderDetail.getDescription());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_TaxPercent, orderDetail.getTaxPercent());
@@ -10218,8 +10200,6 @@ public class DbAdapter {
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Count1, orderDetail.getCount1());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz, orderDetail.getSumCountBaJoz());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Count2, orderDetail.getCount2());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftCount1, orderDetail.getGiftCount1());
-        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftCount2, orderDetail.getGiftCount2());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftType, orderDetail.getGiftType());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Description, orderDetail.getDescription());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_TaxPercent, orderDetail.getTaxPercent());
@@ -10252,8 +10232,6 @@ public class DbAdapter {
 //        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Count1, orderDetail.getCount1());
 //        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz, orderDetail.getSumCountBaJoz());
 //        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Count2, orderDetail.getCount2());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftCount1, orderDetail.getGiftCount1());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftCount2, orderDetail.getGiftCount2());
 //        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftType, orderDetail.getGiftType());
 //        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Description, orderDetail.getDescription());
 //        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_TaxPercent, orderDetail.getTaxPercent());

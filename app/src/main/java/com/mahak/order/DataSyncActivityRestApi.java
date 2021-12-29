@@ -288,8 +288,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
         orderDetailSend.setDiscountType(orderDetail.getDiscountType());
         orderDetailSend.setDiscount(orderDetail.getDiscount());
         orderDetailSend.setPrice("" + orderDetail.getPrice());
-        orderDetailSend.setGiftCount1(orderDetail.getGiftCount1());
-        orderDetailSend.setGiftCount2(orderDetail.getGiftCount2());
         orderDetailSend.setGiftType(orderDetail.getGiftType());
         orderDetailSend.setTaxPercent(orderDetail.getTaxPercent());
         orderDetailSend.setChargePercent(orderDetail.getChargePercent());
@@ -520,10 +518,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 arrayInvoice.get(i).setOrderId(0);
                 orderDetails = db.getAllOrderDetailForSend(arrayInvoice.get(i).getId());
                 for (OrderDetail orderDetail : orderDetails) {
-                    if ((orderDetail.getGiftCount1() > 0 || orderDetail.getGiftCount2() > 0)) {
-                        orderDetail.setCount1(orderDetail.getGiftCount1());
-                        orderDetail.setCount2(orderDetail.getGiftCount2());
-                    }
                     orderDetailProperties = db.getAllOrderDetailProperty(orderDetail.getOrderId(), orderDetail.getProductId());
                     if (orderDetailProperties.size() > 0) {
                         for (OrderDetailProperty orderDetailProperty : orderDetailProperties) {

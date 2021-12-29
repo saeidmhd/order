@@ -710,7 +710,7 @@ public class ProductPickerListActivity extends BaseActivity {
             OrderDetail orderDetail = (OrderDetail) mapEntry.getValue();
             Price = orderDetail.getPrice();
             TotalPrice += Price * orderDetail.getSumCountBaJoz();
-            TotalCount += orderDetail.getSumCountBaJoz() + ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), mContext);
+            TotalCount += orderDetail.getSumCountBaJoz();
 
         }// End of While
         tvTotalCount.setText(formatCount(TotalCount));
@@ -728,7 +728,7 @@ public class ProductPickerListActivity extends BaseActivity {
             Map.Entry mapEntry = (Map.Entry) mapIterator.next();
             int keyValue = (int) mapEntry.getKey();
             OrderDetail orderDetail = (OrderDetail) mapEntry.getValue();
-            TotalCount += orderDetail.getSumCountBaJoz() + ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), mContext);
+            TotalCount += orderDetail.getSumCountBaJoz() ;
 
         }// End of While
         tvTotalCount.setText(formatCount(TotalCount));
@@ -748,7 +748,7 @@ public class ProductPickerListActivity extends BaseActivity {
             Map.Entry mapEntry = (Map.Entry) mapIterator.next();
             int keyValue = (int) mapEntry.getKey();
             OrderDetail orderDetail = (OrderDetail) mapEntry.getValue();
-            if (ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), mContext) == 0 && orderDetail.getCount1() == 0 && orderDetail.getCount2() == 0)
+            if (orderDetail.getCount1() == 0 && orderDetail.getCount2() == 0)
                 mapIterator.remove();
 
         }// End of While
@@ -829,7 +829,7 @@ public class ProductPickerListActivity extends BaseActivity {
                     if (item.getProductId() == object.getProductId()) {
                         ArrayList<ProductDetail> productDetails = db.getAllProductDetailWithProductId(item.getProductId());
                         for (ProductDetail productDetail : productDetails) {
-                            double asset = productDetail.getCount1() + object.getSumCountBaJoz() + ServiceTools.getSumGiftCount12(object.getGiftCount1(), object.getGiftCount2(), mContext);
+                            double asset = productDetail.getCount1() + object.getSumCountBaJoz();
                             productDetail.setCount1(asset);
                         }
                         break;
@@ -915,7 +915,6 @@ public class ProductPickerListActivity extends BaseActivity {
                             Long keyValue = (Long) mapEntry.getKey();
                             if (SelectedProductId == keyValue) {
                                 item = (OrderDetail) mapEntry.getValue();
-                                Gift = ServiceTools.getSumGiftCount12(item.getGiftCount1(), item.getGiftCount2(), mContext);
                                 Count = item.getCount1();
                                 break;
                             }// End of if
@@ -942,7 +941,6 @@ public class ProductPickerListActivity extends BaseActivity {
                             if (SelectedProductId == keyValue) {
                                 item = (OrderDetail) mapEntry.getValue();
                                 Count = item.getCount1();
-                                Gift = ServiceTools.getSumGiftCount12(item.getGiftCount1(), item.getGiftCount2(), mContext);
                                 break;
                             }// End of if
                         }// End of While
@@ -1021,7 +1019,6 @@ public class ProductPickerListActivity extends BaseActivity {
                         if (ProcId == keyValue) {
                             item = (OrderDetail) mapEntry.getValue();
                             txtCount.setText(formatCount(item.getCount1()));
-                            btnGift.setText(String.valueOf(ServiceTools.getSumGiftCount12(item.getGiftCount1(), item.getGiftCount2(), mContext)));
                             res = true;
                             break;
                         }// End of if
@@ -1192,7 +1189,6 @@ public class ProductPickerListActivity extends BaseActivity {
                             Long keyValue = (Long) mapEntry.getKey();
                             if (SelectedProductId == keyValue) {
                                 item = (OrderDetail) mapEntry.getValue();
-                                Gift = ServiceTools.getSumGiftCount12(item.getGiftCount1(), item.getGiftCount2(), mContext);
                                 Count = item.getCount1();
                                 break;
                             }// End of if
@@ -1220,7 +1216,6 @@ public class ProductPickerListActivity extends BaseActivity {
                             if (SelectedProductId == keyValue) {
                                 item = (OrderDetail) mapEntry.getValue();
                                 Count = item.getCount1();
-                                Gift = ServiceTools.getSumGiftCount12(item.getGiftCount1(), item.getGiftCount2(), mContext);
                                 break;
                             }// End of if
                         }// End of While
@@ -1294,7 +1289,6 @@ public class ProductPickerListActivity extends BaseActivity {
                         if (ProcId == keyValue) {
                             item = (OrderDetail) mapEntry.getValue();
                             btnCount.setText(formatCount(item.getCount1()));
-                            btnGift.setText(formatCount(ServiceTools.getSumGiftCount12(item.getGiftCount1(), item.getGiftCount2(), mContext)));
                             res = true;
                             break;
                         }// End of if

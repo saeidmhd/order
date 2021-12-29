@@ -396,8 +396,8 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     db.open();
                     OrderDetail orderDetail = db.GetOrderDetailWithId(item.getId());
                     if (type == ProjectInfo.TYPE_INVOCIE || (type == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext))) {
-                        SumCount1 += orderDetail.getCount1() + orderDetail.getGiftCount1();
-                        SumCount2 += orderDetail.getCount2() + orderDetail.getGiftCount1();
+                        SumCount1 += orderDetail.getCount1() ;
+                        SumCount2 += orderDetail.getCount2() ;
                         holder.tvAsset.setText(ServiceTools.formatCount(SumCount1));
                         holder.tvAsset2.setText(ServiceTools.formatCount(SumCount2));
                     } else {
@@ -407,7 +407,6 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     holder.txtCount.setText(ServiceTools.formatCount(item.getCount1()));
                     holder.txtTotalCount.setText(ServiceTools.formatCount(item.getCount2()));
                     holder.tvPrice.setText(ServiceTools.formatPrice(item.getPrice()));
-                    holder.txtTotalGift.setText(ServiceTools.formatCount(ServiceTools.getSumGiftCount12(item.getGiftCount1(), item.getGiftCount2(), mContext)));
                     res = true;
                     break;
                 }// End of if
@@ -491,7 +490,6 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     item.setDiscount(ServiceTools.toDouble(discount));*/
 
                 //item.setCostLevel(selectedItemPosition);
-                item.setDescription(description);
 
                 if (BaseActivity.getPrefTaxAndChargeIsActive().equals(BaseActivity.Active))
                     item.setTaxPercent(ServiceTools.getTax(product));
@@ -507,7 +505,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     double FinalPrice = ServiceTools.getCalculateFinalPrice(item, mContext);
                     item.setFinalPrice(String.valueOf(FinalPrice));
                 }
-                if(item.getSumCountBaJoz() > 0 || item.getGiftCount1() > 0)
+                if(item.getSumCountBaJoz() > 0)
                     ProductPickerListActivity.HashMap_Product.put(product.getProductId(), item);
                 else{
                     ProductPickerListActivity.HashMap_Product.remove(product.getProductId());
@@ -548,7 +546,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                 /*if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible))
                     object.setDiscount(ServiceTools.toDouble(discount));*/
 
-                object.setDescription(description);
+                //object.setDescription(description);
                // object.setCostLevel(selectedItemPosition);
 
                 if (BaseActivity.getPrefTaxAndChargeIsActive().equals(BaseActivity.Active))

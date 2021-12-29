@@ -156,8 +156,6 @@ public class AutoSyncService extends IntentService {
         orderDetailSend.setDiscountType(orderDetail.getDiscountType());
         orderDetailSend.setDiscount(orderDetail.getDiscount());
         orderDetailSend.setPrice("" + orderDetail.getPrice());
-        orderDetailSend.setGiftCount1(orderDetail.getGiftCount1());
-        orderDetailSend.setGiftCount2(orderDetail.getGiftCount2());
         orderDetailSend.setGiftType(orderDetail.getGiftType());
         orderDetailSend.setTaxPercent(orderDetail.getTaxPercent());
         orderDetailSend.setChargePercent(orderDetail.getChargePercent());

@@ -712,11 +712,11 @@ public class ServiceTools {
     }
 
     public static double getExistCount1(OrderDetail orderDetail, ProductDetail productDetail) {
-        return orderDetail.getSumCountBaJoz() + productDetail.getCount1() + orderDetail.getGiftCount1();
+        return orderDetail.getSumCountBaJoz() + productDetail.getCount1() ;
     }
 
     public static double getExistCount2(OrderDetail orderDetail, ProductDetail productDetail) {
-        return orderDetail.getCount2() + productDetail.getCount2() + orderDetail.getGiftCount2();
+        return orderDetail.getCount2() + productDetail.getCount2() ;
     }
 
     public static double getExistCount1Prop(OrderDetailProperty orderDetailProperty, ProductDetail productDetail) {

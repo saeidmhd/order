@@ -197,8 +197,6 @@ public class PDF_DE {
             TaxPercent = item.getTaxPercent();
             ChargePercent = item.getChargePercent();
             TotalCount += item.getSumCountBaJoz();
-            if (item.getPrice() == 0)
-                TotalCount += ServiceTools.getSumGiftCount12(item.getGiftCount1(), item.getGiftCount2(), mContext);
             PackageCount += item.getCount2();
             TotalPrice += Price;
             off = (offValue * 1);

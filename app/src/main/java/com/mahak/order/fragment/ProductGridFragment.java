@@ -198,8 +198,6 @@ public class ProductGridFragment extends Fragment {
                         int keyValue = (int) mapEntry.getKey();
                         if (product.getProductId() == keyValue) {
                             item = (OrderDetail) mapEntry.getValue();
-                            GiftCount1 = item.getGiftCount1();
-                            GiftCount2 = item.getGiftCount2();
                             Count = item.getCount1();
                             break;
                         }// End of if
@@ -309,7 +307,6 @@ public class ProductGridFragment extends Fragment {
                         if (ProcId == keyValue) {
                             item = (OrderDetail) mapEntry.getValue();
                             txtCount.setText(formatCount(item.getCount1()));
-                            txtTotalGift.setText(formatCount(ServiceTools.getSumGiftCount12(item.getGiftCount1(), item.getGiftCount2(), getActivity())));
                             res = true;
                             break;
                         }// End of if

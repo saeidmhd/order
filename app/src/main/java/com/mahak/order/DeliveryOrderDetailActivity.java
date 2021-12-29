@@ -260,10 +260,6 @@ public class DeliveryOrderDetailActivity extends BaseActivity {
                 tvFee.setText(ServiceTools.formatPrice(orderDetail.getPrice()));
                 tvPrice.setText(ServiceTools.formatPrice(TotalPrice));
                 tvFinalPriceProduct.setText(ServiceTools.formatPrice(Price));
-                if (orderDetail.getGiftCount1() > 0) {
-                    tvGift.setVisibility(View.VISIBLE);
-                    tvGift.setText(String.valueOf(orderDetail.getGiftCount1()));
-                }
                 tvCount.setText(ServiceTools.formatCount(orderDetail.getSumCountBaJoz()));
                 tvNumber.setText(String.valueOf(position + 1));
                 tvOff.setText(ServiceTools.formatPrice(off));

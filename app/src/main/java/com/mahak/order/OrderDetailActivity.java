@@ -432,8 +432,6 @@ public class OrderDetailActivity extends BaseActivity {
         orderDetailSend.setDiscountType(orderDetail.getDiscountType());
         orderDetailSend.setDiscount(orderDetail.getDiscount());
         orderDetailSend.setPrice("" + orderDetail.getPrice());
-        orderDetailSend.setGiftCount1(orderDetail.getGiftCount1());
-        orderDetailSend.setGiftCount2(orderDetail.getGiftCount2());
         orderDetailSend.setGiftType(orderDetail.getGiftType());
         orderDetailSend.setTaxPercent(orderDetail.getTaxPercent());
         orderDetailSend.setChargePercent(orderDetail.getChargePercent());
@@ -993,8 +991,6 @@ public class OrderDetailActivity extends BaseActivity {
             TaxPercent = item.getTaxPercent();
             ChargePercent = item.getChargePercent();
             TotalCount += item.getSumCountBaJoz();
-            if (item.getPrice() == 0)
-                TotalCount += ServiceTools.getSumGiftCount12(item.getGiftCount1(), item.getGiftCount2(), mContext);
             PackageCount += item.getCount2();
             TotalPrice += Price;
             off = (offValue * 1);
@@ -1118,13 +1114,8 @@ public class OrderDetailActivity extends BaseActivity {
                     tvFinalPriceProduct.setText(ServiceTools.formatPrice(finalPrice));
 
                     //TotalPrice == 0
-                    if (orderDetail.getCount1() == 0 && orderDetail.getCount2() == 0) {
-                        tvPrice.setText(R.string.str_gift);
-                        tvCount.setText(formatCount(ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), mContext)));
-                    } else {
-                        tvPrice.setText(ServiceTools.formatPrice(TotalPrice));
-                        tvCount.setText(formatCount(orderDetail.getSumCountBaJoz()));
-                    }
+                    tvPrice.setText(ServiceTools.formatPrice(TotalPrice));
+                    tvCount.setText(formatCount(orderDetail.getSumCountBaJoz()));
 
                     ArrayList<OrderDetailProperty> orderDetailProperties = db.getAllOrderDetailProperty(orderDetail.getOrderId(), orderDetail.getProductId());
                     if (orderDetailProperties.size() > 0) {
@@ -1296,9 +1287,7 @@ public class OrderDetailActivity extends BaseActivity {
                     tvPrice.setVisibility(View.GONE);
                 }
 
-                if (orderDetail.getCount1() == 0 && orderDetail.getCount2() == 0 && orderDetail.getSumCountBaJoz() == 0)
-                    tvCount.setText(formatCount(ServiceTools.getSumGiftCount12(orderDetail.getGiftCount1(), orderDetail.getGiftCount2(), mContext)));
-                else if (orderDetail.getSumCountBaJoz() > 0) {
+                if (orderDetail.getSumCountBaJoz() > 0) {
                     tvCount.setText(formatCount(orderDetail.getSumCountBaJoz()));
                 }
                 if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW ||
