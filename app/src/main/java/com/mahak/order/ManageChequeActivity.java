@@ -328,7 +328,7 @@ public class ManageChequeActivity extends BaseActivity {
                                 if (Type == ProjectInfo.CHEQUE_TYPE)
                                     ManageReceiptActivity.arrayCheque.get(PositionArray).setBankId(null);
                                 else if (Type == ProjectInfo.CASHRECEIPT_TYPE)
-                                    ManageReceiptActivity.arrayCheque.get(PositionArray).setBankId(String.valueOf(bank.getId()));
+                                    ManageReceiptActivity.arrayCheque.get(PositionArray).setBankId(String.valueOf(bank.getBankId()));
 
                                 ManageReceiptActivity.arrayCheque.get(PositionArray).setBankName(bank.getName());
                             }

@@ -38,6 +38,7 @@
         <entry key="app/src/main/res/layout/factor_print_template_80mm_fii_compact.xml" value="0.67" />
         <entry key="app/src/main/res/layout/factor_print_template_compact.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/layout/fragment_invoice_goods_detail.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_invoice_promotion_detail.xml" value="0.20416666666666666" />
         <entry key="app/src/main/res/layout/fragment_item_product_gallery.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout/fragment_products_list3.xml" value="0.16286727456940223" />
         <entry key="app/src/main/res/layout/grv_product_picker_item.xml" value="0.5" />

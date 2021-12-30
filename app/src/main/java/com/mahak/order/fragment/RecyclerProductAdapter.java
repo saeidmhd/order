@@ -644,7 +644,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     item.setDiscount(ServiceTools.toDouble(discount));
 
                 item.setCostLevel(selectedItemPosition);
-                item.setDescription(description);
+                //item.setDescription(description);
 
                 if (BaseActivity.getPrefTaxAndChargeIsActive().equals(BaseActivity.Active))
                     item.setTaxPercent(ServiceTools.getTax(product));
@@ -696,7 +696,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                 if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible))
                     object.setDiscount(ServiceTools.toDouble(discount));
 
-                object.setDescription(description);
+                //object.setDescription(description);
                 object.setCostLevel(selectedItemPosition);
 
                 if (BaseActivity.getPrefTaxAndChargeIsActive().equals(BaseActivity.Active))

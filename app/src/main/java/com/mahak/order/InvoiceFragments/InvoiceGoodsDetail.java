@@ -82,6 +82,7 @@ import static com.mahak.order.BaseActivity.TYPE_KEY;
 import static com.mahak.order.BaseActivity.eshantion_dasti;
 import static com.mahak.order.InvoiceDetailActivity.CommitPromoCode;
 import static com.mahak.order.InvoiceDetailActivity.CustomerId;
+import static com.mahak.order.InvoiceDetailActivity.Description;
 import static com.mahak.order.InvoiceDetailActivity.Discount;
 import static com.mahak.order.InvoiceDetailActivity.FinalPrice;
 import static com.mahak.order.InvoiceDetailActivity.GroupId;
@@ -554,7 +555,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         db.close();
     }
 
-    /*@Override
+    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (this.isVisible()) {
@@ -562,7 +563,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                 refreshCalculation();
             }
         }
-    }*/
+    }
 
     private void refreshCalculation() {
         CalculationTotal();
@@ -729,6 +730,8 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
 
             void Populate(OrderDetail orderDetail, int position) {
 
+                if(TextUtils.isEmpty(orderDetail.getDescription()))
+                    llDescription.setVisibility(View.GONE);
 
                 if (OrderType == ProjectInfo.TYPE_SEND_TRANSFERENCE || OrderType == ProjectInfo.TYPE_RETURN_OF_SALE) {
 
@@ -772,14 +775,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                     tvDescription.setText(orderDetail.getDescription());
                     tvOff.setText(ServiceTools.formatPrice(off));
                     tvChargeAndTax.setText(ServiceTools.formatPrice(TaxAndCharge));
-                }
-
-                String Description = orderDetail.getDescription();
-                if (Description != null) {
-                    if (Description.length() > 0)
-                        llDescription.setVisibility(View.VISIBLE);
-                    else
-                        llDescription.setVisibility(View.GONE);
                 }
             }
         }
@@ -1037,7 +1032,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 fixedDiscount = zarib * arrayPromotionDetail.get(0).getMeghdarPromotion();
                                                 howToPromotion = 3;
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 wholeFactorFixedDiscount(fixedDiscount, mPromoCode);
                                                 break;
                                             case Promotion.takhfif_darsadi:
@@ -1049,14 +1044,14 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 }
                                                 howToPromotion = 3;
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 wholeFactorPercentDiscount(percentDiscount, mPromoCode);
                                                 break;
                                             case Promotion.takhfif_Az_Sotooh:
                                                 offPercent = getDiscountFromDiscountLevel(arrayPromotionDetail.get(0).getMeghdarPromotion(), productDetail);
                                                 howToPromotion = 3;
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 rowPercentOff(offPercent, mPromoCode, product);
                                                 break;
                                             case Promotion.eshantion_Az_hamanKala:
@@ -1068,7 +1063,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                             case Promotion.eshantion_Az_kalahaye_digar:
@@ -1082,7 +1077,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                         }
@@ -1110,7 +1105,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 fixedDiscount = zarib * arrayPromotionDetail.get(0).getMeghdarPromotion();
                                                 howToPromotion = 3;
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 wholeFactorFixedDiscount(fixedDiscount, mPromoCode);
                                                 break;
                                             case Promotion.takhfif_darsadi:
@@ -1122,14 +1117,14 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 }
                                                 howToPromotion = 3;
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 wholeFactorPercentDiscount(percentDiscount, mPromoCode);
                                                 break;
                                             case Promotion.takhfif_Az_Sotooh:
                                                 offPercent = getDiscountFromDiscountLevel(arrayPromotionDetail.get(0).getMeghdarPromotion(), productDetail);
                                                 howToPromotion = 3;
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 rowPercentOff(offPercent, mPromoCode, product);
                                                 break;
                                             case Promotion.eshantion_Az_hamanKala:
@@ -1141,7 +1136,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                             case Promotion.eshantion_Az_kalahaye_digar:
@@ -1155,7 +1150,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                         }
@@ -1180,7 +1175,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 fixedDiscount = zarib * arrayPromotionDetail.get(0).getMeghdarPromotion();
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 3;
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 wholeFactorFixedDiscount(fixedDiscount, mPromoCode);
                                                 break;
                                             case Promotion.takhfif_darsadi:
@@ -1192,14 +1187,14 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 }
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 3;
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 wholeFactorPercentDiscount(percentDiscount, mPromoCode);
                                                 break;
                                             case Promotion.takhfif_Az_Sotooh:
                                                 offPercent = getDiscountFromDiscountLevel(arrayPromotionDetail.get(0).getMeghdarPromotion(), productDetail);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 3;
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 rowPercentOff(offPercent, mPromoCode, product);
                                                 break;
                                             case Promotion.eshantion_Az_hamanKala:
@@ -1211,7 +1206,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                             case Promotion.eshantion_Az_kalahaye_digar:
@@ -1225,7 +1220,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                         }
@@ -1257,7 +1252,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 fixedDiscount = zarib * arrayPromotionDetail.get(0).getMeghdarPromotion();
                                                 howToPromotion = 3;
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 wholeFactorFixedDiscount(fixedDiscount, mPromoCode);
                                                 break;
                                             case Promotion.takhfif_darsadi:
@@ -1269,14 +1264,14 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 }
                                                 howToPromotion = 3;
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 wholeFactorPercentDiscount(percentDiscount, mPromoCode);
                                                 break;
                                             case Promotion.takhfif_Az_Sotooh:
                                                 offPercent = getDiscountFromDiscountLevel(arrayPromotionDetail.get(0).getMeghdarPromotion(), productDetail);
                                                 howToPromotion = 3;
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 rowPercentOff(offPercent, mPromoCode, product);
                                                 break;
                                             case Promotion.eshantion_Az_hamanKala:
@@ -1288,7 +1283,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                             case Promotion.eshantion_Az_kalahaye_digar:
@@ -1302,7 +1297,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                         }
@@ -1328,7 +1323,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 fixedOff = zarib * arrayPromotionDetail.get(0).getMeghdarPromotion();
                                                 howToPromotion = 3;
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 rowFixedOff(fixedOff, mPromoCode, product);
                                                 break;
                                             case Promotion.takhfif_darsadi:
@@ -1340,14 +1335,14 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 }
                                                 howToPromotion = 3;
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 rowPercentOff(offPercent, mPromoCode, product);
                                                 break;
                                             case Promotion.takhfif_Az_Sotooh:
                                                 offPercent = getDiscountFromDiscountLevel(arrayPromotionDetail.get(0).getMeghdarPromotion(), productDetail);
                                                 howToPromotion = 3;
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 rowPercentOff(offPercent, mPromoCode, product);
                                                 break;
                                             case Promotion.eshantion_Az_hamanKala:
@@ -1360,7 +1355,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                             case Promotion.eshantion_Az_kalahaye_digar:
@@ -1372,7 +1367,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                         }
@@ -1395,21 +1390,21 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 fixedOff = zarib * arrayPromotionDetail.get(0).getMeghdarPromotion();
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 3;
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 rowFixedOff(fixedOff, mPromoCode, product);
                                                 break;
                                             case Promotion.takhfif_darsadi:
                                                 offPercent = arrayPromotionDetail.get(0).getMeghdarPromotion();
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 3;
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 rowPercentOff(offPercent, mPromoCode, product);
                                                 break;
                                             case Promotion.takhfif_Az_Sotooh:
                                                 offPercent = getDiscountFromDiscountLevel(arrayPromotionDetail.get(0).getMeghdarPromotion(), productDetail);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 3;
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 rowPercentOff(offPercent, mPromoCode, product);
                                                 break;
                                             case Promotion.eshantion_Az_hamanKala:
@@ -1422,7 +1417,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                             case Promotion.eshantion_Az_kalahaye_digar:
@@ -1434,7 +1429,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
-                                                CommitPromoCode.add(mPromoCode);
+                                                addPromoCode(mPromoCode);
                                                 productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
                                                 break;
                                         }
@@ -1449,6 +1444,10 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             }
         }
 
+    }
+
+    private void addPromoCode(int mPromoCode) {
+        CommitPromoCode.add(mPromoCode);
     }
 
     private double getDiscountFromDiscountLevel(int meghdarPromotion, ProductDetail productDetail) {
@@ -1634,19 +1633,15 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
     }
 
     public void ClearAllGift() {
-            Discount = 0;
-            Set mapSet = ProductPickerListActivity.HashMap_Product.entrySet();
-            Iterator mapIterator = mapSet.iterator();
-            while (mapIterator.hasNext()) {
-                Map.Entry mapEntry = (Map.Entry) mapIterator.next();
-                OrderDetail orderDetail = (OrderDetail) mapEntry.getValue();
-                    if (orderDetail.getCount1() == 0 && orderDetail.getCount2() == 0 && orderDetail.getSumCountBaJoz() == 0) {
-                        mapIterator.remove();
-                        ProductPickerListActivity.Product_Delete.add(orderDetail);
-                        InvoiceDetailActivity.orderDetails.remove(orderDetail);
-                    }
-            }// End of While
-            /////////////////////////////////////////////////////////
+        promoKalaCode = 0;
+        Discount = 0;
+        List<OrderDetail> found = new ArrayList<OrderDetail>();
+        for(OrderDetail orderDetail : InvoiceDetailActivity.orderDetails){
+            if(orderDetail.getGiftType() == Promotion.Eshantion_Tarhi){
+                found.add(orderDetail);
+            }
+        }
+        InvoiceDetailActivity.orderDetails.removeAll(found);
     }
 
     private void setPromoDiscountView() {
