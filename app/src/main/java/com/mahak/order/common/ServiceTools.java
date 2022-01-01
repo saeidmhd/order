@@ -616,7 +616,7 @@ public class ServiceTools {
 
         try {
             user = db.getUser();
-            if (user != null) {
+            if (user.getMahakId() != null) {
                 check = true;
 
                 Calendar calLogin = Calendar.getInstance();

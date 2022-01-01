@@ -217,7 +217,7 @@ public class PayableListActivity extends BaseActivity {
             public void Populate(final PayableTransfer transfer, boolean isExpand, final int position) {
 
                 User user = db.getUser();
-                if (user != null)
+                if (user.getMahakId() != null)
                     tvCustomerName.setText(user.getName());
 
                 tvCashAmount.setText(ServiceTools.formatPrice(transfer.getPrice()));
@@ -446,7 +446,7 @@ public class PayableListActivity extends BaseActivity {
                     for (PayableTransfer item : originalList) {
                         User user = db.getUser();
                         String name = "";
-                        if (user != null)
+                        if (user.getMahakId() != null)
                             name = user.getName();
                         boolean result_contain = ServiceTools.CheckContainsWithSimillar(query, name);
                         if (result_contain) {

@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.Browser;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -51,6 +52,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -345,7 +347,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         FillView();
         User user = db.getUser();
-        if (user != null)
+        if (user.getMahakId() != null)
             tvPageTitle.setText(user.getName() + "( " + getPrefUsername() + " )");
         //////////////////
         Bundle extras = getIntent().getExtras();
@@ -417,10 +419,19 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnZoomMapView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, MapViewActivity.class);
-                intent.putParcelableArrayListExtra(COORDINATE, positions);
-                intent.putParcelableArrayListExtra(CustomerPositions, customerPositions);
-                startActivity(intent);
+                if(isRadaraActive()){
+                    CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                    CustomTabsIntent customTabsIntent = builder.build();
+                    Bundle headers = new Bundle();
+                    headers.putString("token", BaseActivity.getPrefSignalUserToken());
+                    customTabsIntent.intent.putExtra(Browser.EXTRA_HEADERS, headers);
+                    customTabsIntent.launchUrl(DashboardActivity.this, Uri.parse("https://tracking.mahaksoft.com/showrouting"));
+                }else {
+                    Intent intent = new Intent(mContext, MapViewActivity.class);
+                    intent.putParcelableArrayListExtra(COORDINATE, positions);
+                    intent.putParcelableArrayListExtra(CustomerPositions, customerPositions);
+                    startActivity(intent);
+                }
             }
         });
 
