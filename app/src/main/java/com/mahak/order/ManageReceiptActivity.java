@@ -1087,8 +1087,13 @@ public class ManageReceiptActivity extends BaseActivity {
                 Bundle b = data.getBundleExtra("response");
                 String trace = b.getString("trace", null);
                 String amount = b.getString("amount", null);
-                saveReceipt(trace, amount);
-            } else
+                String result = b.getString("result", null);
+                if (result.equals("succeed")) {
+                    if (trace != null && amount != null) {
+                        saveReceipt(trace, amount);
+                    }
+                }
+            }else
                 Toast.makeText(mContext, "خطا در پرداخت توسط پوز", Toast.LENGTH_SHORT).show();
         }
 
