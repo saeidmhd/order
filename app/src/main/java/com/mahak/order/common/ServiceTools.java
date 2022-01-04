@@ -1810,7 +1810,7 @@ FirebaseCrashlytics.getInstance().recordException(e);
             raf.seek(seek);
             Date date = new Date();
             String rafStr= "\n@@@ date: " + ServiceTools.getDate(date)
-                    + " time: " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + "\n"
+                    + " time: " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND) +  "\n"
                     + "@@@ version " + ServiceTools.getVersionCode(mContext);
 
             raf.write(rafStr.getBytes());

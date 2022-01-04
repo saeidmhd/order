@@ -68,17 +68,6 @@
                         android:textColor="@android:color/white"
                         android:textStyle="bold" />
 
-                    <com.mahak.order.widget.FontTextView
-                        android:id="@+id/gift"
-                        style="@style/forms_label_default"
-                        android:layout_width="75dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:singleLine="true"
-                        android:text="@string/str_gift"
-                        android:textColor="@android:color/white"
-                        android:textStyle="bold"
-                        android:visibility="visible" />
 
                     <com.mahak.order.widget.FontTextView
                         android:id="@+id/tvFii"

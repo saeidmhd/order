@@ -376,7 +376,6 @@ public class InvoiceDetailActivity extends BaseActivity {
         tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         btnSave = (Button) findViewById(R.id.btnSave);
         btnSave_close = (Button) findViewById(R.id.btnSave_close);
-        TextView tvTitle_label = (TextView) findViewById(R.id.tvTitle_label);
     }
 
     private void FillView() {

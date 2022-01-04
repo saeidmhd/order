@@ -115,7 +115,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             llFinalPrice;
     private TextView tvCurrency;
     private TextView tvFii;
-    private TextView gift;
     private EditText txtDiscount, txtDiscountPercent;
     //  private ImageView checkDiscount;
     private static AdapterListProduct adListProduct;
@@ -784,10 +783,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
     private void FillView() {
         if (OrderType == ProjectInfo.TYPE_SEND_TRANSFERENCE || OrderType == ProjectInfo.TYPE_RETURN_OF_SALE) {
             tvFii.setVisibility(View.INVISIBLE);
-            gift.setVisibility(View.GONE);
             tvCurrency.setVisibility(View.INVISIBLE);
-        } else if (OrderType == ProjectInfo.TYPE_ORDER) {
-            gift.setVisibility(View.GONE);
         }
         adListProduct = new AdapterListProduct(getActivity(), InvoiceDetailActivity.orderDetails);
         lstCart.setAdapter(adListProduct);
@@ -853,7 +849,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
 
         tvCurrency = (TextView) v.findViewById(R.id.tvCurrency);
         tvFii = (TextView) v.findViewById(R.id.tvFii);
-        gift = (TextView) (TextView) v.findViewById(R.id.gift);
         llTotalOff = (LinearLayout) v.findViewById(R.id.llTotalOff);
         llTotalChargeAndTax = (LinearLayout) v.findViewById(R.id.llTotalChargeAndTax);
         llTotalPrice = (LinearLayout) v.findViewById(R.id.llTotalPrice);
