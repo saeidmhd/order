@@ -249,6 +249,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     Intent intent = new Intent(mContext, PhotoViewerActivity.class);
                     intent.putExtra(ProjectInfo._json_key_user_id, BaseActivity.getPrefUserId());
                     intent.putExtra(ProjectInfo._json_key_product_id, product.getProductId());
+                    intent.putExtra(ProjectInfo._json_key_product_code, product.getProductCode());
                     intent.putExtra(ProjectInfo._json_key_index, 0);
                     ((Activity) mContext).startActivityForResult(intent, REQUEST_FOR_ACTIVITY_CODE);
                 }

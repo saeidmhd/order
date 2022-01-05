@@ -43,6 +43,7 @@ public class PhotoViewerActivity extends BaseActivity {
     private HackyViewPager mViewPager;
     private long userId;
     private long productId;
+    private long productCode;
     private DbAdapter dba;
     private List<PicturesProduct> picturesProducts;
     private int index;
@@ -66,6 +67,7 @@ public class PhotoViewerActivity extends BaseActivity {
             }
             if (bundle.containsKey(ProjectInfo._json_key_product_id)) {
                 productId = bundle.getInt(ProjectInfo._json_key_product_id);
+                productCode = bundle.getLong(ProjectInfo._json_key_product_code);
             }
             if (bundle.containsKey(ProjectInfo._json_key_index)) {
                 index = bundle.getInt(ProjectInfo._json_key_index);
@@ -76,7 +78,7 @@ public class PhotoViewerActivity extends BaseActivity {
 
         if (productId > 0 && userId > 0) {
             dba.open();
-            picturesProducts = dba.getAllPictureByProductId(productId);
+            picturesProducts = dba.getAllPictureByProductId2(productId,productCode);
             dba.close();
         }
 

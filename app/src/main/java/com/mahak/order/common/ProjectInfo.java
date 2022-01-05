@@ -139,6 +139,7 @@ public class ProjectInfo {
     //Json
     public static String _json_key_user_id = "userId";
     public static String _json_key_product_id = "productId";
+    public static String _json_key_product_code = "productCode";
     public static String _json_key_index = "index";
     public static String _json_key_date = "date";
     public static String _json_key_latitude = "latitude";

@@ -1085,18 +1085,20 @@ public class ManageReceiptActivity extends BaseActivity {
         } else if (requestCode == REQUEST_i9000s) {
             if (resultCode == RESULT_OK) {
                 Bundle b = data.getBundleExtra("response");
-                String trace = b.getString("trace", null);
-                String amount = b.getString("amount", null);
-                String result = b.getString("result", null);
-                if (result.equals("succeed")) {
-                    if (trace != null && amount != null) {
-                        saveReceipt(trace, amount);
+                String trace = null;
+                if (b != null) {
+                    trace = b.getString("trace", null);
+                    String amount = b.getString("amount", null);
+                    String result = b.getString("result", null);
+                    if (result.equals("succeed")) {
+                        if (trace != null && amount != null) {
+                            saveReceipt(trace, amount);
+                        }
                     }
                 }
             }else
                 Toast.makeText(mContext, "خطا در پرداخت توسط پوز", Toast.LENGTH_SHORT).show();
         }
-
         super.onActivityResult(requestCode, resultCode, data);
     }
 

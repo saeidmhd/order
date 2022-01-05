@@ -112,8 +112,10 @@ public class InvoiceDetailActivity extends BaseActivity {
 
     public static double FinalPrice;
     private static double visitorCreditValue;
+    private static double customerCreditValue;
     private static final long NoLimit = -1;
     private static double mSpentCredit;
+    private static double mSpentCustomerCredit;
     private static double mCurrentPrice;
 
 
@@ -295,7 +297,10 @@ public class InvoiceDetailActivity extends BaseActivity {
         btnSave_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AsyncSave(0, OrderType).execute();
+                if (OrderType == ProjectInfo.TYPE_INVOCIE && (!visitorHasCredit(FinalPrice)|| !customerHasCredit(FinalPrice))) {
+                    SaveAndReceiptBasedOnOrder();
+                } else
+                    new AsyncSave(0, OrderType).execute();
             }
         });
 
@@ -359,6 +364,21 @@ public class InvoiceDetailActivity extends BaseActivity {
         }
         ///////////////////////////////
         return true;
+    }
+    public static boolean customerHasCredit(double finalPrice) {
+
+        mSpentCustomerCredit = 0;
+
+        Customer customer = db.getCustomerWithPersonId(CustomerId);
+        customerCreditValue = customer.getCredit();
+        if (customerCreditValue == NoLimit)
+            return true;
+
+        if (Mode == MODE_EDIT)
+            mSpentCustomerCredit -= mCurrentPrice;
+
+        //اگر مبلغ فاکتور فعلی بیشتر از اعتبار باشد باید برای ثبت فاکتور دریافتی ثبت کند
+        return !(finalPrice > customerCreditValue);
     }
 
     //اعتبار باقیمانده ویزیتور
@@ -903,12 +923,11 @@ public class InvoiceDetailActivity extends BaseActivity {
                     break;
             }
 
-            alertDialogBuilder
-                    .setMessage(alertMsg)
+            alertDialogBuilder.setMessage(alertMsg)
                     .setCancelable(false)
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            if (OrderType == ProjectInfo.TYPE_INVOCIE && !visitorHasCredit(FinalPrice)) {
+                            if (OrderType == ProjectInfo.TYPE_INVOCIE && (!visitorHasCredit(FinalPrice)|| !customerHasCredit(FinalPrice))) {
                                 SaveAndReceiptBasedOnOrder();
                             } else
                                 new AsyncSave(0, OrderType).execute();
