@@ -851,9 +851,6 @@ public class InvoiceDetailActivity extends BaseActivity {
 
         switch (item.getItemId()) {
             case 0:
-                if(ProductPickerListActivity.HashMap_Product != null){
-                    ProductPickerListActivity.HashMap_Product.clear();
-                }
                 Intent intent = new Intent(mContext, ProductPickerListActivity.class);
                 intent.putExtra(PAGE, PAGE_ORDERLIST);
                 intent.putExtra(TYPE_KEY, OrderType);

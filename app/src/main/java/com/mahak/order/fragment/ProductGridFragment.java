@@ -47,6 +47,7 @@ public class ProductGridFragment extends Fragment {
     private static final int BUTTON_GIFT_REFERENCE = 2;
     private long OrderId;
     private int eshantion_dasti;
+    private int duplicate_product;
     //private AdapterListProduct adapterlistProduct;
     private Product SelectedProduct;
     private ProductDetail SelectedProductDetail;
@@ -107,6 +108,7 @@ public class ProductGridFragment extends Fragment {
             GroupId = bundle.getLong("GroupId");
             OrderId = bundle.getLong("OrderId");
             eshantion_dasti = bundle.getInt("eshantion_dasti");
+            duplicate_product = bundle.getInt("duplicate_product");
             type = bundle.getInt("type");
             mode = bundle.getInt("Mode");
             CountProduct = bundle.getInt("CountProduct");
@@ -390,6 +392,7 @@ public class ProductGridFragment extends Fragment {
             GroupId = bundle.getLong("GroupId");
             OrderId = bundle.getLong("OrderId");
             eshantion_dasti = bundle.getInt("eshantion_dasti");
+            duplicate_product = bundle.getInt("duplicate_product");
             CountProduct = bundle.getInt("CountProduct");
         }
 
@@ -409,6 +412,7 @@ public class ProductGridFragment extends Fragment {
             GroupId = bundle.getLong("GroupId");
             OrderId = bundle.getLong("OrderId");
             eshantion_dasti = bundle.getInt("eshantion_dasti");
+            duplicate_product = bundle.getInt("duplicate_product");
             type = bundle.getInt("type");
             mode = bundle.getInt("Mode");
             CountProduct = bundle.getInt("CountProduct");
@@ -439,7 +443,7 @@ public class ProductGridFragment extends Fragment {
         if (mActivity != null) {
 //            adapterlistProduct = new AdapterListProduct(mActivity, array);
 //            gvProduct.setAdapter(adapterlistProduct);
-            productAdapter = new RecyclerProductAdapter(mContext, array, productPickerListActivity, R.layout.grv_product_picker_item, type, customerId, GroupId, mode, OrderId,eshantion_dasti);
+            productAdapter = new RecyclerProductAdapter(mContext, array, productPickerListActivity, R.layout.grv_product_picker_item, type, customerId, GroupId, mode, OrderId,eshantion_dasti,duplicate_product);
             lstProduct.setAdapter(productAdapter);
 
             if (txtSearch != null) {

@@ -79,6 +79,7 @@ import static com.mahak.order.BaseActivity.PAGE;
 import static com.mahak.order.BaseActivity.PAGE_ORDERLIST;
 import static com.mahak.order.BaseActivity.RETURN_ASSET_KEY;
 import static com.mahak.order.BaseActivity.TYPE_KEY;
+import static com.mahak.order.BaseActivity.duplicate_product;
 import static com.mahak.order.BaseActivity.eshantion_dasti;
 import static com.mahak.order.InvoiceDetailActivity.CommitPromoCode;
 import static com.mahak.order.InvoiceDetailActivity.CustomerId;
@@ -340,9 +341,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mnuAddProduct:
-                if(ProductPickerListActivity.HashMap_Product != null){
-                    ProductPickerListActivity.HashMap_Product.clear();
-                }
                 Intent intent = new Intent(getActivity(), ProductPickerListActivity.class);
                 intent.putExtra(TYPE_KEY, OrderType);
                 intent.putExtra(PAGE, PAGE_ORDERLIST);
@@ -352,6 +350,22 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                 intent.putExtra("OrderId", InvoiceDetailActivity.OrderId);
                 intent.putExtra(RETURN_ASSET_KEY, true);
                 startActivityForResult(intent, REQUEST_PRODUCT_LIST);
+                return true;
+
+            case R.id.mnuAddDuplicateProduct:
+                if(ProductPickerListActivity.HashMap_Product != null){
+                    ProductPickerListActivity.HashMap_Product.clear();
+                }
+                Intent intent3 = new Intent(getActivity(), ProductPickerListActivity.class);
+                intent3.putExtra(TYPE_KEY, OrderType);
+                intent3.putExtra(duplicate_product, 1);
+                intent3.putExtra(PAGE, PAGE_ORDERLIST);
+                intent3.putExtra(CUSTOMERID_KEY, CustomerId);
+                intent3.putExtra(CUSTOMER_GROUP_KEY, GroupId);
+                intent3.putExtra(MODE_PAGE, Mode);
+                intent3.putExtra("OrderId", InvoiceDetailActivity.OrderId);
+                intent3.putExtra(RETURN_ASSET_KEY, true);
+                startActivityForResult(intent3, REQUEST_PRODUCT_LIST);
                 return true;
 
             case R.id.mnuAddEshantion:

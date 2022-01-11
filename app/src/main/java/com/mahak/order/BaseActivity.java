@@ -62,6 +62,7 @@ public class BaseActivity extends AppCompatActivity {
     public static String POSITION_KEY = "Position";
     public static String TYPE_KEY = "Type";
     public static String eshantion_dasti = "eshantion_dasti";
+    public static String duplicate_product = "duplicate_product";
     public static String CODE_KEY = "Code";
     public static String PAYMENT_KEY = "Payment";
     public static String remainVisitorCredit = "remainVisitorCredit";

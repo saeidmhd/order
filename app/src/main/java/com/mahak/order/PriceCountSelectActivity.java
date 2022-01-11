@@ -1282,6 +1282,14 @@ public class PriceCountSelectActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
+                double count1_sabad_kharid = 0;
+                ArrayList<OrderDetail> orderDetails =  InvoiceDetailActivity.orderDetails;
+                if(orderDetails != null){
+                    for (OrderDetail orderDetail : orderDetails)
+                        if(orderDetail.getProductId() == product.getProductId())
+                            count1_sabad_kharid += orderDetail.getCount1();
+                }
+
                 switch (BaseActivity.getPrefUnit2Setting(context)) {
                     case MODE_YekVahedi:
                         count1 = txtCount.getText().toString();
@@ -1316,7 +1324,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                         break;
                 }
 
-                if(type == ProjectInfo.TYPE_INVOCIE && sumCountBaJoz > maxValueRetail){
+                if(type == ProjectInfo.TYPE_INVOCIE && sumCountBaJoz > maxValueRetail ){
                     Dialog(getString(R.string.str_negative_asset)).show();
                     FontAlertDialog.FontDialog(Dialog(getString(R.string.str_negative_asset)));
                 }else {
