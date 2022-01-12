@@ -1,5 +1,7 @@
 package com.mahak.order;
 
+import static com.mahak.order.BaseActivity.mContext;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -107,9 +109,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     private RelativeLayout mDrawerLeft;
     private ActionBarDrawerToggle mDrawerToggle;
     private int Type;
-    private static final int ACCESS_FINE_LOCATION = 113;
-    private static final int ACCESS_COARSE_LOCATION = 114;
-    private static final int REQUEST_WRITE_STORAGE = 115;
     private boolean inZone = false;
     //nav buttons
     private Button
@@ -210,8 +209,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     private int CustomerId;
     private long CustomerClientId;
     private long GroupId;
-    private boolean ACCESS_COARSE_LOCATION_Permission;
-    private boolean ACCESS_FINE_LOCATION_Permission;
     private boolean hasWritePermission;
     private AsyncReport asyncReport;
     SupportMapFragment mapFragment;
@@ -220,7 +217,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     private static final String TAG = DashboardActivity.class.getSimpleName();
 
     // Used in checking for runtime permissions.
-    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+    private static final int REQUEST_LOCATION_PERMISSION = 34;
+    private static final int REQUEST_WRITE_STORAGE = 115;
 
     // A reference to the service used to get location updates.
 
@@ -265,24 +263,12 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         }
 
-        ACCESS_COARSE_LOCATION_Permission = (ContextCompat.checkSelfPermission(DashboardActivity.this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED);
-        ACCESS_FINE_LOCATION_Permission = (ContextCompat.checkSelfPermission(DashboardActivity.this,
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
         hasWritePermission = (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
-
         if (!hasWritePermission) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        REQUEST_WRITE_STORAGE);
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        REQUEST_WRITE_STORAGE);
-            }
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_WRITE_STORAGE);
         }
 
         //config actionbar___________________________________________
@@ -633,7 +619,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                             // Request permission
                             ActivityCompat.requestPermissions(DashboardActivity.this,
                                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                    REQUEST_PERMISSIONS_REQUEST_CODE);
+                                    REQUEST_LOCATION_PERMISSION);
                         }
                     })
                     .show();
@@ -641,7 +627,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             Log.i(TAG, "Requesting permission");
             ActivityCompat.requestPermissions(DashboardActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_PERMISSIONS_REQUEST_CODE);
+                    REQUEST_LOCATION_PERMISSION);
         }
     }
 
@@ -649,7 +635,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Log.i(TAG, "onRequestPermissionResult");
-        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (grantResults.length <= 0) {
             } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startLocationUpdate();
@@ -673,6 +659,12 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                                 startActivity(intent);
                             }
                         }).show();
+            }
+        }else if(requestCode == REQUEST_WRITE_STORAGE){
+            if (grantResults.length > 0) {
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    showPermissionDialog();
+                }
             }
         }
     }
@@ -1668,6 +1660,35 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    public void showPermissionDialog() {
+        Dialog dialog = new Dialog(mContext);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.custom_dialog);
+
+        Button dialog_btn_data = dialog.findViewById(R.id.dialog_btn_ok);
+
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
+
+        dialog_btn_data.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                Intent intent = new Intent();
+                intent.setAction(
+                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package",
+                        BuildConfig.APPLICATION_ID, null);
+                intent.setData(uri);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
             }
         });
         dialog.show();

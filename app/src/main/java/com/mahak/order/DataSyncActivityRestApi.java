@@ -57,6 +57,8 @@ import com.mahak.order.common.Visitor;
 import com.mahak.order.common.VisitorLocation;
 import com.mahak.order.common.VisitorPeople;
 import com.mahak.order.common.VisitorProduct;
+import com.mahak.order.common.login.LoginBody;
+import com.mahak.order.common.login.LoginResult;
 import com.mahak.order.common.request.GetAllDataBody;
 import com.mahak.order.common.request.GetAllDataResult.GetDataResult;
 import com.mahak.order.common.request.SetAllDataBody;
@@ -228,8 +230,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if (ServiceTools.isOnline(mContext)) {
-                    SendReceive();
-
+                    checkUserAvailable();
                 }//End of if
                 else
                     Toast.makeText(mContext, getString(R.string.str_message_dont_connect), Toast.LENGTH_LONG).show();
@@ -242,6 +243,79 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+            }
+        });
+    }
+
+    private void checkUserAvailable() {
+        db.open();
+        final User user = db.getUser();
+        int userDatabaseId = ServiceTools.toInt(user.getDatabaseId());
+        int userId = ServiceTools.toInt(user.getServerUserID());
+        LoginBody loginBody = new LoginBody();
+        //String DeviceID = ServiceTools.getDeviceID(mContext);
+        loginBody.setAppId("MahakOrder");
+        loginBody.setDatabaseId(0);
+        loginBody.setLanguage("en-US");
+        loginBody.setDeviceId("");
+        loginBody.setDescription("login");
+        loginBody.setUserName(user.getUsername());
+        loginBody.setPassword(user.getPassword());
+
+        ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
+        Call<LoginResult> call = apiService.Login(loginBody);
+        pd = new FontProgressDialog(mContext);
+        pd.setMessage(getString(R.string.reviewing_user_info));
+        pd.setCancelable(false);
+        pd.show();
+        call.enqueue(new Callback<LoginResult>() {
+            @Override
+            public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
+                dismissProgressDialog();
+                if (response.body() != null) {
+                    if (response.body().isResult()) {
+                        if (userDatabaseId == response.body().getData().getDatabaseId() && userId == response.body().getData().getVisitorId()) {
+                            BaseActivity.setPrefUserToken(response.body().getData().getUserToken());
+                            setPrefSyncId(response.body().getData().getSyncId());
+                            //Save db
+                            db.open();
+                            user.setSyncId(response.body().getData().getSyncId());
+                            user.setUserToken(response.body().getData().getUserToken());
+                            db.UpdateUser(user);
+                            db.close();
+                            SendReceive();
+                        } else {
+                            ServiceTools.Backup(mContext);
+                            db.open();
+                            db.DeleteAllData();
+                            db.DeleteUser(userId);
+                            db.close();
+                            Toast.makeText(DataSyncActivityRestApi.this, R.string.visitor_changed_login_again, Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(DataSyncActivityRestApi.this, LoginActivityRestApi.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        }
+                    } else {
+                        ServiceTools.Backup(mContext);
+                        db.open();
+                        db.DeleteUser(userId);
+                        db.close();
+                        Toast.makeText(DataSyncActivityRestApi.this, R.string.visitor_changed_login_again, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(DataSyncActivityRestApi.this, LoginActivityRestApi.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResult> call, Throwable t) {
+                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
+                FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                FirebaseCrashlytics.getInstance().log(t.getMessage());
+                dismissProgressDialog();
             }
         });
     }
@@ -705,7 +779,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
                     } else if (response.body() != null) {
                         // mMsg[0] = response.body().getData().getObjects().getOrders().getResults().get(0).getErrors().get(0).getError();
-                        dismissProgressDialog();
                         mMsg[0] = getString(R.string.send_error);
 
                         if (response.body().getData().getObjects() != null)
@@ -720,9 +793,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
                 @Override
                 public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
+                    dismissProgressDialog();
                     FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
                     FirebaseCrashlytics.getInstance().log(t.getMessage());
-                    dismissProgressDialog();
                     mMsg[0] = t.toString();
                     showDialog(mMsg[0]);
                     pbLoading.setVisibility(View.GONE);
@@ -932,7 +1005,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         }
                         pbLoading.setVisibility(View.GONE);
                     } else if (response.body() != null) {
-                        dismissProgressDialog();
                         mMsg[0] = response.body().getMessage();
                         //showDialog(mMsg[0]);
                         setTextGetErrorResult();
@@ -1375,7 +1447,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                     pbLoading.setVisibility(View.GONE);
 
                                 } else if (response.body() != null) {
-                                    dismissProgressDialog();
                                     mMsg[0] = getString(R.string.send_error);
                                     pbLoading.setVisibility(View.GONE);
 

@@ -35,6 +35,7 @@
         <entry key="app/src/main/res/layout/activity_product_picker_list2.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/layout/activity_products_list.xml" value="0.23489583333333333" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/custom_dialog.xml" value="0.4774305555555556" />
         <entry key="app/src/main/res/layout/dialog_pardakht.xml" value="0.67" />
         <entry key="app/src/main/res/layout/dialog_radara.xml" value="0.25" />
         <entry key="app/src/main/res/layout/dialog_request_gps.xml" value="0.5" />
@@ -72,5 +73,6 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_15" project-jdk-name="15" project-jdk-type="JavaSDK" />
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_15_PREVIEW" project-jdk-name="15" project-jdk-type="JavaSDK" />
 </project>
