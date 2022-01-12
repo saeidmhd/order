@@ -351,39 +351,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                 intent.putExtra(RETURN_ASSET_KEY, true);
                 startActivityForResult(intent, REQUEST_PRODUCT_LIST);
                 return true;
-
-            case R.id.mnuAddDuplicateProduct:
-                if(ProductPickerListActivity.HashMap_Product != null){
-                    ProductPickerListActivity.HashMap_Product.clear();
-                }
-                Intent intent3 = new Intent(getActivity(), ProductPickerListActivity.class);
-                intent3.putExtra(TYPE_KEY, OrderType);
-                intent3.putExtra(duplicate_product, 1);
-                intent3.putExtra(PAGE, PAGE_ORDERLIST);
-                intent3.putExtra(CUSTOMERID_KEY, CustomerId);
-                intent3.putExtra(CUSTOMER_GROUP_KEY, GroupId);
-                intent3.putExtra(MODE_PAGE, Mode);
-                intent3.putExtra("OrderId", InvoiceDetailActivity.OrderId);
-                intent3.putExtra(RETURN_ASSET_KEY, true);
-                startActivityForResult(intent3, REQUEST_PRODUCT_LIST);
-                return true;
-
-            case R.id.mnuAddEshantion:
-                if(ProductPickerListActivity.HashMap_Product != null){
-                    ProductPickerListActivity.HashMap_Product.clear();
-                }
-                Intent intent2 = new Intent(getActivity(), ProductPickerListActivity.class);
-                intent2.putExtra(TYPE_KEY, OrderType);
-                intent2.putExtra(eshantion_dasti, 1);
-                intent2.putExtra(PAGE, PAGE_ORDERLIST);
-                intent2.putExtra(CUSTOMERID_KEY, CustomerId);
-                intent2.putExtra(CUSTOMER_GROUP_KEY, GroupId);
-                intent2.putExtra(MODE_PAGE, Mode);
-                intent2.putExtra("OrderId", InvoiceDetailActivity.OrderId);
-                intent2.putExtra(RETURN_ASSET_KEY, true);
-                startActivityForResult(intent2, REQUEST_PRODUCT_LIST);
-                return true;
-
             case R.id.mnuBarcode:
                 if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
                     try {
