@@ -11,7 +11,7 @@
 
     <ScrollView
         android:id="@+id/goodsScroll"
-        android:layout_margin="16dp"
+        android:layout_margin="8dp"
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -124,49 +124,57 @@
                     android:background="@color/forms_seprator_line" />
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/NormalSize">
-
-                    <com.mahak.order.widget.FontTextView
-                        android:id="@+id/tvTotalCount"
-                        style="@style/forms_label_default"
-                        android:layout_width="0dip"
-                        android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <LinearLayout
                         android:layout_weight="1"
-                        android:text="@string/sample_number" />
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/NormalSize">
 
-                    <com.mahak.order.widget.FontTextView
-                        style="@style/forms_label_default"
-                        android:layout_width="132dp"
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvTotalCount"
+                            style="@style/forms_label_default"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/sample_number" />
+
+                        <com.mahak.order.widget.FontTextView
+                            style="@style/forms_label_default"
+                            android:layout_width="132dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/str_total_count" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llTotalPrice"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/str_total_count" />
+                        android:background="@color/forms_alter_row"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/NormalSize">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvTotalPrice"
+                            style="@style/forms_label_default"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="@string/sample_number" />
+
+                        <com.mahak.order.widget.FontTextView
+                            style="@style/forms_label_default"
+                            android:layout_width="132dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/str_total_price" />
+                    </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/llTotalPrice"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/forms_alter_row"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/NormalSize">
 
-                    <com.mahak.order.widget.FontTextView
-                        android:id="@+id/tvTotalPrice"
-                        style="@style/forms_label_default"
-                        android:layout_width="0dip"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="right"
-                        android:text="@string/sample_number" />
-
-                    <com.mahak.order.widget.FontTextView
-                        style="@style/forms_label_default"
-                        android:layout_width="132dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/str_total_price" />
-                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/llTotalOff"

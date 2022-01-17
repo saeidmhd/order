@@ -371,6 +371,7 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/NormalSize"
+                                android:textSize="14sp"
                                 android:text="@string/str_get_geographical_location" />
                         </LinearLayout>
 

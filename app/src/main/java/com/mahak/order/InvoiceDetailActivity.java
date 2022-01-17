@@ -313,7 +313,6 @@ public class InvoiceDetailActivity extends BaseActivity {
     }
 
     private void SaveAndReceiptBasedOnOrder() {
-        if (validateAsset()) {
             if (orderDetails.size() > 0) {
                 Intent intent = new Intent(mContext, ManageReceiptActivity.class);
                 intent.putExtra(MODE_PAGE, MODE_NEW);
@@ -325,10 +324,6 @@ public class InvoiceDetailActivity extends BaseActivity {
                 startActivityForResult(intent, REQUEST_PAY_FACTOR);
             } else
                 Toast.makeText(mContext, String.valueOf(getResources().getString(R.string.str_message_no_product)), Toast.LENGTH_SHORT).show();
-        } else
-            Toast.makeText(mContext, String.valueOf(getResources().getString(R.string.str_message_more_than_asset_product)), Toast.LENGTH_SHORT).show();
-
-
     }
 
     public static boolean visitorHasCredit(double finalPrice) {
@@ -782,21 +777,6 @@ public class InvoiceDetailActivity extends BaseActivity {
         else
             return remainCount1 >= 0 && remainCount2 >= 0;
 
-    }
-
-    public boolean validateAsset() {
-        Product product;
-        ProductDetail productDetail;
-        for (OrderDetail item : orderDetails) {
-            productDetail = db.getProductDetail(item.getProductDetailId());
-            product = db.GetProductWithProductId(productDetail.getProductId());
-            if (item.getSumCountBaJoz()  > 0) {
-                if (productDetail.getCount1() - (item.getSumCountBaJoz()) >= 0) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     /**

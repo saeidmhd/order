@@ -404,6 +404,7 @@
                             android:text="@string/str_get_geographical_location"
                             android:visibility="visible"
                             android:layout_marginLeft="8dp"
+                            android:textSize="14sp"
                             android:padding="8dp" />
 
                         <LinearLayout

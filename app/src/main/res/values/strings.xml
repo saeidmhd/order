@@ -102,7 +102,7 @@
     <string name="str_username_en">UserName</string>
     <string name="str_password_en">Password</string>
     <string name="str_login">ورود به سیستم</string>
-    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.415</string>
+    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.417</string>
     <string name="str_email">پست الکترونیک</string>
     <string name="str_body">متن پیام</string>
     <string name="str_message_content">متن پیام</string>
@@ -1282,6 +1282,7 @@
 
     <string name="location_updated">Location Updated: </string>
     <string name="add_duplicate_product">افزودن کالای تکراری</string>
+    <string name="nodata">اطلاعاتی برای نمایش وجود ندارد</string>
 
 
 </resources>

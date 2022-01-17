@@ -401,6 +401,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/str_get_geographical_location"
                             android:visibility="visible"
+                            android:textSize="14sp"
                             android:layout_marginLeft="8dp"
                             android:padding="8dp" />
 

@@ -5,12 +5,12 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:id="@+id/item_category"
-    android:padding="16dp">
+    android:layout_margin="@dimen/SmallSize">
 
     <LinearLayout
         android:id="@+id/expand_field"
         android:layout_weight="0"
-        android:layout_width="64dp"
+        android:layout_width="32dp"
         android:layout_height="match_parent"
         android:gravity="center">
 
@@ -41,7 +41,7 @@
             android:text="@string/customer_name"
             android:padding="8dp"
             android:textColor="?colorPrimary"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 

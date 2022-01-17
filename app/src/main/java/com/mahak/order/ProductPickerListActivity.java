@@ -1058,7 +1058,7 @@ public class ProductPickerListActivity extends BaseActivity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_products_list, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_products_list3, container, false);
             lstProduct = (ListView) rootView.findViewById(R.id.lstProduct);
 
             lstProduct.setItemsCanFocus(true);

@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="16dp"
+        android:layout_margin="8dp"
         android:background="@color/white"
         android:orientation="vertical">
 
@@ -168,6 +168,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
+                        android:textSize="13sp"
                         android:layout_weight="1"
                         android:text="@string/shop" />
 
@@ -390,6 +391,7 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/NormalSize"
+                                android:textSize="14sp"
                                 android:text="@string/str_get_geographical_location" />
                         </LinearLayout>
 
@@ -635,7 +637,7 @@
                         android:layout_marginLeft="@dimen/NormalSize"
                         android:layout_weight="1"
                         android:text="@string/str_datepicker"
-                        android:visibility="invisible" />
+                        android:visibility="gone" />
 
                     <com.mahak.order.widget.FontTextView
                         android:id="@+id/tvDeliveryDate"

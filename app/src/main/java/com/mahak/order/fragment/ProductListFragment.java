@@ -87,9 +87,6 @@ public class ProductListFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        mContext = context;
-        db = new DbAdapter(mContext);
-        db.open();
         super.onAttach(context);
         if (context instanceof ProductPickerListActivity)
             productPickerListActivity = (ProductPickerListActivity) context;
@@ -113,7 +110,6 @@ public class ProductListFragment extends Fragment {
         mActivity = getActivity();
         array = new ArrayList<>();
         arrayTemp = new ArrayList<>();
-        db.open();
         ////////////////////////////////////////
         TextView txtSearch = null;
         if (productPickerListActivity != null) {
@@ -162,6 +158,10 @@ public class ProductListFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                if(db == null){
+                    db = new DbAdapter(getActivity());
+                    db.open();
+                }
                 if (dy > 0) {
                     if(finalTxtSearch != null){
                         if(TextUtils.isEmpty(finalTxtSearch.getText())){

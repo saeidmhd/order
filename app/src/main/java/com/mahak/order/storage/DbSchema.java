@@ -1636,10 +1636,12 @@ public class DbSchema {
         public static final String COLUMN_CategoryCode = "CategoryCode";
         public static final String COLUMN_ParentCode = "ParentCode";
         public static final String COLUMN_CategoryName = "CategoryName";
+        public static final String COLUMN_USER_ID = "UserId";
 
         public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"Category\" ( " +
                 " `Id` INTEGER," +
                 " `CategoryCode` NUMERIC," +
+                " `UserId` NUMERIC," +
                 " `ParentCode` NUMERIC, " +
                 " `CategoryName` text," +
                 "  PRIMARY KEY(`Id`) )";
