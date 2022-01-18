@@ -127,6 +127,7 @@ public class ProjectInfo {
     public static String pre_mode_state_product = "modeState";
     public static String pre_is_tracking = "hasTrackingRun";
     public static String pre_last_location = "lastLocation";
+    public static String pre_last_stop_location = "stop_lastLocation";
     public static String pre_is_tracking_pause = "hasTrackingPause";
     public static String pre_start_time_tracking = "startTracking";
     public static String pre_end_time_tracking = "endTracking";
@@ -141,9 +142,16 @@ public class ProjectInfo {
     public static String _json_key_product_id = "productId";
     public static String _json_key_product_code = "productCode";
     public static String _json_key_index = "index";
+
     public static String _json_key_date = "date";
     public static String _json_key_latitude = "latitude";
     public static String _json_key_longitude = "longitude";
+
+    public static String _json_key_diff_date = "diff_date";
+    public static String _json_key_stop_date = "stop_date";
+    public static String _json_key_stop_latitude = "stop_latitude";
+    public static String _json_key_stop_longitude = "stop_longitude";
+
     public static String _json_key_points = "points";
     public static String _json_key_result = "result";
     public static String _json_key_config = "result";

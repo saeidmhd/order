@@ -1913,4 +1913,14 @@ FirebaseCrashlytics.getInstance().recordException(e);
         PersianDate persian = DateConverter.civilToPersian(cv);
         return persian.getYear() + "/" + persian.getMonth() + "/" + persian.getDayOfMonth();
     }
+
+    public static String getFormattedDate(long milisecond) {
+
+        Date date = new Date();
+        date.setTime(milisecond);
+        String pattern = "yyyy-MM-dd'T'HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
+        return simpleDateFormat.format(date);
+
+    }
 }

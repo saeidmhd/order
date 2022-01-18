@@ -11,6 +11,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.res.Configuration;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Binder;
 import android.os.Build;
@@ -37,6 +39,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -48,6 +51,7 @@ import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
+import com.mahak.order.common.StopLog;
 import com.mahak.order.common.User;
 import com.mahak.order.common.VisitorLocation;
 import com.mahak.order.common.login.LoginBody;
@@ -61,9 +65,13 @@ import com.mahak.order.storage.DbAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -254,6 +262,31 @@ public class LocationService extends Service {
         }
         return null;
     }
+    private void getStopLog(Location mCurrentLocation) {
+        long diff_time = 0;
+        JSONObject locationStopJson = getLastLocationStopJson(mContext);
+        if(locationStopJson != null){
+            diff_time = (System.currentTimeMillis() - locationStopJson.optLong(ProjectInfo._json_key_stop_date)) + locationStopJson.optLong(ProjectInfo._json_key_diff_date) ;
+        }
+        Location lastStopLocation = new Location("");
+        if(locationStopJson != null){
+            lastStopLocation.setLatitude(locationStopJson.optDouble(ProjectInfo._json_key_stop_latitude));
+            lastStopLocation.setLongitude(locationStopJson.optDouble(ProjectInfo._json_key_stop_longitude));
+        }
+        if(mCurrentLocation.getSpeed() < 1.5 && mCurrentLocation.distanceTo(lastStopLocation) < 111 ){
+            saveStopInJsonFile(mCurrentLocation , diff_time);
+        }else if (diff_time > 60000) {
+            StopLog stopLog = new StopLog();
+            stopLog.setDuration(diff_time / 1000);
+            stopLog.setId(ServiceTools.toLong(ServiceTools.getGenerationCode()));
+            stopLog.setEndDate(ServiceTools.getFormattedDate(System.currentTimeMillis()));
+            stopLog.setEntryDate(ServiceTools.getFormattedDate(mCurrentLocation.getTime()));
+            stopLog.setLat(mCurrentLocation.getLatitude());
+            stopLog.setLng(mCurrentLocation.getLongitude());
+            ServiceTools.writeLog( "\n" +  stopLog.toString());
+            saveStopInJsonFile(mCurrentLocation, 0);
+        }
+    }
 
     private boolean checkDistanceSpeed(Location location) {
         JSONObject obj = getLastLocationJson(mContext);
@@ -310,6 +343,16 @@ public class LocationService extends Service {
             return null;
         }
     }
+    public JSONObject getLastLocationStopJson(Context context) {
+        String lastLocation = ServiceTools.getKeyFromSharedPreferences(context, ProjectInfo.pre_last_stop_location);
+        if (ServiceTools.isNull(lastLocation))
+            return null;
+        try {
+            return new JSONObject(lastLocation);
+        } catch (JSONException e) {
+            return null;
+        }
+    }
 
     private void saveInJsonFile(Location location) {
         JSONObject obj = new JSONObject();
@@ -318,6 +361,18 @@ public class LocationService extends Service {
             obj.put(ProjectInfo._json_key_longitude, location.getLongitude());
             obj.put(ProjectInfo._json_key_date, System.currentTimeMillis());
             ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_last_location, obj.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    private void saveStopInJsonFile(Location location , long diff) {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put(ProjectInfo._json_key_stop_latitude, location.getLatitude());
+            obj.put(ProjectInfo._json_key_stop_longitude, location.getLongitude());
+            obj.put(ProjectInfo._json_key_stop_date, System.currentTimeMillis());
+            obj.put(ProjectInfo._json_key_diff_date, diff);
+            ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_last_stop_location, obj.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -584,6 +639,7 @@ public class LocationService extends Service {
             executeEventLocations(mCurrentLocation,false);
             if(isRadaraActive()){
                 performSignalOperation();
+                getStopLog(mCurrentLocation);
                 Location correctLocation = getCorrectLocation(mCurrentLocation);
                 if (correctLocation != null) {
                     sendLocation(correctLocation);
@@ -760,5 +816,6 @@ public class LocationService extends Service {
             }
         });
     }
+
 }
 
