@@ -74,14 +74,33 @@ public class StopLog {
 
     @Override
     public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+
+        long HH = duration / 3600;
+        long MM = (duration % 3600) / 60;
+        long SS = duration % 60;
+
+        if(HH > 0)
+            sb.append(HH).append(" ساعت و ");
+
+        if(MM > 0)
+            sb.append(MM).append(" دقیقه و ");
+
+        if(SS > 0)
+            sb.append(SS).append(" ثانیه ");
+
+
+        String timeInHHMMSS2 = sb.toString();
+
         return "stopLog{" + "\n" +
                 "id=" + id + "\n" +
                 ", lat=" + lat + "\n" +
                 ", lng=" + lng + "\n" +
                 ", entryDate='" + entryDate + '\'' + "\n" +
-                ", duration=" + duration + "\n" +
                 ", endDate='" + endDate + '\'' + "\n" +
-                ", duration in minute ='" + (duration / 60) + '\'' + "\n" +
+                ", duration='" + duration + '\'' + "\n" +
+                ", duration string=" + timeInHHMMSS2 + "\n" +
                 '}';
     }
 }

@@ -68,6 +68,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -125,18 +126,6 @@ public class LocationService extends Service {
             ".started_from_notification";
 
     private final IBinder mBinder = new LocalBinder();
-
-    /**
-     * The desired interval for location updates. Inexact. Updates may be more or less frequent.
-     */
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
-
-    /**
-     * The fastest rate for active location updates. Updates will never be more frequent
-     * than this value.
-     */
-    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
-            UPDATE_INTERVAL_IN_MILLISECONDS / 2;
 
     /**
      * The identifier for the notification displayed for the foreground service.
@@ -255,37 +244,96 @@ public class LocationService extends Service {
         void onReceivePoint(Location location, boolean saveInDb);
     }
 
+    public void startTracking() {
+        createLocationCallback();
+        createLocationRequest();
+        buildLocationSettingsRequest();
+        startLocationUpdates();
+    }
+
+    private void createLocationCallback() {
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                onNewLocation(locationResult.getLastLocation());
+                mCurrentLocation = locationResult.getLastLocation();
+                updateUI();
+            }
+        };
+    }
+
+    private void createLocationRequest() {
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setFastestInterval(5 * 1000)
+                .setInterval(10 * 1000);
+    }
+
+    private void buildLocationSettingsRequest() {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(locationRequest);
+        mLocationSettingsRequest = builder.build();
+    }
+
+    private void startLocationUpdates() {
+        // Begin by checking if the device has the necessary location settings.
+        Utils.setRequestingLocationUpdates(mContext, true);
+        mContext.startService(new Intent(mContext , LocationService.class));
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext);
+        mSettingsClient = LocationServices.getSettingsClient(mContext);
+
+        mSettingsClient.checkLocationSettings(mLocationSettingsRequest)
+                .addOnSuccessListener(new OnSuccessListener<LocationSettingsResponse>() {
+                    @Override
+                    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                        //noinspection MissingPermission
+                        mFusedLocationClient.requestLocationUpdates(locationRequest,
+                                mLocationCallback, Looper.myLooper());
+                        updateUI();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        int statusCode = ((ApiException) e).getStatusCode();
+                        switch (statusCode) {
+                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                                // Log.i(TAG, "Location settings are not satisfied. Attempting to upgrade " + "location settings ");
+                                try {
+                                    ResolvableApiException rae = (ResolvableApiException) e;
+                                    if(activity != null)
+                                        rae.startResolutionForResult(activity, REQUEST_Location_ON);
+                                } catch (IntentSender.SendIntentException sie) {
+                                    //Log.i(TAG, "PendingIntent unable to execute request.");
+                                }
+                                break;
+                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                                String errorMessage = "Location settings are inadequate, and cannot be " +
+                                        "fixed here. Fix in Settings.";
+                                //Log.e(TAG, errorMessage);
+                                Toast.makeText(mContext, errorMessage, Toast.LENGTH_LONG).show();
+                        }
+                        updateUI();
+                    }
+                });
+    }
+
+    public void stopTracking() {
+        stopLocationUpdates();
+    }
+
+    private void stopLocationUpdates() {
+        removeLocationUpdates();
+    }
+
     private Location getCorrectLocation(Location location) {
         if(checkDistanceSpeed(location)){
             saveInJsonFile(location);
             return location;
         }
         return null;
-    }
-    private void getStopLog(Location mCurrentLocation) {
-        long diff_time = 0;
-        JSONObject locationStopJson = getLastLocationStopJson(mContext);
-        if(locationStopJson != null){
-            diff_time = (System.currentTimeMillis() - locationStopJson.optLong(ProjectInfo._json_key_stop_date)) + locationStopJson.optLong(ProjectInfo._json_key_diff_date) ;
-        }
-        Location lastStopLocation = new Location("");
-        if(locationStopJson != null){
-            lastStopLocation.setLatitude(locationStopJson.optDouble(ProjectInfo._json_key_stop_latitude));
-            lastStopLocation.setLongitude(locationStopJson.optDouble(ProjectInfo._json_key_stop_longitude));
-        }
-        if(mCurrentLocation.getSpeed() < 1.5 && mCurrentLocation.distanceTo(lastStopLocation) < 111 ){
-            saveStopInJsonFile(mCurrentLocation , diff_time);
-        }else if (diff_time > 60000) {
-            StopLog stopLog = new StopLog();
-            stopLog.setDuration(diff_time / 1000);
-            stopLog.setId(ServiceTools.toLong(ServiceTools.getGenerationCode()));
-            stopLog.setEndDate(ServiceTools.getFormattedDate(System.currentTimeMillis()));
-            stopLog.setEntryDate(ServiceTools.getFormattedDate(mCurrentLocation.getTime()));
-            stopLog.setLat(mCurrentLocation.getLatitude());
-            stopLog.setLng(mCurrentLocation.getLongitude());
-            ServiceTools.writeLog( "\n" +  stopLog.toString());
-            saveStopInJsonFile(mCurrentLocation, 0);
-        }
     }
 
     private boolean checkDistanceSpeed(Location location) {
@@ -298,13 +346,55 @@ public class LocationService extends Service {
         lasLocation.setLatitude(obj.optDouble(ProjectInfo._json_key_latitude));
         lasLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_longitude));
         lasLocation.setTime(obj.optLong(ProjectInfo._json_key_date));
-        long diff_time = (System.currentTimeMillis() - obj.optLong(ProjectInfo._json_key_date));
         double mDistance = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), location.getLatitude(), location.getLongitude(), "K") * 1000;
-        if(sendPointsBasedMeter)
-            return mDistance > MIN_DISPALCEMENT_CHANGE_FOR_UPDATES;
-        else
-            return diff_time > MIN_TIME_INTERVAL_UPDATES ;
+        return (mDistance > 111 || location.getSpeed() > 2.5) && location.getSpeed() < 42;
     }
+
+    private void getStopLog(Location mCurrentLocation) {
+
+        Calendar calLastLocation = Calendar.getInstance();
+        Calendar calNow = Calendar.getInstance();
+
+        long currentTime = System.currentTimeMillis();
+        Location lastStopLocation = new Location("");
+        JSONObject locationStopJson = getLastLocationStopJson(mContext);
+        if(locationStopJson == null){
+            saveStopInJsonFile(mCurrentLocation);
+            lastStopLocation = mCurrentLocation;
+        }else {
+            lastStopLocation.setLatitude(locationStopJson.optDouble(ProjectInfo._json_key_stop_latitude));
+            lastStopLocation.setLongitude(locationStopJson.optDouble(ProjectInfo._json_key_stop_longitude));
+            lastStopLocation.setTime(locationStopJson.optLong(ProjectInfo._json_key_stop_date));
+        }
+        calLastLocation.setTimeInMillis(lastStopLocation.getTime());
+        boolean check = calLastLocation.get(Calendar.DAY_OF_YEAR) == calNow.get(Calendar.DAY_OF_YEAR);
+        if(!check){
+            saveStopInJsonFile(mCurrentLocation);
+        }
+        long stop_time = currentTime - lastStopLocation.getTime();
+        if(stop_time > 5 * 60 * 1000){
+            if((mCurrentLocation.distanceTo(lastStopLocation) > 111 || mCurrentLocation.getSpeed() > 2.5)){
+                StopLog stopLog = new StopLog();
+                stopLog.setDuration(stop_time / 1000);
+                stopLog.setId(ServiceTools.toLong(ServiceTools.getGenerationCode()));
+                stopLog.setEndDate(ServiceTools.getFormattedDate(currentTime));
+                stopLog.setEntryDate(ServiceTools.getFormattedDate(lastStopLocation.getTime()));
+                stopLog.setLat(lastStopLocation.getLatitude());
+                stopLog.setLng(lastStopLocation.getLongitude());
+                addStopLogToDb(stopLog);
+                ServiceTools.writeLog( "\n" +  stopLog.toString());
+                saveStopInJsonFile(mCurrentLocation);
+            }
+        }
+    }
+
+    private void addStopLogToDb(StopLog stopLog) {
+        if (dba == null) dba = new DbAdapter(mContext);
+        dba.open();
+        dba.AddStoplog(stopLog);
+        dba.close();
+    }
+
 
     private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
         double theta = lon1 - lon2;
@@ -365,77 +455,19 @@ public class LocationService extends Service {
             e.printStackTrace();
         }
     }
-    private void saveStopInJsonFile(Location location , long diff) {
+    private void saveStopInJsonFile(Location location) {
         JSONObject obj = new JSONObject();
         try {
             obj.put(ProjectInfo._json_key_stop_latitude, location.getLatitude());
             obj.put(ProjectInfo._json_key_stop_longitude, location.getLongitude());
-            obj.put(ProjectInfo._json_key_stop_date, System.currentTimeMillis());
-            obj.put(ProjectInfo._json_key_diff_date, diff);
+            obj.put(ProjectInfo._json_key_stop_date, location.getTime());
             ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_last_stop_location, obj.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public void startTracking() {
-        createLocationCallback();
-        createLocationRequest();
-        buildLocationSettingsRequest();
-        startLocationUpdates();
-    }
 
-    private void startLocationUpdates() {
-        // Begin by checking if the device has the necessary location settings.
-        Utils.setRequestingLocationUpdates(mContext, true);
-        mContext.startService(new Intent(mContext , LocationService.class));
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext);
-        mSettingsClient = LocationServices.getSettingsClient(mContext);
-
-        mSettingsClient.checkLocationSettings(mLocationSettingsRequest)
-                .addOnSuccessListener(new OnSuccessListener<LocationSettingsResponse>() {
-                    @Override
-                    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                        //noinspection MissingPermission
-                        mFusedLocationClient.requestLocationUpdates(locationRequest,
-                                mLocationCallback, Looper.myLooper());
-                        updateUI();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        int statusCode = ((ApiException) e).getStatusCode();
-                        switch (statusCode) {
-                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                                // Log.i(TAG, "Location settings are not satisfied. Attempting to upgrade " + "location settings ");
-                                try {
-                                    ResolvableApiException rae = (ResolvableApiException) e;
-                                    if(activity != null)
-                                        rae.startResolutionForResult(activity, REQUEST_Location_ON);
-                                } catch (IntentSender.SendIntentException sie) {
-                                    //Log.i(TAG, "PendingIntent unable to execute request.");
-                                }
-                                break;
-                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                                String errorMessage = "Location settings are inadequate, and cannot be " +
-                                        "fixed here. Fix in Settings.";
-                                //Log.e(TAG, errorMessage);
-                                Toast.makeText(mContext, errorMessage, Toast.LENGTH_LONG).show();
-                        }
-                        updateUI();
-                    }
-                });
-    }
-
-    public void stopTracking() {
-        stopLocationUpdates();
-    }
-
-    private void stopLocationUpdates() {
-        removeLocationUpdates();
-    }
 
     public boolean isRunService(Context mContext) {
         long masterUserId = BaseActivity.getPrefUserMasterId(mContext);
@@ -448,7 +480,7 @@ public class LocationService extends Service {
         ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking + masterUserId, s);
     }
 
-    public void setTrackingConfig(Context context) {
+    /*public void setTrackingConfig(Context context) {
         String config = ServiceTools.getKeyFromSharedPreferences(context, ProjectInfo.pre_gps_config);
         if (!ServiceTools.isNull(config)) {
             try {
@@ -461,7 +493,7 @@ public class LocationService extends Service {
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 
     private void sendLocation(Location correctLocation) {
         boolean saveInDb = false;
@@ -485,17 +517,11 @@ public class LocationService extends Service {
     }
 
     private void sendToServer(final List<VisitorLocation> visitorLocations) {
-
-        if (dba == null) dba = new DbAdapter(mContext);
-        dba.open();
-
         SetAllDataBody setAllDataBody;
         final ApiInterface apiService;
         Call<SaveAllDataResult> saveAllDataResultCall;
-        User user = dba.getUser();
         setAllDataBody = new SetAllDataBody();
         setAllDataBody.setUserToken(BaseActivity.getPrefUserToken());
-
         apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
         setAllDataBody.setVisitorLocations(visitorLocations);
         saveAllDataResultCall = apiService.SaveAllData(setAllDataBody);
@@ -527,9 +553,10 @@ public class LocationService extends Service {
     }
 
     private void getUserTokenAndSendAgain(List<VisitorLocation> VisitorLocations) {
-        DbAdapter db = new DbAdapter(mContext);
-        db.open();
-        User user = db.getUser();
+        if (dba == null) dba = new DbAdapter(mContext);
+        dba.open();
+        User user = dba.getUser();
+        dba.close();
         LoginBody loginBody = new LoginBody();
         loginBody.setUserName(user.getUsername());
         loginBody.setPassword(user.getPassword());
@@ -614,24 +641,6 @@ public class LocationService extends Service {
             EventLocation eventLocation = entry.getValue();
             eventLocation.onReceivePoint(location,saveInDb);
         }
-    }
-
-    private void createLocationCallback() {
-        mLocationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-                onNewLocation(locationResult.getLastLocation());
-                mCurrentLocation = locationResult.getLastLocation();
-                updateUI();
-            }
-        };
-    }
-
-    private void buildLocationSettingsRequest() {
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        builder.addLocationRequest(locationRequest);
-        mLocationSettingsRequest = builder.build();
     }
 
     private void updateUI() {
@@ -736,16 +745,6 @@ public class LocationService extends Service {
         if (serviceIsRunningInForeground(mContext)) {
             //mNotificationManager.notify(NOTIFICATION_ID, getNotification());
         }
-    }
-
-    /**
-     * Sets the location request parameters.
-     */
-    private void createLocationRequest() {
-        locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setFastestInterval(5000)
-                .setInterval(10000);
     }
 
     /**

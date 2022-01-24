@@ -1319,7 +1319,7 @@ public class DbSchema {
                 "`Id` INTEGER, " +
                 "`ReceiptId` NUMERIC, " +
                 "`ChequeClientId` NUMERIC," +
-                " `ReceiptClientId` NUMERIC, " +
+                "`ReceiptClientId` NUMERIC, " +
                 "`BankClientId` NUMERIC, " +
                 "`Number` NUMERIC, " +
                 "`Bank` TEXT, " +
@@ -1933,6 +1933,7 @@ public class DbSchema {
                 " PRIMARY KEY(id))";
 
     }
+
     public static class RegionSchema implements BaseColumns {
 
         public static final String TABLE_NAME = "Region";
@@ -1955,6 +1956,29 @@ public class DbSchema {
                 " \"RowVersion\" INTEGER," +
                 " \"MapCode\" INTEGER," +
                 " PRIMARY KEY(id))";
+    }
+
+    public static class StopLogSchema implements BaseColumns {
+
+        public static final String TABLE_NAME = "StopLog";
+        public static final String COLUMN_client_id = "client_id";
+        public static final String COLUMN_lat = "lat";
+        public static final String COLUMN_lng = "lng";
+        public static final String COLUMN_entryDate = "entryDate";
+        public static final String COLUMN_duration = "duration";
+        public static final String COLUMN_endDate = "endDate";
+        public static final String COLUMN_UserId = "UserId";
+
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"StopLog\" ( " +
+                " `lat` TEXT," +
+                " `lng` TEXT," +
+                " `entryDate` NUMERIC," +
+                " `duration` TEXT," +
+                " `endDate` NUMERIC," +
+                " `Id` INTEGER," +
+                " `UserId` NUMERIC," +
+                " PRIMARY KEY(`Id`) )";
+        public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
 }

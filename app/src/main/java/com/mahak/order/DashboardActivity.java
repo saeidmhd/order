@@ -25,6 +25,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Browser;
@@ -70,6 +71,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.android.PolyUtil;
 import com.mahak.order.common.CheckList;
@@ -164,7 +166,10 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             tvSumOfPureInvoice,
             tvSumOfChargeAndTaxOrder,
             tvSumOffChargeAndTaxInvoice,
-            tvVersion;
+            tvVersion,
+            speed;
+    private CircularProgressIndicator circularProgressIndicator;
+
     public static TextView tvTrackingService;
 
 
@@ -581,7 +586,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     btnTrackingService.setChecked(true);
                 }
                 setTackingServiceText(true);
-                locationService.setTrackingConfig(mContext);
+              //  locationService.setTrackingConfig(mContext);
                 locationService.startTracking();
                 locationService.setTrackingPrefOff("1");
             }
@@ -803,6 +808,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnNavPromotionList.setOnClickListener(this);
 
         btnTrackingService = (SwitchCompat) findViewById(R.id.btnTrackingService);
+        speed = (TextView) findViewById(R.id.speed);
+        circularProgressIndicator =  findViewById(R.id.speedProgressIndicator);
 
         //Version/////////////////////////////////////////////////////
         PackageInfo pInfo;
@@ -895,6 +902,11 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                         if(location != null){
                             lastPosition = new LatLng(location.getLatitude(), location.getLongitude());
                             showMarkerOnMap(lastPosition);
+                            speed.setText((location.getSpeed() * 3.6) + " km/h ");
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                int progress = (int) (location.getSpeed() * 3.6 * 3.6 * 10);
+                                circularProgressIndicator.setProgress( progress , true);
+                            }
                         }
                     }
                 });

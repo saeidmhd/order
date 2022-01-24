@@ -618,14 +618,9 @@ public class ServiceTools {
             user = db.getUser();
             if (user.getMahakId() != null) {
                 check = true;
-
                 Calendar calLogin = Calendar.getInstance();
                 calLogin.setTimeInMillis(user.getLoginDate());
-
                 check = calLogin.get(Calendar.DAY_OF_YEAR) == calNow.get(Calendar.DAY_OF_YEAR);
-
-            } else {
-                check = false;
             }
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());

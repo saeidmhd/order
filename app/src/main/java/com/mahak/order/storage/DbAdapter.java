@@ -29,6 +29,7 @@ import com.mahak.order.common.CustomerGroup;
 import com.mahak.order.common.ExtraData;
 import com.mahak.order.common.PhotoGallery;
 import com.mahak.order.common.Region;
+import com.mahak.order.common.StopLog;
 import com.mahak.order.common.VisitorLocation;
 import com.mahak.order.common.GroupedTax;
 import com.mahak.order.common.NonRegister;
@@ -905,6 +906,19 @@ public class DbAdapter {
         initialvalue.put(DbSchema.UserSchema.COLUMN_UserToken, user.getUserToken());
 
         return mDb.insert(DbSchema.UserSchema.TABLE_NAME, null, initialvalue);
+    }
+    public long AddStoplog(StopLog stopLog) {
+
+        ContentValues initialvalue = new ContentValues();
+        initialvalue.put(DbSchema.StopLogSchema.COLUMN_client_id, stopLog.getId());
+        initialvalue.put(DbSchema.StopLogSchema.COLUMN_lat, stopLog.getLat());
+        initialvalue.put(DbSchema.StopLogSchema.COLUMN_lng, stopLog.getLng());
+        initialvalue.put(DbSchema.StopLogSchema.COLUMN_entryDate, stopLog.getEntryDate());
+        initialvalue.put(DbSchema.StopLogSchema.COLUMN_duration, stopLog.getDuration());
+        initialvalue.put(DbSchema.StopLogSchema.COLUMN_endDate, stopLog.getEndDate());
+        initialvalue.put(DbSchema.StopLogSchema.COLUMN_UserId, getPrefUserId());
+
+        return mDb.insert(DbSchema.StopLogSchema.TABLE_NAME, null, initialvalue);
     }
 
     public long AddDeliveryOrderDetail(OrderDetail orderDetail) {
@@ -10597,6 +10611,7 @@ public class DbAdapter {
             
             db.execSQL(DbSchema.PhotoGallerySchema.CREATE_TABLE);
             db.execSQL(DbSchema.RegionSchema.CREATE_TABLE);
+            db.execSQL(DbSchema.StopLogSchema.CREATE_TABLE);
 
             db.execSQL("CREATE INDEX " + INDEX_Product + " ON " + DbSchema.ProductSchema.TABLE_NAME + "(" + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + ")");
 
