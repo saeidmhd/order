@@ -51,7 +51,6 @@ import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
-import com.mahak.order.common.StopLog;
 import com.mahak.order.common.User;
 import com.mahak.order.common.VisitorLocation;
 import com.mahak.order.common.login.LoginBody;
@@ -65,14 +64,9 @@ import com.mahak.order.storage.DbAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -88,10 +82,6 @@ public class LocationService extends Service {
 
     private static final int ID_NOTIFICATION_TRACKING = 1090;
 
-    private static int MIN_DISPALCEMENT_CHANGE_FOR_UPDATES = 15; // 1 meters
-    private static long MIN_TIME_INTERVAL_UPDATES = 120000; // 2 min
-
-    private static boolean sendPointsBasedMeter = false;
     public Context mContext;
 
     boolean isLogging = false;
@@ -350,50 +340,6 @@ public class LocationService extends Service {
         return (mDistance > 111 || location.getSpeed() > 2.5) && location.getSpeed() < 42;
     }
 
-    private void getStopLog(Location mCurrentLocation) {
-
-        Calendar calLastLocation = Calendar.getInstance();
-        Calendar calNow = Calendar.getInstance();
-
-        long currentTime = System.currentTimeMillis();
-        Location lastStopLocation = new Location("");
-        JSONObject locationStopJson = getLastLocationStopJson(mContext);
-        if(locationStopJson == null){
-            saveStopInJsonFile(mCurrentLocation);
-            lastStopLocation = mCurrentLocation;
-        }else {
-            lastStopLocation.setLatitude(locationStopJson.optDouble(ProjectInfo._json_key_stop_latitude));
-            lastStopLocation.setLongitude(locationStopJson.optDouble(ProjectInfo._json_key_stop_longitude));
-            lastStopLocation.setTime(locationStopJson.optLong(ProjectInfo._json_key_stop_date));
-        }
-        calLastLocation.setTimeInMillis(lastStopLocation.getTime());
-        boolean check = calLastLocation.get(Calendar.DAY_OF_YEAR) == calNow.get(Calendar.DAY_OF_YEAR);
-        if(!check){
-            saveStopInJsonFile(mCurrentLocation);
-        }
-        long stop_time = currentTime - lastStopLocation.getTime();
-        if(stop_time > 5 * 60 * 1000){
-            if((mCurrentLocation.distanceTo(lastStopLocation) > 111 || mCurrentLocation.getSpeed() > 2.5)){
-                StopLog stopLog = new StopLog();
-                stopLog.setDuration(stop_time / 1000);
-                stopLog.setId(ServiceTools.toLong(ServiceTools.getGenerationCode()));
-                stopLog.setEndDate(ServiceTools.getFormattedDate(currentTime));
-                stopLog.setEntryDate(ServiceTools.getFormattedDate(lastStopLocation.getTime()));
-                stopLog.setLat(lastStopLocation.getLatitude());
-                stopLog.setLng(lastStopLocation.getLongitude());
-                addStopLogToDb(stopLog);
-                ServiceTools.writeLog( "\n" +  stopLog.toString());
-                saveStopInJsonFile(mCurrentLocation);
-            }
-        }
-    }
-
-    private void addStopLogToDb(StopLog stopLog) {
-        if (dba == null) dba = new DbAdapter(mContext);
-        dba.open();
-        dba.AddStoplog(stopLog);
-        dba.close();
-    }
 
 
     private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
@@ -479,21 +425,6 @@ public class LocationService extends Service {
         long masterUserId = BaseActivity.getPrefUserMasterId(mContext);
         ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking + masterUserId, s);
     }
-
-    /*public void setTrackingConfig(Context context) {
-        String config = ServiceTools.getKeyFromSharedPreferences(context, ProjectInfo.pre_gps_config);
-        if (!ServiceTools.isNull(config)) {
-            try {
-                JSONObject obj = new JSONObject(config);
-                MIN_DISPALCEMENT_CHANGE_FOR_UPDATES = obj.getInt(ProjectInfo._json_key_mingps_distance_change) ;
-                sendPointsBasedMeter = obj.getBoolean(ProjectInfo._json_sendPointsBasedMeter);
-                int time = obj.getInt(ProjectInfo._json_key_mingps_time_change);
-                MIN_TIME_INTERVAL_UPDATES = (long) time * 60 * 1000;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
 
     private void sendLocation(Location correctLocation) {
         boolean saveInDb = false;
@@ -648,7 +579,6 @@ public class LocationService extends Service {
             executeEventLocations(mCurrentLocation,false);
             if(isRadaraActive()){
                 performSignalOperation();
-                getStopLog(mCurrentLocation);
                 Location correctLocation = getCorrectLocation(mCurrentLocation);
                 if (correctLocation != null) {
                     sendLocation(correctLocation);
@@ -815,6 +745,5 @@ public class LocationService extends Service {
             }
         });
     }
-
 }
 

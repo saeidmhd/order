@@ -166,9 +166,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             tvSumOfPureInvoice,
             tvSumOfChargeAndTaxOrder,
             tvSumOffChargeAndTaxInvoice,
-            tvVersion,
-            speed;
-    private CircularProgressIndicator circularProgressIndicator;
+            tvVersion;
 
     public static TextView tvTrackingService;
 
@@ -808,8 +806,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnNavPromotionList.setOnClickListener(this);
 
         btnTrackingService = (SwitchCompat) findViewById(R.id.btnTrackingService);
-        speed = (TextView) findViewById(R.id.speed);
-        circularProgressIndicator =  findViewById(R.id.speedProgressIndicator);
 
         //Version/////////////////////////////////////////////////////
         PackageInfo pInfo;
@@ -902,11 +898,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                         if(location != null){
                             lastPosition = new LatLng(location.getLatitude(), location.getLongitude());
                             showMarkerOnMap(lastPosition);
-                            speed.setText((location.getSpeed() * 3.6) + " km/h ");
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                int progress = (int) (location.getSpeed() * 3.6 * 3.6 * 10);
-                                circularProgressIndicator.setProgress( progress , true);
-                            }
                         }
                     }
                 });
