@@ -23,7 +23,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Browser;
@@ -229,6 +228,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     private List<LatLng> latLngpoints = new ArrayList<>();
     private FontProgressDialog pd;
     private static LatLng lastPosition;
+    private int fromActivityResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -524,14 +524,12 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void onResume() {
-
-        asyncReport = new AsyncReport();
-        asyncReport.execute();
-
+        if(fromActivityResult == 0){
+            asyncReport = new AsyncReport();
+            asyncReport.execute();
+        }
         if(isRadaraActive())
             setTrackingConfig();
-
-        //update();
         super.onResume();
     }
 
@@ -556,6 +554,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         };
         this.getApplicationContext().registerReceiver(receiver, filter);
     }
+
 
     private void startLocationUpdate() {
         if(isRadaraActive()){
@@ -1464,6 +1463,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        
+        fromActivityResult = 1;
 
         if (requestCode == REQUEST_Location_ON) {
             if(resultCode != RESULT_OK){

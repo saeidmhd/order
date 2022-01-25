@@ -9,7 +9,8 @@
         <entry key="app/src/main/res/drawable/ic_forward.xml" value="0.1703125" />
         <entry key="app/src/main/res/drawable/ic_gift.xml" value="0.2425" />
         <entry key="app/src/main/res/drawable/ic_gifts.xml" value="0.2425" />
-        <entry key="app/src/main/res/layout-de/activity_dashboard.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_point_selector.xml" value="0.215625" />
+        <entry key="app/src/main/res/layout-de/activity_dashboard.xml" value="0.3592592592592593" />
         <entry key="app/src/main/res/layout-de/activity_manage_customer.xml" value="0.33" />
         <entry key="app/src/main/res/layout-de/activity_setting.xml" value="0.33" />
         <entry key="app/src/main/res/layout-de/factor_print_template.xml" value="0.17708333333333334" />
