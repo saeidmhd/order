@@ -132,11 +132,6 @@ public class LocationService extends Service {
     private static NotificationManager mNotificationManager;
 
     /**
-     * Contains parameters used by {@link com.google.android.gms.location.FusedLocationProviderApi}.
-     */
-    private LocationRequest mLocationRequest;
-
-    /**
      * Provides access to the Fused Location Provider API.
      */
     private FusedLocationProviderClient mFusedLocationClient;
@@ -256,8 +251,8 @@ public class LocationService extends Service {
     private void createLocationRequest() {
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setFastestInterval(5 * 1000)
-                .setInterval(10 * 1000);
+                .setFastestInterval(30 * 1000)
+                .setInterval(30 * 1000);
     }
 
     private void buildLocationSettingsRequest() {
@@ -337,10 +332,8 @@ public class LocationService extends Service {
         lasLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_longitude));
         lasLocation.setTime(obj.optLong(ProjectInfo._json_key_date));
         double mDistance = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), location.getLatitude(), location.getLongitude(), "K") * 1000;
-        return (mDistance > 111 || location.getSpeed() > 2.5) && location.getSpeed() < 42;
+        return (mDistance > 111 || location.getSpeed() > 2.5) && location.getSpeed() < 25;
     }
-
-
 
     private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
         double theta = lon1 - lon2;
@@ -379,16 +372,6 @@ public class LocationService extends Service {
             return null;
         }
     }
-    public JSONObject getLastLocationStopJson(Context context) {
-        String lastLocation = ServiceTools.getKeyFromSharedPreferences(context, ProjectInfo.pre_last_stop_location);
-        if (ServiceTools.isNull(lastLocation))
-            return null;
-        try {
-            return new JSONObject(lastLocation);
-        } catch (JSONException e) {
-            return null;
-        }
-    }
 
     private void saveInJsonFile(Location location) {
         JSONObject obj = new JSONObject();
@@ -401,19 +384,6 @@ public class LocationService extends Service {
             e.printStackTrace();
         }
     }
-    private void saveStopInJsonFile(Location location) {
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put(ProjectInfo._json_key_stop_latitude, location.getLatitude());
-            obj.put(ProjectInfo._json_key_stop_longitude, location.getLongitude());
-            obj.put(ProjectInfo._json_key_stop_date, location.getTime());
-            ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_last_stop_location, obj.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-
 
     public boolean isRunService(Context mContext) {
         long masterUserId = BaseActivity.getPrefUserMasterId(mContext);
@@ -535,18 +505,6 @@ public class LocationService extends Service {
             Log.e("saveInDb",e.getMessage());
         }
         dba.close();
-    }
-
-    private void waiter() {
-        String wait = ServiceTools.getKeyFromSharedPreferences(mContext, ProjectInfo.pre_waiter);
-        while (wait.equals("1")) {
-            try {
-                Thread.sleep(200);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_waiter, "1");
     }
 
     public void stopNotificationServiceTracking() {

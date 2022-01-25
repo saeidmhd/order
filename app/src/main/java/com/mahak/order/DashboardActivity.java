@@ -1,7 +1,5 @@
 package com.mahak.order;
 
-import static com.mahak.order.BaseActivity.mContext;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -47,7 +45,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -71,7 +68,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.android.PolyUtil;
 import com.mahak.order.common.CheckList;
@@ -138,19 +134,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             btnNavReportsList;
 
     private ImageButton btnZoomMapView;
-    private ProgressBar
-            tvSumOfReceiptsProgressBar,
-            tvSumOfOrdersProgressBar,
-            tvSumOfInvoicesProgressBar,
-            tvSumOfCashProgressBar,
-            tvSumOfChequeProgressBar,
-            tvSumOfReceiptsAmountProgressBar,
-            tvSumOfDiscountInvoiceProgressBar,
-            tvSumOfDiscountOrderProgressBar,
-            tvSumOfPureOrderProgressBar,
-            tvSumOfPureInvoiceProgressBar,
-            tvSumOfChargeAndTaxOrderProgressBar,
-            tvSumOfChargeAndTaxInvoiceProgressBar;
 
 
     private TextView
@@ -700,19 +683,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         db.open();
 
         mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
-
-        tvSumOfReceiptsProgressBar = (ProgressBar) findViewById(R.id.tvSumOfReceiptsProgressBar);
-        tvSumOfOrdersProgressBar = findViewById(R.id.tvSumOfOrdersProgressBar);
-        tvSumOfInvoicesProgressBar = findViewById(R.id.tvSumOfInvoicesProgressBar);
-        tvSumOfCashProgressBar = findViewById(R.id.tvSumOfCashProgressBar);
-        tvSumOfChequeProgressBar = findViewById(R.id.tvSumOfChequeProgressBar);
-        tvSumOfReceiptsAmountProgressBar = findViewById(R.id.tvSumOfReceiptsAmountProgressBar);
-        tvSumOfDiscountInvoiceProgressBar = findViewById(R.id.tvSumOfDiscountInvoiceProgressBar);
-        tvSumOfDiscountOrderProgressBar = findViewById(R.id.tvSumOfDiscountOrderProgressBar);
-        tvSumOfPureOrderProgressBar = findViewById(R.id.tvSumOfPureOrderProgressBar);
-        tvSumOfPureInvoiceProgressBar = findViewById(R.id.tvSumOfPureInvoiceProgressBar);
-        tvSumOfChargeAndTaxOrderProgressBar = findViewById(R.id.tvSumOfChargeAndTaxOrderProgressBar);
-        tvSumOfChargeAndTaxInvoiceProgressBar = findViewById(R.id.tvSumOfChargeAndTaxInvoiceProgressBar);
 
         tvSumOfOrders = (TextView) findViewById(R.id.tvSumOfOrders);
         tvSumOfReceipts = (TextView) findViewById(R.id.tvSumOfReceipts);
@@ -1364,33 +1334,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         @Override
         protected void onPreExecute() {
-
-            tvSumOfReceipts.setVisibility(View.GONE);
-            tvSumOfOrders.setVisibility(View.GONE);
-            tvSumOfInvoices.setVisibility(View.GONE);
-            tvSumOfCash.setVisibility(View.GONE);
-            tvSumOfCheque.setVisibility(View.GONE);
-            tvSumOfReceiptsAmount.setVisibility(View.GONE);
-            tvSumOfDiscountInvoice.setVisibility(View.GONE);
-            tvSumOfDiscountOrder.setVisibility(View.GONE);
-            tvSumOfPureOrder.setVisibility(View.GONE);
-            tvSumOfPureInvoice.setVisibility(View.GONE);
-            tvSumOfChargeAndTaxOrder.setVisibility(View.GONE);
-            tvSumOffChargeAndTaxInvoice.setVisibility(View.GONE);
-
-
-            tvSumOfReceiptsProgressBar.setVisibility(View.VISIBLE);
-            tvSumOfOrdersProgressBar.setVisibility(View.VISIBLE);
-            tvSumOfInvoicesProgressBar.setVisibility(View.VISIBLE);
-            tvSumOfCashProgressBar.setVisibility(View.VISIBLE);
-            tvSumOfChequeProgressBar.setVisibility(View.VISIBLE);
-            tvSumOfReceiptsAmountProgressBar.setVisibility(View.VISIBLE);
-            tvSumOfDiscountInvoiceProgressBar.setVisibility(View.VISIBLE);
-            tvSumOfDiscountOrderProgressBar.setVisibility(View.VISIBLE);
-            tvSumOfPureOrderProgressBar.setVisibility(View.VISIBLE);
-            tvSumOfPureInvoiceProgressBar.setVisibility(View.VISIBLE);
-            tvSumOfChargeAndTaxOrderProgressBar.setVisibility(View.VISIBLE);
-            tvSumOfChargeAndTaxInvoiceProgressBar.setVisibility(View.VISIBLE);
             super.onPreExecute();
         }
 
@@ -1414,33 +1357,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         @Override
         protected void onPostExecute(Boolean result) {
-
-            tvSumOfReceiptsProgressBar.setVisibility(View.GONE);
-            tvSumOfOrdersProgressBar.setVisibility(View.GONE);
-            tvSumOfInvoicesProgressBar.setVisibility(View.GONE);
-            tvSumOfCashProgressBar.setVisibility(View.GONE);
-            tvSumOfChequeProgressBar.setVisibility(View.GONE);
-            tvSumOfReceiptsAmountProgressBar.setVisibility(View.GONE);
-            tvSumOfDiscountInvoiceProgressBar.setVisibility(View.GONE);
-            tvSumOfDiscountOrderProgressBar.setVisibility(View.GONE);
-            tvSumOfPureOrderProgressBar.setVisibility(View.GONE);
-            tvSumOfPureInvoiceProgressBar.setVisibility(View.GONE);
-            tvSumOfChargeAndTaxOrderProgressBar.setVisibility(View.GONE);
-            tvSumOfChargeAndTaxInvoiceProgressBar.setVisibility(View.GONE);
-
-            tvSumOfReceipts.setVisibility(View.VISIBLE);
-            tvSumOfOrders.setVisibility(View.VISIBLE);
-            tvSumOfInvoices.setVisibility(View.VISIBLE);
-            tvSumOfCash.setVisibility(View.VISIBLE);
-            tvSumOfCheque.setVisibility(View.VISIBLE);
-            tvSumOfReceiptsAmount.setVisibility(View.VISIBLE);
-            tvSumOfDiscountInvoice.setVisibility(View.VISIBLE);
-            tvSumOfDiscountOrder.setVisibility(View.VISIBLE);
-            tvSumOfPureOrder.setVisibility(View.VISIBLE);
-            tvSumOfPureInvoice.setVisibility(View.VISIBLE);
-            tvSumOfChargeAndTaxOrder.setVisibility(View.VISIBLE);
-            tvSumOffChargeAndTaxInvoice.setVisibility(View.VISIBLE);
-
 
             tvSumOfOrders.setText(ServiceTools.formatPrice(TotalOrder));
             tvSumOfOrders.setSelected(true);
@@ -1610,6 +1526,13 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         isReceiverRegistered = false;
+
+        if (asyncReport != null) {
+            if (asyncReport.getStatus() == AsyncTask.Status.RUNNING) {
+                asyncReport.cancel(true);
+            }
+        }
+
         super.onPause();
 
     }
@@ -1696,4 +1619,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         });
         dialog.show();
     }
+
+
 }

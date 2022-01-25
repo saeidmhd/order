@@ -139,12 +139,6 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             product = arrayOrginal.get(pos);
         if (product != null) {
             initHolder(product, holder, pos, mCount);
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    gotoPriceCount(holder, pos);
-                }
-            });
         }
     }
 
@@ -260,6 +254,19 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     intent.putExtra(ProjectInfo._json_key_index, 0);
                     ((Activity) mContext).startActivityForResult(intent, REQUEST_FOR_ACTIVITY_CODE);
                 }
+            }
+        });
+
+        holder.txtCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gotoPriceCount(holder, position);
+            }
+        });
+        holder.txtTotalCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gotoPriceCount(holder, position);
             }
         });
 
