@@ -427,11 +427,11 @@ public class BackupListActivity extends BaseActivity {
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
 
-        Uri photoURI = FileProvider.getUriForFile(mContext,
+        Uri uri = FileProvider.getUriForFile(mContext,
                 BuildConfig.APPLICATION_ID + ".provider",
                 file);
 
-        share.putExtra(Intent.EXTRA_STREAM, photoURI);
+        share.putExtra(Intent.EXTRA_STREAM, uri);
         try {
             startActivity(Intent.createChooser(share, ""));
         } catch (Exception e) {

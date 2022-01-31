@@ -11,8 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.res.Configuration;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Binder;
 import android.os.Build;
@@ -20,11 +18,9 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
-import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -39,7 +35,6 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -51,7 +46,8 @@ import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
-import com.mahak.order.common.StopLog;
+import com.mahak.order.common.StopLocation.StopLocationResponse;
+import com.mahak.order.common.StopLocation.StopLog;
 import com.mahak.order.common.User;
 import com.mahak.order.common.VisitorLocation;
 import com.mahak.order.common.login.LoginBody;
@@ -65,14 +61,10 @@ import com.mahak.order.storage.DbAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -81,6 +73,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.mahak.order.BaseActivity.getPrefUserId;
 import static com.mahak.order.BaseActivity.isRadaraActive;
 import static com.mahak.order.BaseActivity.setPrefSignalUserToken;
 
@@ -265,7 +258,7 @@ public class LocationService extends Service {
 
     private void createLocationRequest() {
         locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY).setSmallestDisplacement(50)
                 .setFastestInterval(5 * 1000)
                 .setInterval(10 * 1000);
     }
@@ -337,6 +330,7 @@ public class LocationService extends Service {
     }
 
     private boolean checkDistanceSpeed(Location location) {
+        boolean result;
         JSONObject obj = getLastLocationJson(mContext);
         if (obj == null) {
             saveInJsonFile(location);
@@ -347,10 +341,18 @@ public class LocationService extends Service {
         lasLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_longitude));
         lasLocation.setTime(obj.optLong(ProjectInfo._json_key_date));
         double mDistance = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), location.getLatitude(), location.getLongitude(), "K") * 1000;
-        return (mDistance > 111 || location.getSpeed() > 2.5) && location.getSpeed() < 42;
+        result = (mDistance > 50 && mDistance < 111);
+        if(result){
+            ServiceTools.writeLogRadara(mDistance + "\n" + location.getSpeed() + "\n" + location.getAccuracy());
+        }
+        return result;
     }
 
-    private void getStopLog(Location mCurrentLocation) {
+    private void getStopLog(Location currentLocation) {
+
+        long SEVEN_MINUTE = 2 * 60 * 1000;
+
+        ArrayList<StopLog> stopLogs = new ArrayList<>();
 
         Calendar calLastLocation = Calendar.getInstance();
         Calendar calNow = Calendar.getInstance();
@@ -359,8 +361,8 @@ public class LocationService extends Service {
         Location lastStopLocation = new Location("");
         JSONObject locationStopJson = getLastLocationStopJson(mContext);
         if(locationStopJson == null){
-            saveStopInJsonFile(mCurrentLocation);
-            lastStopLocation = mCurrentLocation;
+            saveStopInJsonFile(currentLocation);
+            lastStopLocation = currentLocation;
         }else {
             lastStopLocation.setLatitude(locationStopJson.optDouble(ProjectInfo._json_key_stop_latitude));
             lastStopLocation.setLongitude(locationStopJson.optDouble(ProjectInfo._json_key_stop_longitude));
@@ -369,29 +371,58 @@ public class LocationService extends Service {
         calLastLocation.setTimeInMillis(lastStopLocation.getTime());
         boolean check = calLastLocation.get(Calendar.DAY_OF_YEAR) == calNow.get(Calendar.DAY_OF_YEAR);
         if(!check){
-            saveStopInJsonFile(mCurrentLocation);
+            saveStopInJsonFile(currentLocation);
         }
+
         long stop_time = currentTime - lastStopLocation.getTime();
-        if(stop_time > 5 * 60 * 1000){
-            if((mCurrentLocation.distanceTo(lastStopLocation) > 111 || mCurrentLocation.getSpeed() > 2.5)){
-                StopLog stopLog = new StopLog();
-                stopLog.setDuration(stop_time / 1000);
-                stopLog.setId(ServiceTools.toLong(ServiceTools.getGenerationCode()));
-                stopLog.setEndDate(ServiceTools.getFormattedDate(currentTime));
-                stopLog.setEntryDate(ServiceTools.getFormattedDate(lastStopLocation.getTime()));
-                stopLog.setLat(lastStopLocation.getLatitude());
-                stopLog.setLng(lastStopLocation.getLongitude());
-                addStopLogToDb(stopLog);
-                ServiceTools.writeLog( "\n" +  stopLog.toString());
-                saveStopInJsonFile(mCurrentLocation);
+        if((currentLocation.distanceTo(lastStopLocation) > 111 || currentLocation.getSpeed() > 2.5) && currentLocation.getSpeed() < 42){
+            if(stop_time > SEVEN_MINUTE){
+                saveStopLogs(stopLogs, currentTime, lastStopLocation, stop_time);
             }
+            saveStopInJsonFile(currentLocation);
         }
+        if(stop_time > SEVEN_MINUTE){
+            saveStopLogs(stopLogs, currentTime, lastStopLocation, stop_time);
+        }
+    }
+
+    private void saveStopLogs(ArrayList<StopLog> stopLogs, long currentTime, Location lastStopLocation, long stop_time) {
+        StopLog stopLog = new StopLog();
+        stopLog.setDuration(stop_time / 1000);
+        stopLog.setStopLocationClientId(ServiceTools.toLong(ServiceTools.getStopLocationId(lastStopLocation.getTime())));
+        stopLog.setEndDate(ServiceTools.getFormattedDate(currentTime));
+        stopLog.setEntryDate(ServiceTools.getFormattedDate(lastStopLocation.getTime()));
+        stopLog.setLat(lastStopLocation.getLatitude());
+        stopLog.setLng(lastStopLocation.getLongitude());
+        stopLog.setVisitorId(getPrefUserId());
+        stopLogs.add(stopLog);
+        addStopLogToDb(stopLog);
+        sendStopLocationToServer(stopLogs);
+        ServiceTools.writeLog("\n" + stopLog.toString());
+    }
+
+    public void sendStopLocationToServer( ArrayList<StopLog> stopLog) {
+        ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
+        Call<StopLocationResponse> call = apiService.SetStopLocation(stopLog);
+        call.enqueue(new Callback<StopLocationResponse>() {
+            @Override
+            public void onResponse(Call<StopLocationResponse> call, Response<StopLocationResponse> response) {
+                if (response.body() != null) {
+                    if (response.body().isSucceeded()) {
+                    }else
+                        Log.d("@TAG-Res", "error");
+                }
+            }
+            @Override
+            public void onFailure(Call<StopLocationResponse> call, Throwable t) {
+            }
+        });
     }
 
     private void addStopLogToDb(StopLog stopLog) {
         if (dba == null) dba = new DbAdapter(mContext);
         dba.open();
-        dba.AddStoplog(stopLog);
+        dba.AddStopLog(stopLog);
         dba.close();
     }
 
@@ -461,6 +492,7 @@ public class LocationService extends Service {
             obj.put(ProjectInfo._json_key_stop_latitude, location.getLatitude());
             obj.put(ProjectInfo._json_key_stop_longitude, location.getLongitude());
             obj.put(ProjectInfo._json_key_stop_date, location.getTime());
+            obj.put(ProjectInfo._json_key_client_id, ServiceTools.getStopLocationId(location.getTime()));
             ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_last_stop_location, obj.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -479,21 +511,6 @@ public class LocationService extends Service {
         long masterUserId = BaseActivity.getPrefUserMasterId(mContext);
         ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking + masterUserId, s);
     }
-
-    /*public void setTrackingConfig(Context context) {
-        String config = ServiceTools.getKeyFromSharedPreferences(context, ProjectInfo.pre_gps_config);
-        if (!ServiceTools.isNull(config)) {
-            try {
-                JSONObject obj = new JSONObject(config);
-                MIN_DISPALCEMENT_CHANGE_FOR_UPDATES = obj.getInt(ProjectInfo._json_key_mingps_distance_change) ;
-                sendPointsBasedMeter = obj.getBoolean(ProjectInfo._json_sendPointsBasedMeter);
-                int time = obj.getInt(ProjectInfo._json_key_mingps_time_change);
-                MIN_TIME_INTERVAL_UPDATES = (long) time * 60 * 1000;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
 
     private void sendLocation(Location correctLocation) {
         boolean saveInDb = false;
@@ -753,8 +770,8 @@ public class LocationService extends Service {
      */
     public class LocalBinder extends Binder {
         public LocationService getService(Context context, Activity mActivity) {
-             mContext = context;
-             activity = mActivity;
+            mContext = context;
+            activity = mActivity;
             return LocationService.this;
         }
     }
@@ -815,6 +832,6 @@ public class LocationService extends Service {
             }
         });
     }
-
 }
+
 

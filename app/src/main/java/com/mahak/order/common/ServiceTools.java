@@ -17,6 +17,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -489,6 +490,14 @@ public class ServiceTools {
 //		Random random = new Random();
 //		int res = random.nextInt();
 //		return String.valueOf(res);
+    }
+    public static String getStopLocationId(long time) {
+        String Code = "";
+        long  FinalTime, UserId;
+        UserId = BaseActivity.getPrefUserMasterId();
+        FinalTime = time;
+        Code = String.valueOf(UserId) + FinalTime;
+        return Code;
     }
 
     public static String GenerationCodeOrderProperty() {
@@ -1094,17 +1103,13 @@ public class ServiceTools {
 
     public static double getCalculateDeliveryFinalPrice(OrderDetail object) {
 
-        double off = 0;
         double Tax = 0;
         double Charge = 0;
         double count = (object.getSumCountBaJoz());
         double Price = object.getPrice();
-        double offValue = object.getDiscount();
         double TaxPercent = object.getTaxPercent();
         double ChargePercent = object.getChargePercent();
         Price = (count * Price);
-        off = (offValue * 1);
-        Price = Price - off;
         Tax = ((Price * TaxPercent) / 100);
         Charge = ((Price * ChargePercent) / 100);
         double TaxAndCharge = Tax + Charge;
@@ -1799,6 +1804,36 @@ FirebaseCrashlytics.getInstance().recordException(e);
         try {
             Calendar calendar = Calendar.getInstance();
             String path = Environment.getExternalStorageDirectory().getPath() + "/Tracking_LOG.txt";
+            File f = new File(path);
+            long seek = f.length();
+            RandomAccessFile raf = new RandomAccessFile(new File(path), "rw");
+            raf.seek(seek);
+            Date date = new Date();
+            String rafStr= "\n@@@ date: " + ServiceTools.getDate(date)
+                    + " time: " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND) +  "\n"
+                    + "@@@ version " + ServiceTools.getVersionCode(mContext);
+
+            raf.write(rafStr.getBytes());
+            seek += rafStr.getBytes().length;
+            raf.seek(seek);
+
+            raf.writeUTF(str);
+
+            raf.write("\n----------------------------------\n".getBytes());
+            seek +="\n----------------------------------\n".getBytes().length;
+            raf.seek(seek);
+
+            raf.close();
+        } catch (Exception var10) {
+            FirebaseCrashlytics.getInstance().recordException(var10);
+            var10.printStackTrace();
+        }
+    }
+    public static void writeLogRadara(String str) {
+        new StringBuffer();
+        try {
+            Calendar calendar = Calendar.getInstance();
+            String path = Environment.getExternalStorageDirectory().getPath() + "/radara_LOG.txt";
             File f = new File(path);
             long seek = f.length();
             RandomAccessFile raf = new RandomAccessFile(new File(path), "rw");

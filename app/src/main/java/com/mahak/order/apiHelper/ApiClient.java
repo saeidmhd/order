@@ -18,6 +18,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.mahak.order.BaseActivity.baseUrlTracking;
+import static com.mahak.order.BaseActivity.baseUrlTracking_404;
 import static com.mahak.order.BaseActivity.setDeviceTokenUrl;
 
 
@@ -66,6 +67,16 @@ public class ApiClient {
         if (Signalretrofit == null) {
             Signalretrofit = new Retrofit.Builder()
                     .baseUrl(baseUrlTracking)
+                    .client(client)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .build();
+        }
+        return Signalretrofit;
+    }
+    public static Retrofit trackingRetrofitClient_test() {
+        if (Signalretrofit == null) {
+            Signalretrofit = new Retrofit.Builder()
+                    .baseUrl(baseUrlTracking_404)
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();

@@ -9,9 +9,11 @@
         <entry key="app/src/main/res/drawable/ic_forward.xml" value="0.1703125" />
         <entry key="app/src/main/res/drawable/ic_gift.xml" value="0.2425" />
         <entry key="app/src/main/res/drawable/ic_gifts.xml" value="0.2425" />
+        <entry key="app/src/main/res/layout-de/act_whats_new.xml" value="0.33" />
         <entry key="app/src/main/res/layout-de/activity_dashboard.xml" value="0.1" />
         <entry key="app/src/main/res/layout-de/activity_manage_customer.xml" value="0.33" />
         <entry key="app/src/main/res/layout-de/activity_setting.xml" value="0.33" />
+        <entry key="app/src/main/res/layout-de/dashboard_left_navigation_drawer.xml" value="0.20520833333333333" />
         <entry key="app/src/main/res/layout-de/factor_print_template.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/layout-de/fragment_invoice_goods_detail.xml" value="0.5" />
         <entry key="app/src/main/res/layout-de/fragment_item_product_gallery.xml" value="0.2296875" />
@@ -22,11 +24,13 @@
         <entry key="app/src/main/res/layout-de/receipt_print_arabic.xml" value="0.5" />
         <entry key="app/src/main/res/layout-de/receipt_print_arabic50mm.xml" value="0.67" />
         <entry key="app/src/main/res/layout-de/receipt_print_arabic80mm.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/act_whats_new.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_add_person.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/layout/activity_cart.xml" value="0.23020833333333332" />
         <entry key="app/src/main/res/layout/activity_category.xml" value="0.22135416666666666" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_data_sync.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_delivery_order_detail.xml" value="0.23385416666666667" />
         <entry key="app/src/main/res/layout/activity_good_detail_count.xml" value="0.17" />
         <entry key="app/src/main/res/layout/activity_good_detail_count_1_2.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_good_detail_kol_joz.xml" value="0.33" />

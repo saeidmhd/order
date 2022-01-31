@@ -72,12 +72,6 @@
                 android:padding="3dp"
                 android:gravity="center"/>
 
-            <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:id="@+id/speedProgressIndicator"
-                android:progress="50"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
         </LinearLayout>
 
 
