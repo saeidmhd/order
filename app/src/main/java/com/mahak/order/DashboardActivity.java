@@ -1136,8 +1136,11 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
 
             void Populate(CheckList checklist, int position) {
-                tvName.setText(checklist.getName().trim());
-                tvAddress.setText(checklist.getAddress().trim());
+
+                if(checklist.getName() != null)
+                    tvName.setText(checklist.getName().trim());
+                if(checklist.getAddress() != null)
+                    tvAddress.setText(checklist.getAddress().trim());
                 if (checklist.getDescription() != null)
                     tvDescription.setText(checklist.getDescription().trim());
 
