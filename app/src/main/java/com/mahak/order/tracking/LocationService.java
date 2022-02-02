@@ -156,6 +156,8 @@ public class LocationService extends Service {
      */
     private Location mLocation;
 
+    long tracking_client_id = 0;
+
     @Override
     public void onCreate() {
 
@@ -258,8 +260,8 @@ public class LocationService extends Service {
 
     private void createLocationRequest() {
         locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY).setSmallestDisplacement(50)
-                .setFastestInterval(5 * 1000)
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setFastestInterval(10 * 1000)
                 .setInterval(10 * 1000);
     }
 
@@ -321,36 +323,39 @@ public class LocationService extends Service {
         removeLocationUpdates();
     }
 
-    private Location getCorrectLocation(Location location) {
-        if(checkDistanceSpeed(location)){
-            saveInJsonFile(location);
-            return location;
+    private Location getCorrectLocation(Location currentLocation) {
+        if(compareWithLastLocation(currentLocation)){
+            return currentLocation;
         }
         return null;
     }
 
-    private boolean checkDistanceSpeed(Location location) {
+    private boolean compareWithLastLocation(Location currentLocation) {
         boolean result;
+        double mDistance = 0;
         JSONObject obj = getLastLocationJson(mContext);
-        if (obj == null) {
-            saveInJsonFile(location);
+        if (obj == null || currentLocation.getSpeed() == 0) {
+            saveInJsonFile(currentLocation);
             return false;
         }
         Location lasLocation = new Location("");
         lasLocation.setLatitude(obj.optDouble(ProjectInfo._json_key_latitude));
         lasLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_longitude));
         lasLocation.setTime(obj.optLong(ProjectInfo._json_key_date));
-        double mDistance = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), location.getLatitude(), location.getLongitude(), "K") * 1000;
-        result = (mDistance > 50 && mDistance < 111);
+        mDistance = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(), "K") * 1000;
+        // we get points every 10 sec.Possible distance for walking and car is considered.
+        result = ( mDistance >= 15 &&  mDistance <= 300 );
         if(result){
-            ServiceTools.writeLogRadara(mDistance + "\n" + location.getSpeed() + "\n" + location.getAccuracy());
+            ServiceTools.writeLogRadara(mDistance + "\n" + currentLocation.getSpeed() + "\n" + currentLocation.getAccuracy());
         }
+        saveInJsonFile(currentLocation);
         return result;
     }
 
     private void getStopLog(Location currentLocation) {
 
         long SEVEN_MINUTE = 2 * 60 * 1000;
+        long save_stop_time = 0;
 
         ArrayList<StopLog> stopLogs = new ArrayList<>();
 
@@ -361,35 +366,40 @@ public class LocationService extends Service {
         Location lastStopLocation = new Location("");
         JSONObject locationStopJson = getLastLocationStopJson(mContext);
         if(locationStopJson == null){
-            saveStopInJsonFile(currentLocation);
+            saveStopInJsonFile(currentLocation,0);
             lastStopLocation = currentLocation;
+            tracking_client_id = ServiceTools.toLong(ServiceTools.getStopLocationId(lastStopLocation.getTime()));
         }else {
             lastStopLocation.setLatitude(locationStopJson.optDouble(ProjectInfo._json_key_stop_latitude));
             lastStopLocation.setLongitude(locationStopJson.optDouble(ProjectInfo._json_key_stop_longitude));
             lastStopLocation.setTime(locationStopJson.optLong(ProjectInfo._json_key_stop_date));
+            tracking_client_id = locationStopJson.optLong(ProjectInfo._json_key_client_id);
+            save_stop_time = locationStopJson.optLong(ProjectInfo._json_key_stop_time);
         }
         calLastLocation.setTimeInMillis(lastStopLocation.getTime());
         boolean check = calLastLocation.get(Calendar.DAY_OF_YEAR) == calNow.get(Calendar.DAY_OF_YEAR);
         if(!check){
-            saveStopInJsonFile(currentLocation);
+            saveStopInJsonFile(currentLocation,0);
         }
-
-        long stop_time = currentTime - lastStopLocation.getTime();
-        if((currentLocation.distanceTo(lastStopLocation) > 111 || currentLocation.getSpeed() > 2.5) && currentLocation.getSpeed() < 42){
+        long stop_time = currentTime - lastStopLocation.getTime() - save_stop_time;
+        if(currentLocation.distanceTo(lastStopLocation) >= 15 &&  currentLocation.distanceTo(lastStopLocation) <= 300){
             if(stop_time > SEVEN_MINUTE){
                 saveStopLogs(stopLogs, currentTime, lastStopLocation, stop_time);
+                tracking_client_id = ServiceTools.toLong(ServiceTools.getStopLocationId(lastStopLocation.getTime()));
             }
-            saveStopInJsonFile(currentLocation);
+            saveStopInJsonFile(currentLocation,0);
         }
         if(stop_time > SEVEN_MINUTE){
             saveStopLogs(stopLogs, currentTime, lastStopLocation, stop_time);
+            stop_time += save_stop_time;
+            saveStopInJsonFile(lastStopLocation,stop_time);
         }
     }
 
     private void saveStopLogs(ArrayList<StopLog> stopLogs, long currentTime, Location lastStopLocation, long stop_time) {
         StopLog stopLog = new StopLog();
         stopLog.setDuration(stop_time / 1000);
-        stopLog.setStopLocationClientId(ServiceTools.toLong(ServiceTools.getStopLocationId(lastStopLocation.getTime())));
+        stopLog.setStopLocationClientId(tracking_client_id);
         stopLog.setEndDate(ServiceTools.getFormattedDate(currentTime));
         stopLog.setEntryDate(ServiceTools.getFormattedDate(lastStopLocation.getTime()));
         stopLog.setLat(lastStopLocation.getLatitude());
@@ -486,13 +496,14 @@ public class LocationService extends Service {
             e.printStackTrace();
         }
     }
-    private void saveStopInJsonFile(Location location) {
+    private void saveStopInJsonFile(Location location , long stop_time) {
         JSONObject obj = new JSONObject();
         try {
             obj.put(ProjectInfo._json_key_stop_latitude, location.getLatitude());
             obj.put(ProjectInfo._json_key_stop_longitude, location.getLongitude());
             obj.put(ProjectInfo._json_key_stop_date, location.getTime());
             obj.put(ProjectInfo._json_key_client_id, ServiceTools.getStopLocationId(location.getTime()));
+            obj.put(ProjectInfo._json_key_stop_time, stop_time);
             ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_last_stop_location, obj.toString());
         } catch (JSONException e) {
             e.printStackTrace();

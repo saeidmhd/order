@@ -869,7 +869,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                         if(location != null){
                             lastPosition = new LatLng(location.getLatitude(), location.getLongitude());
                             showMarkerOnMap(lastPosition);
-                            speed.setText((location.getSpeed() * 3.6) + " km/h ");
+                            speed.setText(location.getSpeed() + " m/s ");
                         }
                     }
                 });
