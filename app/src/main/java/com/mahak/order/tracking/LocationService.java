@@ -26,6 +26,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.ActivityTransition;
+import com.google.android.gms.location.ActivityTransitionRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -38,6 +40,7 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.location.DetectedActivity;
 import com.google.android.gms.tasks.Task;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.DashboardActivity;
@@ -66,6 +69,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 import io.reactivex.annotations.NonNull;
@@ -158,6 +163,16 @@ public class LocationService extends Service {
 
     long tracking_client_id = 0;
 
+    private int detected_activity = DetectedActivity.UNKNOWN;
+
+    private Timer timer;
+    private static long InitialInMillis = 1000 * 10;  // 10 Seconds
+    private static long DelayInMillis = 1000 * 60 * 10;  // 10 Minutes
+
+    long stop_time;
+    Location lastStopLocation;
+    long save_stop_time = 0;
+
     @Override
     public void onCreate() {
 
@@ -174,6 +189,78 @@ public class LocationService extends Service {
                     new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
             mNotificationManager.createNotificationChannel(mChannel);
         }
+
+        timer = new Timer();
+        timer.schedule(new SendTimerTask(), InitialInMillis, DelayInMillis);
+
+    }
+
+    private ActivityTransitionRequest createTransitionsRequest() {
+        List<ActivityTransition> transitions = new ArrayList<>();
+
+        transitions.add(
+                new ActivityTransition.Builder()
+                        .setActivityType(DetectedActivity.IN_VEHICLE)
+                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
+                        .build());
+
+        transitions.add(
+                new ActivityTransition.Builder()
+                        .setActivityType(DetectedActivity.IN_VEHICLE)
+                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
+                        .build());
+
+        transitions.add(
+                new ActivityTransition.Builder()
+                        .setActivityType(DetectedActivity.STILL)
+                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
+                        .build());
+
+        transitions.add(
+                new ActivityTransition.Builder()
+                        .setActivityType(DetectedActivity.STILL)
+                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
+                        .build());
+
+
+        transitions.add(
+                new ActivityTransition.Builder()
+                        .setActivityType(DetectedActivity.WALKING)
+                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
+                        .build());
+
+        transitions.add(
+                new ActivityTransition.Builder()
+                        .setActivityType(DetectedActivity.WALKING)
+                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
+                        .build());
+
+        transitions.add(
+                new ActivityTransition.Builder()
+                        .setActivityType(DetectedActivity.RUNNING)
+                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
+                        .build());
+
+        transitions.add(
+                new ActivityTransition.Builder()
+                        .setActivityType(DetectedActivity.RUNNING)
+                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
+                        .build());
+
+        transitions.add(
+                new ActivityTransition.Builder()
+                        .setActivityType(DetectedActivity.ON_BICYCLE)
+                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
+                        .build());
+
+        transitions.add(
+                new ActivityTransition.Builder()
+                        .setActivityType(DetectedActivity.ON_BICYCLE)
+                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
+                        .build());
+
+
+        return new ActivityTransitionRequest(transitions);
     }
 
     @Override
@@ -261,8 +348,9 @@ public class LocationService extends Service {
     private void createLocationRequest() {
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10 * 1000)
                 .setFastestInterval(10 * 1000)
-                .setInterval(10 * 1000);
+                .setSmallestDisplacement(15);
     }
 
     private void buildLocationSettingsRequest() {
@@ -344,71 +432,61 @@ public class LocationService extends Service {
         lasLocation.setTime(obj.optLong(ProjectInfo._json_key_date));
         mDistance = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(), "K") * 1000;
         // we get points every 10 sec.Possible distance for walking and car is considered.
-        result = ( mDistance >= 15 &&  mDistance <= 300 );
+        result = ( mDistance >= 50 &&  mDistance <= 100 );
         if(result){
-            ServiceTools.writeLogRadara(mDistance + "\n" + currentLocation.getSpeed() + "\n" + currentLocation.getAccuracy());
+            ServiceTools.writeLogRadara("\n" + mDistance + "\n" + currentLocation.getSpeed() + "\n" + currentLocation.getAccuracy() + "\n" + currentLocation.getLatitude() + "\n" + currentLocation.getLongitude());
         }
         saveInJsonFile(currentLocation);
         return result;
     }
 
-    private void getStopLog(Location currentLocation) {
-
-        long SEVEN_MINUTE = 2 * 60 * 1000;
-        long save_stop_time = 0;
-
-        ArrayList<StopLog> stopLogs = new ArrayList<>();
+    private void getStopLog() {
 
         Calendar calLastLocation = Calendar.getInstance();
         Calendar calNow = Calendar.getInstance();
 
-        long currentTime = System.currentTimeMillis();
-        Location lastStopLocation = new Location("");
+        lastStopLocation = new Location("");
         JSONObject locationStopJson = getLastLocationStopJson(mContext);
         if(locationStopJson == null){
-            saveStopInJsonFile(currentLocation,0);
-            lastStopLocation = currentLocation;
-            tracking_client_id = ServiceTools.toLong(ServiceTools.getStopLocationId(lastStopLocation.getTime()));
+            saveStopInJsonFile(mCurrentLocation);
+            lastStopLocation = mCurrentLocation;
         }else {
             lastStopLocation.setLatitude(locationStopJson.optDouble(ProjectInfo._json_key_stop_latitude));
             lastStopLocation.setLongitude(locationStopJson.optDouble(ProjectInfo._json_key_stop_longitude));
             lastStopLocation.setTime(locationStopJson.optLong(ProjectInfo._json_key_stop_date));
-            tracking_client_id = locationStopJson.optLong(ProjectInfo._json_key_client_id);
             save_stop_time = locationStopJson.optLong(ProjectInfo._json_key_stop_time);
         }
         calLastLocation.setTimeInMillis(lastStopLocation.getTime());
         boolean check = calLastLocation.get(Calendar.DAY_OF_YEAR) == calNow.get(Calendar.DAY_OF_YEAR);
         if(!check){
-            saveStopInJsonFile(currentLocation,0);
+            saveStopInJsonFile(mCurrentLocation);
+            save_stop_time = 0;
         }
-        long stop_time = currentTime - lastStopLocation.getTime() - save_stop_time;
-        if(currentLocation.distanceTo(lastStopLocation) >= 15 &&  currentLocation.distanceTo(lastStopLocation) <= 300){
-            if(stop_time > SEVEN_MINUTE){
-                saveStopLogs(stopLogs, currentTime, lastStopLocation, stop_time);
-                tracking_client_id = ServiceTools.toLong(ServiceTools.getStopLocationId(lastStopLocation.getTime()));
-            }
-            saveStopInJsonFile(currentLocation,0);
-        }
-        if(stop_time > SEVEN_MINUTE){
-            saveStopLogs(stopLogs, currentTime, lastStopLocation, stop_time);
-            stop_time += save_stop_time;
-            saveStopInJsonFile(lastStopLocation,stop_time);
+
+        if(mCurrentLocation.distanceTo(lastStopLocation) >= 50 &&  mCurrentLocation.distanceTo(lastStopLocation) <= 100){
+            lastStopLocation = null;
         }
     }
 
-    private void saveStopLogs(ArrayList<StopLog> stopLogs, long currentTime, Location lastStopLocation, long stop_time) {
-        StopLog stopLog = new StopLog();
-        stopLog.setDuration(stop_time / 1000);
-        stopLog.setStopLocationClientId(tracking_client_id);
-        stopLog.setEndDate(ServiceTools.getFormattedDate(currentTime));
-        stopLog.setEntryDate(ServiceTools.getFormattedDate(lastStopLocation.getTime()));
-        stopLog.setLat(lastStopLocation.getLatitude());
-        stopLog.setLng(lastStopLocation.getLongitude());
-        stopLog.setVisitorId(getPrefUserId());
-        stopLogs.add(stopLog);
-        addStopLogToDb(stopLog);
-        sendStopLocationToServer(stopLogs);
-        ServiceTools.writeLog("\n" + stopLog.toString());
+    private void saveStopLogs() {
+        if (lastStopLocation != null){
+            ArrayList<StopLog> stopLogs = new ArrayList<>();
+            StopLog stopLog = new StopLog();
+            tracking_client_id = ServiceTools.toLong(ServiceTools.getStopLocationId(lastStopLocation.getTime()));
+            long currentTime = System.currentTimeMillis();
+            stop_time = currentTime - lastStopLocation.getTime();
+            stopLog.setDuration(stop_time / 1000);
+            stopLog.setStopLocationClientId(tracking_client_id);
+            stopLog.setEndDate(ServiceTools.getFormattedDate(currentTime));
+            stopLog.setEntryDate(ServiceTools.getFormattedDate(lastStopLocation.getTime()));
+            stopLog.setLat(lastStopLocation.getLatitude());
+            stopLog.setLng(lastStopLocation.getLongitude());
+            stopLog.setVisitorId(getPrefUserId());
+            stopLogs.add(stopLog);
+            addStopLogToDb(stopLog);
+            sendStopLocationToServer(stopLogs);
+            ServiceTools.writeLog("\n" + stopLog.toString());
+        }
     }
 
     public void sendStopLocationToServer( ArrayList<StopLog> stopLog) {
@@ -496,7 +574,7 @@ public class LocationService extends Service {
             e.printStackTrace();
         }
     }
-    private void saveStopInJsonFile(Location location , long stop_time) {
+    private void saveStopInJsonFile(Location location) {
         JSONObject obj = new JSONObject();
         try {
             obj.put(ProjectInfo._json_key_stop_latitude, location.getLatitude());
@@ -676,7 +754,7 @@ public class LocationService extends Service {
             executeEventLocations(mCurrentLocation,false);
             if(isRadaraActive()){
                 performSignalOperation();
-                getStopLog(mCurrentLocation);
+                getStopLog();
                 Location correctLocation = getCorrectLocation(mCurrentLocation);
                 if (correctLocation != null) {
                     sendLocation(correctLocation);
@@ -843,6 +921,15 @@ public class LocationService extends Service {
             }
         });
     }
+
+
+    private class SendTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            saveStopLogs();
+        }
+    }
+
 }
 
 
