@@ -88,7 +88,7 @@
     <string name="str_username_en">Benutzername</string>
     <string name="str_password_en">Passwort</string>
     <string name="str_login">Einloggen</string>
-    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.421</string>
+    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.422</string>
     <string name="str_email">E-Mail</string>
     <string name="str_body">Text</string>
     <string name="str_message_content">Textnachricht</string>
@@ -1090,7 +1090,7 @@
 
 
     <string name="str_phi">Nettopreis</string>
-    <string name="str_title_fii">Nettopreis</string>
+    <string name="str_title_fee">Nettopreis</string>
     <string name="str_netto">Netto</string>
 
     <string name="str_setting_bank_pos">Wählen Sie eine Bank aus, die mit smart pos verbunden ist</string>

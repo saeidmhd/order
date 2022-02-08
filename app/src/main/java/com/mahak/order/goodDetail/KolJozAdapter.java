@@ -3,7 +3,6 @@ package com.mahak.order.goodDetail;
 
 import android.content.Context;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -25,11 +24,9 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.R;
-import com.mahak.order.common.CountInputFilterMinMax;
 import com.mahak.order.common.OrderDetailProperty;
 import com.mahak.order.common.Product;
 import com.mahak.order.common.ProductDetail;
-import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.Properties;
 import com.mahak.order.common.ServiceTools;
 
@@ -40,7 +37,6 @@ import java.util.List;
 
 import static com.mahak.order.BaseActivity.MODE_EDIT;
 import static com.mahak.order.BaseActivity.MODE_NEW;
-import static com.mahak.order.common.ServiceTools.formatCount;
 import static com.mahak.order.goodDetail.GoodDetailKolJoz.txtsumCount1;
 import static com.mahak.order.goodDetail.GoodDetailKolJoz.txtsumCount2;
 import static com.mahak.order.goodDetail.GoodDetailKolJoz.txtsumCount3;
@@ -96,7 +92,7 @@ public class KolJozAdapter extends RecyclerView.Adapter<KolJozAdapter.ViewHolder
             super(itemView);
 
             tvNumber = (TextView) itemView.findViewById(R.id.tvNumber);
-            tvProductSpec = (TextView) itemView.findViewById(R.id.tvProductSpec);
+            tvProductSpec = (TextView) itemView.findViewById(R.id.tvProductNameSpec);
             btnDelete = (LinearLayout) itemView.findViewById(R.id.btnDelete);
 
             tv_asset1 = (TextView) itemView.findViewById(R.id.tv_asset1);

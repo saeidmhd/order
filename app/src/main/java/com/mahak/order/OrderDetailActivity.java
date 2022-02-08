@@ -35,6 +35,7 @@ import com.mahak.order.common.OrderDetail;
 import com.mahak.order.common.OrderDetailProperty;
 import com.mahak.order.common.Person_Extra_Data;
 import com.mahak.order.common.Printer;
+import com.mahak.order.common.ProductDetail;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ReceivedTransferProducts;
 import com.mahak.order.common.ReceivedTransfers;
@@ -56,7 +57,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.mahak.order.common.ProjectInfo.Woosim_WSP_R341;
 import static com.mahak.order.common.ServiceTools.formatCount;
 import static com.mahak.order.common.ServiceTools.getDateAndTimeForLong;
 
@@ -159,7 +159,7 @@ public class OrderDetailActivity extends BaseActivity {
     private static final int REQUEST_WRITE_STORAGE = 112;
 
     //oscar
-    public static int lst_order_detail_for_print = R.layout.lst_order_detail_for_print;
+    public static int lst_order_detail_for_print = R.layout.print_order_detail_item;
     boolean hasWritePermission = false;
     private Person_Extra_Data extraData = new Person_Extra_Data();
 
@@ -195,27 +195,13 @@ public class OrderDetailActivity extends BaseActivity {
         mActivity = this;
 
         printerBrand = SharedPreferencesHelper.getPrefPrinterBrand(mContext);
+        lst_order_detail_for_print = R.layout.print_order_detail_item;
 
-        if (
-                printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW ||
-                        printerBrand == ProjectInfo.PRINTER_BABY_380_A ||
-                        printerBrand == ProjectInfo.PRINTER_DELTA_380_A ||
-                        printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII ||
-                        printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310 || printerBrand == ProjectInfo.UROVO_K319 || printerBrand == ProjectInfo.Woosim_WSP_R341
-
-        ) {
-
-            lst_order_detail_for_print = R.layout.lst_order_detail_for_print_fii;
-
-        } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
-            lst_order_detail_for_print = R.layout.lst_order_detail_for_print_50mm;
-        } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
-            lst_order_detail_for_print = R.layout.lst_print_szzt;
+        if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
+            lst_order_detail_for_print = R.layout.print_szzt_urovo_item;
         } else {
             if (getTemplate2Status(mContext, ProjectInfo._pName_OrderDetail))
                 lst_order_detail_for_print = R.layout.lst_factor_bixolon2;
-            else
-                lst_order_detail_for_print = R.layout.lst_order_detail_for_print_prop;
         }
 
 
@@ -232,9 +218,9 @@ public class OrderDetailActivity extends BaseActivity {
 
             lst_transfer_detail = R.layout.lst_transfer_detail;
         } else if (OrderType == ProjectInfo.TYPE_RETURN_OF_SALE) {
-            lst_order_detail_for_print = R.layout.lst_order_detail_for_print_return;
+            lst_order_detail_for_print = R.layout.print_return_item;
         } else {
-            lst_transfer_detail = R.layout.lst_order_detail_for_print;
+            lst_transfer_detail = R.layout.print_order_detail_item;
         }
 
         initialise();
@@ -507,6 +493,17 @@ public class OrderDetailActivity extends BaseActivity {
         LinearLayout _llFinalPrice = (LinearLayout) view.findViewById(R.id._llFinalPrice);
         LinearLayout _llDiscount = (LinearLayout) view.findViewById(R.id._llDiscount);
         LinearLayout _llTotalCount = (LinearLayout) view.findViewById(R.id._llTotalCount);
+
+        LinearLayout ll_consumer_price_box = (LinearLayout) view.findViewById(R.id.ll_consumer_price_box);
+        LinearLayout ll_consumer_fee_box = (LinearLayout) view.findViewById(R.id.ll_consumer_fee_box);
+
+        if (SharedPreferencesHelper.get_chk_show_consumer_fee(mContext)) {
+            if(ll_consumer_fee_box != null && ll_consumer_price_box != null ) {
+                ll_consumer_fee_box.setVisibility(View.VISIBLE);
+                ll_consumer_price_box.setVisibility(View.VISIBLE);
+            }
+        }
+
         ListView _lstProduct = (ListView) view.findViewById(R.id._lstProduct);
         ListView _lstGroupedTax = (ListView) view.findViewById(R.id._lstGroupedTax);
         TextView _tvTotalPrice = (TextView) view.findViewById(R.id._tvTotalPrice);
@@ -644,67 +641,17 @@ public class OrderDetailActivity extends BaseActivity {
         protected Boolean doInBackground(String... params) {
 
             Boolean status = false;
-
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            ll = inflater.inflate(R.layout.factor_print_template, null, false);
+            LinearLayout _llPrint = (LinearLayout) ll.findViewById(R.id._llPrint);
+            ChangePrintWidth(_llPrint);
 
-            if (SharedPreferencesHelper.getCompactPrint(mContext)) {
-                if (printerBrand == ProjectInfo.PRINTER_BABY_380_A || printerBrand == ProjectInfo.PRINTER_DELTA_380_A) {
-                    ll = inflater.inflate(R.layout.factor_print_template_80mm_fii_compact, null, false);
-                } else if (printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII) {
-
-                    ll = inflater.inflate(R.layout.factor_print_template_80mm_fii_compact, null, false);
-                    // Gets the layout params that will allow you to resize the layout
-                    LinearLayout _llPrint = (LinearLayout) ll.findViewById(R.id._llPrint);
-                    ChangePrintWidth(_llPrint);
-
-                } else if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW || printerBrand == ProjectInfo.UROVO_K319 || printerBrand == Woosim_WSP_R341) {
-                    ll = inflater.inflate(R.layout.factor_print_template_80mm_fii_compact, null, false);
-                    // Gets the layout params that will allow you to resize the layout
-                    LinearLayout _llPrint = (LinearLayout) ll.findViewById(R.id._llPrint);
-                    ChangePrintWidth(_llPrint);
-
-                } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
-                    ll = inflater.inflate(R.layout.factor_print_template_50mm_fii_compact, null, false);
-                } else if (printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310) {
-                    ll = inflater.inflate(R.layout.factor_print_template_80mm_fii_compact, null, false);
-
-                } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
-                    ll = inflater.inflate(R.layout.factor_print_szzt, null, false);
-
-                } else {
-                    if (getTemplate2Status(mContext, ProjectInfo._pName_OrderDetail))
-                        ll = inflater.inflate(R.layout.factor_bixolon_2, null, false);
-                    else
-                        ll = inflater.inflate(R.layout.factor_print_template_compact, null, false);
-                }
-            } else {
-                if (printerBrand == ProjectInfo.PRINTER_BABY_380_A || printerBrand == ProjectInfo.PRINTER_DELTA_380_A) {
-                    ll = inflater.inflate(R.layout.factor_print_template_80mm_fii, null, false);
-                } else if (printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII) {
-
-                    ll = inflater.inflate(R.layout.factor_print_template_80mm_fii, null, false);
-                    // Gets the layout params that will allow you to resize the layout
-                    LinearLayout _llPrint = (LinearLayout) ll.findViewById(R.id._llPrint);
-                    ChangePrintWidth(_llPrint);
-
-                } else if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW || printerBrand == ProjectInfo.UROVO_K319 || printerBrand == Woosim_WSP_R341) {
-                    ll = inflater.inflate(R.layout.factor_print_template_80mm_fii, null, false);
-                    // Gets the layout params that will allow you to resize the layout
-                    LinearLayout _llPrint = (LinearLayout) ll.findViewById(R.id._llPrint);
-                    ChangePrintWidth(_llPrint);
-
-                } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
-                    ll = inflater.inflate(R.layout.factor_print_template_50mm_fii, null, false);
-                } else if (printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310) {
-                    ll = inflater.inflate(R.layout.factor_print_template_80mm_fii, null, false);
-
-                } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
-                    ll = inflater.inflate(R.layout.factor_print_szzt, null, false);
-
-                } else {
-                    ll = inflater.inflate(R.layout.factor_print_template, null, false);
-                }
-            }
+            if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
+                ll = inflater.inflate(R.layout.factor_print_50mm, null, false);
+            } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
+                ll = inflater.inflate(R.layout.factor_print_szzt, null, false);
+            } else if (getTemplate2Status(mContext, ProjectInfo._pName_OrderDetail))
+                    ll = inflater.inflate(R.layout.factor_bixolon_2, null, false);
 
             LinearLayout _ll_Remain_Detail = (LinearLayout) ll.findViewById(R.id._ll_Remain_Detail);
             LinearLayout _llFooterMessage = (LinearLayout) ll.findViewById(R.id._llFooterMessage);
@@ -1054,7 +1001,7 @@ public class OrderDetailActivity extends BaseActivity {
             public TextView tvProductPropSpec;
 
             public Holder(View view) {
-                tvProductName = (TextView) view.findViewById(R.id.tvProductSpec);
+                tvProductName = (TextView) view.findViewById(R.id.tvProductNameSpec);
                 tvPrice = (TextView) view.findViewById(R.id.tvPrice);
                 tvNumber = (TextView) view.findViewById(R.id.tvNumber);
                 tvGift = (TextView) view.findViewById(R.id.tvGift);
@@ -1064,6 +1011,7 @@ public class OrderDetailActivity extends BaseActivity {
                 tvFinalPriceProduct = (TextView) view.findViewById(R.id.tvFinalPriceProduct);
                 llFinalPriceProduct = (LinearLayout) view.findViewById(R.id.llFinalPriceProduct);
                 llprop_item = (LinearLayout) view.findViewById(R.id.llprop_item);
+
                 tvProductPropSpec = (TextView) view.findViewById(R.id.tvProductPropSpec);
                 tvRowDescription = (TextView) view.findViewById(R.id.tvDescription);
 
@@ -1186,35 +1134,33 @@ public class OrderDetailActivity extends BaseActivity {
         }
 
         public class Holder {
-            public TextView tvPrice, tvProductName, tvNumber, tvGift, tvCount, tvFee, tvOff, tvChargeAndTax, tvFinalPriceProduct, tvProductPropSpec, tvProductCode;
-            public LinearLayout llitem, llprop_item;
+            public TextView tvPrice, tvProductName, tvNumber, tvGift, tvCount, tvFee,tvfii_customer,tvPrice_consumer, tvOff, tvChargeAndTax, tvFinalPriceProduct, tvProductPropSpec, tvProductCode;
+            public LinearLayout llitem, llprop_item , ll_consumer_price , ll_consumer_fee;
             public View view_line;
 
             public Holder(View view) {
                 llitem = (LinearLayout) view.findViewById(R.id.llitem);
                 llprop_item = (LinearLayout) view.findViewById(R.id.llprop_item);
-                tvProductName = (TextView) view.findViewById(R.id.tvProductSpec);
+                tvProductName = (TextView) view.findViewById(R.id.tvProductNameSpec);
                 tvPrice = (TextView) view.findViewById(R.id.tvPrice);
                 tvCount = (TextView) view.findViewById(R.id.tvCount);
                 tvProductPropSpec = (TextView) view.findViewById(R.id.tvProductPropSpec);
 
-                view_line = (View) view.findViewById(R.id.view_line);
-                if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW ||
-                        printerBrand == ProjectInfo.PRINTER_BABY_380_A ||
-                        printerBrand == ProjectInfo.PRINTER_DELTA_380_A ||
-                        printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII ||
-                        printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310 || printerBrand == ProjectInfo.UROVO_K319
-                ) {
-                    tvFee = (TextView) view.findViewById(R.id.tvfii);
-                }
-                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s || printerBrand == Woosim_WSP_R341) {
-                    tvFee = (TextView) view.findViewById(R.id.tvfii);
-                    //tvCount2 = (TextView) view.findViewById(R.id.tvCount2);
-                    //tvProductCode = (TextView) view.findViewById(R.id.tvProductCode);
+                ll_consumer_fee = (LinearLayout) view.findViewById(R.id.ll_consumer_fee);
+                ll_consumer_price = (LinearLayout) view.findViewById(R.id.ll_consumer_price);
+
+                if (SharedPreferencesHelper.get_chk_show_consumer_fee(mContext)) {
+                    if(ll_consumer_fee != null && ll_consumer_price != null ) {
+                        ll_consumer_fee.setVisibility(View.VISIBLE);
+                        ll_consumer_price.setVisibility(View.VISIBLE);
+                    }
                 }
 
-                if (getTemplate2Status(mContext, ProjectInfo._pName_OrderDetail))
-                    tvFee = (TextView) view.findViewById(R.id.tvfii);
+                view_line = (View) view.findViewById(R.id.view_line);
+                tvFee = (TextView) view.findViewById(R.id.tvfii);
+                tvfii_customer = (TextView) view.findViewById(R.id.tvfii_customer);
+                tvPrice_consumer = (TextView) view.findViewById(R.id.tvPrice_consumer);
+
             }
 
             public void Populate(OrderDetail orderDetail, int position) {
@@ -1228,26 +1174,7 @@ public class OrderDetailActivity extends BaseActivity {
 
                 if (OrderType != ProjectInfo.TYPE_RETURN_OF_SALE) {
 
-                    double off = 0;
-                    double Tax = 0;
-                    double Charge = 0;
-                    double Price = 0;
-                    double offValue = orderDetail.getDiscount();
-                    double TaxPercent = orderDetail.getTaxPercent();
-                    double ChargePercent = orderDetail.getChargePercent();
-                    if (String.valueOf(orderDetail.getPrice()).equals(getString(R.string.str_gift)))
-                        Price = 0;
-                    else
-                        Price = orderDetail.getPrice();
-
-                    Price = (Price * orderDetail.getSumCountBaJoz());
-                    off = (offValue * 1);
-                    Price = Price - off;
-
-                    Tax = ((Price * TaxPercent) / 100);
-                    Charge = ((Price * ChargePercent) / 100);
-                    double TaxAndCharge = Tax + Charge;
-                    Price = Price + TaxAndCharge;
+                    double Price = getPrice(orderDetail);
 
                     tvProductName.setText(orderDetail.getProductName());
 
@@ -1271,8 +1198,6 @@ public class OrderDetailActivity extends BaseActivity {
                         tvProductPropSpec.setText(cTitle.toString());
 
                     }
-                    //tvFee.setText(ServiceTools.GetMoneyFormat(orderDetail.getPrice()));
-                    //price == 0
                     if ((orderDetail.getCount1() == 0 && orderDetail.getCount2() == 0)) {
                         tvPrice.setGravity(Gravity.CENTER);
                         tvPrice.setText(R.string.str_gift);
@@ -1290,27 +1215,63 @@ public class OrderDetailActivity extends BaseActivity {
                 if (orderDetail.getSumCountBaJoz() > 0) {
                     tvCount.setText(formatCount(orderDetail.getSumCountBaJoz()));
                 }
-                if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW ||
-                        printerBrand == ProjectInfo.PRINTER_BABY_380_A ||
-                        printerBrand == ProjectInfo.PRINTER_DELTA_380_A ||
-                        printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII ||
-                        printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310 || printerBrand == ProjectInfo.UROVO_K319
-                ) {
-                    tvFee.setText(ServiceTools.formatPrice(orderDetail.getPrice()));
-                }
-                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s || printerBrand == Woosim_WSP_R341) {
-                    //db.open();
-                    //Product product = db.GetProductWithProductId(orderDetail.getProductId());
-                   // tvProductCode.setText(String.valueOf(product.getProductCode()));
-                    tvFee.setText(ServiceTools.formatPrice(orderDetail.getPrice()));
-                }
+                tvFee.setText(ServiceTools.formatPrice(orderDetail.getPrice()));
+                db.open();
+                ProductDetail productDetail = db.getProductDetail(orderDetail.getProductDetailId());
+                tvfii_customer.setText(ServiceTools.formatPrice(productDetail.getCustomerPrice()));
+                tvPrice_consumer.setText(ServiceTools.formatPrice(getPriceConsumer(orderDetail,productDetail.getCustomerPrice())));
 
-                if (getTemplate2Status(mContext, ProjectInfo._pName_OrderDetail))
-                    tvFee.setText(ServiceTools.formatPrice(orderDetail.getPrice()));
             }
         }
 
     }// End of AdapterListProduct
+
+    private double getPrice(OrderDetail orderDetail) {
+        double off = 0;
+        double Tax = 0;
+        double Charge = 0;
+        double Price = 0;
+        double offValue = orderDetail.getDiscount();
+        double TaxPercent = orderDetail.getTaxPercent();
+        double ChargePercent = orderDetail.getChargePercent();
+        if (String.valueOf(orderDetail.getPrice()).equals(getString(R.string.str_gift)))
+            Price = 0;
+        else
+            Price = orderDetail.getPrice();
+
+        Price = (Price * orderDetail.getSumCountBaJoz());
+        off = (offValue * 1);
+        Price = Price - off;
+
+        Tax = ((Price * TaxPercent) / 100);
+        Charge = ((Price * ChargePercent) / 100);
+        double TaxAndCharge = Tax + Charge;
+        Price = Price + TaxAndCharge;
+        return Price;
+    }
+    private double getPriceConsumer(OrderDetail orderDetail, double customerPrice) {
+        double off = 0;
+        double Tax = 0;
+        double Charge = 0;
+        double Price = 0;
+        double offValue = orderDetail.getDiscount();
+        double TaxPercent = orderDetail.getTaxPercent();
+        double ChargePercent = orderDetail.getChargePercent();
+        if (String.valueOf(orderDetail.getPrice()).equals(getString(R.string.str_gift)))
+            Price = 0;
+        else
+            Price = customerPrice;
+
+        Price = (Price * orderDetail.getSumCountBaJoz());
+        off = (offValue * 1);
+        Price = Price - off;
+
+        Tax = ((Price * TaxPercent) / 100);
+        Charge = ((Price * ChargePercent) / 100);
+        double TaxAndCharge = Tax + Charge;
+        Price = Price + TaxAndCharge;
+        return Price;
+    }
 
     public class AdapterGroupedTaxForPrint extends ArrayAdapter<GroupedTax> {
         Activity mContext;

@@ -5,6 +5,7 @@
     android:gravity="center_vertical"
     android:orientation="vertical">
 
+
     <LinearLayout
         android:id="@+id/llitem"
         android:layout_width="match_parent"
@@ -13,15 +14,16 @@
         android:minHeight="@dimen/lst_item_min_height_compact"
         android:orientation="horizontal">
 
+
         <com.mahak.order.widget.FontTextView
-            android:id="@+id/tvProductSpec"
+            android:id="@+id/tvProductNameSpec"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:gravity="left"
             android:maxLines="2"
-            android:paddingLeft="@dimen/SmallSize"
             android:text="@string/sample_product"
+            android:paddingLeft="@dimen/SmallSize"
             android:textColor="@color/black" />
 
         <View
@@ -31,8 +33,9 @@
 
         <com.mahak.order.widget.FontTextView
             android:id="@+id/tvCount"
-            android:layout_width="50dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.75"
             android:gravity="center_horizontal"
             android:text="@string/sample_number"
             android:textColor="@color/black" />
@@ -43,15 +46,30 @@
             android:background="@color/black" />
 
         <com.mahak.order.widget.FontTextView
-            android:id="@+id/tvPrice"
-            android:layout_width="0dip"
+            android:id="@+id/tvfii"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
+            android:paddingLeft="@dimen/marginSize"
             android:gravity="left"
-            android:paddingLeft="@dimen/small_text_size"
+            android:layout_weight="1"
             android:text="@string/sample_number"
             android:textColor="@color/black" />
 
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/black" />
+
+        <com.mahak.order.widget.FontTextView
+            android:id="@+id/tvPrice"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="@string/sample_number"
+            android:paddingLeft="@dimen/marginSize"
+            android:textColor="@color/black" />
 
     </LinearLayout>
 
@@ -80,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="left"
-            android:paddingLeft="@dimen/SmallSize"
+            android:paddingRight="@dimen/SmallSize"
             android:text="@string/details"
             android:textColor="@color/black"
             android:textSize="12sp" />
@@ -92,5 +110,4 @@
         android:layout_height="2dp"
         android:visibility="gone"
         android:background="@color/black" />
-
 </LinearLayout>

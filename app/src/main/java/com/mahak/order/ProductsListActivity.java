@@ -127,7 +127,7 @@ public class ProductsListActivity extends BaseActivity {
 
     //oscar
 
-    public static int lst_print_kala = R.layout.lst_order_detail_for_print_kala_2;
+    public static int lst_print_kala = R.layout.print_kala_item;
     private FontProgressDialog pd;
     AdapterSpnAssetProduct adspnAssetProduct;
 
@@ -161,22 +161,7 @@ public class ProductsListActivity extends BaseActivity {
         mActivity = this;
 
         printerBrand = SharedPreferencesHelper.getPrefPrinterBrand(mContext);
-
-        if (SharedPreferencesHelper.getCompactPrint(mContext)) {
-            if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW || printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII || printerBrand == ProjectInfo.UROVO_K319) {
-
-                lst_print_kala = R.layout.lst_order_detail_for_print_kala_compact;
-            } else {
-                lst_print_kala = R.layout.lst_order_detail_for_print_kala_2_compact;
-            }
-        } else {
-            if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW || printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII || printerBrand == ProjectInfo.UROVO_K319) {
-
-                lst_print_kala = R.layout.lst_order_detail_for_print_kala;
-            } else {
-                lst_print_kala = R.layout.lst_order_detail_for_print_kala_2;
-            }
-        }
+        lst_print_kala = R.layout.print_kala_item;
 
         initialise();
         FillSpinner();
@@ -1131,15 +1116,11 @@ public class ProductsListActivity extends BaseActivity {
 
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             ll = new LinearLayout(mContext);
-
-
             if (printerBrand == ProjectInfo.PRINTER_BABY_380_A || printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310 || printerBrand == ProjectInfo.PRINTER_DELTA_380_A) {
                 inflater.inflate(R.layout.kala_print_template_80mm, ll, true);
-
             } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
                 inflater.inflate(R.layout.kala_print_template_50mm, ll, true);
             } else if (printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII || printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW || printerBrand == ProjectInfo.UROVO_K319 || printerBrand == Woosim_WSP_R341) {
-
                 ll.setDividerPadding(2);
                 ll.setBackgroundColor(getResources().getColor(R.color.black));
                 inflater.inflate(R.layout.kala_print_template_80mm_3parts, ll, true);
@@ -1240,7 +1221,7 @@ public class ProductsListActivity extends BaseActivity {
             public Holder(View view) {
 
                 llitem = (LinearLayout) view.findViewById(R.id.llitem);
-                tvProductName = (TextView) view.findViewById(R.id.tvProductSpec);
+                tvProductName = (TextView) view.findViewById(R.id.tvProductNameSpec);
                 tvCount = (TextView) view.findViewById(R.id.tvCount);
                 tvKalaCode = (TextView) view.findViewById(R.id.tvKalaCode);
 

@@ -14,13 +14,13 @@
         android:minHeight="@dimen/lst_item_min_height_compact"
         android:orientation="horizontal">
 
-
         <com.mahak.order.widget.FontTextView
-            android:id="@+id/tvProductSpec"
+            android:id="@+id/tvProductNameSpec"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:gravity="left"
+            android:textStyle="bold"
             android:maxLines="2"
             android:text="@string/sample_product"
             android:paddingLeft="@dimen/SmallSize"
@@ -36,6 +36,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.75"
+            android:textStyle="bold"
             android:gravity="center_horizontal"
             android:text="@string/sample_number"
             android:textColor="@color/black" />
@@ -51,10 +52,10 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/marginSize"
             android:gravity="left"
+            android:textStyle="bold"
             android:layout_weight="1"
             android:text="@string/sample_number"
             android:textColor="@color/black" />
-
 
         <View
             android:layout_width="2dp"
@@ -67,10 +68,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="left"
+            android:textStyle="bold"
             android:text="@string/sample_number"
             android:paddingLeft="@dimen/marginSize"
             android:textColor="@color/black" />
-
     </LinearLayout>
 
     <View

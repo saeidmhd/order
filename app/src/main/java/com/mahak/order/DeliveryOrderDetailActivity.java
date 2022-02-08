@@ -223,7 +223,7 @@ public class DeliveryOrderDetailActivity extends BaseActivity {
             public TextView tvPrice, tvProductName, tvNumber, tvGift, tvCount, tvFee, tvOff, tvChargeAndTax, tvFinalPriceProduct, tvDescription;
 
             public Holder(View view) {
-                tvProductName = (TextView) view.findViewById(R.id.tvProductSpec);
+                tvProductName = (TextView) view.findViewById(R.id.tvProductNameSpec);
                 tvPrice = (TextView) view.findViewById(R.id.tvPrice);
                 tvNumber = (TextView) view.findViewById(R.id.tvNumber);
                 tvGift = (TextView) view.findViewById(R.id.tvGift);

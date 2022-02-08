@@ -2094,24 +2094,31 @@ public class PrintActivity extends BaseActivity {
     }
 
     private void doPrint(PrinterManager printerManager, int type, Object content) {
-        int ret = printerManager.getStatus();   //Get printer status
-        if (ret == PRNSTS_OK) {
-            printerManager.setupPage(-1, -1);   //Set paper size
-            switch (type) {
-                case PRINT_BITMAP:
-                    Bitmap bitmap = (Bitmap) content;
-                    if (bitmap != null) {
-                        bitmap = Bitmap.createScaledBitmap(bitmap, 384, bitmap.getHeight(), false);
-                        printerManager.drawBitmap(bitmap, 0, 0);  //print pictures
-                    } else {
-                        Toast.makeText(this, "Picture is null", Toast.LENGTH_SHORT).show();
-                    }
-                    break;
+        try {
+            int ret = printerManager.getStatus();   //Get printer status
+            if (ret == PRNSTS_OK) {
+                printerManager.setupPage(-1, -1);   //Set paper size
+                switch (type) {
+                    case PRINT_BITMAP:
+                        Bitmap bitmap = (Bitmap) content;
+                        if (bitmap != null) {
+                            bitmap = Bitmap.createScaledBitmap(bitmap, 384, bitmap.getHeight(), false);
+                            printerManager.drawBitmap(bitmap, 0, 0);  //print pictures
+                        } else {
+                            Toast.makeText(this, "Picture is null", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                }
+                ret = printerManager.printPage(0);  //Execution printing
+                printerManager.paperFeed(8);  //paper feed
             }
-            ret = printerManager.printPage(0);  //Execution printing
-            printerManager.paperFeed(8);  //paper feed
+            updatePrintStatus(ret);
+
+        }catch (RuntimeException exception){
+            Toast.makeText(mContext, "خطا در پیکربندی", Toast.LENGTH_SHORT).show();
+
         }
-        updatePrintStatus(ret);
+
     }
 
     private final int PRINT_TEXT = 0;   //Printed text

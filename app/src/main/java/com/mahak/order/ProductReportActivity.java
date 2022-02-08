@@ -203,13 +203,7 @@ public class ProductReportActivity extends BaseActivity {
         public View getView(final int position, View convertView, ViewGroup parent) {
 
             if (convertView == null) {
-
-                if (SharedPreferencesHelper.getCompactPrint(mContext)) {
-                    convertView = inflater.inflate(R.layout.lst_report_product_item_print_compact, null);
-                } else
-                    convertView = inflater.inflate(R.layout.lst_report_product_item_print, null);
-
-
+                convertView = inflater.inflate(R.layout.lst_report_product_item_print_compact, null);
                 tvCount = (TextView) convertView.findViewById(R.id.tvCount);
                 tvSale = (TextView) convertView.findViewById(R.id.tvSale);
                 tvAsset = (TextView) convertView.findViewById(R.id.tvAsset);
