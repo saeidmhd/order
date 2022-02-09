@@ -584,6 +584,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         }
         setTackingServiceText(false);
         locationService.setTrackingPrefOff("0");
+        ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_last_location, null);
     }
 
     private boolean checkPermissions() {
