@@ -274,7 +274,7 @@ public class LocationService extends Service {
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)
                 .setFastestInterval(10 * 1000)
-                .setSmallestDisplacement(30);
+                .setSmallestDisplacement(100);
     }
 
     private void buildLocationSettingsRequest() {
@@ -364,7 +364,7 @@ public class LocationService extends Service {
         }
     }
 
-    public void sendStopLocationToServer( ArrayList<StopLog> stopLog) {
+    public void sendStopLocationToServer(ArrayList<StopLog> stopLog) {
         ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
         Call<StopLocationResponse> call = apiService.SetStopLocation(stopLog);
         call.enqueue(new Callback<StopLocationResponse>() {
@@ -658,20 +658,35 @@ public class LocationService extends Service {
         boolean result;
         double mDistance = 0;
         double mDistance2 = 0;
+        double mDistance3 = 0;
+
+        Calendar calLastLocation = Calendar.getInstance();
+        Calendar calNow = Calendar.getInstance();
+
         JSONObject obj = getLastLocationJson(mContext);
         if (obj == null) {
             saveStopLocationJsonFile(currentLocation);
             saveInJsonFile(currentLocation);
             return true;
         }
+
+        if(lastStopLocation != null){
+            calLastLocation.setTimeInMillis(lastStopLocation.getTime());
+            boolean check = calLastLocation.get(Calendar.DAY_OF_YEAR) == calNow.get(Calendar.DAY_OF_YEAR);
+            if(!check){
+                saveStopLocationJsonFile(currentLocation);
+            }
+        }
+
         Location lasLocation = new Location("");
         lasLocation.setLatitude(obj.optDouble(ProjectInfo._json_key_latitude));
         lasLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_longitude));
         lasLocation.setTime(obj.optLong(ProjectInfo._json_key_date));
         mDistance = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(), "K") * 1000;
-        mDistance2 = currentLocation.distanceTo(lastStopLocation);
+        mDistance2 = currentLocation.distanceTo(lasLocation);
+
         // we get points every 10 sec.Possible distance for walking and car is considered.
-        result = mDistance <= 35 && mDistance >= 10 ;
+        result = mDistance <= 110 && mDistance >= 10 ;
         if(result){
             ServiceTools.writeLogRadara("\n" + " distance2 : " + mDistance2 + "\n" + mDistance + "\n" + currentLocation.getSpeed() + "\n" + currentLocation.getAccuracy() + "\n" + currentLocation.getLatitude() + "\n" + currentLocation.getLongitude());
             saveStopLocationJsonFile(currentLocation);
