@@ -148,8 +148,10 @@ public class ProjectInfo {
     public static String _json_key_longitude = "longitude";
 
     public static String _json_key_stop_date = "stop_date";
+    public static String _json_key_client_id = "client_id";
     public static String _json_key_stop_latitude = "stop_latitude";
     public static String _json_key_stop_longitude = "stop_longitude";
+    public static String _json_key_stop_time = "stop_time";
 
     public static String _json_key_points = "points";
     public static String _json_key_result = "result";

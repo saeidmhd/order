@@ -11,8 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.res.Configuration;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Binder;
 import android.os.Build;
@@ -20,11 +18,9 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
-import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -43,6 +39,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.location.DetectedActivity;
 import com.google.android.gms.tasks.Task;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.DashboardActivity;
@@ -51,6 +48,8 @@ import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
+import com.mahak.order.common.StopLocation.StopLocationResponse;
+import com.mahak.order.common.StopLocation.StopLog;
 import com.mahak.order.common.User;
 import com.mahak.order.common.VisitorLocation;
 import com.mahak.order.common.login.LoginBody;
@@ -65,9 +64,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 import io.reactivex.annotations.NonNull;
@@ -75,6 +77,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.mahak.order.BaseActivity.getPrefUserId;
 import static com.mahak.order.BaseActivity.isRadaraActive;
 import static com.mahak.order.BaseActivity.setPrefSignalUserToken;
 
@@ -82,6 +85,10 @@ public class LocationService extends Service {
 
     private static final int ID_NOTIFICATION_TRACKING = 1090;
 
+    private static int MIN_DISPALCEMENT_CHANGE_FOR_UPDATES = 15; // 1 meters
+    private static long MIN_TIME_INTERVAL_UPDATES = 120000; // 2 min
+
+    private static boolean sendPointsBasedMeter = false;
     public Context mContext;
 
     boolean isLogging = false;
@@ -132,6 +139,11 @@ public class LocationService extends Service {
     private static NotificationManager mNotificationManager;
 
     /**
+     * Contains parameters used by {@link com.google.android.gms.location.FusedLocationProviderApi}.
+     */
+    private LocationRequest mLocationRequest;
+
+    /**
      * Provides access to the Fused Location Provider API.
      */
     private FusedLocationProviderClient mFusedLocationClient;
@@ -147,6 +159,15 @@ public class LocationService extends Service {
      * The current location.
      */
     private Location mLocation;
+
+    long tracking_client_id = 0;
+
+    private Timer timer;
+    private static long InitialInMillis = 1000 * 10;  // 10 Seconds
+    private static long DelayInMillis = 1000 * 60 * 5;  // 5 Minutes
+
+    long stop_time;
+    Location lastStopLocation;
 
     @Override
     public void onCreate() {
@@ -251,8 +272,9 @@ public class LocationService extends Service {
     private void createLocationRequest() {
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setFastestInterval(30 * 1000)
-                .setInterval(30 * 1000);
+                .setInterval(10 * 1000)
+                .setFastestInterval(10 * 1000)
+                .setSmallestDisplacement(100);
     }
 
     private void buildLocationSettingsRequest() {
@@ -274,8 +296,11 @@ public class LocationService extends Service {
                     @Override
                     public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
                         //noinspection MissingPermission
-                        mFusedLocationClient.requestLocationUpdates(locationRequest,
-                                mLocationCallback, Looper.myLooper());
+                        mFusedLocationClient.requestLocationUpdates(locationRequest,mLocationCallback, Looper.myLooper());
+
+                        timer = new Timer();
+                        timer.schedule(new SendStopLocationTimer(), InitialInMillis, DelayInMillis);
+
                         updateUI();
                     }
                 })
@@ -306,6 +331,10 @@ public class LocationService extends Service {
     }
 
     public void stopTracking() {
+        if(timer != null){
+            timer.cancel();
+            timer.purge();
+        }
         stopLocationUpdates();
     }
 
@@ -313,27 +342,53 @@ public class LocationService extends Service {
         removeLocationUpdates();
     }
 
-    private Location getCorrectLocation(Location location) {
-        if(checkDistanceSpeed(location)){
-            saveInJsonFile(location);
-            return location;
+    private void saveAndSendStopLocation() {
+        lastStopLocation = LastStopLocation();
+        long currentTime = System.currentTimeMillis();
+        stop_time = currentTime - lastStopLocation.getTime();
+        if(stop_time > 5 * 60 * 1000){
+            ArrayList<StopLog> stopLogs = new ArrayList<>();
+            StopLog stopLog = new StopLog();
+            tracking_client_id = ServiceTools.toLong(ServiceTools.getStopLocationId(lastStopLocation.getTime()));
+            stopLog.setDuration(stop_time / 1000);
+            stopLog.setStopLocationClientId(tracking_client_id);
+            stopLog.setEndDate(ServiceTools.getFormattedDate(currentTime));
+            stopLog.setEntryDate(ServiceTools.getFormattedDate(lastStopLocation.getTime()));
+            stopLog.setLat(lastStopLocation.getLatitude());
+            stopLog.setLng(lastStopLocation.getLongitude());
+            stopLog.setVisitorId(getPrefUserId());
+            stopLogs.add(stopLog);
+            addStopLogToDb(stopLog);
+            sendStopLocationToServer(stopLogs);
+            ServiceTools.writeLog("\n" + stopLog.toString());
         }
-        return null;
     }
 
-    private boolean checkDistanceSpeed(Location location) {
-        JSONObject obj = getLastLocationJson(mContext);
-        if (obj == null) {
-            saveInJsonFile(location);
-            return false;
-        }
-        Location lasLocation = new Location("");
-        lasLocation.setLatitude(obj.optDouble(ProjectInfo._json_key_latitude));
-        lasLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_longitude));
-        lasLocation.setTime(obj.optLong(ProjectInfo._json_key_date));
-        double mDistance = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), location.getLatitude(), location.getLongitude(), "K") * 1000;
-        return (mDistance > 111 || location.getSpeed() > 2.5) && location.getSpeed() < 25;
+    public void sendStopLocationToServer(ArrayList<StopLog> stopLog) {
+        ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
+        Call<StopLocationResponse> call = apiService.SetStopLocation(stopLog);
+        call.enqueue(new Callback<StopLocationResponse>() {
+            @Override
+            public void onResponse(Call<StopLocationResponse> call, Response<StopLocationResponse> response) {
+                if (response.body() != null) {
+                    if (response.body().isSucceeded()) {
+                    }else
+                        Log.d("@TAG-Res", "error");
+                }
+            }
+            @Override
+            public void onFailure(Call<StopLocationResponse> call, Throwable t) {
+            }
+        });
     }
+
+    private void addStopLogToDb(StopLog stopLog) {
+        if (dba == null) dba = new DbAdapter(mContext);
+        dba.open();
+        dba.AddStopLog(stopLog);
+        dba.close();
+    }
+
 
     private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
         double theta = lon1 - lon2;
@@ -372,6 +427,37 @@ public class LocationService extends Service {
             return null;
         }
     }
+    public JSONObject getLastStopLocationJson(Context context) {
+        String lastLocation = ServiceTools.getKeyFromSharedPreferences(context, ProjectInfo.pre_last_stop_location);
+        if (ServiceTools.isNull(lastLocation))
+            return null;
+        try {
+            return new JSONObject(lastLocation);
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    private Location LastLocation(){
+        Location lastLocation = new Location("");
+        JSONObject obj = getLastLocationJson(mContext);
+        if (obj != null) {
+            lastLocation.setLatitude(obj.optDouble(ProjectInfo._json_key_latitude));
+            lastLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_longitude));
+            lastLocation.setTime(obj.optLong(ProjectInfo._json_key_date));
+        }
+        return lastLocation;
+    }
+    private Location LastStopLocation(){
+        Location lastLocation = new Location("");
+        JSONObject obj = getLastStopLocationJson(mContext);
+        if (obj != null) {
+            lastLocation.setLatitude(obj.optDouble(ProjectInfo._json_key_stop_latitude));
+            lastLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_stop_longitude));
+            lastLocation.setTime(obj.optLong(ProjectInfo._json_key_stop_date));
+        }
+        return lastLocation;
+    }
 
     private void saveInJsonFile(Location location) {
         JSONObject obj = new JSONObject();
@@ -380,6 +466,17 @@ public class LocationService extends Service {
             obj.put(ProjectInfo._json_key_longitude, location.getLongitude());
             obj.put(ProjectInfo._json_key_date, System.currentTimeMillis());
             ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_last_location, obj.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    private void saveStopLocationJsonFile(Location location) {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put(ProjectInfo._json_key_stop_latitude, location.getLatitude());
+            obj.put(ProjectInfo._json_key_stop_longitude, location.getLongitude());
+            obj.put(ProjectInfo._json_key_stop_date, System.currentTimeMillis());
+            ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_last_stop_location, obj.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -507,6 +604,18 @@ public class LocationService extends Service {
         dba.close();
     }
 
+    private void waiter() {
+        String wait = ServiceTools.getKeyFromSharedPreferences(mContext, ProjectInfo.pre_waiter);
+        while (wait.equals("1")) {
+            try {
+                Thread.sleep(200);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_waiter, "1");
+    }
+
     public void stopNotificationServiceTracking() {
         NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         if (mNotificationManager != null) {
@@ -537,12 +646,53 @@ public class LocationService extends Service {
             executeEventLocations(mCurrentLocation,false);
             if(isRadaraActive()){
                 performSignalOperation();
-                Location correctLocation = getCorrectLocation(mCurrentLocation);
-                if (correctLocation != null) {
-                    sendLocation(correctLocation);
+                if(compareWithLastLocation(mCurrentLocation)){
+                    sendLocation(mCurrentLocation);
                 }
             }
         }
+    }
+
+
+    private boolean compareWithLastLocation(Location currentLocation) {
+        boolean result;
+        double mDistance = 0;
+        double mDistance2 = 0;
+        double mDistance3 = 0;
+
+        Calendar calLastLocation = Calendar.getInstance();
+        Calendar calNow = Calendar.getInstance();
+
+        JSONObject obj = getLastLocationJson(mContext);
+        if (obj == null) {
+            saveStopLocationJsonFile(currentLocation);
+            saveInJsonFile(currentLocation);
+            return true;
+        }
+
+        if(lastStopLocation != null){
+            calLastLocation.setTimeInMillis(lastStopLocation.getTime());
+            boolean check = calLastLocation.get(Calendar.DAY_OF_YEAR) == calNow.get(Calendar.DAY_OF_YEAR);
+            if(!check){
+                saveStopLocationJsonFile(currentLocation);
+            }
+        }
+
+        Location lasLocation = new Location("");
+        lasLocation.setLatitude(obj.optDouble(ProjectInfo._json_key_latitude));
+        lasLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_longitude));
+        lasLocation.setTime(obj.optLong(ProjectInfo._json_key_date));
+        mDistance = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(), "K") * 1000;
+        mDistance2 = currentLocation.distanceTo(lasLocation);
+
+        // we get points every 10 sec.Possible distance for walking and car is considered.
+        result = mDistance <= 110 && mDistance >= 10 ;
+        if(result){
+            ServiceTools.writeLogRadara("\n" + " distance2 : " + mDistance2 + "\n" + mDistance + "\n" + currentLocation.getSpeed() + "\n" + currentLocation.getAccuracy() + "\n" + currentLocation.getLatitude() + "\n" + currentLocation.getLongitude());
+            saveStopLocationJsonFile(currentLocation);
+        }
+        saveInJsonFile(currentLocation);
+        return result;
     }
 
     private void performSignalOperation() {
@@ -641,8 +791,8 @@ public class LocationService extends Service {
      */
     public class LocalBinder extends Binder {
         public LocationService getService(Context context, Activity mActivity) {
-             mContext = context;
-             activity = mActivity;
+            mContext = context;
+            activity = mActivity;
             return LocationService.this;
         }
     }
@@ -690,6 +840,7 @@ public class LocationService extends Service {
                     if (response.body().isResult()) {
                         setPrefSignalUserToken(response.body().getUserToken());
                         isLogging = false;
+                        performSignalOperation();
                     }else {
                         Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                         isLogging = false;
@@ -703,5 +854,15 @@ public class LocationService extends Service {
             }
         });
     }
+
+
+    private class SendStopLocationTimer extends TimerTask {
+        @Override
+        public void run() {
+            saveAndSendStopLocation();
+        }
+    }
+
 }
+
 

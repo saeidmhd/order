@@ -29,7 +29,7 @@ import com.mahak.order.common.CustomerGroup;
 import com.mahak.order.common.ExtraData;
 import com.mahak.order.common.PhotoGallery;
 import com.mahak.order.common.Region;
-import com.mahak.order.common.StopLog;
+import com.mahak.order.common.StopLocation.StopLog;
 import com.mahak.order.common.VisitorLocation;
 import com.mahak.order.common.GroupedTax;
 import com.mahak.order.common.NonRegister;
@@ -907,18 +907,17 @@ public class DbAdapter {
 
         return mDb.insert(DbSchema.UserSchema.TABLE_NAME, null, initialvalue);
     }
-    public long AddStoplog(StopLog stopLog) {
-
+    public long AddStopLog(StopLog stopLog) {
         ContentValues initialvalue = new ContentValues();
-        initialvalue.put(DbSchema.StopLogSchema.COLUMN_client_id, stopLog.getId());
+        initialvalue.put(DbSchema.StopLogSchema.COLUMN_stopLocationClientId, stopLog.getStopLocationClientId());
         initialvalue.put(DbSchema.StopLogSchema.COLUMN_lat, stopLog.getLat());
         initialvalue.put(DbSchema.StopLogSchema.COLUMN_lng, stopLog.getLng());
         initialvalue.put(DbSchema.StopLogSchema.COLUMN_entryDate, stopLog.getEntryDate());
         initialvalue.put(DbSchema.StopLogSchema.COLUMN_duration, stopLog.getDuration());
         initialvalue.put(DbSchema.StopLogSchema.COLUMN_endDate, stopLog.getEndDate());
         initialvalue.put(DbSchema.StopLogSchema.COLUMN_UserId, getPrefUserId());
-
-        return mDb.insert(DbSchema.StopLogSchema.TABLE_NAME, null, initialvalue);
+        long result = mDb.insert(DbSchema.StopLogSchema.TABLE_NAME, null, initialvalue);
+        return result;
     }
 
     public long AddDeliveryOrderDetail(OrderDetail orderDetail) {
@@ -1777,6 +1776,26 @@ public class DbAdapter {
         Cursor cursor;
         try {
             cursor = mDb.query(DbSchema.CustomerSchema.TABLE_NAME, null, DbSchema.CustomerSchema.COLUMN_PersonCode + "=? And " + DbSchema.CustomerSchema.COLUMN_USER_ID + " =? and " + DbSchema.CustomerSchema.COLUMN_Deleted + " =? ", new String[]{mBarcode, String.valueOf(getPrefUserId()), String.valueOf(0)}, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                if (cursor.getCount() > 0) {
+                    customer = getCustomerFromCursor(cursor);
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("getCustomerByBarcode", e.getMessage());
+        }
+        return customer;
+    }
+    public Customer getCustomerWithPersonId(int personId) {
+        Customer customer = new Customer();
+        Cursor cursor;
+        try {
+            cursor = mDb.query(DbSchema.CustomerSchema.TABLE_NAME, null, DbSchema.CustomerSchema.COLUMN_PersonId + "=? And " + DbSchema.CustomerSchema.COLUMN_USER_ID + " =? and " + DbSchema.CustomerSchema.COLUMN_Deleted + " =? ", new String[]{String.valueOf(personId), String.valueOf(getPrefUserId()), String.valueOf(0)}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {

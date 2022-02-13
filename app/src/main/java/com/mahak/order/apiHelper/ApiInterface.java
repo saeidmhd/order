@@ -3,6 +3,8 @@ package com.mahak.order.apiHelper;
 
 import com.mahak.order.common.DeviceTokenModel.DeviceTokenBody;
 import com.mahak.order.common.DeviceTokenModel.DeviceTokenResponse;
+import com.mahak.order.common.StopLocation.StopLocationResponse;
+import com.mahak.order.common.StopLocation.StopLog;
 import com.mahak.order.common.login.LoginBody;
 import com.mahak.order.common.login.LoginResult;
 import com.mahak.order.common.loginSignalr.SignalLoginBody;
@@ -16,6 +18,8 @@ import com.mahak.order.tracking.setting.SettingBody;
 import com.mahak.order.tracking.setting.TrackingSetting;
 import com.mahak.order.tracking.visitorZone.VisitorZoneLocation;
 import com.mahak.order.tracking.visitorZone.ZoneBody;
+
+import java.util.ArrayList;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -48,6 +52,9 @@ public interface ApiInterface {
 
     @POST("SetDeviceToken")
     Call<DeviceTokenResponse> SetDeviceToken(@Body DeviceTokenBody body);
+
+    @POST("tracking/savestopLocations")
+    Call<StopLocationResponse> SetStopLocation(@Body ArrayList<StopLog> body);
 
     @Multipart
     @POST("Upload")

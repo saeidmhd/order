@@ -256,6 +256,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                     } else {
                         percentDiscount = (discount * 100) / final_price;
                         txtDiscountPercent.setText(formatPrice(percentDiscount));
+                        if(OrderType != ProjectInfo.TYPE_Delivery)
                         Discount = ServiceTools.toDouble(txtDiscount.getText().toString());
                     }
                 }
@@ -890,19 +891,21 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             if (OrderType != ProjectInfo.TYPE_RETURN_OF_SALE) {
                 FinalPrice = (TotalPrice - TotalOff) + (totalTaxAndCharge);
             }
+            if(OrderType == ProjectInfo.TYPE_Delivery){
+                FinalPrice = (TotalPrice) + (totalTaxAndCharge);
+            }
 
         }
+
         if (OrderType != ProjectInfo.TYPE_RETURN_OF_SALE) {
             if (Discount > 0) {
                 if (Discount > FinalPrice && FinalPrice != 0) {
                     Discount = FinalPrice;
                 }
                 FinalPrice = FinalPrice - Discount;
-                finalDiscount = Discount;
             } else if (Discount == 0 && percentDiscount > 0) {
                 double dis = ((FinalPrice * percentDiscount) / 100);
                 FinalPrice = FinalPrice - dis;
-                finalDiscount = dis;
             }
         }
     }

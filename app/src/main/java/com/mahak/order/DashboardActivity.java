@@ -566,7 +566,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     btnTrackingService.setChecked(true);
                 }
                 setTackingServiceText(true);
-              //  locationService.setTrackingConfig(mContext);
                 locationService.startTracking();
                 locationService.setTrackingPrefOff("1");
             }
@@ -583,6 +582,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         }
         setTackingServiceText(false);
         locationService.setTrackingPrefOff("0");
+        ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_last_location, null);
     }
 
     private boolean checkPermissions() {
@@ -1466,7 +1466,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        
+
         fromActivityResult = 1;
 
         if (requestCode == REQUEST_Location_ON) {
@@ -1530,13 +1530,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         isReceiverRegistered = false;
-
-        if (asyncReport != null) {
-            if (asyncReport.getStatus() == AsyncTask.Status.RUNNING) {
-                asyncReport.cancel(true);
-            }
-        }
-
         super.onPause();
 
     }
@@ -1623,6 +1616,4 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         });
         dialog.show();
     }
-
-
 }

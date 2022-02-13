@@ -153,6 +153,7 @@ public class DeliveryOrderDetailActivity extends BaseActivity {
             TotalCharge += Charge;
             TotalTax += Tax;
         }
+        Discount -= TotalOff;
         FinalPrice = (TotalPrice - TotalOff) + (TotalTax + TotalCharge);
         FinalPrice = FinalPrice - Discount;
 

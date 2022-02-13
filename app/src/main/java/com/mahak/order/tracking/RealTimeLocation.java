@@ -24,6 +24,7 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
     HubConnection hubConnection;
     Context context;
     Activity activity;
+    Location mLocation;
     HubConnection[] hubConnectionArrayList;
 
     public RealTimeLocation(Context context, Activity activity){
@@ -33,6 +34,7 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
 
     public void sendRealTimeLocation(Location location) {
         sendLocationSignalR(location);
+        mLocation = location;
     }
 
     private void signalSetup() {
@@ -107,6 +109,8 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
         hubConnection.on("OnConnected", (message) -> {
             if(message == 401 || message == 400){
                 setPrefSignalUserToken("");
+            }else {
+                sendLocationSignalR(mLocation);
             }
             Log.d("SignalRManage", String.valueOf(message));
         }, Integer.class);
