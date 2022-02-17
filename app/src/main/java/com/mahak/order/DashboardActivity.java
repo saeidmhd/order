@@ -397,7 +397,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     Bundle headers = new Bundle();
                     headers.putString("token", BaseActivity.getPrefSignalUserToken());
                     customTabsIntent.intent.putExtra(Browser.EXTRA_HEADERS, headers);
-                    customTabsIntent.launchUrl(DashboardActivity.this, Uri.parse("https://tracking.mahaksoft.com/showrouting"));
+                    customTabsIntent.launchUrl(DashboardActivity.this, Uri.parse(baseUrlShowRouting));
                 }else {
                     Intent intent = new Intent(mContext, MapViewActivity.class);
                     intent.putParcelableArrayListExtra(COORDINATE, positions);

@@ -1964,6 +1964,7 @@ public class DbSchema {
         public static final String COLUMN_stopLocationClientId = "stopLocationClientId";
         public static final String COLUMN_lat = "lat";
         public static final String COLUMN_lng = "lng";
+        public static final String COLUMN_sent = "sent";
         public static final String COLUMN_entryDate = "entryDate";
         public static final String COLUMN_duration = "duration";
         public static final String COLUMN_endDate = "endDate";
@@ -1972,6 +1973,7 @@ public class DbSchema {
         public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"StopLog\" ( " +
                 " `lat` TEXT," +
                 " `lng` TEXT," +
+                " `sent` INTEGER," +
                 " `entryDate` TEXT," +
                 " `duration` NUMERIC," +
                 " `endDate` TEXT," +

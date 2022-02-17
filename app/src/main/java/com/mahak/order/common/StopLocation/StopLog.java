@@ -31,6 +31,10 @@ public class StopLog {
     @Expose
     private double longitude;
 
+    @SerializedName("sent")
+    @Expose
+    private int sent;
+
     public long getVisitorId() {
         return visitorId;
     }
@@ -132,5 +136,13 @@ public class StopLog {
                 ", duration='" + duration + '\'' + "\n" +
                 ", duration string=" + timeInHHMMSS2 + "\n" +
                 '}';
+    }
+
+    public int getSent() {
+        return sent;
+    }
+
+    public void setSent(int sent) {
+        this.sent = sent;
     }
 }

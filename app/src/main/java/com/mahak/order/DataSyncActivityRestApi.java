@@ -1473,7 +1473,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             ShowDate();
             // TODO: 10/30/21 uncomment on tracking version
             if(isRadaraActive())
-                new TrackingConfig(mContext,DataSyncActivityRestApi.this,pd).getSignalTokenAndSetting();
+                new TrackingConfig(mContext,pd).getSignalTokenAndSetting();
 
             new ReadOfflinePicturesProducts(mContext).readAllImages();
 

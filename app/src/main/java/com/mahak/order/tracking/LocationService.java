@@ -14,6 +14,7 @@ import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -35,11 +36,9 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.location.DetectedActivity;
 import com.google.android.gms.tasks.Task;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.DashboardActivity;
@@ -239,6 +238,8 @@ public class LocationService extends Service {
         mServiceHandler.removeCallbacksAndMessages(null);
     }
 
+
+
     public LocationService(){}
 
     public LocationService(Context context , Activity activity) {
@@ -262,9 +263,14 @@ public class LocationService extends Service {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
-                onNewLocation(locationResult.getLastLocation());
-                mCurrentLocation = locationResult.getLastLocation();
-                updateUI();
+                Location location = locationResult.getLastLocation();
+                Bundle extras = location.getExtras();
+                boolean isMock = extras != null && extras.getBoolean(FusedLocationProviderClient.KEY_MOCK_LOCATION);
+                if(!isMock){
+                    onNewLocation(locationResult.getLastLocation());
+                    mCurrentLocation = locationResult.getLastLocation();
+                    updateUI();
+                }
             }
         };
     }
@@ -274,7 +280,7 @@ public class LocationService extends Service {
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)
                 .setFastestInterval(10 * 1000)
-                .setSmallestDisplacement(100);
+                .setSmallestDisplacement(150);
     }
 
     private void buildLocationSettingsRequest() {
@@ -358,12 +364,10 @@ public class LocationService extends Service {
             stopLog.setLng(lastStopLocation.getLongitude());
             stopLog.setVisitorId(getPrefUserId());
             stopLogs.add(stopLog);
-            addStopLogToDb(stopLog);
+            InsertStopLogToDb(stopLogs);
             sendStopLocationToServer(stopLogs);
-            ServiceTools.writeLog("\n" + stopLog.toString());
         }
     }
-
     public void sendStopLocationToServer(ArrayList<StopLog> stopLog) {
         ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
         Call<StopLocationResponse> call = apiService.SetStopLocation(stopLog);
@@ -372,8 +376,10 @@ public class LocationService extends Service {
             public void onResponse(Call<StopLocationResponse> call, Response<StopLocationResponse> response) {
                 if (response.body() != null) {
                     if (response.body().isSucceeded()) {
+                        stopLog.get(0).setSent(1);
+                        updateStopLogToDb(stopLog);
                     }else
-                        Log.d("@TAG-Res", "error");
+                        ServiceTools.writeLog("\n" + "error in sending points");
                 }
             }
             @Override
@@ -382,10 +388,16 @@ public class LocationService extends Service {
         });
     }
 
-    private void addStopLogToDb(StopLog stopLog) {
+    private void InsertStopLogToDb(ArrayList<StopLog> stopLogs) {
         if (dba == null) dba = new DbAdapter(mContext);
         dba.open();
-        dba.AddStopLog(stopLog);
+        dba.InsertStopLogs(stopLogs);
+        dba.close();
+    }
+    private void updateStopLogToDb(ArrayList<StopLog> stopLogs) {
+        if (dba == null) dba = new DbAdapter(mContext);
+        dba.open();
+        dba.updateStopLogs(stopLogs);
         dba.close();
     }
 
@@ -655,10 +667,9 @@ public class LocationService extends Service {
 
 
     private boolean compareWithLastLocation(Location currentLocation) {
+
         boolean result;
-        double mDistance = 0;
-        double mDistance2 = 0;
-        double mDistance3 = 0;
+        double mDistance;
 
         Calendar calLastLocation = Calendar.getInstance();
         Calendar calNow = Calendar.getInstance();
@@ -683,12 +694,9 @@ public class LocationService extends Service {
         lasLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_longitude));
         lasLocation.setTime(obj.optLong(ProjectInfo._json_key_date));
         mDistance = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(), "K") * 1000;
-        mDistance2 = currentLocation.distanceTo(lasLocation);
-
-        // we get points every 10 sec.Possible distance for walking and car is considered.
-        result = mDistance <= 110 && mDistance >= 10 ;
+        result = mDistance <= 110 && mDistance >= 10;
         if(result){
-            ServiceTools.writeLogRadara("\n" + " distance2 : " + mDistance2 + "\n" + mDistance + "\n" + currentLocation.getSpeed() + "\n" + currentLocation.getAccuracy() + "\n" + currentLocation.getLatitude() + "\n" + currentLocation.getLongitude());
+            ServiceTools.writeLogRadara( "\n" + mDistance + "\n" + currentLocation.getSpeed() + "\n" + currentLocation.getAccuracy() + "\n" + currentLocation.getLatitude() + "\n" + currentLocation.getLongitude());
             saveStopLocationJsonFile(currentLocation);
         }
         saveInJsonFile(currentLocation);
@@ -864,5 +872,4 @@ public class LocationService extends Service {
     }
 
 }
-
 

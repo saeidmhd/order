@@ -14,6 +14,7 @@ import com.microsoft.signalr.Action1;
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
 
+import static com.mahak.order.BaseActivity.baseUrlSignalR;
 import static com.mahak.order.BaseActivity.getPrefUserId;
 import static com.mahak.order.BaseActivity.setPrefSignalUserToken;
 
@@ -38,7 +39,7 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
     }
 
     private void signalSetup() {
-        hubConnection = HubConnectionBuilder.create("https://tracking.mahaksoft.com/TrackingHub?token=" + BaseActivity.getPrefSignalUserToken()).build();
+        hubConnection = HubConnectionBuilder.create(baseUrlSignalR + BaseActivity.getPrefSignalUserToken()).build();
         hubConnection.setKeepAliveInterval(60000);
         hubConnection.setServerTimeout(60000);
         listenOnConnected();

@@ -18,6 +18,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.common.Bank;
 import com.mahak.order.common.Category;
@@ -2087,6 +2089,18 @@ public class DbAdapter {
         setting.setDeleted(cursor.getInt(cursor.getColumnIndex(DbSchema.SettingSchema.COLUMN_Deleted)));
 
         return setting;
+    }
+    private StopLog getStopLogFromCursor(Cursor cursor) {
+        StopLog stopLog = new StopLog();
+        stopLog.setEndDate(cursor.getString(cursor.getColumnIndex(DbSchema.StopLogSchema.COLUMN_endDate)));
+        stopLog.setVisitorId(cursor.getLong(cursor.getColumnIndex(DbSchema.StopLogSchema.COLUMN_UserId)));
+        stopLog.setEntryDate(cursor.getString(cursor.getColumnIndex(DbSchema.StopLogSchema.COLUMN_entryDate)));
+        stopLog.setDuration(cursor.getLong(cursor.getColumnIndex(DbSchema.StopLogSchema.COLUMN_duration)));
+        stopLog.setStopLocationClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.StopLogSchema.COLUMN_stopLocationClientId)));
+        stopLog.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.StopLogSchema.COLUMN_lat)));
+        stopLog.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.StopLogSchema.COLUMN_lng)));
+        stopLog.setSent(cursor.getInt(cursor.getColumnIndex(DbSchema.StopLogSchema.COLUMN_sent)));
+        return stopLog;
     }
 
     @NonNull
@@ -8044,6 +8058,29 @@ public class DbAdapter {
         }
         return array;
     }
+    public ArrayList<StopLog> getAllStopLogNotSend() {
+        StopLog stopLog;
+        Cursor cursor;
+        ArrayList<StopLog> array = new ArrayList<>();
+        try {
+            cursor = mDb.rawQuery("select * from StopLog where UserId =? and sent =? ",new String[]{String.valueOf(getPrefUserId()),String.valueOf(0)});
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    stopLog = getStopLogFromCursor(cursor);
+                    array.add(stopLog);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("@Error", this.getClass().getName() + " - L:2036 - " + e.getMessage());
+        }
+        return array;
+    }
 
     public ArrayList<Setting> getAllSettings2() {
         Setting setting;
@@ -8904,6 +8941,48 @@ public class DbAdapter {
                 initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Count2, visitorProduct.getCount2());
                 initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Deleted, visitorProduct.getDelete());
                 mDb.update(DbSchema.ProductDetailSchema.TABLE_NAME, initialvalue, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + "=? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + "=? " , new String[]{String.valueOf(visitorProduct.getProductDetailId()) , String.valueOf(visitorProduct.getVisitorId())});
+            }
+            mDb.setTransactionSuccessful();
+        } finally {
+            mDb.endTransaction();
+        }
+    }
+    public void updateStopLogs(List<StopLog> stopLogs) {
+        mDb.beginTransaction();
+        ContentValues contentValues = new ContentValues();
+        try {
+            for (StopLog stopLog : stopLogs) {
+
+                contentValues.put(DbSchema.StopLogSchema.COLUMN_stopLocationClientId, stopLog.getStopLocationClientId());
+                contentValues.put(DbSchema.StopLogSchema.COLUMN_lat, stopLog.getLat());
+                contentValues.put(DbSchema.StopLogSchema.COLUMN_lng, stopLog.getLng());
+                contentValues.put(DbSchema.StopLogSchema.COLUMN_entryDate, stopLog.getEntryDate());
+                contentValues.put(DbSchema.StopLogSchema.COLUMN_duration, stopLog.getDuration());
+                contentValues.put(DbSchema.StopLogSchema.COLUMN_endDate, stopLog.getEndDate());
+                contentValues.put(DbSchema.StopLogSchema.COLUMN_UserId, getPrefUserId());
+                contentValues.put(DbSchema.StopLogSchema.COLUMN_sent, stopLog.getSent());
+                mDb.update(DbSchema.StopLogSchema.TABLE_NAME, contentValues, DbSchema.StopLogSchema.COLUMN_stopLocationClientId + "=? and " + DbSchema.StopLogSchema.COLUMN_UserId + "=? " , new String[]{String.valueOf(stopLog.getStopLocationClientId()) , String.valueOf(stopLog.getVisitorId())});
+            }
+            mDb.setTransactionSuccessful();
+        } finally {
+            mDb.endTransaction();
+        }
+    }
+    public void InsertStopLogs(List<StopLog> stopLogs) {
+        mDb.beginTransaction();
+        ContentValues contentValues = new ContentValues();
+        try {
+            for (StopLog stopLog : stopLogs) {
+
+                contentValues.put(DbSchema.StopLogSchema.COLUMN_stopLocationClientId, stopLog.getStopLocationClientId());
+                contentValues.put(DbSchema.StopLogSchema.COLUMN_lat, stopLog.getLat());
+                contentValues.put(DbSchema.StopLogSchema.COLUMN_lng, stopLog.getLng());
+                contentValues.put(DbSchema.StopLogSchema.COLUMN_entryDate, stopLog.getEntryDate());
+                contentValues.put(DbSchema.StopLogSchema.COLUMN_duration, stopLog.getDuration());
+                contentValues.put(DbSchema.StopLogSchema.COLUMN_endDate, stopLog.getEndDate());
+                contentValues.put(DbSchema.StopLogSchema.COLUMN_UserId, getPrefUserId());
+                contentValues.put(DbSchema.StopLogSchema.COLUMN_sent, stopLog.getSent());
+                mDb.insert(DbSchema.StopLogSchema.TABLE_NAME, null, contentValues);
             }
             mDb.setTransactionSuccessful();
         } finally {
@@ -10663,6 +10742,9 @@ public class DbAdapter {
                 }
                 if (oldVersion < 7) {
                     db.execSQL("ALTER TABLE " + DbSchema.PromotionSchema.TABLE_NAME + " ADD " + DbSchema.PromotionSchema.COLUMN_Deleted + " INTEGER;");
+                }
+                if (oldVersion < 8) {
+                    db.execSQL("ALTER TABLE " + DbSchema.StopLogSchema.TABLE_NAME + " ADD " + DbSchema.StopLogSchema.COLUMN_sent + " INTEGER;");
                 }
             }
         }
