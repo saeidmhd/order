@@ -238,8 +238,6 @@ public class LocationService extends Service {
         mServiceHandler.removeCallbacksAndMessages(null);
     }
 
-
-
     public LocationService(){}
 
     public LocationService(Context context , Activity activity) {
@@ -263,14 +261,15 @@ public class LocationService extends Service {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
-                Location location = locationResult.getLastLocation();
+                onNewLocation(locationResult.getLastLocation());
+                mCurrentLocation = locationResult.getLastLocation();
+                updateUI();
+                /*Location location = locationResult.getLastLocation();
                 Bundle extras = location.getExtras();
                 boolean isMock = extras != null && extras.getBoolean(FusedLocationProviderClient.KEY_MOCK_LOCATION);
                 if(!isMock){
-                    onNewLocation(locationResult.getLastLocation());
-                    mCurrentLocation = locationResult.getLastLocation();
-                    updateUI();
-                }
+
+                }*/
             }
         };
     }
@@ -280,7 +279,43 @@ public class LocationService extends Service {
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)
                 .setFastestInterval(10 * 1000)
-                .setSmallestDisplacement(150);
+                .setSmallestDisplacement(100);
+    }
+    private boolean compareWithLastLocation(Location currentLocation) {
+
+        boolean result;
+        double mDistance;
+
+        Calendar calLastLocation = Calendar.getInstance();
+        Calendar calNow = Calendar.getInstance();
+
+        JSONObject obj = getLastLocationJson(mContext);
+        if (obj == null) {
+            saveStopLocationJsonFile(currentLocation);
+            saveInJsonFile(currentLocation);
+            return true;
+        }
+
+        if(lastStopLocation != null){
+            calLastLocation.setTimeInMillis(lastStopLocation.getTime());
+            boolean check = calLastLocation.get(Calendar.DAY_OF_YEAR) == calNow.get(Calendar.DAY_OF_YEAR);
+            if(!check){
+                saveStopLocationJsonFile(currentLocation);
+            }
+        }
+
+        Location lasLocation = new Location("");
+        lasLocation.setLatitude(obj.optDouble(ProjectInfo._json_key_latitude));
+        lasLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_longitude));
+        lasLocation.setTime(obj.optLong(ProjectInfo._json_key_date));
+        mDistance = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(), "K") * 1000;
+        result = mDistance <= 110 && mDistance >= 10;
+        if(result){
+            ServiceTools.writeLogRadara( "\n" + mDistance + "\n" + currentLocation.getSpeed() + "\n" + currentLocation.getAccuracy() + "\n" + currentLocation.getLatitude() + "\n" + currentLocation.getLongitude());
+            saveStopLocationJsonFile(currentLocation);
+        }
+        saveInJsonFile(currentLocation);
+        return result;
     }
 
     private void buildLocationSettingsRequest() {
@@ -364,7 +399,6 @@ public class LocationService extends Service {
             stopLog.setLng(lastStopLocation.getLongitude());
             stopLog.setVisitorId(getPrefUserId());
             stopLogs.add(stopLog);
-            InsertStopLogToDb(stopLogs);
             sendStopLocationToServer(stopLogs);
         }
     }
@@ -376,8 +410,8 @@ public class LocationService extends Service {
             public void onResponse(Call<StopLocationResponse> call, Response<StopLocationResponse> response) {
                 if (response.body() != null) {
                     if (response.body().isSucceeded()) {
-                        stopLog.get(0).setSent(1);
-                        updateStopLogToDb(stopLog);
+                        /*stopLog.get(0).setSent(1);
+                        updateStopLogToDb(stopLog);*/
                     }else
                         ServiceTools.writeLog("\n" + "error in sending points");
                 }
@@ -665,43 +699,6 @@ public class LocationService extends Service {
         }
     }
 
-
-    private boolean compareWithLastLocation(Location currentLocation) {
-
-        boolean result;
-        double mDistance;
-
-        Calendar calLastLocation = Calendar.getInstance();
-        Calendar calNow = Calendar.getInstance();
-
-        JSONObject obj = getLastLocationJson(mContext);
-        if (obj == null) {
-            saveStopLocationJsonFile(currentLocation);
-            saveInJsonFile(currentLocation);
-            return true;
-        }
-
-        if(lastStopLocation != null){
-            calLastLocation.setTimeInMillis(lastStopLocation.getTime());
-            boolean check = calLastLocation.get(Calendar.DAY_OF_YEAR) == calNow.get(Calendar.DAY_OF_YEAR);
-            if(!check){
-                saveStopLocationJsonFile(currentLocation);
-            }
-        }
-
-        Location lasLocation = new Location("");
-        lasLocation.setLatitude(obj.optDouble(ProjectInfo._json_key_latitude));
-        lasLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_longitude));
-        lasLocation.setTime(obj.optLong(ProjectInfo._json_key_date));
-        mDistance = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(), "K") * 1000;
-        result = mDistance <= 110 && mDistance >= 10;
-        if(result){
-            ServiceTools.writeLogRadara( "\n" + mDistance + "\n" + currentLocation.getSpeed() + "\n" + currentLocation.getAccuracy() + "\n" + currentLocation.getLatitude() + "\n" + currentLocation.getLongitude());
-            saveStopLocationJsonFile(currentLocation);
-        }
-        saveInJsonFile(currentLocation);
-        return result;
-    }
 
     private void performSignalOperation() {
         if(ServiceTools.isOnline(mContext)){
