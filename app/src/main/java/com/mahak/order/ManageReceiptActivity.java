@@ -81,6 +81,7 @@ public class ManageReceiptActivity extends BaseActivity {
     private static int CustomerId;
     private static String Code = ProjectInfo.DONT_CODE;
     private static double Payment;
+    private static double remainCustomerCredit;
     public static ArrayList<Cheque> arrayCheque = new ArrayList<Cheque>();
 
     private EditText txtCustomerName, txtAmount, txtDescription, txtMarketName, txtTrackingCode, txtPayment;
@@ -104,7 +105,7 @@ public class ManageReceiptActivity extends BaseActivity {
     private double TotalPriceInvoice;
     private double TotalReceipt;
     private double mSpentCredit;
-    private double remainCredit;
+    private double remainVisitorCreditValue;
     private double payment;
     private double savedCashedAndCheque;
     private static double mCurrentPrice;
@@ -211,6 +212,7 @@ public class ManageReceiptActivity extends BaseActivity {
                 OrderId = Extras.getLong(ID);
                 Code = Extras.getString(CODE_KEY) != null ? Extras.getString(CODE_KEY) : ProjectInfo.DONT_CODE;
                 Payment = Extras.getDouble(PAYMENT_KEY);
+                remainCustomerCredit = Extras.getDouble(Force_Payment_KEY);
 
                 ReceiptId = Extras.getLong(ID);
 
@@ -532,17 +534,25 @@ public class ManageReceiptActivity extends BaseActivity {
         } else {
             if (Mode == MODE_EDIT) {
                 //باقیمانده اعتبار ویزیتور
-                remainCredit = mVisitorCredit - mSpentCredit;
-                if (remainCredit + totalCashAndCheque() < 0) {
+                remainVisitorCreditValue = mVisitorCredit - mSpentCredit;
+                if (remainVisitorCreditValue + totalCashAndCheque() < 0) {
                     Toast.makeText(mContext, "باید مجموع دریافتی نقد و چک از باقیمانده اعتبار ویزیتور بیشتر باشد!", Toast.LENGTH_SHORT).show();
-                } else
+                } else if(totalCashAndCheque() < remainCustomerCredit)
+                    Toast.makeText(mContext, "باید مجموع دریافتی نقد و چک از باقیمانده اعتبار مشتری بیشتر باشد!", Toast.LENGTH_SHORT).show();
+                else{
                     Save();
+                    //customer.setCredit();
+
+                }
+
             } else {
                 if (Page == PAGE_Invoice_Detail_Activity) {
                     //باقیمانده اعتبار ویزیتور با احتساب فاکتور فعلی
-                    remainCredit = mVisitorCredit - mSpentCredit - Payment;
-                    if (remainCredit + totalCashAndCheque() < 0)
+                    remainVisitorCreditValue = mVisitorCredit - mSpentCredit - Payment;
+                    if (remainVisitorCreditValue + totalCashAndCheque() < 0)
                         Toast.makeText(mContext, "باید مجموع دریافتی نقد و چک از باقیمانده اعتبار ویزیتور بیشتر باشد!", Toast.LENGTH_SHORT).show();
+                    else if(totalCashAndCheque() < remainCustomerCredit)
+                        Toast.makeText(mContext, "باید مجموع دریافتی نقد و چک از باقیمانده اعتبار مشتری بیشتر باشد!", Toast.LENGTH_SHORT).show();
                     else
                         Save();
 
@@ -806,6 +816,9 @@ public class ManageReceiptActivity extends BaseActivity {
         db.open();
         adCheque = new AdapterCheque(mActivity, arrayCheque);
         lstCheque.setAdapter(adCheque);
+
+        if(remainCustomerCredit > 0 )
+            txtAmount.setText(ServiceTools.formatPrice(remainCustomerCredit));
     }
 
     /**
@@ -916,7 +929,6 @@ public class ManageReceiptActivity extends BaseActivity {
             focusView = txtAmount;
             focusView.requestFocus();
         }
-
     }
 
     /**

@@ -64,6 +64,7 @@ public class BaseActivity extends AppCompatActivity {
     public static String eshantion_dasti = "eshantion_dasti";
     public static String CODE_KEY = "Code";
     public static String PAYMENT_KEY = "Payment";
+    public static String Force_Payment_KEY = "Force_Payment";
     public static String remainVisitorCredit = "remainVisitorCredit";
     public static String RETURN_ASSET_KEY = "ReturnAsset";
     public static String RETURN_PUBLISH_KEY = "Publish";

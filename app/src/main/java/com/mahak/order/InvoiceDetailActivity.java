@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -297,8 +296,10 @@ public class InvoiceDetailActivity extends BaseActivity {
         btnSave_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                double remainCustomerCredit = calculateRemainCredit(FinalPrice);
                 if (OrderType == ProjectInfo.TYPE_INVOCIE && (!visitorHasCredit(FinalPrice)|| !customerHasCredit(FinalPrice))) {
-                    SaveAndReceiptBasedOnOrder();
+                    if(remainCustomerCredit > 0)
+                    SaveAndReceiptBasedOnOrder(remainCustomerCredit);
                 } else
                     new AsyncSave(0, OrderType).execute();
             }
@@ -312,7 +313,7 @@ public class InvoiceDetailActivity extends BaseActivity {
         });
     }
 
-    private void SaveAndReceiptBasedOnOrder() {
+    private void SaveAndReceiptBasedOnOrder(double remainCustomerCredit) {
         if (validateAsset()) {
             if (orderDetails.size() > 0) {
                 Intent intent = new Intent(mContext, ManageReceiptActivity.class);
@@ -321,6 +322,7 @@ public class InvoiceDetailActivity extends BaseActivity {
                 intent.putExtra(CUSTOMERID_KEY, CustomerId);
                 intent.putExtra(CUSTOMER_CLIENT_ID_KEY, CustomerClientId);
                 intent.putExtra(PAYMENT_KEY, FinalPrice);
+                intent.putExtra(Force_Payment_KEY, remainCustomerCredit);
                 intent.putExtra(PAGE, PAGE_Invoice_Detail_Activity);
                 startActivityForResult(intent, REQUEST_PAY_FACTOR);
             } else
@@ -377,8 +379,20 @@ public class InvoiceDetailActivity extends BaseActivity {
         if (Mode == MODE_EDIT)
             mSpentCustomerCredit -= mCurrentPrice;
 
-        //اگر مبلغ فاکتور فعلی بیشتر از اعتبار باشد باید برای ثبت فاکتور دریافتی ثبت کند
-        return !(finalPrice > customerCreditValue);
+        //اگر اعتبار مشتری بیشتر یا مساوی مبلغ فاکتور باشد اجازه ثبت فاکتور وجود دارد وگرنه باید دریافتی ثبت گردد
+        return finalPrice < customerCreditValue;
+    }
+    public static double calculateRemainCredit(double finalPrice) {
+
+        mSpentCustomerCredit = 0;
+
+        Customer customer = db.getCustomerWithPersonId(CustomerId);
+        customerCreditValue = customer.getCredit();
+        if (customerCreditValue == NoLimit)
+            return finalPrice;
+
+        //اگر اعتبار مشتری بیشتر یا مساوی مبلغ فاکتور باشد اجازه ثبت فاکتور وجود دارد وگرنه باید دریافتی ثبت گردد
+        return finalPrice - customerCreditValue;
     }
 
     //اعتبار باقیمانده ویزیتور
@@ -886,7 +900,11 @@ public class InvoiceDetailActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_PAY_FACTOR:
-                    new AsyncSave(REQUEST_PAY_FACTOR, OrderType).execute();
+                    double remainCustomerCredit = calculateRemainCredit(FinalPrice);
+                    if (OrderType == ProjectInfo.TYPE_INVOCIE && (!visitorHasCredit(FinalPrice)|| !customerHasCredit(FinalPrice))) {
+                        SaveAndReceiptBasedOnOrder(remainCustomerCredit);
+                    } else
+                        new AsyncSave(REQUEST_PAY_FACTOR, OrderType).execute();
                     break;
                 case REQUEST_PRODUCT_LIST:
 
@@ -927,8 +945,9 @@ public class InvoiceDetailActivity extends BaseActivity {
                     .setCancelable(false)
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            double remainCustomerCredit = calculateRemainCredit(FinalPrice);
                             if (OrderType == ProjectInfo.TYPE_INVOCIE && (!visitorHasCredit(FinalPrice)|| !customerHasCredit(FinalPrice))) {
-                                SaveAndReceiptBasedOnOrder();
+                                SaveAndReceiptBasedOnOrder(remainCustomerCredit);
                             } else
                                 new AsyncSave(0, OrderType).execute();
                             dialog.cancel();
