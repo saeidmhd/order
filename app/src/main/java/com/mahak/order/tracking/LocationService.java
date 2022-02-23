@@ -84,10 +84,6 @@ public class LocationService extends Service {
 
     private static final int ID_NOTIFICATION_TRACKING = 1090;
 
-    private static int MIN_DISPALCEMENT_CHANGE_FOR_UPDATES = 15; // 1 meters
-    private static long MIN_TIME_INTERVAL_UPDATES = 120000; // 2 min
-
-    private static boolean sendPointsBasedMeter = false;
     public Context mContext;
 
     boolean isLogging = false;
@@ -263,13 +259,9 @@ public class LocationService extends Service {
                 super.onLocationResult(locationResult);
                 onNewLocation(locationResult.getLastLocation());
                 mCurrentLocation = locationResult.getLastLocation();
-                updateUI();
-                /*Location location = locationResult.getLastLocation();
-                Bundle extras = location.getExtras();
-                boolean isMock = extras != null && extras.getBoolean(FusedLocationProviderClient.KEY_MOCK_LOCATION);
-                if(!isMock){
-
-                }*/
+                executeEventLocations(mCurrentLocation,false);
+                if((int)mCurrentLocation.getSpeed() > 0)
+                    updateUI();
             }
         };
     }
@@ -309,7 +301,7 @@ public class LocationService extends Service {
         lasLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_longitude));
         lasLocation.setTime(obj.optLong(ProjectInfo._json_key_date));
         mDistance = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(), "K") * 1000;
-        result = mDistance <= 110 && mDistance >= 10;
+        result = mDistance <= 350 && mDistance > 10;
         if(result){
             ServiceTools.writeLogRadara( "\n" + mDistance + "\n" + currentLocation.getSpeed() + "\n" + currentLocation.getAccuracy() + "\n" + currentLocation.getLatitude() + "\n" + currentLocation.getLongitude());
             saveStopLocationJsonFile(currentLocation);
@@ -342,7 +334,6 @@ public class LocationService extends Service {
                         timer = new Timer();
                         timer.schedule(new SendStopLocationTimer(), InitialInMillis, DelayInMillis);
 
-                        updateUI();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -366,7 +357,6 @@ public class LocationService extends Service {
                                 //Log.e(TAG, errorMessage);
                                 Toast.makeText(mContext, errorMessage, Toast.LENGTH_LONG).show();
                         }
-                        updateUI();
                     }
                 });
     }
@@ -399,7 +389,12 @@ public class LocationService extends Service {
             stopLog.setLng(lastStopLocation.getLongitude());
             stopLog.setVisitorId(getPrefUserId());
             stopLogs.add(stopLog);
-            sendStopLocationToServer(stopLogs);
+            if(ServiceTools.isOnline(mContext)){
+                sendStopLocationToServer(stopLogs);
+            }else {
+                stopLogs.get(0).setSent(0);
+                InsertStopLogToDb(stopLogs);
+            }
         }
     }
     public void sendStopLocationToServer(ArrayList<StopLog> stopLog) {
@@ -409,15 +404,16 @@ public class LocationService extends Service {
             @Override
             public void onResponse(Call<StopLocationResponse> call, Response<StopLocationResponse> response) {
                 if (response.body() != null) {
-                    if (response.body().isSucceeded()) {
-                        /*stopLog.get(0).setSent(1);
-                        updateStopLogToDb(stopLog);*/
-                    }else
-                        ServiceTools.writeLog("\n" + "error in sending points");
+                    if (!response.body().isSucceeded()) {
+                        stopLog.get(0).setSent(0);
+                        InsertStopLogToDb(stopLog);
+                    }
                 }
             }
             @Override
             public void onFailure(Call<StopLocationResponse> call, Throwable t) {
+                stopLog.get(0).setSent(0);
+                InsertStopLogToDb(stopLog);
             }
         });
     }
@@ -425,13 +421,26 @@ public class LocationService extends Service {
     private void InsertStopLogToDb(ArrayList<StopLog> stopLogs) {
         if (dba == null) dba = new DbAdapter(mContext);
         dba.open();
-        dba.InsertStopLogs(stopLogs);
+        try {
+            dba.InsertStopLogs(stopLogs);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if(e.getMessage() != null)
+                Log.e("saveInDb",e.getMessage());
+        }
         dba.close();
     }
+
     private void updateStopLogToDb(ArrayList<StopLog> stopLogs) {
         if (dba == null) dba = new DbAdapter(mContext);
         dba.open();
-        dba.updateStopLogs(stopLogs);
+        try {
+            dba.updateStopLogs(stopLogs);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if(e.getMessage() != null)
+                Log.e("saveInDb",e.getMessage());
+        }
         dba.close();
     }
 
@@ -551,11 +560,12 @@ public class LocationService extends Service {
         visitorLocation.setUniqueID(UUID.randomUUID().toString());
         List<VisitorLocation> VisitorLocations = new ArrayList<>();
         VisitorLocations.add(visitorLocation);
+        if(ServiceTools.isOnline(mContext)){
+            sendToServer(VisitorLocations);
+        }
         if(saveInDb(VisitorLocations)){
+            ServiceTools.writeLogRadara("\n" + visitorLocation.getUniqueID() +  "saved in database");
             saveInDb = true;
-            if(ServiceTools.isOnline(mContext)){
-                sendToServer(VisitorLocations);
-            }
         }
         executeEventLocations(correctLocation,saveInDb);
     }
@@ -689,12 +699,10 @@ public class LocationService extends Service {
 
     private void updateUI() {
         if (mCurrentLocation != null) {
-            executeEventLocations(mCurrentLocation,false);
             if(isRadaraActive()){
                 performSignalOperation();
-                if(compareWithLastLocation(mCurrentLocation)){
+                if(compareWithLastLocation(mCurrentLocation))
                     sendLocation(mCurrentLocation);
-                }
             }
         }
     }

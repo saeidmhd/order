@@ -32,6 +32,34 @@
                 android:background="@drawable/forms_btn_circle_selector"
                 android:src="@drawable/ic_point_selector"
                 tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_alignParentBottom="true">
+
+                <ImageView
+                    android:id="@+id/btnZoomMapView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img" />
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="20dip"
+                    android:padding="12dip"
+                    android:text="0"
+                    android:textColor="#ffffffff" />
+
+            </RelativeLayout>
+
+
 
 
         </RelativeLayout>
@@ -658,8 +686,6 @@
             android:layout_height="wrap_content"
             android:gravity="bottom"
             android:id="@+id/horizontalScrollView">
-
-
 
         </HorizontalScrollView>
 

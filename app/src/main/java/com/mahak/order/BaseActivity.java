@@ -199,7 +199,7 @@ public class BaseActivity extends AppCompatActivity {
     public static String InActive = "0.00000000";
     public static String TaxPercent = "4.00000000";
     public static String ChargePercent = "6.00000000";
-    public static String CountDecimalPoint = "0";
+    public static String CountDecimalPoint = "4";
     public static String PriceDecimalPoint = "0";
 
     public static String invisible = "invisible";

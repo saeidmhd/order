@@ -148,7 +148,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             tvSumOfPureInvoice,
             tvSumOfChargeAndTaxOrder,
             tvSumOffChargeAndTaxInvoice,
-            tvVersion;
+            tvVersion,
+            speed;
 
     public static TextView tvTrackingService;
 
@@ -709,6 +710,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         tvSumOfChargeAndTaxOrder = (TextView) findViewById(R.id.tvSumOfChargeAndTaxOrder);
         tvSumOffChargeAndTaxInvoice = (TextView) findViewById(R.id.tvSumOfChargeAndTaxInvoice);
         tvVersion = (TextView) findViewById(R.id.tvVersion);
+        speed = (TextView) findViewById(R.id.speed);
         llReceipt = (LinearLayout) findViewById(R.id.llReceipt);
         llOrder = (LinearLayout) findViewById(R.id.llOrder);
         llInvoice = (LinearLayout) findViewById(R.id.llInvoice);
@@ -867,6 +869,10 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                         if(location != null){
                             lastPosition = new LatLng(location.getLatitude(), location.getLongitude());
                             showMarkerOnMap(lastPosition);
+                            if(location.hasSpeed()){
+                                int speedValue = (int)(location.getSpeed() * 3.6);
+                                speed.setText(String.valueOf(speedValue));
+                            }
                         }
                     }
                 });

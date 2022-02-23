@@ -2,6 +2,7 @@ package com.mahak.order.tracking;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -44,7 +45,7 @@ public class TrackingConfig {
     Context mContext;
     private FontProgressDialog pd;
 
-    private final DbAdapter db;
+    private DbAdapter db;
     JSONObject gpsData = new JSONObject();
 
     public TrackingConfig(Context context, FontProgressDialog pd){
@@ -133,7 +134,7 @@ public class TrackingConfig {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        new sendStopLogAsync().execute();
+                        new getTrackingZoneAsync().execute();
 
                     }else {
                         Toast.makeText(context, response.body().getErrors().get(0).toString(), Toast.LENGTH_LONG).show();
@@ -146,59 +147,6 @@ public class TrackingConfig {
                 Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    class sendStopLogAsync extends AsyncTask<String, String, Integer> {
-
-
-        ArrayList<StopLog> stopLogs = new ArrayList<>();
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Integer doInBackground(String... arg0) {
-            DbAdapter mDb = new DbAdapter(mContext);
-            mDb.open();
-            stopLogs = mDb.getAllStopLogNotSend();
-            mDb.close();
-            return 0;
-        }
-
-        @Override
-        protected void onPostExecute(Integer result) {
-            final String[] mMsg = {""};
-            pd.setMessage("در حال ارسال نقاط توقف");
-            pd.setCancelable(false);
-            pd.show();
-            ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
-            Call<StopLocationResponse> call = apiService.SetStopLocation(stopLogs);
-            call.enqueue(new Callback<StopLocationResponse>() {
-                @Override
-                public void onResponse(Call<StopLocationResponse> call, Response<StopLocationResponse> response) {
-                    dismissProgressDialog();
-                    if (response.body() != null) {
-                        if (response.body().isSucceeded()) {
-                            for(StopLog stopLog : stopLogs)
-                                stopLog.setSent(1);
-                            UpdateOrInsertStopLogToDb(stopLogs);
-                        }else
-                            ServiceTools.writeLog("\n" + "error in sending points");
-
-                       // getTrackingZoneAsync.execute();
-                    }
-                }
-                @Override
-                public void onFailure(Call<StopLocationResponse> call, Throwable t) {
-                    dismissProgressDialog();
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                    FirebaseCrashlytics.getInstance().log(t.getMessage());
-                    mMsg[0] = t.toString();
-                }
-            });
-        }
     }
 
     class getTrackingZoneAsync extends AsyncTask<String, String, Integer> {
@@ -284,8 +232,6 @@ public class TrackingConfig {
             db.open();
             if (trackingZoneData != null){
                 if (trackingZoneData.size() > 0){
-                    /*db.DeleteAllZone();
-                    db.DeleteAllZoneLocation();*/
                     for (Datum datum : trackingZoneData){
                         DataService.InsertZone(db, datum);
                         DataService.InsertZoneLocation(db,datum.getZoneLocations());
@@ -298,9 +244,70 @@ public class TrackingConfig {
 
         @Override
         protected void onPostExecute(Integer result) {
+            new sendStopLogAsync().execute();
             dismissProgressDialog();
         }
 
+    }
+
+    class sendStopLogAsync extends AsyncTask<String, String, Integer> {
+
+
+        ArrayList<StopLog> stopLogs = new ArrayList<>();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Integer doInBackground(String... arg0) {
+            getAllStoplogs();
+            return 0;
+        }
+        private void getAllStoplogs() {
+            if (db == null) db = new DbAdapter(mContext);
+            db.open();
+            try {
+                stopLogs = db.getAllStopLogNotSend();
+            } catch (Exception e) {
+                e.printStackTrace();
+                if(e.getMessage() != null)
+                    Log.e("saveInDb",e.getMessage());
+            }
+            db.close();
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            final String[] mMsg = {""};
+            pd.setMessage("در حال ارسال نقاط توقف");
+            pd.setCancelable(false);
+            pd.show();
+            ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
+            Call<StopLocationResponse> call = apiService.SetStopLocation(stopLogs);
+            call.enqueue(new Callback<StopLocationResponse>() {
+                @Override
+                public void onResponse(Call<StopLocationResponse> call, Response<StopLocationResponse> response) {
+                    dismissProgressDialog();
+                    if (response.body() != null) {
+                        if (response.body().isSucceeded()) {
+                            for(StopLog stopLog : stopLogs)
+                                stopLog.setSent(1);
+                            UpdateOrInsertStopLogToDb(stopLogs);
+                        }else
+                            ServiceTools.writeLog("\n" + "error in sending points");
+                    }
+                }
+                @Override
+                public void onFailure(Call<StopLocationResponse> call, Throwable t) {
+                    dismissProgressDialog();
+                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                    FirebaseCrashlytics.getInstance().log(t.getMessage());
+                    mMsg[0] = t.toString();
+                }
+            });
+        }
     }
 
     private void dismissProgressDialog() {
@@ -309,15 +316,16 @@ public class TrackingConfig {
         }
     }
 
-
-    public void sendStopLocationToServer(ArrayList<StopLog> stopLog) {
-
-    }
-
     private void UpdateOrInsertStopLogToDb(ArrayList<StopLog> stopLogs) {
-        DbAdapter db = new DbAdapter(mContext);
+        if (db == null) db = new DbAdapter(mContext);
         db.open();
-        db.updateStopLogs(stopLogs);
+        try {
+            db.updateStopLogs(stopLogs);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if(e.getMessage() != null)
+                Log.e("saveInDb",e.getMessage());
+        }
         db.close();
     }
 
