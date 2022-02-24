@@ -374,8 +374,20 @@ public class LocationService extends Service {
     }
 
     private void saveAndSendStopLocation() {
-        lastStopLocation = LastStopLocation();
+
+        Calendar calLastLocation = Calendar.getInstance();
+        Calendar calNow = Calendar.getInstance();
         long currentTime = System.currentTimeMillis();
+
+        lastStopLocation = LastStopLocation();
+        calLastLocation.setTimeInMillis(lastStopLocation.getTime());
+        boolean check = calLastLocation.get(Calendar.DAY_OF_YEAR) == calNow.get(Calendar.DAY_OF_YEAR);
+        if(!check){
+            lastStopLocation.setTime(currentTime);
+            saveStopLocationJsonFile(lastStopLocation);
+        }
+
+        lastStopLocation = LastStopLocation();
         stop_time = currentTime - lastStopLocation.getTime();
         if(stop_time > 5 * 60 * 1000){
             ArrayList<StopLog> stopLogs = new ArrayList<>();
