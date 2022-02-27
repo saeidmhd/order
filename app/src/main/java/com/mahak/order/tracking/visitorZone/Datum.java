@@ -21,7 +21,7 @@ public class Datum {
     private List<ZoneLocation> zoneLocations = null;
     @SerializedName("visitorZoneLocations")
     @Expose
-    private String visitorZoneLocations;
+    private List<Object> visitorZoneLocations = null;
     @SerializedName("factorRegistrationOutRange")
     @Expose
     private boolean factorRegistrationOutRange;
@@ -70,11 +70,11 @@ public class Datum {
         this.zoneLocations = zoneLocations;
     }
 
-    public String getVisitorZoneLocations() {
+    public List<Object> getVisitorZoneLocations() {
         return visitorZoneLocations;
     }
 
-    public void setVisitorZoneLocations(String visitorZoneLocations) {
+    public void setVisitorZoneLocations(List<Object> visitorZoneLocations) {
         this.visitorZoneLocations = visitorZoneLocations;
     }
 
