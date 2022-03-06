@@ -37,6 +37,12 @@ public class Data {
     @SerializedName("longitude")
     @Expose
     private double longitude;
+    @SerializedName("startTime")
+    @Expose
+    private int startTime;
+    @SerializedName("endTime")
+    @Expose
+    private int endTime;
 
     public int getId() {
         return id;
@@ -118,4 +124,19 @@ public class Data {
         this.longitude = longitude;
     }
 
+    public int getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(int startTime) {
+        this.startTime = startTime;
+    }
+
+    public int getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(int endTime) {
+        this.endTime = endTime;
+    }
 }

@@ -14,7 +14,6 @@ import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Binder;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -80,7 +79,7 @@ import static com.mahak.order.BaseActivity.getPrefUserId;
 import static com.mahak.order.BaseActivity.isRadaraActive;
 import static com.mahak.order.BaseActivity.setPrefSignalUserToken;
 
-public class LocationService extends Service {
+public class LocationService extends Service  {
 
     private static final int ID_NOTIFICATION_TRACKING = 1090;
 
@@ -134,11 +133,6 @@ public class LocationService extends Service {
     private static NotificationManager mNotificationManager;
 
     /**
-     * Contains parameters used by {@link com.google.android.gms.location.FusedLocationProviderApi}.
-     */
-    private LocationRequest mLocationRequest;
-
-    /**
      * Provides access to the Fused Location Provider API.
      */
     private FusedLocationProviderClient mFusedLocationClient;
@@ -157,15 +151,17 @@ public class LocationService extends Service {
 
     long tracking_client_id = 0;
 
-    private Timer timer;
-    private static long InitialInMillis = 1000 * 10;  // 10 Seconds
-    private static long DelayInMillis = 1000 * 60 * 5;  // 5 Minutes
+
+    private TimerHelper timerHelper;
 
     long stop_time;
     Location lastStopLocation;
 
+
     @Override
     public void onCreate() {
+
+        Log.i(TAG, "in onCreate()");
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mSettingsClient = LocationServices.getSettingsClient(this);
@@ -184,7 +180,7 @@ public class LocationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i(TAG, "Service started");
+        Log.i(TAG, "Service onStartCommand");
         boolean startedFromNotification = intent.getBooleanExtra(EXTRA_STARTED_FROM_NOTIFICATION,
                 false);
         if (startedFromNotification) {
@@ -199,6 +195,7 @@ public class LocationService extends Service {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        Log.i(TAG, "Service onConfigurationChanged");
         super.onConfigurationChanged(newConfig);
         mChangingConfiguration = true;
     }
@@ -221,7 +218,7 @@ public class LocationService extends Service {
 
     @Override
     public boolean onUnbind(Intent intent) {
-        Log.i(TAG, "Last client unbound from service");
+        Log.i(TAG, "onUnbind");
         if (!mChangingConfiguration && Utils.requestingLocationUpdates(this)) {
             Log.i(TAG, "Starting foreground service");
             startForeground(NOTIFICATION_ID, getNotification());
@@ -231,6 +228,7 @@ public class LocationService extends Service {
 
     @Override
     public void onDestroy() {
+        Log.i(TAG, "onDestroy");
         mServiceHandler.removeCallbacksAndMessages(null);
     }
 
@@ -260,8 +258,7 @@ public class LocationService extends Service {
                 onNewLocation(locationResult.getLastLocation());
                 mCurrentLocation = locationResult.getLastLocation();
                 executeEventLocations(mCurrentLocation,false);
-                if((int)mCurrentLocation.getSpeed() > 0)
-                    updateUI();
+                updateUI();
             }
         };
     }
@@ -283,6 +280,7 @@ public class LocationService extends Service {
 
         JSONObject obj = getLastLocationJson(mContext);
         if (obj == null) {
+            performSignalOperation();
             saveStopLocationJsonFile(currentLocation);
             saveInJsonFile(currentLocation);
             return true;
@@ -301,8 +299,10 @@ public class LocationService extends Service {
         lasLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_longitude));
         lasLocation.setTime(obj.optLong(ProjectInfo._json_key_date));
         mDistance = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(), "K") * 1000;
-        result = mDistance <= 350 && mDistance > 10;
+        boolean hasSpeed = (int)currentLocation.getSpeed() > 0;
+        result = mDistance <= 350 && mDistance > 10 && hasSpeed;
         if(result){
+            saveAndSendStopLocation();
             ServiceTools.writeLogRadara( "\n" + mDistance + "\n" + currentLocation.getSpeed() + "\n" + currentLocation.getAccuracy() + "\n" + currentLocation.getLatitude() + "\n" + currentLocation.getLongitude());
             saveStopLocationJsonFile(currentLocation);
         }
@@ -330,9 +330,9 @@ public class LocationService extends Service {
                     public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
                         //noinspection MissingPermission
                         mFusedLocationClient.requestLocationUpdates(locationRequest,mLocationCallback, Looper.myLooper());
+                        timerHelper =  new TimerHelper();
 
-                        timer = new Timer();
-                        timer.schedule(new SendStopLocationTimer(), InitialInMillis, DelayInMillis);
+                        updateUI();
 
                     }
                 })
@@ -357,55 +357,39 @@ public class LocationService extends Service {
                                 //Log.e(TAG, errorMessage);
                                 Toast.makeText(mContext, errorMessage, Toast.LENGTH_LONG).show();
                         }
+                        updateUI();
                     }
                 });
     }
 
     public void stopTracking() {
-        if(timer != null){
-            timer.cancel();
-            timer.purge();
-        }
-        stopLocationUpdates();
-    }
-
-    private void stopLocationUpdates() {
         removeLocationUpdates();
     }
 
     private void saveAndSendStopLocation() {
-
-        Calendar calLastLocation = Calendar.getInstance();
-        Calendar calNow = Calendar.getInstance();
         long currentTime = System.currentTimeMillis();
-
         lastStopLocation = LastStopLocation();
-        calLastLocation.setTimeInMillis(lastStopLocation.getTime());
-        boolean check = calLastLocation.get(Calendar.DAY_OF_YEAR) == calNow.get(Calendar.DAY_OF_YEAR);
-        if(!check){
-            lastStopLocation.setTime(currentTime);
-            saveStopLocationJsonFile(lastStopLocation);
-        }
-
-        lastStopLocation = LastStopLocation();
-        stop_time = currentTime - lastStopLocation.getTime();
-        if(stop_time > 5 * 60 * 1000){
-            ArrayList<StopLog> stopLogs = new ArrayList<>();
-            StopLog stopLog = new StopLog();
-            tracking_client_id = ServiceTools.toLong(ServiceTools.getStopLocationId(lastStopLocation.getTime()));
-            stopLog.setDuration(stop_time / 1000);
-            stopLog.setStopLocationClientId(tracking_client_id);
-            stopLog.setEndDate(ServiceTools.getFormattedDate(currentTime));
-            stopLog.setEntryDate(ServiceTools.getFormattedDate(lastStopLocation.getTime()));
-            stopLog.setLat(lastStopLocation.getLatitude());
-            stopLog.setLng(lastStopLocation.getLongitude());
-            stopLog.setVisitorId(getPrefUserId());
-            stopLogs.add(stopLog);
-            if(ServiceTools.isOnline(mContext)){
-                sendStopLocationToServer(stopLogs);
-            }else {
-                stopLogs.get(0).setSent(0);
-                InsertStopLogToDb(stopLogs);
+        if(checkStartTimeEndTime(mContext , lastStopLocation)){
+            lastStopLocation = LastStopLocation();
+            stop_time = currentTime - lastStopLocation.getTime();
+            if(stop_time > 5 * 60 * 1000){
+                ArrayList<StopLog> stopLogs = new ArrayList<>();
+                StopLog stopLog = new StopLog();
+                tracking_client_id = ServiceTools.toLong(ServiceTools.getStopLocationId(lastStopLocation.getTime()));
+                stopLog.setDuration(stop_time / 1000);
+                stopLog.setStopLocationClientId(tracking_client_id);
+                stopLog.setEndDate(ServiceTools.getFormattedDate(currentTime));
+                stopLog.setEntryDate(ServiceTools.getFormattedDate(lastStopLocation.getTime()));
+                stopLog.setLat(lastStopLocation.getLatitude());
+                stopLog.setLng(lastStopLocation.getLongitude());
+                stopLog.setVisitorId(getPrefUserId());
+                stopLogs.add(stopLog);
+                if(ServiceTools.isOnline(mContext)){
+                    sendStopLocationToServer(stopLogs);
+                }else {
+                    stopLogs.get(0).setSent(-1);
+                    updateStopLogToDb(stopLogs);
+                }
             }
         }
     }
@@ -417,15 +401,15 @@ public class LocationService extends Service {
             public void onResponse(Call<StopLocationResponse> call, Response<StopLocationResponse> response) {
                 if (response.body() != null) {
                     if (!response.body().isSucceeded()) {
-                        stopLog.get(0).setSent(0);
-                        InsertStopLogToDb(stopLog);
+                        stopLog.get(0).setSent(-1);
+                        updateStopLogToDb(stopLog);
                     }
                 }
             }
             @Override
             public void onFailure(Call<StopLocationResponse> call, Throwable t) {
-                stopLog.get(0).setSent(0);
-                InsertStopLogToDb(stopLog);
+                stopLog.get(0).setSent(-1);
+                updateStopLogToDb(stopLog);
             }
         });
     }
@@ -712,7 +696,8 @@ public class LocationService extends Service {
     private void updateUI() {
         if (mCurrentLocation != null) {
             if(isRadaraActive()){
-                performSignalOperation();
+                if((int)mCurrentLocation.getSpeed() > 0)
+                    performSignalOperation();
                 if(compareWithLastLocation(mCurrentLocation))
                     sendLocation(mCurrentLocation);
             }
@@ -741,7 +726,9 @@ public class LocationService extends Service {
      * {@link SecurityException}.
      */
     public void removeLocationUpdates() {
+        ServiceTools.writeLogRadara("Removing location updates");
         Log.i(TAG, "Removing location updates");
+        timerHelper.stopTimer();
         try {
             if(mLocationCallback != null){
                 mFusedLocationClient.removeLocationUpdates(mLocationCallback);
@@ -755,6 +742,8 @@ public class LocationService extends Service {
             Log.e(TAG, "Lost location permission. Could not remove updates. " + unlikely);
         }
     }
+
+
 
     /**
      * Returns the {@link NotificationCompat} used as part of the foreground service.
@@ -881,12 +870,53 @@ public class LocationService extends Service {
     }
 
 
-    private class SendStopLocationTimer extends TimerTask {
-        @Override
-        public void run() {
-            saveAndSendStopLocation();
+    public boolean checkStartTimeEndTime(Context context , Location lastStopLocation) {
+
+        int StartTime = 0;
+        int EndTime = 0;
+        String config = ServiceTools.getKeyFromSharedPreferences(context, ProjectInfo.pre_gps_config);
+        if (!ServiceTools.isNull(config)) {
+            try {
+                JSONObject obj = new JSONObject(config);
+                StartTime = obj.getInt(ProjectInfo._json_key_startTime);
+                EndTime = obj.getInt(ProjectInfo._json_key_endTime);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
+        Calendar calLastLocation = Calendar.getInstance();
+        calLastLocation.setTimeInMillis(lastStopLocation.getTime());
+        boolean betweenStartEndTime = calLastLocation.get(Calendar.HOUR_OF_DAY) >= StartTime && calLastLocation.get(Calendar.HOUR_OF_DAY) <= EndTime;
+        if(!betweenStartEndTime){
+            timerHelper.stopTimer();
+            return false;
+        }
+        return true;
     }
 
+    public class TimerHelper {
+        Timer timer;
+        long InitialInMillis = 10 * 1000;
+        long DelayInMillis = 5 * 60 * 1000;
+
+        public TimerHelper() {
+            timer = new Timer();
+            timer.schedule(new MyTimerTask(), InitialInMillis, DelayInMillis);
+        }
+
+        public void stopTimer() {
+            if(timer != null){
+                timer.cancel();
+            }
+        }
+
+        class MyTimerTask extends TimerTask {
+            @Override
+            public void run() {
+                saveAndSendStopLocation();
+            }
+        }
+    }
 }
 

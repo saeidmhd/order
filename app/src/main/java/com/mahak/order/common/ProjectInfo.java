@@ -165,6 +165,8 @@ public class ProjectInfo {
     public static String _json_key_startTime = "startTime";
     public static String _json_key_endTime = "endTime";
     public static String _json_sendPointsBasedMeter = "sendPointsBasedMeter";
+    public static String get_json_key_startTime = "startTime";
+    public static String get_json_key_endTime = "endTime";
     public static String _json_key_banks = "BankNames";
 
     //Action

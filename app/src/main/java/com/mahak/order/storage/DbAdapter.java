@@ -104,32 +104,17 @@ public class DbAdapter {
         this.mCtx = ctx;
     }
 
-    public DbAdapter open() {
+ /*   public DbAdapter open() {
         this.mDbHelper = new DatabaseHelper(mCtx);
         this.mDb = mDbHelper.getWritableDatabase();
         return this;
-    }
-
-    /*public DbAdapter open() {
-      *//*  this.mDbHelper = new DatabaseHelper(mCtx);
-        if (!mDbHelper.CheckDatabase()) {
-            try {
-                mDbHelper.createDataBase();
-                this.mDb = mDbHelper.openDataBase();
-
-            } catch (Exception e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                FirebaseCrashlytics.getInstance().recordException(e);
-                e.printStackTrace();
-            }
-        } else*//*
-        *//*mDbHelper = new DatabaseHelper(mCtx);
-        this.mDb = mDbHelper.openDataBase();
-
-
-        //////////////////////////////////////////
-        return this;*//*
     }*/
+
+    public DbAdapter open() {
+        this.mDbHelper = new DatabaseHelper(mCtx);
+        this.mDb = mDbHelper.openDataBase();
+        return this;
+    }
 
     public void close() {
         mDbHelper.close();
@@ -8063,7 +8048,7 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<StopLog> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select * from StopLog where UserId =? and sent =? ",new String[]{String.valueOf(getPrefUserId()),String.valueOf(0)});
+            cursor = mDb.rawQuery("select * from StopLog where UserId =? and sent =? ",new String[]{String.valueOf(getPrefUserId()),String.valueOf(-1)});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -8952,7 +8937,6 @@ public class DbAdapter {
         ContentValues contentValues = new ContentValues();
         try {
             for (StopLog stopLog : stopLogs) {
-
                 contentValues.put(DbSchema.StopLogSchema.COLUMN_stopLocationClientId, stopLog.getStopLocationClientId());
                 contentValues.put(DbSchema.StopLogSchema.COLUMN_lat, stopLog.getLat());
                 contentValues.put(DbSchema.StopLogSchema.COLUMN_lng, stopLog.getLng());
@@ -8961,7 +8945,9 @@ public class DbAdapter {
                 contentValues.put(DbSchema.StopLogSchema.COLUMN_endDate, stopLog.getEndDate());
                 contentValues.put(DbSchema.StopLogSchema.COLUMN_UserId, getPrefUserId());
                 contentValues.put(DbSchema.StopLogSchema.COLUMN_sent, stopLog.getSent());
-                mDb.update(DbSchema.StopLogSchema.TABLE_NAME, contentValues, DbSchema.StopLogSchema.COLUMN_stopLocationClientId + "=? and " + DbSchema.StopLogSchema.COLUMN_UserId + "=? " , new String[]{String.valueOf(stopLog.getStopLocationClientId()) , String.valueOf(stopLog.getVisitorId())});
+                int numOfRows = mDb.update(DbSchema.StopLogSchema.TABLE_NAME, contentValues, DbSchema.StopLogSchema.COLUMN_stopLocationClientId + "=? and " + DbSchema.StopLogSchema.COLUMN_UserId + "=? " , new String[]{String.valueOf(stopLog.getStopLocationClientId()) , String.valueOf(stopLog.getVisitorId())});
+                if(numOfRows == 0)
+                    mDb.insert(DbSchema.StopLogSchema.TABLE_NAME, null, contentValues);
             }
             mDb.setTransactionSuccessful();
         } finally {
@@ -10629,19 +10615,23 @@ public class DbAdapter {
         }
 
         SQLiteDatabase openDataBase() throws SQLException {
-            String mPath = DB_PATH + DbSchema.DATABASE_NAME;
-            try {
-                Db = SQLiteDatabase.openDatabase(mPath, null, SQLiteDatabase.OPEN_READWRITE);
-            } catch (SQLiteDatabaseLockedException e) {
-                e.printStackTrace();
+            final String mPath = mContext.getDatabasePath(DbSchema.DATABASE_NAME).toString();
+            if(CheckDatabase(mPath)){
+                try {
+                    Db = SQLiteDatabase.openDatabase(mPath, null, SQLiteDatabase.OPEN_READWRITE);
+                } catch (SQLiteDatabaseLockedException e) {
+                    e.printStackTrace();
+                }
+            }else {
+                Db = this.getWritableDatabase();
             }
             return Db;
         }
 
-        Boolean CheckDatabase() {
+        Boolean CheckDatabase(String mPath) {
 
             Boolean res;
-            File file = new File(DB_PATH + DbSchema.DATABASE_NAME);
+            File file = new File(mPath);
             res = file.exists();
             return res;
         }

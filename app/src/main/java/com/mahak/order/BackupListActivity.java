@@ -50,6 +50,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.mahak.order.common.ServiceTools.getFileName;
+import static com.mahak.order.storage.DbSchema.DATABASE_NAME;
 
 public class BackupListActivity extends BaseActivity {
 
@@ -59,7 +60,7 @@ public class BackupListActivity extends BaseActivity {
     private ListView lstShowBackup;
     private Activity mActivity;
     public static final File DATABASE_DIRECTORY = new File(Environment.getExternalStorageDirectory(), ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_BACKUPS);
-    private static final File DATA_DIRECTORY_DATABASE = new File(Environment.getDataDirectory() + "/data/" + "com.mahak.order" + "/databases/" + DbSchema.DATABASE_NAME);
+    private static final File DATA_DIRECTORY_DATABASE = new File(Environment.getDataDirectory() + "/data/" + "com.mahak.order" + "/databases/" + DATABASE_NAME);
     String BackupFileName = "";
     private ShowBackupsArrayAdapter adapter;
     private int Position;
@@ -122,7 +123,7 @@ public class BackupListActivity extends BaseActivity {
         fontDialog.getPositive().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                restoreBackupDb(BackupFileName);
+                importDB(BackupFileName);
                 dialog.dismiss();
             }
         });
@@ -456,6 +457,40 @@ public class BackupListActivity extends BaseActivity {
             // TODO: handle exception
         }
     }
+
+
+    public void importDB(String inFileName) {
+
+        final String outFileName = mContext.getDatabasePath(DATABASE_NAME).toString();
+
+        try {
+            File dbFile = new File(DATABASE_DIRECTORY, inFileName);
+            FileInputStream fis = new FileInputStream(dbFile);
+
+            // Open the empty db as the output stream
+            OutputStream output = new FileOutputStream(outFileName);
+
+            // Transfer bytes from the input file to the output file
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = fis.read(buffer)) > 0) {
+                output.write(buffer, 0, length);
+            }
+
+            // Close the streams
+            output.flush();
+            output.close();
+            fis.close();
+
+            Toast.makeText(mContext, "Import Completed", Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+            Toast.makeText(mContext, "Unable to import database. Retry", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
+
 
     protected void restoreBackupDb(String BackupFileName) {
 

@@ -112,6 +112,8 @@ public class TrackingConfig {
                         int MIN_DISTANCE_CHANGE_FOR_UPDATES = response.body().getData().getSendPointsPerMeter();
                         int MIN_TIME_BW_UPDATES = response.body().getData().getSendPointsEveryMinute();
                         int radius = response.body().getData().getRadius();
+                        int startTime = response.body().getData().getStartTime();
+                        int endTime = response.body().getData().getEndTime();
                         boolean sendingPointsByAdmin = response.body().getData().isControlSendingPointsByAdmin();
                         boolean sendingPoints = response.body().getData().isSendingPoints();
                         boolean sendPointsBasedMeter = response.body().getData().isSendPointsBasedMeter();
@@ -129,6 +131,8 @@ public class TrackingConfig {
                             gpsData.put(ProjectInfo._json_key_sendingPoints, sendingPoints);
                             gpsData.put(ProjectInfo._json_key_radius, radius);
                             gpsData.put(ProjectInfo._json_sendPointsBasedMeter, sendPointsBasedMeter);
+                            gpsData.put(ProjectInfo._json_key_startTime, startTime);
+                            gpsData.put(ProjectInfo._json_key_endTime, endTime);
                             ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_gps_config, gpsData.toString());
 
                         } catch (JSONException e) {
@@ -262,10 +266,10 @@ public class TrackingConfig {
 
         @Override
         protected Integer doInBackground(String... arg0) {
-            getAllStoplogs();
+            getAllStopLogs();
             return 0;
         }
-        private void getAllStoplogs() {
+        private void getAllStopLogs() {
             if (db == null) db = new DbAdapter(mContext);
             db.open();
             try {
