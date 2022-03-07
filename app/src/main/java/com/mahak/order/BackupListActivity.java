@@ -123,7 +123,7 @@ public class BackupListActivity extends BaseActivity {
         fontDialog.getPositive().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                importDB(BackupFileName);
+                restoreBackupDb(BackupFileName);
                 dialog.dismiss();
             }
         });

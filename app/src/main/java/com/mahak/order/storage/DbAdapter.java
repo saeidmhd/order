@@ -10733,7 +10733,7 @@ public class DbAdapter {
                 if (oldVersion < 7) {
                     db.execSQL("ALTER TABLE " + DbSchema.PromotionSchema.TABLE_NAME + " ADD " + DbSchema.PromotionSchema.COLUMN_Deleted + " INTEGER;");
                 }
-                if (oldVersion < 8) {
+                if (oldVersion < 9) {
                     db.execSQL("ALTER TABLE " + DbSchema.StopLogSchema.TABLE_NAME + " ADD " + DbSchema.StopLogSchema.COLUMN_sent + " INTEGER;");
                 }
             }
