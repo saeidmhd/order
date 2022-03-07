@@ -871,9 +871,8 @@ public class LocationService extends Service  {
 
 
     public boolean checkStartTimeEndTime(Context context , Location lastStopLocation) {
-
-        int StartTime = 0;
-        int EndTime = 0;
+        int StartTime = 8;
+        int EndTime = 22;
         String config = ServiceTools.getKeyFromSharedPreferences(context, ProjectInfo.pre_gps_config);
         if (!ServiceTools.isNull(config)) {
             try {
