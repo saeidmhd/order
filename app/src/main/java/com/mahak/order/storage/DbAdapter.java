@@ -111,7 +111,13 @@ public class DbAdapter {
     }*/
 
     public DbAdapter open() {
-        this.mDbHelper = new DatabaseHelper(mCtx);
+        this.mDbHelper = new DatabaseHelper(mCtx,DbSchema.DATABASE_NAME);
+        this.mDbHelper = new DatabaseHelper(mCtx,DbSchema.RADARA_DATABASE_NAME);
+        this.mDb = mDbHelper.openDataBase();
+        return this;
+    }
+    public DbAdapter openRadaraDb() {
+        this.mDbHelper = new DatabaseHelper(mCtx,DbSchema.RADARA_DATABASE_NAME);
         this.mDb = mDbHelper.openDataBase();
         return this;
     }
@@ -10581,8 +10587,8 @@ public class DbAdapter {
         private final Context mcontext;
         private SQLiteDatabase Db;
 
-        DatabaseHelper(Context context) {
-            super(context, DbSchema.DATABASE_NAME, null, DbSchema.DATABASE_VERSION);
+        DatabaseHelper(Context context , String DatabaseName) {
+            super(context, DatabaseName, null, DbSchema.DATABASE_VERSION);
             this.mcontext = context;
             DB_PATH = Environment.getDataDirectory() + "/data/" + context.getPackageName() + "/databases/";
         }
