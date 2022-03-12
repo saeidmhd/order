@@ -22,6 +22,7 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.GPSTracker;
 import com.mahak.order.common.ProjectInfo;
+import com.mahak.order.storage.RadaraDb;
 import com.mahak.order.tracking.ClusterPoint;
 import com.mahak.order.tracking.LocationService;
 import com.mahak.order.storage.DbAdapter;
@@ -49,7 +50,7 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
     private ClusterManager<ClusterPoint> clusterManager;
     Context context;
     private MapPolygon mapPolygon;
-    private DbAdapter db;
+    private RadaraDb db;
     private List<LatLng> latLngpoints = new ArrayList<>();
     private static final int LOAD_POINT = Menu.FIRST;
     private FontProgressDialog pd;
@@ -236,7 +237,7 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
 
         @Override
         protected Boolean doInBackground(String... strings) {
-            if (db == null) db = new DbAdapter(mContext);
+            if (db == null) db = new RadaraDb(mContext);
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY, 0);
             calendar.set(Calendar.MINUTE, 0);

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mahak.order.common.Notification;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.storage.RadaraDb;
 import com.mahak.order.widget.FontAlertDialog;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class NotificationActivity extends BaseActivity {
     public static final int REQUEST_CODE_DIALOG = 170;
     public static final int REQUEST_CODE_WEBVIEW = 171;
     private ArrayList<Notification> notifications;
-    private DbAdapter db;
+    private RadaraDb db;
     private RecyclerView listTransactions;
 
     @Override
@@ -37,7 +38,7 @@ public class NotificationActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
 
-        db = new DbAdapter(this);
+        db = new RadaraDb(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);

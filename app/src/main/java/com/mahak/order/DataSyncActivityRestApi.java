@@ -69,6 +69,7 @@ import com.mahak.order.service.DataService;
 import com.mahak.order.service.ReadOfflinePicturesProducts;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.DbSchema;
+import com.mahak.order.storage.RadaraDb;
 import com.mahak.order.tracking.TrackingConfig;
 import com.mahak.order.widget.FontAlertDialog;
 import com.mahak.order.widget.FontProgressDialog;
@@ -127,6 +128,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
     private Button btnSync, btnCancel;
     private DbAdapter db;
+    private RadaraDb radaraDb;
     private Context mContext;
     private Activity mActivity;
 
@@ -216,12 +218,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
         }
 
         init();
-
         //get User
         db.open();
+        radaraDb.open();
         user = db.getUser();
-        db.close();
-
         // DeviceID = ServiceTools.getDeviceID(mContext);
         sh = this.getSharedPreferences(SharedPreferencesMahak, MODE_PRIVATE);
         ShowDate();
@@ -248,7 +248,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
     }
 
     private void checkUserAvailable() {
-        db.open();
+        
         final User user = db.getUser();
         int userDatabaseId = ServiceTools.toInt(user.getDatabaseId());
         int userId = ServiceTools.toInt(user.getServerUserID());
@@ -278,18 +278,18 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             BaseActivity.setPrefUserToken(response.body().getData().getUserToken());
                             setPrefSyncId(response.body().getData().getSyncId());
                             //Save db
-                            db.open();
+                            
                             user.setSyncId(response.body().getData().getSyncId());
                             user.setUserToken(response.body().getData().getUserToken());
                             db.UpdateUser(user);
-                            db.close();
+                            
                             SendReceive();
                         } else {
                             ServiceTools.Backup(mContext);
-                            db.open();
+                            
                             db.DeleteAllData();
                             db.DeleteUser(userId);
-                            db.close();
+                            
                             Toast.makeText(DataSyncActivityRestApi.this, R.string.visitor_changed_login_again, Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(DataSyncActivityRestApi.this, LoginActivityRestApi.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -298,9 +298,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         }
                     } else {
                         ServiceTools.Backup(mContext);
-                        db.open();
+                        
                         db.DeleteUser(userId);
-                        db.close();
+                        
                         Toast.makeText(DataSyncActivityRestApi.this, R.string.visitor_changed_login_again, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(DataSyncActivityRestApi.this, LoginActivityRestApi.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -430,6 +430,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
         pbLoading = (ProgressBar) findViewById(R.id.pbLoading);
 
         db = new DbAdapter(mContext);
+        radaraDb = new RadaraDb(mContext);
 
         for (int i = 0; i < arrayCheckUpdate.length; i++) {
             arrayCheckUpdate[i] = true;
@@ -532,9 +533,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (ServiceTools.Backup(mContext)) {
-                    db.open();
+                    
                     db.DeleteAllData();
-                    db.close();
+                    
                     Toast toast = Toast.makeText(mContext, R.string.clean_database_alarm, Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 16);
                     toast.show();
@@ -543,10 +544,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     Calendar cal = Calendar.getInstance();
                     setPrefSyncId(String.valueOf(cal.getTimeInMillis() / 1000));
                     //Save db
-                    db.open();
+                    
                     user.setSyncId(getPrefSyncId());
                     db.UpdateUser(user);
-                    db.close();
+                    
                     dialog.dismiss();
                 }
             }
@@ -585,7 +586,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
         @Override
         protected Integer doInBackground(String... arg0) {
-            db.open();
+            
             arrayInvoice = db.getAllOrderFamily(BaseActivity.getPrefUserId());
             Set<OrderDetail> set = new LinkedHashSet<>();
             for (int i = 0; i < arrayInvoice.size(); i++) {
@@ -624,7 +625,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             payableTransfers = db.getAllPayableNotPublish(BaseActivity.getPrefUserId());
             checkLists = db.getAllDoneChecklistNotPublish();
 
-            visitorLocation = db.getAllGpsPointsForSending();
+            visitorLocation = radaraDb.getAllGpsPointsForSending();
 
             return 0;
         }
@@ -657,7 +658,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 public void onResponse(@NonNull Call<SaveAllDataResult> call, @NonNull Response<SaveAllDataResult> response) {
                     dismissProgressDialog();
                     if (response.body() != null && response.body().isResult()) {
-                        db.open();
+                        
                         if (arrayInvoice.size() > 0) {
                             int invoiceCount = 0;
                             int orderCount = 0;
@@ -759,7 +760,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             for (int i = 0; i < visitorLocation.size(); i++) {
                                 visitorLocation.get(i).setVisitorLocationId(response.body().getData().getObjects().getVisitorLocations().getResults().get(i).getEntityID());
                                 visitorLocation.get(i).setRowVersion(response.body().getData().getObjects().getVisitorLocations().getResults().get(i).getRowVersion());
-                                db.updateGpsTrackingForSending(visitorLocation.get(i));
+                                radaraDb.updateGpsTrackingForSending(visitorLocation.get(i));
                             }
                         }
 
@@ -772,7 +773,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         }
 
                         pbLoading.setVisibility(View.GONE);
-                        db.close();
+                        
 
                         new ReceiveAsyncTask().execute();
 
@@ -866,7 +867,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
         @Override
         protected Integer doInBackground(String... arg0) {
 
-            db.open();
+            
             clearArraysForRecieve();
 
             getAllDataBody = new GetAllDataBody();
@@ -1041,7 +1042,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
         @Override
         protected Integer doInBackground(String... arg0) {
 
-            db.open();
+            
 
             if (customerLists != null)
                 if (customerLists.size() > 0)
@@ -1142,7 +1143,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 if (regions.size() > 0) {
                     arrayTime[22] = DataService.InsertRegion(db, regions,RegionMaxRowVersion);
                 }
-            db.close();
+            
             return 0;
         }
 
@@ -1348,7 +1349,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
         @Override
         protected Integer doInBackground(String... arg0) {
-            db.open();
+            
             picturesProducts = db.getAllSignWithoutUrl();
             return 0;
         }
@@ -1374,7 +1375,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 public void onResponse(@NonNull Call<SaveAllDataResult> call, @NonNull Response<SaveAllDataResult> response) {
                     dismissProgressDialog();
                     if (response.body() != null && response.body().isResult()) {
-                        db.open();
+                        
                         if (picturesProducts.size() > 0) {
                             for (int i = 0; i < picturesProducts.size(); i++) {
                                 picturesProducts.get(i).setPictureId(response.body().getData().getObjects().getPictures().getResults().get(i).getEntityID());
@@ -1382,7 +1383,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             }
                         }
                         pbLoading.setVisibility(View.GONE);
-                        db.close();
+                        
 
                         new SendSignImageAsyncTask().execute();
 
@@ -1439,7 +1440,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             public void onResponse(@NonNull Call<setSignImage> call, @NonNull Response<setSignImage> response) {
                                 dismissProgressDialog();
                                 if (response.body() != null && response.body().getResult()) {
-                                    db.open();
+                                    
                                     PicturesProduct picturesProduct = db.getPictureWithPictureId(response.body().getData().getEntityId());
                                     picturesProduct.setUrl(response.body().getData().getAdditionalData().getFileUrl());
                                     picturesProduct.setPictureHash(response.body().getData().getAdditionalData().getFileHash());
@@ -1482,15 +1483,13 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
     private void SetDate() {
         sh.edit().putLong(_Key_DateSyncInformation, new Date().getTime()).commit();
-        db.open();
         user.setDateSync(getPrefDateSyncInformation());
+        db.open();
         db.UpdateUser(user);
-        db.close();
     }
 
     private void getFileList() {
         signForSend.clear();
-        db.open();
         signForSend = db.getAllSignWithoutUrl();
         String state = Environment.getExternalStorageState();
         final File SIGN_DIRECTORY = new File(Environment.getExternalStorageDirectory(), ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_SIGNS + "/" + ProjectInfo.DIRECTORY_ORDER_SIGNS);
@@ -1542,5 +1541,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
         }
     }
 
-
+    @Override
+    protected void onPause() {
+        db.close();
+        radaraDb.close();
+        super.onPause();
+    }
 }

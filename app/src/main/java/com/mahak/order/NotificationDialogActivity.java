@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.mahak.order.common.Notification;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.storage.RadaraDb;
 
 
 public class NotificationDialogActivity extends Activity {
@@ -21,7 +22,7 @@ public class NotificationDialogActivity extends Activity {
     private Bundle bundle;
     private Intent intent;
     private long NotifiId;
-    private DbAdapter db;
+    private RadaraDb db;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,7 +82,7 @@ public class NotificationDialogActivity extends Activity {
         btnCancel = (Button) findViewById(R.id.btnCancel);
         btnOK = (Button) findViewById(R.id.btnOK);
 
-        db = new DbAdapter(getApplicationContext());
+        db = new RadaraDb(getApplicationContext());
     }
 
     @Override

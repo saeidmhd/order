@@ -57,6 +57,7 @@ import com.mahak.order.common.loginSignalr.SignalLoginResult;
 import com.mahak.order.common.request.SetAllDataBody;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.storage.RadaraDb;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -89,6 +90,7 @@ public class LocationService extends Service  {
 
     private Activity activity;
     private DbAdapter dba;
+    private RadaraDb radaraDb;
     private static Map<String, EventLocation> eventLocations = new HashMap<>();
 
     private LocationRequest locationRequest;
@@ -414,30 +416,17 @@ public class LocationService extends Service  {
         });
     }
 
-    private void InsertStopLogToDb(ArrayList<StopLog> stopLogs) {
-        if (dba == null) dba = new DbAdapter(mContext);
-        dba.open();
-        try {
-            dba.InsertStopLogs(stopLogs);
-        } catch (Exception e) {
-            e.printStackTrace();
-            if(e.getMessage() != null)
-                Log.e("saveInDb",e.getMessage());
-        }
-        dba.close();
-    }
-
     private void updateStopLogToDb(ArrayList<StopLog> stopLogs) {
-        if (dba == null) dba = new DbAdapter(mContext);
-        dba.open();
+        if (radaraDb == null) radaraDb = new RadaraDb(mContext);
+        radaraDb.open();
         try {
-            dba.updateStopLogs(stopLogs);
+            radaraDb.updateStopLogs(stopLogs);
         } catch (Exception e) {
             e.printStackTrace();
             if(e.getMessage() != null)
                 Log.e("saveInDb",e.getMessage());
         }
-        dba.close();
+        radaraDb.close();
     }
 
 
@@ -632,28 +621,28 @@ public class LocationService extends Service  {
 
     private boolean saveInDb(List<VisitorLocation> VisitorLocations) {
         boolean result = false;
-        if (dba == null) dba = new DbAdapter(mContext);
-        dba.open();
+        if (radaraDb == null) radaraDb = new RadaraDb(mContext);
+        radaraDb.open();
         try {
-            result = dba.AddGpsTracking(VisitorLocations);
+            result = radaraDb.AddGpsTracking(VisitorLocations);
         } catch (Exception e) {
             e.printStackTrace();
             if(e.getMessage() != null)
                 Log.e("saveInDb",e.getMessage());
         }
-        dba.close();
+        radaraDb.close();
         return result;
     }
 
     private void updateDb(VisitorLocation visitorLocation) {
-        if (dba == null) dba = new DbAdapter(mContext);
-        dba.open();
+        if (radaraDb == null) radaraDb = new RadaraDb(mContext);
+        radaraDb.open();
         try {
-            dba.updateGpsTrackingForSending(visitorLocation);
+            radaraDb.updateGpsTrackingForSending(visitorLocation);
         } catch (Exception e) {
             Log.e("saveInDb",e.getMessage());
         }
-        dba.close();
+        radaraDb.close();
     }
 
     private void waiter() {
@@ -898,7 +887,7 @@ public class LocationService extends Service  {
     public class TimerHelper {
         Timer timer;
         long InitialInMillis = 10 * 1000;
-        long DelayInMillis = 5 * 60 * 1000;
+        long DelayInMillis = 30 * 1000;
 
         public TimerHelper() {
             timer = new Timer();

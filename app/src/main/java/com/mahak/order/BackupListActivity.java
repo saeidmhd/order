@@ -123,7 +123,7 @@ public class BackupListActivity extends BaseActivity {
         fontDialog.getPositive().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                importDB(BackupFileName);
+                restoreBackupDb(BackupFileName);
                 dialog.dismiss();
             }
         });
@@ -289,6 +289,12 @@ public class BackupListActivity extends BaseActivity {
             Toast.makeText(mActivity, R.string.str_backup_was_created, Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(mActivity, R.string.error_in_create_db_file, Toast.LENGTH_SHORT).show();
+
+        if (ServiceTools.RadaraBackup(mContext))
+            Toast.makeText(mActivity, "بک آپ رادارا ساخته شد", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(mActivity, R.string.error_in_create_db_file, Toast.LENGTH_SHORT).show();
+
 
         /*String format = "HH_mm_ss";
         SimpleDateFormat simpleDate = new SimpleDateFormat(format, Locale.US);
@@ -457,39 +463,6 @@ public class BackupListActivity extends BaseActivity {
             // TODO: handle exception
         }
     }
-
-
-    public void importDB(String inFileName) {
-
-        final String outFileName = mContext.getDatabasePath(DATABASE_NAME).toString();
-
-        try {
-            File dbFile = new File(DATABASE_DIRECTORY, inFileName);
-            FileInputStream fis = new FileInputStream(dbFile);
-
-            // Open the empty db as the output stream
-            OutputStream output = new FileOutputStream(outFileName);
-
-            // Transfer bytes from the input file to the output file
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = fis.read(buffer)) > 0) {
-                output.write(buffer, 0, length);
-            }
-
-            // Close the streams
-            output.flush();
-            output.close();
-            fis.close();
-
-            Toast.makeText(mContext, "Import Completed", Toast.LENGTH_SHORT).show();
-
-        } catch (Exception e) {
-            Toast.makeText(mContext, "Unable to import database. Retry", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-    }
-
 
 
     protected void restoreBackupDb(String BackupFileName) {

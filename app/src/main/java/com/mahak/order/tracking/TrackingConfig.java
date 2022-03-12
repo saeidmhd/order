@@ -19,6 +19,7 @@ import com.mahak.order.common.loginSignalr.SignalLoginBody;
 import com.mahak.order.common.loginSignalr.SignalLoginResult;
 import com.mahak.order.service.DataService;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.storage.RadaraDb;
 import com.mahak.order.tracking.setting.SettingBody;
 import com.mahak.order.tracking.setting.TrackingSetting;
 import com.mahak.order.tracking.visitorZone.Datum;
@@ -45,13 +46,13 @@ public class TrackingConfig {
     Context mContext;
     private FontProgressDialog pd;
 
-    private DbAdapter db;
+    private RadaraDb radaraDb;
     JSONObject gpsData = new JSONObject();
 
     public TrackingConfig(Context context, FontProgressDialog pd){
         mContext = context;
         this.pd = pd;
-        db = new DbAdapter(mContext);
+        radaraDb = new RadaraDb(mContext);
     }
 
     public void getSignalTokenAndSetting() {
@@ -233,16 +234,16 @@ public class TrackingConfig {
 
         @Override
         protected Integer doInBackground(String... arg0) {
-            db.open();
+            radaraDb.open();
             if (trackingZoneData != null){
                 if (trackingZoneData.size() > 0){
                     for (Datum datum : trackingZoneData){
-                        DataService.InsertZone(db, datum);
-                        DataService.InsertZoneLocation(db,datum.getZoneLocations());
+                        DataService.InsertZone(radaraDb, datum);
+                        DataService.InsertZoneLocation(radaraDb,datum.getZoneLocations());
                     }
                 }
             }
-            db.close();
+            radaraDb.close();
             return 0;
         }
 
@@ -270,16 +271,16 @@ public class TrackingConfig {
             return 0;
         }
         private void getAllStopLogs() {
-            if (db == null) db = new DbAdapter(mContext);
-            db.open();
+            if (radaraDb == null) radaraDb = new RadaraDb(mContext);
+            radaraDb.open();
             try {
-                stopLogs = db.getAllStopLogNotSend();
+                stopLogs = radaraDb.getAllStopLogNotSend();
             } catch (Exception e) {
                 e.printStackTrace();
                 if(e.getMessage() != null)
                     Log.e("saveInDb",e.getMessage());
             }
-            db.close();
+            radaraDb.close();
         }
 
         @Override
@@ -321,16 +322,16 @@ public class TrackingConfig {
     }
 
     private void UpdateOrInsertStopLogToDb(ArrayList<StopLog> stopLogs) {
-        if (db == null) db = new DbAdapter(mContext);
-        db.open();
+        if (radaraDb == null) radaraDb = new RadaraDb(mContext);
+        radaraDb.open();
         try {
-            db.updateStopLogs(stopLogs);
+            radaraDb.updateStopLogs(stopLogs);
         } catch (Exception e) {
             e.printStackTrace();
             if(e.getMessage() != null)
                 Log.e("saveInDb",e.getMessage());
         }
-        db.close();
+        radaraDb.close();
     }
 
 }

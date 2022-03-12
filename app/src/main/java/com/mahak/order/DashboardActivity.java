@@ -75,6 +75,7 @@ import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.User;
 import com.mahak.order.common.Visitor;
+import com.mahak.order.storage.RadaraDb;
 import com.mahak.order.tracking.LocationService;
 import com.mahak.order.tracking.MapPolygon;
 import com.mahak.order.tracking.ShowPersonCluster;
@@ -167,6 +168,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
     private int DefaultMapZoom = 14;
     private DbAdapter db;
+    private RadaraDb radaraDb;
     public static ArrayList<CheckList> arrayChecklist = new ArrayList<>();
     private ShowCheckListArrayAdapter adChecklist;
     private Customer customer;
@@ -1223,10 +1225,10 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
     private void showBadgeNotification(Menu menu) {
         long userId = BaseActivity.getPrefUserMasterId(mContext);
-        if (db == null)
-            db = new DbAdapter(mContext);
-        db.open();
-        int count = db.getCountNotReadNotification(String.valueOf(userId));
+        if (radaraDb == null)
+            radaraDb = new RadaraDb(mContext);
+        radaraDb.open();
+        int count = radaraDb.getCountNotReadNotification(String.valueOf(userId));
         if (count > 0) {
             MenuItem item = menu.findItem(2);
             LayerDrawable icon = (LayerDrawable) item.getIcon();

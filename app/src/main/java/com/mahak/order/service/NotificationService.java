@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.mahak.order.common.Notification;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.storage.RadaraDb;
 
 public class NotificationService extends IntentService {
 
@@ -26,7 +27,7 @@ public class NotificationService extends IntentService {
         long Id = bundle.getLong("Id");
         /////////////////////////////////////////////////////
         //Update For read Notification///////////////////////
-        DbAdapter db = new DbAdapter(getApplicationContext());
+        RadaraDb db = new RadaraDb(getApplicationContext());
         db.open();
         Notification notification = db.GetNotification(Id);
         if (notification != null) {

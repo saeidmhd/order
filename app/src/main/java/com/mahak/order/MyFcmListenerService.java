@@ -20,6 +20,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.mahak.order.common.Notification;
 import com.mahak.order.service.NotificationService;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.storage.RadaraDb;
 
 import java.util.Date;
 import java.util.Random;
@@ -72,7 +73,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
             noti.setUserId(userId);
             noti.setDate(new Date().getTime());
 
-            DbAdapter db = new DbAdapter(this);
+            RadaraDb db = new RadaraDb(this);
             db.open();
             long notificationId = db.AddNotification(noti);
             int count = db.getCountNotification(String.valueOf(userId));

@@ -1677,6 +1677,39 @@ FirebaseCrashlytics.getInstance().recordException(e);
             return false;
         }
     }
+    public static boolean RadaraBackup(Context mActivity) {
+
+        String format = "HH_mm_ss";
+        SimpleDateFormat simpleDate = new SimpleDateFormat(format, Locale.US);
+        String strTime = simpleDate.format(new Date().getTime());
+        String date = getBackUpDate(new Date().getTime());
+        File sd = Environment.getExternalStorageDirectory();
+        File data = Environment.getDataDirectory();
+        FileChannel source = null;
+        FileChannel destination = null;
+        String backupDBPath = ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_BACKUPS;
+        File backupDB = new File(sd, backupDBPath);
+        if (!backupDB.exists())
+            backupDB.mkdirs();
+        String currentDBPath = "/data/" + "com.mahak.order" + "/databases/" + DbSchema.RADARA_DATABASE;
+        String backDBPath = ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_BACKUPS + "/" + "radara" + getVersionName(mActivity) + "_" + getPrefUsername() + "_" + date + ".db";
+        File currentDB = new File(data, currentDBPath);
+        File backup = new File(sd, backDBPath);
+        try {
+            source = new FileInputStream(currentDB).getChannel();
+            destination = new FileOutputStream(backup).getChannel();
+            destination.transferFrom(source, 0, source.size());
+            source.close();
+            destination.close();
+            return true;
+        } catch (IOException e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            e.printStackTrace();
+            Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
 
     public static String getVersionName(Context context) {
         PackageInfo pInfo;

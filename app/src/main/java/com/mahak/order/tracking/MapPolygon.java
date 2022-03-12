@@ -17,6 +17,7 @@ import com.google.maps.android.PolyUtil;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.storage.RadaraDb;
 import com.mahak.order.tracking.visitorZone.Datum;
 import com.mahak.order.tracking.visitorZone.ZoneLocation;
 
@@ -30,13 +31,13 @@ import java.util.List;
 public class MapPolygon implements GoogleMap.OnPolygonClickListener {
 
     GoogleMap mGoogleMap;
-    DbAdapter db;
+    RadaraDb radaraDb;
     Context mContext;
 
     public MapPolygon(GoogleMap googleMap , Context context){
         mGoogleMap = googleMap;
         mContext = context;
-        db = new DbAdapter(mContext);
+        radaraDb = new RadaraDb(mContext);
     }
 
     private static final int COLOR_WHITE_ARGB = 0xffffffff;
@@ -110,7 +111,7 @@ public class MapPolygon implements GoogleMap.OnPolygonClickListener {
 
     public List<LatLng> getPolygonPoints(Datum datum){
         List<LatLng> polygonPoints = new ArrayList<>();
-        ArrayList<ZoneLocation> zoneLocations = db.getAllZoneLocation(datum.getId());
+        ArrayList<ZoneLocation> zoneLocations = radaraDb.getAllZoneLocation(datum.getId());
         for (ZoneLocation zoneLocation : zoneLocations){
             polygonPoints.add(new LatLng(zoneLocation.getLatitude(), zoneLocation.getLongitude()));
         }
@@ -118,8 +119,8 @@ public class MapPolygon implements GoogleMap.OnPolygonClickListener {
     }
 
     public void showPolygon() {
-        db.open();
-        ArrayList<Datum> data = db.getAllZone();
+        radaraDb.open();
+        ArrayList<Datum> data = radaraDb.getAllZone();
         for(Datum datum : data){
             List<LatLng> polygonPoints = getPolygonPoints(datum);
             if(polygonPoints.size() > 0){
@@ -153,8 +154,8 @@ public class MapPolygon implements GoogleMap.OnPolygonClickListener {
         }
         if(position == null)
             return false;
-        db.open();
-        ArrayList<Datum> data = db.getAllZone();
+        radaraDb.open();
+        ArrayList<Datum> data = radaraDb.getAllZone();
         for(Datum datum : data){
             List<LatLng> polygonPoints = getPolygonPoints(datum);
             if(polygonPoints.size() > 0){

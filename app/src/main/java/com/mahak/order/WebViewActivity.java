@@ -12,12 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mahak.order.common.Notification;
-import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.storage.RadaraDb;
 
 public class WebViewActivity extends BaseActivity {
 
     private WebView webview;
-    private DbAdapter db;
+    private RadaraDb radaraDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,18 +44,18 @@ public class WebViewActivity extends BaseActivity {
         webview.loadUrl(url);
         //////////////////////////////////////////////////
         //Update read////////////////////////////////////
-        db.open();
-        Notification notification = db.GetNotification(notificationId);
+        radaraDb.open();
+        Notification notification = radaraDb.GetNotification(notificationId);
         if (notification != null) {
             notification.setRead(true);
-            db.UpdateNotification(notification);
+            radaraDb.UpdateNotification(notification);
         }
-        db.close();
+        radaraDb.close();
     }
 
     private void init() {
         webview = (WebView) findViewById(R.id.webView);
-        db = new DbAdapter(mContext);
+        radaraDb = new RadaraDb(mContext);
         WebSettings websetting = webview.getSettings();
         websetting.setBuiltInZoomControls(true);
         webview.getSettings().setJavaScriptEnabled(true);
