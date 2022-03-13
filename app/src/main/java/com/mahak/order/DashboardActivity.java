@@ -21,6 +21,10 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkRequest;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
@@ -76,7 +80,6 @@ import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.User;
 import com.mahak.order.common.Visitor;
-import com.mahak.order.log.NetworkReceiver;
 import com.mahak.order.tracking.LocationService;
 import com.mahak.order.tracking.MapPolygon;
 import com.mahak.order.tracking.ShowPersonCluster;
@@ -100,8 +103,6 @@ import java.util.List;
 public class DashboardActivity extends BaseActivity implements View.OnClickListener, GoogleMap.OnMarkerClickListener,
         GoogleMap.OnMapClickListener {
 
-
-    NetworkReceiver networkReceiver;
 
     private static final int REQUEST_CUSTOMER_LIST = 2;
     private static int REQUEST_DATASYNC = 1;
@@ -239,13 +240,15 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        registerReceiverToCheckGpsOnOff();
+
 
         setContentView(R.layout.activity_dashboard);
 
         mContext = this;
         mActivity = this;
-        networkReceiver = new NetworkReceiver();
+
+        registerReceiverToCheckGpsOnOff();
+        listenNetworkViaConnectivityManager(mContext);
 
         initUI();
 
@@ -537,8 +540,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         if(isRadaraActive())
             setTrackingConfig();
 
-        IntentFilter filter = new IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
-        this.registerReceiver(networkReceiver, filter);
 
         super.onResume();
     }
@@ -1540,7 +1541,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         isReceiverRegistered = false;
-        this.unregisterReceiver(networkReceiver);
         super.onPause();
 
     }
@@ -1626,5 +1626,29 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         });
         dialog.show();
+    }
+
+    private void listenNetworkViaConnectivityManager(final Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkRequest request = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            request = new NetworkRequest.Builder()
+                    .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                    .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
+                    .build();
+            cm.registerNetworkCallback(request, new ConnectivityManager.NetworkCallback() {
+                @Override
+                public void onAvailable(@NonNull Network network) {
+                    ServiceTools.writeLog("available");
+                }
+
+                @Override
+                public void onLost(@NonNull Network network) {
+                    ServiceTools.writeLog("lost");
+                }
+            });
+        }
+
     }
 }

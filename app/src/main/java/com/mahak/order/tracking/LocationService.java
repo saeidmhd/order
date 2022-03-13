@@ -58,8 +58,7 @@ import com.mahak.order.common.loginSignalr.SignalLoginBody;
 import com.mahak.order.common.loginSignalr.SignalLoginResult;
 import com.mahak.order.common.request.SetAllDataBody;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
-import com.mahak.order.log.GPSReceiver;
-import com.mahak.order.log.NetworkReceiver;
+import com.mahak.order.log.LogReceiver;
 import com.mahak.order.storage.DbAdapter;
 
 import org.json.JSONException;
@@ -160,8 +159,7 @@ public class LocationService extends Service  {
 
     long stop_time;
     Location lastStopLocation;
-    NetworkReceiver networkReceiver;
-    GPSReceiver gpsReceiver;
+    LogReceiver logReceiver;
 
 
     @Override
@@ -183,8 +181,7 @@ public class LocationService extends Service  {
             mNotificationManager.createNotificationChannel(mChannel);
         }
 
-        networkReceiver = new NetworkReceiver();
-        gpsReceiver = new GPSReceiver();
+        logReceiver = new LogReceiver();
     }
 
     @Override
@@ -198,11 +195,6 @@ public class LocationService extends Service  {
         }
 
         getLastLocation();
-
-        IntentFilter filter = new IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
-        this.registerReceiver(networkReceiver, filter);
-
-
 
         return START_NOT_STICKY;
     }

@@ -480,21 +480,21 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <receiver android:name=".log.NetworkReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-            </intent-filter>
-        </receiver>
 
-        <receiver android:name=".log.GPSReceiver">
+        <receiver android:name=".log.LogReceiver">
             <intent-filter>
+                <action android:name="android.intent.action.ACTION_BATTERY_LOW" />
+                <action android:name="android.intent.action.ACTION_BATTERY_OKAY" />
+
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.intent.action.AIRPLANE_MODE"/>
+
                 <action android:name="android.location.PROVIDERS_CHANGED"/>
-            </intent-filter>
-        </receiver>
 
-        <receiver android:name=".log.BatteryLevelReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action"/>
             </intent-filter>
         </receiver>
 
