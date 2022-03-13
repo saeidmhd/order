@@ -9,9 +9,11 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.res.Configuration;
 import android.location.Location;
+import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -56,6 +58,8 @@ import com.mahak.order.common.loginSignalr.SignalLoginBody;
 import com.mahak.order.common.loginSignalr.SignalLoginResult;
 import com.mahak.order.common.request.SetAllDataBody;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
+import com.mahak.order.log.GPSReceiver;
+import com.mahak.order.log.NetworkReceiver;
 import com.mahak.order.storage.DbAdapter;
 
 import org.json.JSONException;
@@ -156,6 +160,8 @@ public class LocationService extends Service  {
 
     long stop_time;
     Location lastStopLocation;
+    NetworkReceiver networkReceiver;
+    GPSReceiver gpsReceiver;
 
 
     @Override
@@ -176,6 +182,9 @@ public class LocationService extends Service  {
                     new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
             mNotificationManager.createNotificationChannel(mChannel);
         }
+
+        networkReceiver = new NetworkReceiver();
+        gpsReceiver = new GPSReceiver();
     }
 
     @Override
@@ -189,6 +198,11 @@ public class LocationService extends Service  {
         }
 
         getLastLocation();
+
+        IntentFilter filter = new IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
+        this.registerReceiver(networkReceiver, filter);
+
+
 
         return START_NOT_STICKY;
     }
