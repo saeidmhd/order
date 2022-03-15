@@ -886,7 +886,8 @@ public class LocationService extends Service  {
 
         Calendar calLastLocation = Calendar.getInstance();
         calLastLocation.setTimeInMillis(lastStopLocation.getTime());
-        boolean betweenStartEndTime = calLastLocation.get(Calendar.HOUR_OF_DAY) >= StartTime && calLastLocation.get(Calendar.HOUR_OF_DAY) <= EndTime;
+        int HOUR_OF_DAY = calLastLocation.get(Calendar.HOUR_OF_DAY);
+        boolean betweenStartEndTime = HOUR_OF_DAY >= StartTime && HOUR_OF_DAY <= EndTime;
         if(!betweenStartEndTime){
             timerHelper.stopTimer();
             return false;
