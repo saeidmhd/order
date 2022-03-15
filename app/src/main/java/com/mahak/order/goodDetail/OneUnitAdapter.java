@@ -65,7 +65,7 @@ public class OneUnitAdapter extends RecyclerView.Adapter<OneUnitAdapter.ViewHold
             super(itemView);
 
             tvNumber = (TextView) itemView.findViewById(R.id.tvNumber);
-            tvProductSpec = (TextView) itemView.findViewById(R.id.tvProductSpec);
+            tvProductSpec = (TextView) itemView.findViewById(R.id.tvProductNameSpec);
             btnDelete = (LinearLayout) itemView.findViewById(R.id.btnDelete);
             tv_asset1 = (TextView) itemView.findViewById(R.id.tv_asset1);
             txtCount = (EditText) itemView.findViewById(R.id.txtCount);

@@ -102,7 +102,7 @@
     <string name="str_username_en">UserName</string>
     <string name="str_password_en">Password</string>
     <string name="str_login">ورود به سیستم</string>
-    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.425</string>
+    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.422</string>
     <string name="str_email">پست الکترونیک</string>
     <string name="str_body">متن پیام</string>
     <string name="str_message_content">متن پیام</string>
@@ -280,7 +280,7 @@
     <string name="str_product_name">نام کالا</string>
 
     <string name="str_title_description">توضیحات</string>
-    <string name="str_title_fii">فی</string>
+    <string name="str_title_fee">فی</string>
     <string name="str_registration_order">ثبت سفارش</string>
     <string name="str_registration_receipt_order">ثبت فاکتور و دریافتی</string>
     <string name="str_register">ثبت</string>
@@ -887,7 +887,7 @@
     <string name="asset_1">موجودی ۱</string>
     <string name="paired_devices">Paired Devices</string>
     <string name="other_available_devices">Other Available Devices</string>
-    <string name="sample_product">ماکارونی تک ماکارونی تک ماکارونی تک ماکارونی ک تکی تک </string>
+    <string name="sample_product">ماکارونی تک ماکارونی تک </string>
     <string name="count">عدد</string>
     <string name="bank">بانک ملت</string>
     <string name="description">لطفا جهت افزایش کیف پول در بستره اینترنت یکی از کانال های</string>

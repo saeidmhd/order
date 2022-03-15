@@ -48,7 +48,7 @@ public class NonRegisterDetailActivity extends BaseActivity {
 
     public static int OrderType = 0;
     //oscar
-    public static int lst_order_detail_for_print = R.layout.lst_order_detail_for_print_return;
+    public static int lst_order_detail_for_print = R.layout.print_return_item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,7 @@ public class NonRegisterDetailActivity extends BaseActivity {
         mContext = this;
 
         printerBrand = SharedPreferencesHelper.getPrefPrinterBrand(mContext);
-        lst_order_detail_for_print = R.layout.lst_order_detail_for_print_return;
+        lst_order_detail_for_print = R.layout.print_return_item;
         Extras = getIntent().getExtras();
         if (Extras != null) {
             page = Extras.getInt(PAGE);

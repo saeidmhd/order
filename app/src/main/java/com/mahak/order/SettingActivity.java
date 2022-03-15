@@ -43,7 +43,7 @@ public class SettingActivity extends AppCompatActivity {
 
     private static final int FOLDER_CODE = 131;
     private DbAdapter db;
-    private CheckBox chkReduceAsset, chkShowField, chkShowSign, chkShowBelow, chkShowBelowPrice, chkPrintCompact, chkTemplate2 , chk_tracking_code,chk_market_name,chk_customer_name,chk_count_product,chk_arabic_receipt;
+    private CheckBox chkReduceAsset, chkShowField, chkShowSign, chkShowBelow, chkShowBelowPrice, chkTemplate2 , chk_tracking_code,chk_market_name,chk_customer_name,chk_count_product,chk_arabic_receipt , chk_fee_print;
     private RelativeLayout rvReduceAsset;
     private TextView tvReduceAsset,deviceId;
     private EditText txtChargePercent, txtTaxPercent;
@@ -149,15 +149,6 @@ public class SettingActivity extends AppCompatActivity {
 
             }
         });
-        chkPrintCompact.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                SharedPreferencesHelper.setCompactPrint(mContext, chkPrintCompact.isChecked());
-
-            }
-        });
 
         chkShowSign.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -225,6 +216,14 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 SharedPreferencesHelper.setBelowPrice(mContext, chkShowBelowPrice.isChecked());
+
+            }
+        });
+        chk_fee_print.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SharedPreferencesHelper.set_chk_show_consumer_fee(mContext, chk_fee_print.isChecked());
 
             }
         });
@@ -416,7 +415,6 @@ public class SettingActivity extends AppCompatActivity {
         PrinterSize = (EditText) findViewById(R.id.PrinterSize);
         chkReduceAsset = (CheckBox) findViewById(R.id.chkReduceAsset);
         chkShowField = (CheckBox) findViewById(R.id.chkShowField);
-        chkPrintCompact = (CheckBox) findViewById(R.id.chkPrintCompact);
         chkShowSign = (CheckBox) findViewById(R.id.chkShowSign);
 
         btnSave_close = (Button) findViewById(R.id.btnSave_close);
@@ -429,6 +427,7 @@ public class SettingActivity extends AppCompatActivity {
         chkShowBelow = (CheckBox) findViewById(R.id.chkShowBelow);
         chkShowBelowPrice = (CheckBox) findViewById(R.id.chkBelowPrice);
         chkTemplate2 = (CheckBox) findViewById(R.id.chkTemplate2);
+        chk_fee_print = (CheckBox) findViewById(R.id.chk_fee_print);
         chk_arabic_receipt = (CheckBox) findViewById(R.id.chk_arabic_receipt);
         rvReduceAsset = (RelativeLayout) findViewById(R.id.rvReduceAsset);
         tvReduceAsset = (TextView) findViewById(R.id.tvReduceAsset);
@@ -483,9 +482,8 @@ public class SettingActivity extends AppCompatActivity {
 
         chk_count_product.setChecked(SharedPreferencesHelper.get_chk_count_product(mContext));
 
-        chkPrintCompact.setChecked(SharedPreferencesHelper.getCompactPrint(mContext));
-
         chkShowBelow.setChecked(SharedPreferencesHelper.getDetailUnderFactor(mContext));
+        chk_fee_print.setChecked(SharedPreferencesHelper.get_chk_show_consumer_fee(mContext));
 
         chkShowBelowPrice.setChecked(SharedPreferencesHelper.getBelowPrice(mContext));
 

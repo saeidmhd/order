@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:id="@+id/_llPrint"
-        android:layout_width="@dimen/print_width"
+        android:layout_width="@dimen/print_width80mm"
         android:layout_height="match_parent"
         android:background="@android:color/white"
         android:gravity="center_horizontal"
@@ -18,37 +18,27 @@
         <LinearLayout
             android:id="@+id/llTitle"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginBottom="15dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="vertical"
-            android:padding="2dp">
+            android:paddingRight="@dimen/NormalSize">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingRight="@dimen/NormalSize">
-
-                <com.mahak.order.widget.FontTextView
-                    android:id="@+id/_tvType"
-                    style="@style/forms_page_title_label_default"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="@string/invoice"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/_tvType"
+                style="@style/forms_page_title_label_default380"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/invoice"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="@color/black" />
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -194,10 +184,6 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="15dp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -206,77 +192,96 @@
             android:padding="2dp">
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="30dp"
-                android:background="@color/print_white_box"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/black"
+                android:orientation="vertical"
+                android:padding="2dp">
 
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="24dp"
+                    android:background="@color/print_white_box"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <com.mahak.order.widget.FontTextView
-                    style="@style/forms_page_title_label_default380"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textStyle="bold"
-                    android:gravity="center_horizontal"
-                    android:text="@string/str_product_name"
-                    android:textColor="@color/black" />
+                    <com.mahak.order.widget.FontTextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:gravity="center_horizontal"
+                        android:text="@string/str_product_name"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/print_text_size" />
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/black" />
+
+                    <com.mahak.order.widget.FontTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.75"
+                        android:gravity="center_horizontal"
+                        android:text="@string/str_count"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/print_text_size" />
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/black" />
+
+                    <com.mahak.order.widget.FontTextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:text="@string/str_title_fee"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/print_text_size" />
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/black" />
+
+                    <com.mahak.order.widget.FontTextView
+                        android:id="@+id/_txtPrice"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.25"
+                        android:gravity="center_horizontal"
+                        android:text="@string/str_netto"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/print_text_size" />
+
+                </LinearLayout>
+
 
                 <View
-                    android:layout_width="2dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
                     android:background="@color/black" />
 
-                <com.mahak.order.widget.FontTextView
-                    style="@style/forms_page_title_label_default380"
-                    android:layout_width="50dp"
+                <ListView
+                    android:id="@+id/_lstProduct"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:textStyle="bold"
-                    android:text="@string/str_count"
-                    android:textColor="@color/black" />
-
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/black" />
-
-                <com.mahak.order.widget.FontTextView
-                    android:id="@+id/_txtPrice"
-                    style="@style/forms_page_title_label_default380"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:textStyle="bold"
-                    android:gravity="center_horizontal"
-                    android:text="@string/str_netto"
-                    android:textColor="@color/black" />
-
-
+                    android:layout_margin="0dip"
+                    android:background="@android:color/white"
+                    android:divider="@color/black"
+                    android:dividerHeight="0dp"
+                    android:listSelector="@android:color/transparent"
+                    android:padding="0dip" />
             </LinearLayout>
 
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/black" />
-
-            <ListView
-                android:id="@+id/_lstProduct"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="0dip"
-                android:background="@android:color/white"
-                android:divider="@color/black"
-                android:dividerHeight="0dp"
-                android:listSelector="@android:color/transparent"
-                android:padding="0dip" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="20dp" />
+            android:layout_height="2dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -331,10 +336,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="0dip"
+                android:visibility="gone"
                 android:background="@android:color/white"
                 android:divider="@color/black"
                 android:dividerHeight="0dp"
-                android:visibility="gone"
                 android:listSelector="@android:color/transparent"
                 android:padding="0dip" />
 
@@ -694,8 +699,6 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-
-
     </LinearLayout>
 
     <View
@@ -714,10 +717,10 @@
             android:id="@+id/_tvFooterMessage"
             style="@style/forms_page_title_label_default380"
             android:layout_width="match_parent"
-            android:maxLines="2"
-            android:inputType="textMultiLine"
             android:layout_height="0dip"
             android:textStyle="bold"
+            android:maxLines="2"
+            android:inputType="textMultiLine"
             android:layout_weight="1"
             android:gravity="left"
             android:text="@string/print_footer_messages_part1"

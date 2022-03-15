@@ -137,42 +137,6 @@
                 android:layout_height="0.5dp"
                 android:background="@color/setting_line_separator" />
 
-            <RelativeLayout
-                android:id="@+id/rvCompactPrint"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:visibility="gone"
-                android:padding="@dimen/SmallSize">
-
-                <com.mahak.order.widget.FontCheckBox
-                    android:id="@+id/chkPrintCompact"
-                    style="@style/forms_checkbox_default"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:checked="true"
-                    android:enabled="false" />
-
-                <com.mahak.order.widget.FontTextView
-                    android:id="@+id/tvPrintCompact"
-                    style="@style/forms_label_default"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@id/chkPrintCompact"
-                    android:gravity="right"
-                    android:text="@string/str_message_print_compact"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
-            </RelativeLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/setting_line_separator" />
-
             <com.mahak.order.widget.FontTextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -507,7 +471,22 @@
                     android:entries="@array/array_printer_brand"
                     android:spinnerMode="dropdown" />
 
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
+                    <com.mahak.order.widget.FontCheckBox
+                        android:id="@+id/chk_fee_print"
+                        style="@style/forms_checkbox_default"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="نمایش فی مصرف کننده در چاپ" />
+
+                </LinearLayout>
 
 
                 <LinearLayout

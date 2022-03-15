@@ -86,7 +86,7 @@ public class TwoUnitAdapter extends RecyclerView.Adapter<TwoUnitAdapter.ViewHold
             super(itemView);
 
             tvNumber = (TextView) itemView.findViewById(R.id.tvNumber);
-            tvProductSpec = (TextView) itemView.findViewById(R.id.tvProductSpec);
+            tvProductSpec = (TextView) itemView.findViewById(R.id.tvProductNameSpec);
             btnDelete = (LinearLayout) itemView.findViewById(R.id.btnDelete);
 
             tv_asset1 = (TextView) itemView.findViewById(R.id.tv_asset1);
