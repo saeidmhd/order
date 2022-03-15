@@ -1218,9 +1218,10 @@ public class OrderDetailActivity extends BaseActivity {
                 tvFee.setText(ServiceTools.formatPrice(orderDetail.getPrice()));
                 db.open();
                 ProductDetail productDetail = db.getProductDetail(orderDetail.getProductDetailId());
-                tvfii_customer.setText(ServiceTools.formatPrice(productDetail.getCustomerPrice()));
-                tvPrice_consumer.setText(ServiceTools.formatPrice(getPriceConsumer(orderDetail,productDetail.getCustomerPrice())));
-
+                if (!getTemplate2Status(mContext, ProjectInfo._pName_OrderDetail)){
+                    tvfii_customer.setText(ServiceTools.formatPrice(productDetail.getCustomerPrice()));
+                    tvPrice_consumer.setText(ServiceTools.formatPrice(getPriceConsumer(orderDetail,productDetail.getCustomerPrice())));
+                }
             }
         }
 
