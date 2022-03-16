@@ -728,7 +728,8 @@ public class LocationService extends Service  {
     public void removeLocationUpdates() {
         ServiceTools.writeLogRadara("Removing location updates");
         Log.i(TAG, "Removing location updates");
-        timerHelper.stopTimer();
+        if(timerHelper != null)
+            timerHelper.stopTimer();
         try {
             if(mLocationCallback != null){
                 mFusedLocationClient.removeLocationUpdates(mLocationCallback);
@@ -889,7 +890,8 @@ public class LocationService extends Service  {
         int HOUR_OF_DAY = calLastLocation.get(Calendar.HOUR_OF_DAY);
         boolean betweenStartEndTime = HOUR_OF_DAY >= StartTime && HOUR_OF_DAY <= EndTime;
         if(!betweenStartEndTime){
-            timerHelper.stopTimer();
+            if(timerHelper != null)
+                timerHelper.stopTimer();
             return false;
         }
         return true;
