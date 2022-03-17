@@ -9,11 +9,9 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.res.Configuration;
 import android.location.Location;
-import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -58,7 +56,6 @@ import com.mahak.order.common.loginSignalr.SignalLoginBody;
 import com.mahak.order.common.loginSignalr.SignalLoginResult;
 import com.mahak.order.common.request.SetAllDataBody;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
-import com.mahak.order.log.LogReceiver;
 import com.mahak.order.storage.DbAdapter;
 
 import org.json.JSONException;
@@ -159,7 +156,6 @@ public class LocationService extends Service  {
 
     long stop_time;
     Location lastStopLocation;
-    LogReceiver logReceiver;
 
 
     @Override
@@ -180,8 +176,6 @@ public class LocationService extends Service  {
                     new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
             mNotificationManager.createNotificationChannel(mChannel);
         }
-
-        logReceiver = new LogReceiver();
     }
 
     @Override
@@ -336,8 +330,8 @@ public class LocationService extends Service  {
                     public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
                         //noinspection MissingPermission
                         mFusedLocationClient.requestLocationUpdates(locationRequest,mLocationCallback, Looper.myLooper());
-                        timerHelper =  new TimerHelper();
-
+                        if(timerHelper == null)
+                            timerHelper =  new TimerHelper();
                         updateUI();
 
                     }
@@ -734,7 +728,8 @@ public class LocationService extends Service  {
     public void removeLocationUpdates() {
         ServiceTools.writeLogRadara("Removing location updates");
         Log.i(TAG, "Removing location updates");
-        timerHelper.stopTimer();
+        if(timerHelper != null)
+            timerHelper.stopTimer();
         try {
             if(mLocationCallback != null){
                 mFusedLocationClient.removeLocationUpdates(mLocationCallback);
@@ -892,9 +887,11 @@ public class LocationService extends Service  {
 
         Calendar calLastLocation = Calendar.getInstance();
         calLastLocation.setTimeInMillis(lastStopLocation.getTime());
-        boolean betweenStartEndTime = calLastLocation.get(Calendar.HOUR_OF_DAY) >= StartTime && calLastLocation.get(Calendar.HOUR_OF_DAY) <= EndTime;
+        int HOUR_OF_DAY = calLastLocation.get(Calendar.HOUR_OF_DAY);
+        boolean betweenStartEndTime = HOUR_OF_DAY >= StartTime && HOUR_OF_DAY <= EndTime;
         if(!betweenStartEndTime){
-            timerHelper.stopTimer();
+            if(timerHelper != null)
+                timerHelper.stopTimer();
             return false;
         }
         return true;
@@ -913,6 +910,8 @@ public class LocationService extends Service  {
         public void stopTimer() {
             if(timer != null){
                 timer.cancel();
+                timer = null;
+                timerHelper = null;
             }
         }
 
