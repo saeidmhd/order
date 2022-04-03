@@ -80,6 +80,7 @@ import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.User;
 import com.mahak.order.common.Visitor;
+import com.mahak.order.log.LogReceiver;
 import com.mahak.order.tracking.LocationService;
 import com.mahak.order.tracking.MapPolygon;
 import com.mahak.order.tracking.ShowPersonCluster;
@@ -191,6 +192,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     String SENDER_ID = "779811760050";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private BroadcastReceiver br;
     private boolean isReceiverRegistered;
     private PolylineOptions polylineOptions;
     private Marker marker;
@@ -248,7 +250,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         mActivity = this;
 
         registerReceiverToCheckGpsOnOff();
-        listenNetworkViaConnectivityManager(mContext);
+        registerReceiver2();
+       // listenNetworkViaConnectivityManager(mContext);
 
         initUI();
 
@@ -564,6 +567,18 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         };
         this.getApplicationContext().registerReceiver(receiver, filter);
+    }
+    private void registerReceiver2() {
+        br = new LogReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.location.PROVIDERS_CHANGED");
+        filter.addAction("android.intent.action.BATTERY_LOW");
+        filter.addAction("android.intent.action.BATTERY_OKAY");
+        filter.addAction("android.intent.action.BOOT_COMPLETED");
+        filter.addAction("android.intent.action.ACTION_SHUTDOWN");
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        filter.addAction("android.intent.action.AIRPLANE_MODE");
+        this.getApplicationContext().registerReceiver(br, filter);
     }
 
 
@@ -1640,12 +1655,14 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             cm.registerNetworkCallback(request, new ConnectivityManager.NetworkCallback() {
                 @Override
                 public void onAvailable(@NonNull Network network) {
-                    ServiceTools.writeLog("available");
+                    ServiceTools.writeLog("network available");
+                    Log.d("test_log","network available");
                 }
 
                 @Override
                 public void onLost(@NonNull Network network) {
-                    ServiceTools.writeLog("lost");
+                    ServiceTools.writeLog("network lost");
+                    Log.d("test_log","network lost");
                 }
             });
         }

@@ -7,8 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkRequest;
 import android.net.wifi.WifiManager;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.mahak.order.common.ServiceTools;
 
@@ -16,7 +21,6 @@ public class LogReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-        Log.d("test_log",action);
         switch (action) {
             case Intent.ACTION_BOOT_COMPLETED:
                 ServiceTools.writeLog("BOOT_COMPLETED");
@@ -25,21 +29,11 @@ public class LogReceiver extends BroadcastReceiver {
             case ConnectivityManager.CONNECTIVITY_ACTION:
                 boolean network = ServiceTools.isNetworkAvailable2(context);
                 if (!network) {
-                    ServiceTools.writeLog("mobile_data_disabled");
-                    Log.d("test_log","mobile_data_disabled");
+                    ServiceTools.writeLog("no_network");
+                    Log.d("test_log","no_network");
                 } else {
-                    ServiceTools.writeLog("mobile_data_enabled");
-                    Log.d("test_log","mobile_data_enabled");
-                }
-                break;
-            case WifiManager.WIFI_STATE_CHANGED_ACTION:
-                boolean con = ServiceTools.isNetworkAvailable2(context);
-                if (!con) {
-                    ServiceTools.writeLog("wifi_disabled");
-                    Log.d("test_log","wifi_disabled");
-                } else {
-                    ServiceTools.writeLog("wifi_enabled");
-                    Log.d("test_log","wifi_enabled");
+                    ServiceTools.writeLog("ok_network");
+                    Log.d("test_log","ok_network");
                 }
                 break;
             case LocationManager.PROVIDERS_CHANGED_ACTION:
