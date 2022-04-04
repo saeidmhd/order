@@ -1985,5 +1985,25 @@ public class DbSchema {
                 " `UserId` NUMERIC )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
+    public static class ManageLogSchema implements BaseColumns {
+
+        public static final String TABLE_NAME = "ManageLog";
+        public static final String COLUMN_manageLogClientId = "manageLogClientId";
+        public static final String COLUMN_Log_type = "Log_type";
+        public static final String COLUMN_Log_value = "Log_value";
+        public static final String COLUMN_sent = "sent";
+        public static final String COLUMN_Date_time = "Date_time";
+        public static final String COLUMN_UserId = "UserId";
+
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"ManageLog\" ( " +
+                " `_id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                " `manageLogClientId` NUMERIC," +
+                " `Log_type` INTEGER," +
+                " `Log_value` INTEGER," +
+                " `sent` INTEGER," +
+                " `Date_time` TEXT," +
+                " `UserId` NUMERIC )";
+        public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+    }
 
 }

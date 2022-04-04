@@ -21,6 +21,7 @@ import com.mahak.order.common.Notification;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.StopLocation.StopLog;
 import com.mahak.order.common.VisitorLocation;
+import com.mahak.order.common.manageLog.ManageLog;
 import com.mahak.order.tracking.visitorZone.Datum;
 import com.mahak.order.tracking.visitorZone.ZoneLocation;
 
@@ -457,6 +458,26 @@ public class RadaraDb {
             mDb.endTransaction();
         }
     }
+    public void updateManageLogs(List<ManageLog> manageLogs) {
+        mDb.beginTransaction();
+        ContentValues contentValues = new ContentValues();
+        try {
+            for (ManageLog manageLog : manageLogs) {
+                contentValues.put(DbSchema.ManageLogSchema.COLUMN_manageLogClientId, manageLog.getManageLogClientId());
+                contentValues.put(DbSchema.ManageLogSchema.COLUMN_Log_type, manageLog.getLog_type());
+                contentValues.put(DbSchema.ManageLogSchema.COLUMN_Log_value, manageLog.getLog_value());
+                contentValues.put(DbSchema.ManageLogSchema.COLUMN_sent, manageLog.getSent());
+                contentValues.put(DbSchema.ManageLogSchema.COLUMN_Date_time, manageLog.getDate_time());
+                contentValues.put(DbSchema.ManageLogSchema.COLUMN_UserId, getPrefUserId());
+                int numOfRows = mDb.update(DbSchema.ManageLogSchema.TABLE_NAME, contentValues, DbSchema.ManageLogSchema.COLUMN_manageLogClientId + "=? and " + DbSchema.ManageLogSchema.COLUMN_UserId + "=? " , new String[]{String.valueOf(manageLog.getManageLogClientId()) , String.valueOf(manageLog.getVisitorId())});
+                if(numOfRows == 0)
+                    mDb.insert(DbSchema.ManageLogSchema.TABLE_NAME, null, contentValues);
+            }
+            mDb.setTransactionSuccessful();
+        } finally {
+            mDb.endTransaction();
+        }
+    }
 
     public void DeleteAllData() {
 
@@ -465,6 +486,7 @@ public class RadaraDb {
         mDb.delete(DbSchema.VisitorLocationSchema.TABLE_NAME, null, null);
         mDb.delete(DbSchema.NotificationSchema.TABLE_NAME, null, null);
         mDb.delete(DbSchema.StopLogSchema.TABLE_NAME, null, null);
+        mDb.delete(DbSchema.ManageLogSchema.TABLE_NAME, null, null);
 
         BaseActivity.setPrefAdminControl(false);
         BaseActivity.setPrefTrackingControl(0);
@@ -514,6 +536,7 @@ public class RadaraDb {
             db.execSQL(DbSchema.ZoneSchema.CREATE_TABLE);
             db.execSQL(DbSchema.ZoneLocationSchema.CREATE_TABLE);
             db.execSQL(DbSchema.StopLogSchema.CREATE_TABLE);
+            db.execSQL(DbSchema.ManageLogSchema.CREATE_TABLE);
 
         }
 
