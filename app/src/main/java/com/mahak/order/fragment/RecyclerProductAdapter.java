@@ -202,6 +202,9 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             });
         }
 
+        String url = db.getPhotoUrl(product.getProductId());
+        product.setPictureUrl(url);
+
         if (type == 0) {
             holder.panelCount.setVisibility(View.GONE);
             holder.panelTotalCount.setVisibility(View.GONE);

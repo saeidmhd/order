@@ -21,7 +21,12 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkRequest;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -75,6 +80,7 @@ import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.User;
 import com.mahak.order.common.Visitor;
+import com.mahak.order.log.LogReceiver;
 import com.mahak.order.storage.RadaraDb;
 import com.mahak.order.tracking.LocationService;
 import com.mahak.order.tracking.MapPolygon;
@@ -98,6 +104,7 @@ import java.util.List;
 
 public class DashboardActivity extends BaseActivity implements View.OnClickListener, GoogleMap.OnMarkerClickListener,
         GoogleMap.OnMapClickListener {
+
 
     private static final int REQUEST_CUSTOMER_LIST = 2;
     private static int REQUEST_DATASYNC = 1;
@@ -149,8 +156,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             tvSumOfPureInvoice,
             tvSumOfChargeAndTaxOrder,
             tvSumOffChargeAndTaxInvoice,
-            tvVersion,
-            speed;
+            tvVersion;
 
     public static TextView tvTrackingService;
 
@@ -188,6 +194,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     String SENDER_ID = "779811760050";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private BroadcastReceiver br;
     private boolean isReceiverRegistered;
     private PolylineOptions polylineOptions;
     private Marker marker;
@@ -237,12 +244,16 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        registerReceiverToCheckGpsOnOff();
+
 
         setContentView(R.layout.activity_dashboard);
 
         mContext = this;
         mActivity = this;
+
+        registerReceiverToCheckGpsOnOff();
+        registerReceiver2();
+       // listenNetworkViaConnectivityManager(mContext);
 
         initUI();
 
@@ -533,6 +544,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         }
         if(isRadaraActive())
             setTrackingConfig();
+
+
         super.onResume();
     }
 
@@ -556,6 +569,18 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         };
         this.getApplicationContext().registerReceiver(receiver, filter);
+    }
+    private void registerReceiver2() {
+        br = new LogReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.location.PROVIDERS_CHANGED");
+        filter.addAction("android.intent.action.BATTERY_LOW");
+        filter.addAction("android.intent.action.BATTERY_OKAY");
+        filter.addAction("android.intent.action.BOOT_COMPLETED");
+        filter.addAction("android.intent.action.ACTION_SHUTDOWN");
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        filter.addAction("android.intent.action.AIRPLANE_MODE");
+        this.getApplicationContext().registerReceiver(br, filter);
     }
 
 
@@ -712,7 +737,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         tvSumOfChargeAndTaxOrder = (TextView) findViewById(R.id.tvSumOfChargeAndTaxOrder);
         tvSumOffChargeAndTaxInvoice = (TextView) findViewById(R.id.tvSumOfChargeAndTaxInvoice);
         tvVersion = (TextView) findViewById(R.id.tvVersion);
-        speed = (TextView) findViewById(R.id.speed);
         llReceipt = (LinearLayout) findViewById(R.id.llReceipt);
         llOrder = (LinearLayout) findViewById(R.id.llOrder);
         llInvoice = (LinearLayout) findViewById(R.id.llInvoice);
@@ -871,10 +895,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                         if(location != null){
                             lastPosition = new LatLng(location.getLatitude(), location.getLongitude());
                             showMarkerOnMap(lastPosition);
-                            if(location.hasSpeed()){
-                                int speedValue = (int)(location.getSpeed() * 3.6);
-                                speed.setText(String.valueOf(speedValue));
-                            }
                         }
                     }
                 });
@@ -1623,5 +1643,31 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         });
         dialog.show();
+    }
+
+    private void listenNetworkViaConnectivityManager(final Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkRequest request = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            request = new NetworkRequest.Builder()
+                    .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                    .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
+                    .build();
+            cm.registerNetworkCallback(request, new ConnectivityManager.NetworkCallback() {
+                @Override
+                public void onAvailable(@NonNull Network network) {
+                    ServiceTools.writeLog("network available");
+                    Log.d("test_log","network available");
+                }
+
+                @Override
+                public void onLost(@NonNull Network network) {
+                    ServiceTools.writeLog("network lost");
+                    Log.d("test_log","network lost");
+                }
+            });
+        }
+
     }
 }

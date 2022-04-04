@@ -3,6 +3,7 @@ package com.mahak.order.common;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Application;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -19,8 +20,11 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.location.Location;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings.Secure;
 import android.util.DisplayMetrics;
@@ -1576,6 +1580,19 @@ FirebaseCrashlytics.getInstance().recordException(e);
         return false;
     }
 
+    public static Boolean isNetworkAvailable2(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Network nw = connectivityManager.getActiveNetwork();
+            if (nw == null) return false;
+            NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
+            return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) || actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH));
+        } else {
+            NetworkInfo nwInfo = connectivityManager.getActiveNetworkInfo();
+            return nwInfo != null && nwInfo.isConnected();
+        }
+    }
+
     public static String ConvertTimestampToPersianFormat(Context ctx, long lDate) {
         StringBuilder strOutput = new StringBuilder();
 
@@ -1844,7 +1861,7 @@ FirebaseCrashlytics.getInstance().recordException(e);
             Date date = new Date();
             String rafStr= "\n@@@ date: " + ServiceTools.getDate(date)
                     + " time: " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND) +  "\n"
-                    + "@@@ version " + ServiceTools.getVersionCode(mContext);
+                    + "@@@ version " + ServiceTools.getVersionCode(mContext) +  "\n" ;
 
             raf.write(rafStr.getBytes());
             seek += rafStr.getBytes().length;

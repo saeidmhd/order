@@ -332,8 +332,8 @@ public class LocationService extends Service  {
                     public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
                         //noinspection MissingPermission
                         mFusedLocationClient.requestLocationUpdates(locationRequest,mLocationCallback, Looper.myLooper());
-                        timerHelper =  new TimerHelper();
-
+                        if(timerHelper == null)
+                            timerHelper =  new TimerHelper();
                         updateUI();
 
                     }
@@ -717,7 +717,8 @@ public class LocationService extends Service  {
     public void removeLocationUpdates() {
         ServiceTools.writeLogRadara("Removing location updates");
         Log.i(TAG, "Removing location updates");
-        timerHelper.stopTimer();
+        if(timerHelper != null)
+            timerHelper.stopTimer();
         try {
             if(mLocationCallback != null){
                 mFusedLocationClient.removeLocationUpdates(mLocationCallback);
@@ -860,9 +861,8 @@ public class LocationService extends Service  {
 
 
     public boolean checkStartTimeEndTime(Context context , Location lastStopLocation) {
-
-        int StartTime = 0;
-        int EndTime = 0;
+        int StartTime = 8;
+        int EndTime = 22;
         String config = ServiceTools.getKeyFromSharedPreferences(context, ProjectInfo.pre_gps_config);
         if (!ServiceTools.isNull(config)) {
             try {
@@ -876,9 +876,11 @@ public class LocationService extends Service  {
 
         Calendar calLastLocation = Calendar.getInstance();
         calLastLocation.setTimeInMillis(lastStopLocation.getTime());
-        boolean betweenStartEndTime = calLastLocation.get(Calendar.HOUR_OF_DAY) >= StartTime && calLastLocation.get(Calendar.HOUR_OF_DAY) <= EndTime;
+        int HOUR_OF_DAY = calLastLocation.get(Calendar.HOUR_OF_DAY);
+        boolean betweenStartEndTime = HOUR_OF_DAY >= StartTime && HOUR_OF_DAY <= EndTime;
         if(!betweenStartEndTime){
-            timerHelper.stopTimer();
+            if(timerHelper != null)
+                timerHelper.stopTimer();
             return false;
         }
         return true;
@@ -897,6 +899,8 @@ public class LocationService extends Service  {
         public void stopTimer() {
             if(timer != null){
                 timer.cancel();
+                timer = null;
+                timerHelper = null;
             }
         }
 
