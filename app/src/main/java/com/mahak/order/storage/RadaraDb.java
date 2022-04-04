@@ -41,8 +41,8 @@ public class RadaraDb {
     }
 
     public RadaraDb open() {
-        this.mDbHelper = new DatabaseHelper(mCtx,DbSchema.RADARA_DATABASE);
-        this.mDb = mDbHelper.openDataBase(DbSchema.RADARA_DATABASE);
+        this.mDbHelper = new DatabaseHelper(mCtx,DbSchema.RADARA_DB);
+        this.mDb = mDbHelper.openDataBase(DbSchema.RADARA_DB);
         return this;
     }
 
@@ -469,7 +469,7 @@ public class RadaraDb {
                 contentValues.put(DbSchema.ManageLogSchema.COLUMN_sent, manageLog.getSent());
                 contentValues.put(DbSchema.ManageLogSchema.COLUMN_Date_time, manageLog.getDate_time());
                 contentValues.put(DbSchema.ManageLogSchema.COLUMN_UserId, getPrefUserId());
-                int numOfRows = mDb.update(DbSchema.ManageLogSchema.TABLE_NAME, contentValues, DbSchema.ManageLogSchema.COLUMN_manageLogClientId + "=? and " + DbSchema.ManageLogSchema.COLUMN_UserId + "=? " , new String[]{String.valueOf(manageLog.getManageLogClientId()) , String.valueOf(manageLog.getVisitorId())});
+                int numOfRows = mDb.update(DbSchema.ManageLogSchema.TABLE_NAME, contentValues,  DbSchema.ManageLogSchema.COLUMN_UserId + "=? and " + DbSchema.ManageLogSchema.COLUMN_Date_time + "=? " , new String[]{String.valueOf(manageLog.getVisitorId()) , String.valueOf(manageLog.getDate_time())});
                 if(numOfRows == 0)
                     mDb.insert(DbSchema.ManageLogSchema.TABLE_NAME, null, contentValues);
             }

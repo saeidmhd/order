@@ -4,14 +4,16 @@ import android.provider.BaseColumns;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.mahak.order.BuildConfig;
+import com.mahak.order.common.ServiceTools;
 
 public class DbSchema {
 
-    public static final String DATABASE_NAME = "DB_MahakOrder.db";
-    public static final String RADARA_DATABASE = "DB_Radara.db";
+    public static final String MAHAK_ORDER_DB = "DB_MahakOrder.db";
+    public static final String RADARA_DB = "DB_Radara.db";
 
-    public static final int DATABASE_VERSION = 8;
-    public static final int RADARA_DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = BuildConfig.VERSION_CODE;
+    public static final int RADARA_DATABASE_VERSION = BuildConfig.VERSION_CODE;
 
     public static class UserSchema implements BaseColumns {
 

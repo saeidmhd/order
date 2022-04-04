@@ -252,7 +252,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         mActivity = this;
 
         registerReceiverToCheckGpsOnOff();
-        registerReceiver2();
+        registerReceiver2(mContext);
        // listenNetworkViaConnectivityManager(mContext);
 
         initUI();
@@ -570,8 +570,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         };
         this.getApplicationContext().registerReceiver(receiver, filter);
     }
-    private void registerReceiver2() {
-        br = new LogReceiver();
+    private void registerReceiver2(Context mContext) {
+        br = new LogReceiver(mContext);
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.location.PROVIDERS_CHANGED");
         filter.addAction("android.intent.action.BATTERY_LOW");

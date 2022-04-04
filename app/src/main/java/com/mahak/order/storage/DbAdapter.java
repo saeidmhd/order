@@ -13,13 +13,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 
-
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.common.Bank;
 import com.mahak.order.common.Category;
@@ -95,8 +91,8 @@ public class DbAdapter {
     }
 
     public DbAdapter open() {
-        this.mDbHelper = new DatabaseHelper(mCtx,DbSchema.DATABASE_NAME);
-        this.mDb = mDbHelper.openDataBase(DbSchema.DATABASE_NAME);
+        this.mDbHelper = new DatabaseHelper(mCtx,DbSchema.MAHAK_ORDER_DB);
+        this.mDb = mDbHelper.openDataBase(DbSchema.MAHAK_ORDER_DB);
         return this;
     }
 

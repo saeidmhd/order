@@ -34,7 +34,6 @@ import androidx.core.content.FileProvider;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
-import com.mahak.order.storage.DbSchema;
 import com.mahak.order.widget.FontDialog;
 import com.mahak.order.widget.FontPopUp;
 
@@ -50,7 +49,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.mahak.order.common.ServiceTools.getFileName;
-import static com.mahak.order.storage.DbSchema.DATABASE_NAME;
+import static com.mahak.order.storage.DbSchema.MAHAK_ORDER_DB;
+import static com.mahak.order.storage.DbSchema.RADARA_DB;
 
 public class BackupListActivity extends BaseActivity {
 
@@ -60,7 +60,8 @@ public class BackupListActivity extends BaseActivity {
     private ListView lstShowBackup;
     private Activity mActivity;
     public static final File DATABASE_DIRECTORY = new File(Environment.getExternalStorageDirectory(), ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_BACKUPS);
-    private static final File DATA_DIRECTORY_DATABASE = new File(Environment.getDataDirectory() + "/data/" + "com.mahak.order" + "/databases/" + DATABASE_NAME);
+    private static final File Order_DATABASE = new File(Environment.getDataDirectory() + "/data/" + "com.mahak.order" + "/databases/" + MAHAK_ORDER_DB);
+    private static final File Radara_DATABASE = new File(Environment.getDataDirectory() + "/data/" + "com.mahak.order" + "/databases/" + RADARA_DB);
     String BackupFileName = "";
     private ShowBackupsArrayAdapter adapter;
     private int Position;
@@ -466,30 +467,37 @@ public class BackupListActivity extends BaseActivity {
 
 
     protected void restoreBackupDb(String BackupFileName) {
+        File IMPORT_FILE;
+        File exportFile = null;
 
-        File IMPORT_FILE = new File(DATABASE_DIRECTORY, BackupFileName);
-        File exportFile = DATA_DIRECTORY_DATABASE;
+        if(BackupFileName.contains("radara_"+BuildConfig.VERSION_CODE)){
+             exportFile = Radara_DATABASE;
+        }else if(BackupFileName.contains("MahakOrder_"+BuildConfig.VERSION_CODE))
+             exportFile = Order_DATABASE;
 
-        //if( ! checkDbIsValid(importFile) ) return false;
+        IMPORT_FILE = new File(DATABASE_DIRECTORY, BackupFileName);
 
         if (!IMPORT_FILE.exists()) {
             return;
         }
 
-        try {
-            exportFile.createNewFile();
-            copyFile(IMPORT_FILE, exportFile);
-            Toast.makeText(BackupListActivity.this, R.string.file_recovered_login_again, Toast.LENGTH_SHORT).show();
-            RefreshPreferenceUser();
-            Intent intent = new Intent(BackupListActivity.this, LoginActivityRestApi.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
-        } catch (IOException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            e.printStackTrace();
-        }
+        if(exportFile != null){
+            try {
+                exportFile.createNewFile();
+                copyFile(IMPORT_FILE, exportFile);
+                Toast.makeText(BackupListActivity.this, R.string.file_recovered_login_again, Toast.LENGTH_SHORT).show();
+                RefreshPreferenceUser();
+                Intent intent = new Intent(BackupListActivity.this, LoginActivityRestApi.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            } catch (IOException e) {
+                FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                FirebaseCrashlytics.getInstance().recordException(e);
+                e.printStackTrace();
+            }
+        }else
+            Toast.makeText(mActivity, "خطا در بازیابی بک آپ", Toast.LENGTH_SHORT).show();
     }
 
     private static void copyFile(File src, File dst) throws IOException {

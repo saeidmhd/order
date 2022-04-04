@@ -1,9 +1,7 @@
 package com.mahak.order.common;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.Application;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -18,7 +16,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -37,23 +34,17 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.google.android.datatransport.runtime.dagger.multibindings.ElementsIntoSet;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.mahak.order.AddPersonActivity;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.BuildConfig;
-import com.mahak.order.ProductPickerListActivity;
 import com.mahak.order.R;
 import com.mahak.order.autoSync.SyncAlarmReceiver;
 import com.mahak.order.libs.BadgeDrawable;
@@ -72,9 +63,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.RandomAccessFile;
-import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.channels.FileChannel;
@@ -87,8 +76,6 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
@@ -98,7 +85,6 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.mahak.order.BaseActivity.baseUrlImage;
 import static com.mahak.order.BaseActivity.getPrefUsername;
 import static com.mahak.order.BaseActivity.mContext;
 import static com.mahak.order.common.ProjectInfo.DIRECTORY_ORDER_SIGNS;
@@ -1675,10 +1661,10 @@ FirebaseCrashlytics.getInstance().recordException(e);
         File backupDB = new File(sd, backupDBPath);
         if (!backupDB.exists())
             backupDB.mkdirs();
-        String currentDBPath = "/data/" + "com.mahak.order" + "/databases/" + DbSchema.DATABASE_NAME;
-        String backDBPath = ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_BACKUPS + "/" + "MahakOrder" + getVersionName(mActivity) + "_" + getPrefUsername() + "_" + date + ".db";
+        String currentDBPath = "/data/" + "com.mahak.order" + "/databases/" + DbSchema.MAHAK_ORDER_DB;
+        String orderDBPath = ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_BACKUPS + "/" + "MahakOrder_" + BuildConfig.VERSION_CODE + "_" + getPrefUsername() + "_" + date + ".db";
         File currentDB = new File(data, currentDBPath);
-        File backup = new File(sd, backDBPath);
+        File backup = new File(sd, orderDBPath);
         try {
             source = new FileInputStream(currentDB).getChannel();
             destination = new FileOutputStream(backup).getChannel();
@@ -1708,8 +1694,8 @@ FirebaseCrashlytics.getInstance().recordException(e);
         File backupDB = new File(sd, backupDBPath);
         if (!backupDB.exists())
             backupDB.mkdirs();
-        String currentDBPath = "/data/" + "com.mahak.order" + "/databases/" + DbSchema.RADARA_DATABASE;
-        String backDBPath = ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_BACKUPS + "/" + "radara" + getVersionName(mActivity) + "_" + getPrefUsername() + "_" + date + ".db";
+        String currentDBPath = "/data/" + "com.mahak.order" + "/databases/" + DbSchema.RADARA_DB;
+        String backDBPath = ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_BACKUPS + "/" + "radara_" + BuildConfig.VERSION_CODE + "_" + getPrefUsername() + "_" + date + ".db";
         File currentDB = new File(data, currentDBPath);
         File backup = new File(sd, backDBPath);
         try {
