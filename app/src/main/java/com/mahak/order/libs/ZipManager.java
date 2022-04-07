@@ -77,7 +77,7 @@ public class ZipManager extends AsyncTask<Void, Integer, Integer> {
             zin.close();
             onPostExecute();
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Decompress", "unzip", e);
             onError(e);
@@ -86,7 +86,7 @@ public class ZipManager extends AsyncTask<Void, Integer, Integer> {
     }
 
     protected void onError(Exception e) {
-        FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
         FirebaseCrashlytics.getInstance().recordException(e);
     }
 

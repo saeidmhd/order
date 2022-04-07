@@ -26,6 +26,8 @@ public class SharedPreferencesHelper {
     private static String PREF_chk_customer_name = "chk_customer_name";
     private static String PREF_chk_count_product = "chk_count_product";
 
+    private static String PREF_chk_show_consumer_fee = "chk_show_consumer_fee";
+
 
     public static int getCurrentWidthSize(Context ctx) {
         SharedPreferences sh = ctx.getSharedPreferences(__pref_current_Width, Context.MODE_PRIVATE);
@@ -40,7 +42,7 @@ public class SharedPreferencesHelper {
 
     public static float getCurrentFontSize(Context ctx) {
         SharedPreferences sh = ctx.getSharedPreferences(__pref_current_font, Context.MODE_PRIVATE);
-        return sh.getFloat(__pref_current_font, 14);
+        return sh.getFloat(__pref_current_font, 13);
     }
 
     public static void setCurrentFontSize(Context ctx, float size) {
@@ -153,9 +155,19 @@ public class SharedPreferencesHelper {
         editor.putBoolean(PREF_chk_market_name, value);
         editor.commit();
     }
+    public static void set_chk_show_consumer_fee(Context ctx, boolean value) {
+
+        SharedPreferences perfs = ctx.getSharedPreferences(PREF_chk_show_consumer_fee, Context.MODE_PRIVATE);
+        Editor editor = perfs.edit();
+        editor.putBoolean(PREF_chk_show_consumer_fee, value);
+        editor.commit();
+    }
 
     public static boolean get_chk_market_name(Context ctx) {
         return ctx.getSharedPreferences(PREF_chk_market_name, Context.MODE_PRIVATE).getBoolean(PREF_chk_market_name, true);
+    }
+    public static boolean get_chk_show_consumer_fee(Context ctx) {
+        return ctx.getSharedPreferences(PREF_chk_show_consumer_fee, Context.MODE_PRIVATE).getBoolean(PREF_chk_show_consumer_fee, false);
     }
 
 
@@ -182,18 +194,6 @@ public class SharedPreferencesHelper {
 
     public static boolean get_chk_count_product(Context ctx) {
         return ctx.getSharedPreferences(PREF_chk_count_product, Context.MODE_PRIVATE).getBoolean(PREF_chk_count_product, true);
-    }
-
-    public static void setCompactPrint(Context ctx, boolean value) {
-
-        SharedPreferences perfs = ctx.getSharedPreferences(PREF_CompactPrinter, Context.MODE_PRIVATE);
-        Editor editor = perfs.edit();
-        editor.putBoolean(PREF_CompactPrinter, value);
-        editor.commit();
-    }
-
-    public static boolean getCompactPrint(Context ctx) {
-        return ctx.getSharedPreferences(PREF_CompactPrinter, Context.MODE_PRIVATE).getBoolean(PREF_CompactPrinter, true);
     }
 
     public static void setDetailUnderFactor(Context ctx, boolean value) {

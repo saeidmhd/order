@@ -213,12 +213,7 @@ public class CustomerReportActivity extends BaseActivity {
         public View getView(final int position, View convertView, ViewGroup parent) {
 
             if (convertView == null) {
-                if (SharedPreferencesHelper.getCompactPrint(mContext)) {
-                    convertView = inflater.inflate(R.layout.lst_report_cutomer_item_print_compact, null);
-                } else
-                    convertView = inflater.inflate(R.layout.lst_report_cutomer_item_print, null);
-
-
+                convertView = inflater.inflate(R.layout.lst_report_cutomer_item_print_compact, null);
                 tvCount = (TextView) convertView.findViewById(R.id.tvCount);
                 tvFinalSum = (TextView) convertView.findViewById(R.id.tvFinalSum);
                 tvName = (TextView) convertView.findViewById(R.id.tvName);

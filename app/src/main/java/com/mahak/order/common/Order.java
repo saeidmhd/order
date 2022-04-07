@@ -186,9 +186,9 @@ public class Order {
             Date date = simpleDateFormat.parse(OrderDate);
             return date.getTime();
         } catch (ParseException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -213,7 +213,7 @@ public class Order {
             Date date = simpleDateFormat.parse(DeliveryDate);
             return date.getTime();
         } catch (ParseException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }

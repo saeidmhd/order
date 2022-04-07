@@ -64,7 +64,7 @@ public final class AnalyticsTrackers extends MultiDexApplication {
             public void uncaughtException(Thread t, Throwable e) {
                 exceptionLog(e);
                 FirebaseCrashlytics.getInstance().setUserId(BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
                 FirebaseCrashlytics.getInstance().recordException(e);
                 super.uncaughtException(t, e);
             }

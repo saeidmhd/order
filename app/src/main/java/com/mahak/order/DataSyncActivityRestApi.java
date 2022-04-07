@@ -313,7 +313,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             @Override
             public void onFailure(Call<LoginResult> call, Throwable t) {
                 Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
                 FirebaseCrashlytics.getInstance().log(t.getMessage());
                 dismissProgressDialog();
             }
@@ -795,7 +795,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 @Override
                 public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
                     dismissProgressDialog();
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
                     FirebaseCrashlytics.getInstance().log(t.getMessage());
                     mMsg[0] = t.toString();
                     showDialog(mMsg[0]);
@@ -1015,7 +1015,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
                 @Override
                 public void onFailure(Call<GetDataResult> call, Throwable t) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
                     FirebaseCrashlytics.getInstance().log(t.getMessage());
                     dismissProgressDialog();
                     mMsg[0] = t.toString();
@@ -1392,14 +1392,14 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         //showDialog(response.body().getMessage());
                         pbLoading.setVisibility(View.GONE);
 
-                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
                         FirebaseCrashlytics.getInstance().log(response.body().getMessage());
                     }
                 }
 
                 @Override
                 public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
                     FirebaseCrashlytics.getInstance().log(t.getMessage());
                     dismissProgressDialog();
                     mMsg[0] = t.toString();
@@ -1451,14 +1451,14 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                     mMsg[0] = getString(R.string.send_error);
                                     pbLoading.setVisibility(View.GONE);
 
-                                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
                                     FirebaseCrashlytics.getInstance().log(response.body().toString());
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<setSignImage> call, Throwable t) {
-                                FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
                                 FirebaseCrashlytics.getInstance().log(t.getMessage());
                                 dismissProgressDialog();
                                 mMsg[0] = t.toString();

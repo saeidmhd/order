@@ -25,7 +25,7 @@
             android:textSize="14sp" />
 
         <com.mahak.order.widget.FontTextView
-            android:id="@+id/tvProductSpec"
+            android:id="@+id/tvProductNameSpec"
             style="@style/forms_label_default"
             android:layout_width="74dp"
             android:layout_height="wrap_content"

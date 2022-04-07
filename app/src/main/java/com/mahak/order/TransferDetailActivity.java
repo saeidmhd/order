@@ -39,7 +39,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mahak.order.common.ProjectInfo.Woosim_WSP_R341;
 import static com.mahak.order.common.ServiceTools.getDateAndTimeForLong;
 
 public class TransferDetailActivity extends BaseActivity {
@@ -245,24 +244,12 @@ public class TransferDetailActivity extends BaseActivity {
         @Override
         protected Boolean doInBackground(String... params) {
             Boolean status = false;
-
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            if (printerBrand == ProjectInfo.PRINTER_BABY_380_A || printerBrand == ProjectInfo.PRINTER_DELTA_380_A) {
-                ll = inflater.inflate(R.layout.factor_print_template_80mm, null, false);
-            } else if (printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII) {
-                ll = inflater.inflate(R.layout.factor_print_template_80mm, null, false);
-                LinearLayout _llPrint = (LinearLayout) ll.findViewById(R.id._llPrint);
-                ChangePrintWidth(_llPrint);
-            } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
-                ll = inflater.inflate(R.layout.factor_print_template_50mm_fii_compact, null, false);
-            } else if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW || printerBrand == ProjectInfo.UROVO_K319 || printerBrand == Woosim_WSP_R341) {
-                ll = inflater.inflate(R.layout.factor_print_template_80mm, null, false);
-                LinearLayout _llPrint = (LinearLayout) ll.findViewById(R.id._llPrint);
-                ChangePrintWidth(_llPrint);
-            } else if (printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310) {
-                ll = inflater.inflate(R.layout.factor_print_template_80mm, null, false);
-            } else {
-                ll = inflater.inflate(R.layout.factor_print_template_compact, null, false);
+            ll = inflater.inflate(R.layout.factor_print_template, null, false);
+            LinearLayout _llPrint = (LinearLayout) ll.findViewById(R.id._llPrint);
+            ChangePrintWidth(_llPrint);
+            if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
+                ll = inflater.inflate(R.layout.factor_print_50mm, null, false);
             }
 
             FillPrintView(ll);
@@ -402,7 +389,7 @@ public class TransferDetailActivity extends BaseActivity {
 
 
             public Holder(View view) {
-                tvProductName = (TextView) view.findViewById(R.id.tvProductSpec);
+                tvProductName = (TextView) view.findViewById(R.id.tvProductNameSpec);
                 tvNumber = (TextView) view.findViewById(R.id.tvNumber);
                 tvCount = (TextView) view.findViewById(R.id.tvCount);
                 tvProductPropSpec = (TextView) view.findViewById(R.id.tvProductPropSpec);
@@ -451,7 +438,7 @@ public class TransferDetailActivity extends BaseActivity {
         Activity mContext;
 
         public AdapterListProductForPrint(Activity context, ArrayList<ReceivedTransferProducts> array) {
-            super(context, R.layout.lst_order_detail_for_print, array);
+            super(context, R.layout.print_order_detail_item, array);
             mContext = context;
         }
 
@@ -465,7 +452,7 @@ public class TransferDetailActivity extends BaseActivity {
 
             if (rowview == null) {
                 inflater = mContext.getLayoutInflater();
-                rowview = inflater.inflate(R.layout.lst_order_detail_for_print, null, false);
+                rowview = inflater.inflate(R.layout.print_order_detail_item, null, false);
                 holder = new Holder(rowview);
                 rowview.setTag(holder);
             } else
@@ -482,7 +469,7 @@ public class TransferDetailActivity extends BaseActivity {
 
             public Holder(View view) {
                 llitem = (LinearLayout) view.findViewById(R.id.llitem);
-                tvProductName = (TextView) view.findViewById(R.id.tvProductSpec);
+                tvProductName = (TextView) view.findViewById(R.id.tvProductNameSpec);
                 tvPrice = (TextView) view.findViewById(R.id.tvPrice);
                 tvCount = (TextView) view.findViewById(R.id.tvCount);
             }
@@ -590,7 +577,7 @@ public class TransferDetailActivity extends BaseActivity {
         try {
             propertiesList = gson.fromJson(productDetail.getProperties(), property);
         } catch (JsonSyntaxException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }

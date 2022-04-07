@@ -15,7 +15,7 @@
         android:orientation="horizontal">
 
         <com.mahak.order.widget.FontTextView
-            android:id="@+id/tvProductSpec"
+            android:id="@+id/tvProductNameSpec"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="2"

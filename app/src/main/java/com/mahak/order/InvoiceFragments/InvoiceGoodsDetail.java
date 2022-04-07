@@ -79,11 +79,8 @@ import static com.mahak.order.BaseActivity.PAGE;
 import static com.mahak.order.BaseActivity.PAGE_ORDERLIST;
 import static com.mahak.order.BaseActivity.RETURN_ASSET_KEY;
 import static com.mahak.order.BaseActivity.TYPE_KEY;
-import static com.mahak.order.BaseActivity.duplicate_product;
-import static com.mahak.order.BaseActivity.eshantion_dasti;
 import static com.mahak.order.InvoiceDetailActivity.CommitPromoCode;
 import static com.mahak.order.InvoiceDetailActivity.CustomerId;
-import static com.mahak.order.InvoiceDetailActivity.Description;
 import static com.mahak.order.InvoiceDetailActivity.Discount;
 import static com.mahak.order.InvoiceDetailActivity.FinalPrice;
 import static com.mahak.order.InvoiceDetailActivity.GroupId;
@@ -115,7 +112,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             llTotalPrice,
             llFinalPrice;
     private TextView tvCurrency;
-    private TextView tvFii;
+    private TextView text_view_fee;
     private EditText txtDiscount, txtDiscountPercent;
     //  private ImageView checkDiscount;
     private static AdapterListProduct adListProduct;
@@ -369,7 +366,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                             }
                         });
                     } catch (Exception e) {
-                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
                         FirebaseCrashlytics.getInstance().recordException(e);
                         e.printStackTrace();
                     }
@@ -694,7 +691,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             final LinearLayout llcartDiscount;
 
             Holder(View view) {
-                tvProductName = (TextView) view.findViewById(R.id.tvProductSpec);
+                tvProductName = (TextView) view.findViewById(R.id.tvProductNameSpec);
                 tvPrice = (TextView) view.findViewById(R.id.tvPrice);
                 tvFee = (TextView) view.findViewById(R.id.tvFee);
                 tvOff = (TextView) view.findViewById(R.id.tvOff);
@@ -764,7 +761,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
 
     private void FillView() {
         if (OrderType == ProjectInfo.TYPE_SEND_TRANSFERENCE || OrderType == ProjectInfo.TYPE_RETURN_OF_SALE) {
-            tvFii.setVisibility(View.INVISIBLE);
+            text_view_fee.setVisibility(View.INVISIBLE);
             tvCurrency.setVisibility(View.INVISIBLE);
         }
         adListProduct = new AdapterListProduct(getActivity(), InvoiceDetailActivity.orderDetails);
@@ -830,7 +827,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         tvTotalChargeAndTax = (TextView) v.findViewById(R.id.tvTotalChargeAndTax);
 
         tvCurrency = (TextView) v.findViewById(R.id.tvCurrency);
-        tvFii = (TextView) v.findViewById(R.id.tvFii);
+        text_view_fee = (TextView) v.findViewById(R.id.tvFii);
         llTotalOff = (LinearLayout) v.findViewById(R.id.llTotalOff);
         llTotalChargeAndTax = (LinearLayout) v.findViewById(R.id.llTotalChargeAndTax);
         llTotalPrice = (LinearLayout) v.findViewById(R.id.llTotalPrice);
@@ -930,7 +927,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         try {
             bd = new BigDecimal(Double.toString(d));
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -945,7 +942,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         try {
             bd = new BigDecimal(Double.toString(d));
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }

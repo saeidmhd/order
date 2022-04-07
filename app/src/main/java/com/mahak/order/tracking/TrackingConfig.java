@@ -208,7 +208,7 @@ public class TrackingConfig {
                 @Override
                 public void onFailure(Call<VisitorZoneLocation> call, Throwable t) {
                     dismissProgressDialog();
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
                     FirebaseCrashlytics.getInstance().log(t.getMessage());
                     mMsg[0] = t.toString();
                 }
@@ -307,7 +307,7 @@ public class TrackingConfig {
                 @Override
                 public void onFailure(Call<StopLocationResponse> call, Throwable t) {
                     dismissProgressDialog();
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
                     FirebaseCrashlytics.getInstance().log(t.getMessage());
                     mMsg[0] = t.toString();
                 }

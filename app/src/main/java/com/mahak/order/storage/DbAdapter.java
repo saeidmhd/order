@@ -902,7 +902,7 @@ public class DbAdapter {
                 }
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getBankNameFromBankID", e.getMessage());
         }
@@ -922,7 +922,7 @@ public class DbAdapter {
                 }
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("GetgroupIdFromCustomer", e.getMessage());
         }
@@ -1011,7 +1011,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getMoreCustomerInfo", e.getMessage());
         }
@@ -1033,7 +1033,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getProductExtraInfo", e.getMessage());
         }
@@ -1074,7 +1074,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getTaxInSellExtra", e.getMessage());
         }
@@ -1160,7 +1160,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getCustomerWithPersonId", e.getMessage());
         }
@@ -1249,7 +1249,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getCustomer", e.getMessage());
         }
@@ -1336,7 +1336,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getCustomerWr", e.getMessage());
         }
@@ -1358,7 +1358,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getCustomerByBarcode", e.getMessage());
         }
@@ -1379,7 +1379,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getCustomerByBarcode", e.getMessage());
         }
@@ -1400,7 +1400,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("GetProductWithProductId", e.getMessage());
         }
@@ -1421,7 +1421,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("GetPromoCustomer", e.getMessage());
         }
@@ -1442,7 +1442,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getProductByMer", e.getMessage());
         }
@@ -1463,7 +1463,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getProductWi", e.getMessage());
         }
@@ -1483,7 +1483,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getProductAsset1", e.getMessage());
         }
@@ -1503,7 +1503,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getProductAsset2", e.getMessage());
         }
@@ -1525,7 +1525,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorProductDetail11", e.getMessage());
         }
@@ -1547,7 +1547,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getProductDetail", e.getMessage());
         }
@@ -1569,7 +1569,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getProductDeilWi", e.getMessage());
         }
@@ -1725,7 +1725,7 @@ public class DbAdapter {
         try {
             person_extra_data = gson.fromJson(cursor.getString(cursor.getColumnIndex(DbSchema.ExtraDataSchema.COLUMN_Data)), Person_Extra_Data.class);
         } catch (JsonSyntaxException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -1739,7 +1739,7 @@ public class DbAdapter {
         try {
             product_extra_data = gson.fromJson(cursor.getString(cursor.getColumnIndex(DbSchema.ExtraDataSchema.COLUMN_Data)), Product_Extra_Data.class);
         } catch (JsonSyntaxException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -1752,7 +1752,7 @@ public class DbAdapter {
         try {
             cityZone_extra_data = gson.fromJson(cursor.getString(cursor.getColumnIndex(DbSchema.ExtraDataSchema.COLUMN_Data)), CityZone_Extra_Data.class);
         } catch (JsonSyntaxException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -1765,7 +1765,7 @@ public class DbAdapter {
         try {
             taxInSell_extra_data = gson.fromJson(cursor.getString(cursor.getColumnIndex(DbSchema.ExtraDataSchema.COLUMN_Data)), TaxInSell_Extra_Data.class);
         } catch (JsonSyntaxException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -1808,6 +1808,34 @@ public class DbAdapter {
         category.setCategoryCode(cursor.getInt(cursor.getColumnIndex(DbSchema.CategorySchema.COLUMN_CategoryCode)));
         category.setParentCode(cursor.getInt(cursor.getColumnIndex(DbSchema.CategorySchema.COLUMN_ParentCode)));
         category.setCategoryName(cursor.getString(cursor.getColumnIndex(DbSchema.CategorySchema.COLUMN_CategoryName)));
+        return category;
+    }
+
+    private ProductCategory getProductCategoryFromCursor(Cursor cursor) {
+        ProductCategory productCategory = new ProductCategory();
+        Gson gson = new Gson();
+
+        try {
+            productCategory = gson.fromJson(cursor.getString(cursor.getColumnIndex(DbSchema.ExtraDataSchema.COLUMN_Data)), ProductCategory.class);
+        } catch (JsonSyntaxException e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            e.printStackTrace();
+        }
+
+        return productCategory;
+    }
+
+    private Category getCategoryFromCursor(Cursor cursor) {
+        Category category = new Category();
+        Gson gson = new Gson();
+        try {
+            category = gson.fromJson(cursor.getString(cursor.getColumnIndex(DbSchema.ExtraDataSchema.COLUMN_Data)), Category.class);
+        } catch (JsonSyntaxException e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            e.printStackTrace();
+        }
         return category;
     }
 
@@ -2056,7 +2084,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getPictureProductB", e.getMessage());
         }
@@ -2077,7 +2105,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getPictureWithPictureId", e.getMessage());
         }
@@ -2098,13 +2126,43 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getPictureIdWith", e.getMessage());
         }
         return picturesProduct.getPictureId();
     }
 
+    private ProductGroup getProductGroup(long id) {
+        ProductGroup productGroup = new ProductGroup();
+        Cursor cursor;
+        try {
+            cursor = mDb.query(DbSchema.ProductGroupSchema.TABLE_NAME, null, DbSchema.ProductGroupSchema.COLUMN_ID + "=?", new String[]{String.valueOf(id)}, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                if (cursor.getCount() > 0) {
+                    productGroup.setId(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ID)));
+                    productGroup.setMahakId(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_MAHAK_ID)));
+                    productGroup.setProductGroupCode(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ProductGroupCode)));
+                    productGroup.setDatabaseId(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_DATABASE_ID)));
+                    productGroup.setParentId(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_PARENTID)));
+                    productGroup.setName(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_NAME)));
+                    productGroup.setColor(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_COLOR)));
+                    productGroup.setIcon(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ICON)));
+                    productGroup.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_MODIFYDATE)));
+                    productGroup.setProductCategoryClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ProductGroupClientId)));
+                    productGroup.setProductCategoryId(cursor.getInt(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ProductGroupId)));
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("getProductGroup", e.getMessage());
+        }
+        return productGroup;
+    }
     private ProductGroup getProductGroupFromCursor(Cursor cursor) {
         ProductGroup productGroup = new ProductGroup();
         try {
@@ -2125,7 +2183,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getProductGror", e.getMessage());
         }
@@ -2146,7 +2204,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("GetPromoGroup", e.getMessage());
         }
@@ -2167,7 +2225,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getGroup", e.getMessage());
         }
@@ -2203,7 +2261,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("productPriceLevelName", e.getMessage());
         }
@@ -2238,7 +2296,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetCategory", e.getMessage());
         }
@@ -2279,7 +2337,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetCustomerGroup", e.getMessage());
         }
@@ -2320,7 +2378,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetCustomerGroup", e.getMessage());
         }
@@ -2349,7 +2407,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetCustomerGroup", e.getMessage());
         }
@@ -2387,7 +2445,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetReceipt", e.getMessage());
         }
@@ -2433,7 +2491,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetReceipt", e.getMessage());
         }
@@ -2476,7 +2534,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetProductInOrder", e.getMessage());
         }
@@ -2528,7 +2586,54 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorGetProductInOrder", e.getMessage());
+        }
+        return orderDetail;
+    }
+
+    public OrderDetail GetOrderDetailWithOrderId(long id) {
+        OrderDetail orderDetail = new OrderDetail();
+        Cursor cursor;
+        try {
+            cursor = mDb.query(DbSchema.OrderDetailSchema.TABLE_NAME, null, DbSchema.OrderDetailSchema.COLUMN_OrderId + "=?", new String[]{String.valueOf(id)}, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                if (cursor.getCount() > 0) {
+                    orderDetail.setId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ID)));
+                    orderDetail.setOrderId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_OrderId)));
+                    orderDetail.setOrderDetailId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_OrderDetailId)));
+                    orderDetail.setOrderDetailClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_OrderDetailClientId)));
+                    orderDetail.setOrderClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_OrderClientId)));
+                    orderDetail.setProductDetailId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ProductDetailId)));
+                    orderDetail.setProductId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ProductId)));
+                    if (BaseActivity.getPrefUnit2Setting(mContext) == MODE_MeghdarJoz)
+                        orderDetail.setCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz)));
+                    else
+                        orderDetail.setCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Count1)));
+                    orderDetail.setCount2(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Count2)));
+                    orderDetail.setSumCountBaJoz(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz)));
+                    // orderDetail.setCount2(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PackageCount)));
+                    orderDetail.setPrice(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Price)));
+                    orderDetail.setGiftType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftType)));
+                    orderDetail.setDescription(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Description)));
+                    //orderDetail.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PUBLISH)));
+                    orderDetail.setTaxPercent(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_TaxPercent)));
+                    orderDetail.setChargePercent(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ChargePercent)));
+                    orderDetail.setDiscount(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Discount)));
+                    orderDetail.setDiscountType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_DiscountType)));
+                    orderDetail.setCostLevel(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_CostLevel)));
+                    // orderDetail.setFixedOff(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Fixed_Off)));
+                    // orderDetail.setCostLevel(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Price_LEVEL)));
+                    orderDetail.setPromotionCode(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PROMOTION_CODE)));
+                    //   orderDetail.setGiftType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GIFT_TYPE)));
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetProductInOrder", e.getMessage());
         }
@@ -2560,7 +2665,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorOrdrDetProp", e.getMessage());
         }
@@ -2603,7 +2708,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorOrderdetail", e.getMessage());
         }
@@ -2660,7 +2765,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetOrder", e.getMessage());
         }
@@ -2706,7 +2811,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetOrder", e.getMessage());
         }
@@ -2732,7 +2837,7 @@ public class DbAdapter {
                 }
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetOrder", e.getMessage());
         }
@@ -2790,7 +2895,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetOrder", e.getMessage());
         }
@@ -2835,7 +2940,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetOrder", e.getMessage());
         }
@@ -2880,7 +2985,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetOrder", e.getMessage());
         }
@@ -2926,7 +3031,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetOrder", e.getMessage());
         }
@@ -2982,7 +3087,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetOrder", e.getMessage());
         }
@@ -3023,7 +3128,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetCheckList", e.getMessage());
         }
@@ -3064,7 +3169,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetCheckList", e.getMessage());
         }
@@ -3104,7 +3209,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetCheque", e.getMessage());
         }
@@ -3140,7 +3245,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetUser", e.getMessage());
         }
@@ -3168,7 +3273,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetBank", e.getMessage());
         }
@@ -3207,7 +3312,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetUser", e.getMessage());
         }
@@ -3251,7 +3356,7 @@ public class DbAdapter {
 
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Error GetTransactionLog", e.getMessage());
         }
@@ -3303,7 +3408,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetDeliveryOrder", e.getMessage());
         }
@@ -3356,7 +3461,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetDeliveryOrder", e.getMessage());
         }
@@ -3401,7 +3506,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGet", e.getMessage());
         }
@@ -3484,7 +3589,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGet", e.getMessage());
         }
@@ -3506,7 +3611,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Error RowVersion", e.getMessage());
         }
@@ -3561,7 +3666,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -3592,7 +3697,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetTotalPriceOrder", e.getMessage());
         }
@@ -3622,7 +3727,7 @@ public class DbAdapter {
                 cursor1.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetTotalPriceOrder", e.getMessage());
         }
@@ -3646,7 +3751,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Error Query", e.getMessage());
         }
@@ -3669,7 +3774,7 @@ public class DbAdapter {
                 cursor1.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Error Query", e.getMessage());
         }
@@ -3694,7 +3799,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Error Query", e.getMessage());
         }
@@ -3728,7 +3833,7 @@ public class DbAdapter {
                 cursor1.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -3766,7 +3871,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -3789,7 +3894,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -3822,7 +3927,7 @@ public class DbAdapter {
                 cursor1.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -3856,7 +3961,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -3903,7 +4008,7 @@ public class DbAdapter {
                 cursor1.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -3948,7 +4053,7 @@ public class DbAdapter {
                 cursor1.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -3996,7 +4101,7 @@ public class DbAdapter {
                 cursor1.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -4044,7 +4149,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -4100,7 +4205,7 @@ public class DbAdapter {
                 cursor1.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorgetPurePriceOrder", e.getMessage());
         }
@@ -4155,7 +4260,7 @@ public class DbAdapter {
                 cursor1.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -4176,7 +4281,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -4203,7 +4308,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -4236,7 +4341,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -4274,7 +4379,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -4296,7 +4401,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -4318,7 +4423,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -4340,7 +4445,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("CountNonRegister", e.getMessage());
         }
@@ -4362,7 +4467,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("CountNonRegister", e.getMessage());
         }
@@ -4384,7 +4489,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorgetTotalCountOrder", e.getMessage());
         }
@@ -4406,7 +4511,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorgetTotalCountOrder", e.getMessage());
         }
@@ -4428,7 +4533,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -4450,7 +4555,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -4472,7 +4577,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -4501,7 +4606,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorgetTotalReceipt", e.getMessage());
         }
@@ -4530,7 +4635,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorgetTotalReceipt", e.getMessage());
         }
@@ -4557,7 +4662,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -4612,7 +4717,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetUser", e.getMessage());
         }
@@ -4674,7 +4779,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetUser", e.getMessage());
         }
@@ -4691,7 +4796,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetUser", e.getMessage());
         }
@@ -4751,7 +4856,67 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorGetUser", e.getMessage());
+        }
+        return promotion;
+    }
+
+    public Promotion getPromotionById(int promotionId) {
+
+        Promotion promotion = new Promotion();
+        Cursor cursor;
+        try {
+            cursor = mDb.query(DbSchema.PromotionSchema.TABLE_NAME, null, DbSchema.PromotionSchema.COLUMN_PromotionId + "=? and " + DbSchema.PromotionSchema.COLUMN_MahakId + "=? and " + DbSchema.PromotionSchema.COLUMN_DatabaseId + "=?", new String[]{String.valueOf(promotionId), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId()}, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                if (cursor.getCount() > 0) {
+
+                    promotion.setId(cursor.getLong(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_ID)));
+                    promotion.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_MODIFYDATE)));
+                    promotion.setCreatedBy(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_CreatedBy)));
+                    promotion.setCreatedDate(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_CreatedDate)));
+                    promotion.setModifiedBy(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_ModifiedBy)));
+                    promotion.setPromotionCode(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_PromotionCode)));
+                    promotion.setPriorityPromotion(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_PriorityPromotion)));
+                    promotion.setLevelPromotion(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_LevelPromotion)));
+                    promotion.setAccordingTo(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_AccordingTo)));
+                    promotion.setIsCalcLinear(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_IsCalcLinear)));
+                    promotion.setTypeTasvieh(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_TypeTasvieh)));
+                    promotion.setDeadlineTasvieh(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_DeadlineTasvieh)));
+                    promotion.setIsActive(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_IsActive)));
+                    promotion.setIsAllCustomer(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_IsAllCustomer)));
+                    promotion.setIsAllVisitor(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_IsAllVisitor)));
+                    promotion.setIsAllStore(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_IsAllStore)));
+                    promotion.setIsAllGood(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_IsAllGood)));
+                    promotion.setAggregateWithOther(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_AggregateWithOther)));
+                    promotion.setNamePromotion(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_NamePromotion)));
+                    promotion.setDateStart(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_DateStart)));
+                    promotion.setDateEnd(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_DateEnd)));
+                    promotion.setTimeStart(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_TimeStart)));
+                    promotion.setTimeEnd(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_TimeEnd)));
+                    promotion.setDesPromotion(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_DesPromotion)));
+
+                    promotion.setPromotionId(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_PromotionId)));
+                    promotion.setPromotionClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_PromotionClientId)));
+                    promotion.setPromotionCode(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_PromotionCode)));
+                    promotion.setVisitors(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_Visitors)));
+                    promotion.setStores(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_Stores)));
+                    promotion.setDataHash(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_DataHash)));
+                    promotion.setCreateDate(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_CreateDate)));
+                    promotion.setUpdateDate(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_UpdateDate)));
+                    promotion.setCreateSyncId(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_CreateSyncId)));
+                    promotion.setUpdateSyncId(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_UpdateSyncId)));
+                    promotion.setRowVersion(cursor.getLong(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_RowVersion)));
+                    promotion.setDeleted(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_Deleted)));
+
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetUser", e.getMessage());
         }
@@ -4834,7 +4999,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetUser", e.getMessage());
         }
@@ -4887,7 +5052,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetUser", e.getMessage());
         }
@@ -4942,7 +5107,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetUser", e.getMessage());
         }
@@ -4997,7 +5162,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetUser", e.getMessage());
         }
@@ -5020,7 +5185,7 @@ public class DbAdapter {
                 }
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrisInEntity", e.getMessage());
             return false;
@@ -5044,7 +5209,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetTransfer", e.getMessage());
         }
@@ -5118,7 +5283,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorReasonByTypet", e.getMessage());
         }
@@ -5142,7 +5307,30 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorReasonByTypet", e.getMessage());
+        }
+        return productCategories;
+    }
+
+    public ArrayList<ProductCategory> getAllProductCategoryWithCategoryCode(int CategoryId) {
+        ProductCategory productCategory;
+        Cursor cursor;
+        ArrayList<ProductCategory> productCategories = new ArrayList<>();
+        try {
+            cursor = mDb.query(DbSchema.ProductCategorySchema.TABLE_NAME, null, DbSchema.ProductCategorySchema.COLUMN_CategoryCode + " =? ", new String[]{String.valueOf(CategoryId)}, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    productCategory = productCategoryFromCursor(cursor);
+                    productCategories.add(productCategory);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorReasonByTypet", e.getMessage());
         }
@@ -5165,7 +5353,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorReasonByTypet", e.getMessage());
         }
@@ -5188,7 +5376,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorReasonByTypet", e.getMessage());
         }
@@ -5211,7 +5399,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorReasonByTypet", e.getMessage());
         }
@@ -5234,7 +5422,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorReasonByTypet", e.getMessage());
         }
@@ -5260,7 +5448,33 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrAllVisitor", e.getMessage());
+        }
+        return array;
+    }
+
+    public ArrayList<Promotion> getAllPromotion2(int promotionId) {
+        Promotion promotion;
+        Cursor cursor;
+        ArrayList<Promotion> array = new ArrayList<>();
+        try {
+            cursor = mDb.query(DbSchema.PromotionSchema.TABLE_NAME, null, DbSchema.PromotionSchema.COLUMN_PromotionId + "=? and " +
+                    DbSchema.PromotionSchema.COLUMN_MahakId + "=? and " + DbSchema.PromotionSchema.COLUMN_USER_ID + "=? and " + DbSchema.PromotionSchema.COLUMN_Deleted + "=? and " + DbSchema.PromotionSchema.COLUMN_DatabaseId + "=?", new String[]{String.valueOf(promotionId), BaseActivity.getPrefMahakId(), String.valueOf(getPrefUserId()), String.valueOf(0), BaseActivity.getPrefDatabaseId()}, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    promotion = getPromotion(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_ID)));
+                    if (promotion != null)
+                        array.add(promotion);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllVisitor", e.getMessage());
         }
@@ -5284,7 +5498,29 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrAllVisitor", e.getMessage());
+        }
+        return array;
+    }
+
+    public ArrayList<Integer> getAllPromotionCodeForSpecificGood2(long productCode) {
+        Cursor cursor;
+        ArrayList<Integer> array = new ArrayList<>();
+        try {
+            cursor = mDb.rawQuery("SELECT Promotion.PromotionCode , Promotion.AccordingTo , IsCalcLinear  from PromotionEntity INNER JOIN Promotion on Promotion.PromotionId = PromotionEntity.PromotionId where CodeEntity = ? and EntityType = ? and Promotion.UserId = ?", new String[]{String.valueOf(productCode), String.valueOf(4), String.valueOf(getPrefUserId())});
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    array.add(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_PromotionCode)));
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllVisitor", e.getMessage());
         }
@@ -5311,7 +5547,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllVisitor", e.getMessage());
         }
@@ -5339,7 +5575,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllVisitor", e.getMessage());
         }
@@ -5366,7 +5602,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllVisitor", e.getMessage());
         }
@@ -5392,7 +5628,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllVisitor", e.getMessage());
         }
@@ -5432,7 +5668,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllCustomer", e.getMessage());
         }
@@ -5493,7 +5729,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -5529,7 +5765,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllCustomer", e.getMessage());
         }
@@ -5601,7 +5837,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllCustomer", e.getMessage());
         }
@@ -5653,7 +5889,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllCustomer", e.getMessage());
         }
@@ -5679,7 +5915,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Erorr Query", e.getMessage());
         }
@@ -5703,7 +5939,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getAllProductDetail", e.getMessage());
         }
@@ -5727,7 +5963,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("getMapProductIdBarcode", e.getMessage());
         }
@@ -5760,7 +5996,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("AllProductDetail2", e.getMessage());
         }
@@ -5789,7 +6025,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("AllProductDetail3", e.getMessage());
         }
@@ -5815,7 +6051,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllProduct", e.getMessage());
         }
@@ -5836,7 +6072,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorReasonByTypet", e.getMessage());
         }
@@ -5861,7 +6097,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrgetAllCategory", e.getMessage());
         }
@@ -5886,7 +6122,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrPriceLevelName", e.getMessage());
         }
@@ -5910,7 +6146,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrValidPromotions", e.getMessage());
         }
@@ -5936,7 +6172,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllBanks", e.getMessage());
         }
@@ -5961,7 +6197,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllBanks", e.getMessage());
         }
@@ -5987,7 +6223,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllProductInOrder", e.getMessage());
         }
@@ -6013,7 +6249,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -6039,7 +6275,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -6065,7 +6301,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -6091,7 +6327,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllProductInOrder", e.getMessage());
         }
@@ -6116,12 +6352,39 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllProductInOrder", e.getMessage());
         }
         return array;
     }
+
+    public ArrayList<Order> getAllOrder(int orderType) {
+        Order order;
+        Cursor cursor;
+        ArrayList<Order> array = new ArrayList<>();
+        try {
+            cursor = mDb.rawQuery("SELECT orders.id , Code , OrderDate , name, Address, Organization , orders.PersonClientId , orders.PersonId , orders.publish , Discount , Type from Orders inner join Customers on orders.PersonId = Customers.PersonId " + " Where orders.UserId=? and type =? order by OrderDate desc ", new String[]{String.valueOf(getPrefUserId()), String.valueOf(orderType)});
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    order = getOrderFromCursor2(cursor);
+                    if (order != null)
+                        array.add(order);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrAllOrder", e.getMessage());
+        }
+
+        return array;
+    }
+
 
     public ArrayList<Order> getAllOrder() {
         Order order;
@@ -6141,7 +6404,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllOrder", e.getMessage());
         }
@@ -6166,7 +6429,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllOrder", e.getMessage());
         }
@@ -6192,7 +6455,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllOrder", e.getMessage());
         }
@@ -6218,7 +6481,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllOrder", e.getMessage());
         }
@@ -6244,7 +6507,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllOrder", e.getMessage());
         }
@@ -6279,7 +6542,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllOrder", e.getMessage());
         }
@@ -6308,7 +6571,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllOrder", e.getMessage());
         }
@@ -6345,7 +6608,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllOrder", e.getMessage());
         }
@@ -6370,7 +6633,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllReceipt", e.getMessage());
         }
@@ -6396,7 +6659,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllReceipt", e.getMessage());
         }
@@ -6422,7 +6685,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllReceipt", e.getMessage());
         }
@@ -6447,7 +6710,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllCheque", e.getMessage());
         }
@@ -6473,7 +6736,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllDoneChecklist", e.getMessage());
         }
@@ -6499,7 +6762,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllChecklist", e.getMessage());
         }
@@ -6571,7 +6834,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllTransactionlog", e.getMessage());
         }
@@ -6597,7 +6860,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllOrder", e.getMessage());
         }
@@ -6623,7 +6886,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllInvoice", e.getMessage());
         }
@@ -6649,7 +6912,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllInvoice", e.getMessage());
         }
@@ -6675,7 +6938,7 @@ public class DbAdapter {
                 }
 
             } catch (Exception e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
                 FirebaseCrashlytics.getInstance().recordException(e);
                 Log.e("ErrAllTransfer", e.getMessage());
             }
@@ -6694,7 +6957,7 @@ public class DbAdapter {
                     cursor.close();
                 }
             } catch (Exception e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
                 FirebaseCrashlytics.getInstance().recordException(e);
                 Log.e("ErrorGetTransfer", e.getMessage());
             }
@@ -6721,7 +6984,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllReceipt", e.getMessage());
         }
@@ -6747,7 +7010,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllReceipt", e.getMessage());
         }
@@ -6773,7 +7036,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrCustomerForUpdate", e.getMessage());
         }
@@ -6799,7 +7062,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllNewCustomer", e.getMessage());
         }
@@ -6825,7 +7088,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Err", e.getMessage());
         }
@@ -6850,7 +7113,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Err", e.getMessage());
         }
@@ -6876,7 +7139,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllReceipt", e.getMessage());
         }
@@ -6930,7 +7193,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -6981,7 +7244,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -7014,7 +7277,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -7038,7 +7301,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrgetMorCustInfo", e.getMessage());
         }
@@ -7062,7 +7325,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrgetMorCustInfo", e.getMessage());
         }
@@ -7083,7 +7346,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrgetMorCustInfo", e.getMessage());
         }
@@ -7107,7 +7370,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrgetMorCustInfo", e.getMessage());
         }
@@ -7131,7 +7394,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("@Error", this.getClass().getName() + " - L:2036 - " + e.getMessage());
         }
@@ -7155,7 +7418,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("@Error", this.getClass().getName() + " - L:2036 - " + e.getMessage());
         }
@@ -7180,7 +7443,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllReceipt", e.getMessage());
         }
@@ -7206,7 +7469,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllReceipt", e.getMessage());
         }
@@ -7231,7 +7494,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrAllReceipt", e.getMessage());
         }
@@ -7283,7 +7546,7 @@ public class DbAdapter {
             reportMonth.setPrice(TotalCashAmount + TotalCashReceipt + TotalCheque);
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -7312,7 +7575,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -7350,7 +7613,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -7390,7 +7653,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -7441,7 +7704,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -7496,7 +7759,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("Errorget", e.getMessage());
         }
@@ -7529,7 +7792,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -7560,7 +7823,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -7591,7 +7854,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -7618,7 +7881,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -7668,7 +7931,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -7708,7 +7971,7 @@ public class DbAdapter {
                 cursor.close();
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -7761,7 +8024,7 @@ public class DbAdapter {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -7773,7 +8036,7 @@ public class DbAdapter {
             ContentValues initialvalue = getOnlinePictureProduct(picturesProduct);
             return mDb.update(DbSchema.PicturesProductSchema.TABLE_NAME, initialvalue, DbSchema.PicturesProductSchema.COLUMN_PICTURE_ID + "=?", new String[]{String.valueOf(picturesProduct.getPictureId())});
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             return 0;
         }
@@ -7787,7 +8050,7 @@ public class DbAdapter {
             ContentValues initialvalue = getOnlinePictureProduct(picturesProduct);
             return mDb.update(DbSchema.PicturesProductSchema.TABLE_NAME, initialvalue, DbSchema.PicturesProductSchema.COLUMN_PictureClientId + "=?", new String[]{String.valueOf(picturesProduct.getPictureClientId())});
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             return 0;
         }
@@ -8423,7 +8686,7 @@ public class DbAdapter {
                     try {
                         person_extra_data = gson.fromJson(extraData.getData(), Person_Extra_Data.class);
                     } catch (JsonSyntaxException e) {
-                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
                         FirebaseCrashlytics.getInstance().recordException(e);
                         e.printStackTrace();
                     }
@@ -8457,7 +8720,7 @@ public class DbAdapter {
             productCategory = gson.fromJson(extraData.getData(), ProductCategory.class);
             AddProductCategory(productCategory);
         } catch (JsonSyntaxException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -8470,7 +8733,7 @@ public class DbAdapter {
             category = gson.fromJson(extraData.getData(), Category.class);
             AddCategory(category);
         } catch (JsonSyntaxException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }
@@ -8483,7 +8746,7 @@ public class DbAdapter {
             cityZone_extra_data = gson.fromJson(extraData.getData(), CityZone_Extra_Data.class);
             AddCityZone(cityZone_extra_data);
         } catch (JsonSyntaxException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }

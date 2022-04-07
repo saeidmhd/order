@@ -192,7 +192,7 @@
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/str_title_fii"
+                    android:text="@string/str_title_fee"
                     android:gravity="center"
                     android:textColor="@color/black"
                     android:textSize="@dimen/print_text_size" />

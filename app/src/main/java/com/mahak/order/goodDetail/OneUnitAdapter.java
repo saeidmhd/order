@@ -65,7 +65,7 @@ public class OneUnitAdapter extends RecyclerView.Adapter<OneUnitAdapter.ViewHold
             super(itemView);
 
             tvNumber = (TextView) itemView.findViewById(R.id.tvNumber);
-            tvProductSpec = (TextView) itemView.findViewById(R.id.tvProductSpec);
+            tvProductSpec = (TextView) itemView.findViewById(R.id.tvProductNameSpec);
             btnDelete = (LinearLayout) itemView.findViewById(R.id.btnDelete);
             tv_asset1 = (TextView) itemView.findViewById(R.id.tv_asset1);
             txtCount = (EditText) itemView.findViewById(R.id.txtCount);
@@ -185,7 +185,7 @@ public class OneUnitAdapter extends RecyclerView.Adapter<OneUnitAdapter.ViewHold
                         }
 
                     } catch (NumberFormatException e) {
-                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
                         FirebaseCrashlytics.getInstance().recordException(e);
                         e.printStackTrace();
                     }
@@ -212,7 +212,7 @@ public class OneUnitAdapter extends RecyclerView.Adapter<OneUnitAdapter.ViewHold
             if (productDetails.get(position).getProperties() != null)
                 propertiesList = gson.fromJson(productDetails.get(position).getProperties(), property);
         } catch (JsonSyntaxException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             e.printStackTrace();
         }

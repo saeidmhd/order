@@ -203,7 +203,7 @@ public class Customer {
         this.setCredit(0);
         this.setBalance(0);
         this.setPublish(ProjectInfo.DONT_PUBLISH);
-        this.setSellPriceLevel("1");
+        this.setSellPriceLevel("0");
         this.setDiscountPercent("0.00");
         setMahakId(BaseActivity.getPrefMahakId());
         setDatabaseId(BaseActivity.getPrefDatabaseId());
@@ -341,7 +341,7 @@ public class Customer {
         try {
             Latitude = new BigDecimal(latitude);
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Latitude = new BigDecimal("0.0");
         }
@@ -359,7 +359,7 @@ public class Customer {
         try {
             Longitude = new BigDecimal(longitude);
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
             Longitude = new BigDecimal("0.0");
         }

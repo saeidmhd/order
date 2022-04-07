@@ -4,13 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:gravity="center_horizontal"
+    android:gravity="center"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/_llPrint"
-        android:layout_width="@dimen/print_width"
+        android:layout_width="400dp"
         android:layout_height="match_parent"
+        android:paddingRight="@dimen/print_width50mm"
+        android:paddingLeft="@dimen/print_width50mm"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
         android:background="@android:color/white"
         android:gravity="center_horizontal"
         android:orientation="vertical">
@@ -19,28 +23,20 @@
             android:id="@+id/llTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:gravity="center"
             android:orientation="vertical"
-            android:padding="2dp">
+            android:paddingRight="@dimen/NormalSize">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/_tvType"
+                style="@style/forms_page_title_label_default380"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingRight="@dimen/NormalSize">
-
-                <com.mahak.order.widget.FontTextView
-                    android:id="@+id/_tvType"
-                    style="@style/forms_page_title_label_default"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="@string/invoice"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
+                android:gravity="center_horizontal"
+                android:text="@string/invoice"
+                android:textSize="14sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <View
@@ -54,6 +50,7 @@
             android:background="@android:color/white"
             android:gravity="center"
             android:orientation="horizontal">
+
 
             <com.mahak.order.widget.FontTextView
                 android:layout_width="wrap_content"
@@ -200,20 +197,20 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="24dp"
                 android:background="@color/print_white_box"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <com.mahak.order.widget.FontTextView
-                    style="@style/forms_page_title_label_default380"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textStyle="bold"
                     android:gravity="center_horizontal"
                     android:text="@string/str_product_name"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
 
                 <View
                     android:layout_width="2dp"
@@ -221,13 +218,14 @@
                     android:background="@color/black" />
 
                 <com.mahak.order.widget.FontTextView
-                    style="@style/forms_page_title_label_default380"
-                    android:layout_width="50dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
                     android:gravity="center_horizontal"
-                    android:textStyle="bold"
                     android:text="@string/str_count"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
 
                 <View
                     android:layout_width="2dp"
@@ -236,15 +234,14 @@
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/_txtPrice"
-                    style="@style/forms_page_title_label_default380"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:textStyle="bold"
+                    android:layout_weight="1.25"
                     android:gravity="center_horizontal"
                     android:text="@string/str_netto"
-                    android:textColor="@color/black" />
-
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -266,6 +263,9 @@
                 android:padding="0dip" />
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -318,15 +318,14 @@
             <ListView
                 android:id="@+id/_lstGroupedTax"
                 android:layout_width="fill_parent"
-                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_margin="0dip"
                 android:background="@android:color/white"
                 android:divider="@color/black"
                 android:dividerHeight="0dp"
+                android:visibility="gone"
                 android:listSelector="@android:color/transparent"
                 android:padding="0dip" />
-
 
             <LinearLayout
                 android:id="@+id/_llTotalItems"
@@ -703,13 +702,12 @@
             style="@style/forms_page_title_label_default380"
             android:layout_width="match_parent"
             android:layout_height="0dip"
+            android:maxLines="2"
             android:inputType="textMultiLine"
             android:textStyle="bold"
-            android:maxLines="2"
             android:layout_weight="1"
             android:gravity="left"
             android:text="@string/print_footer_messages_part1"
             android:textColor="@color/black" />
     </LinearLayout>
-
 </LinearLayout>

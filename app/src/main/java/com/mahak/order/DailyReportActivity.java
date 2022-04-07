@@ -274,43 +274,22 @@ public class DailyReportActivity extends BaseActivity {
             Boolean status = false;
 
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            if (SharedPreferencesHelper.getCompactPrint(mContext)) {
-                if (printerBrand == ProjectInfo.PRINTER_BABY_380_A || printerBrand == ProjectInfo.PRINTER_DELTA_380_A) {
-                    ll = inflater.inflate(R.layout.print_view_report_1_80_compact, null, false);
-                } else if (printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII) {
-                    ll = inflater.inflate(R.layout.print_view_report_1_88_compact, null, false);
-                    LinearLayout _llPrint = (LinearLayout) ll.findViewById(R.id._llPrint);
-                    ChangePrintWidth(_llPrint);
-                } else if (printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310) {
-                    ll = inflater.inflate(R.layout.print_view_report_1_80_compact, null, false);
-                } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
-                    ll = inflater.inflate(R.layout.print_view_report_1_50_compact, null, false);
-                } else if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW || printerBrand == ProjectInfo.UROVO_K319 || printerBrand == Woosim_WSP_R341) {
-                    ll = inflater.inflate(R.layout.print_view_report_1_88_compact, null, false);
-                    LinearLayout _llPrint = (LinearLayout) ll.findViewById(R.id._llPrint);
-                    ChangePrintWidth(_llPrint);
-                } else {
-                    ll = inflater.inflate(R.layout.print_view_report_1_compact, null, false);
-                }
+            if (printerBrand == ProjectInfo.PRINTER_BABY_380_A || printerBrand == ProjectInfo.PRINTER_DELTA_380_A) {
+                ll = inflater.inflate(R.layout.print_view_report_1_80_compact, null, false);
+            } else if (printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII) {
+                ll = inflater.inflate(R.layout.print_view_report_1_88_compact, null, false);
+                LinearLayout _llPrint = (LinearLayout) ll.findViewById(R.id._llPrint);
+                ChangePrintWidth(_llPrint);
+            } else if (printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310) {
+                ll = inflater.inflate(R.layout.print_view_report_1_80_compact, null, false);
+            } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
+                ll = inflater.inflate(R.layout.print_view_report_1_50_compact, null, false);
+            } else if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW || printerBrand == ProjectInfo.UROVO_K319 || printerBrand == Woosim_WSP_R341) {
+                ll = inflater.inflate(R.layout.print_view_report_1_88_compact, null, false);
+                LinearLayout _llPrint = (LinearLayout) ll.findViewById(R.id._llPrint);
+                ChangePrintWidth(_llPrint);
             } else {
-                if (printerBrand == ProjectInfo.PRINTER_BABY_380_A || printerBrand == ProjectInfo.PRINTER_DELTA_380_A) {
-                    ll = inflater.inflate(R.layout.print_view_report_1_80, null, false);
-                } else if (printerBrand == ProjectInfo.PRINTER_BABY_380_KOOHII) {
-                    ll = inflater.inflate(R.layout.print_view_report_1_88, null, false);
-                    LinearLayout _llPrint = (LinearLayout) ll.findViewById(R.id._llPrint);
-                    ChangePrintWidth(_llPrint);
-                } else if (printerBrand == ProjectInfo.PRINTER_BIXOLON_SPP_R310) {
-                    ll = inflater.inflate(R.layout.print_view_report_1_80, null, false);
-                } else if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
-                    ll = inflater.inflate(R.layout.print_view_report_1_50, null, false);
-                } else if (printerBrand == ProjectInfo.PRINTER_OSCAR_POS88MW || printerBrand == ProjectInfo.UROVO_K319 || printerBrand == Woosim_WSP_R341) {
-                    ll = inflater.inflate(R.layout.print_view_report_1_88, null, false);
-                    LinearLayout _llPrint = (LinearLayout) ll.findViewById(R.id._llPrint);
-                    ChangePrintWidth(_llPrint);
-                } else {
-                    ll = inflater.inflate(R.layout.print_view_report_1, null, false);
-                }
+                ll = inflater.inflate(R.layout.print_view_report_1_compact, null, false);
             }
 
             initPrintViewData(ll);

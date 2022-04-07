@@ -86,7 +86,7 @@ public class ReturnDetailActivity extends BaseActivity {
     public static int OrderType = 0;
 
     //oscar
-    public static int lst_order_detail_for_print = R.layout.lst_order_detail_for_print_return;
+    public static int lst_order_detail_for_print = R.layout.print_return_item;
     private Reasons reasons;
 
     @Override
@@ -109,7 +109,7 @@ public class ReturnDetailActivity extends BaseActivity {
         tvPageTitle.setText(getString(R.string.str_detail_return));
 
         printerBrand = SharedPreferencesHelper.getPrefPrinterBrand(mContext);
-        lst_order_detail_for_print = R.layout.lst_order_detail_for_print_return;
+        lst_order_detail_for_print = R.layout.print_return_item;
         Extras = getIntent().getExtras();
         if (Extras != null) {
             page = Extras.getInt(PAGE);
@@ -400,7 +400,7 @@ FirebaseCrashlytics.getInstance().recordException(e);
             LinearLayout llprop_item;
 
             public Holder(View view) {
-                tvProductName = (TextView) view.findViewById(R.id.tvProductSpec);
+                tvProductName = (TextView) view.findViewById(R.id.tvProductNameSpec);
                 tvNumber = (TextView) view.findViewById(R.id.tvNumber);
                 tvCount = (TextView) view.findViewById(R.id.tvCount);
                 tvProductPropSpec = (TextView) view.findViewById(R.id.tvProductPropSpec);
@@ -471,7 +471,7 @@ FirebaseCrashlytics.getInstance().recordException(e);
 
             public Holder(View view) {
                 llitem = (LinearLayout) view.findViewById(R.id.llitem);
-                tvProductName = (TextView) view.findViewById(R.id.tvProductSpec);
+                tvProductName = (TextView) view.findViewById(R.id.tvProductNameSpec);
                 tvPrice = (TextView) view.findViewById(R.id.tvPrice);
                 tvCount = (TextView) view.findViewById(R.id.tvCount);
             }
