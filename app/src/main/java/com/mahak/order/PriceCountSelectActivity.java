@@ -1381,8 +1381,10 @@ public class PriceCountSelectActivity extends BaseActivity {
         // with priority of 1.visitor 2.customer 3.customerGroup 4.product
 
         defaultVisitorPrice = db.getDefVisitorPriceLevel();
-        defaultCustomerPrice = db.getDefCustomerPriceLevel(customerId);
-        defaultCustomerGroupPrice = db.getDefGroupCustomerPriceLevel(groupId);
+        if(customerId > 0)
+            defaultCustomerPrice = db.getDefCustomerPriceLevel(customerId);
+        if(groupId > 0)
+            defaultCustomerGroupPrice = db.getDefGroupCustomerPriceLevel(groupId);
 
         // String defaultProductPrice = db.getProductDefaultPrice(products.get(position).getProductCode());
 

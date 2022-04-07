@@ -193,8 +193,15 @@ public class ServiceTools {
 
     public static int getPrefDefPrice(DbAdapter db , int CustomerId , long GroupId ) {
         int defVisitor = db.getDefVisitorPriceLevel();
-        int defCustomer = db.getDefCustomerPriceLevel(CustomerId);
-        int defGroupCustomer = db.getDefGroupCustomerPriceLevel(GroupId);
+
+        int defCustomer = 0;
+        if(CustomerId > 0)
+            defCustomer = db.getDefCustomerPriceLevel(CustomerId);
+
+        int defGroupCustomer = 0;
+        if(GroupId > 0)
+            defGroupCustomer = db.getDefGroupCustomerPriceLevel(GroupId);
+
         if(defVisitor != 0)
             return defVisitor;
         else if (defCustomer != 0)

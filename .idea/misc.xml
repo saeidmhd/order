@@ -3,85 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/drawable-anydpi/ic_forward.xml" value="0.1703125" />
-        <entry key="app/src/main/res/drawable/forms_btn_circle_selector.xml" value="0.19635416666666666" />
-        <entry key="app/src/main/res/drawable/forms_spinner_selector.xml" value="0.21354166666666666" />
-        <entry key="app/src/main/res/drawable/ic_add_gift.xml" value="0.1703125" />
-        <entry key="app/src/main/res/drawable/ic_forward.xml" value="0.1703125" />
-        <entry key="app/src/main/res/drawable/ic_gift.xml" value="0.2425" />
-        <entry key="app/src/main/res/drawable/ic_gifts.xml" value="0.2425" />
-        <entry key="app/src/main/res/drawable/ic_point_selector.xml" value="0.215625" />
-        <entry key="app/src/main/res/layout-de/act_whats_new.xml" value="0.259375" />
-        <entry key="app/src/main/res/layout-de/activity_dashboard.xml" value="0.3592592592592593" />
-        <entry key="app/src/main/res/layout-de/activity_manage_customer.xml" value="0.33" />
-        <entry key="app/src/main/res/layout-de/activity_setting.xml" value="0.33" />
-        <entry key="app/src/main/res/layout-de/factor_print_template.xml" value="0.17708333333333334" />
-        <entry key="app/src/main/res/layout-de/fragment_invoice_goods_detail.xml" value="0.5" />
-        <entry key="app/src/main/res/layout-de/fragment_item_product_gallery.xml" value="0.2296875" />
-        <entry key="app/src/main/res/layout-de/grv_product_picker_item.xml" value="0.2296875" />
-        <entry key="app/src/main/res/layout-de/lst_order_detail.xml" value="0.33" />
-        <entry key="app/src/main/res/layout-de/lst_product_picker_item.xml" value="0.2296875" />
-        <entry key="app/src/main/res/layout-de/promotion_picker_item.xml" value="0.33" />
-        <entry key="app/src/main/res/layout-de/receipt_print_arabic.xml" value="0.5" />
-        <entry key="app/src/main/res/layout-de/receipt_print_arabic50mm.xml" value="0.67" />
-        <entry key="app/src/main/res/layout-de/receipt_print_arabic80mm.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/activity_add_person.xml" value="0.17708333333333334" />
-        <entry key="app/src/main/res/layout/activity_cart.xml" value="0.23020833333333332" />
-        <entry key="app/src/main/res/layout/activity_category.xml" value="0.22135416666666666" />
-        <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.2765151515151515" />
-        <entry key="app/src/main/res/layout/activity_data_sync.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_good_detail_count.xml" value="0.17" />
-        <entry key="app/src/main/res/layout/activity_good_detail_count_1_2.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/activity_good_detail_kol_joz.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/activity_manage_customer.xml" value="0.22604166666666667" />
-        <entry key="app/src/main/res/layout/activity_order_detail.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/activity_product_picker_list.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_product_picker_list2.xml" value="0.17708333333333334" />
-        <entry key="app/src/main/res/layout/activity_products_list.xml" value="0.23489583333333333" />
-        <entry key="app/src/main/res/layout/activity_setting.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/custom_dialog.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/dialog_pardakht.xml" value="0.67" />
-        <entry key="app/src/main/res/layout/dialog_radara.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/dialog_request_gps.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/factor_print_template.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/factor_print_template_50mm_fii.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/factor_print_template_50mm_fii_compact.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/factor_print_template_80mm.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/factor_print_template_80mm_compact.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/factor_print_template_80mm_fii.xml" value="0.9002890173410405" />
-        <entry key="app/src/main/res/layout/factor_print_template_80mm_fii_compact.xml" value="0.67" />
-        <entry key="app/src/main/res/layout/factor_print_template_compact.xml" value="0.17708333333333334" />
-        <entry key="app/src/main/res/layout/fragment_customer_detail.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/fragment_invoice_goods_detail.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/fragment_invoice_goods_detail2.xml" value="0.2296875" />
-        <entry key="app/src/main/res/layout/fragment_invoice_promotion_detail.xml" value="0.20416666666666666" />
-        <entry key="app/src/main/res/layout/fragment_item_product_gallery.xml" value="0.2296875" />
-        <entry key="app/src/main/res/layout/fragment_products_list.xml" value="0.22135416666666666" />
-        <entry key="app/src/main/res/layout/fragment_products_list3.xml" value="0.16286727456940223" />
-        <entry key="app/src/main/res/layout/grv_product_picker_item.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/item_layout.xml" value="0.33489583333333334" />
-        <entry key="app/src/main/res/layout/kala_print_template_50mm.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/list_cheque_receipt.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/lst_cart_item.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/lst_factor_bixolon2.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/lst_order_detail_for_print_kala.xml" value="0.16286727456940223" />
-        <entry key="app/src/main/res/layout/lst_order_detail_for_print_kala_2.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/lst_order_detail_for_print_kala_2_compact.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/lst_order_detail_for_print_kala_compact.xml" value="0.26838235294117646" />
-        <entry key="app/src/main/res/layout/lst_product_picker_item.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/nav_tab.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/receipt_print.xml" value="0.43356643356643354" />
-        <entry key="app/src/main/res/layout/receipt_print50mm.xml" value="0.27063106796116504" />
-        <entry key="app/src/main/res/layout/receipt_print80mm.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/receipt_print_arabic.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/receipt_print_arabic50mm.xml" value="0.67" />
-        <entry key="app/src/main/res/layout/receipt_print_arabic80mm.xml" value="0.37083333333333335" />
-        <entry key="app/src/main/res/menu/dashboard.xml" value="0.21927083333333333" />
-        <entry key="app/src/main/res/menu/menu_add_product.xml" value="0.33" />
-        <entry key="app/src/main/res/menu/menu_products_list.xml" value="0.2046875" />
+        <entry key="app/src/main/res/layout/factor_print_szzt.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/factor_print_template.xml" value="0.24114583333333334" />
+        <entry key="app/src/main/res/layout/print_order_detail_item.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/print_order_detail_item2.xml" value="0.17135416666666667" />
+        <entry key="app/src/main/res/layout/print_szzt_urovo_item.xml" value="0.24114583333333334" />
       </map>
     </option>
   </component>
-  <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_15_PREVIEW" project-jdk-name="15" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>

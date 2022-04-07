@@ -203,7 +203,7 @@ public class Customer {
         this.setCredit(0);
         this.setBalance(0);
         this.setPublish(ProjectInfo.DONT_PUBLISH);
-        this.setSellPriceLevel("1");
+        this.setSellPriceLevel("0");
         this.setDiscountPercent("0.00");
         setMahakId(BaseActivity.getPrefMahakId());
         setDatabaseId(BaseActivity.getPrefDatabaseId());

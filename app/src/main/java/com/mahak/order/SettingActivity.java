@@ -91,7 +91,7 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 small.setChecked(false);
                 large.setChecked(false);
-                SharedPreferencesHelper.setCurrentFontSize(mContext, 14);
+                SharedPreferencesHelper.setCurrentFontSize(mContext, 13);
             }
         });
 
@@ -100,7 +100,7 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 small.setChecked(false);
                 medium.setChecked(false);
-                SharedPreferencesHelper.setCurrentFontSize(mContext, 16);
+                SharedPreferencesHelper.setCurrentFontSize(mContext, 15);
             }
         });
 
