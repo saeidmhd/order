@@ -463,13 +463,12 @@ public class RadaraDb {
         ContentValues contentValues = new ContentValues();
         try {
             for (ManageLog manageLog : manageLogs) {
-                contentValues.put(DbSchema.ManageLogSchema.COLUMN_manageLogClientId, manageLog.getManageLogClientId());
-                contentValues.put(DbSchema.ManageLogSchema.COLUMN_Log_type, manageLog.getLog_type());
-                contentValues.put(DbSchema.ManageLogSchema.COLUMN_Log_value, manageLog.getLog_value());
+                contentValues.put(DbSchema.ManageLogSchema.COLUMN_Log_type, manageLog.getType());
+                contentValues.put(DbSchema.ManageLogSchema.COLUMN_Log_value, manageLog.getValue());
                 contentValues.put(DbSchema.ManageLogSchema.COLUMN_sent, manageLog.getSent());
-                contentValues.put(DbSchema.ManageLogSchema.COLUMN_Date_time, manageLog.getDate_time());
+                contentValues.put(DbSchema.ManageLogSchema.COLUMN_Date_time, manageLog.getCreated());
                 contentValues.put(DbSchema.ManageLogSchema.COLUMN_UserId, getPrefUserId());
-                int numOfRows = mDb.update(DbSchema.ManageLogSchema.TABLE_NAME, contentValues,  DbSchema.ManageLogSchema.COLUMN_UserId + "=? and " + DbSchema.ManageLogSchema.COLUMN_Date_time + "=? " , new String[]{String.valueOf(manageLog.getVisitorId()) , String.valueOf(manageLog.getDate_time())});
+                int numOfRows = mDb.update(DbSchema.ManageLogSchema.TABLE_NAME, contentValues,  DbSchema.ManageLogSchema.COLUMN_UserId + "=? and " + DbSchema.ManageLogSchema.COLUMN_Date_time + "=? " , new String[]{String.valueOf(manageLog.getVisitorId()) , String.valueOf(manageLog.getCreated())});
                 if(numOfRows == 0)
                     mDb.insert(DbSchema.ManageLogSchema.TABLE_NAME, null, contentValues);
             }

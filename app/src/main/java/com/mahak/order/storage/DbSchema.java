@@ -1990,7 +1990,6 @@ public class DbSchema {
     public static class ManageLogSchema implements BaseColumns {
 
         public static final String TABLE_NAME = "ManageLog";
-        public static final String COLUMN_manageLogClientId = "manageLogClientId";
         public static final String COLUMN_Log_type = "Log_type";
         public static final String COLUMN_Log_value = "Log_value";
         public static final String COLUMN_sent = "sent";

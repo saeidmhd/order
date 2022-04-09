@@ -9,24 +9,18 @@ public class ManageLog {
     @Expose
     private long visitorId;
 
-    @SerializedName("Log_type")
+    @SerializedName("type")
     @Expose
-    private int Log_type;
+    private int type;
 
-    @SerializedName("Log_value")
+    @SerializedName("value")
     @Expose
-    private int Log_value;
+    private String value;
 
-    @SerializedName("date_time")
+    @SerializedName("created")
     @Expose
-    private String date_time;
+    private String created;
 
-    @SerializedName("manageLogClientId")
-    @Expose
-    private long manageLogClientId;
-
-    @SerializedName("sent")
-    @Expose
     private int sent;
 
     public long getVisitorId() {
@@ -37,36 +31,28 @@ public class ManageLog {
         this.visitorId = visitorId;
     }
 
-    public int getLog_type() {
-        return Log_type;
+    public int getType() {
+        return type;
     }
 
-    public void setLog_type(int log_type) {
-        Log_type = log_type;
+    public void setType(int type) {
+        this.type = type;
     }
 
-    public int getLog_value() {
-        return Log_value;
+    public String getValue() {
+        return value;
     }
 
-    public void setLog_value(int log_value) {
-        Log_value = log_value;
+    public void setValue(String value) {
+        this.value = value;
     }
 
-    public String getDate_time() {
-        return date_time;
+    public String getCreated() {
+        return created;
     }
 
-    public void setDate_time(String date_time) {
-        this.date_time = date_time;
-    }
-
-    public long getManageLogClientId() {
-        return manageLogClientId;
-    }
-
-    public void setManageLogClientId(long manageLogClientId) {
-        this.manageLogClientId = manageLogClientId;
+    public void setCreated(String created) {
+        this.created = created;
     }
 
     public int getSent() {
