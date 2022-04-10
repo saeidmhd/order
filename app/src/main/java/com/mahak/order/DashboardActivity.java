@@ -26,7 +26,6 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.net.Uri;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -71,6 +70,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.android.PolyUtil;
@@ -596,6 +596,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 setTackingServiceText(true);
                 locationService.startTracking();
                 locationService.setTrackingPrefOff("1");
+                if(getLastlocation() != null)
+                    locationService.performSignalOperation(getLastlocation());
             }
         }
     }
@@ -694,6 +696,18 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         }
         return latLng;
+    }
+    private Location getLastlocation(){
+        Location lastLocation = null;
+        if(locationService != null){
+            JSONObject obj = locationService.getLastLocationJson(mContext);
+            if (obj != null) {
+                lastLocation = new Location("");
+                lastLocation.setLatitude(obj.optDouble(ProjectInfo._json_key_latitude));
+                lastLocation.setLongitude(obj.optDouble(ProjectInfo._json_key_longitude));
+            }
+        }
+        return lastLocation;
     }
     @Override
     public void onBackPressed() {
@@ -879,6 +893,13 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     initMap();
                     if(getLastPoint() != null)
                         showMarkerOnMap(getLastPoint());
+
+                    mGoogleMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
+                        @Override
+                        public void onPolygonClick(@NonNull Polygon polygon) {
+                            Toast.makeText(mActivity, String.valueOf(polygon.getTag()), Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
                 }
             });

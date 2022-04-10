@@ -3,7 +3,7 @@ package com.mahak.order.common.manageLog;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ManageLog {
+public class RadaraManageLog {
 
     @SerializedName("visitorId")
     @Expose

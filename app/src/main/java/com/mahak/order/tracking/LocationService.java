@@ -282,7 +282,7 @@ public class LocationService extends Service  {
 
         JSONObject obj = getLastLocationJson(mContext);
         if (obj == null) {
-            performSignalOperation();
+            performSignalOperation(currentLocation);
             saveStopLocationJsonFile(currentLocation);
             saveInJsonFile(currentLocation);
             return true;
@@ -686,7 +686,7 @@ public class LocationService extends Service  {
         if (mCurrentLocation != null) {
             if(isRadaraActive()){
                 if((int)mCurrentLocation.getSpeed() > 0)
-                    performSignalOperation();
+                    performSignalOperation(mCurrentLocation);
                 if(compareWithLastLocation(mCurrentLocation))
                     sendLocation(mCurrentLocation);
             }
@@ -694,19 +694,21 @@ public class LocationService extends Service  {
     }
 
 
-    private void performSignalOperation() {
-        if(ServiceTools.isOnline(mContext)){
-            if(isLogging)
-                return;
-            if(BaseActivity.getPrefSignalUserToken().isEmpty()){
-                getSignalToken(mContext);
-                realTimeLocation = null;
-                return;
+    public void performSignalOperation(Location location) {
+        if(location != null){
+            if(ServiceTools.isOnline(mContext)){
+                if(isLogging)
+                    return;
+                if(BaseActivity.getPrefSignalUserToken().isEmpty()){
+                    getSignalToken(mContext);
+                    realTimeLocation = null;
+                    return;
+                }
+                if(realTimeLocation == null){
+                    realTimeLocation = new RealTimeLocation(mContext,activity);
+                }
+                realTimeLocation.sendRealTimeLocation(location);
             }
-            if(realTimeLocation == null){
-                realTimeLocation = new RealTimeLocation(mContext,activity);
-            }
-            realTimeLocation.sendRealTimeLocation(mCurrentLocation);
         }
     }
 
@@ -844,7 +846,7 @@ public class LocationService extends Service  {
                     if (response.body().isResult()) {
                         setPrefSignalUserToken(response.body().getUserToken());
                         isLogging = false;
-                        performSignalOperation();
+                        performSignalOperation(mCurrentLocation);
                     }else {
                         Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                         isLogging = false;

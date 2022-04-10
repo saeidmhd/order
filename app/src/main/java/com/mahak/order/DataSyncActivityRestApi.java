@@ -288,6 +288,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             ServiceTools.Backup(mContext);
                             
                             db.DeleteAllData();
+                            radaraDb.DeleteAllData();
                             db.DeleteUser(userId);
                             
                             Toast.makeText(DataSyncActivityRestApi.this, R.string.visitor_changed_login_again, Toast.LENGTH_SHORT).show();
@@ -535,6 +536,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 if (ServiceTools.Backup(mContext)) {
                     
                     db.DeleteAllData();
+                    radaraDb.DeleteAllData();
                     
                     Toast toast = Toast.makeText(mContext, R.string.clean_database_alarm, Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 16);

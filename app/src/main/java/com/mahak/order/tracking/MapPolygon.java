@@ -127,6 +127,7 @@ public class MapPolygon implements GoogleMap.OnPolygonClickListener {
                 Polygon polygon = mGoogleMap.addPolygon(new PolygonOptions()
                         .clickable(true)
                         .addAll(polygonPoints));
+                polygon.setClickable(true);
                 polygons.add(polygon);
                 polygon.setTag(datum.getTitle());
                 stylePolygon(polygon);

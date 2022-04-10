@@ -235,6 +235,7 @@ public class TrackingConfig {
         @Override
         protected Integer doInBackground(String... arg0) {
             radaraDb.open();
+            radaraDb.DeleteZoneLocation();
             if (trackingZoneData != null){
                 if (trackingZoneData.size() > 0){
                     for (Datum datum : trackingZoneData){

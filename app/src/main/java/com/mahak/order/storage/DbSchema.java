@@ -1998,7 +1998,6 @@ public class DbSchema {
 
         public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"ManageLog\" ( " +
                 " `_id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-                " `manageLogClientId` NUMERIC," +
                 " `Log_type` INTEGER," +
                 " `Log_value` INTEGER," +
                 " `sent` INTEGER," +

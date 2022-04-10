@@ -9,15 +9,16 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.util.Log;
 
-import com.google.gson.JsonObject;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.StopLocation.StopLocationResponse;
-import com.mahak.order.common.StopLocation.StopLog;
-import com.mahak.order.common.manageLog.ManageLog;
+import com.mahak.order.common.manageLog.RadaraManageLog;
 import com.mahak.order.storage.RadaraDb;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -27,7 +28,7 @@ import retrofit2.Response;
 
 public class LogReceiver extends BroadcastReceiver {
     RadaraDb radaraDb;
-    ManageLog manageLog;
+    RadaraManageLog radaraManageLog;
     Context mContext;
 
     public LogReceiver(Context context) {
@@ -40,83 +41,135 @@ public class LogReceiver extends BroadcastReceiver {
         if(radaraDb == null) radaraDb = new RadaraDb(mContext);
         radaraDb.open();
 
-        ArrayList<ManageLog> manageLogs = new ArrayList<>();
+        ArrayList<RadaraManageLog> radaraManageLogs = new ArrayList<>();
         String action = intent.getAction();
+        JSONObject jsonObject = new JSONObject();
         switch (action) {
             case Intent.ACTION_BOOT_COMPLETED:
-                if(manageLog == null) manageLog = new ManageLog();
-                manageLog.setType(1);
-                manageLog.setValue("1");
-                ServiceTools.writeLog("BOOT_COMPLETED");
-                Log.d("test_log","BOOT_COMPLETED");
+                if(radaraManageLog == null) radaraManageLog = new RadaraManageLog();
+                radaraManageLog.setType(1);
+                try {
+                    jsonObject = new JSONObject();
+                    jsonObject.put("device","Boot Complete");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                radaraManageLog.setValue(jsonObject.toString());
                 break;
             case ConnectivityManager.CONNECTIVITY_ACTION:
-                if(manageLog == null) manageLog = new ManageLog();
+                if(radaraManageLog == null) radaraManageLog = new RadaraManageLog();
                 boolean network = ServiceTools.isNetworkAvailable2(context);
-                manageLog.setType(2);
+                radaraManageLog.setType(2);
                 if (!network) {
-                    manageLog.setValue("-1");
-                    ServiceTools.writeLog("no_network");
-                    Log.d("test_log","no_network");
+                    try {
+                        jsonObject = new JSONObject();
+                        jsonObject.put("internet","Off");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    radaraManageLog.setValue(jsonObject.toString());
                 } else {
-                    manageLog.setValue("1");
-                    ServiceTools.writeLog("ok_network");
-                    Log.d("test_log","ok_network");
+                    try {
+                        jsonObject = new JSONObject();
+                        jsonObject.put("internet","On");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    radaraManageLog.setValue(jsonObject.toString());
                 }
                 break;
             case LocationManager.PROVIDERS_CHANGED_ACTION:
-                if(manageLog == null) manageLog = new ManageLog();
+                if(radaraManageLog == null) radaraManageLog = new RadaraManageLog();
                 LocationManager service = (LocationManager) context.getSystemService(LOCATION_SERVICE);
                 boolean isGPSPROVIDEREnabled = service != null && service.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                manageLog.setType(3);
+                radaraManageLog.setType(3);
                 if (!isGPSPROVIDEREnabled) {
-                    manageLog.setValue("-1");
-                    ServiceTools.writeLog("gps_disabled");
-                    Log.d("test_log","gps_disabled");
+
+                    try {
+                        jsonObject = new JSONObject();
+                        jsonObject.put("gps","Off");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    radaraManageLog.setValue(jsonObject.toString());
                 } else {
-                    manageLog.setValue("1");
-                    ServiceTools.writeLog("gps_enabled");
-                    Log.d("test_log","gps_enabled");
+                    try {
+                        jsonObject = new JSONObject();
+                        jsonObject.put("gps","On");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    radaraManageLog.setValue(jsonObject.toString());
                 }
                 break;
             case Intent.ACTION_BATTERY_LOW:
-                if(manageLog == null) manageLog = new ManageLog();
-                manageLog.setType(4);
-                manageLog.setValue("-1");
-                ServiceTools.writeLog("BATTERY LOW!!");
-                Log.d("test_log","BATTERY LOW!!");
+                if(radaraManageLog == null) radaraManageLog = new RadaraManageLog();
+                radaraManageLog.setType(4);
+                try {
+                    jsonObject = new JSONObject();
+                    jsonObject.put("battery","Low");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                radaraManageLog.setValue(jsonObject.toString());
+
                 break;
             case Intent.ACTION_BATTERY_OKAY:
-                if(manageLog == null) manageLog = new ManageLog();
-                manageLog.setType(4);
-                manageLog.setValue("1");
-                ServiceTools.writeLog("BATTERY ok!!");
-                Log.d("test_log","BATTERY ok!!");
+                if(radaraManageLog == null) radaraManageLog = new RadaraManageLog();
+                radaraManageLog.setType(4);
+                try {
+                    jsonObject = new JSONObject();
+                    jsonObject.put("battery","High");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                radaraManageLog.setValue(jsonObject.toString());
                 break;
         }
-        if(manageLog != null){
-            manageLog.setCreated(ServiceTools.getFormattedDate(currentTime));
-            manageLog.setVisitorId(BaseActivity.getPrefUserId());
-            sendManageLogToServer(manageLog);
-            manageLogs.add(manageLog);
-            radaraDb.updateManageLogs(manageLogs);
+        if(radaraManageLog != null){
+            radaraManageLog.setCreated(ServiceTools.getFormattedDate(currentTime));
+            radaraManageLog.setVisitorId(BaseActivity.getPrefUserId());
+
+            if(ServiceTools.isOnline(mContext)){
+                sendManageLogToServer(radaraManageLog);
+            }else {
+                radaraManageLog.setSent(-1);
+                radaraManageLogs.add(radaraManageLog);
+                updateManageLogToDb(radaraManageLogs);
+            }
         }
     }
 
-    public void sendManageLogToServer(ManageLog manageLog) {
+    private void updateManageLogToDb(ArrayList<RadaraManageLog> radaraManageLogs) {
+        if (radaraDb == null) radaraDb = new RadaraDb(mContext);
+        radaraDb.open();
+        try {
+            radaraDb.updateManageLogs(radaraManageLogs);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if(e.getMessage() != null)
+                Log.e("saveInDb",e.getMessage());
+        }
+        radaraDb.close();
+    }
+
+    public void sendManageLogToServer(RadaraManageLog radaraManageLog) {
         ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
-        Call<StopLocationResponse> call = apiService.saveStatusLog(manageLog);
+        Call<StopLocationResponse> call = apiService.saveStatusLog(radaraManageLog);
         call.enqueue(new Callback<StopLocationResponse>() {
             @Override
             public void onResponse(Call<StopLocationResponse> call, Response<StopLocationResponse> response) {
                 if (response.body() != null) {
                     if (!response.body().isSucceeded()) {
+                        radaraManageLog.setSent(-1);
+                        //updateManageLogToDb(radaraManageLog);
                     }
                 }
             }
             @Override
             public void onFailure(Call<StopLocationResponse> call, Throwable t) {
                 Log.d("fail",t.getMessage());
+                radaraManageLog.setSent(-1);
             }
         });
     }
