@@ -9,6 +9,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.res.Configuration;
 import android.location.Location;
@@ -56,6 +57,7 @@ import com.mahak.order.common.loginSignalr.SignalLoginBody;
 import com.mahak.order.common.loginSignalr.SignalLoginResult;
 import com.mahak.order.common.request.SetAllDataBody;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
+import com.mahak.order.log.LogReceiver;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.RadaraDb;
 
@@ -164,6 +166,8 @@ public class LocationService extends Service  {
     public void onCreate() {
 
         Log.i(TAG, "in onCreate()");
+
+        registerReceiver2();
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mSettingsClient = LocationServices.getSettingsClient(this);
@@ -723,11 +727,13 @@ public class LocationService extends Service  {
             timerHelper.stopTimer();
         try {
             if(mLocationCallback != null){
-                mFusedLocationClient.removeLocationUpdates(mLocationCallback);
-                Utils.setRequestingLocationUpdates(mContext, false);
-                stopSelf();
-                if(realTimeLocation != null)
-                    realTimeLocation.stopRealTimeSend();
+                if(mFusedLocationClient != null){
+                    mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+                    Utils.setRequestingLocationUpdates(mContext, false);
+                    stopSelf();
+                    if(realTimeLocation != null)
+                        realTimeLocation.stopRealTimeSend();
+                }
             }
         } catch (SecurityException unlikely) {
             Utils.setRequestingLocationUpdates(mContext, true);
@@ -912,6 +918,19 @@ public class LocationService extends Service  {
                 saveAndSendStopLocation();
             }
         }
+    }
+
+    private void registerReceiver2() {
+        LogReceiver br = new LogReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.location.PROVIDERS_CHANGED");
+        filter.addAction("android.intent.action.BATTERY_LOW");
+        filter.addAction("android.intent.action.BATTERY_OKAY");
+        filter.addAction("android.intent.action.BOOT_COMPLETED");
+        filter.addAction("android.intent.action.ACTION_SHUTDOWN");
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        filter.addAction("android.intent.action.AIRPLANE_MODE");
+        this.getApplicationContext().registerReceiver(br, filter);
     }
 }
 

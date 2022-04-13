@@ -21,7 +21,7 @@ import com.mahak.order.common.Notification;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.StopLocation.StopLog;
 import com.mahak.order.common.VisitorLocation;
-import com.mahak.order.common.manageLog.RadaraManageLog;
+import com.mahak.order.common.manageLog.StatusLog;
 import com.mahak.order.tracking.visitorZone.Datum;
 import com.mahak.order.tracking.visitorZone.ZoneLocation;
 
@@ -439,17 +439,17 @@ public class RadaraDb {
 
 
     //................ manage log
-    public ArrayList<RadaraManageLog> getAllManageLogNotSend() {
-        RadaraManageLog radaraManageLog;
+    public ArrayList<StatusLog> getAllManageLogNotSend() {
+        StatusLog statusLog;
         Cursor cursor;
-        ArrayList<RadaraManageLog> array = new ArrayList<>();
+        ArrayList<StatusLog> array = new ArrayList<>();
         try {
             cursor = mDb.rawQuery("select * from ManageLog where UserId =? and sent =? ",new String[]{String.valueOf(getPrefUserId()),String.valueOf(-1)});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    radaraManageLog = getManageLogFromCursor(cursor);
-                    array.add(radaraManageLog);
+                    statusLog = getManageLogFromCursor(cursor);
+                    array.add(statusLog);
                     cursor.moveToNext();
                 }
                 cursor.close();
@@ -462,14 +462,14 @@ public class RadaraDb {
         }
         return array;
     }
-    private RadaraManageLog getManageLogFromCursor(Cursor cursor) {
-        RadaraManageLog radaraManageLog = new RadaraManageLog();
-        radaraManageLog.setCreated(cursor.getString(cursor.getColumnIndex(DbSchema.ManageLogSchema.COLUMN_Date_time)));
-        radaraManageLog.setVisitorId(cursor.getLong(cursor.getColumnIndex(DbSchema.ManageLogSchema.COLUMN_UserId)));
-        radaraManageLog.setValue(cursor.getString(cursor.getColumnIndex(DbSchema.ManageLogSchema.COLUMN_Log_value)));
-        radaraManageLog.setType(cursor.getInt(cursor.getColumnIndex(DbSchema.ManageLogSchema.COLUMN_Log_type)));
-        radaraManageLog.setSent(cursor.getInt(cursor.getColumnIndex(DbSchema.ManageLogSchema.COLUMN_sent)));
-        return radaraManageLog;
+    private StatusLog getManageLogFromCursor(Cursor cursor) {
+        StatusLog statusLog = new StatusLog();
+        statusLog.setCreated(cursor.getString(cursor.getColumnIndex(DbSchema.ManageLogSchema.COLUMN_Date_time)));
+        statusLog.setVisitorId(cursor.getLong(cursor.getColumnIndex(DbSchema.ManageLogSchema.COLUMN_UserId)));
+        statusLog.setValue(cursor.getString(cursor.getColumnIndex(DbSchema.ManageLogSchema.COLUMN_Log_value)));
+        statusLog.setType(cursor.getInt(cursor.getColumnIndex(DbSchema.ManageLogSchema.COLUMN_Log_type)));
+        statusLog.setSent(cursor.getInt(cursor.getColumnIndex(DbSchema.ManageLogSchema.COLUMN_sent)));
+        return statusLog;
     }
     public void updateStopLogs(List<StopLog> stopLogs) {
         mDb.beginTransaction();
@@ -493,17 +493,17 @@ public class RadaraDb {
             mDb.endTransaction();
         }
     }
-    public void updateManageLogs(List<RadaraManageLog> radaraManageLogs) {
+    public void updateManageLogs(List<StatusLog> statusLogs) {
         mDb.beginTransaction();
         ContentValues contentValues = new ContentValues();
         try {
-            for (RadaraManageLog radaraManageLog : radaraManageLogs) {
-                contentValues.put(DbSchema.ManageLogSchema.COLUMN_Log_type, radaraManageLog.getType());
-                contentValues.put(DbSchema.ManageLogSchema.COLUMN_Log_value, radaraManageLog.getValue());
-                contentValues.put(DbSchema.ManageLogSchema.COLUMN_sent, radaraManageLog.getSent());
-                contentValues.put(DbSchema.ManageLogSchema.COLUMN_Date_time, radaraManageLog.getCreated());
+            for (StatusLog statusLog : statusLogs) {
+                contentValues.put(DbSchema.ManageLogSchema.COLUMN_Log_type, statusLog.getType());
+                contentValues.put(DbSchema.ManageLogSchema.COLUMN_Log_value, statusLog.getValue());
+                contentValues.put(DbSchema.ManageLogSchema.COLUMN_sent, statusLog.getSent());
+                contentValues.put(DbSchema.ManageLogSchema.COLUMN_Date_time, statusLog.getCreated());
                 contentValues.put(DbSchema.ManageLogSchema.COLUMN_UserId, getPrefUserId());
-                int numOfRows = mDb.update(DbSchema.ManageLogSchema.TABLE_NAME, contentValues,  DbSchema.ManageLogSchema.COLUMN_UserId + "=? and " + DbSchema.ManageLogSchema.COLUMN_Date_time + "=? " , new String[]{String.valueOf(radaraManageLog.getVisitorId()) , String.valueOf(radaraManageLog.getCreated())});
+                int numOfRows = mDb.update(DbSchema.ManageLogSchema.TABLE_NAME, contentValues,  DbSchema.ManageLogSchema.COLUMN_UserId + "=? and " + DbSchema.ManageLogSchema.COLUMN_Date_time + "=? " , new String[]{String.valueOf(statusLog.getVisitorId()) , String.valueOf(statusLog.getCreated())});
                 if(numOfRows == 0)
                     mDb.insert(DbSchema.ManageLogSchema.TABLE_NAME, null, contentValues);
             }

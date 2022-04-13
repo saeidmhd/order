@@ -494,7 +494,7 @@ public class ManageCustomerActivity extends BaseActivity {
             txtZone.setText(customer.getZone());
             txtMobile.setText(customer.getMobile());
             txtAddress.setText(customer.getAddress());
-            txtTell.setText(customer.getMobile());
+            txtTell.setText(customer.getTell());
 
             txtShift.setText(customer.getShift());
             txtLatitude.setText(String.valueOf(customer.getLatitude()));

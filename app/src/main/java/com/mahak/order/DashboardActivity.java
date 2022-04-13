@@ -252,7 +252,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         mActivity = this;
 
         registerReceiverToCheckGpsOnOff();
-        registerReceiver2(mContext);
+        //registerReceiver2(mContext);
        // listenNetworkViaConnectivityManager(mContext);
 
         initUI();
@@ -301,17 +301,17 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnTrackingService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!isRadaraActive()){
-                    showDialogRadara();
-                    if(btnTrackingService.isChecked())
-                        btnTrackingService.setChecked(false);
-                }else {
+                if(isRadaraActive()){
                     if (locationService == null) locationService = new LocationService(mContext, DashboardActivity.this);
                     if(locationService.isRunService(mContext) && !btnTrackingService.isChecked()){
                         stopLocationUpdate();
                     }else {
                         startLocationUpdate();
                     }
+                }else {
+                    showDialogRadara();
+                    if(btnTrackingService.isChecked())
+                        btnTrackingService.setChecked(false);
                 }
             }
         });
@@ -570,8 +570,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         };
         this.getApplicationContext().registerReceiver(receiver, filter);
     }
-    private void registerReceiver2(Context mContext) {
-        br = new LogReceiver(mContext);
+    private void registerReceiver2() {
+        br = new LogReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.location.PROVIDERS_CHANGED");
         filter.addAction("android.intent.action.BATTERY_LOW");
@@ -960,12 +960,12 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
-
-        bindService(new Intent(this, LocationService.class), mServiceConnection,
-                Context.BIND_AUTO_CREATE);
-        if(Utils.requestingLocationUpdates(this) && checkServiceLocationIsRunning(mContext))
-            setButtonsState(true);
-
+        if(isRadaraActive()){
+            bindService(new Intent(this, LocationService.class), mServiceConnection,
+                    Context.BIND_AUTO_CREATE);
+            if(Utils.requestingLocationUpdates(this) && checkServiceLocationIsRunning(mContext))
+                setButtonsState(true);
+        }
     }
 
     private void setButtonsState(boolean requestingLocationUpdates) {

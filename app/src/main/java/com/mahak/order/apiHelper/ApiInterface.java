@@ -9,7 +9,8 @@ import com.mahak.order.common.login.LoginBody;
 import com.mahak.order.common.login.LoginResult;
 import com.mahak.order.common.loginSignalr.SignalLoginBody;
 import com.mahak.order.common.loginSignalr.SignalLoginResult;
-import com.mahak.order.common.manageLog.RadaraManageLog;
+import com.mahak.order.common.manageLog.ManageLog;
+import com.mahak.order.common.manageLog.StatusLog;
 import com.mahak.order.common.request.GetAllDataBody;
 import com.mahak.order.common.request.GetAllDataResult.GetDataResult;
 import com.mahak.order.common.request.SetAllDataBody;
@@ -58,7 +59,7 @@ public interface ApiInterface {
     Call<StopLocationResponse> SetStopLocation(@Body ArrayList<StopLog> body);
 
     @POST("statuslog/savestatuslog")
-    Call<StopLocationResponse> saveStatusLog(@Body RadaraManageLog body);
+    Call<StopLocationResponse> saveStatusLog(@Body ManageLog body);
 
     @Multipart
     @POST("Upload")

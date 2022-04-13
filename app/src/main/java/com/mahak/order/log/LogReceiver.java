@@ -14,13 +14,15 @@ import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.StopLocation.StopLocationResponse;
-import com.mahak.order.common.manageLog.RadaraManageLog;
+import com.mahak.order.common.manageLog.ManageLog;
+import com.mahak.order.common.manageLog.StatusLog;
 import com.mahak.order.storage.RadaraDb;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,38 +30,37 @@ import retrofit2.Response;
 
 public class LogReceiver extends BroadcastReceiver {
     RadaraDb radaraDb;
-    RadaraManageLog radaraManageLog;
-    Context mContext;
-
-    public LogReceiver(Context context) {
-        mContext = context;
-    }
-
+    StatusLog statusLog;
+    
     @Override
     public void onReceive(Context context, Intent intent) {
         long currentTime = System.currentTimeMillis();
-        if(radaraDb == null) radaraDb = new RadaraDb(mContext);
+        if(radaraDb == null) radaraDb = new RadaraDb(context);
         radaraDb.open();
 
-        ArrayList<RadaraManageLog> radaraManageLogs = new ArrayList<>();
+        ArrayList<StatusLog> statusLogs = new ArrayList<>();
+        ManageLog manageLog = new ManageLog();
         String action = intent.getAction();
         JSONObject jsonObject = new JSONObject();
         switch (action) {
             case Intent.ACTION_BOOT_COMPLETED:
-                if(radaraManageLog == null) radaraManageLog = new RadaraManageLog();
-                radaraManageLog.setType(1);
+                if(statusLog == null) statusLog = new StatusLog();
+                statusLog.setType(1);
                 try {
                     jsonObject = new JSONObject();
                     jsonObject.put("device","Boot Complete");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                radaraManageLog.setValue(jsonObject.toString());
+                if(statusLog.getValue() != null)
+                    if(statusLog.getValue().equals(jsonObject.toString()))
+                        return;
+                statusLog.setValue(jsonObject.toString());
                 break;
             case ConnectivityManager.CONNECTIVITY_ACTION:
-                if(radaraManageLog == null) radaraManageLog = new RadaraManageLog();
+                if(statusLog == null) statusLog = new StatusLog();
                 boolean network = ServiceTools.isNetworkAvailable2(context);
-                radaraManageLog.setType(2);
+                statusLog.setType(2);
                 if (!network) {
                     try {
                         jsonObject = new JSONObject();
@@ -67,7 +68,10 @@ public class LogReceiver extends BroadcastReceiver {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    radaraManageLog.setValue(jsonObject.toString());
+                    if(statusLog.getValue() != null)
+                        if(statusLog.getValue().equals(jsonObject.toString()))
+                            return;
+                    statusLog.setValue(jsonObject.toString());
                 } else {
                     try {
                         jsonObject = new JSONObject();
@@ -75,23 +79,24 @@ public class LogReceiver extends BroadcastReceiver {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    radaraManageLog.setValue(jsonObject.toString());
+                    if(statusLog.getValue() != null)
+                        if(statusLog.getValue().equals(jsonObject.toString()))
+                            return;
+                    statusLog.setValue(jsonObject.toString());
                 }
                 break;
             case LocationManager.PROVIDERS_CHANGED_ACTION:
-                if(radaraManageLog == null) radaraManageLog = new RadaraManageLog();
+                if(statusLog == null) statusLog = new StatusLog();
                 LocationManager service = (LocationManager) context.getSystemService(LOCATION_SERVICE);
                 boolean isGPSPROVIDEREnabled = service != null && service.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                radaraManageLog.setType(3);
+                statusLog.setType(3);
                 if (!isGPSPROVIDEREnabled) {
-
                     try {
                         jsonObject = new JSONObject();
                         jsonObject.put("gps","Off");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    radaraManageLog.setValue(jsonObject.toString());
                 } else {
                     try {
                         jsonObject = new JSONObject();
@@ -99,52 +104,61 @@ public class LogReceiver extends BroadcastReceiver {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    radaraManageLog.setValue(jsonObject.toString());
                 }
+                if(statusLog.getValue() != null)
+                    if(statusLog.getValue().equals(jsonObject.toString()))
+                        return;
+                statusLog.setValue(jsonObject.toString());
                 break;
             case Intent.ACTION_BATTERY_LOW:
-                if(radaraManageLog == null) radaraManageLog = new RadaraManageLog();
-                radaraManageLog.setType(4);
+                if(statusLog == null) statusLog = new StatusLog();
+                statusLog.setType(4);
                 try {
                     jsonObject = new JSONObject();
                     jsonObject.put("battery","Low");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                radaraManageLog.setValue(jsonObject.toString());
+                if(statusLog.getValue() != null)
+                    if(statusLog.getValue().equals(jsonObject.toString()))
+                        return;
+                statusLog.setValue(jsonObject.toString());
 
                 break;
             case Intent.ACTION_BATTERY_OKAY:
-                if(radaraManageLog == null) radaraManageLog = new RadaraManageLog();
-                radaraManageLog.setType(4);
+                if(statusLog == null) statusLog = new StatusLog();
+                statusLog.setType(4);
                 try {
                     jsonObject = new JSONObject();
                     jsonObject.put("battery","High");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                radaraManageLog.setValue(jsonObject.toString());
+                if(statusLog.getValue() != null)
+                    if(statusLog.getValue().equals(jsonObject.toString()))
+                        return;
+                statusLog.setValue(jsonObject.toString());
                 break;
         }
-        if(radaraManageLog != null){
-            radaraManageLog.setCreated(ServiceTools.getFormattedDate(currentTime));
-            radaraManageLog.setVisitorId(BaseActivity.getPrefUserId());
-
-            if(ServiceTools.isOnline(mContext)){
-                sendManageLogToServer(radaraManageLog);
+        if(statusLog != null){
+            statusLog.setCreated(ServiceTools.getFormattedDate(currentTime));
+            statusLog.setVisitorId(BaseActivity.getPrefUserId());
+            statusLogs.add(statusLog);
+            manageLog.setStatusLogs(statusLogs);
+            if(ServiceTools.isOnline(context)){
+                sendManageLogToServer(manageLog,context);
             }else {
-                radaraManageLog.setSent(-1);
-                radaraManageLogs.add(radaraManageLog);
-                updateManageLogToDb(radaraManageLogs);
+                statusLogs.get(0).setSent(-1);
+                updateManageLogToDb(statusLogs, context);
             }
         }
     }
 
-    private void updateManageLogToDb(ArrayList<RadaraManageLog> radaraManageLogs) {
-        if (radaraDb == null) radaraDb = new RadaraDb(mContext);
+    private void updateManageLogToDb(ArrayList<StatusLog> statusLogs, Context context) {
+        if (radaraDb == null) radaraDb = new RadaraDb(context);
         radaraDb.open();
         try {
-            radaraDb.updateManageLogs(radaraManageLogs);
+            radaraDb.updateManageLogs(statusLogs);
         } catch (Exception e) {
             e.printStackTrace();
             if(e.getMessage() != null)
@@ -153,23 +167,25 @@ public class LogReceiver extends BroadcastReceiver {
         radaraDb.close();
     }
 
-    public void sendManageLogToServer(RadaraManageLog radaraManageLog) {
+    public void sendManageLogToServer(ManageLog manageLog, Context context) {
         ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
-        Call<StopLocationResponse> call = apiService.saveStatusLog(radaraManageLog);
+        Call<StopLocationResponse> call = apiService.saveStatusLog(manageLog);
         call.enqueue(new Callback<StopLocationResponse>() {
             @Override
             public void onResponse(Call<StopLocationResponse> call, Response<StopLocationResponse> response) {
                 if (response.body() != null) {
                     if (!response.body().isSucceeded()) {
-                        radaraManageLog.setSent(-1);
-                        //updateManageLogToDb(radaraManageLog);
+                        ArrayList<StatusLog> statusLogs = manageLog.getStatusLogs();
+                        statusLogs.get(0).setSent(-1);
+                        updateManageLogToDb(statusLogs,context);
                     }
                 }
             }
             @Override
             public void onFailure(Call<StopLocationResponse> call, Throwable t) {
-                Log.d("fail",t.getMessage());
-                radaraManageLog.setSent(-1);
+                ArrayList<StatusLog> statusLogs = manageLog.getStatusLogs();
+                statusLogs.get(0).setSent(-1);
+                updateManageLogToDb(statusLogs,context);
             }
         });
     }
