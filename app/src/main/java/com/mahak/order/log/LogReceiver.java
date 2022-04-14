@@ -43,20 +43,6 @@ public class LogReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         JSONObject jsonObject = new JSONObject();
         switch (action) {
-            case Intent.ACTION_BOOT_COMPLETED:
-                if(statusLog == null) statusLog = new StatusLog();
-                statusLog.setType(1);
-                try {
-                    jsonObject = new JSONObject();
-                    jsonObject.put("device","Boot Complete");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                if(statusLog.getValue() != null)
-                    if(statusLog.getValue().equals(jsonObject.toString()))
-                        return;
-                statusLog.setValue(jsonObject.toString());
-                break;
             case ConnectivityManager.CONNECTIVITY_ACTION:
                 if(statusLog == null) statusLog = new StatusLog();
                 boolean network = ServiceTools.isNetworkAvailable2(context);

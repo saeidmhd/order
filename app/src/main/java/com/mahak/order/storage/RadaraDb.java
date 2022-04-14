@@ -439,7 +439,7 @@ public class RadaraDb {
 
 
     //................ manage log
-    public ArrayList<StatusLog> getAllManageLogNotSend() {
+    public ArrayList<StatusLog> getAllStatusLogNotSend() {
         StatusLog statusLog;
         Cursor cursor;
         ArrayList<StatusLog> array = new ArrayList<>();

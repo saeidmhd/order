@@ -17,6 +17,8 @@ import com.mahak.order.common.StopLocation.StopLog;
 import com.mahak.order.common.User;
 import com.mahak.order.common.loginSignalr.SignalLoginBody;
 import com.mahak.order.common.loginSignalr.SignalLoginResult;
+import com.mahak.order.common.manageLog.ManageLog;
+import com.mahak.order.common.manageLog.StatusLog;
 import com.mahak.order.service.DataService;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.RadaraDb;
@@ -304,6 +306,68 @@ public class TrackingConfig {
                         }else
                             ServiceTools.writeLog("\n" + "error in sending points");
                     }
+                    new sendStatusLogAsync().execute();
+                }
+                @Override
+                public void onFailure(Call<StopLocationResponse> call, Throwable t) {
+                    dismissProgressDialog();
+                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+                    FirebaseCrashlytics.getInstance().log(t.getMessage());
+                    mMsg[0] = t.toString();
+                }
+            });
+        }
+    }
+    class sendStatusLogAsync extends AsyncTask<String, String, Integer> {
+
+
+        ArrayList<StatusLog> statusLogs = new ArrayList<>();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Integer doInBackground(String... arg0) {
+            getAllStatusLogs();
+            return 0;
+        }
+        private void getAllStatusLogs() {
+            if (radaraDb == null) radaraDb = new RadaraDb(mContext);
+            radaraDb.open();
+            try {
+                statusLogs = radaraDb.getAllStatusLogNotSend();
+            } catch (Exception e) {
+                e.printStackTrace();
+                if(e.getMessage() != null)
+                    Log.e("saveInDb",e.getMessage());
+            }
+            radaraDb.close();
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            final String[] mMsg = {""};
+            pd.setMessage("در حال ارسال لاگ های مدیریت");
+            pd.setCancelable(false);
+            pd.show();
+            ManageLog manageLog = new ManageLog();
+            manageLog.setStatusLogs(statusLogs);
+            ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
+            Call<StopLocationResponse> call = apiService.saveStatusLog(manageLog);
+            call.enqueue(new Callback<StopLocationResponse>() {
+                @Override
+                public void onResponse(Call<StopLocationResponse> call, Response<StopLocationResponse> response) {
+                    dismissProgressDialog();
+                    if (response.body() != null) {
+                        if (response.body().isSucceeded()) {
+                            for(StatusLog statusLog : statusLogs)
+                                statusLog.setSent(1);
+                            updateManageLogToDb(statusLogs,mContext);
+                        }else
+                            ServiceTools.writeLog("\n" + "error in sending points");
+                    }
                 }
                 @Override
                 public void onFailure(Call<StopLocationResponse> call, Throwable t) {
@@ -322,6 +386,19 @@ public class TrackingConfig {
         }
     }
 
+    private void updateManageLogToDb(ArrayList<StatusLog> statusLogs, Context context) {
+        if (radaraDb == null) radaraDb = new RadaraDb(context);
+        radaraDb.open();
+        try {
+            radaraDb.updateManageLogs(statusLogs);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if(e.getMessage() != null)
+                Log.e("saveInDb",e.getMessage());
+        }
+        radaraDb.close();
+    }
+
     private void UpdateOrInsertStopLogToDb(ArrayList<StopLog> stopLogs) {
         if (radaraDb == null) radaraDb = new RadaraDb(mContext);
         radaraDb.open();
@@ -334,5 +411,4 @@ public class TrackingConfig {
         }
         radaraDb.close();
     }
-
 }
