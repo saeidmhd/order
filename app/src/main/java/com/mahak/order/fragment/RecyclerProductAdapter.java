@@ -178,15 +178,15 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         double SumCount1 = 0;
         double price = 0;
         double customerPrice = 0;
-        int promotionId = 0;
+       // int promotionId = 0;
 
         SumCount1 = product.getSumCount1();
         SumCount2 = product.getSumCount2();
         price = product.getPrice();
-        promotionId = product.getPromotionId();
+       // promotionId = product.getPromotionId();
         customerPrice = product.getCustomerPrice();
 
-        if(promotionId > 0){
+        /*if(promotionId > 0){
             int count = db.getCountProductPromotionEntity();
             if(count > 0){
                 holder.imgGift.setVisibility(View.VISIBLE);
@@ -200,7 +200,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     showPromotionDetail();
                 }
             });
-        }
+        }*/
 
         String url = db.getPhotoUrl(product.getProductId());
         product.setPictureUrl(url);

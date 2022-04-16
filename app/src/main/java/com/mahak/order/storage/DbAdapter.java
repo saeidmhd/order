@@ -4327,7 +4327,7 @@ public class DbAdapter {
         try {
             cursor = mDb.rawQuery(" select count(*) from Products " +
                     " inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                    " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode " +
+                    " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode and ProductCategory.UserId" + " = " + getPrefUserId() +
                     " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_Deleted + " = " + " 0 and " + DbSchema.ProductDetailSchema.TABLE_NAME + "." + DbSchema.ProductDetailSchema.COLUMN_Deleted + " = " + " 0 " +
                     " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
                     getProductCategoryString(CategoryId) + getProductAssetStrnig(MODE_ASSET) + getCategoryString(categoryCode) +
@@ -5233,7 +5233,7 @@ public class DbAdapter {
                     " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
                     " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                     " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4" +
-                    " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode " +
+                    " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode and ProductCategory.UserId" + " = " + getPrefUserId() +
                     " where " + DbSchema.ProductSchema.TABLE_NAME + " . " + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
                     " and Products.Deleted = 0 and ProductDetail.Deleted = 0 "+
                     getProductAssetStrnig(modeasset) +
@@ -5253,7 +5253,7 @@ public class DbAdapter {
                     " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
                     " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                     " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4 " +
-                    " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode " +
+                    " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode and ProductCategory.UserId" + " = " + getPrefUserId() +
                     " where " + DbSchema.ProductSchema.TABLE_NAME + " . " + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
                     " and Products.Deleted = 0 and ProductDetail.Deleted = 0 "+
                     getProductAssetStrnig(modeasset) +
@@ -5798,7 +5798,7 @@ public class DbAdapter {
                         " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
                         " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                         " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4 " +
-                        " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode " +
+                        " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode and ProductCategory.UserId" + " = " + getPrefUserId() +
                         " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) " +
                         " and Products.Deleted = 0 and ProductDetail.Deleted = 0 " +
                         " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
@@ -5819,7 +5819,7 @@ public class DbAdapter {
                         " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
                         " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                         " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4 " +
-                        " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode " +
+                        " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode and ProductCategory.UserId" + " = " + getPrefUserId() +
                         " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) " +
                         " and Products.Deleted = 0 and ProductDetail.Deleted = 0 " +
                         " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
@@ -7456,7 +7456,7 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<PicturesProduct> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select PicturesProduct.* , itemCode from PicturesProduct left join PhotoGallery on PicturesProduct.pictureId = PhotoGallery.pictureId where ( itemcode =? or itemid =? ) and PicturesProduct.userid =? order by PicturesProduct.pictureId ", new String[]{String.valueOf(productId),String.valueOf(productCode), String.valueOf(getPrefUserId())});
+            cursor = mDb.rawQuery("select PicturesProduct.* , itemCode from PicturesProduct left join PhotoGallery on PicturesProduct.pictureId = PhotoGallery.pictureId where ( itemcode =? or itemid =? ) and PhotoGallery.userid =? order by PicturesProduct.pictureId ", new String[]{String.valueOf(productId),String.valueOf(productCode), String.valueOf(getPrefUserId())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
