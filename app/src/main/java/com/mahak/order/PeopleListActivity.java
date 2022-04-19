@@ -463,14 +463,8 @@ public class PeopleListActivity extends BaseActivity {
             rowview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Customer customer = (Customer) parent.getItemAtPosition(position);
                     Customer customer = getItem(position);
-
-                    if (customer.getPersonId() == 0 && customer.getPersonClientId() == 0) {
-                        Intent intent = new Intent(mContext, AddPersonActivity.class);
-                        startActivityForResult(intent, REQUESTCODE_ADD_CUSTOMER);
-                    } else {
-                        if (Page == PAGE_DASHBORD) {
+                    if (Page == PAGE_DASHBORD) {
                             Intent intent = new Intent(mContext, ManageCustomerActivity.class);
                             intent.putExtra(MODE_PAGE, MODE_EDIT);
                             intent.putExtra(CUSTOMERID_KEY, customer.getPersonId());
@@ -517,8 +511,6 @@ public class PeopleListActivity extends BaseActivity {
                             setResult(RESULT_OK, intent);
                             finish();
                         }
-                    }
-
                 }
             });
 
@@ -582,6 +574,18 @@ public class PeopleListActivity extends BaseActivity {
                                     intent1.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
                                     intent1.putExtra(CUSTOMER_GROUP_KEY, GroupId);
                                     startActivity(intent1);
+                                    break;
+                                case R.id.mnuEdit:
+                                    if(customer.getPersonId() == 0){
+                                        Intent intent2 = new Intent(mContext, AddPersonActivity.class);
+                                        intent2.putExtra(MODE_PAGE, MODE_EDIT);
+                                        intent2.putExtra(CUSTOMER_CLIENT_ID_KEY, customer.getPersonClientId());
+                                        intent2.putExtra(CUSTOMER_GROUP_KEY, GroupId);
+                                        startActivityForResult(intent2, REQUESTCODE_ADD_CUSTOMER);
+                                    }else {
+                                        Toast.makeText(PeopleListActivity.this, "اطلاعات این شخص به سرور ارسال گردیده و امکان ویرایش وجود ندارد!", Toast.LENGTH_SHORT).show();
+                                    }
+                                    
                                     break;
                             }
                             return false;

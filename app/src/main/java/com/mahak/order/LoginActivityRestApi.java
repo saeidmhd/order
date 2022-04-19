@@ -288,6 +288,7 @@ public class LoginActivityRestApi extends BaseActivity {
         }
         setPrefUserId(ServiceTools.toLong(user.getServerUserID()));
         mDb.open();
+        ServiceTools.setSettingPreferences(mDb, mContext);
         Visitor visitor = mDb.getVisitor();
         HasRadara = visitor.HasRadara();
         mDb.close();

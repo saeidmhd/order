@@ -21,7 +21,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -155,8 +154,6 @@ public class ManageCustomerActivity extends BaseActivity {
 
         Fillspinner();
         FillValues();
-
-
 
         ///////////////////////////////////////////////////////
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -588,7 +585,7 @@ public class ManageCustomerActivity extends BaseActivity {
         customer.setRowVersion(0);
 
         if (Mode == MODE_NEW)
-            db.AddCustomer(customer);
+            db.AddOrUpdateCustomer(customer);
         else if (Mode == MODE_EDIT)
             db.UpdateCustomer(customer);
 

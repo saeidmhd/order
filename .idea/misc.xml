@@ -3,11 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/activity_add_person.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_manage_customer.xml" value="0.25" />
         <entry key="app/src/main/res/layout/factor_print_szzt.xml" value="0.25" />
         <entry key="app/src/main/res/layout/factor_print_template.xml" value="0.24114583333333334" />
         <entry key="app/src/main/res/layout/print_order_detail_item.xml" value="0.22" />
         <entry key="app/src/main/res/layout/print_order_detail_item2.xml" value="0.17135416666666667" />
         <entry key="app/src/main/res/layout/print_szzt_urovo_item.xml" value="0.24114583333333334" />
+        <entry key="app/src/main/res/menu/pmenu_call.xml" value="0.20729166666666668" />
       </map>
     </option>
   </component>

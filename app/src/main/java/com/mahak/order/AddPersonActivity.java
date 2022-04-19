@@ -108,6 +108,8 @@ public class AddPersonActivity extends BaseActivity {
     private boolean hasContactPermission;
     private static final int REQUEST_CONTACT = 113;
     private Region customerRegion;
+    private int personId;
+    private long personClientId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,19 +143,22 @@ public class AddPersonActivity extends BaseActivity {
         mContext = this;
         mActivity = this;
 
+        initialise();
+        Fillspinner();
+
         Extras = getIntent().getExtras();
         if (Extras != null) {
             Mode = Extras.getInt(MODE_PAGE);
+            if (Mode == MODE_EDIT) {
+                personId = Extras.getInt(CUSTOMERID_KEY);
+                personClientId = Extras.getLong(CUSTOMER_CLIENT_ID_KEY);
+                FillValues(personClientId);
+            }
         }
-
-        initialise();
         txtFirstName.requestFocus();
-        Fillspinner();
 
-        if (Mode == MODE_EDIT) {
-            Id = Extras.getLong(ID);
-            FillValues(Id);
-        }
+
+
         ///////////////////////////////////////////////////////
         btnSave.setOnClickListener(new View.OnClickListener() {
 
@@ -281,9 +286,7 @@ public class AddPersonActivity extends BaseActivity {
             if (Latitude == 0 && Longitude == 0)
                 Toast.makeText(mContext, getResources().getString(R.string.str_message_dont_connect_gps), Toast.LENGTH_SHORT).show();
             else {
-                db.open();
                 db.UpdateLocationCustomer(customer.getId(), String.valueOf(Latitude), String.valueOf(Longitude));
-                db.close();
 
                 LatLng pos = new LatLng(Latitude, Longitude);
                 positions = new ArrayList<>();
@@ -387,6 +390,7 @@ public class AddPersonActivity extends BaseActivity {
         btnContact = (Button) findViewById(R.id.btnContact);
         //______________________________________________________________________
         db = new DbAdapter(mContext);
+        db.open();
         customer = new Customer();
         FirstLoadspnState = false;
         //________________________________________________________________________
@@ -395,12 +399,18 @@ public class AddPersonActivity extends BaseActivity {
 
     }
 
+
+    @Override
+    protected void onDestroy() {
+        db.close();
+        super.onDestroy();
+    }
+
     /**
      * Fill spinner CustomerGroup ,State ,City
      */
     public void Fillspinner() {
         //Fill spnCustomerGroup
-        db.open();
         arrayCustomerGroup = db.getAllCustomerGroup();
         AdapterSpnCustomerGroup adcustomergroup = new AdapterSpnCustomerGroup(mActivity, arrayCustomerGroup);
         spnCustomerGroup.setAdapter(adcustomergroup);
@@ -447,9 +457,7 @@ public class AddPersonActivity extends BaseActivity {
      * @param id
      */
     public void FillValues(long id) {
-        db.open();
-        customer = db.getCustomerWithPersonId(id);
-        db.close();
+        customer = db.getCustomerWithPersonClientId(id);
 
         if (customer != null) {
 
@@ -470,7 +478,7 @@ public class AddPersonActivity extends BaseActivity {
 
             //set selection spnCustomerGroup
             for (int i = 0; i < arrayCustomerGroup.size(); i++) {
-                if (arrayCustomerGroup.get(i).getId() == customer.getPersonGroupId()) {
+                if (arrayCustomerGroup.get(i).getPersonGroupId() == customer.getPersonGroupId()) {
                     spnCustomerGroup.setSelection(i);
                     break;
                 }
@@ -505,7 +513,9 @@ public class AddPersonActivity extends BaseActivity {
      * Save Information In Database
      */
     public Customer SaveInDb() {
-        db.open();
+
+        if(personClientId == 0)
+            personClientId = ServiceTools.toLong(ServiceTools.getGenerationCode());
 
         customer.setName(replaceWithEnglish(txtFirstName.getText().toString() + " " + txtLastName.getText().toString()));
         customer.setFirstName(replaceWithEnglish(txtFirstName.getText().toString()));
@@ -513,7 +523,7 @@ public class AddPersonActivity extends BaseActivity {
         customer.setPersonGroupId(CustomerGroupId);
         customer.setPersonGroupCode(CustomerGroupCode);
         customer.setOrganization(replaceWithEnglish(txtMarketName.getText().toString()));
-        customer.setPersonClientId(ServiceTools.toLong(ServiceTools.getGenerationCode()));
+        customer.setPersonClientId(personClientId);
         customer.setState(StateName);
         customer.setCity(CityName);
         customer.setCityCode(cityCode);
@@ -530,8 +540,7 @@ public class AddPersonActivity extends BaseActivity {
         customer.setDatabaseId(BaseActivity.getPrefDatabaseId());
         customer.setDeleted(false);
 
-        db.AddCustomer(customer);
-        db.close();
+        db.AddOrUpdateCustomer(customer);
         return customer;
 
     }

@@ -64,7 +64,9 @@ public class RadaraDb {
                 initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_created, zoneLocation.getCreated());
                 initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_lastModifiedBy, zoneLocation.getLastModifiedBy());
                 initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_lastModified, zoneLocation.getLastModified());
-                mDb.insert(DbSchema.ZoneLocationSchema.TABLE_NAME, null, initialvalue);
+                boolean result = (mDb.update(DbSchema.ZoneLocationSchema.TABLE_NAME, initialvalue,"id =?" , new String[]{String.valueOf(zoneLocation.getId())})) > 0;
+                if(!result)
+                    mDb.insert(DbSchema.ZoneLocationSchema.TABLE_NAME, null, initialvalue);
             }
             mDb.setTransactionSuccessful();
         } finally {
@@ -82,7 +84,9 @@ public class RadaraDb {
             initialvalue.put(DbSchema.ZoneSchema.COLUMN_created, datum.getCreated());
             initialvalue.put(DbSchema.ZoneSchema.COLUMN_lastModifiedBy, datum.getLastModified());
             initialvalue.put(DbSchema.ZoneSchema.COLUMN_lastModified, datum.getLastModifiedBy());
-            mDb.insert(DbSchema.ZoneSchema.TABLE_NAME, null, initialvalue);
+            boolean result = (mDb.update(DbSchema.ZoneSchema.TABLE_NAME, initialvalue,"zoneId =? and visitorId =? " , new String[]{String.valueOf(datum.getId()), String.valueOf(getPrefUserId())})) > 0;
+            if(!result)
+                mDb.insert(DbSchema.ZoneSchema.TABLE_NAME, null, initialvalue);
             mDb.setTransactionSuccessful();
         } finally {
             mDb.endTransaction();
@@ -528,8 +532,8 @@ public class RadaraDb {
     }
     public void DeleteZoneLocation() {
 
-        mDb.delete(DbSchema.ZoneLocationSchema.TABLE_NAME, null, null);
-        mDb.delete(DbSchema.ZoneSchema.TABLE_NAME, null, null);
+        //mDb.delete(DbSchema.ZoneLocationSchema.TABLE_NAME, null, null);
+        mDb.delete(DbSchema.ZoneSchema.TABLE_NAME, "visitorId=?", new String[]{String.valueOf(getPrefUserId())});
 
     }
     private static class DatabaseHelper extends SQLiteOpenHelper {

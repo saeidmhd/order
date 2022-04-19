@@ -22,5 +22,9 @@
         android:orderInCategory="300"
         app:showAsAction="never"
         android:title="@string/str_detail_customer" />
-
+    <item
+        android:id="@+id/mnuEdit"
+        android:orderInCategory="300"
+        app:showAsAction="never"
+        android:title="@string/str_edit" />
 </menu>

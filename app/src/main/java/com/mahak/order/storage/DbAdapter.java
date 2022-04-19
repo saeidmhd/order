@@ -101,7 +101,7 @@ public class DbAdapter {
     }
 
     //QUERIES ADD
-    public long AddCustomer(Customer customer) {
+    public void AddOrUpdateCustomer(Customer customer) {
         if (customer.getFirstName() == null)
             customer.setFirstName("");
         if (customer.getLastName() == null)
@@ -155,7 +155,10 @@ public class DbAdapter {
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_Fax, customer.getFax());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_Deleted, customer.getDeleted());
 
-        return mDb.insert(DbSchema.CustomerSchema.TABLE_NAME, null, initialvalue);
+        boolean result = (mDb.update(DbSchema.CustomerSchema.TABLE_NAME, initialvalue, DbSchema.CustomerSchema.COLUMN_PersonClientId + "=?", new String[]{String.valueOf(customer.getPersonClientId())})) > 0;
+        if(!result) {
+            mDb.insert(DbSchema.CustomerSchema.TABLE_NAME, null, initialvalue);
+        }
     }
 
     //__________________________QUERIES__________________________________________________
@@ -251,7 +254,7 @@ public class DbAdapter {
 
         initialvalue.put(DbSchema.SettingSchema.COLUMN_SettingId, setting.getSettingId());
         initialvalue.put(DbSchema.SettingSchema.COLUMN_SettingCode, setting.getSettingCode());
-        initialvalue.put(DbSchema.SettingSchema.COLUMN_USER_ID, getPrefUserId());
+        initialvalue.put(DbSchema.SettingSchema.COLUMN_USER_ID, setting.getVisitorId());
         initialvalue.put(DbSchema.SettingSchema.COLUMN_Value, setting.getValue());
         initialvalue.put(DbSchema.SettingSchema.COLUMN_Deleted, setting.getDeleted());
         initialvalue.put(DbSchema.SettingSchema.COLUMN_DataHash, setting.getDataHash());
@@ -1648,7 +1651,7 @@ public class DbAdapter {
 
         setting.setSettingId(cursor.getInt(cursor.getColumnIndex(DbSchema.SettingSchema.COLUMN_SettingId)));
         setting.setSettingCode(cursor.getInt(cursor.getColumnIndex(DbSchema.SettingSchema.COLUMN_SettingCode)));
-        setting.setVisitorId(cursor.getInt(cursor.getColumnIndex(DbSchema.SettingSchema.COLUMN_USER_ID)));
+        setting.setVisitorId(cursor.getLong(cursor.getColumnIndex(DbSchema.SettingSchema.COLUMN_USER_ID)));
         setting.setValue(cursor.getString(cursor.getColumnIndex(DbSchema.SettingSchema.COLUMN_Value)));
         setting.setDataHash(cursor.getString(cursor.getColumnIndex(DbSchema.SettingSchema.COLUMN_DataHash)));
         setting.setCreateDate(cursor.getString(cursor.getColumnIndex(DbSchema.SettingSchema.COLUMN_CreateDate)));
@@ -7313,7 +7316,7 @@ public class DbAdapter {
         ArrayList<Region> regions = new ArrayList<>();
         Cursor cursor;
         try {
-            cursor = mDb.rawQuery("select * from Region where (CityID % 100000)  = 0 or ProvinceID = 0 order by ProvinceName" , null);
+            cursor = mDb.rawQuery("select * from Region where ((CityID % 100000)  = 0 or ProvinceID = 0) and userid = ? order by ProvinceName " , new String[]{String.valueOf(BaseActivity.getPrefUserId())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -7358,7 +7361,7 @@ public class DbAdapter {
         ArrayList<Region> regions = new ArrayList<>();
         Cursor cursor;
         try {
-            cursor = mDb.rawQuery("select * from Region where ProvinceID =? order by CityName " , new String[]{String.valueOf(ProvinceID)});
+            cursor = mDb.rawQuery("select * from Region where ProvinceID =? and userid =? order by CityName " , new String[]{String.valueOf(ProvinceID), String.valueOf(BaseActivity.getPrefUserId())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -7382,7 +7385,7 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<Setting> array = new ArrayList<>();
         try {
-            cursor = mDb.query(DbSchema.SettingSchema.TABLE_NAME, null, null, null, null, null, null);
+            cursor = mDb.rawQuery("select * from Setting where deleted = 0  and userid =? ", new String[]{String.valueOf(BaseActivity.getPrefUserId())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -9513,9 +9516,33 @@ public class DbAdapter {
 
     public void upgradeDatabase() {
         if (mDb.getVersion() < DbSchema.DATABASE_VERSION) {
-            mDb.execSQL("ALTER TABLE " + DbSchema.PromotionSchema.TABLE_NAME + " ADD " + DbSchema.PromotionSchema.COLUMN_Deleted + " INTEGER;");
+            if(!isColumnExists("Promotion","Deleted")){
+                mDb.execSQL("ALTER TABLE " + DbSchema.PromotionSchema.TABLE_NAME + " ADD " + DbSchema.PromotionSchema.COLUMN_Deleted + " INTEGER;");
+            }
             mDb.setVersion(DbSchema.DATABASE_VERSION);
         }
+    }
+
+    public boolean isColumnExists (String table, String column) {
+        boolean isExists = false;
+        Cursor cursor = null;
+        try {
+            cursor = mDb.rawQuery("PRAGMA table_info("+ table +")", null);
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    String name = cursor.getString(cursor.getColumnIndex("name"));
+                    if (column.equalsIgnoreCase(name)) {
+                        isExists = true;
+                        break;
+                    }
+                }
+            }
+
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return isExists;
     }
 
     public void DeleteAllData() {

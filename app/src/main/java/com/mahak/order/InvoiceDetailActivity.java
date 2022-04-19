@@ -48,6 +48,7 @@ import com.mahak.order.widget.FontProgressDialog;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 import static com.mahak.order.common.ProjectInfo.TYPE_Delivery;
 import static com.mahak.order.common.ProjectInfo.TYPE_SEND_TRANSFERENCE;
@@ -67,7 +68,7 @@ public class InvoiceDetailActivity extends BaseActivity {
     public static ArrayList<OrderDetail> orderDetails = new ArrayList<>();
     public static ArrayList<OrderDetailProperty> orderDetailProperties = new ArrayList<>();
     public static ArrayList<OrderDetail> orderDetailArrayList = new ArrayList<>();
-    public static ArrayList<Integer> CommitPromoCode = new ArrayList<>();
+    public static LinkedHashSet<Integer> CommitPromoCode = new LinkedHashSet<>();
 
     public static int CustomerId = 0;
     public static long CustomerClientId = 0;

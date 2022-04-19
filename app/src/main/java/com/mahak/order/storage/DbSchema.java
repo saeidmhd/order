@@ -1866,14 +1866,14 @@ public class DbSchema {
         public static final String COLUMN_lastModified = "lastModified";
 
         public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"Zone\" ( " +
-                "\"zoneId\" INTEGER," +
+                " \"_ID\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                " \"zoneId\" INTEGER," +
                 " \"visitorId\" INTEGER," +
                 " \"title\" TEXT," +
                 " \"createdBy\" TEXT," +
                 " \"created\" TEXT," +
                 " \"lastModifiedBy\" TEXT," +
-                " \"lastModified\" TEXT," +
-                " PRIMARY KEY(zoneId , createdBy) )";
+                " \"lastModified\" TEXT )";
     }
 
     public static class ZoneLocationSchema implements BaseColumns {

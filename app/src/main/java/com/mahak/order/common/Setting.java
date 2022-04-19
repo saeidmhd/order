@@ -2,6 +2,7 @@ package com.mahak.order.common;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.mahak.order.BaseActivity;
 
 public class Setting {
 
@@ -13,7 +14,7 @@ public class Setting {
     private int settingCode;
     @SerializedName("VisitorId")
     @Expose
-    private int visitorId;
+    private long visitorId;
     @SerializedName("Value")
     @Expose
     private String value;
@@ -55,11 +56,14 @@ public class Setting {
         this.settingCode = settingCode;
     }
 
-    public int getVisitorId() {
-        return visitorId;
+    public long getVisitorId() {
+        if(visitorId == 0)
+            return BaseActivity.getPrefUserId();
+        else
+            return visitorId;
     }
 
-    public void setVisitorId(int visitorId) {
+    public void setVisitorId(long visitorId) {
         this.visitorId = visitorId;
     }
 
