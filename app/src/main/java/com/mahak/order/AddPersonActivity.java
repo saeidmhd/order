@@ -13,6 +13,7 @@ import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -144,7 +145,7 @@ public class AddPersonActivity extends BaseActivity {
         mActivity = this;
 
         initialise();
-        Fillspinner();
+        FillSpinner();
 
         Extras = getIntent().getExtras();
         if (Extras != null) {
@@ -399,6 +400,33 @@ public class AddPersonActivity extends BaseActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(personClientId != 0){
+            getMenuInflater().inflate(R.menu.pmenu_edit_customer, menu);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.delete_new_person) {
+            if(!checkActivity()){
+                db.DeleteClientCustomer(personClientId);
+                setResult(RESULT_OK);
+                finish();
+            }else
+                Toast.makeText(mContext, " برای این مشتری عملیات ثبت شده ، امکان حذف وجود ندارد!", Toast.LENGTH_SHORT).show();
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private boolean checkActivity() {
+        db.open();
+        return db.getAllOrderWithPersonClientId(personClientId).size() > 0 || db.getAllReceiptWithPersonClientId(personClientId).size() > 0 ;
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -409,7 +437,7 @@ public class AddPersonActivity extends BaseActivity {
     /**
      * Fill spinner CustomerGroup ,State ,City
      */
-    public void Fillspinner() {
+    public void FillSpinner() {
         //Fill spnCustomerGroup
         arrayCustomerGroup = db.getAllCustomerGroup();
         AdapterSpnCustomerGroup adcustomergroup = new AdapterSpnCustomerGroup(mActivity, arrayCustomerGroup);
@@ -738,18 +766,6 @@ public class AddPersonActivity extends BaseActivity {
                 txtAddress.setText(Address);
             }
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            case R.id.home:
-                //setResult(RESULT_OK);
-                //finish();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

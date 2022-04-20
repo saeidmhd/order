@@ -697,7 +697,6 @@ public class PeopleListActivity extends BaseActivity {
                         setResult(RESULT_OK, intent);
                         finish();
                     }
-
                     Log.d("MainActivity", "Scanned");
                 } else
                     Toast.makeText(mContext, R.string.there_is_no_customer, Toast.LENGTH_SHORT).show();
@@ -708,43 +707,47 @@ public class PeopleListActivity extends BaseActivity {
             switch (requestCode) {
                 case REQUESTCODE_ADD_CUSTOMER:
                     long personClientId;
-                    Bundle bundle = data.getExtras();
-                    personClientId = bundle != null ? bundle.getLong("PersonClientId", 0) : 0;
-                    if (Page == PAGE_ADD_INVOICE) {
-                        Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
-                        intent.putExtra(CUSTOMER_CLIENT_ID_KEY, personClientId);
-                        intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
-                        intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_INVOCIE);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    } else if (Page == PAGE_ADD_ORDER) {
-                        Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
-                        intent.putExtra(CUSTOMER_CLIENT_ID_KEY, personClientId);
-                        intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
-                        intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_ORDER);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    } else if (Page == PAGE_MANAGE_RECEIPT) {
-                        Intent intent = new Intent(mContext, ManageReceiptActivity.class);
-                        intent.putExtra(CUSTOMER_CLIENT_ID_KEY, personClientId);
-                        intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
-                        intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_NON);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    } else if (Page == PAGE_ADD_NON_REGISTER) {
-                        Intent intent = new Intent(mContext, NonRegisterActivity.class);
-                        intent.putExtra(CUSTOMER_CLIENT_ID_KEY, personClientId);
-                        intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    } else if (Page == PAGE_ADD_RETURN) {
-                        Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
-                        intent.putExtra(CUSTOMER_CLIENT_ID_KEY, personClientId);
-                        intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
-                        intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_RETURN_OF_SALE);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    } else {
+                    if(data != null){
+                        Bundle bundle = data.getExtras();
+                        personClientId = bundle != null ? bundle.getLong("PersonClientId", 0) : 0;
+                        if (Page == PAGE_ADD_INVOICE) {
+                            Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
+                            intent.putExtra(CUSTOMER_CLIENT_ID_KEY, personClientId);
+                            intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
+                            intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_INVOCIE);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        } else if (Page == PAGE_ADD_ORDER) {
+                            Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
+                            intent.putExtra(CUSTOMER_CLIENT_ID_KEY, personClientId);
+                            intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
+                            intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_ORDER);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        } else if (Page == PAGE_MANAGE_RECEIPT) {
+                            Intent intent = new Intent(mContext, ManageReceiptActivity.class);
+                            intent.putExtra(CUSTOMER_CLIENT_ID_KEY, personClientId);
+                            intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
+                            intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_NON);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        } else if (Page == PAGE_ADD_NON_REGISTER) {
+                            Intent intent = new Intent(mContext, NonRegisterActivity.class);
+                            intent.putExtra(CUSTOMER_CLIENT_ID_KEY, personClientId);
+                            intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        } else if (Page == PAGE_ADD_RETURN) {
+                            Intent intent = new Intent(mContext, InvoiceDetailActivity.class);
+                            intent.putExtra(CUSTOMER_CLIENT_ID_KEY, personClientId);
+                            intent.putExtra(CUSTOMER_GROUP_KEY, GroupId);
+                            intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_RETURN_OF_SALE);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }else {
+                            ReadALLCustomer();
+                        }
+                    }else {
                         ReadALLCustomer();
                     }
                     break;

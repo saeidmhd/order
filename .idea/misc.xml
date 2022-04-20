@@ -7,10 +7,13 @@
         <entry key="app/src/main/res/layout/activity_manage_customer.xml" value="0.25" />
         <entry key="app/src/main/res/layout/factor_print_szzt.xml" value="0.25" />
         <entry key="app/src/main/res/layout/factor_print_template.xml" value="0.24114583333333334" />
+        <entry key="app/src/main/res/layout/lst_customer_item.xml" value="0.25885416666666666" />
         <entry key="app/src/main/res/layout/print_order_detail_item.xml" value="0.22" />
         <entry key="app/src/main/res/layout/print_order_detail_item2.xml" value="0.17135416666666667" />
         <entry key="app/src/main/res/layout/print_szzt_urovo_item.xml" value="0.24114583333333334" />
         <entry key="app/src/main/res/menu/pmenu_call.xml" value="0.20729166666666668" />
+        <entry key="app/src/main/res/menu/pmenu_edit_customer.xml" value="0.25885416666666666" />
+        <entry key="app/src/main/res/menu/pmenu_edit_delete.xml" value="0.2518518518518518" />
       </map>
     </option>
   </component>

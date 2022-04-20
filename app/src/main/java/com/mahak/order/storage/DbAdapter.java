@@ -6895,6 +6895,30 @@ public class DbAdapter {
         }
         return array;
     }
+    public ArrayList<Order> getAllOrderWithPersonClientId(long personClientId) {
+        Order order;
+        Cursor cursor;
+        ArrayList<Order> array = new ArrayList<>();
+        try {
+            cursor = mDb.query(DbSchema.OrderSchema.TABLE_NAME, null, DbSchema.OrderSchema.COLUMN_PersonClientId + " =? AND " + DbSchema.OrderSchema.COLUMN_USER_ID + " =? " , new String[]{String.valueOf(personClientId), String.valueOf(getPrefUserId())}, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    order = getOrderFromCursor(cursor);
+                    if (order != null)
+                        array.add(order);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrAllInvoice", e.getMessage());
+        }
+        return array;
+    }
 
     public ArrayList<NonRegister> getAllNonRegisterNotPublish(long userId) {
 
@@ -6975,6 +6999,31 @@ public class DbAdapter {
         ArrayList<Receipt> array = new ArrayList<>();
         try {
             cursor = mDb.query(DbSchema.ReceiptSchema.TABLE_NAME, null, DbSchema.ReceiptSchema.COLUMN_USER_ID + " =? AND " + DbSchema.ReceiptSchema.COLUMN_PUBLISH + " =? AND " + DbSchema.ReceiptSchema.COLUMN_MAHAK_ID + "=? AND " + DbSchema.ReceiptSchema.COLUMN_DATABASE_ID + "=?", new String[]{String.valueOf(userId), String.valueOf(ProjectInfo.DONT_PUBLISH), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId()}, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    receipt = GetReceipt(cursor.getLong(cursor.getColumnIndex(DbSchema.ReceiptSchema.COLUMN_ID)));
+                    if (receipt != null)
+                        array.add(receipt);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrAllReceipt", e.getMessage());
+        }
+
+        return array;
+    }
+    public ArrayList<Receipt> getAllReceiptWithPersonClientId(long personClientId) {
+        Receipt receipt;
+        Cursor cursor;
+        ArrayList<Receipt> array = new ArrayList<>();
+        try {
+            cursor = mDb.query(DbSchema.ReceiptSchema.TABLE_NAME, null, DbSchema.ReceiptSchema.COLUMN_PersonClientId + " =? AND " + DbSchema.ReceiptSchema.COLUMN_USER_ID , new String[]{String.valueOf(personClientId), String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -9420,6 +9469,9 @@ public class DbAdapter {
 
     public boolean DeleteCustomer(Long id) {
         return (mDb.delete(DbSchema.CustomerSchema.TABLE_NAME, DbSchema.CustomerSchema.COLUMN_ID + "=?", new String[]{String.valueOf(id)})) > 0;
+    }
+    public boolean DeleteClientCustomer(Long id) {
+        return (mDb.delete(DbSchema.CustomerSchema.TABLE_NAME, DbSchema.CustomerSchema.COLUMN_PersonClientId + "=?", new String[]{String.valueOf(id)})) > 0;
     }
 
     public boolean DeleteServerVisitor(Visitor visitor) {
