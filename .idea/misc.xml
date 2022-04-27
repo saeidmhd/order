@@ -4,9 +4,17 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_add_person.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_good_detail_count.xml" value="0.2171875" />
+        <entry key="app/src/main/res/layout/activity_good_detail_count_1_2.xml" value="0.2171875" />
         <entry key="app/src/main/res/layout/activity_manage_customer.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/detail_select3new.xml" value="0.2171875" />
+        <entry key="app/src/main/res/layout/expandlist_child_receipt.xml" value="0.225" />
+        <entry key="app/src/main/res/layout/expandlist_group_receipt.xml" value="0.5" />
         <entry key="app/src/main/res/layout/factor_print_szzt.xml" value="0.25" />
         <entry key="app/src/main/res/layout/factor_print_template.xml" value="0.24114583333333334" />
+        <entry key="app/src/main/res/layout/fragment_invoice_goods_detail.xml" value="0.25092592592592594" />
+        <entry key="app/src/main/res/layout/fragment_products_list.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/lst_cart_item.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/lst_customer_item.xml" value="0.25885416666666666" />
         <entry key="app/src/main/res/layout/print_order_detail_item.xml" value="0.22" />
         <entry key="app/src/main/res/layout/print_order_detail_item2.xml" value="0.17135416666666667" />

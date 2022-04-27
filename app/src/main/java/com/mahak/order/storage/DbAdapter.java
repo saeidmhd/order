@@ -368,7 +368,7 @@ public class DbAdapter {
         initialvalue.put(DbSchema.PayableSchema.COLUMN_TransferCode, payableTransfer.getTransferCode());
         initialvalue.put(DbSchema.PayableSchema.COLUMN_TransferDate, payableTransfer.getTransferDate());
         initialvalue.put(DbSchema.PayableSchema.COLUMN_TransferType, payableTransfer.getTransferType());
-        initialvalue.put(DbSchema.PayableSchema.COLUMN_Receiverid, payableTransfer.getReceiverid());
+        initialvalue.put(DbSchema.PayableSchema.COLUMN_Receiverid, payableTransfer.getReceiverId());
         initialvalue.put(DbSchema.PayableSchema.COLUMN_Comment, payableTransfer.getDescription());
         initialvalue.put(DbSchema.PayableSchema.COLUMN_PayerId, payableTransfer.getPayerId());
         initialvalue.put(DbSchema.PayableSchema.COLUMN_PUBLISH, payableTransfer.getPublish());
@@ -888,13 +888,13 @@ public class DbAdapter {
 
     //QUERIES GET--------------------------------------------------------------------------------------------
 
-    public String getBankNameFromBankID(String masterId) {
+    public String getBankNameFromBankID(String bankId) {
 
         Cursor cursor;
         String BankName = "";
         try {
 
-            cursor = mDb.query(DbSchema.BanksSchema.TABLE_NAME, null, DbSchema.BanksSchema.COLUMN_BANK_CODE + "=? ", new String[]{masterId}, null, null, null);
+            cursor = mDb.query(DbSchema.BanksSchema.TABLE_NAME, null, DbSchema.BanksSchema.COLUMN_BankId + "=? ", new String[]{bankId}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -2471,7 +2471,7 @@ public class DbAdapter {
                     payableTransfer.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.PayableSchema.COLUMN_PUBLISH)));
                     payableTransfer.setTransferType(cursor.getInt(cursor.getColumnIndex(DbSchema.PayableSchema.COLUMN_TransferType)));
                     payableTransfer.setTransferDate(cursor.getLong(cursor.getColumnIndex(DbSchema.PayableSchema.COLUMN_TransferDate)));
-                    payableTransfer.setReceiverid(cursor.getInt(cursor.getColumnIndex(DbSchema.PayableSchema.COLUMN_Receiverid)));
+                    payableTransfer.setReceiverId(cursor.getInt(cursor.getColumnIndex(DbSchema.PayableSchema.COLUMN_Receiverid)));
                     payableTransfer.setDescription(cursor.getString(cursor.getColumnIndex(DbSchema.PayableSchema.COLUMN_Comment)));
                     payableTransfer.setVisitorId(cursor.getInt(cursor.getColumnIndex(DbSchema.PayableSchema.COLUMN_VisitorId)));
                     payableTransfer.setDataBaseId(cursor.getString(cursor.getColumnIndex(DbSchema.PayableSchema.COLUMN_DatabaseId)));
@@ -6182,6 +6182,31 @@ public class DbAdapter {
 
         return array;
     }
+    public ArrayList<Bank> getAllBankWithBankId(long bankId) {
+        Bank bank;
+        Cursor cursor;
+        ArrayList<Bank> array = new ArrayList<>();
+        try {
+            String orderBy = DbSchema.BanksSchema.COLUMN_BankId + " = " + bankId + " DESC";
+            cursor = mDb.query(DbSchema.BanksSchema.TABLE_NAME, null, DbSchema.BanksSchema.COLUMN_MAHAK_ID + "=? AND " + DbSchema.BanksSchema.COLUMN_DATABASE_ID + "=?", new String[]{BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId()}, null, null, orderBy);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    bank = getBank(cursor.getLong(cursor.getColumnIndex(DbSchema.BanksSchema.COLUMN_ID)));
+                    array.add(bank);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrAllBanks", e.getMessage());
+        }
+
+        return array;
+    }
 
     public ArrayList<Bank> getAllBank() {
         Bank bank;
@@ -6193,8 +6218,7 @@ public class DbAdapter {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     bank = getBank(cursor.getLong(cursor.getColumnIndex(DbSchema.BanksSchema.COLUMN_ID)));
-                    if (bank != null)
-                        array.add(bank);
+                    array.add(bank);
                     cursor.moveToNext();
                 }
                 cursor.close();
@@ -8910,7 +8934,7 @@ public class DbAdapter {
         initialvalue.put(DbSchema.PayableSchema.COLUMN_TransferCode, payableTransfer.getTransferCode());
         initialvalue.put(DbSchema.PayableSchema.COLUMN_TransferDate, payableTransfer.getTransferDate());
         initialvalue.put(DbSchema.PayableSchema.COLUMN_TransferType, payableTransfer.getTransferType());
-        initialvalue.put(DbSchema.PayableSchema.COLUMN_Receiverid, payableTransfer.getReceiverid());
+        initialvalue.put(DbSchema.PayableSchema.COLUMN_Receiverid, payableTransfer.getReceiverId());
         initialvalue.put(DbSchema.PayableSchema.COLUMN_Comment, payableTransfer.getDescription());
         initialvalue.put(DbSchema.PayableSchema.COLUMN_PayerId, payableTransfer.getPayerId());
         initialvalue.put(DbSchema.PayableSchema.COLUMN_PUBLISH, payableTransfer.getPublish());

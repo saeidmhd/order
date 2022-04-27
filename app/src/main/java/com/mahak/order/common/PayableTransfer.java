@@ -62,7 +62,7 @@ public class PayableTransfer {
 
     @SerializedName("ReceiverId")
     @Expose
-    private int receiverid;
+    private long receiverId;
 
     @SerializedName("PayerId")
     @Expose
@@ -157,12 +157,12 @@ public class PayableTransfer {
         this.price = new BigDecimal(price);
     }
 
-    public int getReceiverid() {
-        return receiverid;
+    public long getReceiverId() {
+        return receiverId;
     }
 
-    public void setReceiverid(int receiverid) {
-        this.receiverid = receiverid;
+    public void setReceiverId(long receiverId) {
+        this.receiverId = receiverId;
     }
 
     public String getDescription() {

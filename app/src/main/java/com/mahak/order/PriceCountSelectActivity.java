@@ -325,9 +325,10 @@ public class PriceCountSelectActivity extends BaseActivity {
                 if (editKol) {
                     if (txtCountKol.hasFocus()) {
                         try {
+                            txtCountJoz.setText("0");
                             double kol = ServiceTools.toDouble(txtCountKol.getText().toString()) * product.getUnitRatio();
                             double joz = ServiceTools.toDouble(txtCountJoz.getText().toString());
-                            txtSumCount12.setText(formatCount((int) (kol + joz)));
+                            txtSumCount12.setText(formatCount((kol + joz)));
 
                         } catch (NumberFormatException e) {
                             FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
@@ -366,7 +367,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                         try {
                             double kol = ServiceTools.toDouble(txtCountKol.getText().toString()) * product.getUnitRatio();
                             double joz = ServiceTools.toDouble(txtCountJoz.getText().toString());
-                            txtSumCount12.setText(formatCount((int) (kol + joz)));
+                            txtSumCount12.setText(formatCount((kol + joz)));
 
                         } catch (NumberFormatException e) {
                             FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
@@ -382,12 +383,12 @@ public class PriceCountSelectActivity extends BaseActivity {
         txtCountJoz.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus){
+                if(hasFocus){
                     int kol = 0;
                     double sum = ServiceTools.RegulartoDouble(txtSumCount12.getText().toString());
                     if(product.getUnitRatio() > 0)
                         kol = (int) (sum / product.getUnitRatio());
-                    int joz =  (int)(sum - (kol * product.getUnitRatio()));
+                    double joz =  (sum - (kol * product.getUnitRatio()));
 
                     txtCountKol.setText(formatCount(kol));
                     txtCountJoz.setText(formatCount(joz));
@@ -413,7 +414,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                             double sum = ServiceTools.RegulartoDouble(txtSumCount12.getText().toString());
                             if(product.getUnitRatio() > 0)
                                 kol = (int) (sum / product.getUnitRatio());
-                            int joz =  (int)(sum - (kol * product.getUnitRatio()));
+                            double joz =  (sum - (kol * product.getUnitRatio()));
 
                             txtCountKol.setText(formatCount(kol));
                             txtCountJoz.setText(formatCount(joz));
@@ -770,7 +771,7 @@ public class PriceCountSelectActivity extends BaseActivity {
 
         double sum;
         int kol = 0;
-        int joz;
+        double joz;
 
         if (type == ProjectInfo.TYPE_ORDER || type == ProjectInfo.TYPE_RETURN_OF_SALE) {
             return true;
@@ -779,7 +780,7 @@ public class PriceCountSelectActivity extends BaseActivity {
         sum = ServiceTools.RegulartoDouble(txtSumCount12.getText().toString());
         if(product.getUnitRatio() > 0)
             kol = (int) (sum / product.getUnitRatio());
-        joz =  (int)(sum - (kol * product.getUnitRatio()));
+        joz =  (sum - (kol * product.getUnitRatio()));
 
         txtCountKol.setText(formatCount(kol));
         txtCountJoz.setText(formatCount(joz));
@@ -1230,7 +1231,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                 txtCountKol.setText(count2);
                 double kol = ServiceTools.toDouble(count2) * product.getUnitRatio();
                 double joz = ServiceTools.toDouble(count1);
-                txtSumCount12.setText(formatCount((int) (kol + joz)));
+                txtSumCount12.setText(formatCount( (kol + joz)));
 
                 CalculateJozKolSum();
                 unitName2.setText("( " + product.getUnitName2() + " )");

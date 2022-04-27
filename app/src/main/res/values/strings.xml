@@ -838,7 +838,7 @@
     <string name="packages">(بسته)</string>
     <string name="x">X</string>
     <string name="sell_invoice_info">اطلاعات فاکتور فروش</string>
-    <string name="discount_average">میانگین مبلغ تخفیفات(مرجوعی)</string>
+    <string name="discount_average">میانگین تخفیفات(مرجوعی)</string>
     <string name="cheq_info">اطلاعات چک</string>
     <string name="pay_to_bank">پرداخت به بانک</string>
     <string name="pay_for_expense">پرداخت بابت هزینه</string>
@@ -1072,7 +1072,7 @@
     <string name="to">به</string>
     <string name="not_send">ارسال نشده</string>
     <string name="wait_for_approval">در انتظار تایید</string>
-    <string name="to_bank">به بانک</string>
+    <string name="to_bank">به حساب</string>
     <string name="to_expence">به هزینه</string>
     <string name="to_visitore">نام ویزیتور</string>
     <string name="register_invoice">ثبت کالا در فاکتور</string>

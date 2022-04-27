@@ -54,7 +54,7 @@ public class ManagePayableActivity extends BaseActivity {
     private static int Mode;
     private Bundle Extras;
     private TextView txtDescription;
-    private long BankCode = 0;
+    private long BankId = 0;
     private long PayableId;
     private PayableTransfer payableTransfer;
 
@@ -193,11 +193,11 @@ public class ManagePayableActivity extends BaseActivity {
                 payableTransfer.setVisitorId((int) BaseActivity.getPrefUserMasterId());
                 if (Type == ProjectInfo.Bank_TYPE) {
 
-                    payableTransfer.setReceiverid((int) BankCode);
+                    payableTransfer.setReceiverId(BankId);
                     payableTransfer.setTransferType(3);
 
                 } else if (Type == ProjectInfo.Expense_TYPE) {
-                    payableTransfer.setReceiverid(0);
+                    payableTransfer.setReceiverId(0);
                     payableTransfer.setTransferType(4);
                 }
 
@@ -235,11 +235,11 @@ public class ManagePayableActivity extends BaseActivity {
                 payableTransfer.setDescription(txtDescription.getText().toString().trim());
                 if (Type == ProjectInfo.Bank_TYPE) {
 
-                    payableTransfer.setReceiverid((int) BankCode);
+                    payableTransfer.setReceiverId(BankId);
                     payableTransfer.setTransferType(3);
 
                 } else if (Type == ProjectInfo.Expense_TYPE) {
-                    payableTransfer.setReceiverid(0);
+                    payableTransfer.setReceiverId(0);
                     payableTransfer.setTransferType(4);
                 }
                 db.UpdatePayable(payableTransfer);
@@ -311,7 +311,7 @@ public class ManagePayableActivity extends BaseActivity {
         db.open();
         arrayBank = new ArrayList<Bank>();
         PayableTransfer payableTransfer = db.GetPayable(PayableId);
-        arrayBank = db.getAllBank(payableTransfer.getReceiverid());
+        arrayBank = db.getAllBankWithBankId(payableTransfer.getReceiverId());
         AdapterSpnBank adSpinner = new AdapterSpnBank(mContext, R.layout.item_spinner, arrayBank);
         spnBank.setAdapter(adSpinner);
         //Fill Adapter Spinner________________________________________________________________
@@ -372,7 +372,7 @@ public class ManagePayableActivity extends BaseActivity {
             View row = inflater.inflate(R.layout.item_spinner, parent, false);
             TextView tvName = (TextView) row.findViewById(R.id.tvName);
             tvName.setText(banks.get(position).getName());
-            BankCode = banks.get(position).getBankCode();
+            BankId = banks.get(position).getBankId();
 
             return row;
         }

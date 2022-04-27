@@ -232,8 +232,8 @@ public class PayableListActivity extends BaseActivity {
                 tvCode.setText("" + transfer.getTransferCode());
 
                 if (transfer.getTransferType() == 3) {
-                    String bankName = db.getBankNameFromBankID(String.valueOf(transfer.getReceiverid()));
-                    tvReceiptAmount.setText(getString(R.string.to_bank) + bankName);
+                    String bankName = db.getBankNameFromBankID(String.valueOf(transfer.getReceiverId()));
+                    tvReceiptAmount.setText(getString(R.string.to_bank)+ " " + bankName);
                 } else {
                     tvReceiptAmount.setText(R.string.to_expence);
                 }
