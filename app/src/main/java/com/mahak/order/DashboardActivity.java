@@ -1456,7 +1456,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     public void setTrackingConfig() {
         btnTrackingService.setEnabled(!BaseActivity.getPrefAdminControl(mContext));
         if(BaseActivity.getPrefTrackingControl(mContext) == 1){
-            btnTrackingService.setChecked(true);
             startLocationUpdate();
         }
     }
@@ -1631,6 +1630,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         dialog_btn_data.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startLocationUpdate();
                 dialog.dismiss();
             }
         });

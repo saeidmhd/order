@@ -16,8 +16,8 @@ android {
         applicationId "com.mahak.order"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 3434
-        versionName '3.434'
+        versionCode 3436
+        versionName '3.436'
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -134,9 +134,5 @@ dependencies {
     implementation 'com.microsoft.signalr:signalr:5.0.10'
 
     implementation "androidx.multidex:multidex:2.0.1"
-
-
-    implementation 'com.google.firebase:firebase-inappmessaging-display:20.0.0'
-    implementation 'com.google.firebase:firebase-messaging:22.0.0'
 
 }

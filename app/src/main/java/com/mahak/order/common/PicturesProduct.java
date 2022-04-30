@@ -238,11 +238,6 @@ public class PicturesProduct {
         isLoaded = loaded;
     }
 
-    //new
-
-    public void setPictureId(int pictureId) {
-        this.pictureId = pictureId;
-    }
 
     public long getPictureClientId() {
         return pictureClientId;

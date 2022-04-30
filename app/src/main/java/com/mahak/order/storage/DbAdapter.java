@@ -2073,11 +2073,11 @@ public class DbAdapter {
 
     }
 
-    public PicturesProduct getPictureProductByMasterIdAndDataBaseIdAndPictureId(String masterId, String dataBaseId, String pictureId) {
+    public PicturesProduct getPictureProductByMasterIdAndDataBaseIdAndPictureId(String masterId, String dataBaseId , String fileName) {
         PicturesProduct picturesProduct = new PicturesProduct();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.PicturesProductSchema.TABLE_NAME, null, DbSchema.PicturesProductSchema.COLUMN_PictureCode + "=? And " + DbSchema.PicturesProductSchema.COLUMN_DATABASE_ID + " =? And " + DbSchema.PicturesProductSchema.COLUMN_PICTURE_ID + " =? ", new String[]{masterId, dataBaseId, pictureId}, null, null, null);
+            cursor = mDb.query(DbSchema.PicturesProductSchema.TABLE_NAME, null, DbSchema.PicturesProductSchema.COLUMN_PictureCode + "=? And " + DbSchema.PicturesProductSchema.COLUMN_DATABASE_ID + " =? And " + DbSchema.PicturesProductSchema.COLUMN_FILE_NAME + " =? " , new String[]{masterId, dataBaseId , fileName}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -6065,7 +6065,7 @@ public class DbAdapter {
         String url = null;
         Cursor cursor;
         try {
-            cursor = mDb.rawQuery(" select url from PhotoGallery LEFT join PicturesProduct on PicturesProduct.pictureId = PhotoGallery.pictureId where itemCode = ? and deleted = 0 ", new String[]{String.valueOf(productId)});
+            cursor = mDb.rawQuery(" select url , PicturesProduct.pictureid from PicturesProduct LEFT join PhotoGallery  on PicturesProduct.pictureId = PhotoGallery.pictureId where itemCode = ? and deleted = 0 order by PicturesProduct.pictureid desc ", new String[]{String.valueOf(productId)});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {

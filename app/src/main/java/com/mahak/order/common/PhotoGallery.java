@@ -10,7 +10,7 @@ public class PhotoGallery {
     private int photoGalleryId;
     @SerializedName("PictureId")
     @Expose
-    private int pictureId;
+    private long pictureId;
     @SerializedName("EntityType")
     @Expose
     private int entityType;
@@ -50,11 +50,11 @@ public class PhotoGallery {
         this.photoGalleryId = photoGalleryId;
     }
 
-    public int getPictureId() {
+    public long getPictureId() {
         return pictureId;
     }
 
-    public void setPictureId(int pictureId) {
+    public void setPictureId(long pictureId) {
         this.pictureId = pictureId;
     }
 
