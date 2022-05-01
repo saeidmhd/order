@@ -14,6 +14,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -73,6 +74,7 @@ public class MapViewActivity extends BaseActivity implements OnMapReadyCallback,
             mapFragment.getMapAsync(googleMap -> {
 
                 mMap = googleMap;
+                mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(mContext,R.raw.map_style));
 
                 new ShowPersonCluster(mMap,context).showPeople();
 

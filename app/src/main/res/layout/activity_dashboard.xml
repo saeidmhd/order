@@ -39,7 +39,7 @@
                 android:layout_below="@+id/btnZoomMapView"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/forms_btn_circle_selector"
-                android:src="@drawable/ic_baseline_timeline_24"
+                android:src="@drawable/ic_road_map"
                 tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
         </RelativeLayout>

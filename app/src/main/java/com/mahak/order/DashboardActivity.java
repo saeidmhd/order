@@ -68,6 +68,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
@@ -891,8 +892,9 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 public void onMapReady(GoogleMap googleMap) {
                     if (googleMap != null)
                         mGoogleMap = googleMap;
+                    mGoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(mContext,R.raw.map_style));
                     new ShowPersonCluster(mGoogleMap,mContext).showPeople();
-                    showCheckListPositon();
+                    showCheckListPosition();
                     mapPolygon = new MapPolygon(mGoogleMap,mContext);
                     mapPolygon.showPolygon();
                     initMap();
@@ -944,7 +946,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    private void showCheckListPositon() {
+    private void showCheckListPosition() {
         try {
             if (arrayChecklist.size() == 0)
                 positions.clear();
