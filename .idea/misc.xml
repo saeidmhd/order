@@ -3,10 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/ic_point_selector.xml" value="0.2255" />
+        <entry key="app/src/main/res/layout-de/activity_dashboard.xml" value="0.10833333333333334" />
         <entry key="app/src/main/res/layout/activity_add_person.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/activity_data_sync.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_good_detail_count.xml" value="0.2171875" />
         <entry key="app/src/main/res/layout/activity_good_detail_count_1_2.xml" value="0.2171875" />
         <entry key="app/src/main/res/layout/activity_manage_customer.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.15625" />
+        <entry key="app/src/main/res/layout/dashboard_left_navigation_drawer.xml" value="0.33" />
         <entry key="app/src/main/res/layout/detail_select3new.xml" value="0.2171875" />
         <entry key="app/src/main/res/layout/expandlist_child_receipt.xml" value="0.225" />
         <entry key="app/src/main/res/layout/expandlist_group_receipt.xml" value="0.5" />

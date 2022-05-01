@@ -140,7 +140,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             btnAddNewInvoice,
             btnNavReportsList;
 
-    private ImageButton btnZoomMapView;
+    private ImageButton btnZoomMapView , btnShowRoute;
 
 
     private TextView
@@ -405,6 +405,15 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnZoomMapView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(mContext, MapViewActivity.class);
+                intent.putParcelableArrayListExtra(COORDINATE, positions);
+                intent.putParcelableArrayListExtra(CustomerPositions, customerPositions);
+                startActivity(intent);
+            }
+        });
+        btnShowRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if(isRadaraActive()){
                     CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                     CustomTabsIntent customTabsIntent = builder.build();
@@ -412,11 +421,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     headers.putString("token", BaseActivity.getPrefSignalUserToken());
                     customTabsIntent.intent.putExtra(Browser.EXTRA_HEADERS, headers);
                     customTabsIntent.launchUrl(DashboardActivity.this, Uri.parse(baseUrlShowRouting));
-                }else {
-                    Intent intent = new Intent(mContext, MapViewActivity.class);
-                    intent.putParcelableArrayListExtra(COORDINATE, positions);
-                    intent.putParcelableArrayListExtra(CustomerPositions, customerPositions);
-                    startActivity(intent);
                 }
             }
         });
@@ -736,6 +740,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnAddNewReceipt = (Button) findViewById(R.id.btnAddNewReceipt);
         btnAddNewInvoice = (Button) findViewById(R.id.btnAddNewInvoice);
         btnZoomMapView = (ImageButton) findViewById(R.id.btnZoomMapView);
+        btnShowRoute = (ImageButton) findViewById(R.id.btnShowRoute);
 
         tvSumOfOrders = (TextView) findViewById(R.id.tvSumOfOrders);
         tvTrackingService = (TextView) findViewById(R.id.tvTrackingService);

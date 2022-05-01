@@ -32,6 +32,15 @@
                 android:background="@drawable/forms_btn_circle_selector"
                 android:src="@drawable/ic_point_selector"
                 tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+            <ImageButton
+                android:id="@+id/btnShowRoute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btnZoomMapView"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/forms_btn_circle_selector"
+                android:src="@drawable/ic_baseline_timeline_24"
+                tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
         </RelativeLayout>
 
