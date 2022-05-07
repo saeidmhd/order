@@ -384,8 +384,7 @@ public class RadaraDb {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     VisitorLocation visitorLocation = getGpsPointFromCursor(cursor);
-                    if (visitorLocation != null)
-                        array.add(new LatLng(visitorLocation.getLatitude(), visitorLocation.getLongitude()));
+                    array.add(new LatLng(visitorLocation.getLatitude(), visitorLocation.getLongitude()));
                     cursor.moveToNext();
                 }
                 cursor.close();

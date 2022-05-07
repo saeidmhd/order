@@ -88,7 +88,7 @@
     <string name="str_username_en">Benutzername</string>
     <string name="str_password_en">Passwort</string>
     <string name="str_login">Einloggen</string>
-    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.436</string>
+    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.440</string>
     <string name="str_email">E-Mail</string>
     <string name="str_body">Text</string>
     <string name="str_message_content">Textnachricht</string>
@@ -1216,6 +1216,89 @@
     <string name="add_duplicate_product">افزودن کالای تکراری</string>
     <string name="nodata">اطلاعاتی برای نمایش وجود ندارد</string>
     <string name="str_title_fee">فی</string>
+
+    <string name="new_3_270">نسخه ۳.۲۷۰</string>
+    <string name="new_3_270_1">	رفع خطای عدم نمایش فی در چاپ  urovo</string>
+    <string name="new_3_270_2">	رفع خطای مربوط به ثبت فاکتور با اقلام زیاد</string>
+    <string name="new_3_270_3">رفع خطای جستجو برای کالاهای برای کالاهای با نام طولانی </string>
+    <string name="new_3_270_4">	رفع خطای جستجوی فاکتور ها</string>
+
+    <string name="new_3_275">نسخه ۳.۲۷۵</string>
+    <string name="new_3_275_1">	چاپ فشرده برای پرینتر های حرارتی</string>
+    <string name="new_3_275_2">	پیاده سازی محاسبه دو واحدی مقدار جز و کل مشابه محک</string>
+    <string name="new_3_275_3">جستجوی کالا با استفاده از هر قسمت نام کالا</string>
+
+    <string name="new_3_295">نسخه ۳.۲۹۵</string>
+    <string name="new_3_295_1">	افزوده شدن علامت گیفت به کالایی دارای طرح تشویقی  </string>
+    <string name="new_3_295_2">	افزوده شدن فیلتر طرحهای تشویقی به لیست اشخاص و کالاها</string>
+    <string name="new_3_295_3">افزوده شدن فی به چاپ در پرینتر i9000s </string>
+    <string name="new_3_295_4">	رفع خطای جستجوی فاکتور ها</string>
+
+    <string name="new_3_315">نسخه ۳.۳۱۵</string>
+    <string name="new_3_315_1">	نمایش صحیح تعداد کالاها بعد از فیلتر یا تغییر گروه   </string>
+    <string name="new_3_315_2">	نمایش صحیح مربوط به تاریخ تراکنش ها</string>
+    <string name="new_3_315_3">امکان رفتن به فرم چاپ بعد از ثبت دریافتی</string>
+    <string name="new_3_315_4">	افزوده شدن چاپ اختصاصی برای پرینتر بیکسولون </string>
+
+    <string name="new_3_320">نسخه ۳.۳۲۰</string>
+    <string name="new_3_320_1">	رفع خطا در محاسبه طرح تشویقی در طرح تخفیف ثابت سطری</string>
+    <string name="new_3_320_2">	رفع مغایرت مانده و گردش شخص</string>
+    <string name="new_3_320_3">رفع خطای نمایش شهر و استان</string>
+    <string name="new_3_320_4">	رفع خطای مربوط به طرح تشویقی بر روی گروه کالا </string>
+
+    <string name="new_3_330">نسخه ۳.۳۳۰</string>
+    <string name="new_3_330_1">	امکان چاپ دریافتی</string>
+    <string name="new_3_330_2">افزوده شدن دو خط برای توضیحات چاپ زیر فاکتور </string>
+    <string name="new_3_330_3">رفع خطای مربوط به دریافت نوتیفیکیشن</string>
+    <string name="new_3_330_4">	رفع ایراد ارسال دریافتی ها در اسمارت پوز ها در صورتی که دریافتی از پوز باشد </string>
+    <string name="new_3_330_5">	رفع ایراد سایز چاپ ردیف های فاکتور در پرینتر urovo_k319 </string>
+    <string name="new_3_330_6">	رفع خطای مربوط به ثبت فاکتور با قیمت صفر کالا</string>
+
+    <string name="new_3_335">نسخه ۳.۳۳۵</string>
+    <string name="new_3_335_1">	افزودن دکمه ذخیره به فرم تنظیمات</string>
+    <string name="new_3_335_2">افزودن فرم ذخیره به فرم تنظیمات چاپ </string>
+    <string name="new_3_335_3">برطرف شدن مورد نمایش کالاها با موجودی صفر </string>
+    <string name="new_3_335_4">	نمایش صحیح تعداد کالا </string>
+
+    <string name="new_3_410">نسخه ۳.۴۱۰</string>
+    <string name="new_3_410_1">	افزوده شدن افزونه رادارا به سفارش گیر تبلت</string>
+    <string name="new_3_410_2">جلوگیری از ویرایش مشتری به جز فیلد موقعیت جغرافیایی </string>
+    <string name="new_3_410_3">تغییر در نمایش دسته بندی کالاها </string>
+    <string name="new_3_410_4">	رفع خطای تشویقی صعودی</string>
+    <string name="new_3_410_5">	طرح تشویقی وزنی و حجمی</string>
+    <string name="new_3_410_6">	رفع خطای نمایش لیست گردش حساب</string>
+    <string name="new_3_410_7">	رفع خطای نمایش منطقه ها در قسمت اطلاعات بیشتر مشتری</string>
+
+    <string name="new_3_420">نسخه ۳.۴۲۰</string>
+    <string name="new_3_420_1">	برطرف شدن مشکل گزارشات داشبورد</string>
+    <string name="new_3_420_2">نمایش دکمه اضافه و منها در لیست کالاها </string>
+    <string name="new_3_420_3">رفع خطای تصاویر آفلاین کالاها </string>
+    <string name="new_3_420_4">	نمایش مسیر یابی مشتریان بر روی نقشه زوم</string>
+    <string name="new_3_420_5">	رفع مشکل ثبت چک در دریافتی</string>
+    <string name="new_3_420_6">	رفع مشکل دریافتی urovo </string>
+    <string name="new_3_420_7">	تغییر در نمایش طرح های تشویقی </string>
+    <string name="new_3_420_8">	بهبود رابط کاربری برای گوشی های کوچک </string>
+    <string name="new_3_420_9">	افزایش سرعت لود کالاها و اسکرول کالاها </string>
+
+    <string name="new_3_430">نسخه ۳.۴۳۰</string>
+    <string name="new_3_430_1">	افزوده شدن قابلیت توقف رادارا</string>
+    <string name="new_3_430_2">بررسی اعتبار مشتری برای ثبت فاکتور </string>
+    <string name="new_3_430_3">اشانتیون دستی (بر اساس تنظیمات محک)</string>
+    <string name="new_3_430_4">	ثبت کالای تکراری (بر اساس تنظیمات محک)</string>
+    <string name="new_3_430_5">	برطرف شدن خطای موجودی دو برابر</string>
+    <string name="new_3_430_6">	نمایش فی مصرف کننده در چاپ </string>
+    <string name="new_3_430_7">	بهبود عملکرد رادارا </string>
+    <string name="new_3_430_8">	بهبود رابط کاربری برای گوشی های کوچک </string>
+    <string name="new_3_430_9">	افزایش سرعت لود کالاها و اسکرول کالاها </string>
+
+
+    <string name="new_3_440">نسخه ۳.۴۴۰</string>
+    <string name="new_3_440_1">	افزوده شدن قابلیت لاگ های رادارا</string>
+    <string name="new_3_440_2">ویرایش شخص جدید </string>
+    <string name="new_3_440_3">رفع خطای ثبت اعشاری در مقدار جز و کل</string>
+    <string name="new_3_440_4">	برطرف شدن خطای محدوده برای استفاده دو کاربر همزمان</string>
+    <string name="new_3_440_5">	برطرف شدن مشکل نمایش تصاویر آفلاین</string>
+    <string name="new_3_440_6">تغییرات در نمایش نقشه داشبورد </string>
 
 
 </resources>

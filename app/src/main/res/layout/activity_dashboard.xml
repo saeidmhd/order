@@ -14,7 +14,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dip"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:visibility="visible">
 
             <fragment
@@ -73,7 +73,6 @@
                 android:text="@string/str_tracking_description" />
 
         </LinearLayout>
-
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -659,15 +658,6 @@
 
 
         </LinearLayout>
-
-        <HorizontalScrollView
-            android:scrollbars="none"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="bottom"
-            android:id="@+id/horizontalScrollView">
-
-        </HorizontalScrollView>
 
     </LinearLayout>
 

@@ -247,7 +247,7 @@ public class DbAdapter {
         return mDb.insert(DbSchema.CustomersGroupSchema.TABLE_NAME, null, initialvalue);
     }
 
-    public long AddSetting(Setting setting) {
+    public void AddSetting(Setting setting) {
         boolean result;
 
         ContentValues initialvalue = new ContentValues();
@@ -264,8 +264,9 @@ public class DbAdapter {
         initialvalue.put(DbSchema.SettingSchema.COLUMN_UpdateSyncId, setting.getUpdateSyncId());
         initialvalue.put(DbSchema.SettingSchema.COLUMN_RowVersion, setting.getRowVersion());
 
-        return mDb.insert(DbSchema.SettingSchema.TABLE_NAME, null, initialvalue);
-
+        result = (mDb.update(DbSchema.SettingSchema.TABLE_NAME, initialvalue, DbSchema.SettingSchema.COLUMN_SettingId + "=? and " + DbSchema.SettingSchema.COLUMN_USER_ID + "=? " , new String[]{String.valueOf(setting.getSettingId()) , String.valueOf(setting.getVisitorId())})) > 0;
+        if(!result)
+            mDb.insert(DbSchema.SettingSchema.TABLE_NAME, null, initialvalue);
     }
 
     public long AddOrder(Order order) {
@@ -5905,7 +5906,7 @@ public class DbAdapter {
         ArrayList<CustomerGroup> array = new ArrayList<>();
         String orderBy = DbSchema.CustomersGroupSchema.COLUMN_PersonGroupId;
         try {
-            cursor = mDb.query(DbSchema.CustomersGroupSchema.TABLE_NAME, null, DbSchema.CustomersGroupSchema.COLUMN_MAHAK_ID + "=? and " + DbSchema.CustomersGroupSchema.COLUMN_DATABASE_ID + "=?", new String[]{BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId()}, null, null, orderBy);
+            cursor = mDb.query(DbSchema.CustomersGroupSchema.TABLE_NAME, null, DbSchema.CustomersGroupSchema.COLUMN_MAHAK_ID + "=? and " + DbSchema.CustomersGroupSchema.COLUMN_DATABASE_ID + "=? and " + DbSchema.CustomersGroupSchema.COLUMN_USER_ID + "=? ", new String[]{BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId() , String.valueOf(BaseActivity.getPrefUserId())}, null, null, orderBy);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -8221,8 +8222,7 @@ public class DbAdapter {
         initialvalue.put(DbSchema.SettingSchema.COLUMN_CreateSyncId, setting.getCreateSyncId());
         initialvalue.put(DbSchema.SettingSchema.COLUMN_UpdateSyncId, setting.getUpdateSyncId());
         initialvalue.put(DbSchema.SettingSchema.COLUMN_RowVersion, setting.getRowVersion());
-
-        result = (mDb.update(DbSchema.SettingSchema.TABLE_NAME, initialvalue, DbSchema.SettingSchema.COLUMN_SettingId + "=?", new String[]{String.valueOf(setting.getSettingId())})) > 0;
+        result = (mDb.update(DbSchema.SettingSchema.TABLE_NAME, initialvalue, DbSchema.SettingSchema.COLUMN_SettingId + "=? and " + DbSchema.SettingSchema.COLUMN_USER_ID + "=? " , new String[]{String.valueOf(setting.getSettingId()) , String.valueOf(setting.getVisitorId())})) > 0;
         return result;
     }
 

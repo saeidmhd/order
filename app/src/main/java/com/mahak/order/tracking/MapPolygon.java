@@ -38,7 +38,7 @@ public class MapPolygon implements GoogleMap.OnPolygonClickListener {
         radaraDb = new RadaraDb(mContext);
     }
 
-    private static final int COLOR_Fill_Color = 0xffB9BAAc;
+    private static final int COLOR_Fill_Color = 0x77B9BAAc;
     private static final int COLOR_Stroke = 0xff5E5F51;
 
     private static final int POLYGON_STROKE_WIDTH_PX = 4;

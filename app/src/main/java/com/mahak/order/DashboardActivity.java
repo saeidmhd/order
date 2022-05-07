@@ -43,7 +43,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -169,8 +168,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             llOrder,
             llReceipt;
     private Marker mSelectedMarker;
-
-    private HorizontalScrollView horizontalScrollView;
 
 
     private int DefaultMapZoom = 14;
@@ -475,12 +472,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         });
 
 
-        horizontalScrollView.postDelayed(new Runnable() {
-            public void run() {
-                horizontalScrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
-            }
-        }, 1L);
-
 
         //on receive message from google gcm
         MyFcmListenerService.receiveMessag = new View.OnClickListener() {
@@ -761,8 +752,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         llOrder = (LinearLayout) findViewById(R.id.llOrder);
         llInvoice = (LinearLayout) findViewById(R.id.llInvoice);
 
-
-        horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScrollView);
 
         //nav buttons
         btnNavProductList = (Button) findViewById(R.id.btnNavProductList);

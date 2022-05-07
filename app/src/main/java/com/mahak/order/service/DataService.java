@@ -50,7 +50,6 @@ public class DataService {
 
     static int TRUE = 1;
     static int FALSE = 0;
-    private static long result = 0;
 
     public static double InsertCustomer(DbAdapter db, List<Customer> data, long rowVersion) {
         long startTime = System.nanoTime();
@@ -82,7 +81,7 @@ public class DataService {
             if (data.get(i).getDeleted() == FALSE) {
                 data.get(i).setModifyDate(date.getTime());
                 if (!db.UpdateServerCustomerGroup(data.get(i)))
-                    result = db.AddCustomerGroup(data.get(i));
+                    db.AddCustomerGroup(data.get(i));
             } else
                 db.DeleteCustomerGroup(data.get(i));
         }
@@ -120,7 +119,7 @@ public class DataService {
             if (data.get(i).getDeleted() == FALSE) {
                 data.get(i).setModifyDate(date.getTime());
                 if (!db.UpdateServerBank(data.get(i)))
-                    result = db.AddBank(data.get(i));
+                    db.AddBank(data.get(i));
             } else
                 db.DeleteServerBank(data.get(i));
         }
@@ -137,7 +136,7 @@ public class DataService {
             if (data.get(i).getDeleted() == FALSE) {
                 data.get(i).setModifyDate(date.getTime());
                 if (!db.UpdateServerCategory(data.get(i)))
-                    result = db.AddProductGroup(data.get(i));
+                    db.AddProductGroup(data.get(i));
             } else
                 db.DeleteCategory(data.get(i));
         }
@@ -182,9 +181,7 @@ public class DataService {
         db.open();
         for (int i = 0; i < data.size(); i++) {
             Setting setting = data.get(i);
-            if (!db.UpdateSetting(setting)) {
-                result = db.AddSetting(setting);
-            }
+            db.AddSetting(setting);
         }
         db.close();
         ServiceTools.setSettingPreferences(db, mContext);
@@ -209,7 +206,7 @@ public class DataService {
                 //else item isnot new then update to database
                 if (data.get(i).getStatus() != ProjectInfo.STATUS_DO)
                     if (!db.UpdateServerCheckList(data.get(i)))
-                        result = db.AddCheckList(data.get(i));
+                        db.AddCheckList(data.get(i));
             } else
                 db.DeleteChecklist(data.get(i));
         }
@@ -234,7 +231,7 @@ public class DataService {
                 //if item is new add then to database
                 //else item isnot new then update to database
                 if (!db.UpdateServerTransactionsLog(arrayTransactionsLog.get(i)))
-                    result = db.AddTransactionsLog(arrayTransactionsLog.get(i));
+                    db.AddTransactionsLog(arrayTransactionsLog.get(i));
             } else
                 db.DeleteTransactionLog(arrayTransactionsLog.get(i));
         }
@@ -251,7 +248,7 @@ public class DataService {
             if (picturesProduct.getItemType() == 102) {
                 if (!picturesProduct.isDeleted()) {
                     if (db.UpdatePicturesProduct(picturesProduct) <= 0)
-                        result = db.addPicturesProductFromWeb(picturesProduct);
+                        db.addPicturesProductFromWeb(picturesProduct);
                 } else {
                     db.DeletePicturesProduct(picturesProduct.getPictureId());
                 }
@@ -292,7 +289,7 @@ public class DataService {
             PropertyDescription propertyDescription = data.get(i);
             if (propertyDescription.getDeleted() == FALSE) {
                 if (!db.UpdatePropertyDescription(propertyDescription))
-                    result = db.AddPropertyDescription(propertyDescription);
+                    db.AddPropertyDescription(propertyDescription);
             } else {
                 db.DeletePropertyDescription(propertyDescription.getPropertyDescriptionId());
             }
@@ -313,7 +310,7 @@ public class DataService {
             if (!data.get(i).isDeleted()) {
                 if (data.get(i).getIsAccepted() == ProjectInfo.TYPE_NaN && data.get(i).getReceiverVisitorId().equals(String.valueOf(BaseActivity.getPrefUserId()))) {
                     if (!db.UpdateReceivedTransfersFromServer(data.get(i)))
-                        result = db.AddReceivedTransfers(data.get(i));
+                        db.AddReceivedTransfers(data.get(i));
                 }
             } else
                 db.DeleteReceivedTransfer(data.get(i).getTransferStoreId());
@@ -332,7 +329,7 @@ public class DataService {
             productDetail = db.getProductDetail(ServiceTools.toLong(data.get(i).getProductDetailId()));
             product = db.GetProductWithProductId(productDetail.getProductId());
             if (!db.UpdateReceivedTransferProducts(data.get(i), product)) {
-                result = db.AddReceivedTransferProducts(data.get(i), product);
+                db.AddReceivedTransferProducts(data.get(i), product);
             }
 
                 /*if(db.CheckExistProduct(Long.parseLong(data.get(i).getProductDetailId())) == 0){
@@ -354,7 +351,7 @@ public class DataService {
             //if item is new add then to database
             //else item isnot new then update to database
             if (!db.UpdateReasons(data.get(i)))
-                result = db.AddReasons(data.get(i));
+                db.AddReasons(data.get(i));
         }
         db.close();
         long endTime = System.nanoTime();
@@ -380,7 +377,7 @@ public class DataService {
                 }
                 db.upgradeDatabase();
                 if(data.get(i).getDeleted() == 0)
-                    result = db.AddPromotion(data.get(i), promotionOtherFields);
+                    db.AddPromotion(data.get(i), promotionOtherFields);
         }
         db.close();
         long endTime = System.nanoTime();
@@ -407,7 +404,7 @@ public class DataService {
             //if item is new add then to database
             //else item is not new then update to database
             if(!data.get(i).isDeleted())
-                result = db.AddPromotionDetail(data.get(i), promotionDetailOtherFields);
+                db.AddPromotionDetail(data.get(i), promotionDetailOtherFields);
         }
         db.close();
         long endTime = System.nanoTime();
@@ -435,7 +432,7 @@ public class DataService {
             //if item is new add then to database
             //else item is not new then update to database
             if(!data.get(i).isDeleted())
-                result = db.AddEntitiesOfPromotions(data.get(i), promotionEntityOtherFields);
+                db.AddEntitiesOfPromotions(data.get(i), promotionEntityOtherFields);
 
         }
         db.close();
@@ -467,7 +464,7 @@ public class DataService {
                     //if item is new add then to database
                     //else item isnot new then update to database
                     if (!db.UpdateServerDeliveryOrder(orders.get(i)))
-                        result = db.AddDeliveryOrder(orders.get(i));
+                        db.AddDeliveryOrder(orders.get(i));
                 } else
                     db.DeleteDeliveryOrder(orders.get(i));
             }
@@ -500,7 +497,7 @@ public class DataService {
                         orderDetails.get(i).setProductId(product.getProductId());
                         if (orderDetails.get(i).getDescription() == null)
                             orderDetails.get(i).setDescription("");
-                        result = db.AddDeliveryOrderDetail(orderDetails.get(i));
+                        db.AddDeliveryOrderDetail(orderDetails.get(i));
                     } else
                         db.DeleteOrderWithOrderId(orderDetails.get(i).getOrderId());
                 }
@@ -521,7 +518,7 @@ public class DataService {
 
             data.get(i).setModifyDate(date.getTime());
             if (!db.UpdateServerPriceLevelName(data.get(i)))
-                result = db.AddPriceLevelName(data.get(i));
+                db.AddPriceLevelName(data.get(i));
         }
         db.close();
         long endTime = System.nanoTime();
