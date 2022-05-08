@@ -1455,7 +1455,7 @@ public class OrdersListActivity extends BaseActivity {
                 break;
 
             case R.id.mnuAdd:
-                if(DashboardActivity.CanRegisterInvoiceOutOfZone()){
+                if(DashboardActivity.CanRegisterInvoiceOutOfZone(mContext)){
                     Intent intent = new Intent(mContext, PeopleListActivity.class);
                     intent.putExtra(PAGE, PAGE_ADD_NON_REGISTER);
                     startActivityForResult(intent, REQUEST_CUSTOMER_LIST);

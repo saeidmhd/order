@@ -383,7 +383,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 if(isRadaraActive()){
                     if(!btnTrackingService.isChecked()){
                         showDialogRequest();
-                    }else if(CanRegisterInvoiceOutOfZone()){
+                    }else if(CanRegisterInvoiceOutOfZone(mContext)){
                         Type = ProjectInfo.TYPE_INVOCIE;
                         Intent intent = new Intent(mContext, PeopleListActivity.class);
                         intent.putExtra(PAGE, PAGE_ADD_INVOICE);
@@ -502,9 +502,9 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    public static boolean CanRegisterInvoiceOutOfZone() {
+    public static boolean CanRegisterInvoiceOutOfZone(Context context) {
         boolean canRegister = true;
-        String config = ServiceTools.getKeyFromSharedPreferences(mContext, ProjectInfo.pre_gps_config);
+        String config = ServiceTools.getKeyFromSharedPreferences(context, ProjectInfo.pre_gps_config);
         if (!ServiceTools.isNull(config)) {
             try {
                 JSONObject obj = new JSONObject(config);

@@ -195,6 +195,14 @@ public class DataSyncActivityRestApi extends BaseActivity {
     private long RegionMaxRowVersion;
     private File[] files;
 
+
+
+    SendAsyncTask sendAsyncTask;
+    ReceiveAsyncTask receiveAsyncTask;
+    SaveAsyncTask saveAsyncTask;
+    SendSignInfoAsyncTask sendSignInfoAsyncTask;
+    SendSignImageAsyncTask sendSignImageAsyncTask;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -338,7 +346,8 @@ public class DataSyncActivityRestApi extends BaseActivity {
         pd.setMessage(getString(R.string.sending_info));
         pd.setCancelable(false);
         pd.show();
-        new SendAsyncTask().execute();
+        sendAsyncTask = new SendAsyncTask();
+        sendAsyncTask.execute();
     }
 
     private OrderDetail createOrderDetail(OrderDetailProperty orderDetailProperty, OrderDetail orderDetail) {
@@ -482,7 +491,13 @@ public class DataSyncActivityRestApi extends BaseActivity {
     }
 
     private void Cancel() {
-        // syncAsyn.cancel(true);
+
+        sendAsyncTask.cancel(true);
+        receiveAsyncTask.cancel(true);
+        saveAsyncTask.cancel(true);
+        sendSignInfoAsyncTask.cancel(true);
+        sendSignImageAsyncTask.cancel(true);
+
         btnSync.setEnabled(true);
         pbLoading.setVisibility(View.GONE);
     }
@@ -562,6 +577,55 @@ public class DataSyncActivityRestApi extends BaseActivity {
         });
         Dialog dialog = builder.show();
         FontAlertDialog.FontDialog(dialog);
+    }
+
+    private String getResponseError(Objects objects) {
+        try {
+            if (objects.getPeople().getResults().size() > 0)
+                return "خطا در ارسال اشخاص" + "\n" + objects.getPeople().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getPeople().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getBanks().getResults().size() > 0)
+                return "خطا در ارسال بانک" + "\n" + objects.getBanks().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getBanks().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getChecklists().getResults().size() > 0)
+                return "خطا در ارسال چک لیست ها" + "\n" + objects.getChecklists().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getChecklists().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getCheques().getResults().size() > 0)
+                return "خطا در ارسال چک ها" + "\n" + objects.getCheques().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getCheques().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getPayableTransfers().getResults().size() > 0)
+                return "خطا در ارسال پرداختی ها" + "\n" + objects.getPayableTransfers().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getPayableTransfers().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getSettings().getSettingsResults().size() > 0)
+                return "خطا در ارسال تنظیمات" + "\n" + objects.getSettings().getSettingsResults().get(0).getErrors().get(0).getError() + "\n" + objects.getSettings().getSettingsResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getExtraDatas().getResults().size() > 0)
+                return "خطا در ارسال اطلاعات بیشتر" + "\n" + objects.getExtraDatas().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getExtraDatas().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getOrderDetails().getResults().size() > 0)
+                return "خطا در ارسال جزییات فاکتور" + "\n" + objects.getOrderDetails().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getOrderDetails().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getOrders().getResults().size() > 0)
+                return "خطا در ارسال فاکتور" + "\n" + objects.getOrders().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getOrders().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getPersonGroups().getResults().size() > 0)
+                return "خطا در ارسال گروه اشخاص" + "\n" + objects.getPersonGroups().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getPersonGroups().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getPictures().getResults().size() > 0)
+                return "خطا در ارسال تصاویر" + "\n" + objects.getPictures().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getPictures().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getProductCategories().getResults().size() > 0)
+                return "خطا در ارسال گروه کالاها" + "\n" + objects.getProductCategories().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getProductCategories().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getProductDetails().getResults().size() > 0)
+                return "خطا در ارسال جزییات کالاها" + "\n" + objects.getProductDetails().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getProductDetails().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getProducts().getResults().size() > 0)
+                return "خطا در ارسال کالاها" + "\n" + objects.getProducts().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getProducts().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getReceipts().getResults().size() > 0)
+                return "خطا در ارسال دریافتی ها" + "\n" + objects.getReceipts().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getReceipts().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getTransactions().getResults().size() > 0)
+                return "خطا در ارسال گردش حساب ها" + "\n" + objects.getTransactions().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getTransactions().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getVisitors().getResults().size() > 0)
+                return "خطا در ارسال ویزیتور ها" + "\n" + objects.getVisitors().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getVisitors().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getNotRegisters().getResults().size() > 0)
+                return "خطا در ارسال عدم ثبت سفارش" + "\n" + objects.getNotRegisters().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getNotRegisters().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getTransferStores().getResults().size() > 0)
+                return "خطا در ارسال حواله کالا" + "\n" + objects.getTransferStores().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getTransferStores().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getTransferStoreDetails().getResults().size() > 0)
+                return "خطا در ارسال جزییات حواله کالاها" + "\n" + objects.getTransferStoreDetails().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getTransferStoreDetails().getResults().get(0).getErrors().get(0).getProperty();
+            return "";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "خطای ناشناخته";
+        }
     }
 
     class SendAsyncTask extends AsyncTask<String, String, Integer> {
@@ -777,7 +841,8 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         pbLoading.setVisibility(View.GONE);
                         
 
-                        new ReceiveAsyncTask().execute();
+                        receiveAsyncTask = new ReceiveAsyncTask();
+                        receiveAsyncTask.execute();
 
 
                     } else if (response.body() != null) {
@@ -805,55 +870,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     setTextSendErrorResult();
                 }
             });
-        }
-    }
-
-    private String getResponseError(Objects objects) {
-        try {
-            if (objects.getPeople().getResults().size() > 0)
-                return "خطا در ارسال اشخاص" + "\n" + objects.getPeople().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getPeople().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getBanks().getResults().size() > 0)
-                return "خطا در ارسال بانک" + "\n" + objects.getBanks().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getBanks().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getChecklists().getResults().size() > 0)
-                return "خطا در ارسال چک لیست ها" + "\n" + objects.getChecklists().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getChecklists().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getCheques().getResults().size() > 0)
-                return "خطا در ارسال چک ها" + "\n" + objects.getCheques().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getCheques().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getPayableTransfers().getResults().size() > 0)
-                return "خطا در ارسال پرداختی ها" + "\n" + objects.getPayableTransfers().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getPayableTransfers().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getSettings().getSettingsResults().size() > 0)
-                return "خطا در ارسال تنظیمات" + "\n" + objects.getSettings().getSettingsResults().get(0).getErrors().get(0).getError() + "\n" + objects.getSettings().getSettingsResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getExtraDatas().getResults().size() > 0)
-                return "خطا در ارسال اطلاعات بیشتر" + "\n" + objects.getExtraDatas().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getExtraDatas().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getOrderDetails().getResults().size() > 0)
-                return "خطا در ارسال جزییات فاکتور" + "\n" + objects.getOrderDetails().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getOrderDetails().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getOrders().getResults().size() > 0)
-                return "خطا در ارسال فاکتور" + "\n" + objects.getOrders().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getOrders().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getPersonGroups().getResults().size() > 0)
-                return "خطا در ارسال گروه اشخاص" + "\n" + objects.getPersonGroups().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getPersonGroups().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getPictures().getResults().size() > 0)
-                return "خطا در ارسال تصاویر" + "\n" + objects.getPictures().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getPictures().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getProductCategories().getResults().size() > 0)
-                return "خطا در ارسال گروه کالاها" + "\n" + objects.getProductCategories().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getProductCategories().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getProductDetails().getResults().size() > 0)
-                return "خطا در ارسال جزییات کالاها" + "\n" + objects.getProductDetails().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getProductDetails().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getProducts().getResults().size() > 0)
-                return "خطا در ارسال کالاها" + "\n" + objects.getProducts().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getProducts().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getReceipts().getResults().size() > 0)
-                return "خطا در ارسال دریافتی ها" + "\n" + objects.getReceipts().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getReceipts().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getTransactions().getResults().size() > 0)
-                return "خطا در ارسال گردش حساب ها" + "\n" + objects.getTransactions().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getTransactions().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getVisitors().getResults().size() > 0)
-                return "خطا در ارسال ویزیتور ها" + "\n" + objects.getVisitors().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getVisitors().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getNotRegisters().getResults().size() > 0)
-                return "خطا در ارسال عدم ثبت سفارش" + "\n" + objects.getNotRegisters().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getNotRegisters().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getTransferStores().getResults().size() > 0)
-                return "خطا در ارسال حواله کالا" + "\n" + objects.getTransferStores().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getTransferStores().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getTransferStoreDetails().getResults().size() > 0)
-                return "خطا در ارسال جزییات حواله کالاها" + "\n" + objects.getTransferStoreDetails().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getTransferStoreDetails().getResults().get(0).getErrors().get(0).getProperty();
-            return "";
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "خطای ناشناخته";
         }
     }
 
@@ -1004,7 +1020,8 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
                             double a = (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
 
-                            new SaveAsyncTask().execute();
+                            saveAsyncTask =  new SaveAsyncTask();
+                            saveAsyncTask.execute();
                         }
                         pbLoading.setVisibility(View.GONE);
                     } else if (response.body() != null) {
@@ -1330,7 +1347,8 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 }
             }
 
-            new SendSignInfoAsyncTask().execute();
+            sendSignInfoAsyncTask =  new SendSignInfoAsyncTask();
+            sendSignInfoAsyncTask.execute();
 
             pbLoading.setVisibility(View.GONE);
             dismissProgressDialog();
@@ -1385,9 +1403,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             }
                         }
                         pbLoading.setVisibility(View.GONE);
-                        
 
-                        new SendSignImageAsyncTask().execute();
+
+                        sendSignImageAsyncTask = new SendSignImageAsyncTask();
+                        sendSignImageAsyncTask.execute();
 
                     } else if (response.body() != null) {
                         mMsg[0] = getString(R.string.send_error);
