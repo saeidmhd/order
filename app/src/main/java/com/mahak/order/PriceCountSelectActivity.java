@@ -1250,10 +1250,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                     txtCount2.setEnabled(false);
                 }
                 txtCount1.setText(formatCount(ServiceTools.toDouble(count1)));
-                if (product.getUnitRatio() > 0)
-                    txtCount2.setText(formatCount(ServiceTools.toDouble(count1) / product.getUnitRatio()));
-                else
-                    txtCount2.setText(formatCount(ServiceTools.toDouble(count2)));
+                txtCount2.setText(formatCount(ServiceTools.toDouble(count2)));
 
                 unitName.setText("( " + product.getUnitName() + " )");
                 unitName2.setText("( " + product.getUnitName2() + " )");

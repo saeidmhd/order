@@ -84,10 +84,11 @@ public class Visitor {
     @SerializedName("Name")
     @Expose
     private String Name;
-    ///
+
     @SerializedName("VisitorId")
     @Expose
     private int visitorId;
+
     @SerializedName("VisitorClientId")
     @Expose
     private long visitorClientId;
@@ -95,6 +96,7 @@ public class Visitor {
     @SerializedName("Password")
     @Expose
     private String password;
+
     @SerializedName("PersonCode")
     @Expose
     private int personCode;
@@ -102,6 +104,7 @@ public class Visitor {
     @SerializedName("VisitorType")
     @Expose
     private int visitorType;
+
     @SerializedName("DeviceId")
     @Expose
     private String deviceId;
@@ -109,6 +112,7 @@ public class Visitor {
     @SerializedName("IsActive")
     @Expose
     private boolean isActive;
+
     @SerializedName("Color")
     @Expose
     private String color;
@@ -116,21 +120,30 @@ public class Visitor {
     @SerializedName("DataHash")
     @Expose
     private String dataHash;
+
     @SerializedName("CreateDate")
     @Expose
     private String createDate;
+
     @SerializedName("UpdateDate")
     @Expose
     private String updateDate;
+
     @SerializedName("CreateSyncId")
     @Expose
     private int createSyncId;
+
     @SerializedName("UpdateSyncId")
     @Expose
     private int updateSyncId;
+
     @SerializedName("RowVersion")
     @Expose
     private long rowVersion;
+
+    @SerializedName("ExtraInfo")
+    @Expose
+    private String extraInfo;
 
 
     public Visitor() {

@@ -212,7 +212,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         }
 
         Boolean res = false;
-        if (BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz) {
+        if (BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz || BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.Mode_DoVahedi ) {
             holder.panelTotalAsset.setVisibility(View.VISIBLE);
             if (productPickerListActivity != null)
                 holder.panelTotalCount.setVisibility(View.VISIBLE);
@@ -307,7 +307,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
 
                     total_count1 ++;
 
-                    if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)
+                    if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz || BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.Mode_DoVahedi)
                         sum = total_count1 + (total_count2 * product.getUnitRatio());
                     else
                         sum = total_count1;
@@ -352,7 +352,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
 
                     if(total_count1 > 0){
                         total_count1--;
-                        if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)
+                        if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz || BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.Mode_DoVahedi)
                             sum = total_count1 + (total_count2 * product.getUnitRatio());
                         else
                             sum = total_count1;
@@ -399,7 +399,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     if(asset_count2 > 0){
                         total_count2++;
 
-                        if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)
+                        if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz || BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.Mode_DoVahedi)
                             sum = total_count1 + (total_count2 * product.getUnitRatio());
                         else
                             sum = total_count1;
@@ -442,7 +442,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     if(total_count2 > 0){
                         total_count2--;
 
-                        if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)
+                        if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz || BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.Mode_DoVahedi)
                             sum = total_count1 + (total_count2 * product.getUnitRatio());
                         else
                             sum = total_count1;

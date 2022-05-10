@@ -492,11 +492,16 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
     private void Cancel() {
 
-        sendAsyncTask.cancel(true);
-        receiveAsyncTask.cancel(true);
-        saveAsyncTask.cancel(true);
-        sendSignInfoAsyncTask.cancel(true);
-        sendSignImageAsyncTask.cancel(true);
+        if(sendAsyncTask != null)
+            sendAsyncTask.cancel(true);
+        if(receiveAsyncTask != null)
+            receiveAsyncTask.cancel(true);
+        if(saveAsyncTask != null)
+            saveAsyncTask.cancel(true);
+        if(sendSignInfoAsyncTask != null)
+            sendSignInfoAsyncTask.cancel(true);
+        if(sendSignImageAsyncTask != null)
+            sendSignImageAsyncTask.cancel(true);
 
         btnSync.setEnabled(true);
         pbLoading.setVisibility(View.GONE);
