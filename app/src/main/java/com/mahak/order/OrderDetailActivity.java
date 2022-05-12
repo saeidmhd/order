@@ -197,7 +197,7 @@ public class OrderDetailActivity extends BaseActivity {
         printerBrand = SharedPreferencesHelper.getPrefPrinterBrand(mContext);
         lst_order_detail_for_print = R.layout.print_order_detail_item;
 
-        if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
+        if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s || printerBrand == ProjectInfo.SMART_POS_MoreFun) {
             lst_order_detail_for_print = R.layout.print_szzt_urovo_item;
         } else {
             if (getTemplate2Status(mContext, ProjectInfo._pName_OrderDetail))
@@ -648,7 +648,7 @@ public class OrderDetailActivity extends BaseActivity {
 
             if (printerBrand == ProjectInfo.PRINTER_BABY_280_A) {
                 ll = inflater.inflate(R.layout.factor_print_50mm, null, false);
-            } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
+            } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s || printerBrand == ProjectInfo.SMART_POS_MoreFun) {
                 ll = inflater.inflate(R.layout.factor_print_szzt, null, false);
             } else if (getTemplate2Status(mContext, ProjectInfo._pName_OrderDetail))
                     ll = inflater.inflate(R.layout.factor_bixolon_2, null, false);

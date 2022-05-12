@@ -66,7 +66,7 @@
     <style name="forms_edittext_default" parent="@android:style/Widget.Button">
         <item name="android:background">@drawable/forms_edittext_selector</item>
         <item name="android:textColor">@color/forms_edittext_text_color_selector</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:minHeight">@dimen/edittext_height</item>
         <item name="android:height">@dimen/edittext_height</item>
         <item name="android:gravity">center_vertical</item>

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -25,6 +27,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ava.thirdparty.container.ThirdPartyDTO;
+import com.ava.thirdparty.listener.ResultListener;
+import com.ava.thirdparty.manager.ThirdPartyManager;
 import com.kishcore.sdk.hybrid.api.HostApp;
 
 
@@ -55,13 +60,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 import static com.mahak.order.common.ServiceTools.getDateAndTimeForLong;
 
 //import com.mahak.order.common.ProductInOrder;
 
 @SuppressLint("ValidFragment")
-public class ManageReceiptActivity extends BaseActivity {
+public class ManageReceiptActivity extends BaseActivity implements ResultListener {
 
     private static int REQUEST_CUSTOMER_LIST = 1;
     private static int REQUEST_MANAGE_CHEQUE = 2;
@@ -118,6 +124,8 @@ public class ManageReceiptActivity extends BaseActivity {
     Order order;
     private long OrderId;
 
+    protected ThirdPartyManager manager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,6 +181,9 @@ public class ManageReceiptActivity extends BaseActivity {
                     Toast.makeText(mContext, "UNKNOWN", Toast.LENGTH_SHORT).show();
                     break;
             }
+        }
+        if(printerBrand == ProjectInfo.SMART_POS_MoreFun){
+            manager = ThirdPartyManager.getInstance();
         }
 
 
@@ -519,6 +530,8 @@ public class ManageReceiptActivity extends BaseActivity {
                     managePaySzzt();
                 else if (printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s)
                     managePayUrovoI9000();
+                else if (printerBrand == ProjectInfo.SMART_POS_MoreFun)
+                    manageMoreFun();
             }
         });
 
@@ -651,6 +664,38 @@ public class ManageReceiptActivity extends BaseActivity {
         intent.putExtra("amount", amount);
         intent.putExtra("res_num", 2L);
         startActivityForResult(intent, REQUEST_i9000s);
+
+    }
+    private void manageMoreFun() {
+        String amount = String.valueOf((int) Payment);
+        if (amount.equals("0"))
+        {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(),"INVALID AMOUNT",Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            });
+            return;
+        }
+
+        Handler mHandler = new Handler(Looper.getMainLooper());
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                ThirdPartyDTO request = new ThirdPartyDTO();
+                request.setAmount(amount);
+                request.setSessionID(UUID.randomUUID().toString());//random number for check request is unique
+                request.setPackageName(getPackageName());//application package name for double check
+                try {
+                    request.setReturnTimeout(6);//automatically return to third party app after timeout is must be over 5 sec
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                manager.sendRequestSale(request, ManageReceiptActivity.this);
+            }
+        });
 
     }
 
@@ -799,7 +844,7 @@ public class ManageReceiptActivity extends BaseActivity {
         lstCheque = (ListView) findViewById(R.id.lstCheque);
 
         printerBrand = SharedPreferencesHelper.getPrefPrinterBrand(mContext);
-        if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s)
+        if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s || printerBrand == ProjectInfo.SMART_POS_MoreFun)
             posLL.setVisibility(View.VISIBLE);
 
         db = new DbAdapter(mContext);
@@ -932,6 +977,26 @@ public class ManageReceiptActivity extends BaseActivity {
         Code = ProjectInfo.DONT_CODE;
         Payment = 0.0;
         lngDate = 0;
+    }
+
+    @Override
+    public void onReceiveResult(Bundle bundle) {
+        int code = (int) bundle.get("RequestCode");
+        if (code == ThirdPartyManager.CODE_REQUEST_TXN) {
+            ThirdPartyDTO response=  manager.receiveResponse(bundle);
+            if (response.getResponseCode().equals("0")&&
+                    response.getResponseMessage().equalsIgnoreCase("SUCCESS"))//mean operation is successfully
+            {
+                saveReceipt(response.getTrace(), response.getAmount());
+            }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(),response.getResponseMessage(),Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            });
+        }
     }
 
     private class AdapterCheque extends ArrayAdapter<Cheque> {

@@ -54,6 +54,9 @@ import androidx.print.PrintHelper;
 
 import com.android.print.sdk.PrinterConstants;
 import com.android.print.sdk.PrinterInstance;
+import com.ava.thirdparty.container.ThirdPartyDTO;
+import com.ava.thirdparty.listener.ResultListener;
+import com.ava.thirdparty.manager.ThirdPartyManager;
 import com.bixolon.printer.BixolonPrinter;
 import com.centerm.smartpos.aidl.printer.AidlPrinter;
 import com.centerm.smartpos.aidl.printer.AidlPrinterStateChangeListener;
@@ -107,6 +110,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Set;
+import java.util.UUID;
 import java.util.Vector;
 
 import PRTAndroidSDK.PRTAndroidPrint;
@@ -123,7 +127,7 @@ import static com.mahak.order.common.ProjectInfo.DIRECTORY_ORDER_SIGNS;
 import static com.mahak.order.common.ProjectInfo.PRINTER_SZZT_KS8223;
 import static com.mahak.order.common.ProjectInfo.Woosim_WSP_R341;
 
-public class PrintActivity extends BaseActivity {
+public class PrintActivity extends BaseActivity implements ResultListener {
 
     private static final int PRINT_SIGN_REQUEST = 1001;
 
@@ -229,6 +233,9 @@ public class PrintActivity extends BaseActivity {
     public static File DIRECTORY_PDF = new File(DATABASE_DIRECTORY + "/" + FileNamePDF);
 
 
+    protected ThirdPartyManager MoreFunManager;
+
+
     //k9
     private AidlPrinter printDev = null;
     private AidlPrinterStateChangeListener callback = new PrinterCallback();
@@ -277,6 +284,20 @@ public class PrintActivity extends BaseActivity {
 
     private PrinterManager mPrinterManager;
 
+    @Override
+    public void onReceiveResult(Bundle bundle) {
+        int code = (int) bundle.get("RequestCode");
+        ThirdPartyDTO response=  MoreFunManager.receiveResponse(bundle);
+        if (code == ThirdPartyManager.CODE_REQUEST_PRINT) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(),"REQUEST_PRINT:"+ response.getResponseMessage(),Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
     //smartpos k9
     private class PrinterCallback extends AidlPrinterStateChangeListener.Stub {
 
@@ -314,6 +335,8 @@ public class PrintActivity extends BaseActivity {
 
         mContext = this;
         mActivity = this;
+
+        MoreFunManager=ThirdPartyManager.getInstance();
 
         printerBrand = SharedPreferencesHelper.getPrefPrinterBrand(mContext);
         if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223){
@@ -446,7 +469,13 @@ public class PrintActivity extends BaseActivity {
         btnPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
+                if(printerBrand == ProjectInfo.SMART_POS_MoreFun){
+                    ThirdPartyDTO request = new ThirdPartyDTO();
+                    request.setSessionID(UUID.randomUUID().toString());//random number for check request is unique
+                    request.setPackageName(getPackageName());
+                    request.setExtraPrint(MoreFunManager.convert(bPrint));//extra print after print customer
+                    MoreFunManager.sendRequestPrint(request,PrintActivity.this);
+                }else if (printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
                     Message msg = mPrintHandler.obtainMessage(PRINT_BITMAP);
                     msg.obj = bPrint;
                     msg.sendToTarget();
@@ -518,10 +547,10 @@ public class PrintActivity extends BaseActivity {
                 printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 ||
                 printerBrand == ProjectInfo.Centerm_K9)) {
             if(mService != null){
-                  if (!mService.isBTopen()) {
-                      Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                      startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-                  }
+                if (!mService.isBTopen()) {
+                    Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+                }
             }
         }
         if (printerBrand == ProjectInfo.PRINTER_Rongta_RPP200) {
@@ -633,7 +662,7 @@ public class PrintActivity extends BaseActivity {
         View ll;
         printerBrand = SharedPreferencesHelper.getPrefPrinterBrand(mContext);
 
-        if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.Centerm_K9 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
+        if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.Centerm_K9 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s || printerBrand == ProjectInfo.SMART_POS_MoreFun) {
             ll_btn_connect.setVisibility(View.GONE);
         }
 
@@ -959,7 +988,11 @@ public class PrintActivity extends BaseActivity {
     }
 
     public void initPrinter() {
-        if (printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
+        if (printerBrand == ProjectInfo.SMART_POS_MoreFun) {
+            mIsConnected = true;
+            btnConnect.setEnabled(true);
+            refreshStatus();
+        }else if (printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s) {
             new CustomThread().start();
             mIsConnected = true;
             btnConnect.setEnabled(true);

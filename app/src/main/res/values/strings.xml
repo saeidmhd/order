@@ -328,7 +328,7 @@
     <string name="str_register_date">تاریخ ثبت</string>
     <string name="str_cash_amount">مبلغ نقدی</string>
     <string name="str_add_new_cheque">اضافه کردن</string>
-    <string name="str_cheque">چک ها و حواله ها</string>
+    <string name="str_cheque">چک و حواله</string>
     <string name="str_cheque_type">چک</string>
     <string name="str_cash_receipt_type">حواله </string>
     <string name="str_edit">ویرایش</string>

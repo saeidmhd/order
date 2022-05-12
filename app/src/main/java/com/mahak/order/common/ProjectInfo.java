@@ -92,6 +92,7 @@ public class ProjectInfo {
     public static int Woosim_WSP_R341 = 11;
     public static int Centerm_K9 = 12;
     public static int SMART_POS_UROVO_i9000s = 13;
+    public static int SMART_POS_MoreFun = 14;
 
     //Statics
     public static int TYPE_CASH = 0;
