@@ -5,6 +5,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -64,10 +67,12 @@ import java.util.UUID;
 
 import static com.mahak.order.common.ServiceTools.getDateAndTimeForLong;
 
+import androidx.annotation.NonNull;
+
 //import com.mahak.order.common.ProductInOrder;
 
 @SuppressLint("ValidFragment")
-public class ManageReceiptActivity extends BaseActivity implements ResultListener {
+public class ManageReceiptActivity extends BaseActivity implements ResultListener  {
 
     private static int REQUEST_CUSTOMER_LIST = 1;
     private static int REQUEST_MANAGE_CHEQUE = 2;
@@ -182,14 +187,15 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
                     break;
             }
         }
-        if(printerBrand == ProjectInfo.SMART_POS_MoreFun){
-            manager = ThirdPartyManager.getInstance();
-        }
-
 
         alertDialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(mActivity);
 
         initialise();
+
+        if(printerBrand == ProjectInfo.SMART_POS_MoreFun){
+            manager = ThirdPartyManager.getInstance();
+        }
+
         Extras = getIntent().getExtras();
 
         arrayBank = new ArrayList<>();
@@ -696,7 +702,25 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
                 manager.sendRequestSale(request, ManageReceiptActivity.this);
             }
         });
+    }
 
+    @Override
+    public void onReceiveResult(Bundle bundle) {
+        int code = (int) bundle.get("RequestCode");
+        if (code == ThirdPartyManager.CODE_REQUEST_TXN) {
+            ThirdPartyDTO response=  manager.receiveResponse(bundle);
+            if (response.getResponseCode().equals("0")&&
+                    response.getResponseMessage().equalsIgnoreCase("SUCCESS"))//mean operation is successfully
+            {
+                saveReceipt(response.getTrace(), response.getAmount());
+            }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(),response.getResponseMessage(),Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     private void saveReceipt(String traceNumber, String amount) {
@@ -979,26 +1003,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         lngDate = 0;
     }
 
-    @Override
-    public void onReceiveResult(Bundle bundle) {
-        int code = (int) bundle.get("RequestCode");
-        if (code == ThirdPartyManager.CODE_REQUEST_TXN) {
-            ThirdPartyDTO response=  manager.receiveResponse(bundle);
-            if (response.getResponseCode().equals("0")&&
-                    response.getResponseMessage().equalsIgnoreCase("SUCCESS"))//mean operation is successfully
-            {
-                saveReceipt(response.getTrace(), response.getAmount());
-            }
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(),response.getResponseMessage(),Toast.LENGTH_LONG).show();
-                    finish();
-                }
-            });
-        }
-    }
-
     private class AdapterCheque extends ArrayAdapter<Cheque> {
         Activity mContext;
 
@@ -1086,6 +1090,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CUSTOMER_LIST) {
             if (resultCode == RESULT_OK) {
                 CustomerId = data.getIntExtra(CUSTOMERID_KEY, 0);
@@ -1161,10 +1166,9 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
                         }
                     }
                 }
-            }else
+            } else
                 Toast.makeText(mContext, "خطا در پرداخت توسط پوز", Toast.LENGTH_SHORT).show();
         }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
