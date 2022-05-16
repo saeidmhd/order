@@ -1569,8 +1569,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
     @Override
     protected void onPause() {
-        db.close();
-        radaraDb.close();
         super.onPause();
     }
 }
