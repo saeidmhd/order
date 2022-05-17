@@ -92,7 +92,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
     private static int CustomerId;
     private static String Code = ProjectInfo.DONT_CODE;
     private static double Payment;
-    private static double remainCustomerCredit;
+    private double remainCustomerCredit;
     public static ArrayList<Cheque> arrayCheque = new ArrayList<Cheque>();
 
     private EditText txtCustomerName, txtAmount, txtDescription, txtMarketName, txtTrackingCode, txtPayment;
@@ -220,73 +220,72 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
 
         totalReceiptForInvoiceNotPublished = db.getTotalReceiptForInvoiceNotPublished();
 
-        if (savedInstanceState == null) {
-            if (Extras != null) {
-                Page = Extras.getInt(PAGE);
-                Mode = Extras.getInt(MODE_PAGE);
-                CustomerId = Extras.getInt(CUSTOMERID_KEY);
-                CustomerClientId = Extras.getLong(CUSTOMER_CLIENT_ID_KEY);
-                OrderId = Extras.getLong(ID);
-                Code = Extras.getString(CODE_KEY) != null ? Extras.getString(CODE_KEY) : ProjectInfo.DONT_CODE;
-                Payment = Extras.getDouble(PAYMENT_KEY);
-                remainCustomerCredit = Extras.getDouble(Force_Payment_KEY);
+        if (Extras != null) {
+            Page = Extras.getInt(PAGE);
+            Mode = Extras.getInt(MODE_PAGE);
+            CustomerId = Extras.getInt(CUSTOMERID_KEY);
+            CustomerClientId = Extras.getLong(CUSTOMER_CLIENT_ID_KEY);
+            OrderId = Extras.getLong(ID);
+            Code = Extras.getString(CODE_KEY) != null ? Extras.getString(CODE_KEY) : ProjectInfo.DONT_CODE;
+            Payment = Extras.getDouble(PAYMENT_KEY);
+            remainCustomerCredit = Extras.getDouble(Force_Payment_KEY);
+            txtAmount.setText(ServiceTools.formatPrice(remainCustomerCredit));
 
-                ReceiptId = Extras.getLong(ID);
+            ReceiptId = Extras.getLong(ID);
 
-                visitorHasCredit(Payment);
-                currentVisitorCredit = remainVisitorCredit(Payment);
+            visitorHasCredit(Payment);
+            currentVisitorCredit = remainVisitorCredit(Payment);
 
-                if (Page == PAGE_CHECKLIST) {
+            if (Page == PAGE_CHECKLIST) {
+                dt = new Date();
+                lngDate = dt.getTime();
+                StrDate = getDateAndTimeForLong(lngDate);
+                tvDate.setText(StrDate);
+            } else if (Page == PAGE_DASHBORD) {
+                dt = new Date();
+                lngDate = dt.getTime();
+                StrDate = getDateAndTimeForLong(lngDate);
+                tvDate.setText(StrDate);
+            } else if (Page == PAGE_ORDER_DETAIL) {
+                dt = new Date();
+                lngDate = dt.getTime();
+                StrDate = getDateAndTimeForLong(lngDate);
+                tvDate.setText(StrDate);
+                txtTrackingCode.setText(Code);
+                txtPayment.setText(ServiceTools.formatPrice(Payment));
+            } else if (Page == PAGE_RECEIPTLIST) {
+                if (Mode == MODE_EDIT) {
+                    savedCashedAndCheque = db.getTotalReceiptWithId(ReceiptId);
+                    // اعتبار مصرف شده بدون احتساب دریافتی فعلی
+                    mSpentCredit = mSpentCredit + savedCashedAndCheque;
+                    FillView();
+                } else if (Mode == MODE_NEW) {
                     dt = new Date();
                     lngDate = dt.getTime();
                     StrDate = getDateAndTimeForLong(lngDate);
                     tvDate.setText(StrDate);
-                } else if (Page == PAGE_DASHBORD) {
-                    dt = new Date();
-                    lngDate = dt.getTime();
-                    StrDate = getDateAndTimeForLong(lngDate);
-                    tvDate.setText(StrDate);
-                } else if (Page == PAGE_ORDER_DETAIL) {
+                }
+            } else if (Page == PAGE_Invoice_Detail_Activity) {
+                if (Mode == MODE_NEW) {
                     dt = new Date();
                     lngDate = dt.getTime();
                     StrDate = getDateAndTimeForLong(lngDate);
                     tvDate.setText(StrDate);
                     txtTrackingCode.setText(Code);
                     txtPayment.setText(ServiceTools.formatPrice(Payment));
-                } else if (Page == PAGE_RECEIPTLIST) {
-                    if (Mode == MODE_EDIT) {
-                        savedCashedAndCheque = db.getTotalReceiptWithId(ReceiptId);
-                        // اعتبار مصرف شده بدون احتساب دریافتی فعلی
-                        mSpentCredit = mSpentCredit + savedCashedAndCheque;
-                        FillView();
-                    } else if (Mode == MODE_NEW) {
-                        dt = new Date();
-                        lngDate = dt.getTime();
-                        StrDate = getDateAndTimeForLong(lngDate);
-                        tvDate.setText(StrDate);
-                    }
-                } else if (Page == PAGE_Invoice_Detail_Activity) {
-                    if (Mode == MODE_NEW) {
-                        dt = new Date();
-                        lngDate = dt.getTime();
-                        StrDate = getDateAndTimeForLong(lngDate);
-                        tvDate.setText(StrDate);
-                        txtTrackingCode.setText(Code);
-                        txtPayment.setText(ServiceTools.formatPrice(Payment));
-                    }
-                }
-
-                if (CustomerId == ProjectInfo.CUSTOMERID_GUEST) {
-                    Customer customer = db.getCustomerWithPersonClientId(CustomerClientId);
-                    txtCustomerName.setText(customer.getName());
-                    txtMarketName.setText(customer.getOrganization());
-                } else {
-                    Customer customer = db.getCustomerWithPersonId(CustomerId);
-                    txtCustomerName.setText(customer.getName());
-                    txtMarketName.setText(customer.getOrganization());
                 }
             }
-        } else {
+
+            Customer customer;
+            if (CustomerId == ProjectInfo.CUSTOMERID_GUEST) {
+                customer = db.getCustomerWithPersonClientId(CustomerClientId);
+            } else {
+                customer = db.getCustomerWithPersonId(CustomerId);
+            }
+            txtCustomerName.setText(customer.getName());
+            txtMarketName.setText(customer.getOrganization());
+        }else if (savedInstanceState != null) {
+
             CustomerName = savedInstanceState.getString(CUSTOMER_NAME_KEY);
             MarketName = savedInstanceState.getString(MARKET_KEY);
             StrDate = savedInstanceState.getString(STR_DATE_KEY);
@@ -302,6 +301,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             txtDescription.setText(Description);
             txtTrackingCode.setText(Code);
             txtPayment.setText(ServiceTools.formatPrice(Payment));
+
         }
 
         lstCheque.setOnItemClickListener(new OnItemClickListener() {
@@ -885,9 +885,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         db.open();
         adCheque = new AdapterCheque(mActivity, arrayCheque);
         lstCheque.setAdapter(adCheque);
-
-        if(remainCustomerCredit > 0 )
-            txtAmount.setText(ServiceTools.formatPrice(remainCustomerCredit));
     }
 
     /**

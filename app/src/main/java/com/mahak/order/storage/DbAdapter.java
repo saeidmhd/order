@@ -3737,6 +3737,35 @@ public class DbAdapter {
         }
         return TotalPrice;
     }
+    public double getTotalPriceInvoicePerPerson(long personId) {
+        Cursor cursor1, cursor2;
+        double TotalPrice = 0;
+        long id;
+        try {
+            cursor1 = mDb.query(DbSchema.OrderSchema.TABLE_NAME, null, DbSchema.OrderSchema.COLUMN_USER_ID + "=? AND " + DbSchema.OrderSchema.COLUMN_MAHAK_ID + "=? AND " + DbSchema.OrderSchema.COLUMN_DATABASE_ID + "=? AND " + DbSchema.OrderSchema.COLUMN_TYPE + "=? AND " + DbSchema.OrderSchema.COLUMN_PersonId + " =? ", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(ProjectInfo.TYPE_INVOCIE) , String.valueOf(personId)}, null, null, null);
+            if (cursor1 != null) {
+                cursor1.moveToFirst();
+                while (!cursor1.isAfterLast()) {
+                    id = cursor1.getLong(cursor1.getColumnIndex(DbSchema.OrderSchema.COLUMN_ID));
+                    cursor2 = mDb.rawQuery("select  sum(" + DbSchema.OrderDetailSchema.COLUMN_Price + "*" + DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz + ")  from " + DbSchema.OrderDetailSchema.TABLE_NAME + " where " + DbSchema.OrderDetailSchema.COLUMN_OrderId + "=" + id, null);
+                    if (cursor2 != null) {
+                        cursor2.moveToFirst();
+                        if (cursor2.getCount() > 0) {
+                            TotalPrice = TotalPrice + cursor2.getDouble(0);
+                        }
+                        cursor2.close();
+                    }
+                    cursor1.moveToNext();
+                }// End of While
+                cursor1.close();
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorGetTotalPriceOrder", e.getMessage());
+        }
+        return TotalPrice;
+    }
 
     public double getTotalReceiveTransfer() {
         Cursor cursor;
@@ -4626,7 +4655,35 @@ public class DbAdapter {
             String rawquery = "select sum(" + DbSchema.ReceiptSchema.COLUMN_CASHAMOUNT + "+ifnull((select sum(" + DbSchema.ChequeSchema.COLUMN_AMOUNT + ") from "
                     + DbSchema.ChequeSchema.TABLE_NAME + " where " + DbSchema.ChequeSchema.COLUMN_RECEIPTID
                     + "=" + DbSchema.ReceiptSchema.TABLE_NAME + "." + DbSchema.ReceiptSchema.COLUMN_ID + "),0)) as totalsum"
-                    + " from " + DbSchema.ReceiptSchema.TABLE_NAME + " where " + DbSchema.ReceiptSchema.COLUMN_ID + "=" + String.valueOf(id);
+                    + " from " + DbSchema.ReceiptSchema.TABLE_NAME + " where " + DbSchema.ReceiptSchema.COLUMN_ID + "=" + id;
+
+
+            cursor = mDb.rawQuery(rawquery, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                if (cursor.getCount() > 0) {
+                    TotalReceipt = cursor.getLong(cursor.getColumnIndex("totalsum"));
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorgetTotalReceipt", e.getMessage());
+        }
+
+        return TotalReceipt;
+    }
+    public long getTotalCustomerReceiptWithId(long id) {
+
+        Cursor cursor;
+        long TotalReceipt = 0;
+        try {
+            String rawquery = "select sum(" + DbSchema.ReceiptSchema.COLUMN_CASHAMOUNT + "+ifnull((select sum(" + DbSchema.ChequeSchema.COLUMN_AMOUNT + ") from "
+                    + DbSchema.ChequeSchema.TABLE_NAME + " where " + DbSchema.ChequeSchema.COLUMN_RECEIPTID
+                    + "=" + DbSchema.ReceiptSchema.TABLE_NAME + "." + DbSchema.ReceiptSchema.COLUMN_ID + "),0)) as totalsum"
+                    + " from " + DbSchema.ReceiptSchema.TABLE_NAME + " where " + DbSchema.ReceiptSchema.PERSON_ID + "=" + id;
 
 
             cursor = mDb.rawQuery(rawquery, null);
