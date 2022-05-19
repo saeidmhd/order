@@ -60,7 +60,7 @@ public class Customer {
     private String lastName;
 
     @SerializedName("SellPriceLevel")
-    @Expose
+    @Expose(serialize = false)
     private String sellPriceLevel;
 
     @SerializedName("Organization")
@@ -72,11 +72,11 @@ public class Customer {
     private String Tell;
 
     @SerializedName("Balance")
-    @Expose
+    @Expose(serialize = false)
     private BigDecimal Balance;
 
     @SerializedName("Credit")
-    @Expose
+    @Expose(serialize = false)
     private BigDecimal Credit;
 
     @SerializedName("PersonGroupId")
@@ -84,19 +84,19 @@ public class Customer {
     private long personGroupId;
 
     @SerializedName("PersonGroupCode")
-    @Expose
+    @Expose(serialize = false)
     private long PersonGroupCode;
 
     @SerializedName("Deleted")
-    @Expose
+    @Expose(serialize = false)
     private boolean deleted;
 
     @SerializedName("PersonCode")
-    @Expose
+    @Expose(serialize = false)
     private long personCode;
 
     @SerializedName("DiscountPercent")
-    @Expose
+    @Expose(serialize = false)
     private String DiscountPercent;
 
     @SerializedName("State")
@@ -106,6 +106,7 @@ public class Customer {
     @SerializedName("Zone")
     @Expose
     private String Zone;
+
     @SerializedName("Address")
     @Expose
     private String Address;
@@ -125,33 +126,37 @@ public class Customer {
     @SerializedName("Mobile")
     @Expose
     private String Mobile;
-    //new
+
     @SerializedName("PersonId")
     @Expose
     private int personId;
+
     @SerializedName("PersonClientId")
     @Expose
     private long personClientId;
 
     @SerializedName("PersonType")
-    @Expose
+    @Expose(serialize = false)
     private int personType;
 
     @SerializedName("Gender")
-    @Expose
+    @Expose(serialize = false)
     private int gender;
+
     @SerializedName("NationalCode")
-    @Expose
+    @Expose(serialize = false)
     private String nationalCode;
 
     @SerializedName("Email")
-    @Expose
+    @Expose(serialize = false)
     private String email;
+
     @SerializedName("UserName")
-    @Expose
+    @Expose(serialize = false)
     private String userName;
+
     @SerializedName("Password")
-    @Expose
+    @Expose(serialize = false)
     private String password;
 
     @SerializedName("CityCode")
@@ -159,30 +164,35 @@ public class Customer {
     private int cityCode;
 
     @SerializedName("Fax")
-    @Expose
+    @Expose(serialize = false)
     private String fax;
 
     @SerializedName("DataHash")
-    @Expose
+    @Expose(serialize = false)
     private String dataHash;
+
     @SerializedName("CreateDate")
-    @Expose
+    @Expose(serialize = false)
     private String createDate;
+
     @SerializedName("UpdateDate")
-    @Expose
+    @Expose(serialize = false)
     private String updateDate;
+
     @SerializedName("CreateSyncId")
-    @Expose
+    @Expose(serialize = false)
     private int createSyncId;
+
     @SerializedName("UpdateSyncId")
-    @Expose
+    @Expose(serialize = false)
     private int updateSyncId;
+
     @SerializedName("RowVersion")
-    @Expose
+    @Expose(serialize = false)
     private long rowVersion;
 
     @SerializedName("Prifix")
-    @Expose
+    @Expose(serialize = false)
     private String prefix;
 
     @SerializedName("PersonGroupClientId")

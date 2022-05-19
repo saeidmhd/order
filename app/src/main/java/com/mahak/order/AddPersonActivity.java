@@ -2,8 +2,11 @@ package com.mahak.order;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -12,6 +15,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,8 +42,10 @@ import com.mahak.order.common.GPSTracker;
 import com.mahak.order.common.Region;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.widget.FontAlertDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static com.mahak.order.common.ServiceTools.replaceWithEnglish;
@@ -412,14 +418,36 @@ public class AddPersonActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.delete_new_person) {
             if(!checkActivity()){
-                db.DeleteClientCustomer(personClientId);
-                setResult(RESULT_OK);
-                finish();
+                cleanDatabase();
             }else
                 Toast.makeText(mContext, " برای این مشتری عملیات ثبت شده ، امکان حذف وجود ندارد!", Toast.LENGTH_SHORT).show();
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void cleanDatabase() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle(FontAlertDialog.getFontTitle(getString(R.string.str_title_delete)));
+        builder.setMessage(getString(R.string.str_message_delete_customer));
+        builder.setPositiveButton(getString(R.string.str_ok), new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                db.DeleteClientCustomer(personClientId);
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+        builder.setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        Dialog dialog = builder.show();
+        FontAlertDialog.FontDialog(dialog);
     }
 
     private boolean checkActivity() {
@@ -561,7 +589,7 @@ public class AddPersonActivity extends BaseActivity {
         customer.setAddress(replaceWithEnglish(txtAddress.getText().toString()));
         customer.setLatitude(ServiceTools.toDouble(txtLatitude.getText().toString()));
         customer.setLongitude(ServiceTools.toDouble(txtLongitude.getText().toString()));
-        customer.setCredit(0);
+        customer.setCredit(-1);
         customer.setBalance(0);
         customer.setUserId(BaseActivity.getPrefUserId());
         customer.setMahakId(BaseActivity.getPrefMahakId());

@@ -918,7 +918,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                 percentDiscount = (Discount * 100) / (FinalPrice + Discount);
             txtDiscountPercent.setText(ServiceTools.formatPrice(percentDiscount));
             tvFinalPrice.setText(ServiceTools.formatPrice(FinalPrice));
-            InvoiceDetailActivity.btnSave.setEnabled(OrderType != ProjectInfo.TYPE_INVOCIE || InvoiceDetailActivity.visitorHasCredit(FinalPrice));
         }
     }
 

@@ -1703,31 +1703,6 @@ public class DbAdapter {
         customer.setSellPriceLevel(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_SellPriceLevel)));
         return customer;
     }
-    private Customer getCustomerForSend(Cursor cursor) {
-        Customer customer;
-        customer = new Customer();
-        customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LATITUDE)));
-        customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LONGITUDE)));
-        customer.setPersonId(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PersonId)));
-        customer.setPersonGroupId(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PersonGroupId)));
-        customer.setId(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_ID)));
-        customer.setPersonCode(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PersonCode)));
-        customer.setPersonId(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PersonId)));
-        customer.setOrderCount(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_HasOrder)));
-        customer.setPersonClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PersonClientId)));
-        customer.setUserId(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_USER_ID)));
-        customer.setPersonGroupId(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PersonGroupId)));
-        customer.setPersonGroupCode(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PersonGroupCode)));
-        customer.setCredit(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CREDIT)));
-        customer.setCityCode(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CityCode)));
-        customer.setBalance(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_BALANCE)));
-        customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LATITUDE)));
-        customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LONGITUDE)));
-        customer.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_MODIFYDATE)));
-        customer.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PUBLISH)));
-        customer.setRowVersion(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_RowVersion)));
-        return customer;
-    }
 
     private Customer getCustomerFromCursor2(Cursor cursor) {
         Customer customer = new Customer();
@@ -7188,7 +7163,7 @@ public class DbAdapter {
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    customer = getCustomerForSend(cursor);
+                    customer = getCustomerFromCursor(cursor);
                     array.add(customer);
                     cursor.moveToNext();
                 }

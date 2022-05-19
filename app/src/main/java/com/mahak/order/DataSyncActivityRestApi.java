@@ -307,9 +307,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         }
                     } else {
                         ServiceTools.Backup(mContext);
-                        
                         db.DeleteUser(userId);
-                        
                         Toast.makeText(DataSyncActivityRestApi.this, R.string.visitor_changed_login_again, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(DataSyncActivityRestApi.this, LoginActivityRestApi.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

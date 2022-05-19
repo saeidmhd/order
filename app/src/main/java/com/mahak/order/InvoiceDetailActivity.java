@@ -101,7 +101,7 @@ public class InvoiceDetailActivity extends BaseActivity {
     private Context mContext;
     public static int orderPromotionCode = 0;
     public static int orderGiftType = 0;
-    public static Button btnSave, btnSave_close;
+    public static Button btnSave_close;
     public static TextView tvPageTitle;
     public static Customer customer;
     public static Visitor visitor;
@@ -301,12 +301,7 @@ public class InvoiceDetailActivity extends BaseActivity {
             }
         });
 
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AsyncSave(0, OrderType).execute();
-            }
-        });
+
     }
 
     private void saveFactor() {
@@ -371,22 +366,9 @@ public class InvoiceDetailActivity extends BaseActivity {
         ///////////////////////////////
         return true;
     }
-    public boolean customerHasCredit(double finalPrice) {
-
-        mSpentCustomerCredit = 0;
-
-        Customer customer = db.getCustomerWithPersonId(CustomerId);
-        customerCreditValue = customer.getCredit();
-        if (customerCreditValue == NoLimit)
-            return true;
-
-        if (Mode == MODE_EDIT)
-            mSpentCustomerCredit -= mCurrentPrice;
-
-        //اگر اعتبار مشتری بیشتر یا مساوی مبلغ فاکتور باشد اجازه ثبت فاکتور وجود دارد وگرنه باید دریافتی ثبت گردد
-        return finalPrice < customerCreditValue;
-    }
     public double calculateRemainCredit(double finalPrice) {
+        if(CustomerId == 0)
+            return -1;
         Customer customer = db.getCustomerWithPersonId(CustomerId);
         double customerCredit = customer.getCredit();
         if (customerCredit == NoLimit)
@@ -410,7 +392,6 @@ public class InvoiceDetailActivity extends BaseActivity {
         db = new DbAdapter(mContext);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-        btnSave = (Button) findViewById(R.id.btnSave);
         btnSave_close = (Button) findViewById(R.id.btnSave_close);
     }
 
@@ -418,24 +399,15 @@ public class InvoiceDetailActivity extends BaseActivity {
         if (OrderType == ProjectInfo.TYPE_ORDER) {
             tvPageTitle.setText(getString(R.string.str_save_order));
             btnSave_close.setText(getString(R.string.str_save_order_close));
-            btnSave.setText(getString(R.string.str_save_order));
-            //btnDatePicker.setVisibility(View.VISIBLE);
         } else if (OrderType == ProjectInfo.TYPE_INVOCIE || OrderType == TYPE_Delivery) {
             tvPageTitle.setText(getString(R.string.str_save_invoice));
             btnSave_close.setText(getString(R.string.str_save_invoice_close));
-            btnSave.setText(getString(R.string.str_save_invoice));
-            // btnDatePicker.setVisibility(View.INVISIBLE);
         } else if (OrderType == ProjectInfo.TYPE_SEND_TRANSFERENCE) {
             tvPageTitle.setText(getString(R.string.str_save_Transference));
             btnSave_close.setText(getString(R.string.str_save_Transference_close));
-            btnSave.setText(getString(R.string.str_save_Transference));
-            // btnDatePicker.setVisibility(View.VISIBLE);
-
         } else if (OrderType == ProjectInfo.TYPE_RETURN_OF_SALE) {
             tvPageTitle.setText(getString(R.string.str_add_return));
             btnSave_close.setText(getString(R.string.str_add_return_close));
-            btnSave.setText(getString(R.string.str_add_return));
-            // btnDatePicker.setVisibility(View.VISIBLE);
         }
     }
 

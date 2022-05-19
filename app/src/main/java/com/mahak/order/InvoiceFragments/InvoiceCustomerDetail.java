@@ -82,7 +82,6 @@ import static com.mahak.order.InvoiceDetailActivity.SettlementType;
 import static com.mahak.order.InvoiceDetailActivity.StrLatitude;
 import static com.mahak.order.InvoiceDetailActivity.StrLongitude;
 import static com.mahak.order.InvoiceDetailActivity.Tell;
-import static com.mahak.order.InvoiceDetailActivity.btnSave;
 import static com.mahak.order.InvoiceDetailActivity.customer;
 import static com.mahak.order.InvoiceDetailActivity.lngDeliveryDate;
 import static com.mahak.order.InvoiceDetailActivity.lngOrderDate;
@@ -91,8 +90,6 @@ import static com.mahak.order.InvoiceDetailActivity.strOrderDate;
 import static com.mahak.order.InvoiceDetailActivity.tvPageTitle;
 import static com.mahak.order.InvoiceDetailActivity.visitor;
 import static com.mahak.order.InvoiceDetailActivity.visitorId;
-
-//import static com.mahak.order.InvoiceDetailActivity.returnOfSale;
 
 
 public class InvoiceCustomerDetail extends Fragment implements FragmentLifecycle {
@@ -282,12 +279,10 @@ public class InvoiceCustomerDetail extends Fragment implements FragmentLifecycle
                     if (OrderType == ProjectInfo.TYPE_SEND_TRANSFERENCE) {
 
                         tvPageTitle.setText(getString(R.string.str_save_Transference));
-                        btnSave.setText(getString(R.string.str_save_Transference));
                         btnDeliveryDate.setVisibility(View.VISIBLE);
 
                     } else if (OrderType == ProjectInfo.TYPE_RETURN_OF_SALE) {
                         tvPageTitle.setText(getString(R.string.str_add_return));
-                        btnSave.setText(getString(R.string.str_add_return));
                         btnDeliveryDate.setVisibility(View.VISIBLE);
                     } else {
                         OrderType = ProjectInfo.TYPE_ORDER;
@@ -296,14 +291,12 @@ public class InvoiceCustomerDetail extends Fragment implements FragmentLifecycle
                         strDeliveryDate = ServiceTools.getDateForLong(getActivity(), lngDeliveryDate);
                         tvDeliveryDate.setText(strDeliveryDate);
                         tvPageTitle.setText(getString(R.string.str_save_order));
-                        btnSave.setText(getString(R.string.str_save_order));
                     }
 
                 } else if (position == 1) {
                     OrderType = ProjectInfo.TYPE_INVOCIE;
                     btnDeliveryDate.setVisibility(View.INVISIBLE);
                     tvPageTitle.setText(getString(R.string.str_save_invoice));
-                    btnSave.setText(getString(R.string.str_save_invoice));
                     lngDeliveryDate = new Date().getTime();
                     strDeliveryDate = ServiceTools.getDateForLong(getActivity(), lngDeliveryDate);
                     tvDeliveryDate.setText(strDeliveryDate);

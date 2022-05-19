@@ -102,7 +102,7 @@
     <string name="str_username_en">UserName</string>
     <string name="str_password_en">Password</string>
     <string name="str_login">ورود به سیستم</string>
-    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.441</string>
+    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.442</string>
     <string name="str_email">پست الکترونیک</string>
     <string name="str_body">متن پیام</string>
     <string name="str_message_content">متن پیام</string>
@@ -384,6 +384,7 @@
     <string name="str_message_get_delivery_order">تحویلی برای این مشتری وجود ندارد</string>
     <string name="str_message_dont_select_bank">بانکی انتخاب نکردید</string>
     <string name="str_message_delete_all_of_data">آیا می خواهید همه ی اطلاعات را پاک نمایید؟</string>
+    <string name="str_message_delete_customer">آیا می خواهید این شخص حذف شود؟</string>
     <string name="str_message_date">تاریخ یا زمان سیستم شما درست نمیباشد</string>
     <string name="str_message_pars_data">خطا در دریافت صحیح اطلاعات</string>
     <string name="str_message_no_data">داده ای موجود نیست به قسمت بروز رسانی بروید</string>

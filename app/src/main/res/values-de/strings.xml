@@ -88,7 +88,7 @@
     <string name="str_username_en">Benutzername</string>
     <string name="str_password_en">Passwort</string>
     <string name="str_login">Einloggen</string>
-    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.441</string>
+    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.442</string>
     <string name="str_email">E-Mail</string>
     <string name="str_body">Text</string>
     <string name="str_message_content">Textnachricht</string>
@@ -343,6 +343,7 @@
     <string name="str_message_get_delivery_order">Es gibt keine Lieferung an diesem Kunde</string>
     <string name="str_message_dont_select_bank">Sie haben keine Bank gewählt</string>
     <string name="str_message_delete_all_of_data">Möchten Sie alle Informationen löschen?</string>
+    <string name="str_message_delete_customer">آیا می خواهید این شخص حذف شود؟</string>
     <string name="str_message_date">Datum oder Uhrzeit Ihres Systems ist falsch</string>
     <string name="str_message_pars_data">Fehler beim korrekten Erhalt der Informationen</string>
     <string name="str_message_no_data">Keine Daten verfügbar, Gehen Sie zum Aktualisieren-Bereich</string>
