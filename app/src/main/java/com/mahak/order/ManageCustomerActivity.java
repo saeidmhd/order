@@ -103,7 +103,7 @@ public class ManageCustomerActivity extends BaseActivity {
             txtReturnChequeCount;
 
     private Spinner spnCustomerGroup, spnCity, spnState, spnCustomerType;
-    private Button btnGetLoction, btnSave, btnSaveAndNew, btnContact, btnShowlocation;
+    private Button btnGetLoction, btnContact, btnShowlocation;
     private Bundle Extras;
     private static int Mode = 0;
     private long CustomerGroupId;
@@ -155,23 +155,6 @@ public class ManageCustomerActivity extends BaseActivity {
         Fillspinner();
         FillValues();
 
-        ///////////////////////////////////////////////////////
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SaveInDb();
-                setResult(RESULT_OK);
-                finish();
-            }
-        });
-        btnSaveAndNew.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                SaveInDb();
-                Clear();
-            }
-        });
         btnGetLoction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -364,8 +347,6 @@ public class ManageCustomerActivity extends BaseActivity {
         }
     }
 
-
-
     /**
      * Initializing Variables
      */
@@ -417,18 +398,7 @@ public class ManageCustomerActivity extends BaseActivity {
         spnCustomerType = (Spinner) findViewById(R.id.spnCustomerType);
         spnCustomerType.setClickable(false);
         spnCustomerType.setEnabled(false);
-
-        btnSave = (Button) findViewById(R.id.btnSave);
-        btnSaveAndNew = (Button) findViewById(R.id.btnSaveAndNew);
         btnContact = (Button) findViewById(R.id.btnContact);
-        //___________________________________________________________________
-        if (Mode == MODE_EDIT)
-            btnSaveAndNew.setVisibility(View.GONE);
-        else if (Mode == MODE_NEW)
-            btnSaveAndNew.setVisibility(View.VISIBLE);
-        //______________________________________________________________________
-        //btnSave.setVisibility(View.GONE);
-        btnSaveAndNew.setVisibility(View.GONE);
         //______________________________________________________________________
         db = new DbAdapter(mContext);
         customer = new Customer();
@@ -560,35 +530,6 @@ public class ManageCustomerActivity extends BaseActivity {
                 }
             }
         }
-    }
-
-    /**
-     * Save Information In Database
-     */
-    public void SaveInDb() {
-        db.open();
-
-        customer.setName(txtCustomerName.getText().toString());
-        customer.setPersonGroupId(arrayCustomerGroup.get(spnCustomerGroup.getSelectedItemPosition()).getPersonGroupId());
-        customer.setPersonGroupCode(arrayCustomerGroup.get(spnCustomerGroup.getSelectedItemPosition()).getPersonGroupCode());
-        customer.setOrganization(txtMarketName.getText().toString());
-        customer.setState(StateName);
-        customer.setCity(CityName);
-        customer.setCityCode(cityCode);
-        customer.setZone(txtZone.getText().toString());
-        customer.setMobile(txtMobile.getText().toString());
-        customer.setTell(txtTell.getText().toString());
-        customer.setAddress(txtAddress.getText().toString());
-        customer.setShift(txtShift.getText().toString());
-        customer.setLatitude(ServiceTools.toDouble(txtLatitude.getText().toString()));
-        customer.setLongitude(ServiceTools.toDouble(txtLongitude.getText().toString()));
-        customer.setRowVersion(0);
-
-        if (Mode == MODE_NEW)
-            db.AddOrUpdateCustomer(customer);
-        else if (Mode == MODE_EDIT)
-            db.UpdateCustomer(customer);
-
     }
 
     /**

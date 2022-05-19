@@ -323,6 +323,7 @@ public class InvoiceDetailActivity extends BaseActivity {
 
     private void SaveAndReceiptBasedOnOrder(double remainCustomerCredit) {
             if (orderDetails.size() > 0) {
+                Toast.makeText(mContext, R.string.credit_alarm, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(mContext, ManageReceiptActivity.class);
                 intent.putExtra(MODE_PAGE, MODE_NEW);
                 intent.putExtra(CODE_KEY, InvoiceCode);
@@ -886,7 +887,6 @@ public class InvoiceDetailActivity extends BaseActivity {
                     saveFactor();
                     break;
                 case REQUEST_PRODUCT_LIST:
-
                     break;
             }
         }

@@ -503,6 +503,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
         if(sendSignImageAsyncTask != null)
             sendSignImageAsyncTask.cancel(true);
 
+        db.close();
+        radaraDb.close();
+
         btnSync.setEnabled(true);
         pbLoading.setVisibility(View.GONE);
     }

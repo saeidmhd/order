@@ -1000,14 +1000,6 @@
             android:text="@string/str_save_and_new"
             android:visibility="gone" />
 
-        <com.mahak.order.widget.FontButtonView
-            android:id="@+id/btnSave"
-            style="@style/forms_btn_default"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_gravity="bottom"
-            android:text="@string/str_save" />
     </LinearLayout>
 
 </LinearLayout>

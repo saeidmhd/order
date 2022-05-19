@@ -1703,6 +1703,31 @@ public class DbAdapter {
         customer.setSellPriceLevel(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_SellPriceLevel)));
         return customer;
     }
+    private Customer getCustomerForSend(Cursor cursor) {
+        Customer customer;
+        customer = new Customer();
+        customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LATITUDE)));
+        customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LONGITUDE)));
+        customer.setPersonId(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PersonId)));
+        customer.setPersonGroupId(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PersonGroupId)));
+        customer.setId(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_ID)));
+        customer.setPersonCode(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PersonCode)));
+        customer.setPersonId(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PersonId)));
+        customer.setOrderCount(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_HasOrder)));
+        customer.setPersonClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PersonClientId)));
+        customer.setUserId(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_USER_ID)));
+        customer.setPersonGroupId(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PersonGroupId)));
+        customer.setPersonGroupCode(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PersonGroupCode)));
+        customer.setCredit(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CREDIT)));
+        customer.setCityCode(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_CityCode)));
+        customer.setBalance(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_BALANCE)));
+        customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LATITUDE)));
+        customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LONGITUDE)));
+        customer.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_MODIFYDATE)));
+        customer.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PUBLISH)));
+        customer.setRowVersion(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_RowVersion)));
+        return customer;
+    }
 
     private Customer getCustomerFromCursor2(Cursor cursor) {
         Customer customer = new Customer();
@@ -7159,11 +7184,11 @@ public class DbAdapter {
         ArrayList<Customer> array = new ArrayList<>();
         try {
             //cursor = mDb.query(DbSchema.Customerschema.TABLE_NAME, new String[]{DbSchema.Customerschema.COLUMN_ID,DbSchema.Customerschema.COLUMN_PersonId,DbSchema.Customerschema.COLUMN_PersonGroupId,DbSchema.Customerschema.COLUMN_ADDRESS,DbSchema.Customerschema.COLUMN_PHONE,DbSchema.Customerschema.COLUMN_MOBILE,DbSchema.Customerschema.COLUMN_LATITUDE,DbSchema.Customerschema.COLUMN_LONGITUDE}, DbSchema.Customerschema.COLUMN_USER_ID + " =? AND " + DbSchema.Customerschema.COLUMN_DATABASE_ID + "=? " , new String[]{String.valueOf(BaseActivity.getPrefUserId()), BaseActivity.getPrefDatabaseId()}, null, null, orderBy);
-            cursor = mDb.query(DbSchema.CustomerSchema.TABLE_NAME, null, DbSchema.CustomerSchema.COLUMN_USER_ID + "=? AND " + DbSchema.CustomerSchema.COLUMN_PersonId + " !=? and " + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + "=? and " + DbSchema.CustomerSchema.COLUMN_Deleted + "=? and " + DbSchema.CustomerSchema.COLUMN_RowVersion + "=?", new String[]{String.valueOf(getPrefUserId()), String.valueOf(0), BaseActivity.getPrefDatabaseId(), String.valueOf(0), String.valueOf(0)}, null, null, orderBy);
+            cursor = mDb.query(DbSchema.CustomerSchema.TABLE_NAME, null, DbSchema.CustomerSchema.COLUMN_USER_ID + " =? AND " + DbSchema.CustomerSchema.COLUMN_PersonId + " !=? and " + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + "=? and " + DbSchema.CustomerSchema.COLUMN_Deleted + "=? and " + DbSchema.CustomerSchema.COLUMN_PUBLISH + " =? ", new String[]{String.valueOf(getPrefUserId()), String.valueOf(0), BaseActivity.getPrefDatabaseId(), String.valueOf(0), String.valueOf(ProjectInfo.DONT_PUBLISH)}, null, null, orderBy);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    customer = getCustomerFromCursor(cursor);
+                    customer = getCustomerForSend(cursor);
                     array.add(customer);
                     cursor.moveToNext();
                 }
@@ -8644,7 +8669,7 @@ public class DbAdapter {
         ContentValues initialvalue = new ContentValues();
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_LATITUDE, latitude);
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_LONGITUDE, longitude);
-        initialvalue.put(DbSchema.CustomerSchema.COLUMN_PUBLISH, ProjectInfo.PUBLISH);
+        initialvalue.put(DbSchema.CustomerSchema.COLUMN_PUBLISH, ProjectInfo.DONT_PUBLISH);
         result = (mDb.update(DbSchema.CustomerSchema.TABLE_NAME, initialvalue, DbSchema.CustomerSchema.COLUMN_ID + "=?", new String[]{String.valueOf(id)})) > 0;
         return result;
     }

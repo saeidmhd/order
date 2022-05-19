@@ -25,7 +25,7 @@ public class ProjectInfo {
     public static int Bank_TYPE = 3;
     public static int Expense_TYPE = 4;
     public static int PUBLISH = 1;
-    public static int DONT_PUBLISH = 0;
+    public static int DONT_PUBLISH = -1;
     public static int PUBLISH_ACCEPT = 2;
     public static int PUBLISH_REJECT = 3;
     public static int CUSTOMERID_GUEST = 0;

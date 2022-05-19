@@ -190,21 +190,6 @@ public class Customer {
     private int personGroupClientId;
 
     public Customer() {
-        this.setGroup("");
-        this.setOrganization("");
-        this.setState("");
-        this.setCity("");
-        this.setAddress("");
-        this.setZone("");
-        this.setTell("");
-        this.setMobile("");
-        this.setLatitude(0);
-        this.setLongitude(0);
-        this.setCredit(0);
-        this.setBalance(0);
-        this.setPublish(ProjectInfo.DONT_PUBLISH);
-        this.setSellPriceLevel("0");
-        this.setDiscountPercent("0.00");
         setMahakId(BaseActivity.getPrefMahakId());
         setDatabaseId(BaseActivity.getPrefDatabaseId());
         setUserId(BaseActivity.getPrefUserId());
