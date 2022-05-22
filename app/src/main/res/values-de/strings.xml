@@ -88,7 +88,7 @@
     <string name="str_username_en">Benutzername</string>
     <string name="str_password_en">Passwort</string>
     <string name="str_login">Einloggen</string>
-    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.442</string>
+    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.445</string>
     <string name="str_email">E-Mail</string>
     <string name="str_body">Text</string>
     <string name="str_message_content">Textnachricht</string>
@@ -1301,6 +1301,14 @@
     <string name="new_3_440_5">	برطرف شدن مشکل نمایش تصاویر آفلاین</string>
     <string name="new_3_440_6">تغییرات در نمایش نقشه داشبورد </string>
     <string name="credit_alarm">با توجه به اعتبار مشتری نیاز به ثبت دریافتی می باشد!</string>
+    <string name="check_new_person_activity">\" برای این مشتری عملیات ثبت شده ، امکان حذف وجود ندارد!\"</string>
+
+    <string name="new_3_445">نسخه ۳.۴۴۵</string>
+    <string name="new_3_445_1">	فعال شدن بررسی اعتبار مشتری</string>
+    <string name="new_3_445_2">ثبت مجدد تنظیمات با لاگین کاربر جدید </string>
+    <string name="new_3_445_3">رفع خطای نمایش طرح های تکراری در تب طرح های تشویقی</string>
+    <string name="new_3_445_4">	برطرف شدن خطای خطا در بروزرسانی در صورت دیتای زیاد و sleep device</string>
+    <string name="new_3_445_5">	برطرف شدن خطای سینک درارسال اطلاعات مشتری ویرایش شده</string>
 
 
 </resources>

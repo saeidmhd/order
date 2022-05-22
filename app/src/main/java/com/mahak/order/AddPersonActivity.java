@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,7 +44,6 @@ import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.widget.FontAlertDialog;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import static com.mahak.order.common.ServiceTools.replaceWithEnglish;
@@ -418,15 +416,15 @@ public class AddPersonActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.delete_new_person) {
             if(!checkActivity()){
-                cleanDatabase();
+                removePerson();
             }else
-                Toast.makeText(mContext, " برای این مشتری عملیات ثبت شده ، امکان حذف وجود ندارد!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, R.string.check_new_person_activity, Toast.LENGTH_SHORT).show();
 
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void cleanDatabase() {
+    private void removePerson() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setTitle(FontAlertDialog.getFontTitle(getString(R.string.str_title_delete)));

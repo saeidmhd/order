@@ -335,7 +335,7 @@
         <item>Woosim_WSP_R341</item>
         <item>Centerm_K9</item>
         <item>SMART_POS_UROVO_i9000s</item>
-        <item>SMART_POS_MoreFun</item>
+        <!--<item>SMART_POS_MoreFun</item>-->
     </string-array>
 
     <string-array name="reports_list_title">

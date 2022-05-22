@@ -305,9 +305,11 @@ public class InvoiceDetailActivity extends BaseActivity {
     }
 
     private void saveFactor() {
+        double remainCustomerCredit = calculateRemainCredit(FinalPrice);
         if(OrderType == ProjectInfo.TYPE_INVOCIE){
-            double remainCustomerCredit = calculateRemainCredit(FinalPrice);
-            if(remainCustomerCredit > 0)
+            if (!visitorHasCredit(FinalPrice))
+                SaveAndReceiptBasedOnOrder(FinalPrice);
+            else if(remainCustomerCredit > 0)
                 SaveAndReceiptBasedOnOrder(remainCustomerCredit);
             else
                 new AsyncSave(0, OrderType).execute();
