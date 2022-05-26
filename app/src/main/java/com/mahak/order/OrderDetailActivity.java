@@ -26,17 +26,21 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.mahak.order.InvoiceFragments.InvoiceGoodsDetail;
 import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
+import com.mahak.order.common.Cheque;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.GroupedTax;
 import com.mahak.order.common.Order;
 import com.mahak.order.common.OrderDetail;
 import com.mahak.order.common.OrderDetailProperty;
 import com.mahak.order.common.Person_Extra_Data;
+import com.mahak.order.common.PrintReceipt;
 import com.mahak.order.common.Printer;
 import com.mahak.order.common.ProductDetail;
 import com.mahak.order.common.ProjectInfo;
+import com.mahak.order.common.Receipt;
 import com.mahak.order.common.ReceivedTransferProducts;
 import com.mahak.order.common.ReceivedTransfers;
 import com.mahak.order.common.ServiceTools;
@@ -45,6 +49,7 @@ import com.mahak.order.common.User;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.common.request.SetAllDataBody;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
+import com.mahak.order.fragment.RecyclerProductAdapter;
 import com.mahak.order.storage.DbAdapter;
 
 import java.util.ArrayList;
@@ -119,6 +124,7 @@ public class OrderDetailActivity extends BaseActivity {
     private long OrderId;
     private ArrayList<OrderDetail> orderDetails;
     private ArrayList<GroupedTax> groupedTaxes;
+    private AdapterReceipt _adReceipt;
     private ArrayList<OrderDetail> orderDetailArrayList;
     private ArrayList<OrderDetail> arrayGiftProductForPrint;
     private AdapterListProduct adProduct;
@@ -506,6 +512,7 @@ public class OrderDetailActivity extends BaseActivity {
 
         ListView _lstProduct = (ListView) view.findViewById(R.id._lstProduct);
         ListView _lstGroupedTax = (ListView) view.findViewById(R.id._lstGroupedTax);
+        ListView _lstGroupedReceipt = (ListView) view.findViewById(R.id._lstGroupedReceipt);
         TextView _tvTotalPrice = (TextView) view.findViewById(R.id._tvTotalPrice);
         TextView _tvTotalOff = (TextView) view.findViewById(R.id._tvTotalOff);
         TextView _tvTotalChargeAndTax = (TextView) view.findViewById(R.id._tvTotalChargeAndTax);
@@ -576,6 +583,42 @@ public class OrderDetailActivity extends BaseActivity {
             _tvUsername.setText(BaseActivity.getUserProfile().getName());
 
         orderDetailArrayList = (ArrayList<OrderDetail>) orderDetails.clone();
+
+        db.open();
+        ArrayList<Receipt> receipts =  db.getAllReceiptWithTrackingCode(order.getCode());
+        ArrayList<PrintReceipt> printReceipts = new ArrayList<>();
+
+        for(Receipt receipt : receipts){
+            PrintReceipt printReceipt = new PrintReceipt();
+            printReceipt.setReceiptType(ProjectInfo.TYPE_CASH);
+            printReceipt.setReceiptName("وجه نقد : " + ServiceTools.formatPrice(receipt.getCashAmount()));
+            printReceipt.setAmount(receipt.getCashAmount());
+            printReceipts.add(printReceipt);
+
+            ArrayList<Cheque> arrayCheque = db.getAllCheque(receipt.getId());
+            for (int i = 0; i < arrayCheque.size(); i++) {
+                Cheque cheque = arrayCheque.get(i);
+                if (arrayCheque.get(i).getType() == ProjectInfo.CHEQUE_TYPE){
+                    printReceipt.setReceiptType(ProjectInfo.CHEQUE_TYPE);
+                    printReceipt.setAmount(arrayCheque.get(i).getAmount());
+                    printReceipt.setReceiptName("چک دریافتی به مبلغ" + " " + ServiceTools.formatPrice(cheque.getAmount()) + " "  + cheque.getBankName() + " " + cheque.getDate());
+                    printReceipts.add(printReceipt);
+                }
+                else if (arrayCheque.get(i).getType() == ProjectInfo.CASHRECEIPT_TYPE){
+                    printReceipt.setReceiptType(ProjectInfo.CASHRECEIPT_TYPE);
+                    printReceipt.setAmount(arrayCheque.get(i).getAmount());
+                    printReceipt.setReceiptName("حواله دریافتی به مبلغ" + " " + ServiceTools.formatPrice(cheque.getAmount()) + " "  + cheque.getBankName() + " " + cheque.getDate());
+                    printReceipts.add(printReceipt);
+                }
+            }
+        }
+
+        _adReceipt = new AdapterReceipt(mActivity, printReceipts);
+
+        _lstGroupedReceipt.setDrawingCacheEnabled(true);
+        _lstGroupedReceipt.setAdapter(_adReceipt);
+        ServiceTools.setListViewHeightBasedOnChildren(_lstGroupedReceipt);
+
 
         if (SharedPreferencesHelper.getCurrentLanguage(mContext).equals("de_DE")) {
             _lstGroupedTax.setVisibility(View.VISIBLE);
@@ -651,7 +694,7 @@ public class OrderDetailActivity extends BaseActivity {
             } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s || printerBrand == ProjectInfo.SMART_POS_MoreFun) {
                 ll = inflater.inflate(R.layout.factor_print_szzt, null, false);
             } else if (getTemplate2Status(mContext, ProjectInfo._pName_OrderDetail))
-                    ll = inflater.inflate(R.layout.factor_bixolon_2, null, false);
+                ll = inflater.inflate(R.layout.factor_bixolon_2, null, false);
 
             LinearLayout _ll_Remain_Detail = (LinearLayout) ll.findViewById(R.id._ll_Remain_Detail);
             LinearLayout _llFooterMessage = (LinearLayout) ll.findViewById(R.id._llFooterMessage);
@@ -804,7 +847,7 @@ public class OrderDetailActivity extends BaseActivity {
                 tvMarketName.setText(customer.getOrganization());
 
                 if (customer != null)
-                RemainedCustomer = customer.getBalance();
+                    RemainedCustomer = customer.getBalance();
                 if (extraData.getRemainStatus() == 1)
                     RemainedCustomer = RemainedCustomer * -1;
             }
@@ -1321,6 +1364,48 @@ public class OrderDetailActivity extends BaseActivity {
         }
 
     }// End of AdapterListProduct
+
+    public class AdapterReceipt extends ArrayAdapter<PrintReceipt> {
+        Activity mContext;
+
+        public AdapterReceipt(Activity context, ArrayList<PrintReceipt> array) {
+            super(context, R.layout.lst_grouped_tax_for_print, array);
+            mContext = context;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            View rowview = convertView;
+
+            Holder holder = null;
+            LayoutInflater inflater = null;
+
+            final PrintReceipt printReceipt = getItem(position);
+
+            if (rowview == null) {
+                inflater = mContext.getLayoutInflater();
+                rowview = inflater.inflate(R.layout.lst_receipt_for_print, null, false);
+                holder = new Holder(rowview);
+                rowview.setTag(holder);
+            } else
+                holder = (Holder) rowview.getTag();
+            holder.Populate(printReceipt);
+            return rowview;
+        }
+
+        public class Holder {
+            public TextView tvTaxValue;
+
+            public Holder(View view) {
+                tvTaxValue = (TextView) view.findViewById(R.id.tvTaxValue);
+            }
+
+            public void Populate(PrintReceipt printReceipt) {
+                tvTaxValue.setText(printReceipt.getReceiptName());
+            }
+        }
+
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

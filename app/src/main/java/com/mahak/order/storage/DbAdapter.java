@@ -6725,6 +6725,30 @@ public class DbAdapter {
 
         return array;
     }
+    public ArrayList<Receipt> getAllReceiptWithTrackingCode(String code) {
+        Receipt receipt;
+        Cursor cursor;
+        ArrayList<Receipt> array = new ArrayList<>();
+        try {
+            cursor = mDb.query(DbSchema.ReceiptSchema.TABLE_NAME, null, DbSchema.ReceiptSchema.COLUMN_USER_ID + "=? AND  " + DbSchema.ReceiptSchema.COLUMN_MAHAK_ID + "=? AND " + DbSchema.ReceiptSchema.COLUMN_DATABASE_ID + "=? and " + DbSchema.ReceiptSchema.COLUMN_CODE + "=? ", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), code }, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    receipt = GetReceipt(cursor.getLong(cursor.getColumnIndex(DbSchema.ReceiptSchema.COLUMN_ID)));
+                    if (receipt != null)
+                        array.add(receipt);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrAllReceipt", e.getMessage());
+        }
+
+        return array;
+    }
 
     public ArrayList<Receipt> getAllReceiptNotPublished() {
         Receipt receipt;

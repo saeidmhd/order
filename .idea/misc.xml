@@ -10,6 +10,9 @@
         <entry key="app/src/main/res/layout-de/activity_dashboard.xml" value="0.10833333333333334" />
         <entry key="app/src/main/res/layout-de/activity_invoice_detail.xml" value="0.33489583333333334" />
         <entry key="app/src/main/res/layout-de/activity_manage_customer.xml" value="0.30416666666666664" />
+        <entry key="app/src/main/res/layout-de/factor_print_template.xml" value="0.25833333333333336" />
+        <entry key="app/src/main/res/layout-de/print_layout.xml" value="0.25833333333333336" />
+        <entry key="app/src/main/res/layout-de/print_order_detail_item.xml" value="0.25833333333333336" />
         <entry key="app/src/main/res/layout/act_whats_new.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_add_person.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.25" />
@@ -27,12 +30,14 @@
         <entry key="app/src/main/res/layout/expandlist_child_receipt.xml" value="0.225" />
         <entry key="app/src/main/res/layout/expandlist_group_receipt.xml" value="0.5" />
         <entry key="app/src/main/res/layout/factor_print_szzt.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/factor_print_template.xml" value="0.24114583333333334" />
+        <entry key="app/src/main/res/layout/factor_print_template.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_invoice_goods_detail.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/fragment_products_list.xml" value="0.18" />
         <entry key="app/src/main/res/layout/lst_cart_item.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/lst_customer_item.xml" value="0.25885416666666666" />
+        <entry key="app/src/main/res/layout/lst_grouped_tax_for_print.xml" value="0.33" />
         <entry key="app/src/main/res/layout/lst_product_picker_item.xml" value="0.1640625" />
+        <entry key="app/src/main/res/layout/lst_receipt_for_print.xml" value="0.33" />
         <entry key="app/src/main/res/layout/print_order_detail_item.xml" value="0.22" />
         <entry key="app/src/main/res/layout/print_order_detail_item2.xml" value="0.17135416666666667" />
         <entry key="app/src/main/res/layout/print_szzt_urovo_item.xml" value="0.24114583333333334" />
