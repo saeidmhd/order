@@ -39,6 +39,7 @@ import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.Receipt;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.Visitor;
+import com.mahak.order.common.VisitorProduct;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.DbSchema;
 import com.mahak.order.tracking.LocationService;
@@ -695,27 +696,29 @@ public class InvoiceDetailActivity extends BaseActivity {
     private void deleteOrderDetail(Order order) {
         db.open();
         ProductDetail productDetail;
-        ArrayList<OrderDetail> existOrderdetailInDb = db.getAllOrderDetail(order.getId());
-        for (OrderDetail orderDetail : existOrderdetailInDb) {
+        VisitorProduct visitorProduct;
+        ArrayList<OrderDetail> existOrderDetailInDb = db.getAllOrderDetail(order.getId());
+        for (OrderDetail orderDetail : existOrderDetailInDb) {
             productDetail = db.getProductDetail(orderDetail.getProductDetailId());
+            visitorProduct = db.getVisitorProduct(orderDetail.getProductDetailId());
             Product product = db.GetProductWithProductId(productDetail.getProductId());
             ArrayList<OrderDetailProperty> orderDetailProperties = db.getAllOrderDetailProperty(order.getId(), product.getProductId());
             if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE || (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext))) {
                 if (orderDetailProperties.size() > 0) {
                     for (OrderDetailProperty orderDetailProperty : orderDetailProperties) {
 
-                        productDetail.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail) + orderDetailProperty.getCount1());
-                        productDetail.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail) + orderDetailProperty.getCount2());
+                        visitorProduct.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail) + orderDetailProperty.getCount1());
+                        visitorProduct.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail) + orderDetailProperty.getCount2());
 
-                        db.UpdateProductDetail(productDetail);
+                        db.UpdateOrAddVisitorProductFast(visitorProduct);
                     }
                     db.DeleteOrderDetailProperty(order.getId());
                 }
 
-                productDetail.setCount1(productDetail.getCount1() + orderDetail.getSumCountBaJoz());
-                productDetail.setCount2(productDetail.getCount2() + orderDetail.getCount2());
+                visitorProduct.setCount1(visitorProduct.getCount1() + orderDetail.getSumCountBaJoz());
+                visitorProduct.setCount2(visitorProduct.getCount2() + orderDetail.getCount2());
 
-                db.UpdateProductDetail(productDetail);
+                db.UpdateOrAddVisitorProductFast(visitorProduct);
             }
         }
         db.DeleteOrderDetail(order.getId());
@@ -723,33 +726,33 @@ public class InvoiceDetailActivity extends BaseActivity {
 
     private void reduceAsset(OrderDetail item, ArrayList<OrderDetailProperty> orderDetailProperties) {
 
-        ProductDetail productDetail;
+        VisitorProduct visitorProduct;
         double remainCount1 = 0;
         double remainCount2 = 0;
 
         if (orderDetailProperties.size() > 0) {
             for (OrderDetailProperty orderDetailProperty : orderDetailProperties) {
-                productDetail = db.getProductDetail(orderDetailProperty.getProductDetailId());
+                visitorProduct = db.getVisitorProduct(orderDetailProperty.getProductDetailId());
                 if (orderDetailProperty.getOrderId() == 0) {
                     orderDetailProperty.setOrderId(OrderId);
                     db.UpdateOrderDetailPropertyWithOrderid(0, orderDetailProperty);
                 } else
                     db.UpdateOrderDetailPropertyWithOrderid(OrderId, orderDetailProperty);
 
-                remainCount1 = productDetail.getCount1() - ( orderDetailProperty.getSumCountBaJoz());
-                remainCount2 = productDetail.getCount2() - ( orderDetailProperty.getCount2());
+                remainCount1 = visitorProduct.getCount1() - ( orderDetailProperty.getSumCountBaJoz());
+                remainCount2 = visitorProduct.getCount2() - ( orderDetailProperty.getCount2());
 
-                productDetail.setCount1(remainCount1);
-                productDetail.setCount2(remainCount2);
+                visitorProduct.setCount1(remainCount1);
+                visitorProduct.setCount2(remainCount2);
 
-                db.UpdateProductDetail(productDetail);
+                db.UpdateOrAddVisitorProductFast(visitorProduct);
 
             }
         } else {
-            productDetail = db.getProductDetail(item.getProductDetailId());
-            productDetail.setCount1(productDetail.getCount1() - ( item.getSumCountBaJoz()));
-            productDetail.setCount2(productDetail.getCount2() - ( item.getCount2()));
-            db.UpdateProductDetail(productDetail);
+            visitorProduct = db.getVisitorProduct(item.getProductDetailId());
+            visitorProduct.setCount1(visitorProduct.getCount1() - ( item.getSumCountBaJoz()));
+            visitorProduct.setCount2(visitorProduct.getCount2() - ( item.getCount2()));
+            db.UpdateOrAddVisitorProductFast(visitorProduct);
         }
     }
 

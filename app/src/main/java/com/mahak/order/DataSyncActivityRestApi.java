@@ -1,5 +1,7 @@
 package com.mahak.order;
 
+import static com.mahak.order.common.ServiceTools.getDateAndTimeForLong;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -19,7 +21,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import androidx.appcompat.app.ActionBar;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -36,7 +37,6 @@ import com.mahak.order.common.OrderDetail;
 import com.mahak.order.common.OrderDetailProperty;
 import com.mahak.order.common.PayableTransfer;
 import com.mahak.order.common.PhotoGallery;
-import com.mahak.order.common.Region;
 import com.mahak.order.common.PicturesProduct;
 import com.mahak.order.common.Product;
 import com.mahak.order.common.ProductDetail;
@@ -49,6 +49,7 @@ import com.mahak.order.common.PromotionEntity;
 import com.mahak.order.common.PropertyDescription;
 import com.mahak.order.common.Reasons;
 import com.mahak.order.common.Receipt;
+import com.mahak.order.common.Region;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.Setting;
 import com.mahak.order.common.TransactionsLog;
@@ -92,38 +93,43 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.mahak.order.common.ServiceTools.getDateAndTimeForLong;
-
 public class DataSyncActivityRestApi extends BaseActivity {
 
-    private ProgressBar pbLoading;
     private FontProgressDialog pd;
 
     final boolean[] send_result = {false};
 
     private TextView
-            tvActivityList,
             tvOrderList,
             tvReceiptList,
             tvPayableList,
-            tvSendDoneCheckList,
-            tvProductList,
-            tvDeliveryOrderList,
-            tvConfig,
-            tvPicturesProduct;
+            tvSendDoneCheckList, tvDate,tvDayOfDate,tvInvoiceList,tvReturnOfSaleList,tvSendNonRegister,tvSendCustomerList;
 
     private TextView
-            tvCustomerList,
-            tvMoreInfo,
-            tvPriceLevel,
-            tvTransaction,
-            tvInvoiceList,
-            tvReturnOfSaleList,
-            tvSendNonRegister,
-            tvDate,
-            tvDayOfDate,
-            tvSendCustomerList,
-            tvVisitorٰList;
+            tvExtraData
+            ,tvProductDetailList
+            ,tvVisitorProduct
+            ,tvProductList
+            ,tvPerson
+            ,personGroup
+            ,tvVisitorPerson
+            ,tvBanks
+            ,tvVisitorٰList
+            ,tvCheckList
+            ,tvTransaction
+            ,tvDelivery
+            ,tvDeliveryDetail
+            ,returnReason
+            ,tvPromotionList
+            ,tvPromotionDetailList
+            ,tvPromotionDeliveryEntity
+            ,tvProductPicture
+            ,tvPictureDetails
+            ,tvRegion
+            ,tvPropertyDesc
+            ,tvPriceLevelNames
+            ,tvProductGroup
+            ,tvSetting;
     private ScrollView mScrollView;
 
     private Button btnSync, btnCancel;
@@ -133,7 +139,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
     private Activity mActivity;
 
     private User user;
-    private TextView tvPromotion;
 
     List<Bank> bankLists = new ArrayList<>();
     List<CustomerGroup> personGroupLists = new ArrayList<>();
@@ -256,7 +261,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
     }
 
     private void checkUserAvailable() {
-        
+
         final User user = db.getUser();
         int userDatabaseId = ServiceTools.toInt(user.getDatabaseId());
         int userId = ServiceTools.toInt(user.getServerUserID());
@@ -286,19 +291,19 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             BaseActivity.setPrefUserToken(response.body().getData().getUserToken());
                             setPrefSyncId(response.body().getData().getSyncId());
                             //Save db
-                            
+
                             user.setSyncId(response.body().getData().getSyncId());
                             user.setUserToken(response.body().getData().getUserToken());
                             db.UpdateUser(user);
-                            
+
                             SendReceive();
                         } else {
                             ServiceTools.Backup(mContext);
-                            
+
                             db.DeleteAllData();
                             radaraDb.DeleteAllData();
                             db.DeleteUser(userId);
-                            
+
                             Toast.makeText(DataSyncActivityRestApi.this, R.string.visitor_changed_login_again, Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(DataSyncActivityRestApi.this, LoginActivityRestApi.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -390,17 +395,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
     }
 
     private void setTextGetErrorResult() {
-        tvDeliveryOrderList.setText(getString(R.string.str_message_error));
         tvTransaction.setText(getString(R.string.str_message_error));
-        tvActivityList.setText(getString(R.string.str_message_error));
         tvProductList.setText(getString(R.string.str_message_error));
         tvVisitorٰList.setText(getString(R.string.str_message_error));
-        tvCustomerList.setText(getString(R.string.str_message_error));
-        tvPromotion.setText(getString(R.string.str_message_error));
-        tvMoreInfo.setText(getString(R.string.str_message_error));
-        tvPriceLevel.setText(getString(R.string.str_message_error));
-        tvConfig.setText(getString(R.string.str_message_error));
-        tvPicturesProduct.setText(getString(R.string.str_message_error));
     }
 
     /**
@@ -409,33 +406,47 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
     private void init() {
 
-        tvActivityList = (TextView) findViewById(R.id.tvActivityList);
         tvOrderList = (TextView) findViewById(R.id.tvOrderList);
-        tvReceiptList = (TextView) findViewById(R.id.tvReceiptList);
-        tvPayableList = (TextView) findViewById(R.id.tvPayableList);
-        tvProductList = (TextView) findViewById(R.id.tvProductList);
-        tvSendDoneCheckList = (TextView) findViewById(R.id.tvSendDoneCheckList);
-        tvConfig = (TextView) findViewById(R.id.tvConfig);
-        tvPicturesProduct = (TextView) findViewById(R.id.tvPicturesProduct);
-        tvCustomerList = (TextView) findViewById(R.id.tvCustomerList);
-        tvMoreInfo = (TextView) findViewById(R.id.tvMoreInfo);
-        tvPromotion = (TextView) findViewById(R.id.tvPromotion);
-        tvPriceLevel = (TextView) findViewById(R.id.tvPriceLevel);
-        tvTransaction = (TextView) findViewById(R.id.tvTransaction);
-        tvDeliveryOrderList = (TextView) findViewById(R.id.tvDeliveryOrder);
         tvInvoiceList = (TextView) findViewById(R.id.tvInvoiceList);
         tvReturnOfSaleList = (TextView) findViewById(R.id.tvReturnOfSaleList);
         tvSendNonRegister = (TextView) findViewById(R.id.tvSendNonRegister);
         tvSendCustomerList = (TextView) findViewById(R.id.tvSendCustomerList);
+        tvReceiptList = (TextView) findViewById(R.id.tvReceiptList);
+        tvPayableList = (TextView) findViewById(R.id.tvPayableList);
+        tvProductList = (TextView) findViewById(R.id.tvProductList);
+        tvSendDoneCheckList = (TextView) findViewById(R.id.tvSendDoneCheckList);
+        tvTransaction = (TextView) findViewById(R.id.tvTransaction);
         tvVisitorٰList = (TextView) findViewById(R.id.tvVisitorٰList);
         mScrollView = (ScrollView) findViewById(R.id.mScrollView);
-
         tvDate = (TextView) findViewById(R.id.tvDate);
+        tvProductDetailList = (TextView) findViewById(R.id.tvProductDetailList);
+        tvVisitorProduct = (TextView) findViewById(R.id.tvVisitorProduct);
+        tvExtraData = (TextView) findViewById(R.id.tvExtraData);
+        tvPerson = (TextView) findViewById(R.id.tvPerson);
+        personGroup = (TextView) findViewById(R.id.personGroup);
+        tvVisitorPerson = (TextView) findViewById(R.id.tvVisitorPerson);
+        tvBanks = (TextView) findViewById(R.id.tvBanks);
+        tvVisitorٰList = (TextView) findViewById(R.id.tvVisitorٰList);
+        tvCheckList = (TextView) findViewById(R.id.tvCheckList);
+        tvDelivery = (TextView) findViewById(R.id.tvDelivery);
+        tvDeliveryDetail = (TextView) findViewById(R.id.tvDeliveryDetail);
+        returnReason = (TextView) findViewById(R.id.returnReason);
+        tvPromotionList = (TextView) findViewById(R.id.tvPromotionList);
+        tvPromotionDetailList = (TextView) findViewById(R.id.tvPromotionDetailList);
+        tvPromotionDeliveryEntity = (TextView) findViewById(R.id.tvPromotionDeliveryEntity);
+        tvProductPicture = (TextView) findViewById(R.id.tvProductPicture);
+        tvPictureDetails = (TextView) findViewById(R.id.tvPictureDetails);
+        tvRegion = (TextView) findViewById(R.id.tvRegion);
+        tvPropertyDesc = (TextView) findViewById(R.id.tvPropertyDesc);
+        tvPriceLevelNames = (TextView) findViewById(R.id.tvPriceLevelNames);
+        tvProductGroup = (TextView) findViewById(R.id.tvProductGroup);
+        tvSetting = (TextView) findViewById(R.id.tvSetting);
+
+
         tvDayOfDate = (TextView) findViewById(R.id.tvDay);
 
         btnSync = (Button) findViewById(R.id.btnSync);
         btnCancel = (Button) findViewById(R.id.btnCancel);
-        pbLoading = (ProgressBar) findViewById(R.id.pbLoading);
 
         db = new DbAdapter(mContext);
         radaraDb = new RadaraDb(mContext);
@@ -447,26 +458,38 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
     private void resetTextViews() {
 
-        tvActivityList.setText("");
         tvOrderList.setText("");
         tvReceiptList.setText("");
         tvPayableList.setText("");
         tvSendDoneCheckList.setText("");
-        tvProductList.setText("");
-        tvDeliveryOrderList.setText("");
-        tvConfig.setText("");
-        tvPicturesProduct.setText("");
-        tvCustomerList.setText("");
-        tvMoreInfo.setText("");
-        tvPriceLevel.setText("");
-        tvTransaction.setText("");
         tvInvoiceList.setText("");
         tvReturnOfSaleList.setText("");
         tvSendNonRegister.setText("");
         tvSendCustomerList.setText("");
+        tvExtraData.setText("");
+        tvProductDetailList.setText("");
+        tvVisitorProduct.setText("");
+        tvProductList.setText("");
+        tvPerson.setText("");
+        personGroup.setText("");
+        tvVisitorPerson.setText("");
+        tvBanks.setText("");
         tvVisitorٰList.setText("");
-        tvPromotion.setText("");
-
+        tvCheckList.setText("");
+        tvTransaction.setText("");
+        tvDelivery.setText("");
+        tvDeliveryDetail.setText("");
+        returnReason.setText("");
+        tvPromotionList.setText("");
+        tvPromotionDetailList.setText("");
+        tvPromotionDeliveryEntity.setText("");
+        tvProductPicture.setText("");
+        tvPictureDetails.setText("");
+        tvRegion.setText("");
+        tvPropertyDesc.setText("");
+        tvPriceLevelNames.setText("");
+        tvProductGroup.setText("");
+        tvSetting.setText("");
     }
 
     private Dialog Dialog(String msg) {
@@ -505,7 +528,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
         radaraDb.close();
 
         btnSync.setEnabled(true);
-        pbLoading.setVisibility(View.GONE);
     }
 
     /**
@@ -555,10 +577,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (ServiceTools.Backup(mContext)) {
-                    
+
                     db.DeleteAllData();
                     radaraDb.DeleteAllData();
-                    
+
                     Toast toast = Toast.makeText(mContext, R.string.clean_database_alarm, Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 16);
                     toast.show();
@@ -567,10 +589,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     Calendar cal = Calendar.getInstance();
                     setPrefSyncId(String.valueOf(cal.getTimeInMillis() / 1000));
                     //Save db
-                    
+
                     user.setSyncId(getPrefSyncId());
                     db.UpdateUser(user);
-                    
+
                     dialog.dismiss();
                 }
             }
@@ -653,12 +675,11 @@ public class DataSyncActivityRestApi extends BaseActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pbLoading.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected Integer doInBackground(String... arg0) {
-            
+
             arrayInvoice = db.getAllOrderFamily(BaseActivity.getPrefUserId());
             Set<OrderDetail> set = new LinkedHashSet<>();
             for (int i = 0; i < arrayInvoice.size(); i++) {
@@ -705,9 +726,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
         @Override
         protected void onPostExecute(Integer result) {
 
-            pbLoading.setVisibility(View.GONE);
-            pbLoading.setVisibility(View.VISIBLE);
-
 
             final String[] mMsg = {""};
 
@@ -730,7 +748,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 public void onResponse(@NonNull Call<SaveAllDataResult> call, @NonNull Response<SaveAllDataResult> response) {
                     dismissProgressDialog();
                     if (response.body() != null && response.body().isResult()) {
-                        
+
                         if (arrayInvoice.size() > 0) {
                             int invoiceCount = 0;
                             int orderCount = 0;
@@ -844,12 +862,8 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             db.UpdatePicturesProductWithClientId(picturesProduct);
                         }
 
-                        pbLoading.setVisibility(View.GONE);
-                        
 
-                        receiveAsyncTask = new ReceiveAsyncTask();
-                        receiveAsyncTask.execute();
-
+                        new ReceiveAsyncTask(1).execute();
 
                     } else if (response.body() != null) {
                         // mMsg[0] = response.body().getData().getObjects().getOrders().getResults().get(0).getErrors().get(0).getError();
@@ -861,7 +875,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             showDialog(response.body().getMessage());
 
                         setTextSendErrorResult();
-                        pbLoading.setVisibility(View.GONE);
                     }
                 }
 
@@ -872,7 +885,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     FirebaseCrashlytics.getInstance().log(t.getMessage());
                     mMsg[0] = t.toString();
                     showDialog(mMsg[0]);
-                    pbLoading.setVisibility(View.GONE);
                     setTextSendErrorResult();
                 }
             });
@@ -881,90 +893,116 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
     class ReceiveAsyncTask extends AsyncTask<String, String, Integer> {
         GetAllDataBody getAllDataBody;
+        int whichUpdate = 0;
+
+        public ReceiveAsyncTask(int i) {
+            whichUpdate = i;
+        }
 
         @Override
         protected void onPreExecute() {
+            pd.setMessage("در حال دریافت " + getPdMessage(whichUpdate));
+            pd.setCancelable(false);
+            pd.show();
             super.onPreExecute();
-            pbLoading.setVisibility(View.VISIBLE);
+
         }
 
         @Override
         protected Integer doInBackground(String... arg0) {
-
-            
-            clearArraysForRecieve();
-
             getAllDataBody = new GetAllDataBody();
-
-            //CustomerMaxRowVersion = db.getMaxRowVersion(DbSchema.Customerschema.TABLE_NAME);
-            CustomerMaxRowVersion = db.getMaxRowVersion(DbSchema.CustomerSchema.TABLE_NAME);
-            CustomersGroupMaxRowVersion = db.getMaxRowVersion(DbSchema.CustomersGroupSchema.TABLE_NAME);
-            VisitorPersonMaxRowVersion = db.getMaxRowVersion(DbSchema.VisitorPeopleSchema.TABLE_NAME);
-
-            BankMaxRowVersion = db.getMaxRowVersion(DbSchema.BanksSchema.TABLE_NAME);
-            VisitorMaxRowVersion = db.getMaxRowVersion(DbSchema.VisitorSchema.TABLE_NAME);
-
-            CheckListMaxRowVersion = db.getMaxRowVersion(DbSchema.CheckListSchema.TABLE_NAME);
-            TransactionslogMaxRowVersion = db.getMaxRowVersion(DbSchema.TransactionsLogSchema.TABLE_NAME);
-
-            OrderRowMaxVersion = db.getMaxRowVersion(DbSchema.OrderSchema.TABLE_NAME);
-            OrderDetailMaxRowVersion = db.getMaxRowVersion(DbSchema.OrderDetailSchema.TABLE_NAME);
-
-            ReasonMaxRowVersion = db.getMaxRowVersion(DbSchema.ReasonsSchema.TABLE_NAME);
-            PromotionMaxRowVersion = db.getMaxRowVersion(DbSchema.PromotionSchema.TABLE_NAME);
-            PromotionDetailMaxRowVersion = db.getMaxRowVersion(DbSchema.PromotionDetailSchema.TABLE_NAME);
-            PromotionEntityMaxRowVersion = db.getMaxRowVersion(DbSchema.PromotionEntitySchema.TABLE_NAME);
-
-            PicturesMaxRowVersion = db.getMaxRowVersion(DbSchema.PicturesProductSchema.TABLE_NAME);
-            PhotoGalleryMaxRowVersion = db.getMaxRowVersion(DbSchema.PhotoGallerySchema.TABLE_NAME);
-            RegionMaxRowVersion = db.getMaxRowVersion(DbSchema.RegionSchema.TABLE_NAME);
-
-            ExtraDataMaxRowVersion = db.getMaxRowVersion(DbSchema.ExtraDataSchema.TABLE_NAME);
-            PropertyDescriptionMaxRowVersion = db.getMaxRowVersion(DbSchema.PropertyDescriptionSchema.TABLE_NAME);
-            VisitorProductMaxRowVersion = db.getMaxRowVersion(DbSchema.VisitorProductSchema.TABLE_NAME);
-            PriceLevelMaxRowVersion = db.getMaxRowVersion(DbSchema.PriceLevelNameSchema.TABLE_NAME);
-            CategoryMaxRowVersion = db.getMaxRowVersion(DbSchema.ProductGroupSchema.TABLE_NAME);
-            ProductMaxRowVersion = db.getMaxRowVersion(DbSchema.ProductSchema.TABLE_NAME);
-            ProductDetailMaxRowVersion = db.getMaxRowVersion(DbSchema.ProductDetailSchema.TABLE_NAME);
-
-            SettingMaxRowVersion = db.getMaxRowVersion(DbSchema.SettingSchema.TABLE_NAME);
-
-            getAllDataBody.setFromPersonVersion(CustomerMaxRowVersion);
-            getAllDataBody.setFromPersonGroupVersion(CustomersGroupMaxRowVersion);
-            getAllDataBody.setFromVisitorPersonVersion(VisitorPersonMaxRowVersion);
-            getAllDataBody.setFromPhotoGalleryVersion(PhotoGalleryMaxRowVersion);
-            getAllDataBody.setFromRegionVersion(RegionMaxRowVersion);
-
-
-            getAllDataBody.setFromBankVersion(BankMaxRowVersion);
-            getAllDataBody.setFromVisitorVersion(VisitorMaxRowVersion);
-
-            getAllDataBody.setFromChecklistVersion(CheckListMaxRowVersion);
-            getAllDataBody.setFromTransactionVersion(TransactionslogMaxRowVersion);
-
-            getAllDataBody.setFromOrderVersion(OrderRowMaxVersion);
-            getAllDataBody.setFromOrderDetailVersion(OrderDetailMaxRowVersion);
-
-            ArrayList<Integer> orderTypes = new ArrayList<>();
-            orderTypes.add(ProjectInfo.TYPE_Delivery);
-            getAllDataBody.setOrderTypes(orderTypes);
-
-            getAllDataBody.setFromReturnReasonVersion(ReasonMaxRowVersion);
-
-            getAllDataBody.setFromPromotionVersion(0);
-            getAllDataBody.setFromPromotionDetailVersion(0);
-            getAllDataBody.setFromPromotionEntityVersion(0);
-
-            getAllDataBody.setFromPictureVersion(PicturesMaxRowVersion);
-            getAllDataBody.setFromExtraDataVersion(ExtraDataMaxRowVersion);
-            getAllDataBody.setFromPropertyDescriptionVersion(PropertyDescriptionMaxRowVersion);
-            getAllDataBody.setFromVisitorProductVersion(VisitorProductMaxRowVersion);
-            getAllDataBody.setFromCostLevelNameVersion(PriceLevelMaxRowVersion);
-            getAllDataBody.setFromProductCategoryVersion(CategoryMaxRowVersion);
-            getAllDataBody.setFromProductVersion(ProductMaxRowVersion);
-            getAllDataBody.setFromProductDetailVersion(ProductDetailMaxRowVersion);
-
-            getAllDataBody.setFromSettingVersion(SettingMaxRowVersion);
+            switch (whichUpdate){
+                case 1:
+                    ProductMaxRowVersion = db.getMaxRowVersion(DbSchema.ProductSchema.TABLE_NAME);
+                    getAllDataBody.setFromProductVersion(ProductMaxRowVersion);
+                    VisitorProductMaxRowVersion = db.getMaxRowVersion(DbSchema.VisitorProductSchema.TABLE_NAME);
+                    getAllDataBody.setFromVisitorProductVersion(VisitorProductMaxRowVersion);
+                    break;
+                case 2:
+                    ProductDetailMaxRowVersion = db.getMaxRowVersion(DbSchema.ProductDetailSchema.TABLE_NAME);
+                    getAllDataBody.setFromProductDetailVersion(ProductDetailMaxRowVersion);
+                    break;
+                case 3:
+                    ExtraDataMaxRowVersion = db.getMaxRowVersion(DbSchema.ExtraDataSchema.TABLE_NAME);
+                    getAllDataBody.setFromExtraDataVersion(ExtraDataMaxRowVersion);
+                    break;
+                case 4:
+                    CustomerMaxRowVersion = db.getMaxRowVersion(DbSchema.CustomerSchema.TABLE_NAME);
+                    getAllDataBody.setFromPersonVersion(CustomerMaxRowVersion);
+                    VisitorPersonMaxRowVersion = db.getMaxRowVersion(DbSchema.VisitorPeopleSchema.TABLE_NAME);
+                    getAllDataBody.setFromVisitorPersonVersion(VisitorPersonMaxRowVersion);
+                    break;
+                case 5:
+                    CustomersGroupMaxRowVersion = db.getMaxRowVersion(DbSchema.CustomersGroupSchema.TABLE_NAME);
+                    getAllDataBody.setFromPersonGroupVersion(CustomersGroupMaxRowVersion);
+                    break;
+                case 6:
+                    BankMaxRowVersion = db.getMaxRowVersion(DbSchema.BanksSchema.TABLE_NAME);
+                    getAllDataBody.setFromBankVersion(BankMaxRowVersion);
+                    break;
+                case 7:
+                    VisitorMaxRowVersion = db.getMaxRowVersion(DbSchema.VisitorSchema.TABLE_NAME);
+                    getAllDataBody.setFromVisitorVersion(VisitorMaxRowVersion);
+                    break;
+                case 8:
+                    CheckListMaxRowVersion = db.getMaxRowVersion(DbSchema.CheckListSchema.TABLE_NAME);
+                    getAllDataBody.setFromChecklistVersion(CheckListMaxRowVersion);
+                    break;
+                case 9:
+                    TransactionslogMaxRowVersion = db.getMaxRowVersion(DbSchema.TransactionsLogSchema.TABLE_NAME);
+                    getAllDataBody.setFromTransactionVersion(TransactionslogMaxRowVersion);
+                    break;
+                case 10:
+                    ArrayList<Integer> orderTypes = new ArrayList<>();
+                    orderTypes.add(ProjectInfo.TYPE_Delivery);
+                    getAllDataBody.setOrderTypes(orderTypes);
+                    OrderRowMaxVersion = db.getMaxRowVersion(DbSchema.OrderSchema.TABLE_NAME);
+                    getAllDataBody.setFromOrderVersion(OrderRowMaxVersion);
+                    OrderDetailMaxRowVersion = db.getMaxRowVersion(DbSchema.OrderDetailSchema.TABLE_NAME);
+                    getAllDataBody.setFromOrderDetailVersion(OrderDetailMaxRowVersion);
+                    break;
+                case 11:
+                    getAllDataBody.setFromPromotionVersion(0L);
+                    break;
+                case 12:
+                    getAllDataBody.setFromPromotionDetailVersion(0L);
+                    break;
+                case 13:
+                    getAllDataBody.setFromPromotionEntityVersion(0L);
+                    break;
+                case 14:
+                    ReasonMaxRowVersion = db.getMaxRowVersion(DbSchema.ReasonsSchema.TABLE_NAME);
+                    getAllDataBody.setFromReturnReasonVersion(ReasonMaxRowVersion);
+                    break;
+                case 15:
+                    PicturesMaxRowVersion = db.getMaxRowVersion(DbSchema.PicturesProductSchema.TABLE_NAME);
+                    getAllDataBody.setFromPictureVersion(PicturesMaxRowVersion);
+                    break;
+                case 16:
+                    PhotoGalleryMaxRowVersion = db.getMaxRowVersion(DbSchema.PhotoGallerySchema.TABLE_NAME);
+                    getAllDataBody.setFromPhotoGalleryVersion(PhotoGalleryMaxRowVersion);
+                    break;
+                case 17:
+                    RegionMaxRowVersion = db.getMaxRowVersion(DbSchema.RegionSchema.TABLE_NAME);
+                    getAllDataBody.setFromRegionVersion(RegionMaxRowVersion);
+                    break;
+                case 18:
+                    PropertyDescriptionMaxRowVersion = db.getMaxRowVersion(DbSchema.PropertyDescriptionSchema.TABLE_NAME);
+                    getAllDataBody.setFromPropertyDescriptionVersion(PropertyDescriptionMaxRowVersion);
+                    break;
+                case 19:
+                    PriceLevelMaxRowVersion = db.getMaxRowVersion(DbSchema.PriceLevelNameSchema.TABLE_NAME);
+                    getAllDataBody.setFromCostLevelNameVersion(PriceLevelMaxRowVersion);
+                    break;
+                case 20:
+                    CategoryMaxRowVersion = db.getMaxRowVersion(DbSchema.ProductGroupSchema.TABLE_NAME);
+                    getAllDataBody.setFromProductCategoryVersion(CategoryMaxRowVersion);
+                    break;
+                case 21:
+                    SettingMaxRowVersion = db.getMaxRowVersion(DbSchema.SettingSchema.TABLE_NAME);
+                    getAllDataBody.setFromSettingVersion(SettingMaxRowVersion);
+                    break;
+            }
 
             return 0;
         }
@@ -972,69 +1010,130 @@ public class DataSyncActivityRestApi extends BaseActivity {
         @Override
         protected void onPostExecute(Integer result) {
 
-            pbLoading.setVisibility(View.GONE);
-            pbLoading.setVisibility(View.VISIBLE);
-
             final String[] mMsg = {""};
-
             ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
             Call<GetDataResult> getDataResultCall;
             getDataResultCall = apiService.GetAllData(getAllDataBody);
-            pbLoading.setVisibility(View.VISIBLE);
-            pd.setMessage(getString(R.string.recieiving_info));
-            pd.setCancelable(false);
-            pd.show();
             getDataResultCall.enqueue(new Callback<GetDataResult>() {
                 @Override
                 public void onResponse(Call<GetDataResult> call, Response<GetDataResult> response) {
-                    dismissProgressDialog();
                     if (response.body() != null && response.body().isResult()) {
                         if (response.body().getData() != null) {
-
-                            long startTime = System.nanoTime();
-
-                            bankLists = response.body().getData().getObjects().getBanks();
-                            personGroupLists = response.body().getData().getObjects().getPersonGroups();
-                            customerLists = response.body().getData().getObjects().getPeople();
-                            visitorPeople = response.body().getData().getObjects().getVisitorPeople();
-
-                            visitorLists = response.body().getData().getObjects().getVisitors();
-                            checkLists = response.body().getData().getObjects().getChecklists();
-                            transactionsLogs = response.body().getData().getObjects().getTransactions();
-                            orders = response.body().getData().getObjects().getOrders();
-                            orderDetails = response.body().getData().getObjects().getOrderDetails();
-                            reasons = response.body().getData().getObjects().getReturnReasons();
-
-                            promotions = response.body().getData().getObjects().getPromotions();
-                            promotionDetails = response.body().getData().getObjects().getPromotionDetails();
-                            promotionEntities = response.body().getData().getObjects().getPromotionEntities();
-
-                            extraData = response.body().getData().getObjects().getExtraData();
-                            picturesProducts = response.body().getData().getObjects().getPictures();
-                            photoGalleries = response.body().getData().getObjects().getPhotoGalleries();
-                            regions = response.body().getData().getObjects().getRegions();
-                            propertyDescriptions = response.body().getData().getObjects().getPropertyDescriptions();
-                            visitorProducts = response.body().getData().getObjects().getVisitorProducts();
-                            productPriceLevelNames = response.body().getData().getObjects().getCostLevelNames();
-                            productGroupLists = response.body().getData().getObjects().getProductCategories();
-                            productList = response.body().getData().getObjects().getProducts();
-                            productDetails = response.body().getData().getObjects().getProductDetails();
-
-                            settings = response.body().getData().getObjects().getSettings();
-
-                            long endTime = System.nanoTime();
-
-                            double a = (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
-
-                            saveAsyncTask =  new SaveAsyncTask();
-                            saveAsyncTask.execute();
+                            switch (whichUpdate){
+                                case 1:
+                                    productList = response.body().getData().getObjects().getProducts();
+                                    visitorProducts = response.body().getData().getObjects().getVisitorProducts();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 2:
+                                    productDetails = response.body().getData().getObjects().getProductDetails();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 3:
+                                    extraData = response.body().getData().getObjects().getExtraData();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 4:
+                                    customerLists = response.body().getData().getObjects().getPeople();
+                                    visitorPeople = response.body().getData().getObjects().getVisitorPeople();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 5:
+                                    personGroupLists = response.body().getData().getObjects().getPersonGroups();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 6:
+                                    bankLists = response.body().getData().getObjects().getBanks();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 7:
+                                    visitorLists = response.body().getData().getObjects().getVisitors();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 8:
+                                    checkLists = response.body().getData().getObjects().getChecklists();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 9:
+                                    transactionsLogs = response.body().getData().getObjects().getTransactions();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 10:
+                                    orders = response.body().getData().getObjects().getOrders();
+                                    orderDetails = response.body().getData().getObjects().getOrderDetails();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 11:
+                                    promotions = response.body().getData().getObjects().getPromotions();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 12:
+                                    promotionDetails = response.body().getData().getObjects().getPromotionDetails();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 13:
+                                    promotionEntities = response.body().getData().getObjects().getPromotionEntities();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 14:
+                                    reasons = response.body().getData().getObjects().getReturnReasons();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 15:
+                                    picturesProducts = response.body().getData().getObjects().getPictures();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 16:
+                                    photoGalleries = response.body().getData().getObjects().getPhotoGalleries();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 17:
+                                    regions = response.body().getData().getObjects().getRegions();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 18:
+                                    propertyDescriptions = response.body().getData().getObjects().getPropertyDescriptions();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 19:
+                                    productPriceLevelNames = response.body().getData().getObjects().getCostLevelNames();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 20:
+                                    productGroupLists = response.body().getData().getObjects().getProductCategories();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 21:
+                                    settings = response.body().getData().getObjects().getSettings();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                            }
                         }
-                        pbLoading.setVisibility(View.GONE);
                     } else if (response.body() != null) {
                         mMsg[0] = response.body().getMessage();
                         //showDialog(mMsg[0]);
                         setTextGetErrorResult();
-                        pbLoading.setVisibility(View.GONE);
                     }
                 }
 
@@ -1046,20 +1145,26 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     mMsg[0] = t.toString();
                     //showDialog(mMsg[0]);
                     setTextGetErrorResult();
-                    pbLoading.setVisibility(View.GONE);
                 }
             });
+
+
         }
     }
 
     class SaveAsyncTask extends AsyncTask<String, String, Integer> {
+        int whichUpdate = 0;
 
+
+        public SaveAsyncTask(int which) {
+            whichUpdate = which;
+
+        }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pbLoading.setVisibility(View.VISIBLE);
-            pd.setMessage(getString(R.string.storing_info));
+            pd.setMessage("در حال ذخیره " + getPdMessage(whichUpdate));
             pd.setCancelable(false);
             pd.show();
         }
@@ -1067,299 +1172,323 @@ public class DataSyncActivityRestApi extends BaseActivity {
         @Override
         protected Integer doInBackground(String... arg0) {
 
-            
+            switch (whichUpdate){
+                case 1:
+                    if (productList != null)
+                        if (productList.size() > 0)
+                            arrayTime[3] = DataService.InsertProduct(db, productList, ProductMaxRowVersion);
+                    if (visitorProducts != null)
+                        if (visitorProducts.size() > 0) {
+                            arrayTime[8] = DataService.InsertVisitorProducts(db, visitorProducts, VisitorProductMaxRowVersion);
+                        }
+                    break;
+                case 2:
+                    if (productDetails != null)
+                        if (productDetails.size() > 0) {
+                            arrayTime[4] = DataService.InsertProductDetail(db, productDetails, ProductDetailMaxRowVersion);
+                        }
+                    break;
+                case 3:
+                    if (extraData != null)
+                        if (extraData.size() > 0)
+                            arrayTime[15] = DataService.InsertExtraInfo(db, extraData, ExtraDataMaxRowVersion);
+                    break;
+                case 4:
+                    if (customerLists != null)
+                        if (customerLists.size() > 0)
+                            arrayTime[0] = DataService.InsertCustomer(db, customerLists, CustomerMaxRowVersion);
+                    if (visitorPeople != null)
+                        if (visitorPeople.size() > 0)
+                            arrayTime[0] += DataService.InsertVisitorPeople(db, visitorPeople, VisitorPersonMaxRowVersion);
+                    break;
+                case 5:
+                    if (personGroupLists != null)
+                        if (personGroupLists.size() > 0)
+                            arrayTime[0] += DataService.InsertCustomerGroup(db, personGroupLists);
+                    break;
+                case 6:
+                    if (bankLists != null)
+                        if (bankLists.size() > 0) {
+                            arrayTime[20] = DataService.InsertBank(db, bankLists);
+                        }
+                    break;
+                case 7:
+                    if (visitorLists != null)
+                        if (visitorLists.size() > 0)
+                            arrayTime[2] = DataService.InsertVisitor(db, visitorLists);
+                    break;
+                case 8:
+                    if (checkLists != null)
+                        if (checkLists.size() > 0)
+                            arrayTime[10] = DataService.InsertCheckList(db, checkLists);
+                    break;
+                case 9:
+                    if (transactionsLogs != null)
+                        if (transactionsLogs.size() > 0)
+                            arrayTime[11] = DataService.InsertTransactionsLog(db, transactionsLogs);
+                    break;
+                case 10:
+                    if (orders != null)
+                        if (orders.size() > 0) {
+                            arrayTime[16] = DataService.InsertDeliveryOrder(db, orders);
+                            if (orderDetails != null)
+                                if (orderDetails.size() > 0) {
+                                    arrayTime[17] = DataService.InsertDeliveryOrderDetail(db, orderDetails, mContext);
+                                }
+                        }
+                    break;
+                case 11:
+                    if (promotions != null)
+                        if (promotions.size() > 0) {
+                            arrayTime[12] = DataService.InsertPromotion(db, promotions);
+                        }
+                    break;
+                case 12:
+                    if (promotionDetails != null)
+                        if (promotionDetails.size() > 0) {
+                            arrayTime[13] = DataService.InsertPromotionDetails(db, promotionDetails);
+                        }
+                    break;
+                case 13:
+                    if (promotionEntities != null)
+                        if (promotionEntities.size() > 0) {
+                            arrayTime[13] = DataService.InsertEntitiesOfPromotions(db, promotionEntities);
+                        }
+                    break;
+                case 14:
+                    if (reasons != null)
+                        if (reasons.size() > 0) {
+                            arrayTime[19] = DataService.InsertReason(db, reasons);
+                        }
+                    break;
+                case 15:
+                    if (picturesProducts != null)
+                        if (picturesProducts.size() > 0)
+                            arrayTime[5] = DataService.InsertPicturesProduct(db, picturesProducts);
+                    break;
+                case 16:
+                    if (photoGalleries != null)
+                        if (photoGalleries.size() > 0) {
+                            arrayTime[21] = DataService.InsertPhotoGallery(db, photoGalleries,PhotoGalleryMaxRowVersion);
+                        }
+                    break;
+                case 17:
+                    if (regions != null)
+                        if (regions.size() > 0) {
+                            arrayTime[22] = DataService.InsertRegion(db, regions,RegionMaxRowVersion);
+                        }
+                    break;
 
-            if (customerLists != null)
-                if (customerLists.size() > 0)
-                    arrayTime[0] = DataService.InsertCustomer(db, customerLists, CustomerMaxRowVersion);
+                case 18:
+                    if (propertyDescriptions != null)
+                        if (propertyDescriptions.size() > 0) {
+                            arrayTime[7] = DataService.InsertPropertyDescription(db, propertyDescriptions);
+                        }
+                    break;
 
-            if (personGroupLists != null)
-                if (personGroupLists.size() > 0)
-                    arrayTime[0] += DataService.InsertCustomerGroup(db, personGroupLists);
+                case 19:
+                    if (productPriceLevelNames != null)
+                        if (productPriceLevelNames.size() > 0) {
+                            arrayTime[9] = DataService.InsertCostLevelName(db, productPriceLevelNames);
+                        }
+                    break;
+                case 20:
+                    if (productGroupLists != null)
+                        if (productGroupLists.size() > 0) {
+                            arrayTime[6] = DataService.InsertCategory(db, productGroupLists);
+                        }
+                    break;
+                case 21:
+                    if (settings != null)
+                        if (settings.size() > 0) {
+                            arrayTime[18] = DataService.InsertSettings(db, settings, mContext);
+                        }
+                    break;
+            }
 
-            if (visitorPeople != null)
-                if (visitorPeople.size() > 0)
-                    arrayTime[0] += DataService.InsertVisitorPeople(db, visitorPeople, VisitorPersonMaxRowVersion);
-
-            if (visitorLists != null)
-                if (visitorLists.size() > 0)
-                    arrayTime[2] = DataService.InsertVisitor(db, visitorLists);
-
-            if (productList != null)
-                if (productList.size() > 0)
-                    arrayTime[3] = DataService.InsertProduct(db, productList, ProductMaxRowVersion);
-
-            if (productDetails != null)
-                if (productDetails.size() > 0) {
-                    arrayTime[4] = DataService.InsertProductDetail(db, productDetails, ProductDetailMaxRowVersion);
-                }
-            if (picturesProducts != null)
-                if (picturesProducts.size() > 0)
-                    arrayTime[5] = DataService.InsertPicturesProduct(db, picturesProducts);
-
-            if (productGroupLists != null)
-                if (productGroupLists.size() > 0) {
-                    arrayTime[6] = DataService.InsertCategory(db, productGroupLists);
-                }
-            if (propertyDescriptions != null)
-                if (propertyDescriptions.size() > 0) {
-                    arrayTime[7] = DataService.InsertPropertyDescription(db, propertyDescriptions);
-                }
-            if (visitorProducts != null)
-                if (visitorProducts.size() > 0) {
-                    arrayTime[8] = DataService.InsertVisitorProducts(db, visitorProducts, VisitorProductMaxRowVersion);
-                }
-            if (productPriceLevelNames != null)
-                if (productPriceLevelNames.size() > 0) {
-                    arrayTime[9] = DataService.InsertCostLevelName(db, productPriceLevelNames);
-                }
-            if (checkLists != null)
-                if (checkLists.size() > 0)
-                    arrayTime[10] = DataService.InsertCheckList(db, checkLists);
-
-            if (transactionsLogs != null)
-                if (transactionsLogs.size() > 0)
-                    arrayTime[11] = DataService.InsertTransactionsLog(db, transactionsLogs);
-
-            if (promotions != null)
-                if (promotions.size() > 0) {
-                    arrayTime[12] = DataService.InsertPromotion(db, promotions);
-                }
-
-            if (promotionDetails != null)
-                if (promotionDetails.size() > 0) {
-                    arrayTime[13] = DataService.InsertPromotionDetails(db, promotionDetails);
-                }
-
-            if (promotionEntities != null)
-                if (promotionEntities.size() > 0) {
-                    arrayTime[13] = DataService.InsertEntitiesOfPromotions(db, promotionEntities);
-                }
-
-            if (extraData != null)
-                if (extraData.size() > 0)
-                    arrayTime[15] = DataService.InsertExtraInfo(db, extraData, ExtraDataMaxRowVersion);
-
-            if (orders != null)
-                if (orders.size() > 0) {
-                    arrayTime[16] = DataService.InsertDeliveryOrder(db, orders);
-                }
-            if (orderDetails != null)
-                if (orderDetails.size() > 0) {
-                    arrayTime[17] = DataService.InsertDeliveryOrderDetail(db, orderDetails, mContext);
-                }
-            if (settings != null)
-                if (settings.size() > 0) {
-                    arrayTime[18] = DataService.InsertSettings(db, settings, mContext);
-                }
-            if (reasons != null)
-                if (reasons.size() > 0) {
-                    arrayTime[19] = DataService.InsertReason(db, reasons);
-                }
-            if (bankLists != null)
-                if (bankLists.size() > 0) {
-                    arrayTime[20] = DataService.InsertBank(db, bankLists);
-                }
-            if (photoGalleries != null)
-                if (photoGalleries.size() > 0) {
-                    arrayTime[21] = DataService.InsertPhotoGallery(db, photoGalleries,PhotoGalleryMaxRowVersion);
-                }
-            if (regions != null)
-                if (regions.size() > 0) {
-                    arrayTime[22] = DataService.InsertRegion(db, regions,RegionMaxRowVersion);
-                }
-            
             return 0;
         }
 
         @Override
         protected void onPostExecute(Integer result) {
 
-            for (int i = 0; i < arrayCheckUpdate.length; i++) {
-                switch (i) {
-                    case 0:
-                        if (arrayCheckUpdate[0])
-                            if (customerLists.size() > 0) {
-                                tvCustomerList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + customerLists.size() + " (" + String.format("%.2f", arrayTime[0]) + getString(R.string.secound) + ") ");
-                            } else
-                                tvCustomerList.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvCustomerList.setText(getString(R.string.str_message_failed_save));
-                        break;
-                    case 1:
-                        if (arrayCheckUpdate[1])
-                            if (customerLists.size() > 0) {
-                                tvCustomerList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + customerLists.size() + " (" + String.format("%.2f", arrayTime[0]) + getString(R.string.secound) + ") ");
-                            } else
-                                tvCustomerList.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvCustomerList.setText(getString(R.string.str_message_failed_save) + getString(R.string.customer_group));
-                        break;
-                    case 2:
-                        if (arrayCheckUpdate[2])
-                            if (visitorLists.size() > 0) {
-                                tvVisitorٰList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + visitorLists.size() + " (" + String.format("%.2f", arrayTime[2]) + getString(R.string.secound) + ") ");
-                            } else
-                                tvVisitorٰList.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvVisitorٰList.setText(getString(R.string.str_message_failed_save));
-                        break;
-                    case 3:
-                        if (arrayCheckUpdate[3])
-                            if (productList.size() > 0) {
-                                tvProductList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + productList.size() + " (" + String.format("%.2f", arrayTime[3]) + getString(R.string.secound) + ") ");
-                            } else
-                                tvProductList.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvProductList.setText(getString(R.string.str_message_failed_save));
-                        break;
-                    case 4:
-                        if (arrayCheckUpdate[4])
-                            if (productDetails.size() > 0) {
-                                tvPriceLevel.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + productDetails.size() + " (" + String.format("%.2f", arrayTime[4]) + getString(R.string.secound) + ") ");
-                            } else
-                                tvPriceLevel.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvPriceLevel.setText(getString(R.string.str_message_failed_save) + getString(R.string.product_properties));
-                        break;
-                    case 5:
-                        if (arrayCheckUpdate[5])
-                            if (picturesProducts.size() > 0) {
-                                tvPicturesProduct.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + picturesProducts.size() + " (" + String.format("%.2f", arrayTime[5]) + getString(R.string.secound) + ") ");
-                            } else
-                                tvPicturesProduct.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvPicturesProduct.setText(getString(R.string.str_message_failed_save) + getString(R.string.product_images));
-                        break;
-                    case 6:
-                        if (arrayCheckUpdate[6])
-                            if (productList.size() > 0) {
-                                tvProductList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + productDetails.size() + " (" + String.format("%.2f", arrayTime[6]) + getString(R.string.secound) + ") ");
-                            } else
-                                tvProductList.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvProductList.setText(getString(R.string.str_message_failed_save) + getString(R.string.product_category));
-                        break;
-                    case 7:
-                        if (arrayCheckUpdate[7])
-                            if (productList.size() > 0) {
-                                tvProductList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + productDetails.size() + " (" + String.format("%.2f", arrayTime[7]) + getString(R.string.secound) + ") ");
-                            } else
-                                tvProductList.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvProductList.setText(getString(R.string.str_message_failed_save) + getString(R.string.product_details_desc));
-                        break;
-                    case 8:
-                        if (arrayCheckUpdate[8])
-                            if (productList.size() > 0) {
-                                tvProductList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + productDetails.size() + " (" + String.format("%.2f", arrayTime[8]) + getString(R.string.secound) + ") ");
-                            } else
-                                tvProductList.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvProductList.setText(getString(R.string.str_message_failed_save) + getString(R.string.visitor_product));
-                        break;
-                    case 9:
-                        if (arrayCheckUpdate[9])
-                            if (productList.size() > 0) {
-                                double sumTime = arrayTime[3] + arrayTime[6] + arrayTime[7] + arrayTime[8] + arrayTime[9];
-                                tvProductList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + productDetails.size() + " (" + String.format("%.2f", sumTime) + getString(R.string.secound) + ") ");
-                            } else
-                                tvProductList.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvProductList.setText(getString(R.string.str_message_failed_save) + getString(R.string.price_level_names));
-                        break;
-                    case 10:
-                        if (arrayCheckUpdate[10])
-                            if (checkLists.size() > 0) {
-                                tvActivityList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + checkLists.size() + " (" + String.format("%.2f", arrayTime[10]) + getString(R.string.secound) + ") ");
-                            } else
-                                tvActivityList.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvActivityList.setText(getString(R.string.str_message_failed_save));
-                        break;
-                    case 11:
-                        if (arrayCheckUpdate[11])
-                            if (transactionsLogs.size() > 0) {
-                                tvTransaction.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + transactionsLogs.size() + " (" + String.format("%.2f", arrayTime[11]) + getString(R.string.secound) + ") ");
-                            } else
-                                tvTransaction.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvTransaction.setText(getString(R.string.str_message_failed_save));
-                        break;
-                    case 12:
-                        if (arrayCheckUpdate[12])
-                            if (promotions.size() > 0) {
-                                tvPromotion.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + promotions.size() + " (" + String.format("%.2f", arrayTime[12]) + getString(R.string.secound) + ") ");
-                            } else
-                                tvPromotion.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvPromotion.setText(getString(R.string.str_message_failed_save) + getString(R.string.promotion));
-                        break;
-                    case 13:
-                        if (arrayCheckUpdate[13])
-                            if (promotions.size() > 0) {
-                                tvPromotion.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + promotions.size() + " (" + String.format("%.2f", arrayTime[13]) + getString(R.string.secound) + ") ");
-                            } else
-                                tvPromotion.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvPromotion.setText(getString(R.string.str_message_failed_save) + getString(R.string.promotion_details));
-                        break;
-                    case 14:
-                        if (arrayCheckUpdate[14])
-                            if (promotions.size() > 0) {
-                                double sumTime = arrayTime[12] + arrayTime[13] + arrayTime[14];
-                                tvPromotion.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + promotions.size() + " (" + String.format("%.2f", sumTime) + getString(R.string.secound) + ") ");
-                            } else
-                                tvPromotion.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvPromotion.setText(getString(R.string.str_message_failed_save) + getString(R.string.promotion_entity_details));
-                        break;
-                    case 15:
-                        if (arrayCheckUpdate[15])
-                            if (extraData.size() > 0) {
-                                tvMoreInfo.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + extraData.size() + " (" + String.format("%.2f", arrayTime[15]) + getString(R.string.secound) + ") ");
-                            } else
-                                tvMoreInfo.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvMoreInfo.setText(getString(R.string.str_message_failed_save));
-                        break;
-                    case 16:
-                        if (arrayCheckUpdate[16])
-                            if (orders.size() > 0) {
-                                tvDeliveryOrderList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + orders.size() + " (" + String.format("%.2f", arrayTime[16]) + getString(R.string.secound) + ") ");
-                            } else
-                                tvDeliveryOrderList.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvDeliveryOrderList.setText(getString(R.string.str_message_failed_save) + getString(R.string.delivery));
-                        break;
-                    case 17:
-                        if (arrayCheckUpdate[17])
-                            if (orders.size() > 0) {
-                                tvDeliveryOrderList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + orders.size() + " (" + String.format("%.2f", arrayTime[17]) + getString(R.string.secound) + ") ");
-                            } else
-                                tvDeliveryOrderList.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvDeliveryOrderList.setText(getString(R.string.str_message_failed_save) + getString(R.string.delivery_details));
-                        break;
-                    case 18:
-                        if (arrayCheckUpdate[18])
-                            if (settings.size() > 0) {
-                                tvConfig.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + settings.size() + " (" + String.format("%.2f", arrayTime[18]) + getString(R.string.secound) + ") ");
-                            } else
-                                tvConfig.setText(R.string.no_new_item_for_receive);
-                        else
-                            tvConfig.setText(getString(R.string.str_message_failed_save));
-                        break;
-                }
+            switch (whichUpdate){
+                case 1:
+                    if (productList != null)
+                        if (productList.size() > 0) {
+                            tvProductList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + productList.size() );
+                        }else
+                            tvProductList.setText(R.string.no_new_item_for_receive);
+                    if (visitorProducts != null)
+                        if (visitorProducts.size() > 0) {
+                            tvVisitorProduct.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + visitorProducts.size() );
+                        }else
+                            tvVisitorProduct.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 2:
+                    if (productDetails != null)
+                        if (productDetails.size() > 0) {
+                            tvProductDetailList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + productDetails.size() );
+                        }else
+                            tvProductDetailList.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 3:
+                    if (extraData != null)
+                        if (extraData.size() > 0) {
+                            tvExtraData.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + extraData.size() );
+                        }else
+                            tvExtraData.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 4:
+                    if (customerLists != null)
+                        if (customerLists.size() > 0) {
+                            tvPerson.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + customerLists.size() );
+                        }else
+                            tvPerson.setText(R.string.no_new_item_for_receive);
+                    if (visitorPeople != null)
+                        if (visitorPeople.size() > 0) {
+                            tvVisitorPerson.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + visitorPeople.size() );
+                        }else
+                            tvVisitorPerson.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 5:
+                    if (personGroupLists != null)
+                        if (personGroupLists.size() > 0) {
+                            personGroup.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + personGroupLists.size() );
+                        }else
+                            personGroup.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 6:
+                    if (bankLists != null)
+                        if (bankLists.size() > 0) {
+                            tvBanks.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + bankLists.size() );
+                        }else
+                            tvBanks.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 7:
+                    if (visitorLists != null)
+                        if (visitorLists.size() > 0) {
+                            tvVisitorٰList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + visitorLists.size() );
+                        }else
+                            tvVisitorٰList.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 8:
+                    if (checkLists != null)
+                        if (checkLists.size() > 0) {
+                            tvCheckList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + checkLists.size() );
+                        }else
+                            tvCheckList.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 9:
+                    if (transactionsLogs != null)
+                        if (transactionsLogs.size() > 0) {
+                            tvTransaction.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + transactionsLogs.size() );
+                        }else
+                            tvTransaction.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 10:
+                    if (orders != null)
+                        if (orders.size() > 0) {
+                            tvDelivery.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + orders.size() );
+                        }else
+                            tvDelivery.setText(R.string.no_new_item_for_receive);
+                    if (orderDetails != null)
+                        if (orderDetails.size() > 0) {
+                            tvDeliveryDetail.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + orderDetails.size() );
+                        }else
+                            tvDeliveryDetail.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 11:
+                    if (promotions != null)
+                        if (promotions.size() > 0) {
+                            tvPromotionList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + promotions.size() );
+                        }else
+                            tvPromotionList.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 12:
+                    if (promotionDetails != null)
+                        if (promotionDetails.size() > 0) {
+                            tvPromotionDetailList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + promotionDetails.size() );
+                        }else
+                            tvPromotionDetailList.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 13:
+                    if (promotionEntities != null)
+                        if (promotionEntities.size() > 0) {
+                            tvPromotionDeliveryEntity.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + promotionEntities.size() );
+                        }else
+                            tvPromotionDeliveryEntity.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 14:
+                    if (reasons != null)
+                        if (reasons.size() > 0) {
+                            returnReason.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + reasons.size() );
+                        }else
+                            returnReason.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 15:
+                    if (picturesProducts != null)
+                        if (picturesProducts.size() > 0) {
+                            tvProductPicture.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + picturesProducts.size() );
+                        }else
+                            tvProductPicture.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 16:
+                    if (photoGalleries != null)
+                        if (photoGalleries.size() > 0) {
+                            tvPictureDetails.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + photoGalleries.size() );
+                        }else
+                            tvPictureDetails.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 17:
+                    if (regions != null)
+                        if (regions.size() > 0) {
+                            tvRegion.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + regions.size() );
+                        }else
+                            tvRegion.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 18:
+                    if (propertyDescriptions != null)
+                        if (propertyDescriptions.size() > 0) {
+                            tvPropertyDesc.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + propertyDescriptions.size() );
+                        }else
+                            tvPropertyDesc.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 19:
+                    if (productPriceLevelNames != null)
+                        if (productPriceLevelNames.size() > 0) {
+                            tvPriceLevelNames.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + productPriceLevelNames.size() );
+                        }else
+                            tvPriceLevelNames.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 20:
+                    if (productGroupLists != null)
+                        if (productGroupLists.size() > 0) {
+                            tvProductGroup.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + productGroupLists.size() );
+                        }else
+                            tvProductGroup.setText(R.string.no_new_item_for_receive);
+                    break;
+                case 21:
+                    tvCheckList.requestFocus();
+                    if (settings != null)
+                        if (settings.size() > 0) {
+                            tvSetting.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + settings.size() );
+                        }else
+                            tvSetting.setText(R.string.no_new_item_for_receive);
+                    break;
             }
 
-            sendSignInfoAsyncTask =  new SendSignInfoAsyncTask();
-            sendSignInfoAsyncTask.execute();
+            if(whichUpdate < 21 ){
+                whichUpdate++;
+                new ReceiveAsyncTask(whichUpdate).execute();
+            }else{
+                dismissProgressDialog();
+                sendSignInfoAsyncTask =  new SendSignInfoAsyncTask();
+                sendSignInfoAsyncTask.execute();
+            }
 
-            pbLoading.setVisibility(View.GONE);
-            dismissProgressDialog();
+
         }
-
     }
 
     class SendSignInfoAsyncTask extends AsyncTask<String, String, Integer> {
@@ -1370,12 +1499,11 @@ public class DataSyncActivityRestApi extends BaseActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pbLoading.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected Integer doInBackground(String... arg0) {
-            
+
             picturesProducts = db.getAllSignWithoutUrl();
             return 0;
         }
@@ -1383,57 +1511,58 @@ public class DataSyncActivityRestApi extends BaseActivity {
         @Override
         protected void onPostExecute(Integer result) {
 
-            pbLoading.setVisibility(View.GONE);
-            pbLoading.setVisibility(View.VISIBLE);
+            if(picturesProducts.size() > 0){
+                final String[] mMsg = {""};
+                ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
+                SetAllDataBody setAllDataBody = new SetAllDataBody();
+                setAllDataBody.setPictures(picturesProducts);
+                Call<SaveAllDataResult> saveAllDataResultCall = apiService.SaveAllData(setAllDataBody);
 
-            final String[] mMsg = {""};
+                pd.setMessage(getString(R.string.sending_image));
+                pd.setCancelable(false);
+                pd.show();
+                saveAllDataResultCall.enqueue(new Callback<SaveAllDataResult>() {
+                    @Override
+                    public void onResponse(@NonNull Call<SaveAllDataResult> call, @NonNull Response<SaveAllDataResult> response) {
+                        if (response.body() != null && response.body().isResult()) {
 
-            ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
-            SetAllDataBody setAllDataBody = new SetAllDataBody();
-            setAllDataBody.setPictures(picturesProducts);
-            Call<SaveAllDataResult> saveAllDataResultCall = apiService.SaveAllData(setAllDataBody);
-
-            pd.setMessage(getString(R.string.sending_image));
-            pd.setCancelable(false);
-            pd.show();
-            saveAllDataResultCall.enqueue(new Callback<SaveAllDataResult>() {
-                @Override
-                public void onResponse(@NonNull Call<SaveAllDataResult> call, @NonNull Response<SaveAllDataResult> response) {
-                    dismissProgressDialog();
-                    if (response.body() != null && response.body().isResult()) {
-                        
-                        if (picturesProducts.size() > 0) {
-                            for (int i = 0; i < picturesProducts.size(); i++) {
-                                picturesProducts.get(i).setPictureId(response.body().getData().getObjects().getPictures().getResults().get(i).getEntityID());
-                                db.UpdatePicturesProductWithClientId(picturesProducts.get(i));
+                            if (picturesProducts.size() > 0) {
+                                for (int i = 0; i < picturesProducts.size(); i++) {
+                                    picturesProducts.get(i).setPictureId(response.body().getData().getObjects().getPictures().getResults().get(i).getEntityID());
+                                    db.UpdatePicturesProductWithClientId(picturesProducts.get(i));
+                                }
                             }
+
+
+                            sendSignImageAsyncTask = new SendSignImageAsyncTask();
+                            sendSignImageAsyncTask.execute();
+
+                        } else if (response.body() != null) {
+                            mMsg[0] = getString(R.string.send_error);
+                            //showDialog(response.body().getMessage());
+
+                            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+                            FirebaseCrashlytics.getInstance().log(response.body().getMessage());
                         }
-                        pbLoading.setVisibility(View.GONE);
-
-
-                        sendSignImageAsyncTask = new SendSignImageAsyncTask();
-                        sendSignImageAsyncTask.execute();
-
-                    } else if (response.body() != null) {
-                        mMsg[0] = getString(R.string.send_error);
-                        //showDialog(response.body().getMessage());
-                        pbLoading.setVisibility(View.GONE);
-
-                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                        FirebaseCrashlytics.getInstance().log(response.body().getMessage());
                     }
-                }
 
-                @Override
-                public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                    FirebaseCrashlytics.getInstance().log(t.getMessage());
-                    dismissProgressDialog();
-                    mMsg[0] = t.toString();
-                    //showDialog(mMsg[0]);
-                    pbLoading.setVisibility(View.GONE);
-                }
-            });
+                    @Override
+                    public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
+                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+                        FirebaseCrashlytics.getInstance().log(t.getMessage());
+                        dismissProgressDialog();
+                        mMsg[0] = t.toString();
+                        //showDialog(mMsg[0]);
+                    }
+                });
+            }else {
+                if(isRadaraActive())
+                    new TrackingConfig(mContext,pd).getSignalTokenAndSetting();
+
+                new ReadOfflinePicturesProducts(mContext).readAllImages();
+            }
+
+
         }
     }
 
@@ -1450,7 +1579,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
         protected void onPostExecute(Integer result) {
             if (files != null) {
                 if (files.length > 0) {
-                    pbLoading.setVisibility(View.VISIBLE);
                     for (File mFile : files) {
                         final String[] mMsg = {""};
                         long pictureId = db.getPictureIdWithFileName(mFile.getName());
@@ -1465,18 +1593,15 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         mSetSignImageResult.enqueue(new Callback<setSignImage>() {
                             @Override
                             public void onResponse(@NonNull Call<setSignImage> call, @NonNull Response<setSignImage> response) {
-                                dismissProgressDialog();
                                 if (response.body() != null && response.body().getResult()) {
-                                    
+
                                     PicturesProduct picturesProduct = db.getPictureWithPictureId(response.body().getData().getEntityId());
                                     picturesProduct.setUrl(response.body().getData().getAdditionalData().getFileUrl());
                                     picturesProduct.setPictureHash(response.body().getData().getAdditionalData().getFileHash());
                                     db.UpdatePicturesProductWithClientId(picturesProduct);
-                                    pbLoading.setVisibility(View.GONE);
 
                                 } else if (response.body() != null) {
                                     mMsg[0] = getString(R.string.send_error);
-                                    pbLoading.setVisibility(View.GONE);
 
                                     FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
                                     FirebaseCrashlytics.getInstance().log(response.body().toString());
@@ -1490,7 +1615,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                 dismissProgressDialog();
                                 mMsg[0] = t.toString();
                                 //showDialog(mMsg[0]);
-                                pbLoading.setVisibility(View.GONE);
                             }
                         });
                     }
@@ -1566,6 +1690,56 @@ public class DataSyncActivityRestApi extends BaseActivity {
         if (!isFinishing()) {
             Dialog(msg).show();
         }
+    }
+
+    public String getPdMessage(int whichUpdate){
+        switch (whichUpdate){
+            case 1:
+                return "کالاها و کالاهای ویزیتور";
+            case 2:
+                return "جزییات کالاها";
+            case 3:
+                return "داده های افزوده";
+            case 4:
+                return "اشخاص و اشخاص ویزیتور";
+            case 5:
+                return "گروه اشخاص";
+            case 6:
+                return "بانکها";
+            case 7:
+                return "لیست ویزیتورها";
+            case 8:
+                return "چک لیستها";
+            case 9:
+                return "گردش اشخاص";
+            case 10:
+                return "لیست تحویلی ها";
+            case 11:
+                return "جزییات تحویلی ها";
+            case 12:
+                return "دلایل برگشتی";
+            case 13:
+                return "طرح های تشویقی";
+            case 14:
+                return "جزییات طرح های تشویقی";
+            case 15:
+                return "موجودیت های طرح های تشویقی";
+            case 16:
+                return "تصاویر کالاها";
+            case 17:
+                return "جزییات تصاویر کالاها";
+            case 18:
+                return "شهر ها و استان ها";
+            case 19:
+                return "شرح جزییات کالا";
+            case 20:
+                return "نام سطوح قیمتی";
+            case 21:
+                return "گروه بندی کالاها";
+            case 22:
+                return "تنظیمات";
+        }
+        return "";
     }
 
     @Override

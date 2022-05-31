@@ -338,7 +338,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         if (extras != null) {
             if (extras.getInt(Type_Login) == bnd_Login_Splash) {
                 int CountProduct = db.getTotalCountProduct();
-                int CountCustomer = db.getTotalCountPeople();
+                int CountCustomer = db.getTotalCountPeople(0 , "");
                 if (CountCustomer == 0 && CountProduct == 0) {
                     Dialog(getString(R.string.str_message_no_data)).show();
                     FontAlertDialog.FontDialog(dialog);

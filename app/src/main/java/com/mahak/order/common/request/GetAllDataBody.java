@@ -12,102 +12,102 @@ public class GetAllDataBody {
     private String userToken;
     @SerializedName("FromBankVersion")
     @Expose
-    private long fromBankVersion;
+    private Long fromBankVersion = null;
     @SerializedName("FromChecklistVersion")
     @Expose
-    private long fromChecklistVersion;
+    private Long fromChecklistVersion = null;
     @SerializedName("FromChequeVersion")
     @Expose
-    private long fromChequeVersion;
+    private Long fromChequeVersion = null;
     @SerializedName("FromExtraDataVersion")
     @Expose
-    private long fromExtraDataVersion;
+    private Long fromExtraDataVersion = null;
     @SerializedName("FromOrderDetailVersion")
     @Expose
-    private long fromOrderDetailVersion;
+    private Long fromOrderDetailVersion = null;
     @SerializedName("FromOrderVersion")
     @Expose
-    private long fromOrderVersion;
+    private Long fromOrderVersion = null;
     @SerializedName("FromPersonGroupVersion")
     @Expose
-    private long fromPersonGroupVersion;
+    private Long fromPersonGroupVersion = null;
     @SerializedName("FromPersonVersion")
     @Expose
-    private long fromPersonVersion;
+    private Long fromPersonVersion = null;
     @SerializedName("FromPictureVersion")
     @Expose
-    private long fromPictureVersion;
+    private Long fromPictureVersion = null;
     @SerializedName("FromProductCategoryVersion")
     @Expose
-    private long fromProductCategoryVersion;
+    private Long fromProductCategoryVersion = null;
     @SerializedName("FromProductDetailVersion")
     @Expose
-    private long fromProductDetailVersion;
+    private Long fromProductDetailVersion = null;
     @SerializedName("FromProductVersion")
     @Expose
-    private long fromProductVersion;
+    private Long fromProductVersion = null;
     @SerializedName("FromReceiptVersion")
     @Expose
-    private long fromReceiptVersion;
+    private Long fromReceiptVersion = null;
     @SerializedName("FromSettingVersion")
     @Expose
-    private long fromSettingVersion;
+    private Long fromSettingVersion = null;
     @SerializedName("FromTransactionVersion")
     @Expose
-    private long fromTransactionVersion;
+    private Long fromTransactionVersion = null;
     @SerializedName("FromVisitorVersion")
     @Expose
-    private long fromVisitorVersion;
+    private Long fromVisitorVersion = null;
     @SerializedName("FromReturnReasonVersion")
     @Expose
-    private long fromReturnReasonVersion;
+    private Long fromReturnReasonVersion = null;
 
     @SerializedName("FromCostLevelNameVersion")
     @Expose
-    private long fromCostLevelNameVersion;
+    private Long fromCostLevelNameVersion = null;
 
     @SerializedName("FromPromotionVersion")
     @Expose
-    private long fromPromotionVersion;
+    private Long fromPromotionVersion = null;
 
     @SerializedName("FromPromotionDetailVersion")
     @Expose
-    private long fromPromotionDetailVersion;
+    private Long fromPromotionDetailVersion = null;
 
     @SerializedName("FromPromotionEntityVersion")
     @Expose
-    private long fromPromotionEntityVersion;
+    private Long fromPromotionEntityVersion = null;
 
     @SerializedName("FromTransferStoreVersion")
     @Expose
-    private long fromTransferStoreVersion;
+    private Long fromTransferStoreVersion = null;
 
     @SerializedName("FromTransferStoreDetailVersion")
     @Expose
-    private long fromTransferStoreDetailVersion;
+    private Long fromTransferStoreDetailVersion = null;
 
     @SerializedName("OrderTypes")
     @Expose
-    private ArrayList<Integer> orderTypes;
+    private ArrayList<Integer> orderTypes = null;
 
     @SerializedName("FromPropertyDescriptionVersion")
     @Expose
-    private long FromPropertyDescriptionVersion;
+    private Long FromPropertyDescriptionVersion = null;
     @SerializedName("FromVisitorProductVersion")
     @Expose
-    private long fromVisitorProductVersion;
+    private Long fromVisitorProductVersion = null;
 
     @SerializedName("FromVisitorPersonVersion")
     @Expose
-    private long fromVisitorPersonVersion;
+    private Long fromVisitorPersonVersion = null;
 
     @SerializedName("FromPhotoGalleryVersion")
     @Expose
-    private long fromPhotoGalleryVersion;
+    private Long fromPhotoGalleryVersion = null;
 
     @SerializedName("FromRegionVersion")
     @Expose
-    private long fromRegionVersion;
+    private Long fromRegionVersion = null;
 
 
     public String getUserToken() {
@@ -118,187 +118,187 @@ public class GetAllDataBody {
         this.userToken = userToken;
     }
 
-    public long getFromBankVersion() {
+    public Long getFromBankVersion() {
         return fromBankVersion;
     }
 
-    public void setFromBankVersion(long fromBankVersion) {
+    public void setFromBankVersion(Long fromBankVersion) {
         this.fromBankVersion = fromBankVersion;
     }
 
-    public long getFromChecklistVersion() {
+    public Long getFromChecklistVersion() {
         return fromChecklistVersion;
     }
 
-    public void setFromChecklistVersion(long fromChecklistVersion) {
+    public void setFromChecklistVersion(Long fromChecklistVersion) {
         this.fromChecklistVersion = fromChecklistVersion;
     }
 
-    public long getFromChequeVersion() {
+    public Long getFromChequeVersion() {
         return fromChequeVersion;
     }
 
-    public void setFromChequeVersion(long fromChequeVersion) {
+    public void setFromChequeVersion(Long fromChequeVersion) {
         this.fromChequeVersion = fromChequeVersion;
     }
 
-    public long getFromExtraDataVersion() {
+    public Long getFromExtraDataVersion() {
         return fromExtraDataVersion;
     }
 
-    public void setFromExtraDataVersion(long fromExtraDataVersion) {
+    public void setFromExtraDataVersion(Long fromExtraDataVersion) {
         this.fromExtraDataVersion = fromExtraDataVersion;
     }
 
-    public long getFromOrderDetailVersion() {
+    public Long getFromOrderDetailVersion() {
         return fromOrderDetailVersion;
     }
 
-    public void setFromOrderDetailVersion(long fromOrderDetailVersion) {
+    public void setFromOrderDetailVersion(Long fromOrderDetailVersion) {
         this.fromOrderDetailVersion = fromOrderDetailVersion;
     }
 
-    public long getFromOrderVersion() {
+    public Long getFromOrderVersion() {
         return fromOrderVersion;
     }
 
-    public void setFromOrderVersion(long fromOrderVersion) {
+    public void setFromOrderVersion(Long fromOrderVersion) {
         this.fromOrderVersion = fromOrderVersion;
     }
 
-    public long getFromPersonGroupVersion() {
+    public Long getFromPersonGroupVersion() {
         return fromPersonGroupVersion;
     }
 
-    public void setFromPersonGroupVersion(long fromPersonGroupVersion) {
+    public void setFromPersonGroupVersion(Long fromPersonGroupVersion) {
         this.fromPersonGroupVersion = fromPersonGroupVersion;
     }
 
-    public long getFromPersonVersion() {
+    public Long getFromPersonVersion() {
         return fromPersonVersion;
     }
 
-    public void setFromPersonVersion(long fromPersonVersion) {
+    public void setFromPersonVersion(Long fromPersonVersion) {
         this.fromPersonVersion = fromPersonVersion;
     }
 
-    public long getFromPictureVersion() {
+    public Long getFromPictureVersion() {
         return fromPictureVersion;
     }
 
-    public void setFromPictureVersion(long fromPictureVersion) {
+    public void setFromPictureVersion(Long fromPictureVersion) {
         this.fromPictureVersion = fromPictureVersion;
     }
 
-    public long getFromProductCategoryVersion() {
+    public Long getFromProductCategoryVersion() {
         return fromProductCategoryVersion;
     }
 
-    public void setFromProductCategoryVersion(long fromProductCategoryVersion) {
+    public void setFromProductCategoryVersion(Long fromProductCategoryVersion) {
         this.fromProductCategoryVersion = fromProductCategoryVersion;
     }
 
-    public long getFromProductDetailVersion() {
+    public Long getFromProductDetailVersion() {
         return fromProductDetailVersion;
     }
 
-    public void setFromProductDetailVersion(long fromProductDetailVersion) {
+    public void setFromProductDetailVersion(Long fromProductDetailVersion) {
         this.fromProductDetailVersion = fromProductDetailVersion;
     }
 
-    public long getFromProductVersion() {
+    public Long getFromProductVersion() {
         return fromProductVersion;
     }
 
-    public void setFromProductVersion(long fromProductVersion) {
+    public void setFromProductVersion(Long fromProductVersion) {
         this.fromProductVersion = fromProductVersion;
     }
 
-    public long getFromReceiptVersion() {
+    public Long getFromReceiptVersion() {
         return fromReceiptVersion;
     }
 
-    public void setFromReceiptVersion(long fromReceiptVersion) {
+    public void setFromReceiptVersion(Long fromReceiptVersion) {
         this.fromReceiptVersion = fromReceiptVersion;
     }
 
-    public long getFromSettingVersion() {
+    public Long getFromSettingVersion() {
         return fromSettingVersion;
     }
 
-    public void setFromSettingVersion(long fromSettingVersion) {
+    public void setFromSettingVersion(Long fromSettingVersion) {
         this.fromSettingVersion = fromSettingVersion;
     }
 
-    public long getFromTransactionVersion() {
+    public Long getFromTransactionVersion() {
         return fromTransactionVersion;
     }
 
-    public void setFromTransactionVersion(long fromTransactionVersion) {
+    public void setFromTransactionVersion(Long fromTransactionVersion) {
         this.fromTransactionVersion = fromTransactionVersion;
     }
 
-    public long getFromVisitorVersion() {
+    public Long getFromVisitorVersion() {
         return fromVisitorVersion;
     }
 
-    public void setFromVisitorVersion(long fromVisitorVersion) {
+    public void setFromVisitorVersion(Long fromVisitorVersion) {
         this.fromVisitorVersion = fromVisitorVersion;
     }
 
-    public long getFromReturnReasonVersion() {
+    public Long getFromReturnReasonVersion() {
         return fromReturnReasonVersion;
     }
 
-    public void setFromReturnReasonVersion(long fromReturnReasonVersion) {
+    public void setFromReturnReasonVersion(Long fromReturnReasonVersion) {
         this.fromReturnReasonVersion = fromReturnReasonVersion;
     }
 
-    public long getFromCostLevelNameVersion() {
+    public Long getFromCostLevelNameVersion() {
         return fromCostLevelNameVersion;
     }
 
-    public void setFromCostLevelNameVersion(long fromCostLevelNameVersion) {
+    public void setFromCostLevelNameVersion(Long fromCostLevelNameVersion) {
         this.fromCostLevelNameVersion = fromCostLevelNameVersion;
     }
 
-    public long getFromPromotionVersion() {
+    public Long getFromPromotionVersion() {
         return fromPromotionVersion;
     }
 
-    public void setFromPromotionVersion(long fromPromotionVersion) {
+    public void setFromPromotionVersion(Long fromPromotionVersion) {
         this.fromPromotionVersion = fromPromotionVersion;
     }
 
-    public long getFromPromotionDetailVersion() {
+    public Long getFromPromotionDetailVersion() {
         return fromPromotionDetailVersion;
     }
 
-    public void setFromPromotionDetailVersion(long fromPromotionDetailVersion) {
+    public void setFromPromotionDetailVersion(Long fromPromotionDetailVersion) {
         this.fromPromotionDetailVersion = fromPromotionDetailVersion;
     }
 
-    public long getFromPromotionEntityVersion() {
+    public Long getFromPromotionEntityVersion() {
         return fromPromotionEntityVersion;
     }
 
-    public void setFromPromotionEntityVersion(long fromPromotionEntityVersion) {
+    public void setFromPromotionEntityVersion(Long fromPromotionEntityVersion) {
         this.fromPromotionEntityVersion = fromPromotionEntityVersion;
     }
 
-    public long getFromTransferStoreVersion() {
+    public Long getFromTransferStoreVersion() {
         return fromTransferStoreVersion;
     }
 
-    public void setFromTransferStoreVersion(long fromTransferStoreVersion) {
+    public void setFromTransferStoreVersion(Long fromTransferStoreVersion) {
         this.fromTransferStoreVersion = fromTransferStoreVersion;
     }
 
-    public long getFromTransferStoreDetailVersion() {
+    public Long getFromTransferStoreDetailVersion() {
         return fromTransferStoreDetailVersion;
     }
 
-    public void setFromTransferStoreDetailVersion(long fromTransferStoreDetailVersion) {
+    public void setFromTransferStoreDetailVersion(Long fromTransferStoreDetailVersion) {
         this.fromTransferStoreDetailVersion = fromTransferStoreDetailVersion;
     }
 
@@ -310,43 +310,43 @@ public class GetAllDataBody {
         this.orderTypes = orderTypes;
     }
 
-    public long getFromPropertyDescriptionVersion() {
+    public Long getFromPropertyDescriptionVersion() {
         return FromPropertyDescriptionVersion;
     }
 
-    public void setFromPropertyDescriptionVersion(long fromPropertyDescriptionVersion) {
+    public void setFromPropertyDescriptionVersion(Long fromPropertyDescriptionVersion) {
         FromPropertyDescriptionVersion = fromPropertyDescriptionVersion;
     }
 
-    public long getFromVisitorProductVersion() {
+    public Long getFromVisitorProductVersion() {
         return fromVisitorProductVersion;
     }
 
-    public void setFromVisitorProductVersion(long fromVisitorProductVersion) {
+    public void setFromVisitorProductVersion(Long fromVisitorProductVersion) {
         this.fromVisitorProductVersion = fromVisitorProductVersion;
     }
 
-    public long getFromVisitorPersonVersion() {
+    public Long getFromVisitorPersonVersion() {
         return fromVisitorPersonVersion;
     }
 
-    public void setFromVisitorPersonVersion(long fromVisitorPersonVersion) {
+    public void setFromVisitorPersonVersion(Long fromVisitorPersonVersion) {
         this.fromVisitorPersonVersion = fromVisitorPersonVersion;
     }
 
-    public long getFromPhotoGalleryVersion() {
+    public Long getFromPhotoGalleryVersion() {
         return fromPhotoGalleryVersion;
     }
 
-    public void setFromPhotoGalleryVersion(long fromPhotoGalleryVersion) {
+    public void setFromPhotoGalleryVersion(Long fromPhotoGalleryVersion) {
         this.fromPhotoGalleryVersion = fromPhotoGalleryVersion;
     }
 
-    public long getFromRegionVersion() {
+    public Long getFromRegionVersion() {
         return fromRegionVersion;
     }
 
-    public void setFromRegionVersion(long fromRegionVersion) {
+    public void setFromRegionVersion(Long fromRegionVersion) {
         this.fromRegionVersion = fromRegionVersion;
     }
 }

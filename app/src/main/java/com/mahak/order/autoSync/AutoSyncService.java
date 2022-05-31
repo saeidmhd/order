@@ -387,7 +387,6 @@ public class AutoSyncService extends IntentService {
             db.open();
 
             getAllDataBody = new GetAllDataBody();
-            getAllDataBody.setUserToken(mUserToken);
 
             CustomerMaxRowVersion = db.getMaxRowVersion(DbSchema.CustomerSchema.TABLE_NAME);
             CustomersGroupMaxRowVersion = db.getMaxRowVersion(DbSchema.CustomersGroupSchema.TABLE_NAME);

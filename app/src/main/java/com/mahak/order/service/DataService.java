@@ -53,29 +53,27 @@ public class DataService {
 
     public static double InsertCustomer(DbAdapter db, List<Customer> data, long rowVersion) {
         long startTime = System.nanoTime();
-        db.open();
         db.UpdateOrAddServerCustomerFast(data,rowVersion);
-        db.close();
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
 
     public static void InsertZone(RadaraDb db, Datum data) {
-        db.open();
+        
         db.AddZone(data);
-        db.close();
+       
     }
 
     public static void InsertZoneLocation(RadaraDb db, List<ZoneLocation> data) {
-        db.open();
+        
         db.AddZoneLocation(data);
-        db.close();
+       
     }
 
     public static double InsertCustomerGroup(DbAdapter db, List<CustomerGroup> data) {
         long startTime = System.nanoTime();
-        db.open();
+        
         Date date = new Date();
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).getDeleted() == FALSE) {
@@ -85,35 +83,35 @@ public class DataService {
             } else
                 db.DeleteCustomerGroup(data.get(i));
         }
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertVisitorPeople(DbAdapter db, List<VisitorPeople> data, long rowVersion) {
         long startTime = System.nanoTime();
-        db.open();
+        
         db.UpdateOrAddVisitorPeopleFast(data , rowVersion);
-        db.UpdatePersonFromVisitorPeopleFast(data);
-        db.close();
+        //db.UpdatePersonFromVisitorPeopleFast(data);
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertVisitor(DbAdapter db, List<Visitor> data) {
         long startTime = System.nanoTime();
-        db.open();
+        
         db.UpdateOrAddServerVisitor(data);
         Visitor visitor = db.getVisitor();
         BaseActivity.setRadaraActive(visitor.HasRadara());
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertBank(DbAdapter db, List<Bank> data) {
         long startTime = System.nanoTime();
-        db.open();
+        
         Date date = new Date();
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).getDeleted() == FALSE) {
@@ -123,14 +121,14 @@ public class DataService {
             } else
                 db.DeleteServerBank(data.get(i));
         }
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertCategory(DbAdapter db, List<ProductGroup> data) {
         long startTime = System.nanoTime();
-        db.open();
+        
         Date date = new Date();
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).getDeleted() == FALSE) {
@@ -140,50 +138,50 @@ public class DataService {
             } else
                 db.DeleteCategory(data.get(i));
         }
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertProduct(DbAdapter db, List<Product> data, long rowVersion) {
         long startTime = System.nanoTime();
-        db.open();
+        
         db.UpdateOrAddServerProductFast(data , rowVersion);
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertProductDetail(DbAdapter db, List<ProductDetail> data, long rowVersion) {
         long startTime = System.nanoTime();
-        db.open();
+        
         db.UpdateOrAddProductDetail(data,rowVersion);
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertVisitorProducts(DbAdapter db, List<VisitorProduct> data, long rowVersion) {
         long startTime = System.nanoTime();
-        db.open();
+        
 
         db.UpdateOrAddVisitorProductFast(data,rowVersion);
-        db.UpdateProductFromVisitorProductFast(data);
-        db.UpdateProductDetailFromVisitorProductFast(data);
+       /* db.UpdateProductFromVisitorProductFast(data);
+        db.UpdateProductDetailFromVisitorProductFast(data);*/
 
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertSettings(DbAdapter db, List<Setting> data, Context mContext) {
         long startTime = System.nanoTime();
-        db.open();
+        
         for (int i = 0; i < data.size(); i++) {
             Setting setting = data.get(i);
             db.AddSetting(setting);
         }
-        db.close();
+       
         ServiceTools.setSettingPreferences(db, mContext);
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
@@ -191,7 +189,7 @@ public class DataService {
 
     public static double InsertCheckList(DbAdapter db, List<CheckList> data) {
         long startTime = System.nanoTime();
-        db.open();
+        
         Date date = new Date();
         for (int i = 0; i < data.size(); i++) {
             //if isDelete == false then new or update to database
@@ -210,14 +208,14 @@ public class DataService {
             } else
                 db.DeleteChecklist(data.get(i));
         }
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertTransactionsLog(DbAdapter db, List<TransactionsLog> arrayTransactionsLog) {
         long startTime = System.nanoTime();
-        db.open();
+        
         Date date = new Date();
         for (int i = 0; i < arrayTransactionsLog.size(); i++) {
             //if isDelete == false then new or update to database
@@ -235,14 +233,14 @@ public class DataService {
             } else
                 db.DeleteTransactionLog(arrayTransactionsLog.get(i));
         }
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertPicturesProduct(DbAdapter db, List<PicturesProduct> data) {
         long startTime = System.nanoTime();
-        db.open();
+        
         for (int i = 0; i < data.size(); i++) {
             PicturesProduct picturesProduct = data.get(i);
             if (picturesProduct.getItemType() == 102) {
@@ -254,7 +252,7 @@ public class DataService {
                 }
             }
         }
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
@@ -262,9 +260,9 @@ public class DataService {
     public static double InsertPhotoGallery(DbAdapter db, List<PhotoGallery> data ,long rowVersion) {
 
         long startTime = System.nanoTime();
-        db.open();
+        
         db.UpdateOrAddPhotoGallery(data,rowVersion);
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
 
@@ -272,9 +270,9 @@ public class DataService {
     public static double InsertRegion(DbAdapter db, List<Region> data ,long rowVersion) {
 
         long startTime = System.nanoTime();
-        db.open();
+        
         db.UpdateOrAddRegion(data,rowVersion);
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
 
@@ -283,7 +281,7 @@ public class DataService {
     public static double InsertPropertyDescription(DbAdapter db, List<PropertyDescription> data) {
         long startTime = System.nanoTime();
 
-        db.open();
+        
 
         for (int i = 0; i < data.size(); i++) {
             PropertyDescription propertyDescription = data.get(i);
@@ -294,14 +292,14 @@ public class DataService {
                 db.DeletePropertyDescription(propertyDescription.getPropertyDescriptionId());
             }
         }
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertReceivedTransfers(DbAdapter db, List<ReceivedTransfers> data) {
         long startTime = System.nanoTime();
-        db.open();
+        
         //get json from server
         Date date = new Date();
         for (int i = 0; i < data.size(); i++) {
@@ -315,14 +313,14 @@ public class DataService {
             } else
                 db.DeleteReceivedTransfer(data.get(i).getTransferStoreId());
         }
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertReceivedTransferProduct(DbAdapter db, List<ReceivedTransferProducts> data) {
         long startTime = System.nanoTime();
-        db.open();
+        
         Product product;
         ProductDetail productDetail;
         for (int i = 0; i < data.size(); i++) {
@@ -336,14 +334,14 @@ public class DataService {
                     db.AddProductFromReceivedTransfer(data.get(i));
                 }*/
         }
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertReason(DbAdapter db, List<Reasons> data) {
         long startTime = System.nanoTime();
-        db.open();
+        
         Date date = new Date();
         for (int i = 0; i < data.size(); i++) {
             //set Now date in modifyDate
@@ -353,14 +351,14 @@ public class DataService {
             if (!db.UpdateReasons(data.get(i)))
                 db.AddReasons(data.get(i));
         }
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertPromotion(DbAdapter db, List<Promotion> data) {
         long startTime = System.nanoTime();
-        db.open();
+        
         db.DeleteAllPromotion();
         Date date = new Date();
         Gson gson = new Gson();
@@ -379,14 +377,14 @@ public class DataService {
                 if(data.get(i).getDeleted() == 0)
                     db.AddPromotion(data.get(i), promotionOtherFields);
         }
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertPromotionDetails(DbAdapter db, List<PromotionDetail> data) {
         long startTime = System.nanoTime();
-        db.open();
+        
         db.DeleteAllPromotionDetail();
         Date date = new Date();
         Gson gson = new Gson();
@@ -406,14 +404,14 @@ public class DataService {
             if(!data.get(i).isDeleted())
                 db.AddPromotionDetail(data.get(i), promotionDetailOtherFields);
         }
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertEntitiesOfPromotions(DbAdapter db, List<PromotionEntity> data) {
         long startTime = System.nanoTime();
-        db.open();
+        
         // ArrayList<PromotionEntity> arrayEntitiesOfPromotions = Parser.getEntitiesOfPromotions(data);
         db.DeleteAllPromotionEntity();
         Date date = new Date();
@@ -435,23 +433,23 @@ public class DataService {
                 db.AddEntitiesOfPromotions(data.get(i), promotionEntityOtherFields);
 
         }
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertExtraInfo(DbAdapter db, List<ExtraData> data, long rowVersion) {
         long startTime = System.nanoTime();
-        db.open();
+        
         db.UpdateOrAddExtraInfo(data , rowVersion);
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertDeliveryOrder(DbAdapter db, List<Order> orders) {
         long startTime = System.nanoTime();
-        db.open();
+        
 
         Date date = new Date();
         for (int i = 0; i < orders.size(); i++) {
@@ -469,14 +467,14 @@ public class DataService {
                     db.DeleteDeliveryOrder(orders.get(i));
             }
         }
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
     public static double InsertDeliveryOrderDetail(DbAdapter db, List<OrderDetail> orderDetails, Context mContext) {
         long startTime = System.nanoTime();
-        db.open();
+        
         //if isDelete == false then new or update to database
         //else if iDelete == true then delete from database
         Product product;
@@ -504,7 +502,7 @@ public class DataService {
             } else
                 db.DeleteOrderDetail(orderDetails.get(i));
         }
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
 
@@ -512,7 +510,7 @@ public class DataService {
 
     public static double InsertCostLevelName(DbAdapter db, List<ProductPriceLevelName> data) {
         long startTime = System.nanoTime();
-        db.open();
+        
         Date date = new Date();
         for (int i = 0; i < data.size(); i++) {
 
@@ -520,7 +518,7 @@ public class DataService {
             if (!db.UpdateServerPriceLevelName(data.get(i)))
                 db.AddPriceLevelName(data.get(i));
         }
-        db.close();
+       
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }

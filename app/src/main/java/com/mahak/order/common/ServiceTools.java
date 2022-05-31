@@ -643,7 +643,8 @@ public class ServiceTools {
         double sum = 0;
         ArrayList<ProductDetail> productDetails = db.getAllProductDetail(productId);
         for (ProductDetail productDetail : productDetails) {
-            sum += productDetail.getCount1();
+            VisitorProduct visitorProduct =  db.getVisitorProduct(productDetail.getProductDetailId());
+            sum += visitorProduct.getCount1();
         }
         db.close();
         return sum;
@@ -672,7 +673,8 @@ public class ServiceTools {
         double sum = 0;
         ArrayList<ProductDetail> productDetails = db.getAllProductDetail(productId);
         for (ProductDetail productDetail : productDetails) {
-            sum += productDetail.getCount2();
+            VisitorProduct visitorProduct =  db.getVisitorProduct(productDetail.getProductDetailId());
+            sum += visitorProduct.getCount2();
         }
         db.close();
         return sum;

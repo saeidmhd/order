@@ -1170,7 +1170,6 @@ public class PeopleListActivity extends BaseActivity {
 
             db.open();
             getAllDataBody = new GetAllDataBody();
-            getAllDataBody.setUserToken(mUserToken);
 
             CustomerMaxRowVersion = db.getMaxRowVersion(DbSchema.CustomerSchema.TABLE_NAME);
             ExtraDataMaxRowVersion = db.getMaxRowVersion(DbSchema.ExtraDataSchema.TABLE_NAME);

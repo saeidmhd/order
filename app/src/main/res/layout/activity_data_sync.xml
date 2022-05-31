@@ -20,11 +20,6 @@
             android:layout_margin="3dp"
             android:src="@drawable/img_page_title_sync" />
 
-        <ProgressBar
-            android:id="@+id/pbLoading"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
     </LinearLayout>
 
     <ScrollView
@@ -271,7 +266,7 @@
                         android:orientation="horizontal">
 
                         <com.mahak.order.widget.FontTextView
-                            android:id="@+id/tvCustomerList"
+                            android:id="@+id/tvProductList"
                             android:layout_width="0dp"
                             android:layout_height="fill_parent"
                             android:layout_weight="1"
@@ -284,9 +279,168 @@
                             android:layout_gravity="right"
                             android:layout_weight="1"
                             android:padding="@dimen/NormalSize"
-                            android:text="@string/str_customer_list" />
+                            android:text="دریافت کالاها" />
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvVisitorProduct"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/NormalSize" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:padding="@dimen/NormalSize"
+                            android:text="دریافت کالاهای ویزیتور" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvProductDetailList"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/NormalSize" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:padding="@dimen/NormalSize"
+                            android:text="دریافت جزییات کالاها" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvExtraData"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/NormalSize" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:padding="@dimen/NormalSize"
+                            android:text="دریافت داده های افزوده" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvPerson"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/NormalSize" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:padding="@dimen/NormalSize"
+                            android:text="دریافت اشخاص" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvVisitorPerson"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/NormalSize" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:padding="@dimen/NormalSize"
+                            android:text="دریافت اشخاص ویزیتور" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/personGroup"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/NormalSize" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:padding="@dimen/NormalSize"
+                            android:text="دریافت گروه اشخاص" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvBanks"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/NormalSize" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:padding="@dimen/NormalSize"
+                            android:text="دریافت بانکها" />
+                    </LinearLayout>
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -307,9 +461,8 @@
                             android:layout_gravity="right"
                             android:layout_weight="1"
                             android:padding="@dimen/NormalSize"
-                            android:text="@string/str_visitor_list" />
+                            android:text="دریافت لیست ویزیتورها" />
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -317,7 +470,7 @@
                         android:orientation="horizontal">
 
                         <com.mahak.order.widget.FontTextView
-                            android:id="@+id/tvProductList"
+                            android:id="@+id/tvCheckList"
                             android:layout_width="0dp"
                             android:layout_height="fill_parent"
                             android:layout_weight="1"
@@ -330,78 +483,8 @@
                             android:layout_gravity="right"
                             android:layout_weight="1"
                             android:padding="@dimen/NormalSize"
-                            android:text="@string/str_product_list" />
+                            android:text="دریافت چک لیستها" />
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:orientation="horizontal">
-
-                        <com.mahak.order.widget.FontTextView
-                            android:id="@+id/tvPriceLevel"
-                            android:layout_width="0dp"
-                            android:layout_height="fill_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical|left"
-                            android:paddingLeft="@dimen/NormalSize" />
-
-                        <com.mahak.order.widget.FontTextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:layout_weight="1"
-                            android:padding="@dimen/NormalSize"
-                            android:text="@string/str_get_price_level" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:orientation="horizontal">
-
-                        <com.mahak.order.widget.FontTextView
-                            android:id="@+id/tvPicturesProduct"
-                            android:layout_width="0dp"
-                            android:layout_height="fill_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical|left"
-                            android:paddingLeft="@dimen/NormalSize" />
-
-                        <com.mahak.order.widget.FontTextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:layout_weight="1"
-                            android:padding="@dimen/NormalSize"
-                            android:text="@string/str_get_pictures_product" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:orientation="horizontal">
-
-                        <com.mahak.order.widget.FontTextView
-                            android:id="@+id/tvActivityList"
-                            android:layout_width="0dp"
-                            android:layout_height="fill_parent"
-                            android:layout_weight="1"
-                            android:gravity="left|center_vertical"
-                            android:paddingLeft="@dimen/NormalSize" />
-
-                        <com.mahak.order.widget.FontTextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:layout_weight="1"
-                            android:padding="@dimen/NormalSize"
-                            android:text="@string/str_activity_list" />
-                    </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -422,9 +505,8 @@
                             android:layout_gravity="right"
                             android:layout_weight="1"
                             android:padding="@dimen/NormalSize"
-                            android:text="@string/str_bill" />
+                            android:text="دریافت گردش اشخاص" />
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -432,7 +514,7 @@
                         android:orientation="horizontal">
 
                         <com.mahak.order.widget.FontTextView
-                            android:id="@+id/tvPromotion"
+                            android:id="@+id/tvDelivery"
                             android:layout_width="0dp"
                             android:layout_height="fill_parent"
                             android:layout_weight="1"
@@ -445,9 +527,8 @@
                             android:layout_gravity="right"
                             android:layout_weight="1"
                             android:padding="@dimen/NormalSize"
-                            android:text="@string/str_get_promotion" />
+                            android:text="دریافت لیست تحویلی ها" />
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -455,7 +536,7 @@
                         android:orientation="horizontal">
 
                         <com.mahak.order.widget.FontTextView
-                            android:id="@+id/tvMoreInfo"
+                            android:id="@+id/tvDeliveryDetail"
                             android:layout_width="0dp"
                             android:layout_height="fill_parent"
                             android:layout_weight="1"
@@ -468,9 +549,8 @@
                             android:layout_gravity="right"
                             android:layout_weight="1"
                             android:padding="@dimen/NormalSize"
-                            android:text="@string/str_get_more_info" />
+                            android:text="دریافت جزییات تحویلی ها" />
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -478,7 +558,7 @@
                         android:orientation="horizontal">
 
                         <com.mahak.order.widget.FontTextView
-                            android:id="@+id/tvDeliveryOrder"
+                            android:id="@+id/returnReason"
                             android:layout_width="0dp"
                             android:layout_height="fill_parent"
                             android:layout_weight="1"
@@ -491,9 +571,8 @@
                             android:layout_gravity="right"
                             android:layout_weight="1"
                             android:padding="@dimen/NormalSize"
-                            android:text="@string/str_get_delivery_order_list" />
+                            android:text="دریافت دلایل برگشتی" />
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -501,7 +580,7 @@
                         android:orientation="horizontal">
 
                         <com.mahak.order.widget.FontTextView
-                            android:id="@+id/tvConfig"
+                            android:id="@+id/tvPromotionList"
                             android:layout_width="0dp"
                             android:layout_height="fill_parent"
                             android:layout_weight="1"
@@ -514,8 +593,209 @@
                             android:layout_gravity="right"
                             android:layout_weight="1"
                             android:padding="@dimen/NormalSize"
-                            android:text="@string/str_get_config" />
+                            android:text="دریافت طرح های تشویقی" />
                     </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvPromotionDetailList"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/NormalSize" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:padding="@dimen/NormalSize"
+                            android:text="دریافت جزییات طرح های تشویقی" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvPromotionDeliveryEntity"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/NormalSize" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:padding="@dimen/NormalSize"
+                            android:text="دریافت موجودیت های طرح های تشویقی" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvProductPicture"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/NormalSize" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:padding="@dimen/NormalSize"
+                            android:text="دریافت تصاویر کالاها" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvPictureDetails"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/NormalSize" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:padding="@dimen/NormalSize"
+                            android:text="دریافت جزییات تصاویر کالاها" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvRegion"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/NormalSize" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:padding="@dimen/NormalSize"
+                            android:text="دریافت شهر ها و استان ها" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvPropertyDesc"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/NormalSize" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:padding="@dimen/NormalSize"
+                            android:text="دریافت شرح جزییات کالا" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvPriceLevelNames"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/NormalSize" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:padding="@dimen/NormalSize"
+                            android:text="دریافت نام سطوح قیمتی" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvProductGroup"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/NormalSize" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:padding="@dimen/NormalSize"
+                            android:text="دریافت گروه بندی کالاها" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvSetting"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/NormalSize" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:padding="@dimen/NormalSize"
+                            android:text="دریافت تنظیمات" />
+                    </LinearLayout>
+
 
                 </LinearLayout>
             </LinearLayout>

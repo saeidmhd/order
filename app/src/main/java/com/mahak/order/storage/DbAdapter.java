@@ -16,6 +16,8 @@ import android.util.Log;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.common.Bank;
 import com.mahak.order.common.Category;
@@ -917,7 +919,7 @@ public class DbAdapter {
         long groupId = 0L;
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.CustomerSchema.TABLE_NAME, null, DbSchema.CustomerSchema.COLUMN_USER_ID + " =? and " + DbSchema.CustomerSchema.COLUMN_MAHAK_ID + "=? and " + DbSchema.CustomerSchema.COLUMN_PersonCode + "=? and " + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + "=? and " + DbSchema.CustomerSchema.COLUMN_Deleted + "=?", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), String.valueOf(customer.getPersonCode()), BaseActivity.getPrefDatabaseId(), String.valueOf(0)}, null, null, null);
+            cursor = mDb.query(DbSchema.CustomerSchema.TABLE_NAME, null, DbSchema.CustomerSchema.COLUMN_USER_ID + " =? and " + DbSchema.CustomerSchema.COLUMN_MAHAK_ID + "=? and " + DbSchema.CustomerSchema.COLUMN_PersonCode + "=? and " + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + " =? ", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), String.valueOf(customer.getPersonCode()), BaseActivity.getPrefDatabaseId()}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -1124,7 +1126,7 @@ public class DbAdapter {
 
         try {
             //cursor = mDb.query(DbSchema.Customerschema.TABLE_NAME, null, DbSchema.Customerschema.COLUMN_ID + "=?",new String[]{String.valueOf(id)}, null, null, null);
-            cursor = mDb.rawQuery("select " + Columns + " from  " + DbSchema.CustomerSchema.TABLE_NAME + " inner join " + DbSchema.CustomersGroupSchema.TABLE_NAME + " on " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonGroupId + " = " + DbSchema.CustomersGroupSchema.TABLE_NAME + "." + DbSchema.CustomersGroupSchema.COLUMN_PersonGroupId + " where " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonId + " = " + id + " and " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_Deleted + " = " + "0" + " order by " + DbSchema.CustomerSchema.COLUMN_PersonCode, null);
+            cursor = mDb.rawQuery("select " + Columns + " from  " + DbSchema.CustomerSchema.TABLE_NAME + " inner join " + DbSchema.CustomersGroupSchema.TABLE_NAME + " on " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonGroupId + " = " + DbSchema.CustomersGroupSchema.TABLE_NAME + "." + DbSchema.CustomersGroupSchema.COLUMN_PersonGroupId + " where " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonId + " = " + id + " order by " + DbSchema.CustomerSchema.COLUMN_PersonCode, null);
             cursor.moveToFirst();
             if (cursor.getCount() > 0) {
                 customer = new Customer();
@@ -1212,7 +1214,7 @@ public class DbAdapter {
 
         try {
             //cursor = mDb.query(DbSchema.Customerschema.TABLE_NAME, null, DbSchema.Customerschema.COLUMN_ID + "=?",new String[]{String.valueOf(id)}, null, null, null);
-            cursor = mDb.rawQuery("select " + Columns + " from  " + DbSchema.CustomerSchema.TABLE_NAME + " inner join " + DbSchema.CustomersGroupSchema.TABLE_NAME + " on " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonGroupId + " = " + DbSchema.CustomersGroupSchema.TABLE_NAME + "." + DbSchema.CustomersGroupSchema.COLUMN_PersonGroupId + " LEFT join PromotionEntity  on PromotionEntity.CodeEntity = Customers.PersonCode and EntityType = 2 " + " where " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_ID + " = " + id + " and " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_Deleted + " = " + "0" + " order by " + DbSchema.CustomerSchema.COLUMN_PersonCode, null);
+            cursor = mDb.rawQuery("select " + Columns + " from  " + DbSchema.CustomerSchema.TABLE_NAME + " inner join " + DbSchema.CustomersGroupSchema.TABLE_NAME + " on " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonGroupId + " = " + DbSchema.CustomersGroupSchema.TABLE_NAME + "." + DbSchema.CustomersGroupSchema.COLUMN_PersonGroupId + " LEFT join PromotionEntity  on PromotionEntity.CodeEntity = Customers.PersonCode and EntityType = 2 " + " where " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_ID + " = " + id + " order by " + DbSchema.CustomerSchema.COLUMN_PersonCode, null);
             cursor.moveToFirst();
             if (cursor.getCount() > 0) {
                 customer = new Customer();
@@ -1300,7 +1302,7 @@ public class DbAdapter {
 
         try {
             //cursor = mDb.query(DbSchema.Customerschema.TABLE_NAME, null, DbSchema.Customerschema.COLUMN_ID + "=?",new String[]{String.valueOf(id)}, null, null, null);
-            cursor = mDb.rawQuery("select " + Columns + " from  " + DbSchema.CustomerSchema.TABLE_NAME + " inner join " + DbSchema.CustomersGroupSchema.TABLE_NAME + " on " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonGroupId + " = " + DbSchema.CustomersGroupSchema.TABLE_NAME + "." + DbSchema.CustomersGroupSchema.COLUMN_PersonGroupId + " where " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonClientId + " = " + id + " and " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_Deleted + " = " + "0" + " order by " + DbSchema.CustomerSchema.COLUMN_PersonCode, null);
+            cursor = mDb.rawQuery("select " + Columns + " from  " + DbSchema.CustomerSchema.TABLE_NAME + " inner join " + DbSchema.CustomersGroupSchema.TABLE_NAME + " on " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonGroupId + " = " + DbSchema.CustomersGroupSchema.TABLE_NAME + "." + DbSchema.CustomersGroupSchema.COLUMN_PersonGroupId + " where " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonClientId + " = " + id + " order by " + DbSchema.CustomerSchema.COLUMN_PersonCode, null);
             cursor.moveToFirst();
             if (cursor.getCount() > 0) {
                 customer = new Customer();
@@ -1352,7 +1354,7 @@ public class DbAdapter {
         Customer customer = new Customer();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.CustomerSchema.TABLE_NAME, null, DbSchema.CustomerSchema.COLUMN_PersonCode + "=? And " + DbSchema.CustomerSchema.COLUMN_USER_ID + " =? and " + DbSchema.CustomerSchema.COLUMN_Deleted + " =? ", new String[]{mBarcode, String.valueOf(getPrefUserId()), String.valueOf(0)}, null, null, null);
+            cursor = mDb.query(DbSchema.CustomerSchema.TABLE_NAME, null, DbSchema.CustomerSchema.COLUMN_PersonCode + "=? And " + DbSchema.CustomerSchema.COLUMN_USER_ID + " =? ", new String[]{mBarcode, String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -1373,7 +1375,7 @@ public class DbAdapter {
         Customer customer = new Customer();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.CustomerSchema.TABLE_NAME, null, DbSchema.CustomerSchema.COLUMN_PersonId + "=? And " + DbSchema.CustomerSchema.COLUMN_USER_ID + " =? and " + DbSchema.CustomerSchema.COLUMN_Deleted + " =? ", new String[]{String.valueOf(personId), String.valueOf(getPrefUserId()), String.valueOf(0)}, null, null, null);
+            cursor = mDb.query(DbSchema.CustomerSchema.TABLE_NAME, null, DbSchema.CustomerSchema.COLUMN_PersonId + "=? And " + DbSchema.CustomerSchema.COLUMN_USER_ID + " =? " , new String[]{String.valueOf(personId), String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -1394,7 +1396,7 @@ public class DbAdapter {
         Product product = new Product();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ProductSchema.TABLE_NAME, null, DbSchema.ProductSchema.COLUMN_ProductId + "=? And " + DbSchema.ProductSchema.COLUMN_DATABASE_ID + "=? And " + DbSchema.ProductSchema.COLUMN_USER_ID + " =? and " + DbSchema.ProductSchema.COLUMN_Deleted + " =? ", new String[]{String.valueOf(id), BaseActivity.getPrefDatabaseId(), String.valueOf(getPrefUserId()), String.valueOf(0)}, null, null, null);
+            cursor = mDb.query(DbSchema.ProductSchema.TABLE_NAME, null, DbSchema.ProductSchema.COLUMN_ProductId + "=? And " + DbSchema.ProductSchema.COLUMN_DATABASE_ID + "=? And " + DbSchema.ProductSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(id), BaseActivity.getPrefDatabaseId(), String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -1415,7 +1417,7 @@ public class DbAdapter {
         Customer customer = new Customer();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.CustomerSchema.TABLE_NAME, null, DbSchema.CustomerSchema.COLUMN_PersonCode + "=? and " + DbSchema.CustomerSchema.COLUMN_Deleted + " =? ", new String[]{String.valueOf(masterId), String.valueOf(0)}, null, null, null);
+            cursor = mDb.query(DbSchema.CustomerSchema.TABLE_NAME, null, DbSchema.CustomerSchema.COLUMN_PersonCode + " =? ", new String[]{String.valueOf(masterId)}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -1436,7 +1438,7 @@ public class DbAdapter {
         Product product = new Product();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ProductSchema.TABLE_NAME, null, DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + "=? And " + DbSchema.ProductSchema.COLUMN_DATABASE_ID + " =? and " + DbSchema.ProductSchema.COLUMN_Deleted + " =? ", new String[]{masterId, dataBaseId, String.valueOf(0)}, null, null, null);
+            cursor = mDb.query(DbSchema.ProductSchema.TABLE_NAME, null, DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + "=? And " + DbSchema.ProductSchema.COLUMN_DATABASE_ID + " =? ", new String[]{masterId, dataBaseId}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -1457,7 +1459,7 @@ public class DbAdapter {
         Product product = new Product();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ProductSchema.TABLE_NAME, null, DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + "=? And " + DbSchema.ProductSchema.COLUMN_DATABASE_ID + "=? And " + DbSchema.ProductSchema.COLUMN_USER_ID + " =? and " + DbSchema.ProductSchema.COLUMN_Deleted + " =? ", new String[]{String.valueOf(productCode), BaseActivity.getPrefDatabaseId(), String.valueOf(getPrefUserId()), String.valueOf(0)}, null, null, null);
+            cursor = mDb.query(DbSchema.ProductSchema.TABLE_NAME, null, DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + "=? And " + DbSchema.ProductSchema.COLUMN_DATABASE_ID + "=? And " + DbSchema.ProductSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(productCode), BaseActivity.getPrefDatabaseId(), String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -1478,7 +1480,7 @@ public class DbAdapter {
         double asset1 = 0;
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{masterId, String.valueOf(0) , String.valueOf(getPrefUserId())}, null, null, null);
+            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{masterId , String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -1498,7 +1500,7 @@ public class DbAdapter {
         double asset2 = 0;
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{masterId, String.valueOf(0) , String.valueOf(getPrefUserId())}, null, null, null);
+            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId  + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{masterId , String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -1541,7 +1543,7 @@ public class DbAdapter {
         ProductDetail productDetail = new ProductDetail();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(masterId), String.valueOf(0) , String.valueOf(getPrefUserId())}, null, null, null);
+            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId  + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(masterId) , String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -1557,13 +1559,34 @@ public class DbAdapter {
         }
         return productDetail;
     }
+    public VisitorProduct getVisitorProduct(long masterId) {
+
+        VisitorProduct visitorProduct = new VisitorProduct();
+        Cursor cursor;
+        try {
+            cursor = mDb.query(DbSchema.VisitorProductSchema.TABLE_NAME, null, DbSchema.VisitorProductSchema.COLUMN_ProductDetailId + " =? and " + DbSchema.VisitorProductSchema.COLUMN_Deleted + " =? and " + DbSchema.VisitorProductSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(masterId), String.valueOf(0) , String.valueOf(getPrefUserId())}, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                if (cursor.getCount() > 0) {
+                    visitorProduct = getVisitorProductFromCursor(cursor);
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("getProductDetail", e.getMessage());
+        }
+        return visitorProduct;
+    }
 
     public ProductDetail getProductDetailWithProductId(long productId) {
 
         ProductDetail productDetail = new ProductDetail();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(productId), String.valueOf(0), String.valueOf(getPrefUserId())}, null, null, null);
+            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductId  + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(productId), String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -1902,6 +1925,24 @@ public class DbAdapter {
         }
 
         return productDetail;
+    }
+    private VisitorProduct getVisitorProductFromCursor(Cursor cursor) {
+        VisitorProduct visitorProduct = new VisitorProduct();
+        visitorProduct.setProductDetailId(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_ProductDetailId)));
+        visitorProduct.setVisitorProductId(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_VisitorProductId)));
+        visitorProduct.setVisitorId(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_USER_ID)));
+        visitorProduct.setCount1(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_Count1)));
+        visitorProduct.setCount2(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_Count2)));
+        visitorProduct.setPrice(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_Price)));
+        visitorProduct.setSerials(cursor.getString(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_Serials)));
+        visitorProduct.setDelete(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_Deleted)));
+        visitorProduct.setDataHash(cursor.getString(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_DataHash)));
+        visitorProduct.setCreateDate(cursor.getString(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_CreateDate)));
+        visitorProduct.setUpdateDate(cursor.getString(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_UpdateDate)));
+        visitorProduct.setCreateSyncId(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_CreateSyncId)));
+        visitorProduct.setUpdateSyncId(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_UpdateSyncId)));
+        visitorProduct.setRowVersion(cursor.getLong(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_RowVersion)));
+        return visitorProduct;
     }
 
     private void setProductDetailPrice(Cursor cursor, ProductDetail productDetail) {
@@ -3621,6 +3662,28 @@ public class DbAdapter {
         }
         return RowVersion;
     }
+    public long getProductMaxRowVersion(String tableName) {
+        Cursor cursor = null;
+        long RowVersion = 0;
+        try {
+            cursor = mDb.rawQuery("select max(RowVersion) from " + "products" + " where " + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId(), null);
+            cursor = mDb.rawQuery("select max(RowVersion) from products left join produ on vis " + "products" + " where " + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId(), null);
+
+            if (cursor != null) {
+                cursor.moveToFirst();
+                if (cursor.getCount() > 0) {
+                    RowVersion = cursor.getLong(0);
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("Error RowVersion", e.getMessage());
+        }
+        return RowVersion;
+    }
 
     private PicturesProduct getPictureProductFromCursor(Cursor cursor) {
         PicturesProduct picturesProduct = new PicturesProduct();
@@ -4304,7 +4367,7 @@ public class DbAdapter {
         Cursor cursor;
         int TotalCount = 0;
         try {
-            cursor = mDb.rawQuery("select  count(*)  from " + DbSchema.CustomerSchema.TABLE_NAME + " where " + DbSchema.CustomerSchema.COLUMN_MAHAK_ID + "='" + BaseActivity.getPrefMahakId() + "' and " + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + "='" + BaseActivity.getPrefDatabaseId() + "' and " + DbSchema.CustomerSchema.COLUMN_USER_ID + "=" + getPrefUserId() + " and " + DbSchema.CustomerSchema.COLUMN_Deleted + " = " + "0", null);
+            cursor = mDb.rawQuery("select  count(*)  from " + DbSchema.CustomerSchema.TABLE_NAME + " where " + DbSchema.CustomerSchema.COLUMN_MAHAK_ID + "='" + BaseActivity.getPrefMahakId() + "' and " + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + "='" + BaseActivity.getPrefDatabaseId() + "' and " + DbSchema.CustomerSchema.COLUMN_USER_ID + "=" + getPrefUserId() , null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -4326,12 +4389,7 @@ public class DbAdapter {
         Cursor cursor;
         int TotalCount = 0;
         try {
-            cursor = mDb.rawQuery(
-                    "select  count(*)  from " + DbSchema.ProductSchema.TABLE_NAME
-                            + " where " + DbSchema.ProductSchema.COLUMN_Deleted + " = " + 0
-                            + "  and " + DbSchema.ProductSchema.COLUMN_MAHAK_ID + "='" + BaseActivity.getPrefMahakId()
-                            + "' and " + DbSchema.ProductSchema.COLUMN_DATABASE_ID + "='" + BaseActivity.getPrefDatabaseId()
-                            + "' and " + DbSchema.ProductSchema.COLUMN_USER_ID + "=" + getPrefUserId(), null);
+            cursor = mDb.rawQuery("SELECT count(*) from VisitorProduct where deleted = 0 and userId = ?", new String[]{String.valueOf(getPrefUserId())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -4360,8 +4418,10 @@ public class DbAdapter {
         try {
             cursor = mDb.rawQuery(" select count(*) from Products " +
                     " inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+                    " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userId = ProductDetail.UserId " +
                     " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode and ProductCategory.UserId" + " = " + getPrefUserId() +
-                    " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_Deleted + " = " + " 0 and " + DbSchema.ProductDetailSchema.TABLE_NAME + "." + DbSchema.ProductDetailSchema.COLUMN_Deleted + " = " + " 0 " +
+                    " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) " +
+                    " and visitorproduct.deleted = 0 "  +
                     " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
                     getProductCategoryString(CategoryId) + getProductAssetStrnig(MODE_ASSET) + getCategoryString(categoryCode) +
                     " order by " + orderBy, null);
@@ -4393,12 +4453,13 @@ public class DbAdapter {
         int TotalCount = 0;
         try {
             cursor = mDb.rawQuery(
-                    "select count(*) from Customers INNER join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId and Customers.UserId = CustomersGroups.UserId "
+                    "select count(*) from Customers " +
+                            "INNER join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId and Customers.UserId = CustomersGroups.UserId " +
+                            "left join visitorpeople on visitorpeople.personid = customers.personid and VisitorPeople.userId = Customers.userId "
                             + " where ( " + LikeStr +
                             " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
                             " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
-                            " ) and " + groupIdScript(groupId)
-                            + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_Deleted + " = " + 0
+                            " ) and " + groupIdScript(groupId) + " visitorpeople.deleted = 0 "
                             + " and " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_MAHAK_ID + " = '" + BaseActivity.getPrefMahakId()
                             + "' and " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + " = " + BaseActivity.getPrefDatabaseId()
                             + " and " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_USER_ID + " = " + getPrefUserId()
@@ -5291,14 +5352,14 @@ public class DbAdapter {
                     " when 7 then price7 " +
                     " when 8 then price8 " +
                     " when 9 then price9 " +
-                    " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
+                    " when 10 then price10 end as price , productdetail.Customerprice , sum(visitorproduct.Count1) as sumcount1 , sum(visitorproduct.Count2) as sumcount2 " +
                     " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+                    " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid" +
                     " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4" +
                     " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode and ProductCategory.UserId" + " = " + getPrefUserId() +
                     " where " + DbSchema.ProductSchema.TABLE_NAME + " . " + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                    " and Products.Deleted = 0 and ProductDetail.Deleted = 0 "+
                     getProductAssetStrnig(modeasset) +
-                    getProductCategoryString(id) + getCategoryString(categoryCode) + " GROUP by Products.productId " + " order by " + orderBy  + " LIMIT " + LIMIT, null);
+                    getProductCategoryString(id) + getCategoryString(categoryCode) + " and visitorproduct.deleted = 0 " + " GROUP by Products.productId " + " order by " + orderBy  + " LIMIT " + LIMIT, null);
         } else {
             cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel , PromotionId, UnitName2 , UnitName  , ProductDetail.productDetailId , " +
                     " case  " + defPriceLevel +
@@ -5311,14 +5372,14 @@ public class DbAdapter {
                     " when 7 then price7 " +
                     " when 8 then price8 " +
                     " when 9 then price9 " +
-                    " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
+                    " when 10 then price10 end as price , productdetail.Customerprice , sum(visitorproduct.Count1) as sumcount1 , sum(visitorproduct.Count2) as sumcount2 " +
                     " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+                    " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid " +
                     " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4 " +
                     " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode and ProductCategory.UserId" + " = " + getPrefUserId() +
                     " where " + DbSchema.ProductSchema.TABLE_NAME + " . " + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                    " and Products.Deleted = 0 and ProductDetail.Deleted = 0 "+
                     getProductAssetStrnig(modeasset) +
-                    getProductCategoryString(id) + getCategoryString(categoryCode) + " GROUP by Products.productId " + " order by " + orderBy + " LIMIT " + LIMIT , null);
+                    getProductCategoryString(id) + getCategoryString(categoryCode)+ " and visitorproduct.deleted = 0 " + " GROUP by Products.productId " + " order by " + orderBy + " LIMIT " + LIMIT , null);
         }
 
         return cursor;
@@ -5708,13 +5769,14 @@ public class DbAdapter {
         ArrayList<Customer> array = new ArrayList<>();
         try {
             cursor = mDb.rawQuery("select Customers.Organization, Customers.name, Customers.Address, Customers.PersonCode, PromotionId, Customers.PersonClientId, Customers.PersonId, Customers.PersonGroupId, Customers.Mobile, Customers.Phone, Customers.Id , Customers.balance " +
-                    " from Customers inner join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId " +
+                    " from Customers inner join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId and CustomersGroups.userId = Customers.userId  " +
+                    " LEFT join visitorpeople  on visitorpeople.personid = Customers.personid and VisitorPeople.userId = Customers.userId " +
                     " LEFT join PromotionEntity  on PromotionEntity.CodeEntity = Customers.PersonCode and EntityType = 2 " +
                     " where ( " + LikeStr +
                     " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
                     " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
                     " ) and " + groupIdScript(groupId) +
-                    " Customers.UserId = ? and Customers.MahakId = ? and Customers.DatabaseId = ? and Customers.Deleted = ?" +
+                    " Customers.UserId = ? and Customers.MahakId = ? and Customers.DatabaseId = ? and visitorpeople.Deleted = ?" +
                     " order by " + orderBy + " LIMIT " + LIMIT, new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(0)});
             // cursor = mDb.query(DbSchema.Customerschema.TABLE_NAME, null, DbSchema.Customerschema.COLUMN_USER_ID + " =? and " + DbSchema.Customerschema.COLUMN_MAHAK_ID + "=? and " + DbSchema.Customerschema.COLUMN_DATABASE_ID + "=? and " + groupIdScript(groupId) + DbSchema.Customerschema.COLUMN_Deleted + "=?", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(0)}, null, null, orderBy, LIMIT);
             if (cursor != null) {
@@ -5808,13 +5870,14 @@ public class DbAdapter {
         ArrayList<Customer> array = new ArrayList<>();
         try {
             cursor = mDb.rawQuery("select Customers.Organization, Customers.name, Customers.Address, Customers.PersonCode, PromotionId, Customers.PersonClientId, Customers.PersonId, Customers.PersonGroupId, Customers.Mobile, Customers.Phone, Customers.Id, Customers.balance " +
-                    " from Customers inner join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId " +
+                    " from Customers inner join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId  and CustomersGroups.userId = Customers.userId  " +
                     " LEFT join PromotionEntity  on PromotionEntity.CodeEntity = Customers.PersonCode and EntityType = 2 " +
+                    " LEFT join visitorpeople  on visitorpeople.personid = Customers.personid and VisitorPeople.userId = Customers.userId " +
                     " where ( " + LikeStr +
                     " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
                     " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
                     " ) and " + groupIdScript(groupId) +
-                    " Customers.UserId = ? and Customers.MahakId = ? and Customers.DatabaseId = ? and Customers.Deleted = ?" +
+                    " Customers.UserId = ? and Customers.MahakId = ? and Customers.DatabaseId = ? and visitorpeople.Deleted = ?" +
                     " order by " + orderBy, new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(0)});
             if (cursor != null) {
                 cursor.moveToFirst();
@@ -5856,12 +5919,12 @@ public class DbAdapter {
                         " when 7 then price7 " +
                         " when 8 then price8 " +
                         " when 9 then price9 " +
-                        " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
+                        " when 10 then price10 end as price , productdetail.Customerprice , sum(visitorproduct.Count1) as sumcount1 , sum(visitorproduct.Count2) as sumcount2 " +
                         " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+                        " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid" +
                         " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4 " +
                         " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode and ProductCategory.UserId" + " = " + getPrefUserId() +
                         " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) " +
-                        " and Products.Deleted = 0 and ProductDetail.Deleted = 0 " +
                         " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
                         getProductCategoryString(CategoryId) + getProductAssetStrnig(MODE_ASSET) + getCategoryString(categoryCode)  + " GROUP by Products.productId " +
                         " order by " + orderBy, null);
@@ -5877,12 +5940,12 @@ public class DbAdapter {
                         " when 7 then price7 " +
                         " when 8 then price8 " +
                         " when 9 then price9 " +
-                        " when 10 then price10 end as price , productdetail.Customerprice , sum(Count1) as sumcount1 , sum(Count2) as sumcount2 " +
+                        " when 10 then price10 end as price , productdetail.Customerprice , sum(visitorproduct.Count1) as sumcount1 , sum(visitorproduct.Count2) as sumcount2 " +
                         " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+                        " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid" +
                         " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4 " +
                         " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode and ProductCategory.UserId" + " = " + getPrefUserId() +
                         " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) " +
-                        " and Products.Deleted = 0 and ProductDetail.Deleted = 0 " +
                         " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
                         getProductCategoryString(CategoryId) + getProductAssetStrnig(MODE_ASSET) + getCategoryString(categoryCode) + " GROUP by Products.productId " +
                         " order by " + orderBy, null);
@@ -5921,11 +5984,11 @@ public class DbAdapter {
         if (modeasset == ProjectInfo.ASSET_ALL_PRODUCT) {
             return "";
         } else if (modeasset == ProjectInfo.ASSET_EXIST_PRODUCT) {
-            return " and " + DbSchema.ProductDetailSchema.COLUMN_Count1 + " > " + " 0.0 ";
+            return " and " + "visitorproduct.Count1" + " > " + " 0.0 ";
         } else if (modeasset == ProjectInfo.ASSET_ZERO_PRODUCT) {
-            return " and " + DbSchema.ProductDetailSchema.COLUMN_Count1 + " = " + " 0.0 ";
+            return " and " + "visitorproduct.Count1" + " = " + " 0.0 ";
         } else if (modeasset == ProjectInfo.ASSET_NOT_EXIST_PRODUCT) {
-            return " and " + DbSchema.ProductDetailSchema.COLUMN_Count1 + " < " + " 0.0 ";
+            return " and " + "visitorproduct.Count1" + " < " + " 0.0 ";
         } else if (modeasset == ProjectInfo.ASSET_promotion) {
             return " and " + "PromotionId" + ">" + " 0 ";
         }
@@ -5938,7 +6001,7 @@ public class DbAdapter {
         String orderBy = DbSchema.CustomerSchema.COLUMN_PersonCode;
         ArrayList<Customer> array = new ArrayList<>();
         try {
-            cursor = mDb.query(DbSchema.CustomerSchema.TABLE_NAME, null, DbSchema.CustomerSchema.COLUMN_USER_ID + " =? and " + DbSchema.CustomerSchema.COLUMN_MAHAK_ID + "=? and " + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + "=? and " + DbSchema.CustomerSchema.COLUMN_Deleted + "=?", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), String.valueOf(BaseActivity.getPrefDatabaseId()), String.valueOf(0)}, null, null, orderBy);
+            cursor = mDb.query(DbSchema.CustomerSchema.TABLE_NAME, null, DbSchema.CustomerSchema.COLUMN_USER_ID + " =? and " + DbSchema.CustomerSchema.COLUMN_MAHAK_ID + "=? and " + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + " =? " , new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), String.valueOf(BaseActivity.getPrefDatabaseId())}, null, null, orderBy);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -5989,7 +6052,7 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<ProductDetail> array = new ArrayList<>();
         try {
-            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(id), String.valueOf(0) , String.valueOf(getPrefUserId())}, null, null, null);
+            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(id) , String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -6012,7 +6075,7 @@ public class DbAdapter {
         HashMap<String, Long> hashMap = new HashMap<>();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_Deleted  + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(0),String.valueOf(getPrefUserId())}, null, null, null);
+            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null,  DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -6039,18 +6102,13 @@ public class DbAdapter {
         ArrayList<ProductDetail> array = new ArrayList<>();
         try {
             cursor = mDb.rawQuery("select * from " + DbSchema.ProductDetailSchema.TABLE_NAME +
-                    " where " + DbSchema.ProductDetailSchema.COLUMN_ProductId + " = " + id +
-                    " and " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " = " + 0, null);
+                    " where " + DbSchema.ProductDetailSchema.COLUMN_ProductId + " = " + id , null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     productDetail = getProductDetail(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductDetailSchema.COLUMN_ProductDetailId)));
                     if (productDetail != null) {
-                        if (type == ProjectInfo.TYPE_INVOCIE && mode == BaseActivity.MODE_NEW) {
-                            if (productDetail.getCount1() > 0 || productDetail.getCount2() > 0)
-                                array.add(productDetail);
-                        } else
-                            array.add(productDetail);
+                        array.add(productDetail);
                     }
                     cursor.moveToNext();
                 }
@@ -6072,8 +6130,7 @@ public class DbAdapter {
         ArrayList<ProductDetail> array = new ArrayList<>();
         try {
             cursor = mDb.rawQuery("select * from " + DbSchema.ProductDetailSchema.TABLE_NAME +
-                    " where " + DbSchema.ProductDetailSchema.COLUMN_ProductId + " = " + id +
-                    " and " + DbSchema.ProductDetailSchema.COLUMN_Deleted + " = " + 0, null);
+                    " where " + DbSchema.ProductDetailSchema.COLUMN_ProductId + " = " + id , null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -7183,7 +7240,7 @@ public class DbAdapter {
         ArrayList<Customer> array = new ArrayList<>();
         try {
             //cursor = mDb.query(DbSchema.Customerschema.TABLE_NAME, new String[]{DbSchema.Customerschema.COLUMN_ID,DbSchema.Customerschema.COLUMN_PersonId,DbSchema.Customerschema.COLUMN_PersonGroupId,DbSchema.Customerschema.COLUMN_ADDRESS,DbSchema.Customerschema.COLUMN_PHONE,DbSchema.Customerschema.COLUMN_MOBILE,DbSchema.Customerschema.COLUMN_LATITUDE,DbSchema.Customerschema.COLUMN_LONGITUDE}, DbSchema.Customerschema.COLUMN_USER_ID + " =? AND " + DbSchema.Customerschema.COLUMN_DATABASE_ID + "=? " , new String[]{String.valueOf(BaseActivity.getPrefUserId()), BaseActivity.getPrefDatabaseId()}, null, null, orderBy);
-            cursor = mDb.query(DbSchema.CustomerSchema.TABLE_NAME, null, DbSchema.CustomerSchema.COLUMN_USER_ID + " =? AND " + DbSchema.CustomerSchema.COLUMN_PersonId + " !=? and " + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + "=? and " + DbSchema.CustomerSchema.COLUMN_Deleted + "=? and " + DbSchema.CustomerSchema.COLUMN_PUBLISH + " =? ", new String[]{String.valueOf(getPrefUserId()), String.valueOf(0), BaseActivity.getPrefDatabaseId(), String.valueOf(0), String.valueOf(ProjectInfo.DONT_PUBLISH)}, null, null, orderBy);
+            cursor = mDb.query(DbSchema.CustomerSchema.TABLE_NAME, null, DbSchema.CustomerSchema.COLUMN_USER_ID + " =? AND " + DbSchema.CustomerSchema.COLUMN_PersonId + " !=? and " + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + "=? and " + DbSchema.CustomerSchema.COLUMN_PUBLISH + " =? ", new String[]{String.valueOf(getPrefUserId()), String.valueOf(0), BaseActivity.getPrefDatabaseId() , String.valueOf(ProjectInfo.DONT_PUBLISH)}, null, null, orderBy);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -7208,7 +7265,7 @@ public class DbAdapter {
         String orderBy = DbSchema.CustomerSchema.COLUMN_PersonCode;
         ArrayList<Customer> array = new ArrayList<>();
         try {
-            cursor = mDb.query(DbSchema.CustomerSchema.TABLE_NAME, null, DbSchema.CustomerSchema.COLUMN_USER_ID + " =? AND " + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + "=? AND " + DbSchema.CustomerSchema.COLUMN_PersonId + " =? and " + DbSchema.CustomerSchema.COLUMN_Deleted + "=?", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefDatabaseId(), String.valueOf(0), String.valueOf(0)}, null, null, orderBy);
+            cursor = mDb.query(DbSchema.CustomerSchema.TABLE_NAME, null, DbSchema.CustomerSchema.COLUMN_USER_ID + " =? AND " + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + "=? AND " + DbSchema.CustomerSchema.COLUMN_PersonId + " =? ", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefDatabaseId(), String.valueOf(0)}, null, null, orderBy);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -8252,6 +8309,37 @@ public class DbAdapter {
         }
         return result;
     }
+    public boolean UpdateOrAddVisitorProductFast(VisitorProduct visitorProduct) {
+        boolean result = false;
+        mDb.beginTransaction();
+        try {
+            ContentValues initialvalue = new ContentValues();
+                initialvalue.put(DbSchema.VisitorProductSchema.COLUMN_VisitorProductId, visitorProduct.getVisitorProductId());
+                initialvalue.put(DbSchema.VisitorProductSchema.COLUMN_ProductDetailId, visitorProduct.getProductDetailId());
+                initialvalue.put(DbSchema.VisitorProductSchema.COLUMN_USER_ID, visitorProduct.getVisitorId());
+                initialvalue.put(DbSchema.VisitorProductSchema.COLUMN_Count1, visitorProduct.getCount1());
+                initialvalue.put(DbSchema.VisitorProductSchema.COLUMN_Count2, visitorProduct.getCount2());
+                initialvalue.put(DbSchema.VisitorProductSchema.COLUMN_Price, visitorProduct.getPrice());
+                initialvalue.put(DbSchema.VisitorProductSchema.COLUMN_Serials, visitorProduct.getSerials());
+                initialvalue.put(DbSchema.VisitorProductSchema.COLUMN_Deleted, visitorProduct.getDelete());
+
+                initialvalue.put(DbSchema.VisitorProductSchema.COLUMN_DataHash, visitorProduct.getDataHash());
+                initialvalue.put(DbSchema.VisitorProductSchema.COLUMN_CreateDate, visitorProduct.getCreateDate());
+                initialvalue.put(DbSchema.VisitorProductSchema.COLUMN_UpdateDate, visitorProduct.getUpdateDate());
+                initialvalue.put(DbSchema.VisitorProductSchema.COLUMN_CreateSyncId, visitorProduct.getCreateSyncId());
+                initialvalue.put(DbSchema.VisitorProductSchema.COLUMN_UpdateSyncId, visitorProduct.getUpdateSyncId());
+                initialvalue.put(DbSchema.VisitorProductSchema.COLUMN_RowVersion, visitorProduct.getRowVersion());
+
+                result = (mDb.update(DbSchema.VisitorProductSchema.TABLE_NAME, initialvalue, DbSchema.VisitorProductSchema.COLUMN_VisitorProductId + "=?", new String[]{String.valueOf(visitorProduct.getVisitorProductId())})) > 0;
+
+
+            mDb.setTransactionSuccessful();
+
+        } finally {
+            mDb.endTransaction();
+        }
+        return result;
+    }
 
     public boolean UpdateOrAddVisitorPeopleFast(List<VisitorPeople> visitorPeople, long rowVersion) {
         boolean result = false;
@@ -8747,7 +8835,7 @@ public class DbAdapter {
         initialvalue.put(DbSchema.CustomersGroupSchema.COLUMN_UpdateSyncId, customergroup.getUpdateSyncId());
         initialvalue.put(DbSchema.CustomersGroupSchema.COLUMN_RowVersion, customergroup.getRowVersion());
 
-        result = (mDb.update(DbSchema.CustomersGroupSchema.TABLE_NAME, initialvalue, DbSchema.CustomersGroupSchema.COLUMN_PersonGroupId + "=? ", new String[]{String.valueOf(customergroup.getPersonGroupId())})) > 0;
+        result = (mDb.update(DbSchema.CustomersGroupSchema.TABLE_NAME, initialvalue, DbSchema.CustomersGroupSchema.COLUMN_PersonGroupId + "=? and  " + DbSchema.CustomersGroupSchema.COLUMN_USER_ID + " =?  " , new String[]{String.valueOf(customergroup.getPersonGroupId()) , String.valueOf(getPrefUserId())})) > 0;
         return result;
     }
 

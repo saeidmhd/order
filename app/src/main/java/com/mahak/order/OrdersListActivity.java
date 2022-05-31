@@ -52,6 +52,7 @@ import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.User;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.common.VisitorPeople;
+import com.mahak.order.common.VisitorProduct;
 import com.mahak.order.common.login.LoginBody;
 import com.mahak.order.common.login.LoginResult;
 import com.mahak.order.common.request.GetAllDataBody;
@@ -1030,27 +1031,29 @@ public class OrdersListActivity extends BaseActivity {
     private void deleteOrderDetail(Order order) {
         db.open();
         ProductDetail productDetail;
-        ArrayList<OrderDetail> existOrderdetailInDb = db.getAllOrderDetail(order.getId());
-        for (OrderDetail orderDetail : existOrderdetailInDb) {
+        VisitorProduct visitorProduct;
+        ArrayList<OrderDetail> existOrderDetailInDb = db.getAllOrderDetail(order.getId());
+        for (OrderDetail orderDetail : existOrderDetailInDb) {
             productDetail = db.getProductDetail(orderDetail.getProductDetailId());
+            visitorProduct = db.getVisitorProduct(orderDetail.getProductDetailId());
             Product product = db.GetProductWithProductId(productDetail.getProductId());
             ArrayList<OrderDetailProperty> orderDetailProperties = db.getAllOrderDetailProperty(order.getId(), product.getProductId());
             if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE || (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext))) {
                 if (orderDetailProperties.size() > 0) {
                     for (OrderDetailProperty orderDetailProperty : orderDetailProperties) {
-                        productDetail = db.getProductDetail(orderDetailProperty.getProductDetailId());
-                        productDetail.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail));
-                        productDetail.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail));
 
-                        db.UpdateProductDetail(productDetail);
+                        visitorProduct.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail) + orderDetailProperty.getCount1());
+                        visitorProduct.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail) + orderDetailProperty.getCount2());
+
+                        db.UpdateOrAddVisitorProductFast(visitorProduct);
                     }
                     db.DeleteOrderDetailProperty(order.getId());
-                } else {
-                    productDetail.setCount1(productDetail.getCount1() + orderDetail.getSumCountBaJoz());
-                    productDetail.setCount2(productDetail.getCount2() + orderDetail.getCount2());
-
-                    db.UpdateProductDetail(productDetail);
                 }
+
+                visitorProduct.setCount1(visitorProduct.getCount1() + orderDetail.getSumCountBaJoz());
+                visitorProduct.setCount2(visitorProduct.getCount2() + orderDetail.getCount2());
+
+                db.UpdateOrAddVisitorProductFast(visitorProduct);
             }
         }
         db.DeleteOrderDetail(order.getId());
@@ -1505,7 +1508,6 @@ public class OrdersListActivity extends BaseActivity {
 
         final GetAllDataBody getAllDataBody;
         getAllDataBody = new GetAllDataBody();
-        getAllDataBody.setUserToken(user.getUserToken());
         apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
         getAllDataBody.setFromTransferStoreVersion(db.getMaxRowVersion(DbSchema.ReceivedTransfersSchema.TABLE_NAME));
         getDataResultCall = apiService.GetAllData(getAllDataBody);
@@ -1697,7 +1699,6 @@ public class OrdersListActivity extends BaseActivity {
 
         final GetAllDataBody getAllDataBody;
         getAllDataBody = new GetAllDataBody();
-        getAllDataBody.setUserToken(user.getUserToken());
         apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
 
         getAllDataBody.setFromTransferStoreVersion(db.getMaxRowVersion(DbSchema.ReceivedTransfersSchema.TABLE_NAME));
