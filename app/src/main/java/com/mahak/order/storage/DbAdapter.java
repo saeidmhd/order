@@ -5341,7 +5341,7 @@ public class DbAdapter {
     private Cursor getAllProductQuery(long categoryCode , long id, String LIMIT, String orderBy, int modeasset, int defPriceLevel) {
         Cursor cursor;
         if (defPriceLevel == 0) {
-            cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName  , ProductDetail.productDetailId , " +
+            cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName  , ProductDetail.productDetailId , pc.CategoryCode , " +
                     " case DefaultSellPriceLevel  " +
                     " when 1 then Price1 " +
                     " when 2 then Price2 " +
@@ -5354,14 +5354,14 @@ public class DbAdapter {
                     " when 9 then price9 " +
                     " when 10 then price10 end as price , productdetail.Customerprice , sum(visitorproduct.Count1) as sumcount1 , sum(visitorproduct.Count2) as sumcount2 " +
                     " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                    " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid" +
+                    " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userid = products.userid" +
                     " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4" +
-                    " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode and ProductCategory.UserId" + " = " + getPrefUserId() +
+                    " LEFT  join ( SELECT DISTINCT userid , productcode , CategoryCode from ProductCategory ) as pc on  products.ProductCode = pc.ProductCode " +
                     " where " + DbSchema.ProductSchema.TABLE_NAME + " . " + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
                     getProductAssetStrnig(modeasset) +
-                    getProductCategoryString(id) + getCategoryString(categoryCode) + " and visitorproduct.deleted = 0 " + " GROUP by Products.productId " + " order by " + orderBy  + " LIMIT " + LIMIT, null);
+                    getProductCategoryString(id) + getCategoryString2(categoryCode) + " and visitorproduct.deleted = 0 " + " GROUP by Products.productId " + " order by " + orderBy  + " LIMIT " + LIMIT, null);
         } else {
-            cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel , PromotionId, UnitName2 , UnitName  , ProductDetail.productDetailId , " +
+            cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel , PromotionId, UnitName2 , UnitName  , ProductDetail.productDetailId ,  , pc.CategoryCode, " +
                     " case  " + defPriceLevel +
                     " when 1 then Price1 " +
                     " when 2 then Price2 " +
@@ -5374,12 +5374,13 @@ public class DbAdapter {
                     " when 9 then price9 " +
                     " when 10 then price10 end as price , productdetail.Customerprice , sum(visitorproduct.Count1) as sumcount1 , sum(visitorproduct.Count2) as sumcount2 " +
                     " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                    " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid " +
+                    " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userid = products.userid " +
                     " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4 " +
-                    " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode and ProductCategory.UserId" + " = " + getPrefUserId() +
+                    " LEFT  join ( SELECT DISTINCT userid , productcode , CategoryCode from ProductCategory ) as pc on  products.ProductCode = pc.ProductCode " +
+
                     " where " + DbSchema.ProductSchema.TABLE_NAME + " . " + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
                     getProductAssetStrnig(modeasset) +
-                    getProductCategoryString(id) + getCategoryString(categoryCode)+ " and visitorproduct.deleted = 0 " + " GROUP by Products.productId " + " order by " + orderBy + " LIMIT " + LIMIT , null);
+                    getProductCategoryString(id) + getCategoryString2(categoryCode)+ " and visitorproduct.deleted = 0 " + " GROUP by Products.productId " + " order by " + orderBy + " LIMIT " + LIMIT , null);
         }
 
         return cursor;
@@ -5464,7 +5465,12 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<Category> categories = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select * from Category where Category.ParentCode = 0 and userid = ? order by Category.CategoryCode", new String[]{String.valueOf(getPrefUserId())});
+            cursor = mDb.rawQuery(" select * from Category where  userId = ? and  CategoryCode in (SELECT  pc.CategoryCode  from Products \n" +
+                    " LEFT join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId \n" +
+                    " LEFT join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userid = products.userid \n" +
+                    " LEFT  join ( SELECT DISTINCT userid , productcode , CategoryCode from ProductCategory ) as pc on  products.ProductCode = pc.ProductCode \n" +
+                    " where Products . UserId = ?  and visitorproduct.deleted = 0 \n" +
+                    " GROUP by Products.productId  order by Products.ProductCode Asc LIMIT 0,100)", new String[]{String.valueOf(getPrefUserId()), String.valueOf(getPrefUserId())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -5921,7 +5927,7 @@ public class DbAdapter {
                         " when 9 then price9 " +
                         " when 10 then price10 end as price , productdetail.Customerprice , sum(visitorproduct.Count1) as sumcount1 , sum(visitorproduct.Count2) as sumcount2 " +
                         " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                        " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid" +
+                        " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userid = products.userid" +
                         " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4 " +
                         " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode and ProductCategory.UserId" + " = " + getPrefUserId() +
                         " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) " +
@@ -5942,7 +5948,7 @@ public class DbAdapter {
                         " when 9 then price9 " +
                         " when 10 then price10 end as price , productdetail.Customerprice , sum(visitorproduct.Count1) as sumcount1 , sum(visitorproduct.Count2) as sumcount2 " +
                         " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                        " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid" +
+                        " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userid = products.userid " +
                         " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4 " +
                         " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode and ProductCategory.UserId" + " = " + getPrefUserId() +
                         " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) " +
@@ -5977,6 +5983,11 @@ public class DbAdapter {
     private String getCategoryString(long categoryCode) {
         if (categoryCode != 0)
             return " and " + DbSchema.ProductCategorySchema.TABLE_NAME + "." + DbSchema.ProductCategorySchema.COLUMN_CategoryCode + " = " + categoryCode;
+        else return "";
+    }
+    private String getCategoryString2(long categoryCode) {
+        if (categoryCode != 0)
+            return " and " + "pc.CategoryCode" + " = " + categoryCode;
         else return "";
     }
 
@@ -8421,6 +8432,19 @@ public class DbAdapter {
                 initialvalue.put(DbSchema.ProductSchema.COLUMN_Deleted, visitorProduct.getDelete());
                 mDb.update(DbSchema.ProductSchema.TABLE_NAME, initialvalue, DbSchema.ProductSchema.COLUMN_ProductId + "=? ", new String[]{String.valueOf(productDetail.getProductId())});
             }
+            mDb.setTransactionSuccessful();
+        } finally {
+            mDb.endTransaction();
+        }
+    }
+    public void UpdateProductFromVisitorProductFast2() {
+        mDb.beginTransaction();
+        ContentValues initialvalue = new ContentValues();
+        try {
+            mDb.rawQuery("UPDATE productdetail SET deleted=(SELECT deleted FROM visitorproduct WHERE visitorproduct.productdetailid=productdetail.productdetailid)" , null);
+            mDb.rawQuery("UPDATE products SET deleted=(SELECT deleted FROM productdetail WHERE products.productdetailid=productdetail.productdetailid)" , null);
+            mDb.rawQuery("UPDATE productdetail SET count1=(SELECT count1 FROM visitorproduct WHERE visitorproduct.productdetailid=productdetail.productdetailid)" , null);
+            mDb.rawQuery("UPDATE productdetail SET count2=(SELECT count2 FROM visitorproduct WHERE visitorproduct.productdetailid=productdetail.productdetailid)" , null);
             mDb.setTransactionSuccessful();
         } finally {
             mDb.endTransaction();

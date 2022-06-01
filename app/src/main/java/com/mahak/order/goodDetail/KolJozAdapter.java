@@ -29,6 +29,7 @@ import com.mahak.order.common.Product;
 import com.mahak.order.common.ProductDetail;
 import com.mahak.order.common.Properties;
 import com.mahak.order.common.ServiceTools;
+import com.mahak.order.common.VisitorProduct;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -37,6 +38,7 @@ import java.util.List;
 
 import static com.mahak.order.BaseActivity.MODE_EDIT;
 import static com.mahak.order.BaseActivity.MODE_NEW;
+import static com.mahak.order.BaseActivity.mContext;
 import static com.mahak.order.goodDetail.GoodDetailKolJoz.txtsumCount1;
 import static com.mahak.order.goodDetail.GoodDetailKolJoz.txtsumCount2;
 import static com.mahak.order.goodDetail.GoodDetailKolJoz.txtsumCount3;
@@ -45,6 +47,7 @@ import static com.mahak.order.goodDetail.GoodDetailKolJoz.txtsumCount3;
 public class KolJozAdapter extends RecyclerView.Adapter<KolJozAdapter.ViewHolder> implements Filterable {
 
     private ArrayList<ProductDetail> productDetails;
+    private ArrayList<VisitorProduct> visitorProducts;
     ArrayList<ProductDetail> filterItem;
     private LayoutInflater mInflater;
     private ArrayList<ProductDetail> productDetailOriginal = new ArrayList<>();
@@ -105,9 +108,10 @@ public class KolJozAdapter extends RecyclerView.Adapter<KolJozAdapter.ViewHolder
         }
     }
 
-    KolJozAdapter(Context context, ArrayList<ProductDetail> productDetails, ArrayList<OrderDetailProperty> orderDetailProperties, int mode, Product product, int type) {
+    KolJozAdapter(Context context, ArrayList<ProductDetail> productDetails, ArrayList<VisitorProduct> visitorProducts, ArrayList<OrderDetailProperty> orderDetailProperties, int mode, Product product, int type) {
 
         this.productDetails = productDetails;
+        this.visitorProducts = visitorProducts;
         this.orderDetailProperties = orderDetailProperties;
         this.mInflater = LayoutInflater.from(context);
         this.productDetailOriginal.addAll(productDetails);
@@ -186,10 +190,10 @@ public class KolJozAdapter extends RecyclerView.Adapter<KolJozAdapter.ViewHolder
         holder.tvNumber.setText(String.valueOf(position + 1));
         holder.tvProductSpec.setText(getTitle(position));
 
-        if (productDetails.size() > 0) {
+        if (visitorProducts.size() > 0) {
             for (OrderDetailProperty orderDetailProperty : orderDetailProperties) {
-                if (orderDetailProperty.getProductDetailId() == productDetails.get(holder.getAdapterPosition()).getProductDetailId())
-                    setUnitJozKol(orderDetailProperty, holder, productDetails.get(holder.getAdapterPosition()));
+                if (orderDetailProperty.getProductDetailId() == visitorProducts.get(holder.getAdapterPosition()).getProductDetailId())
+                    setUnitJozKol(orderDetailProperty, holder, visitorProducts.get(holder.getAdapterPosition()));
             }
         }
         setSumAmount(holder, orderDetailProperties.get(holder.getAdapterPosition()));
@@ -419,7 +423,7 @@ public class KolJozAdapter extends RecyclerView.Adapter<KolJozAdapter.ViewHolder
         return str;
     }
 
-    private void setUnitJozKol(OrderDetailProperty orderDetailProperty, ViewHolder holder, ProductDetail productDetail) {
+    private void setUnitJozKol(OrderDetailProperty orderDetailProperty, ViewHolder holder, VisitorProduct visitorProduct) {
 
         if (orderDetailProperties.size() > 0) {
             holder.txtCount.setText(ServiceTools.formatCount(orderDetailProperty.getSumCountBaJoz()));
@@ -428,13 +432,13 @@ public class KolJozAdapter extends RecyclerView.Adapter<KolJozAdapter.ViewHolder
         }
 
         if (mode == MODE_NEW) {
-            holder.tv_asset1.setText(ServiceTools.formatCount(productDetail.getCount1()));
-            holder.tv_asset2.setText(ServiceTools.formatCount(productDetail.getCount2()));
-            maxValueRetail = productDetail.getCount1();
-            maxValueRetail2 = productDetail.getCount2();
+            holder.tv_asset1.setText(ServiceTools.formatCount(visitorProduct.getCount1()));
+            holder.tv_asset2.setText(ServiceTools.formatCount(visitorProduct.getCount2()));
+            maxValueRetail = visitorProduct.getCount1();
+            maxValueRetail2 = visitorProduct.getCount2();
         } else if (mode == MODE_EDIT) {
-            maxValueRetail = ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail);
-            maxValueRetail2 = ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail);
+            maxValueRetail = ServiceTools.getExistCount1Prop(orderDetailProperty, visitorProduct);
+            maxValueRetail2 = ServiceTools.getExistCount2Prop(orderDetailProperty, visitorProduct);
             holder.tv_asset1.setText(ServiceTools.formatCount(maxValueRetail));
             holder.tv_asset2.setText(ServiceTools.formatCount(maxValueRetail2));
         }

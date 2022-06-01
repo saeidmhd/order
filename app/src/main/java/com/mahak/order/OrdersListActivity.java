@@ -1,5 +1,7 @@
 package com.mahak.order;
 
+import static com.mahak.order.BaseActivity.mContext;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -1041,19 +1043,16 @@ public class OrdersListActivity extends BaseActivity {
             if (order.getOrderType() == ProjectInfo.TYPE_INVOCIE || (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext))) {
                 if (orderDetailProperties.size() > 0) {
                     for (OrderDetailProperty orderDetailProperty : orderDetailProperties) {
-
-                        visitorProduct.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail) + orderDetailProperty.getCount1());
-                        visitorProduct.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail) + orderDetailProperty.getCount2());
-
+                        visitorProduct.setCount1(ServiceTools.getExistCount1Prop(orderDetailProperty, visitorProduct));
+                        visitorProduct.setCount2(ServiceTools.getExistCount2Prop(orderDetailProperty, visitorProduct));
                         db.UpdateOrAddVisitorProductFast(visitorProduct);
                     }
                     db.DeleteOrderDetailProperty(order.getId());
+                }else{
+                    visitorProduct.setCount1(visitorProduct.getCount1() + orderDetail.getSumCountBaJoz());
+                    visitorProduct.setCount2(visitorProduct.getCount2() + orderDetail.getCount2());
+                    db.UpdateOrAddVisitorProductFast(visitorProduct);
                 }
-
-                visitorProduct.setCount1(visitorProduct.getCount1() + orderDetail.getSumCountBaJoz());
-                visitorProduct.setCount2(visitorProduct.getCount2() + orderDetail.getCount2());
-
-                db.UpdateOrAddVisitorProductFast(visitorProduct);
             }
         }
         db.DeleteOrderDetail(order.getId());
@@ -1524,6 +1523,7 @@ public class OrdersListActivity extends BaseActivity {
                                 Order order;
                                 Product product;
                                 ProductDetail productDetail;
+                                VisitorProduct visitorProduct;
                                 order = db.getAllTransferPublish(BaseActivity.getPrefUserId(), "" + receivedTransferList.get(i).getTransferStoreClientId());
                                 if (order.getCode().equals(String.valueOf(receivedTransferList.get(i).getTransferStoreClientId())))
                                     arrayInvoice.add(order);
@@ -1536,10 +1536,11 @@ public class OrdersListActivity extends BaseActivity {
                                         orderDetails = db.getAllOrderDetailWithOrderId(arrayInvoice.get(j).getId());
                                         for (OrderDetail item : orderDetails) {
                                             productDetail = db.getProductDetail(item.getProductDetailId());
+                                            visitorProduct = db.getVisitorProduct(item.getProductDetailId());
                                             product = db.GetProductWithProductId(productDetail.getProductId());
-                                            productDetail.setCount1(productDetail.getCount1() - (item.getSumCountBaJoz()));
+                                            visitorProduct.setCount1(visitorProduct.getCount1() - (item.getSumCountBaJoz()));
                                             db.UpdateProduct(product);
-                                            db.UpdateProductDetail(productDetail);
+                                            db.UpdateOrAddVisitorProductFast(visitorProduct);
                                         }
                                     }
                                 }

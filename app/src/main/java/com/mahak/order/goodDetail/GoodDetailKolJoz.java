@@ -42,6 +42,7 @@ import com.mahak.order.common.Properties;
 import com.mahak.order.common.PropertyDescription;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.SharedPreferencesHelper;
+import com.mahak.order.common.VisitorProduct;
 import com.mahak.order.scan.SmallCaptureActivity;
 import com.mahak.order.storage.DbAdapter;
 
@@ -126,6 +127,7 @@ public class GoodDetailKolJoz extends BaseActivity {
     private InputMethodManager imm;
     private double TotalCount;
     ArrayList<ProductDetail> productDetails = new ArrayList<>();
+    ArrayList<VisitorProduct> visitorProducts = new ArrayList<>();
 
     private TextView sumAsset, tvUnit, tvUnit1_sell, tvUnitjoz_sell, tvUnitKol_sell, tvUnit1;
 
@@ -294,6 +296,7 @@ public class GoodDetailKolJoz extends BaseActivity {
             }
         }
         for (ProductDetail productDetail : productDetails) {
+            visitorProducts.add(db.getVisitorProduct(productDetail.getProductDetailId()));
             List<Properties> propertiesList = new ArrayList<>();
             try {
                 propertiesList = gson.fromJson(productDetail.getProperties(), property);
@@ -320,7 +323,7 @@ public class GoodDetailKolJoz extends BaseActivity {
         productDetailRecycler.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         productDetailRecycler.setLayoutManager(mLayoutManager);
-        adapterListProductDetail = new KolJozAdapter(GoodDetailKolJoz.this, productDetails, orderDetailProperties, mode, product, type);
+        adapterListProductDetail = new KolJozAdapter(GoodDetailKolJoz.this, productDetails,visitorProducts, orderDetailProperties, mode, product, type);
         productDetailRecycler.setAdapter(adapterListProductDetail);
     }
 
@@ -442,7 +445,7 @@ public class GoodDetailKolJoz extends BaseActivity {
             orderDetailProperty.setSumCountBaJoz(0);
         }
 
-        adapterListProductDetail = new KolJozAdapter(GoodDetailKolJoz.this, productDetails, orderDetailProperties, mode, product, type);
+        adapterListProductDetail = new KolJozAdapter(GoodDetailKolJoz.this, productDetails, visitorProducts, orderDetailProperties, mode, product, type);
         productDetailRecycler.setAdapter(adapterListProductDetail);
     }
 }

@@ -30,12 +30,14 @@ import com.mahak.order.common.ProductDetail;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.Properties;
 import com.mahak.order.common.ServiceTools;
+import com.mahak.order.common.VisitorProduct;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.mahak.order.BaseActivity.Mode_DoVahedi;
+import static com.mahak.order.BaseActivity.mContext;
 import static com.mahak.order.common.ServiceTools.formatCount;
 import static com.mahak.order.goodDetail.GoodDetailTwoUnit.txtsumCount1;
 import static com.mahak.order.goodDetail.GoodDetailTwoUnit.txtsumCount2;
@@ -44,6 +46,7 @@ import static com.mahak.order.goodDetail.GoodDetailTwoUnit.txtsumCount2;
 public class TwoUnitAdapter extends RecyclerView.Adapter<TwoUnitAdapter.ViewHolder> implements Filterable {
 
     private ArrayList<ProductDetail> productDetails;
+    private ArrayList<VisitorProduct> visitorProducts;
     ArrayList<ProductDetail> filterItem;
     private LayoutInflater mInflater;
     private ArrayList<ProductDetail> productDetailOriginal = new ArrayList<>();
@@ -101,9 +104,10 @@ public class TwoUnitAdapter extends RecyclerView.Adapter<TwoUnitAdapter.ViewHold
         }
     }
 
-    TwoUnitAdapter(Context context, ArrayList<ProductDetail> productDetails, ArrayList<OrderDetailProperty> orderDetailProperties, int mode, Product product, int type) {
+    TwoUnitAdapter(Context context, ArrayList<ProductDetail> productDetails, ArrayList<VisitorProduct> visitorProducts, ArrayList<OrderDetailProperty> orderDetailProperties, int mode, Product product, int type) {
 
         this.productDetails = productDetails;
+        this.visitorProducts = visitorProducts;
         this.orderDetailProperties = orderDetailProperties;
         this.mInflater = LayoutInflater.from(context);
         this.productDetailOriginal.addAll(productDetails);
@@ -181,10 +185,10 @@ public class TwoUnitAdapter extends RecyclerView.Adapter<TwoUnitAdapter.ViewHold
         sumAmount1 = 0;
         holder.tvNumber.setText(String.valueOf(position + 1));
         holder.tvProductSpec.setText(getTitle(position));
-        if (productDetails.size() > 0) {
+        if (visitorProducts.size() > 0) {
             for (OrderDetailProperty orderDetailProperty : orderDetailProperties) {
-                if (orderDetailProperty.getProductDetailId() == productDetails.get(holder.getAdapterPosition()).getProductDetailId())
-                    setUnit2(orderDetailProperty, holder, productDetails.get(holder.getAdapterPosition()));
+                if (orderDetailProperty.getProductDetailId() == visitorProducts.get(holder.getAdapterPosition()).getProductDetailId())
+                    setUnit2(orderDetailProperty, holder, visitorProducts.get(holder.getAdapterPosition()));
             }
         }
         holder.txtCount1.addTextChangedListener(new TextWatcher() {
@@ -368,13 +372,13 @@ public class TwoUnitAdapter extends RecyclerView.Adapter<TwoUnitAdapter.ViewHold
         return str;
     }
 
-    private void setUnit2(OrderDetailProperty orderDetailProperty, ViewHolder holder, ProductDetail productDetail) {
+    private void setUnit2(OrderDetailProperty orderDetailProperty, ViewHolder holder, VisitorProduct visitorProduct) {
 
         holder.txtCount1.setText(ServiceTools.formatCount(orderDetailProperty.getCount1()));
         holder.txtCount2.setText(ServiceTools.formatCount(orderDetailProperty.getCount2()));
 
-        maxValueRetail = ServiceTools.getExistCount1Prop(orderDetailProperty, productDetail);
-        maxValueRetail2 = ServiceTools.getExistCount2Prop(orderDetailProperty, productDetail);
+        maxValueRetail = ServiceTools.getExistCount1Prop(orderDetailProperty, visitorProduct);
+        maxValueRetail2 = ServiceTools.getExistCount2Prop(orderDetailProperty, visitorProduct);
 
         holder.tv_asset1.setText(ServiceTools.formatCount(maxValueRetail));
         holder.tv_asset2.setText(ServiceTools.formatCount(maxValueRetail2));

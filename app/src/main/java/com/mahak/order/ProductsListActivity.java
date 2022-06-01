@@ -1376,6 +1376,7 @@ public class ProductsListActivity extends BaseActivity {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            int selectedPos = -1;
             return new MyLevelCategoryAdapter.Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false));
         }
 
@@ -1409,6 +1410,7 @@ public class ProductsListActivity extends BaseActivity {
 
             Holder(View itemView) {
                 super(itemView);
+                int row_index;
                 mTitle = (TextView) itemView.findViewById(R.id.title);
                 mExpandIcon = (ImageView) itemView.findViewById(R.id.image_view);
                 mTextBox = (LinearLayout) itemView.findViewById(R.id.text_box);
@@ -1423,6 +1425,7 @@ public class ProductsListActivity extends BaseActivity {
                         getProducts();
                     }
                 });
+
                 mExpandButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

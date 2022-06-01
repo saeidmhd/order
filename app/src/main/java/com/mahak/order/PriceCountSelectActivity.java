@@ -258,10 +258,10 @@ public class PriceCountSelectActivity extends BaseActivity {
                 orderDetailPropertylist = db.getAllOrderDetailProperty(orderId, product.getProductId());
                 maxValueRetail = ServiceTools.getSumCount1prop(product.getProductId(), orderDetailPropertylist, this);
             } else {
-                maxValueRetail = ServiceTools.getExistCount1(orderDetail, productDetails.get(0));
+                maxValueRetail = ServiceTools.getExistCount1(orderDetail, productDetails.get(0) , context);
                 if (BaseActivity.getPrefUnit2Setting(mContext) != BaseActivity.MODE_YekVahedi) {
                     if (ServiceTools.getSumCount2(product.getProductId(), this) > 0) {
-                        maxValueRetail2 = ServiceTools.getExistCount2(orderDetail, productDetails.get(0));
+                        maxValueRetail2 = ServiceTools.getExistCount2(orderDetail, productDetails.get(0),mContext);
                     } else {
                         maxValueRetail2 = maxValueRetail / product.getUnitRatio();
                     }

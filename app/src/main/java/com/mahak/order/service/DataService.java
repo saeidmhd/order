@@ -163,9 +163,8 @@ public class DataService {
 
     public static double InsertVisitorProducts(DbAdapter db, List<VisitorProduct> data, long rowVersion) {
         long startTime = System.nanoTime();
-        
-
         db.UpdateOrAddVisitorProductFast(data,rowVersion);
+        //db.UpdateProductFromVisitorProductFast2();
        /* db.UpdateProductFromVisitorProductFast(data);
         db.UpdateProductDetailFromVisitorProductFast(data);*/
 

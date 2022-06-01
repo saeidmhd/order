@@ -57,6 +57,7 @@ import com.mahak.order.common.ProductGroup;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.SharedPreferencesHelper;
+import com.mahak.order.common.VisitorProduct;
 import com.mahak.order.fragment.PlaceholderListGalleryFragment;
 import com.mahak.order.fragment.ProductGridFragment;
 import com.mahak.order.fragment.ProductGridGalleryFragment;
@@ -834,7 +835,8 @@ public class ProductPickerListActivity extends BaseActivity {
                     if (item.getProductId() == object.getProductId()) {
                         ArrayList<ProductDetail> productDetails = db.getAllProductDetailWithProductId(item.getProductId());
                         for (ProductDetail productDetail : productDetails) {
-                            double asset = productDetail.getCount1() + object.getSumCountBaJoz();
+                            VisitorProduct visitorProduct = db.getVisitorProduct(productDetail.getProductDetailId());
+                            double asset = visitorProduct.getCount1() + object.getSumCountBaJoz();
                             productDetail.setCount1(asset);
                         }
                         break;

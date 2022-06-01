@@ -37,6 +37,7 @@ import com.mahak.order.common.Properties;
 import com.mahak.order.common.PropertyDescription;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.SharedPreferencesHelper;
+import com.mahak.order.common.VisitorProduct;
 import com.mahak.order.scan.SmallCaptureActivity;
 import com.mahak.order.storage.DbAdapter;
 
@@ -78,6 +79,7 @@ public class GoodDetailOneUnit extends BaseActivity {
     private long orderId;
 
     ArrayList<ProductDetail> productDetails = new ArrayList<>();
+    ArrayList<VisitorProduct> visitorProducts = new ArrayList<>();
     static TextView txtsumCount1;
     static TextView sumAsset;
     private TextView row;
@@ -241,14 +243,16 @@ public class GoodDetailOneUnit extends BaseActivity {
             }
         }
         for (ProductDetail productDetail : productDetails) {
-            sumCount1 += productDetail.getCount1();
+            VisitorProduct visitorProduct = db.getVisitorProduct(productDetail.getProductDetailId());
+            visitorProducts.add(visitorProduct);
+            sumCount1 += visitorProduct.getCount1();
         }
         sumAsset.setText(ServiceTools.formatCount(sumCount1));
         productDetailRecycler.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         productDetailRecycler.setLayoutManager(mLayoutManager);
 
-        adapterListProductDetail = new OneUnitAdapter(GoodDetailOneUnit.this, productDetails, orderDetailProperties, mode, type);
+        adapterListProductDetail = new OneUnitAdapter(GoodDetailOneUnit.this, productDetails, visitorProducts,orderDetailProperties, mode, type);
         /*Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.divider);
         productDetailRecycler.addItemDecoration(new DividerItemDecoration(dividerDrawable));*/
         productDetailRecycler.setAdapter(adapterListProductDetail);

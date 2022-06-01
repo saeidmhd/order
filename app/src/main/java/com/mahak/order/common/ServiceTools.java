@@ -656,16 +656,6 @@ public class ServiceTools {
         Product product = db.GetProductWithProductId(productId);
         return product.getName();
     }
-    public static double getSumCount11(ArrayList<ProductDetail> productDetails) {
-        if(productDetails.size() == 1)
-            return productDetails.get(0).getCount1();
-        double sum = 0;
-        for (ProductDetail productDetail : productDetails) {
-            sum += productDetail.getCount1();
-        }
-        return sum;
-
-    }
 
     public static double getSumCount2(int productId, Context context) {
         DbAdapter db = new DbAdapter(context);
@@ -680,16 +670,6 @@ public class ServiceTools {
         return sum;
 
     }
-    public static double getSumCount12(ArrayList<ProductDetail> productDetails) {
-        if(productDetails.size() == 1)
-            return productDetails.get(0).getCount2();
-        double sum = 0;
-        for (ProductDetail productDetail : productDetails) {
-            sum += productDetail.getCount2();
-        }
-        return sum;
-
-    }
 
     public static double getSumCount1prop(int productId, ArrayList<OrderDetailProperty> orderDetailProperties, Context context) {
         DbAdapter db = new DbAdapter(context);
@@ -697,7 +677,8 @@ public class ServiceTools {
         double sum = 0;
         ArrayList<ProductDetail> productDetails = db.getAllProductDetail(productId);
         for (ProductDetail productDetail : productDetails) {
-            sum += productDetail.getCount1();
+            VisitorProduct visitorProduct =  db.getVisitorProduct(productDetail.getProductDetailId());
+            sum += visitorProduct.getCount1();
         }
         for (OrderDetailProperty orderDetailProperty : orderDetailProperties) {
             sum += orderDetailProperty.getSumCountBaJoz();
@@ -707,33 +688,27 @@ public class ServiceTools {
 
     }
 
-    public static double getSumGiftCount12(double giftCount1, double giftCount2, Context context) {
-        if (BaseActivity.getPrefUnit2Setting(context) == BaseActivity.MODE_MeghdarJoz)
-            return giftCount1 + giftCount2;
-        else
-            return giftCount1;
+    public static double getExistCount1(OrderDetail orderDetail, ProductDetail productDetail, Context context) {
+        DbAdapter db = new DbAdapter(context);
+        db.open();
+        VisitorProduct visitorProduct =  db.getVisitorProduct(productDetail.getProductDetailId());
+        return orderDetail.getSumCountBaJoz() + visitorProduct.getCount1() ;
     }
 
-    public static double getExistCount1(OrderDetail orderDetail, ProductDetail productDetail) {
-        return orderDetail.getSumCountBaJoz() + productDetail.getCount1() ;
+    public static double getExistCount2(OrderDetail orderDetail, ProductDetail productDetail, Context context) {
+        DbAdapter db = new DbAdapter(context);
+        db.open();
+        VisitorProduct visitorProduct =  db.getVisitorProduct(productDetail.getProductDetailId());
+        return orderDetail.getCount2() + visitorProduct.getCount2() ;
     }
 
-    public static double getExistCount2(OrderDetail orderDetail, ProductDetail productDetail) {
-        return orderDetail.getCount2() + productDetail.getCount2() ;
+    public static double getExistCount1Prop(OrderDetailProperty orderDetailProperty,  VisitorProduct visitorProduct) {
+        return orderDetailProperty.getSumCountBaJoz() + visitorProduct.getCount1();
     }
 
-    public static double getExistCount1Prop(OrderDetailProperty orderDetailProperty, ProductDetail productDetail) {
-        return orderDetailProperty.getSumCountBaJoz() + productDetail.getCount1();
+    public static double getExistCount2Prop(OrderDetailProperty orderDetailProperty, VisitorProduct visitorProduct) {
+        return orderDetailProperty.getCount2() + visitorProduct.getCount2();
     }
-
-    public static double getExistCount2Prop(OrderDetailProperty orderDetailProperty, ProductDetail productDetail) {
-        return orderDetailProperty.getCount2() + productDetail.getCount2();
-    }
-
-    public static double getExistSumCountProp(OrderDetailProperty orderDetailProperty, ProductDetail productDetail) {
-        return orderDetailProperty.getSumCountBaJoz() + productDetail.getCount2();
-    }
-
 
     public static String computeMD5Hash(String password) {
         StringBuffer MD5Hash = null;
