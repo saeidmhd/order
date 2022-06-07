@@ -370,7 +370,8 @@
     <string name="str_message_more_than_asset_product">بیش تر از موجودی است</string>
     <string name="str_message_publish_delete">به سمت سرور ارسال شده است نمی توانید حذف کنید</string>
     <string name="str_message_publish_send">به سمت سرور ارسال شده است</string>
-    <string name="str_message_less_remain_credit">با توجه به باقیمانده اعتبار نمی توانید حذف کنید </string>
+    <string name="str_message_less_remain_credit">با توجه به باقیمانده اعتبار ویزیتور ، دریافتی حذف نمیشود! </string>
+    <string name="str_message_less_remain_credit_customer">با توجه به باقیمانده اعتبار مشتری ، دریافتی حذف نمیشود! </string>
     <string name="str_message_select_update">آیتمی را برای بروزرسانی انتخاب نمایید</string>
     <string name="str_message_dont_connect">اتصال به اینترنت برقرار نمی باشد</string>
     <string name="str_message_not_found_location">موقعیت جاری پیدا نشده است</string>

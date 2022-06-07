@@ -5,9 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -66,8 +63,6 @@ import java.util.Locale;
 import java.util.UUID;
 
 import static com.mahak.order.common.ServiceTools.getDateAndTimeForLong;
-
-import androidx.annotation.NonNull;
 
 //import com.mahak.order.common.ProductInOrder;
 
@@ -228,6 +223,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             OrderId = Extras.getLong(ID);
             Code = Extras.getString(CODE_KEY) != null ? Extras.getString(CODE_KEY) : ProjectInfo.DONT_CODE;
             Payment = Extras.getDouble(PAYMENT_KEY);
+
             remainCustomerCredit = Extras.getDouble(Force_Payment_KEY);
             txtAmount.setText(ServiceTools.formatPrice(remainCustomerCredit));
 
@@ -301,8 +297,8 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             txtDescription.setText(Description);
             txtTrackingCode.setText(Code);
             txtPayment.setText(ServiceTools.formatPrice(Payment));
-
         }
+
 
         lstCheque.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -515,7 +511,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
                     payment = 0L;*/
                 /*//باقیمانده اعتبار ویزیتور
                 remainCredit = mVisitorCredit - (payment + mSpentCredit);*/
-                saveReciept();
+                saveReceipt();
             }
         });
 
@@ -546,8 +542,22 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
 
     }// End of OnCreate
 
+    public boolean customerHasCredit(Receipt receipt) {
+        int customerId = receipt.getPersonId();
+        if(customerId == 0)
+            return true;
+        Customer customer = db.getCustomerWithPersonId(customerId);
+        double customerCredit = customer.getCredit();
+        if (customerCredit == -1)
+            return true;
+        else {
+            double customerCreditValue = (customerCredit + db.getTotalCustomerReceiptWithId(customerId) - savedCashedAndCheque + totalCashAndCheque()) - db.getTotalPriceInvoicePerPerson(customerId);
+            return customerCreditValue >= 0;
+        }
+    }
 
-    private void saveReciept() {
+
+    private void saveReceipt() {
         if (mVisitorCredit == -1) {
             Save();
         } else {
@@ -556,7 +566,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
                 remainVisitorCreditValue = mVisitorCredit - mSpentCredit;
                 if (remainVisitorCreditValue + totalCashAndCheque() < 0) {
                     Toast.makeText(mContext, "باید مجموع دریافتی نقد و چک از باقیمانده اعتبار ویزیتور بیشتر باشد!", Toast.LENGTH_SHORT).show();
-                } else if(totalCashAndCheque() < remainCustomerCredit)
+                } else if(!customerHasCredit(receipt))
                     Toast.makeText(mContext, "باید مجموع دریافتی نقد و چک از باقیمانده اعتبار مشتری بیشتر باشد!", Toast.LENGTH_SHORT).show();
                 else{
                     Save();
@@ -1210,7 +1220,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
                 .setCancelable(false)
                 .setPositiveButton("بله", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        saveReciept();
+                        saveReceipt();
                         dialog.cancel();
                     }
                 })

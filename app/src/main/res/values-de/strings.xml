@@ -1309,6 +1309,7 @@
     <string name="new_3_445_3">رفع خطای نمایش طرح های تکراری در تب طرح های تشویقی</string>
     <string name="new_3_445_4">	برطرف شدن خطای خطا در بروزرسانی در صورت دیتای زیاد و sleep device</string>
     <string name="new_3_445_5">	برطرف شدن خطای سینک درارسال اطلاعات مشتری ویرایش شده</string>
+    <string name="str_message_less_remain_credit_customer">با توجه به باقیمانده اعتبار مشتری ، دریافتی حذف نمیشود! </string>
 
 
 </resources>

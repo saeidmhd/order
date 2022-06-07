@@ -307,31 +307,15 @@ public class ReceiptsListActivity extends BaseActivity {
                                     case R.id.mnuDelete:
                                         PositionArray = position;
                                         ReceiptId = receipt.getId();
-                                        //مجموع تمام فاکتور ها چه ارسال شده یا نشده
-                                        TotalPriceInvoice = db.getPurePriceInvoice();
-                                        //مجموع تمام دریافتی ها چه ارسال شده یا نشده
-                                        TotalReceipt = db.getTotalPriceReceipt();
-                                        //اعتبار مصرف شده
-                                        mSpentCredit = TotalPriceInvoice - TotalReceipt;
-                                        //اعتبار ویزیتور
-                                        mVisitorCredit = mVisitor.getTotalCredit();
-                                        //اعتبار باقیمانده = اعتبار ویزیتور - اعتبار  مصرف شده
-                                        remainCredit = mVisitorCredit - mSpentCredit;
-                                        //میزان دریافتی های مربوط به این ReceiptId
-                                        savedCashedAndCheque = db.getTotalReceiptWithId(ReceiptId);
-
-                                        if (mVisitorCredit != -1) {
-                                            if (remainCredit - savedCashedAndCheque < 0) {
+                                        if (receipt.getPublish() == ProjectInfo.DONT_PUBLISH) {
+                                            if(!visitorHasCredit())
                                                 Toast.makeText(mContext, getResources().getString(R.string.str_message_less_remain_credit), Toast.LENGTH_SHORT).show();
-                                                break;
-                                            }
-                                        } else {
-                                            if (receipt.getPublish() == ProjectInfo.DONT_PUBLISH) {
+                                            else if(!customerHasCredit(receipt))
+                                                Toast.makeText(mContext, getResources().getString(R.string.str_message_less_remain_credit_customer), Toast.LENGTH_SHORT).show();
+                                            else
                                                 Dialogdelete();
-                                            } else
-                                                Toast.makeText(mContext, getResources().getString(R.string.str_message_publish_delete), Toast.LENGTH_SHORT).show();
-                                        }
-
+                                        } else
+                                            Toast.makeText(mContext, getResources().getString(R.string.str_message_publish_delete), Toast.LENGTH_SHORT).show();
                                         break;
                                     case R.id.mnuEdit:
                                         if (receipt.getPublish() == ProjectInfo.DONT_PUBLISH) {
@@ -375,6 +359,20 @@ public class ReceiptsListActivity extends BaseActivity {
 
                     }
                 });
+            }
+        }
+
+        public boolean customerHasCredit(Receipt receipt) {
+            int customerId = receipt.getPersonId();
+            if(customerId == 0)
+                return true;
+            Customer customer = db.getCustomerWithPersonId(customerId);
+            double customerCredit = customer.getCredit();
+            if (customerCredit == -1)
+                return true;
+            else {
+                double customerCreditValue = customerCredit + db.getTotalCustomerReceiptWithId(customerId) - db.getTotalPriceInvoicePerPerson(customerId);
+                return customerCreditValue - savedCashedAndCheque >= 0;
             }
         }
 
@@ -657,6 +655,25 @@ public class ReceiptsListActivity extends BaseActivity {
 
         }
 
+    }
+
+    private boolean visitorHasCredit() {
+        //اعتبار ویزیتور
+        mVisitorCredit = mVisitor.getTotalCredit();
+        if(mVisitorCredit == -1)
+            return true;
+        //مجموع تمام فاکتور ها چه ارسال شده یا نشده
+        TotalPriceInvoice = db.getPurePriceInvoice();
+        //مجموع تمام دریافتی ها چه ارسال شده یا نشده
+        TotalReceipt = db.getTotalPriceReceipt();
+        //اعتبار مصرف شده
+        mSpentCredit = TotalPriceInvoice - TotalReceipt;
+        //اعتبار باقیمانده = اعتبار ویزیتور - اعتبار  مصرف شده
+        remainCredit = mVisitorCredit - mSpentCredit;
+        //میزان دریافتی های مربوط به این ReceiptId
+        savedCashedAndCheque = db.getTotalReceiptWithId(ReceiptId);
+
+        return remainCredit - savedCashedAndCheque > 0;
     }
 
     public void FillPrintView(View view) {

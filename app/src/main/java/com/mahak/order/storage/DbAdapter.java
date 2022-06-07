@@ -1931,8 +1931,8 @@ public class DbAdapter {
         visitorProduct.setProductDetailId(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_ProductDetailId)));
         visitorProduct.setVisitorProductId(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_VisitorProductId)));
         visitorProduct.setVisitorId(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_USER_ID)));
-        visitorProduct.setCount1(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_Count1)));
-        visitorProduct.setCount2(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_Count2)));
+        visitorProduct.setCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_Count1)));
+        visitorProduct.setCount2(cursor.getDouble(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_Count2)));
         visitorProduct.setPrice(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_Price)));
         visitorProduct.setSerials(cursor.getString(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_Serials)));
         visitorProduct.setDelete(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_Deleted)));
