@@ -67,8 +67,6 @@ import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.threeLevelAdapter.Item;
 import com.mahak.order.widget.FontAlertDialog;
 import com.mahak.order.widget.SortDialogActivity;
-import com.multilevelview.MultiLevelAdapter;
-import com.multilevelview.MultiLevelRecyclerView;
 import com.multilevelview.models.RecyclerViewItem;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
@@ -152,9 +150,9 @@ public class ProductPickerListActivity extends BaseActivity {
     private ImageView close_category;
     private LinearLayout ll_category;
     private LinearLayout category_layout;
-    private LinearLayout show_all_product;
-    private MultiLevelRecyclerView multiLevelRecyclerView;
+    private RecyclerView multiLevelRecyclerView;
     public static int clickedItemCategoryCode = 0;
+    static int row_index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -467,8 +465,7 @@ public class ProductPickerListActivity extends BaseActivity {
         ArrayAssetProduct = getResources().getStringArray(R.array.array_asset_product);
         db = new DbAdapter(mContext);
 
-        multiLevelRecyclerView = (MultiLevelRecyclerView) findViewById(R.id.rv_list);
-        show_all_product = (LinearLayout) findViewById(R.id.show_all_product);
+        multiLevelRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         ll_category = (LinearLayout) findViewById(R.id.ll_category);
         show_category = (ImageView) findViewById(R.id.show_category);
         category_layout = (LinearLayout) findViewById(R.id.category_layout);
@@ -482,15 +479,6 @@ public class ProductPickerListActivity extends BaseActivity {
         if (productCategories.size() == 0){
             category_layout.setVisibility(View.GONE);
         }
-
-       /* if(clickedItemCategoryCode != 0){
-
-            close_category.setVisibility(View.VISIBLE);
-            show_category.setVisibility(View.GONE);
-            ll_category.setVisibility(View.VISIBLE);
-
-            addAllRelatedCategory();
-        }*/
 
         show_category.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -513,42 +501,18 @@ public class ProductPickerListActivity extends BaseActivity {
                 ll_category.setVisibility(View.GONE);
             }
         });
-
-        show_all_product.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                clickedItemCategoryCode = 0;
-                getProducts();
-            }
-        });
     }
 
     private void addAllRelatedCategory() {
-        ArrayList<Category> rootCategories;
-        rootCategories = db.getAllRootCategories();
-
+        ArrayList<Category> rootCategories = new ArrayList<>();
+        Category category = new Category();
+        category.setCategoryName("تمام کالاها");
+        category.setCategoryCode(0);
+        rootCategories.add(category);
+        rootCategories.addAll(db.getAllRootCategories());
         multiLevelRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        List<Item> itemList = (List<Item>) recursivePopulateData(rootCategories.size(), rootCategories);
-        MyLevelCategoryAdapter myAdapter = new MyLevelCategoryAdapter(mContext, itemList, multiLevelRecyclerView);
-
+        CategoryAdapter2 myAdapter = new CategoryAdapter2(rootCategories, mContext);
         multiLevelRecyclerView.setAdapter(myAdapter);
-        multiLevelRecyclerView.setToggleItemOnClick(false);
-        multiLevelRecyclerView.setAccordion(false);
-
-    }
-
-    private List<?> recursivePopulateData(int depth, ArrayList<Category> rootCategories) {
-        List<RecyclerViewItem> itemList = new ArrayList<>();
-        for (int i = 0; i < depth; i++) {
-            Item item = new Item(i);
-            item.setText(rootCategories.get(i).getCategoryName());
-            item.setCategoryCode(rootCategories.get(i).getCategoryCode());
-            ArrayList<Category> LevelCategories = db.getAllCategoryWithParentCode(rootCategories.get(i).getCategoryCode());
-            item.setCategoryChildren(LevelCategories);
-            item.addChildren((List<RecyclerViewItem>) recursivePopulateData(LevelCategories.size(), LevelCategories));
-            itemList.add(item);
-        }
-        return itemList;
     }
 
     /**
@@ -1660,83 +1624,66 @@ public class ProductPickerListActivity extends BaseActivity {
         return dialog;
     }
 
-    public class MyLevelCategoryAdapter extends MultiLevelAdapter {
+    public class CategoryAdapter2 extends RecyclerView.Adapter<CategoryAdapter2.ViewHolder> {
 
-        private MyLevelCategoryAdapter.Holder mViewHolder;
-        private Context mContext;
-        private List<Item> mListItems = new ArrayList<>();
-        private Item mItem;
-        private MultiLevelRecyclerView mMultiLevelRecyclerView;
-
-        public MyLevelCategoryAdapter(Context mContext, List<Item> mListItems, MultiLevelRecyclerView mMultiLevelRecyclerView) {
-            super(mListItems);
-            this.mListItems = mListItems;
-            this.mContext = mContext;
-            this.mMultiLevelRecyclerView = mMultiLevelRecyclerView;
-        }
-
-        private void setExpandButton(ImageView expandButton, boolean isExpanded) {
-            expandButton.setImageResource(isExpanded ? R.drawable.ic_keyboard_arrow_up_black_24dp : R.drawable.ic_keyboard_arrow_down_black_24dp);
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new MyLevelCategoryAdapter.Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            mViewHolder = (MyLevelCategoryAdapter.Holder) holder;
-            mItem = mListItems.get(position);
-
-            if (mItem.hasChildren())
-                holder.itemView.setBackgroundColor(Color.parseColor("#efefef"));
-            else {
-                holder.itemView.setBackgroundColor(Color.parseColor("#dedede"));
-                mViewHolder.mTitle.setTextSize(14);
-            }
-
-            mViewHolder.mTitle.setText(mItem.getText());
-
-            if (mItem.hasChildren() && mItem.getChildren().size() > 0) {
-                mViewHolder.mExpandButton.setVisibility(View.VISIBLE);
-            } else {
-                mViewHolder.mExpandButton.setVisibility(View.GONE);
-            }
-        }
+        private ArrayList<Category> categories;
+        private LayoutInflater mInflater;
+        private ArrayList<Category> arrayOriginal = new ArrayList<>();
 
 
-        private class Holder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
 
             TextView mTitle;
-            ImageView mExpandIcon;
-            LinearLayout mTextBox, mExpandButton, item_category;
+            LinearLayout mTextBox, item_category;
 
-            Holder(View itemView) {
+            ViewHolder(View itemView) {
                 super(itemView);
                 mTitle = (TextView) itemView.findViewById(R.id.title);
-                mExpandIcon = (ImageView) itemView.findViewById(R.id.image_view);
                 mTextBox = (LinearLayout) itemView.findViewById(R.id.text_box);
                 item_category = (LinearLayout) itemView.findViewById(R.id.item_category);
-                mExpandButton = (LinearLayout) itemView.findViewById(R.id.expand_field);
-
-                item_category.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ArrayList<Product> productArrayList;
-                        clickedItemCategoryCode = mListItems.get(getAdapterPosition()).getCategoryCode();
-                        getProducts();
-                    }
-                });
-                mExpandButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mMultiLevelRecyclerView.toggleItemsGroup(getAdapterPosition());
-                        mExpandIcon.animate().rotation(mListItems.get(getAdapterPosition()).isExpanded() ? -180 : 0).start();
-                    }
-                });
             }
         }
 
+        public CategoryAdapter2( ArrayList<Category> categories, Context context) {
+
+            this.categories = categories;
+            this.mInflater = LayoutInflater.from(context);
+            arrayOriginal.addAll(categories);
+        }
+
+        @Override
+        public CategoryAdapter2.ViewHolder onCreateViewHolder(ViewGroup parent,int viewType) {
+            View view = mInflater.inflate(R.layout.item_layout2, parent, false);
+            return new CategoryAdapter2.ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(CategoryAdapter2.ViewHolder holder, final int position) {
+            holder.mTitle.setText(categories.get(position).getCategoryName());
+
+            holder.item_category.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickedItemCategoryCode = categories.get(position).getCategoryCode();
+                    getProducts();
+                    row_index=position;
+                    notifyDataSetChanged();
+                }
+            });
+
+            if(row_index==position){
+                holder.item_category.setBackgroundColor(Color.parseColor("#dedede"));
+            }
+            else
+            {
+                holder.item_category.setBackgroundColor(Color.parseColor("#f4f4f4"));
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return categories.size();
+        }
     }
+
 }
