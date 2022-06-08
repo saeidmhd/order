@@ -179,7 +179,7 @@ public class ReceiptsListActivity extends BaseActivity {
                 customer = db.getCustomerWithPersonId(item.getPersonId());
                 item.setCustomerName(customer.getName());
             }
-            arrayCheque = db.getAllCheque(item.getId());
+            arrayCheque = db.getAllCheque(item.getReceiptClientId());
 
             double totalCheque = 0, totalCashReceipt = 0, totalAmount = 0;
 
@@ -690,7 +690,7 @@ public class ReceiptsListActivity extends BaseActivity {
             receipt.setCustomerName(customer.getName());
         }
 
-        arrayCheque = db.getAllCheque(receipt.getId());
+        arrayCheque = db.getAllCheque(receipt.getReceiptClientId());
         double totalCheque = 0, totalCashReceipt = 0, totalAmount = 0;
         for (int i = 0; i < arrayCheque.size(); i++) {
             if (arrayCheque.get(i).getType() == ProjectInfo.CHEQUE_TYPE)
@@ -1068,7 +1068,7 @@ public class ReceiptsListActivity extends BaseActivity {
         for (int i = 0; i < receipts.size(); i++) {
             if (receipts.get(i).getPersonId() == 0)
                 customers.add(db.getCustomerWithPersonClientId(receipts.get(i).getPersonClientId()));
-            cheques.addAll(db.getAllCheque(receipts.get(i).getId()));
+            cheques.addAll(db.getAllCheque(receipts.get(i).getReceiptClientId()));
         }
 
         setAllDataBody.setReceipts(receipts);

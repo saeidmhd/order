@@ -730,6 +730,8 @@
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/_llReceiptDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/black"
@@ -752,7 +754,6 @@
                         android:textStyle="bold" />
                 </LinearLayout>
                 <LinearLayout
-                    android:id="@+id/_llReceiptDetail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
@@ -769,17 +770,7 @@
                         android:dividerHeight="0dp"
                         android:visibility="visible"
                         android:listSelector="@android:color/transparent"
-                        android:padding="0dip" />
-
-                    <com.mahak.order.widget.BoldPrintTextView
-                        style="@style/forms_page_title_label_default380"
-                        android:textSize="16sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:text="@string/str_print_remaining_final_person"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold" />
+                        android:padding="0dip"/>
                 </LinearLayout>
             </LinearLayout>
 

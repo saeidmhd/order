@@ -1219,7 +1219,7 @@ public class OrdersListActivity extends BaseActivity {
             arrayReceipt = db.getAllReceipt(code);
             arrayCheque = new ArrayList<>();
             for (int i = 0; i < arrayReceipt.size(); i++) {
-                arrayCheque.addAll(db.getAllCheque(arrayReceipt.get(i).getId()));
+                arrayCheque.addAll(db.getAllCheque(arrayReceipt.get(i).getReceiptClientId()));
             }
             if (arrayInvoice.get(0).getPersonClientId() != 0) {
                 Customers.add(db.getCustomerWithPersonClientId(arrayInvoice.get(0).getPersonClientId()));

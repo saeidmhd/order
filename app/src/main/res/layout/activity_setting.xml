@@ -486,6 +486,14 @@
                         android:layout_height="match_parent"
                         android:text="نمایش فی مصرف کننده در چاپ" />
 
+                    <com.mahak.order.widget.FontCheckBox
+                        android:id="@+id/chk_receipt_detail_print"
+                        style="@style/forms_checkbox_default"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="نمایش جزییات دریافتی" />
+
                 </LinearLayout>
 
 

@@ -4685,8 +4685,8 @@ public class DbAdapter {
         long TotalReceipt = 0;
         try {
             String rawquery = "select sum(" + DbSchema.ReceiptSchema.COLUMN_CASHAMOUNT + "+ifnull((select sum(" + DbSchema.ChequeSchema.COLUMN_AMOUNT + ") from "
-                    + DbSchema.ChequeSchema.TABLE_NAME + " where " + DbSchema.ChequeSchema.COLUMN_RECEIPTID
-                    + "=" + DbSchema.ReceiptSchema.TABLE_NAME + "." + DbSchema.ReceiptSchema.COLUMN_ID + "),0)) as totalsum"
+                    + DbSchema.ChequeSchema.TABLE_NAME + " where " + DbSchema.ChequeSchema.COLUMN_ReceiptClientId
+                    + "=" + DbSchema.ReceiptSchema.TABLE_NAME + "." + DbSchema.ReceiptSchema.COLUMN_ReceiptClientId + "),0)) as totalsum"
                     + " from " + DbSchema.ReceiptSchema.TABLE_NAME + " where " + DbSchema.ReceiptSchema.COLUMN_CODE + "=" + "'" + code + "'";
 
 
@@ -6870,12 +6870,12 @@ public class DbAdapter {
         return array;
     }
 
-    public ArrayList<Cheque> getAllCheque(long receiptid) {
+    public ArrayList<Cheque> getAllCheque(long receiptClientId) {
         Cheque cheque;
         Cursor cursor;
         ArrayList<Cheque> array = new ArrayList<>();
         try {
-            cursor = mDb.query(DbSchema.ChequeSchema.TABLE_NAME, null, DbSchema.ChequeSchema.COLUMN_RECEIPTID + "=?", new String[]{String.valueOf(receiptid)}, null, null, null);
+            cursor = mDb.query(DbSchema.ChequeSchema.TABLE_NAME, null, DbSchema.ChequeSchema.COLUMN_ReceiptClientId + "=?", new String[]{String.valueOf(receiptClientId)}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {

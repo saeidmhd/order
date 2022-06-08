@@ -43,7 +43,7 @@ public class SettingActivity extends AppCompatActivity {
 
     private static final int FOLDER_CODE = 131;
     private DbAdapter db;
-    private CheckBox chkReduceAsset, chkShowField, chkShowSign, chkShowBelow, chkShowBelowPrice, chkTemplate2 , chk_tracking_code,chk_market_name,chk_customer_name,chk_count_product,chk_arabic_receipt , chk_fee_print;
+    private CheckBox chkReduceAsset, chkShowField, chkShowSign, chkShowBelow, chkShowBelowPrice, chkTemplate2 , chk_tracking_code,chk_market_name,chk_customer_name,chk_count_product,chk_arabic_receipt , chk_fee_print,chk_receipt_detail_print;
     private RelativeLayout rvReduceAsset;
     private TextView tvReduceAsset,deviceId;
     private EditText txtChargePercent, txtTaxPercent;
@@ -224,6 +224,14 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 SharedPreferencesHelper.set_chk_show_consumer_fee(mContext, chk_fee_print.isChecked());
+
+            }
+        });
+        chk_receipt_detail_print.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SharedPreferencesHelper.set_chk_show_receipt_detail(mContext, chk_receipt_detail_print.isChecked());
 
             }
         });
@@ -428,6 +436,7 @@ public class SettingActivity extends AppCompatActivity {
         chkShowBelowPrice = (CheckBox) findViewById(R.id.chkBelowPrice);
         chkTemplate2 = (CheckBox) findViewById(R.id.chkTemplate2);
         chk_fee_print = (CheckBox) findViewById(R.id.chk_fee_print);
+        chk_receipt_detail_print = (CheckBox) findViewById(R.id.chk_receipt_detail_print);
         chk_arabic_receipt = (CheckBox) findViewById(R.id.chk_arabic_receipt);
         rvReduceAsset = (RelativeLayout) findViewById(R.id.rvReduceAsset);
         tvReduceAsset = (TextView) findViewById(R.id.tvReduceAsset);
@@ -484,6 +493,7 @@ public class SettingActivity extends AppCompatActivity {
 
         chkShowBelow.setChecked(SharedPreferencesHelper.getDetailUnderFactor(mContext));
         chk_fee_print.setChecked(SharedPreferencesHelper.get_chk_show_consumer_fee(mContext));
+        chk_receipt_detail_print.setChecked(SharedPreferencesHelper.get_chk_show_receipt_detail(mContext));
 
         chkShowBelowPrice.setChecked(SharedPreferencesHelper.getBelowPrice(mContext));
 

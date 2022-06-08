@@ -64,6 +64,7 @@ import retrofit2.Response;
 
 import static com.mahak.order.common.ServiceTools.formatCount;
 import static com.mahak.order.common.ServiceTools.getDateAndTimeForLong;
+import static com.mahak.order.common.ServiceTools.getDateForLong;
 
 public class OrderDetailActivity extends BaseActivity {
 
@@ -502,11 +503,17 @@ public class OrderDetailActivity extends BaseActivity {
 
         LinearLayout ll_consumer_price_box = (LinearLayout) view.findViewById(R.id.ll_consumer_price_box);
         LinearLayout ll_consumer_fee_box = (LinearLayout) view.findViewById(R.id.ll_consumer_fee_box);
+        LinearLayout _llReceiptDetail = (LinearLayout) view.findViewById(R.id._llReceiptDetail);
 
         if (SharedPreferencesHelper.get_chk_show_consumer_fee(mContext)) {
             if(ll_consumer_fee_box != null && ll_consumer_price_box != null ) {
                 ll_consumer_fee_box.setVisibility(View.VISIBLE);
                 ll_consumer_price_box.setVisibility(View.VISIBLE);
+            }
+        }
+        if (SharedPreferencesHelper.get_chk_show_receipt_detail(mContext)) {
+            if(_llReceiptDetail != null) {
+                _llReceiptDetail.setVisibility(View.VISIBLE);
             }
         }
 
@@ -587,27 +594,31 @@ public class OrderDetailActivity extends BaseActivity {
         db.open();
         ArrayList<Receipt> receipts =  db.getAllReceiptWithTrackingCode(order.getCode());
         ArrayList<PrintReceipt> printReceipts = new ArrayList<>();
+        PrintReceipt printReceipt;
 
         for(Receipt receipt : receipts){
-            PrintReceipt printReceipt = new PrintReceipt();
-            printReceipt.setReceiptType(ProjectInfo.TYPE_CASH);
-            printReceipt.setReceiptName("وجه نقد : " + ServiceTools.formatPrice(receipt.getCashAmount()));
-            printReceipt.setAmount(receipt.getCashAmount());
-            printReceipts.add(printReceipt);
-
-            ArrayList<Cheque> arrayCheque = db.getAllCheque(receipt.getId());
+            if (receipt.getCashAmount() > 0){
+                printReceipt = new PrintReceipt();
+                printReceipt.setReceiptType(ProjectInfo.TYPE_CASH);
+                printReceipt.setReceiptName("وجه نقد : " + ServiceTools.formatPrice(receipt.getCashAmount()));
+                printReceipt.setAmount(receipt.getCashAmount());
+                printReceipts.add(printReceipt);
+            }
+            ArrayList<Cheque> arrayCheque = db.getAllCheque(receipt.getReceiptClientId());
             for (int i = 0; i < arrayCheque.size(); i++) {
                 Cheque cheque = arrayCheque.get(i);
                 if (arrayCheque.get(i).getType() == ProjectInfo.CHEQUE_TYPE){
+                    printReceipt = new PrintReceipt();
                     printReceipt.setReceiptType(ProjectInfo.CHEQUE_TYPE);
                     printReceipt.setAmount(arrayCheque.get(i).getAmount());
-                    printReceipt.setReceiptName("چک دریافتی به مبلغ" + " " + ServiceTools.formatPrice(cheque.getAmount()) + " "  + cheque.getBankName() + " " + cheque.getDate());
+                    printReceipt.setReceiptName("چک دریافتی به مبلغ" + " " + ServiceTools.formatPrice(cheque.getAmount()) + " "  + cheque.getBankName() + " به تاریخ "  + getDateForLong(cheque.getDate()));
                     printReceipts.add(printReceipt);
                 }
                 else if (arrayCheque.get(i).getType() == ProjectInfo.CASHRECEIPT_TYPE){
+                    printReceipt = new PrintReceipt();
                     printReceipt.setReceiptType(ProjectInfo.CASHRECEIPT_TYPE);
                     printReceipt.setAmount(arrayCheque.get(i).getAmount());
-                    printReceipt.setReceiptName("حواله دریافتی به مبلغ" + " " + ServiceTools.formatPrice(cheque.getAmount()) + " "  + cheque.getBankName() + " " + cheque.getDate());
+                    printReceipt.setReceiptName("حواله دریافتی به مبلغ" + " " + ServiceTools.formatPrice(cheque.getAmount()) + " "  + cheque.getBankName() + " به تاریخ "  + getDateForLong(cheque.getDate()));
                     printReceipts.add(printReceipt);
                 }
             }
@@ -617,7 +628,7 @@ public class OrderDetailActivity extends BaseActivity {
 
         _lstGroupedReceipt.setDrawingCacheEnabled(true);
         _lstGroupedReceipt.setAdapter(_adReceipt);
-        ServiceTools.setListViewHeightBasedOnChildren(_lstGroupedReceipt);
+        ServiceTools.setListViewChequeHeightBasedOnChildren(_lstGroupedReceipt);
 
 
         if (SharedPreferencesHelper.getCurrentLanguage(mContext).equals("de_DE")) {

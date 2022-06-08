@@ -27,6 +27,7 @@ public class SharedPreferencesHelper {
     private static String PREF_chk_count_product = "chk_count_product";
 
     private static String PREF_chk_show_consumer_fee = "chk_show_consumer_fee";
+    private static String PREF_chk_show_receipt_detail = "chk_show_receipt_detail";
 
 
     public static int getCurrentWidthSize(Context ctx) {
@@ -162,12 +163,22 @@ public class SharedPreferencesHelper {
         editor.putBoolean(PREF_chk_show_consumer_fee, value);
         editor.commit();
     }
+    public static void set_chk_show_receipt_detail(Context ctx, boolean value) {
+
+        SharedPreferences perfs = ctx.getSharedPreferences(PREF_chk_show_receipt_detail, Context.MODE_PRIVATE);
+        Editor editor = perfs.edit();
+        editor.putBoolean(PREF_chk_show_receipt_detail, value);
+        editor.commit();
+    }
 
     public static boolean get_chk_market_name(Context ctx) {
         return ctx.getSharedPreferences(PREF_chk_market_name, Context.MODE_PRIVATE).getBoolean(PREF_chk_market_name, true);
     }
     public static boolean get_chk_show_consumer_fee(Context ctx) {
         return ctx.getSharedPreferences(PREF_chk_show_consumer_fee, Context.MODE_PRIVATE).getBoolean(PREF_chk_show_consumer_fee, false);
+    }
+    public static boolean get_chk_show_receipt_detail(Context ctx) {
+        return ctx.getSharedPreferences(PREF_chk_show_receipt_detail, Context.MODE_PRIVATE).getBoolean(PREF_chk_show_receipt_detail, false);
     }
 
 

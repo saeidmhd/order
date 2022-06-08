@@ -43,7 +43,9 @@
         <entry key="app/src/main/res/layout/lst_cart_item.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/lst_customer_item.xml" value="0.25885416666666666" />
         <entry key="app/src/main/res/layout/lst_detail_item2.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/lst_grouped_tax_for_print.xml" value="0.5" />
         <entry key="app/src/main/res/layout/lst_product_picker_item.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/lst_receipt_for_print.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/print_order_detail_item.xml" value="0.22" />
         <entry key="app/src/main/res/layout/print_order_detail_item2.xml" value="0.17135416666666667" />
         <entry key="app/src/main/res/layout/print_szzt_urovo_item.xml" value="0.24114583333333334" />

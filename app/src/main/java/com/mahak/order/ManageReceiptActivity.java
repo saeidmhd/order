@@ -845,7 +845,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         } else
             Code = ProjectInfo.DONT_CODE;
         //Read arrayCheque From Database And Set Adapter_______
-        arrayCheque = db.getAllCheque(receipt.getId());
+        arrayCheque = db.getAllCheque(receipt.getReceiptClientId());
         adCheque = new AdapterCheque(mActivity, arrayCheque);
         lstCheque.setAdapter(adCheque);
         ServiceTools.setListViewChequeHeightBasedOnChildren(lstCheque);

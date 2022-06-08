@@ -258,7 +258,7 @@ public class AutoSyncService extends IntentService {
             arrayCheque = new ArrayList<>();
 
             for (int i = 0; i < arrayReceipt.size(); i++) {
-                arrayCheque.addAll(db.getAllCheque(arrayReceipt.get(i).getId()));
+                arrayCheque.addAll(db.getAllCheque(arrayReceipt.get(i).getReceiptClientId()));
             }
             arrayNonRegister = db.getAllNonRegisterNotPublish(BaseActivity.getPrefUserId());
             newCustomers = new ArrayList<>(db.getAllNewCustomer());

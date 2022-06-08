@@ -585,7 +585,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     toast.setGravity(Gravity.CENTER, 0, 16);
                     toast.show();
                     resetTextViews();
-                    mScrollView.fullScroll(View.FOCUS_UP);
+                    //mScrollView.fullScroll(View.FOCUS_UP);
                     Calendar cal = Calendar.getInstance();
                     setPrefSyncId(String.valueOf(cal.getTimeInMillis() / 1000));
                     //Save db
@@ -703,7 +703,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             arrayCheque = new ArrayList<>();
 
             for (int i = 0; i < arrayReceipt.size(); i++) {
-                arrayCheque.addAll(db.getAllCheque(arrayReceipt.get(i).getId()));
+                arrayCheque.addAll(db.getAllCheque(arrayReceipt.get(i).getReceiptClientId()));
             }
             arrayNonRegister = db.getAllNonRegisterNotPublish(BaseActivity.getPrefUserId());
             newCustomers = new ArrayList<>(db.getAllNewCustomer());
@@ -933,6 +933,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     getAllDataBody.setFromVisitorPersonVersion(VisitorPersonMaxRowVersion);
                     break;
                 case 5:
+                    mScrollView.fullScroll(View.FOCUS_DOWN);
                     CustomersGroupMaxRowVersion = db.getMaxRowVersion(DbSchema.CustomersGroupSchema.TABLE_NAME);
                     getAllDataBody.setFromPersonGroupVersion(CustomersGroupMaxRowVersion);
                     break;

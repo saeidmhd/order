@@ -562,7 +562,7 @@ public class ServiceTools {
         if(listAdapter.getCount()>0){
             View listItem = listAdapter.getView(0, null, listView);
             listItem.measure(0, 0);
-            totalHeight += listItem.getMeasuredHeight() * listAdapter.getCount();
+            totalHeight += listItem.getMeasuredHeight() * (listAdapter.getCount());
         }
         /*for (int i = 0; i < listAdapter.getCount(); i++) {
             View listItem = listAdapter.getView(i, null, listView);
