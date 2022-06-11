@@ -34,8 +34,9 @@
         <entry key="app/src/main/res/layout/detail_select3new.xml" value="0.2171875" />
         <entry key="app/src/main/res/layout/expandlist_child_receipt.xml" value="0.225" />
         <entry key="app/src/main/res/layout/expandlist_group_receipt.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/factor_print_50mm.xml" value="0.1859375" />
         <entry key="app/src/main/res/layout/factor_print_szzt.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/factor_print_template.xml" value="0.24114583333333334" />
+        <entry key="app/src/main/res/layout/factor_print_template.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_invoice_goods_detail.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/fragment_products_list.xml" value="0.18" />
         <entry key="app/src/main/res/layout/item_layout.xml" value="0.33" />

@@ -148,7 +148,6 @@ public class ProductListFragment extends Fragment {
             }
         }
 
-        final TextView finalTxtSearch = txtSearch;
         lstProduct.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -163,21 +162,24 @@ public class ProductListFragment extends Fragment {
                     db.open();
                 }
                 if (dy > 0) {
-                    if(finalTxtSearch != null){
-                        if(TextUtils.isEmpty(finalTxtSearch.getText())){
+                        visibleItemCount = lstProduct.getChildCount();
+                        totalItemCount = layoutManager.getItemCount();
+                        firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
 
-                            visibleItemCount = lstProduct.getChildCount();
-                            totalItemCount = layoutManager.getItemCount();
-                            firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+                        if((firstVisibleItem + visibleItemCount) >= totalItemCount){
 
-                            if((firstVisibleItem + visibleItemCount) >= totalItemCount){
-                                if (type == ProjectInfo.TYPE_INVOCIE)
-                                    getAdapter().addAll(db.getAllProduct(clickedItemCategoryCode,CategoryId,ProjectInfo.ASSET_EXIST_PRODUCT,totalItemCount));
-                                else
-                                    getAdapter().addAll(db.getAllProduct(clickedItemCategoryCode,CategoryId,MODE_ASSET,totalItemCount));
+                            String SearchString = "";
+                            if (productPickerListActivity != null) {
+                                SearchString = ProductPickerListActivity.txtSearch.getText().toString();
+                            } else if (productsListActivity != null) {
+                                SearchString = ProductsListActivity.txtSearch.getText().toString();
                             }
+
+                            if (type == ProjectInfo.TYPE_INVOCIE)
+                                getAdapter().addAll(db.getAllProduct(SearchString, clickedItemCategoryCode,CategoryId,ProjectInfo.ASSET_EXIST_PRODUCT,totalItemCount));
+                            else
+                                getAdapter().addAll(db.getAllProduct(SearchString, clickedItemCategoryCode,CategoryId,MODE_ASSET,totalItemCount));
                         }
-                    }
                 }
             }
         });

@@ -2,22 +2,16 @@ package com.mahak.order.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,21 +19,12 @@ import com.mahak.order.ProductItemInitialize;
 import com.mahak.order.ProductPickerListActivity;
 import com.mahak.order.ProductsListActivity;
 import com.mahak.order.R;
-import com.mahak.order.common.Category;
 import com.mahak.order.common.Product;
-import com.mahak.order.common.ProductCategory;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.storage.DbAdapter;
-import com.mahak.order.threeLevelAdapter.Item;
-import com.multilevelview.MultiLevelAdapter;
-import com.multilevelview.MultiLevelRecyclerView;
-import com.multilevelview.models.RecyclerViewItem;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import static com.mahak.order.BaseActivity.CUSTOMER_GROUP_KEY;
 
@@ -175,9 +160,6 @@ public class PlaceholderListGalleryFragment extends Fragment {
             }
         }
 
-
-
-        final TextView finalTxtSearch = txtSearch;
         lstProduct.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -188,20 +170,23 @@ public class PlaceholderListGalleryFragment extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0) {
-                    if(finalTxtSearch != null){
-                        if(TextUtils.isEmpty(finalTxtSearch.getText())){
+                    visibleItemCount = lstProduct.getChildCount();
+                    totalItemCount = layoutManager.getItemCount();
+                    firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
 
-                            visibleItemCount = lstProduct.getChildCount();
-                            totalItemCount = layoutManager.getItemCount();
-                            firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+                    if((firstVisibleItem + visibleItemCount) >= totalItemCount){
 
-                            if((firstVisibleItem + visibleItemCount) >= totalItemCount){
-                                if (type == ProjectInfo.TYPE_INVOCIE)
-                                    getAdapter().addAll(db.getAllProduct(clickedItemCategoryCode,CategoryId,ProjectInfo.ASSET_EXIST_PRODUCT,totalItemCount));
-                                else
-                                    getAdapter().addAll(db.getAllProduct(clickedItemCategoryCode,CategoryId,MODE_ASSET,totalItemCount));
-                            }
+                        String SearchString = "";
+                        if (productPickerListActivity != null) {
+                            SearchString = ProductPickerListActivity.txtSearch.getText().toString();
+                        } else if (productsListActivity != null) {
+                            SearchString = ProductsListActivity.txtSearch.getText().toString();
                         }
+
+                        if (type == ProjectInfo.TYPE_INVOCIE)
+                            getAdapter().addAll(db.getAllProduct(SearchString, clickedItemCategoryCode,CategoryId,ProjectInfo.ASSET_EXIST_PRODUCT,totalItemCount));
+                        else
+                            getAdapter().addAll(db.getAllProduct(SearchString, clickedItemCategoryCode,CategoryId,MODE_ASSET,totalItemCount));
                     }
                 }
             }

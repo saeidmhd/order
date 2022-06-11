@@ -138,6 +138,7 @@
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:text="ثبت نشده"
                 android:gravity="left"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/print_text_size" />
@@ -176,6 +177,62 @@
                 android:layout_marginLeft="@dimen/LargeSize"
                 android:gravity="right"
                 android:text="@string/str_username"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/print_text_size" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.mahak.order.widget.PrintTextView
+                android:id="@+id/_tvAddress"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="ثبت نشده"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/print_text_size" />
+
+            <com.mahak.order.widget.PrintTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/LargeSize"
+                android:gravity="right"
+                android:text="آدرس فروشگاه"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/print_text_size" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.mahak.order.widget.PrintTextView
+                android:id="@+id/_tvPhone"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="ثبت نشده"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/print_text_size" />
+
+            <com.mahak.order.widget.PrintTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/LargeSize"
+                android:gravity="right"
+                android:text="شماره تماس"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/print_text_size" />
         </LinearLayout>

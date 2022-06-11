@@ -16,8 +16,6 @@ import android.util.Log;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.common.Bank;
 import com.mahak.order.common.Category;
@@ -80,6 +78,7 @@ import static com.mahak.order.BaseActivity.getPrefUserId;
 import static com.mahak.order.BaseActivity.getPrefUserMasterId;
 import static com.mahak.order.BaseActivity.mContext;
 import static com.mahak.order.common.ServiceTools.RegulartoDouble;
+import static com.mahak.order.common.ServiceTools.getLikeString;
 
 public class DbAdapter {
 
@@ -5338,52 +5337,51 @@ public class DbAdapter {
         return order;
     }
 
-    private Cursor getAllProductQuery(long categoryCode , long id, String LIMIT, String orderBy, int modeasset, int defPriceLevel) {
+    private Cursor getAllProductQuery(String searchStr, long categoryCode, long categoryId, String LIMIT, int mode_asset) {
         Cursor cursor;
-        if (defPriceLevel == 0) {
-            cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName  , ProductDetail.productDetailId , pc.CategoryCode , " +
-                    " case DefaultSellPriceLevel  " +
-                    " when 1 then Price1 " +
-                    " when 2 then Price2 " +
-                    " when 3 then price3 " +
-                    " when 4 then price4 " +
-                    " when 5 then price5 " +
-                    " when 6 then price6 " +
-                    " when 7 then price7 " +
-                    " when 8 then price8 " +
-                    " when 9 then price9 " +
-                    " when 10 then price10 end as price , productdetail.Customerprice , sum(visitorproduct.Count1) as sumcount1 , sum(visitorproduct.Count2) as sumcount2 " +
-                    " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                    " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userid = products.userid" +
-                    " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4" +
-                    " LEFT  join ( SELECT DISTINCT userid , productcode , CategoryCode from ProductCategory ) as pc on  products.ProductCode = pc.ProductCode " +
-                    " where " + DbSchema.ProductSchema.TABLE_NAME + " . " + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                    getProductAssetStrnig(modeasset) +
-                    getProductCategoryString(id) + getCategoryString2(categoryCode) + " and visitorproduct.deleted = 0 " + " GROUP by Products.productId " + " order by " + orderBy  + " LIMIT " + LIMIT, null);
-        } else {
-            cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel , PromotionId, UnitName2 , UnitName  , ProductDetail.productDetailId ,  , pc.CategoryCode, " +
-                    " case  " + defPriceLevel +
-                    " when 1 then Price1 " +
-                    " when 2 then Price2 " +
-                    " when 3 then price3 " +
-                    " when 4 then price4 " +
-                    " when 5 then price5 " +
-                    " when 6 then price6 " +
-                    " when 7 then price7 " +
-                    " when 8 then price8 " +
-                    " when 9 then price9 " +
-                    " when 10 then price10 end as price , productdetail.Customerprice , sum(visitorproduct.Count1) as sumcount1 , sum(visitorproduct.Count2) as sumcount2 " +
-                    " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                    " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userid = products.userid " +
-                    " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4 " +
-                    " LEFT  join ( SELECT DISTINCT userid , productcode , CategoryCode from ProductCategory ) as pc on  products.ProductCode = pc.ProductCode " +
-
-                    " where " + DbSchema.ProductSchema.TABLE_NAME + " . " + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                    getProductAssetStrnig(modeasset) +
-                    getProductCategoryString(id) + getCategoryString2(categoryCode)+ " and visitorproduct.deleted = 0 " + " GROUP by Products.productId " + " order by " + orderBy + " LIMIT " + LIMIT , null);
+        int defPriceLevel = BaseActivity.getPrefDefSellPrice();
+        String orderBy = BaseActivity.getPrefSortBase_product() + " " + BaseActivity.getPrefSortDirection();
+        if (ServiceTools.checkArabic(searchStr)) {
+            searchStr = ServiceTools.replaceWithEnglish(searchStr);
         }
-
+        cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName  , ProductDetail.productDetailId , pc.CategoryCode , " +
+                getPriceLevel(defPriceLevel) + " productdetail.Customerprice , sum(visitorproduct.Count1) as sumcount1 , sum(visitorproduct.Count2) as sumcount2 " +
+                " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
+                " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userid = products.userid" +
+                " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4" +
+                " LEFT  join ( SELECT DISTINCT userid , productcode , CategoryCode from ProductCategory ) as pc on  products.ProductCode = pc.ProductCode " +
+                " where " +  getSearchString(searchStr) + DbSchema.ProductSchema.TABLE_NAME + " . " + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId()
+                + getProductAssetStrnig(mode_asset) + getProductCategoryString(categoryId) + getCategoryString2(categoryCode)
+                + " and visitorproduct.deleted = 0 " + " GROUP by Products.productId " + " order by " + orderBy  + " LIMIT " + LIMIT, null);
         return cursor;
+    }
+
+    public String getPriceLevel(int defPriceLevel){
+        if (defPriceLevel != 0) {
+            return " case  " + defPriceLevel +
+                    " when 1 then Price1 " +
+                    " when 2 then Price2 " +
+                    " when 3 then price3 " +
+                    " when 4 then price4 " +
+                    " when 5 then price5 " +
+                    " when 6 then price6 " +
+                    " when 7 then price7 " +
+                    " when 8 then price8 " +
+                    " when 9 then price9 " +
+                    " when 10 then price10 end as price , ";
+        }else
+            return " case DefaultSellPriceLevel "  +
+                    " when 1 then Price1 " +
+                    " when 2 then Price2 " +
+                    " when 3 then price3 " +
+                    " when 4 then price4 " +
+                    " when 5 then price5 " +
+                    " when 6 then price6 " +
+                    " when 7 then price7 " +
+                    " when 8 then price8 " +
+                    " when 9 then price9 " +
+                    " when 10 then price10 end as price , ";
+
     }
 
 
@@ -5902,81 +5900,14 @@ public class DbAdapter {
         return array;
     }
 
-    public ArrayList<Product> searchProduct(String searchStr, long categoryCode ,int type, long CategoryId, int MODE_ASSET) {
-        Product product;
-        Cursor cursor;
-        String orderBy = BaseActivity.getPrefSortBase_product() + " " + BaseActivity.getPrefSortDirection();
-        if (ServiceTools.checkArabic(searchStr)) {
-            searchStr = ServiceTools.replaceWithEnglish(searchStr);
-        }
-        String LikeStr = ServiceTools.getLikeString(searchStr);
-        int defPriceLevel = BaseActivity.getPrefDefSellPrice();
-        ArrayList<Product> array = new ArrayList<>();
-        try {
-            if (defPriceLevel == 0) {
-                cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName  , ProductDetail.productDetailId , " +
-                        " case DefaultSellPriceLevel  " +
-                        " when 1 then Price1 " +
-                        " when 2 then Price2 " +
-                        " when 3 then price3 " +
-                        " when 4 then price4 " +
-                        " when 5 then price5 " +
-                        " when 6 then price6 " +
-                        " when 7 then price7 " +
-                        " when 8 then price8 " +
-                        " when 9 then price9 " +
-                        " when 10 then price10 end as price , productdetail.Customerprice , sum(visitorproduct.Count1) as sumcount1 , sum(visitorproduct.Count2) as sumcount2 " +
-                        " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                        " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userid = products.userid" +
-                        " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4 " +
-                        " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode and ProductCategory.UserId" + " = " + getPrefUserId() +
-                        " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) " +
-                        " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                        getProductCategoryString(CategoryId) + getProductAssetStrnig(MODE_ASSET) + getCategoryString(categoryCode)  + " GROUP by Products.productId " +
-                        " order by " + orderBy, null);
-            } else {
-                cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName , ProductDetail.productDetailId , " +
-                        " case  " + defPriceLevel +
-                        " when 1 then Price1 " +
-                        " when 2 then Price2 " +
-                        " when 3 then price3 " +
-                        " when 4 then price4 " +
-                        " when 5 then price5 " +
-                        " when 6 then price6 " +
-                        " when 7 then price7 " +
-                        " when 8 then price8 " +
-                        " when 9 then price9 " +
-                        " when 10 then price10 end as price , productdetail.Customerprice , sum(visitorproduct.Count1) as sumcount1 , sum(visitorproduct.Count2) as sumcount2 " +
-                        " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                        " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userid = products.userid " +
-                        " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4 " +
-                        " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode and ProductCategory.UserId" + " = " + getPrefUserId() +
-                        " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) " +
-                        " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                        getProductCategoryString(CategoryId) + getProductAssetStrnig(MODE_ASSET) + getCategoryString(categoryCode) + " GROUP by Products.productId " +
-                        " order by " + orderBy, null);
-            }
-
-            if (cursor != null) {
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    product = getProductFromCursor2(cursor);
-                    array.add(product);
-                    cursor.moveToNext();
-                }
-                cursor.close();
-            }
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrAllCustomer", e.getMessage());
-        }
-        return array;
-    }
-
     private String getProductCategoryString(long categoryId) {
         if (categoryId != 0)
             return " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_CATEGORYID + " = " + categoryId;
+        else return "";
+    }
+    private String getSearchString(String searchString) {
+        if (!TextUtils.isEmpty(searchString))
+            return " ( " + getLikeString(searchString) + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchString + "%'" + " ) " + " and ";
         else return "";
     }
 
@@ -6161,15 +6092,13 @@ public class DbAdapter {
         return array;
     }
 
-    public ArrayList<Product> getAllProduct(long categoryCode , long id, int modeasset, int totalItem) {
+    public ArrayList<Product> getAllProduct(String searchStr, long categoryCode, long categoryId, int mode_asset, int totalItem) {
         Product product;
         String LIMIT = totalItem + ",100";
         Cursor cursor = null;
-        String orderBy = BaseActivity.getPrefSortBase_product() + " " + BaseActivity.getPrefSortDirection();
         ArrayList<Product> array = new ArrayList<>();
-        int defPriceLevel = BaseActivity.getPrefDefSellPrice();
         try {
-            cursor = getAllProductQuery(categoryCode ,id, LIMIT, orderBy, modeasset, defPriceLevel);
+            cursor = getAllProductQuery(searchStr , categoryCode ,categoryId, LIMIT, mode_asset);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {

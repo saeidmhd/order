@@ -64,10 +64,8 @@ import com.mahak.order.fragment.ProductGridGalleryFragment;
 import com.mahak.order.fragment.ProductListFragment;
 import com.mahak.order.fragment.ProductPagerFragment;
 import com.mahak.order.storage.DbAdapter;
-import com.mahak.order.threeLevelAdapter.Item;
 import com.mahak.order.widget.FontAlertDialog;
 import com.mahak.order.widget.SortDialogActivity;
-import com.multilevelview.models.RecyclerViewItem;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
@@ -792,7 +790,7 @@ public class ProductPickerListActivity extends BaseActivity {
         //////////////////////////////////////////////////////////////////
         if (mode == MODE_EDIT) {
             ArrayList<Product> arrayproduct;
-            arrayproduct = db.getAllProduct(CategoryCode,categoryid, modeasset, 0);
+            arrayproduct = db.getAllProduct("", CategoryCode,categoryid, modeasset, 0);
             //Set Correct Asset______________________________________________
             for (OrderDetail object : InvoiceDetailActivity.orderDetailArrayList) {
                 for (Product item : arrayproduct) {
@@ -812,7 +810,7 @@ public class ProductPickerListActivity extends BaseActivity {
             //____________________________________________________________________
         }//End of if
         else if (mode == MODE_NEW) {
-            arrayProductMain = db.getAllProduct(CategoryCode,categoryid, modeasset, 0);
+            arrayProductMain = db.getAllProduct("", CategoryCode,categoryid, modeasset, 0);
         }
         db.close();
     }

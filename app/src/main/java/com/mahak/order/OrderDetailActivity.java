@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -505,18 +506,6 @@ public class OrderDetailActivity extends BaseActivity {
         LinearLayout ll_consumer_fee_box = (LinearLayout) view.findViewById(R.id.ll_consumer_fee_box);
         LinearLayout _llReceiptDetail = (LinearLayout) view.findViewById(R.id._llReceiptDetail);
 
-        if (SharedPreferencesHelper.get_chk_show_consumer_fee(mContext)) {
-            if(ll_consumer_fee_box != null && ll_consumer_price_box != null ) {
-                ll_consumer_fee_box.setVisibility(View.VISIBLE);
-                ll_consumer_price_box.setVisibility(View.VISIBLE);
-            }
-        }
-        if (SharedPreferencesHelper.get_chk_show_receipt_detail(mContext)) {
-            if(_llReceiptDetail != null) {
-                _llReceiptDetail.setVisibility(View.VISIBLE);
-            }
-        }
-
         ListView _lstProduct = (ListView) view.findViewById(R.id._lstProduct);
         ListView _lstGroupedTax = (ListView) view.findViewById(R.id._lstGroupedTax);
         ListView _lstGroupedReceipt = (ListView) view.findViewById(R.id._lstGroupedReceipt);
@@ -543,9 +532,67 @@ public class OrderDetailActivity extends BaseActivity {
         LinearLayout _llTitle = (LinearLayout) view.findViewById(R.id.llTitle);
         _llTitle.setVisibility(View.GONE);
         TextView _tvUsername = (TextView) view.findViewById(R.id._tvUsername);
+
+        TextView _tvAddress = (TextView) view.findViewById(R.id._tvAddress);
+        TextView _tvPhone = (TextView) view.findViewById(R.id._tvPhone);
+
         TextView CustomerName = (TextView) view.findViewById(R.id.tvCustomerName);
         TextView _txtPrice = (TextView) view.findViewById(R.id._txtPrice);
         TextView _txtTotalPrice = (TextView) view.findViewById(R.id._txtTotalPrice);
+
+        if (SharedPreferencesHelper.get_chk_show_consumer_fee(mContext)) {
+            if(ll_consumer_fee_box != null && ll_consumer_price_box != null ) {
+                ll_consumer_fee_box.setVisibility(View.VISIBLE);
+                ll_consumer_price_box.setVisibility(View.VISIBLE);
+            }
+        }
+        if (SharedPreferencesHelper.get_chk_show_receipt_detail(mContext)) {
+            if(_llReceiptDetail != null) {
+
+                db.open();
+                ArrayList<Receipt> receipts =  db.getAllReceiptWithTrackingCode(order.getCode());
+                ArrayList<PrintReceipt> printReceipts = new ArrayList<>();
+                PrintReceipt printReceipt;
+
+                for(Receipt receipt : receipts){
+                    if (receipt.getCashAmount() > 0){
+                        printReceipt = new PrintReceipt();
+                        printReceipt.setReceiptType(ProjectInfo.TYPE_CASH);
+                        printReceipt.setReceiptName("وجه نقد : " + ServiceTools.formatPrice(receipt.getCashAmount()));
+                        printReceipt.setAmount(receipt.getCashAmount());
+                        printReceipts.add(printReceipt);
+                    }
+                    ArrayList<Cheque> arrayCheque = db.getAllCheque(receipt.getReceiptClientId());
+                    for (int i = 0; i < arrayCheque.size(); i++) {
+                        Cheque cheque = arrayCheque.get(i);
+                        if (arrayCheque.get(i).getType() == ProjectInfo.CHEQUE_TYPE){
+                            printReceipt = new PrintReceipt();
+                            printReceipt.setReceiptType(ProjectInfo.CHEQUE_TYPE);
+                            printReceipt.setAmount(arrayCheque.get(i).getAmount());
+                            printReceipt.setReceiptName("چک دریافتی به مبلغ" + " " + ServiceTools.formatPrice(cheque.getAmount()) + " "  + cheque.getBankName() + " به تاریخ "  + getDateForLong(cheque.getDate()));
+                            printReceipts.add(printReceipt);
+                        }
+                        else if (arrayCheque.get(i).getType() == ProjectInfo.CASHRECEIPT_TYPE){
+                            printReceipt = new PrintReceipt();
+                            printReceipt.setReceiptType(ProjectInfo.CASHRECEIPT_TYPE);
+                            printReceipt.setAmount(arrayCheque.get(i).getAmount());
+                            printReceipt.setReceiptName("حواله دریافتی به مبلغ" + " " + ServiceTools.formatPrice(cheque.getAmount()) + " "  + cheque.getBankName() + " به تاریخ "  + getDateForLong(cheque.getDate()));
+                            printReceipts.add(printReceipt);
+                        }
+                    }
+                }
+
+                if(printReceipts.size() > 0){
+                    _llReceiptDetail.setVisibility(View.VISIBLE);
+                    _adReceipt = new AdapterReceipt(mActivity, printReceipts);
+                    _lstGroupedReceipt.setDrawingCacheEnabled(true);
+                    _lstGroupedReceipt.setAdapter(_adReceipt);
+                    ServiceTools.setListViewChequeHeightBasedOnChildren(_lstGroupedReceipt);
+                }
+            }
+        }
+
+
         if (OrderType == ProjectInfo.TYPE_RETURN_OF_SALE) {
 
             _tvType.setText(tvOrderType.getText().toString());
@@ -580,7 +627,13 @@ public class OrderDetailActivity extends BaseActivity {
         } else
             _tvType.setText(tvOrderType.getText().toString());
         _tvCustomerName.setText(tvCustomerName.getText().toString());
-        _tvMarketName.setText(tvMarketName.getText().toString());
+        if(!TextUtils.isEmpty(customer.getAddress()))
+            _tvAddress.setText(customer.getAddress());
+        if(!TextUtils.isEmpty(customer.getTell()))
+            _tvPhone.setText(customer.getTell());
+        if(!TextUtils.isEmpty(tvMarketName.getText().toString()))
+            _tvMarketName.setText(tvMarketName.getText().toString());
+
         _tvInvocieNumber.setText(tvInvoiceNumber.getText().toString());
         _tvOrderDate.setText(tvOrderDate.getText().toString());
         _tvTotalCount.setText(formatCount(TotalCount));
@@ -590,45 +643,6 @@ public class OrderDetailActivity extends BaseActivity {
             _tvUsername.setText(BaseActivity.getUserProfile().getName());
 
         orderDetailArrayList = (ArrayList<OrderDetail>) orderDetails.clone();
-
-        db.open();
-        ArrayList<Receipt> receipts =  db.getAllReceiptWithTrackingCode(order.getCode());
-        ArrayList<PrintReceipt> printReceipts = new ArrayList<>();
-        PrintReceipt printReceipt;
-
-        for(Receipt receipt : receipts){
-            if (receipt.getCashAmount() > 0){
-                printReceipt = new PrintReceipt();
-                printReceipt.setReceiptType(ProjectInfo.TYPE_CASH);
-                printReceipt.setReceiptName("وجه نقد : " + ServiceTools.formatPrice(receipt.getCashAmount()));
-                printReceipt.setAmount(receipt.getCashAmount());
-                printReceipts.add(printReceipt);
-            }
-            ArrayList<Cheque> arrayCheque = db.getAllCheque(receipt.getReceiptClientId());
-            for (int i = 0; i < arrayCheque.size(); i++) {
-                Cheque cheque = arrayCheque.get(i);
-                if (arrayCheque.get(i).getType() == ProjectInfo.CHEQUE_TYPE){
-                    printReceipt = new PrintReceipt();
-                    printReceipt.setReceiptType(ProjectInfo.CHEQUE_TYPE);
-                    printReceipt.setAmount(arrayCheque.get(i).getAmount());
-                    printReceipt.setReceiptName("چک دریافتی به مبلغ" + " " + ServiceTools.formatPrice(cheque.getAmount()) + " "  + cheque.getBankName() + " به تاریخ "  + getDateForLong(cheque.getDate()));
-                    printReceipts.add(printReceipt);
-                }
-                else if (arrayCheque.get(i).getType() == ProjectInfo.CASHRECEIPT_TYPE){
-                    printReceipt = new PrintReceipt();
-                    printReceipt.setReceiptType(ProjectInfo.CASHRECEIPT_TYPE);
-                    printReceipt.setAmount(arrayCheque.get(i).getAmount());
-                    printReceipt.setReceiptName("حواله دریافتی به مبلغ" + " " + ServiceTools.formatPrice(cheque.getAmount()) + " "  + cheque.getBankName() + " به تاریخ "  + getDateForLong(cheque.getDate()));
-                    printReceipts.add(printReceipt);
-                }
-            }
-        }
-
-        _adReceipt = new AdapterReceipt(mActivity, printReceipts);
-
-        _lstGroupedReceipt.setDrawingCacheEnabled(true);
-        _lstGroupedReceipt.setAdapter(_adReceipt);
-        ServiceTools.setListViewChequeHeightBasedOnChildren(_lstGroupedReceipt);
 
 
         if (SharedPreferencesHelper.getCurrentLanguage(mContext).equals("de_DE")) {

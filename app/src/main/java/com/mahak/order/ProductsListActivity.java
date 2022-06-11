@@ -68,7 +68,6 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -1008,7 +1007,7 @@ public class ProductsListActivity extends BaseActivity {
         protected Boolean doInBackground(String... arg0) {
             db.open();
             BaseActivity.setPrefDefSellPrice(ServiceTools.getPrefDefPrice(db,0,0));
-            arrayProductMain = db.getAllProduct(CategoryCode,Id, ModeAssetProduct, 0);
+            arrayProductMain = db.getAllProduct("", CategoryCode,Id, ModeAssetProduct, 0);
             return true;
         }
 
