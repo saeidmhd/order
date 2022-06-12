@@ -1633,6 +1633,22 @@ public class DbSchema {
                 " PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
+    public static class PersonCategorySchema implements BaseColumns {
+
+        public static final String TABLE_NAME = "PersonCategory";
+        public static final String COLUMN_ID = "Id";
+        public static final String COLUMN_CategoryCode = "CategoryCode";
+        public static final String COLUMN_PersonCode = "PersonCode";
+        public static final String COLUMN_USER_ID = "UserId";
+
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"PersonCategory\" ( " +
+                " `Id` INTEGER," +
+                " `CategoryCode` NUMERIC," +
+                " `UserId` NUMERIC ," +
+                " `PersonCode` NUMERIC," +
+                " PRIMARY KEY(`Id`) )";
+        public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+    }
 
     public static class CategorySchema implements BaseColumns {
 

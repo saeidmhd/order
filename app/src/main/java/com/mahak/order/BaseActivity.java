@@ -146,6 +146,7 @@ public class BaseActivity extends AppCompatActivity {
     public static int average_last_price = 10201;
     public static int city_zone = 140;
     public static int product_category = 10202;
+    public static int person_category = 10102;
     public static int category = 130;
 
 

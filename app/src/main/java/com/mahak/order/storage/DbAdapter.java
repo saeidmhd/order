@@ -25,6 +25,7 @@ import com.mahak.order.common.CityZone_Extra_Data;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.CustomerGroup;
 import com.mahak.order.common.ExtraData;
+import com.mahak.order.common.PersonCategory;
 import com.mahak.order.common.PhotoGallery;
 import com.mahak.order.common.Region;
 import com.mahak.order.common.GroupedTax;
@@ -833,6 +834,13 @@ public class DbAdapter {
         contentValues.put(DbSchema.ProductCategorySchema.COLUMN_ProductCode, productCategory.getProductCode());
         contentValues.put(DbSchema.ProductCategorySchema.COLUMN_USER_ID, BaseActivity.getPrefUserId());
         mDb.insert(DbSchema.ProductCategorySchema.TABLE_NAME, null, contentValues);
+    }
+    public void AddPersonCategory(PersonCategory personCategory) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DbSchema.PersonCategorySchema.COLUMN_CategoryCode, personCategory.getCategoryCode());
+        contentValues.put(DbSchema.PersonCategorySchema.COLUMN_PersonCode, personCategory.getPersonCode());
+        contentValues.put(DbSchema.PersonCategorySchema.COLUMN_USER_ID, BaseActivity.getPrefUserId());
+        mDb.insert(DbSchema.PersonCategorySchema.TABLE_NAME, null, contentValues);
     }
 
     public long AddPriceLevelName(ProductPriceLevelName productPriceLevelName) {
@@ -1826,6 +1834,14 @@ public class DbAdapter {
         productCategory.setProductCode(cursor.getInt(cursor.getColumnIndex(DbSchema.ProductCategorySchema.COLUMN_ProductCode)));
         productCategory.setUserId(cursor.getInt(cursor.getColumnIndex(DbSchema.ProductCategorySchema.COLUMN_USER_ID)));
         return productCategory;
+    }
+    private PersonCategory personCategoryFromCursor(Cursor cursor) {
+        PersonCategory personCategory = new PersonCategory();
+        personCategory.setId(cursor.getLong(cursor.getColumnIndex(DbSchema.PersonCategorySchema.COLUMN_ID)));
+        personCategory.setCategoryCode(cursor.getInt(cursor.getColumnIndex(DbSchema.PersonCategorySchema.COLUMN_CategoryCode)));
+        personCategory.setPersonCode(cursor.getInt(cursor.getColumnIndex(DbSchema.PersonCategorySchema.COLUMN_PersonCode)));
+        personCategory.setUserId(cursor.getInt(cursor.getColumnIndex(DbSchema.PersonCategorySchema.COLUMN_USER_ID)));
+        return personCategory;
     }
 
     private Category categoryFromCursor(Cursor cursor) {
@@ -4441,7 +4457,7 @@ public class DbAdapter {
         return TotalCount;
     }
 
-    public int getTotalCountPeople(long groupId, String searchString) {
+    public int getTotalCountPeople(int categoryCode, long groupId, String searchString) {
         Cursor cursor;
         if (ServiceTools.checkArabic(searchString)) {
             searchString = ServiceTools.replaceWithEnglish(searchString);
@@ -4453,12 +4469,13 @@ public class DbAdapter {
         try {
             cursor = mDb.rawQuery(
                     "select count(*) from Customers " +
-                            "INNER join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId and Customers.UserId = CustomersGroups.UserId " +
-                            "left join visitorpeople on visitorpeople.personid = customers.personid and VisitorPeople.userId = Customers.userId "
-                            + " where ( " + LikeStr +
+                            " INNER join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId and Customers.UserId = CustomersGroups.UserId " +
+                            " left join visitorpeople on visitorpeople.personid = customers.personid and VisitorPeople.userId = Customers.userId " +
+                            " LEFT  join ( SELECT DISTINCT userid , Personcode , CategoryCode from PersonCategory ) as pc on  Customers.PersonCode = pc.PersonCode "  +
+                            " where ( " + LikeStr +
                             " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
                             " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
-                            " ) and " + groupIdScript(groupId) + " visitorpeople.deleted = 0 "
+                            " ) and " + groupIdScript(groupId) + " visitorpeople.deleted = 0 " + getCategoryString2(categoryCode)
                             + " and " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_MAHAK_ID + " = '" + BaseActivity.getPrefMahakId()
                             + "' and " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + " = " + BaseActivity.getPrefDatabaseId()
                             + " and " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_USER_ID + " = " + getPrefUserId()
@@ -5434,6 +5451,28 @@ public class DbAdapter {
         }
         return productCategories;
     }
+    public ArrayList<PersonCategory> getAllPersonCategory() {
+        PersonCategory personCategory;
+        Cursor cursor;
+        ArrayList<PersonCategory> personCategories = new ArrayList<>();
+        try {
+            cursor = mDb.query(DbSchema.PersonCategorySchema.TABLE_NAME, null, DbSchema.PersonCategorySchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(BaseActivity.getPrefUserId())}, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    personCategory = personCategoryFromCursor(cursor);
+                    personCategories.add(personCategory);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorReasonByTypet", e.getMessage());
+        }
+        return personCategories;
+    }
 
     public ArrayList<ProductCategory> getAllProductCategoryWithCategoryCode(int CategoryId) {
         ProductCategory productCategory;
@@ -5469,6 +5508,30 @@ public class DbAdapter {
                     " LEFT  join ( SELECT DISTINCT userid , productcode , CategoryCode from ProductCategory ) as pc on  products.ProductCode = pc.ProductCode \n" +
                     " where Products . UserId = ?  and visitorproduct.deleted = 0 \n" +
                     " GROUP by Products.productId  order by Products.ProductCode Asc LIMIT 0,100)", new String[]{String.valueOf(getPrefUserId()), String.valueOf(getPrefUserId())});
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    category = categoryFromCursor(cursor);
+                    categories.add(category);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorReasonByTypet", e.getMessage());
+        }
+        return categories;
+    }
+    public ArrayList<Category> getAllCategorizedPeople() {
+        Category category;
+        Cursor cursor;
+        ArrayList<Category> categories = new ArrayList<>();
+        try {
+            cursor = mDb.rawQuery(" select * from Category where  userId = ? and  CategoryCode in (SELECT  pc.CategoryCode  from Customers left join VisitorPeople on VisitorPeople.PersonId = Customers.PersonId\n" +
+                    " LEFT  join ( SELECT DISTINCT userid , PersonCode , CategoryCode from PersonCategory ) as pc on  Customers.PersonCode = pc.PersonCode\n" +
+                    " where Customers.UserId = ? and VisitorPeople.Deleted = 0 )", new String[]{String.valueOf(getPrefUserId()), String.valueOf(getPrefUserId())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -5761,7 +5824,7 @@ public class DbAdapter {
         return array;
     }
 
-    public ArrayList<Customer> getAllCustomer(long groupId, int totalItemCount, String searchString) {
+    public ArrayList<Customer> getAllCustomer(long categoryCode ,  long groupId, int totalItemCount, String searchString) {
         Customer customer;
         Cursor cursor;
         if (ServiceTools.checkArabic(searchString)) {
@@ -5772,16 +5835,17 @@ public class DbAdapter {
         String LIMIT = String.valueOf(totalItemCount) + ",15";
         ArrayList<Customer> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select Customers.Organization, Customers.name, Customers.Address, Customers.PersonCode, PromotionId, Customers.PersonClientId, Customers.PersonId, Customers.PersonGroupId, Customers.Mobile, Customers.Phone, Customers.Id , Customers.balance " +
+            cursor = mDb.rawQuery("select Customers.Organization, Customers.name, Customers.Address, Customers.PersonCode, PromotionId, Customers.PersonClientId, Customers.PersonId, Customers.PersonGroupId, Customers.Mobile, Customers.Phone, Customers.Id , Customers.balance  , pc.CategoryCode" +
                     " from Customers inner join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId and CustomersGroups.userId = Customers.userId  " +
                     " LEFT join visitorpeople  on visitorpeople.personid = Customers.personid and VisitorPeople.userId = Customers.userId " +
                     " LEFT join PromotionEntity  on PromotionEntity.CodeEntity = Customers.PersonCode and EntityType = 2 " +
+                    " LEFT  join ( SELECT DISTINCT userid , Personcode , CategoryCode from PersonCategory ) as pc on  Customers.PersonCode = pc.PersonCode" +
                     " where ( " + LikeStr +
                     " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
                     " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
                     " ) and " + groupIdScript(groupId) +
                     " Customers.UserId = ? and Customers.MahakId = ? and Customers.DatabaseId = ? and visitorpeople.Deleted = ?" +
-                    " order by " + orderBy + " LIMIT " + LIMIT, new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(0)});
+                    getCategoryString2(categoryCode)+ " order by " + orderBy + " LIMIT " + LIMIT, new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(0)});
             // cursor = mDb.query(DbSchema.Customerschema.TABLE_NAME, null, DbSchema.Customerschema.COLUMN_USER_ID + " =? and " + DbSchema.Customerschema.COLUMN_MAHAK_ID + "=? and " + DbSchema.Customerschema.COLUMN_DATABASE_ID + "=? and " + groupIdScript(groupId) + DbSchema.Customerschema.COLUMN_Deleted + "=?", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(0)}, null, null, orderBy, LIMIT);
             if (cursor != null) {
                 cursor.moveToFirst();
@@ -5863,7 +5927,7 @@ public class DbAdapter {
         return items;
     }
 
-    public ArrayList<Customer> searchCustomer(long groupId, String searchString) {
+    public ArrayList<Customer> searchCustomer(int categoryCode , long groupId, String searchString) {
         Customer customer;
         Cursor cursor;
         if (ServiceTools.checkArabic(searchString)) {
@@ -5873,15 +5937,16 @@ public class DbAdapter {
         String LikeStr = ServiceTools.anyPartOfPersonNameLikeString(searchString);
         ArrayList<Customer> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select Customers.Organization, Customers.name, Customers.Address, Customers.PersonCode, PromotionId, Customers.PersonClientId, Customers.PersonId, Customers.PersonGroupId, Customers.Mobile, Customers.Phone, Customers.Id, Customers.balance " +
+            cursor = mDb.rawQuery("select Customers.Organization, Customers.name, Customers.Address, Customers.PersonCode, PromotionId, Customers.PersonClientId, Customers.PersonId, Customers.PersonGroupId, Customers.Mobile, Customers.Phone, Customers.Id, Customers.balance , pc.CategoryCode " +
                     " from Customers inner join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId  and CustomersGroups.userId = Customers.userId  " +
                     " LEFT join PromotionEntity  on PromotionEntity.CodeEntity = Customers.PersonCode and EntityType = 2 " +
                     " LEFT join visitorpeople  on visitorpeople.personid = Customers.personid and VisitorPeople.userId = Customers.userId " +
+                    " LEFT join ( SELECT DISTINCT userid , Personcode , CategoryCode from PersonCategory ) as pc on  Customers.PersonCode = pc.PersonCode" +
                     " where ( " + LikeStr +
                     " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
                     " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
-                    " ) and " + groupIdScript(groupId) +
-                    " Customers.UserId = ? and Customers.MahakId = ? and Customers.DatabaseId = ? and visitorpeople.Deleted = ?" +
+                    " ) and " + groupIdScript(groupId)  +
+                    " Customers.UserId = ? and Customers.MahakId = ? and Customers.DatabaseId = ? and visitorpeople.Deleted = ?" + getCategoryString2(categoryCode) +
                     " order by " + orderBy, new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(0)});
             if (cursor != null) {
                 cursor.moveToFirst();
@@ -8901,6 +8966,8 @@ public class DbAdapter {
                     add_category(extraData);
                 } else if (extraData.getItemType() == BaseActivity.product_category) {
                     add_product_category(extraData);
+                }else if (extraData.getItemType() == BaseActivity.person_category) {
+                    add_person_category(extraData);
                 }
             }
             mDb.setTransactionSuccessful();
@@ -8917,6 +8984,18 @@ public class DbAdapter {
         try {
             productCategory = gson.fromJson(extraData.getData(), ProductCategory.class);
             AddProductCategory(productCategory);
+        } catch (JsonSyntaxException e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            e.printStackTrace();
+        }
+    }
+    private void add_person_category(ExtraData extraData) {
+        Gson gson = new Gson();
+        PersonCategory personCategory;
+        try {
+            personCategory = gson.fromJson(extraData.getData(), PersonCategory.class);
+            AddPersonCategory(personCategory);
         } catch (JsonSyntaxException e) {
             FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
             FirebaseCrashlytics.getInstance().recordException(e);
@@ -9878,6 +9957,7 @@ public class DbAdapter {
 
             db.execSQL(DbSchema.ExtraDataSchema.CREATE_TABLE);
             db.execSQL(DbSchema.ProductCategorySchema.CREATE_TABLE);
+            db.execSQL(DbSchema.PersonCategorySchema.CREATE_TABLE);
             db.execSQL(DbSchema.CategorySchema.CREATE_TABLE);
 
             db.execSQL(DbSchema.CityZoneSchema.CREATE_TABLE);
@@ -9914,6 +9994,9 @@ public class DbAdapter {
                 }
                 if (oldVersion < 7) {
                     db.execSQL("ALTER TABLE " + DbSchema.PromotionSchema.TABLE_NAME + " ADD " + DbSchema.PromotionSchema.COLUMN_Deleted + " INTEGER;");
+                }
+                if(oldVersion < 3450){
+                    db.execSQL(DbSchema.PersonCategorySchema.CREATE_TABLE);
                 }
             }
         }

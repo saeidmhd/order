@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filter.FilterListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -39,14 +41,19 @@ import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.kishcore.sdk.hybrid.api.SDKManager;
 import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
+import com.mahak.order.common.Category;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.CustomerGroup;
+import com.mahak.order.common.PersonCategory;
 import com.mahak.order.common.Printer;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
@@ -125,6 +132,15 @@ public class PeopleListActivity extends BaseActivity {
     private int totalItem = 0;
     Boolean CheckFilter = false;
     private String search;
+
+
+    private ImageView show_category;
+    private ImageView close_category;
+    private LinearLayout ll_category;
+    private LinearLayout category_layout;
+    private RecyclerView multiLevelRecyclerView;
+    public static int selectedCategory = 0;
+    static int row_index;
 
 
     @Override
@@ -274,7 +290,7 @@ public class PeopleListActivity extends BaseActivity {
                     if (firstVisibleItem + visibleItemCount > totalItemCount - 2 && totalItemCount < CountCustomer) {
                             totalItem = totalItemCount;
                             search = txtSearch.getText().toString();
-                            adCustomer.addAll(db.getAllCustomer(GroupId, totalItem,search));
+                            adCustomer.addAll(db.getAllCustomer(selectedCategory, GroupId, totalItem,search));
                             adCustomer.notifyDataSetChanged();
                     }
                 }
@@ -296,6 +312,54 @@ public class PeopleListActivity extends BaseActivity {
         spnGroup = (Spinner) findViewById(R.id.spnGroup);
         // swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
         llprogressBar = (LinearLayout) findViewById(R.id.llprogressBar);
+
+        multiLevelRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
+        ll_category = (LinearLayout) findViewById(R.id.ll_category);
+        show_category = (ImageView) findViewById(R.id.show_category);
+        category_layout = (LinearLayout) findViewById(R.id.category_layout);
+        close_category = (ImageView) findViewById(R.id.close_category);
+
+        multiLevelRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
+
+        db.open();
+        ArrayList<PersonCategory> personCategories = db.getAllPersonCategory();
+
+        if (personCategories.size() == 0){
+            category_layout.setVisibility(View.GONE);
+        }
+        show_category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (personCategories.size() > 0){
+
+                    close_category.setVisibility(View.VISIBLE);
+                    show_category.setVisibility(View.GONE);
+                    ll_category.setVisibility(View.VISIBLE);
+
+                    addAllRelatedCategory();
+                }
+            }
+        });
+        close_category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                close_category.setVisibility(View.GONE);
+                show_category.setVisibility(View.VISIBLE);
+                ll_category.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void addAllRelatedCategory() {
+        ArrayList<Category> categories = new ArrayList<>();
+        Category category = new Category();
+        category.setCategoryName("تمام اشخاص");
+        category.setCategoryCode(0);
+        categories.add(category);
+        categories.addAll(db.getAllCategorizedPeople());
+        multiLevelRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        CategoryAdapter2 myAdapter = new CategoryAdapter2(categories, mContext);
+        multiLevelRecyclerView.setAdapter(myAdapter);
     }
 
     /**
@@ -304,8 +368,8 @@ public class PeopleListActivity extends BaseActivity {
     private void ReadALLCustomer() {
         db.open();
         search = txtSearch.getText().toString();
-        arrayCustomer = db.getAllCustomer(GroupId, 0,search);
-        CountCustomer = db.getTotalCountPeople(GroupId , search);
+        arrayCustomer = db.getAllCustomer(selectedCategory, GroupId, 0,search);
+        CountCustomer = db.getTotalCountPeople(selectedCategory, GroupId , search);
         tvPageTitle.setText(getString(R.string.str_nav_customer_list) + "(" + CountCustomer + ")");
         adCustomer = new AdapterCustomer(mActivity);
         lstCustomer.setAdapter(adCustomer);
@@ -368,7 +432,7 @@ public class PeopleListActivity extends BaseActivity {
 
                      ArrayList<Customer> newValue;
 
-                     newValue = db.searchCustomer(GroupId, constraint.toString());
+                     newValue = db.searchCustomer(selectedCategory,  GroupId, constraint.toString());
 
                     result.values = newValue;
                     result.count = newValue.size();
@@ -585,7 +649,7 @@ public class PeopleListActivity extends BaseActivity {
                                     }else {
                                         Toast.makeText(PeopleListActivity.this, "اطلاعات این شخص به سرور ارسال گردیده و امکان ویرایش وجود ندارد!", Toast.LENGTH_SHORT).show();
                                     }
-                                    
+
                                     break;
                             }
                             return false;
@@ -1257,6 +1321,68 @@ public class PeopleListActivity extends BaseActivity {
             adspinner.notifyDataSetChanged();
         }
 
+    }
+
+    public class CategoryAdapter2 extends RecyclerView.Adapter<CategoryAdapter2.ViewHolder> {
+
+        private ArrayList<Category> categories;
+        private LayoutInflater mInflater;
+        private ArrayList<Category> arrayOriginal = new ArrayList<>();
+
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+
+            TextView mTitle;
+            LinearLayout mTextBox, item_category;
+
+            ViewHolder(View itemView) {
+                super(itemView);
+                mTitle = (TextView) itemView.findViewById(R.id.title);
+                mTextBox = (LinearLayout) itemView.findViewById(R.id.text_box);
+                item_category = (LinearLayout) itemView.findViewById(R.id.item_category);
+            }
+        }
+
+        public CategoryAdapter2( ArrayList<Category> categories, Context context) {
+
+            this.categories = categories;
+            this.mInflater = LayoutInflater.from(context);
+            arrayOriginal.addAll(categories);
+        }
+
+        @Override
+        public CategoryAdapter2.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = mInflater.inflate(R.layout.item_layout2, parent, false);
+            return new CategoryAdapter2.ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(CategoryAdapter2.ViewHolder holder, final int position) {
+            holder.mTitle.setText(categories.get(position).getCategoryName());
+
+            holder.item_category.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    selectedCategory = categories.get(position).getCategoryCode();
+                    ReadALLCustomer();
+                    row_index=position;
+                    notifyDataSetChanged();
+                }
+            });
+
+            if(row_index==position){
+                holder.item_category.setBackgroundColor(Color.parseColor("#dedede"));
+            }
+            else
+            {
+                holder.item_category.setBackgroundColor(Color.parseColor("#f4f4f4"));
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return categories.size();
+        }
     }
 
 
