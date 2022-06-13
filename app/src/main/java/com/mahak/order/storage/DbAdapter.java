@@ -17,6 +17,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.mahak.order.BaseActivity;
+import com.mahak.order.BuildConfig;
 import com.mahak.order.common.Bank;
 import com.mahak.order.common.Category;
 import com.mahak.order.common.CheckList;
@@ -835,6 +836,7 @@ public class DbAdapter {
         contentValues.put(DbSchema.ProductCategorySchema.COLUMN_USER_ID, BaseActivity.getPrefUserId());
         mDb.insert(DbSchema.ProductCategorySchema.TABLE_NAME, null, contentValues);
     }
+
     public void AddPersonCategory(PersonCategory personCategory) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DbSchema.PersonCategorySchema.COLUMN_CategoryCode, personCategory.getCategoryCode());
@@ -1487,11 +1489,11 @@ public class DbAdapter {
         double asset1 = 0;
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{masterId , String.valueOf(getPrefUserId())}, null, null, null);
+            cursor = mDb.query(DbSchema.VisitorProductSchema.TABLE_NAME, null, DbSchema.VisitorProductSchema.COLUMN_ProductDetailId + " =? and " + DbSchema.VisitorProductSchema.COLUMN_USER_ID + " =? ", new String[]{masterId , String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
-                    asset1 = cursor.getDouble(cursor.getColumnIndex(DbSchema.ProductDetailSchema.COLUMN_Count1));
+                    asset1 = cursor.getDouble(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_Count1));
                 }
                 cursor.close();
             }
@@ -1507,11 +1509,11 @@ public class DbAdapter {
         double asset2 = 0;
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId  + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{masterId , String.valueOf(getPrefUserId())}, null, null, null);
+            cursor = mDb.query(DbSchema.VisitorProductSchema.TABLE_NAME, null, DbSchema.VisitorProductSchema.COLUMN_ProductDetailId  + " =? and " + DbSchema.VisitorProductSchema.COLUMN_USER_ID + " =? ", new String[]{masterId , String.valueOf(getPrefUserId())}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
-                    asset2 = cursor.getDouble(cursor.getColumnIndex(DbSchema.ProductDetailSchema.COLUMN_Count2));
+                    asset2 = cursor.getDouble(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_Count2));
                 }
                 cursor.close();
             }
@@ -1780,19 +1782,6 @@ public class DbAdapter {
         return product_extra_data;
     }
 
-    private CityZone_Extra_Data getCityZoneExtraInfo(Cursor cursor) {
-        Gson gson = new Gson();
-        CityZone_Extra_Data cityZone_extra_data = new CityZone_Extra_Data();
-        try {
-            cityZone_extra_data = gson.fromJson(cursor.getString(cursor.getColumnIndex(DbSchema.ExtraDataSchema.COLUMN_Data)), CityZone_Extra_Data.class);
-        } catch (JsonSyntaxException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            e.printStackTrace();
-        }
-        return cityZone_extra_data;
-    }
-
     private TaxInSell_Extra_Data getTaxInSellExtra(Cursor cursor) {
         Gson gson = new Gson();
         TaxInSell_Extra_Data taxInSell_extra_data = new TaxInSell_Extra_Data();
@@ -1835,6 +1824,7 @@ public class DbAdapter {
         productCategory.setUserId(cursor.getInt(cursor.getColumnIndex(DbSchema.ProductCategorySchema.COLUMN_USER_ID)));
         return productCategory;
     }
+
     private PersonCategory personCategoryFromCursor(Cursor cursor) {
         PersonCategory personCategory = new PersonCategory();
         personCategory.setId(cursor.getLong(cursor.getColumnIndex(DbSchema.PersonCategorySchema.COLUMN_ID)));
@@ -1850,34 +1840,6 @@ public class DbAdapter {
         category.setCategoryCode(cursor.getInt(cursor.getColumnIndex(DbSchema.CategorySchema.COLUMN_CategoryCode)));
         category.setParentCode(cursor.getInt(cursor.getColumnIndex(DbSchema.CategorySchema.COLUMN_ParentCode)));
         category.setCategoryName(cursor.getString(cursor.getColumnIndex(DbSchema.CategorySchema.COLUMN_CategoryName)));
-        return category;
-    }
-
-    private ProductCategory getProductCategoryFromCursor(Cursor cursor) {
-        ProductCategory productCategory = new ProductCategory();
-        Gson gson = new Gson();
-
-        try {
-            productCategory = gson.fromJson(cursor.getString(cursor.getColumnIndex(DbSchema.ExtraDataSchema.COLUMN_Data)), ProductCategory.class);
-        } catch (JsonSyntaxException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            e.printStackTrace();
-        }
-
-        return productCategory;
-    }
-
-    private Category getCategoryFromCursor(Cursor cursor) {
-        Category category = new Category();
-        Gson gson = new Gson();
-        try {
-            category = gson.fromJson(cursor.getString(cursor.getColumnIndex(DbSchema.ExtraDataSchema.COLUMN_Data)), Category.class);
-        } catch (JsonSyntaxException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            e.printStackTrace();
-        }
         return category;
     }
 
@@ -1941,6 +1903,7 @@ public class DbAdapter {
 
         return productDetail;
     }
+
     private VisitorProduct getVisitorProductFromCursor(Cursor cursor) {
         VisitorProduct visitorProduct = new VisitorProduct();
         visitorProduct.setProductDetailId(cursor.getInt(cursor.getColumnIndex(DbSchema.VisitorProductSchema.COLUMN_ProductDetailId)));
@@ -2193,36 +2156,6 @@ public class DbAdapter {
         return picturesProduct.getPictureId();
     }
 
-    private ProductGroup getProductGroup(long id) {
-        ProductGroup productGroup = new ProductGroup();
-        Cursor cursor;
-        try {
-            cursor = mDb.query(DbSchema.ProductGroupSchema.TABLE_NAME, null, DbSchema.ProductGroupSchema.COLUMN_ID + "=?", new String[]{String.valueOf(id)}, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                if (cursor.getCount() > 0) {
-                    productGroup.setId(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ID)));
-                    productGroup.setMahakId(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_MAHAK_ID)));
-                    productGroup.setProductGroupCode(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ProductGroupCode)));
-                    productGroup.setDatabaseId(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_DATABASE_ID)));
-                    productGroup.setParentId(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_PARENTID)));
-                    productGroup.setName(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_NAME)));
-                    productGroup.setColor(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_COLOR)));
-                    productGroup.setIcon(cursor.getString(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ICON)));
-                    productGroup.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_MODIFYDATE)));
-                    productGroup.setProductCategoryClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ProductGroupClientId)));
-                    productGroup.setProductCategoryId(cursor.getInt(cursor.getColumnIndex(DbSchema.ProductGroupSchema.COLUMN_ProductGroupId)));
-                }
-                cursor.close();
-            }
-
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("getProductGroup", e.getMessage());
-        }
-        return productGroup;
-    }
     private ProductGroup getProductGroupFromCursor(Cursor cursor) {
         ProductGroup productGroup = new ProductGroup();
         try {
@@ -2653,53 +2586,6 @@ public class DbAdapter {
         return orderDetail;
     }
 
-    public OrderDetail GetOrderDetailWithOrderId(long id) {
-        OrderDetail orderDetail = new OrderDetail();
-        Cursor cursor;
-        try {
-            cursor = mDb.query(DbSchema.OrderDetailSchema.TABLE_NAME, null, DbSchema.OrderDetailSchema.COLUMN_OrderId + "=?", new String[]{String.valueOf(id)}, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                if (cursor.getCount() > 0) {
-                    orderDetail.setId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ID)));
-                    orderDetail.setOrderId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_OrderId)));
-                    orderDetail.setOrderDetailId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_OrderDetailId)));
-                    orderDetail.setOrderDetailClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_OrderDetailClientId)));
-                    orderDetail.setOrderClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_OrderClientId)));
-                    orderDetail.setProductDetailId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ProductDetailId)));
-                    orderDetail.setProductId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ProductId)));
-                    if (BaseActivity.getPrefUnit2Setting(mContext) == MODE_MeghdarJoz)
-                        orderDetail.setCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz)));
-                    else
-                        orderDetail.setCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Count1)));
-                    orderDetail.setCount2(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Count2)));
-                    orderDetail.setSumCountBaJoz(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz)));
-                    // orderDetail.setCount2(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PackageCount)));
-                    orderDetail.setPrice(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Price)));
-                    orderDetail.setGiftType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftType)));
-                    orderDetail.setDescription(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Description)));
-                    //orderDetail.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PUBLISH)));
-                    orderDetail.setTaxPercent(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_TaxPercent)));
-                    orderDetail.setChargePercent(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ChargePercent)));
-                    orderDetail.setDiscount(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Discount)));
-                    orderDetail.setDiscountType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_DiscountType)));
-                    orderDetail.setCostLevel(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_CostLevel)));
-                    // orderDetail.setFixedOff(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Fixed_Off)));
-                    // orderDetail.setCostLevel(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Price_LEVEL)));
-                    orderDetail.setPromotionCode(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PROMOTION_CODE)));
-                    //   orderDetail.setGiftType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GIFT_TYPE)));
-                }
-                cursor.close();
-            }
-
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorGetProductInOrder", e.getMessage());
-        }
-        return orderDetail;
-    }
-
     public OrderDetailProperty GetOrderDetailProperty(long id) {
         OrderDetailProperty orderDetailProperty = new OrderDetailProperty();
         Cursor cursor;
@@ -2903,7 +2789,6 @@ public class DbAdapter {
         }
         return order;
     }
-
 
     public Order GetOrderWithOrderClientId(long clientId) {
         Order order = new Order();
@@ -3677,28 +3562,6 @@ public class DbAdapter {
         }
         return RowVersion;
     }
-    public long getProductMaxRowVersion(String tableName) {
-        Cursor cursor = null;
-        long RowVersion = 0;
-        try {
-            cursor = mDb.rawQuery("select max(RowVersion) from " + "products" + " where " + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId(), null);
-            cursor = mDb.rawQuery("select max(RowVersion) from products left join produ on vis " + "products" + " where " + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId(), null);
-
-            if (cursor != null) {
-                cursor.moveToFirst();
-                if (cursor.getCount() > 0) {
-                    RowVersion = cursor.getLong(0);
-                }
-                cursor.close();
-            }
-
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("Error RowVersion", e.getMessage());
-        }
-        return RowVersion;
-    }
 
     private PicturesProduct getPictureProductFromCursor(Cursor cursor) {
         PicturesProduct picturesProduct = new PicturesProduct();
@@ -3815,6 +3678,7 @@ public class DbAdapter {
         }
         return TotalPrice;
     }
+
     public double getTotalPriceInvoicePerPerson(long personId) {
         Cursor cursor1, cursor2;
         double TotalPrice = 0;
@@ -4607,28 +4471,6 @@ public class DbAdapter {
         return TotalCount;
     }
 
-    public int getCountProductPromotionEntity() {
-        Cursor cursor;
-        int TotalCount = 0;
-        try {
-            cursor = mDb.rawQuery("SELECT  count (EntityType) from PromotionEntity where EntityType = 4 ", null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                if (cursor.getCount() > 0) {
-                    TotalCount = cursor.getInt(0);
-                }
-                cursor.close();
-            }
-
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorgetTotalCountOrder", e.getMessage());
-        }
-
-        return TotalCount;
-    }
-
     public int getTotalCountInvoice() {
         Cursor cursor;
         int TotalCount = 0;
@@ -4752,6 +4594,7 @@ public class DbAdapter {
 
         return TotalReceipt;
     }
+
     public long getTotalCustomerReceiptWithId(long id) {
 
         Cursor cursor;
@@ -4947,66 +4790,6 @@ public class DbAdapter {
         Cursor cursor;
         try {
             cursor = mDb.query(DbSchema.PromotionSchema.TABLE_NAME, null, DbSchema.PromotionSchema.COLUMN_PromotionCode + "=? and " + DbSchema.PromotionSchema.COLUMN_MahakId + "=? and " + DbSchema.PromotionSchema.COLUMN_DatabaseId + "=?", new String[]{codePromotion, BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId()}, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                if (cursor.getCount() > 0) {
-
-                    promotion.setId(cursor.getLong(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_ID)));
-                    promotion.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_MODIFYDATE)));
-                    promotion.setCreatedBy(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_CreatedBy)));
-                    promotion.setCreatedDate(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_CreatedDate)));
-                    promotion.setModifiedBy(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_ModifiedBy)));
-                    promotion.setPromotionCode(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_PromotionCode)));
-                    promotion.setPriorityPromotion(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_PriorityPromotion)));
-                    promotion.setLevelPromotion(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_LevelPromotion)));
-                    promotion.setAccordingTo(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_AccordingTo)));
-                    promotion.setIsCalcLinear(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_IsCalcLinear)));
-                    promotion.setTypeTasvieh(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_TypeTasvieh)));
-                    promotion.setDeadlineTasvieh(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_DeadlineTasvieh)));
-                    promotion.setIsActive(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_IsActive)));
-                    promotion.setIsAllCustomer(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_IsAllCustomer)));
-                    promotion.setIsAllVisitor(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_IsAllVisitor)));
-                    promotion.setIsAllStore(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_IsAllStore)));
-                    promotion.setIsAllGood(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_IsAllGood)));
-                    promotion.setAggregateWithOther(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_AggregateWithOther)));
-                    promotion.setNamePromotion(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_NamePromotion)));
-                    promotion.setDateStart(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_DateStart)));
-                    promotion.setDateEnd(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_DateEnd)));
-                    promotion.setTimeStart(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_TimeStart)));
-                    promotion.setTimeEnd(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_TimeEnd)));
-                    promotion.setDesPromotion(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_DesPromotion)));
-
-                    promotion.setPromotionId(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_PromotionId)));
-                    promotion.setPromotionClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_PromotionClientId)));
-                    promotion.setPromotionCode(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_PromotionCode)));
-                    promotion.setVisitors(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_Visitors)));
-                    promotion.setStores(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_Stores)));
-                    promotion.setDataHash(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_DataHash)));
-                    promotion.setCreateDate(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_CreateDate)));
-                    promotion.setUpdateDate(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_UpdateDate)));
-                    promotion.setCreateSyncId(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_CreateSyncId)));
-                    promotion.setUpdateSyncId(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_UpdateSyncId)));
-                    promotion.setRowVersion(cursor.getLong(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_RowVersion)));
-                    promotion.setDeleted(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_Deleted)));
-
-                }
-                cursor.close();
-            }
-
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorGetUser", e.getMessage());
-        }
-        return promotion;
-    }
-
-    public Promotion getPromotionById(int promotionId) {
-
-        Promotion promotion = new Promotion();
-        Cursor cursor;
-        try {
-            cursor = mDb.query(DbSchema.PromotionSchema.TABLE_NAME, null, DbSchema.PromotionSchema.COLUMN_PromotionId + "=? and " + DbSchema.PromotionSchema.COLUMN_MahakId + "=? and " + DbSchema.PromotionSchema.COLUMN_DatabaseId + "=?", new String[]{String.valueOf(promotionId), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId()}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 if (cursor.getCount() > 0) {
@@ -5451,6 +5234,7 @@ public class DbAdapter {
         }
         return productCategories;
     }
+
     public ArrayList<PersonCategory> getAllPersonCategory() {
         PersonCategory personCategory;
         Cursor cursor;
@@ -5472,29 +5256,6 @@ public class DbAdapter {
             Log.e("ErrorReasonByTypet", e.getMessage());
         }
         return personCategories;
-    }
-
-    public ArrayList<ProductCategory> getAllProductCategoryWithCategoryCode(int CategoryId) {
-        ProductCategory productCategory;
-        Cursor cursor;
-        ArrayList<ProductCategory> productCategories = new ArrayList<>();
-        try {
-            cursor = mDb.query(DbSchema.ProductCategorySchema.TABLE_NAME, null, DbSchema.ProductCategorySchema.COLUMN_CategoryCode + " =? ", new String[]{String.valueOf(CategoryId)}, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    productCategory = productCategoryFromCursor(cursor);
-                    productCategories.add(productCategory);
-                    cursor.moveToNext();
-                }
-                cursor.close();
-            }
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorReasonByTypet", e.getMessage());
-        }
-        return productCategories;
     }
 
     public ArrayList<Category> getAllRootCategories() {
@@ -5524,6 +5285,7 @@ public class DbAdapter {
         }
         return categories;
     }
+
     public ArrayList<Category> getAllCategorizedPeople() {
         Category category;
         Cursor cursor;
@@ -5532,29 +5294,6 @@ public class DbAdapter {
             cursor = mDb.rawQuery(" select * from Category where  userId = ? and  CategoryCode in (SELECT  pc.CategoryCode  from Customers left join VisitorPeople on VisitorPeople.PersonId = Customers.PersonId\n" +
                     " LEFT  join ( SELECT DISTINCT userid , PersonCode , CategoryCode from PersonCategory ) as pc on  Customers.PersonCode = pc.PersonCode\n" +
                     " where Customers.UserId = ? and VisitorPeople.Deleted = 0 )", new String[]{String.valueOf(getPrefUserId()), String.valueOf(getPrefUserId())});
-            if (cursor != null) {
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    category = categoryFromCursor(cursor);
-                    categories.add(category);
-                    cursor.moveToNext();
-                }
-                cursor.close();
-            }
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorReasonByTypet", e.getMessage());
-        }
-        return categories;
-    }
-
-    public ArrayList<Category> getAllCategoryWithParentCode(int parentCode) {
-        Category category;
-        Cursor cursor;
-        ArrayList<Category> categories = new ArrayList<>();
-        try {
-            cursor = mDb.rawQuery("select * from Category where Category.ParentCode = ? and userid = ? order by Category.CategoryCode ", new String[]{String.valueOf(parentCode),String.valueOf(getPrefUserId())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -5631,78 +5370,6 @@ public class DbAdapter {
                     promotion = getPromotion(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_ID)));
                     if (promotion != null)
                         array.add(promotion);
-                    cursor.moveToNext();
-                }
-                cursor.close();
-            }
-
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrAllVisitor", e.getMessage());
-        }
-        return array;
-    }
-
-    public ArrayList<Promotion> getAllPromotion2(int promotionId) {
-        Promotion promotion;
-        Cursor cursor;
-        ArrayList<Promotion> array = new ArrayList<>();
-        try {
-            cursor = mDb.query(DbSchema.PromotionSchema.TABLE_NAME, null, DbSchema.PromotionSchema.COLUMN_PromotionId + "=? and " +
-                    DbSchema.PromotionSchema.COLUMN_MahakId + "=? and " + DbSchema.PromotionSchema.COLUMN_USER_ID + "=? and " + DbSchema.PromotionSchema.COLUMN_Deleted + "=? and " + DbSchema.PromotionSchema.COLUMN_DatabaseId + "=?", new String[]{String.valueOf(promotionId), BaseActivity.getPrefMahakId(), String.valueOf(getPrefUserId()), String.valueOf(0), BaseActivity.getPrefDatabaseId()}, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    promotion = getPromotion(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_ID)));
-                    if (promotion != null)
-                        array.add(promotion);
-                    cursor.moveToNext();
-                }
-                cursor.close();
-            }
-
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrAllVisitor", e.getMessage());
-        }
-        return array;
-    }
-
-    public ArrayList<Promotion> getAllPromotionCodeForSpecificGood(long productCode) {
-        Promotion promotion;
-        Cursor cursor;
-        ArrayList<Promotion> array = new ArrayList<>();
-        try {
-            cursor = mDb.rawQuery("SELECT Promotion.PromotionCode , Promotion.AccordingTo , IsCalcLinear  from PromotionEntity INNER JOIN Promotion on Promotion.PromotionId = PromotionEntity.PromotionId where CodeEntity = ? and EntityType = ? and Promotion.UserId = ? and Promotion.deleted = ?", new String[]{String.valueOf(productCode), String.valueOf(4), String.valueOf(getPrefUserId()), String.valueOf(0)});
-            if (cursor != null) {
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    promotion = getPromotion2(cursor);
-                    array.add(promotion);
-                    cursor.moveToNext();
-                }
-                cursor.close();
-            }
-
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrAllVisitor", e.getMessage());
-        }
-        return array;
-    }
-
-    public ArrayList<Integer> getAllPromotionCodeForSpecificGood2(long productCode) {
-        Cursor cursor;
-        ArrayList<Integer> array = new ArrayList<>();
-        try {
-            cursor = mDb.rawQuery("SELECT Promotion.PromotionCode , Promotion.AccordingTo , IsCalcLinear  from PromotionEntity INNER JOIN Promotion on Promotion.PromotionId = PromotionEntity.PromotionId where CodeEntity = ? and EntityType = ? and Promotion.UserId = ?", new String[]{String.valueOf(productCode), String.valueOf(4), String.valueOf(getPrefUserId())});
-            if (cursor != null) {
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    array.add(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_PromotionCode)));
                     cursor.moveToNext();
                 }
                 cursor.close();
@@ -5970,6 +5637,7 @@ public class DbAdapter {
             return " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_CATEGORYID + " = " + categoryId;
         else return "";
     }
+
     private String getSearchString(String searchString) {
         if (!TextUtils.isEmpty(searchString))
             return " ( " + getLikeString(searchString) + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchString + "%'" + " ) " + " and ";
@@ -5981,6 +5649,7 @@ public class DbAdapter {
             return " and " + DbSchema.ProductCategorySchema.TABLE_NAME + "." + DbSchema.ProductCategorySchema.COLUMN_CategoryCode + " = " + categoryCode;
         else return "";
     }
+
     private String getCategoryString2(long categoryCode) {
         if (categoryCode != 0)
             return " and " + "pc.CategoryCode" + " = " + categoryCode;
@@ -6302,6 +5971,7 @@ public class DbAdapter {
 
         return array;
     }
+
     public ArrayList<Bank> getAllBankWithBankId(long bankId) {
         Bank bank;
         Cursor cursor;
@@ -6505,33 +6175,6 @@ public class DbAdapter {
         }
         return array;
     }
-
-    public ArrayList<Order> getAllOrder(int orderType) {
-        Order order;
-        Cursor cursor;
-        ArrayList<Order> array = new ArrayList<>();
-        try {
-            cursor = mDb.rawQuery("SELECT orders.id , Code , OrderDate , name, Address, Organization , orders.PersonClientId , orders.PersonId , orders.publish , Discount , Type from Orders inner join Customers on orders.PersonId = Customers.PersonId " + " Where orders.UserId=? and type =? order by OrderDate desc ", new String[]{String.valueOf(getPrefUserId()), String.valueOf(orderType)});
-            if (cursor != null) {
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    order = getOrderFromCursor2(cursor);
-                    if (order != null)
-                        array.add(order);
-                    cursor.moveToNext();
-                }
-                cursor.close();
-            }
-
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrAllOrder", e.getMessage());
-        }
-
-        return array;
-    }
-
 
     public ArrayList<Order> getAllOrder() {
         Order order;
@@ -6787,6 +6430,7 @@ public class DbAdapter {
 
         return array;
     }
+
     public ArrayList<Receipt> getAllReceiptWithTrackingCode(String code) {
         Receipt receipt;
         Cursor cursor;
@@ -7063,6 +6707,7 @@ public class DbAdapter {
         }
         return array;
     }
+
     public ArrayList<Order> getAllOrderWithPersonClientId(long personClientId) {
         Order order;
         Cursor cursor;
@@ -7186,6 +6831,7 @@ public class DbAdapter {
 
         return array;
     }
+
     public ArrayList<Receipt> getAllReceiptWithPersonClientId(long personClientId) {
         Receipt receipt;
         Cursor cursor;
@@ -8314,6 +7960,7 @@ public class DbAdapter {
         }
         return result;
     }
+
     public boolean UpdateOrAddVisitorProductFast(VisitorProduct visitorProduct) {
         boolean result = false;
         mDb.beginTransaction();
@@ -8380,84 +8027,6 @@ public class DbAdapter {
             mDb.endTransaction();
         }
         return result;
-    }
-
-    public boolean UpdateSetting(Setting setting) {
-        boolean result;
-        ContentValues initialvalue = new ContentValues();
-        initialvalue.put(DbSchema.SettingSchema.COLUMN_SettingId, setting.getSettingId());
-        initialvalue.put(DbSchema.SettingSchema.COLUMN_SettingCode, setting.getSettingCode());
-        initialvalue.put(DbSchema.SettingSchema.COLUMN_USER_ID, setting.getVisitorId());
-        initialvalue.put(DbSchema.SettingSchema.COLUMN_Value, setting.getValue());
-        initialvalue.put(DbSchema.SettingSchema.COLUMN_Deleted, setting.getDeleted());
-        initialvalue.put(DbSchema.SettingSchema.COLUMN_DataHash, setting.getDataHash());
-        initialvalue.put(DbSchema.SettingSchema.COLUMN_CreateDate, setting.getCreateDate());
-        initialvalue.put(DbSchema.SettingSchema.COLUMN_UpdateDate, setting.getUpdateDate());
-        initialvalue.put(DbSchema.SettingSchema.COLUMN_CreateSyncId, setting.getCreateSyncId());
-        initialvalue.put(DbSchema.SettingSchema.COLUMN_UpdateSyncId, setting.getUpdateSyncId());
-        initialvalue.put(DbSchema.SettingSchema.COLUMN_RowVersion, setting.getRowVersion());
-        result = (mDb.update(DbSchema.SettingSchema.TABLE_NAME, initialvalue, DbSchema.SettingSchema.COLUMN_SettingId + "=? and " + DbSchema.SettingSchema.COLUMN_USER_ID + "=? " , new String[]{String.valueOf(setting.getSettingId()) , String.valueOf(setting.getVisitorId())})) > 0;
-        return result;
-    }
-
-    public void UpdateProductDetailFromVisitorProductFast(List<VisitorProduct> visitorProducts) {
-        mDb.beginTransaction();
-        ContentValues initialvalue = new ContentValues();
-        try {
-            for (VisitorProduct visitorProduct : visitorProducts) {
-                initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Count1, visitorProduct.getCount1());
-                initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Count2, visitorProduct.getCount2());
-                initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Deleted, visitorProduct.getDelete());
-                mDb.update(DbSchema.ProductDetailSchema.TABLE_NAME, initialvalue, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + "=? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + "=? " , new String[]{String.valueOf(visitorProduct.getProductDetailId()) , String.valueOf(visitorProduct.getVisitorId())});
-            }
-            mDb.setTransactionSuccessful();
-        } finally {
-            mDb.endTransaction();
-        }
-    }
-
-    public void UpdateProductFromVisitorProductFast(List<VisitorProduct> visitorProducts) {
-        mDb.beginTransaction();
-        ContentValues initialvalue = new ContentValues();
-        try {
-            for (int i = 0; i < visitorProducts.size(); i++) {
-                VisitorProduct visitorProduct = visitorProducts.get(i);
-                ProductDetail productDetail = getProductDetailForState(visitorProduct.getProductDetailId());
-                initialvalue.put(DbSchema.ProductSchema.COLUMN_Deleted, visitorProduct.getDelete());
-                mDb.update(DbSchema.ProductSchema.TABLE_NAME, initialvalue, DbSchema.ProductSchema.COLUMN_ProductId + "=? ", new String[]{String.valueOf(productDetail.getProductId())});
-            }
-            mDb.setTransactionSuccessful();
-        } finally {
-            mDb.endTransaction();
-        }
-    }
-    public void UpdateProductFromVisitorProductFast2() {
-        mDb.beginTransaction();
-        ContentValues initialvalue = new ContentValues();
-        try {
-            mDb.rawQuery("UPDATE productdetail SET deleted=(SELECT deleted FROM visitorproduct WHERE visitorproduct.productdetailid=productdetail.productdetailid)" , null);
-            mDb.rawQuery("UPDATE products SET deleted=(SELECT deleted FROM productdetail WHERE products.productdetailid=productdetail.productdetailid)" , null);
-            mDb.rawQuery("UPDATE productdetail SET count1=(SELECT count1 FROM visitorproduct WHERE visitorproduct.productdetailid=productdetail.productdetailid)" , null);
-            mDb.rawQuery("UPDATE productdetail SET count2=(SELECT count2 FROM visitorproduct WHERE visitorproduct.productdetailid=productdetail.productdetailid)" , null);
-            mDb.setTransactionSuccessful();
-        } finally {
-            mDb.endTransaction();
-        }
-    }
-
-    public void UpdatePersonFromVisitorPeopleFast(List<VisitorPeople> visitorPeople) {
-        mDb.beginTransaction();
-        ContentValues initialvalue = new ContentValues();
-        try {
-            for (int i = 0; i < visitorPeople.size(); i++) {
-                VisitorPeople visitorPerson = visitorPeople.get(i);
-                initialvalue.put(DbSchema.CustomerSchema.COLUMN_Deleted, visitorPerson.isDeleted());
-                mDb.update(DbSchema.CustomerSchema.TABLE_NAME, initialvalue, DbSchema.CustomerSchema.COLUMN_PersonId + "=?", new String[]{String.valueOf(visitorPerson.getPersonId())});
-            }
-            mDb.setTransactionSuccessful();
-        } finally {
-            mDb.endTransaction();
-        }
     }
 
     public boolean UpdateCustomer(Customer customer) {
@@ -8990,6 +8559,7 @@ public class DbAdapter {
             e.printStackTrace();
         }
     }
+
     private void add_person_category(ExtraData extraData) {
         Gson gson = new Gson();
         PersonCategory personCategory;
@@ -9156,52 +8726,6 @@ public class DbAdapter {
         return result;
     }
 
-    public boolean UpdateProductDetail(ProductDetail productDetail) {
-        boolean result;
-
-        ContentValues initialvalue = new ContentValues();
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_ProductDetailId, productDetail.getProductDetailId());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_ProductDetailClientId, productDetail.getProductDetailClientId());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_ProductDetailCode, productDetail.getProductDetailCode());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_ProductId, productDetail.getProductId());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Properties, productDetail.getProperties());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Count1, productDetail.getCount1());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Count2, productDetail.getCount2());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Barcode, productDetail.getBarcode());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Price1, productDetail.getPrice1());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Price2, productDetail.getPrice2());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Price3, productDetail.getPrice3());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Price4, productDetail.getPrice4());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Price5, productDetail.getPrice5());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Price6, productDetail.getPrice6());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Price7, productDetail.getPrice7());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Price8, productDetail.getPrice8());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Price9, productDetail.getPrice9());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Price10, productDetail.getPrice10());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_DefaultSellPriceLevel, productDetail.getDefaultSellPriceLevel());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Discount, productDetail.getDiscount());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Serials, productDetail.getSerials());
-
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Discount1, productDetail.getDiscount1());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Discount2, productDetail.getDiscount2());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Discount3, productDetail.getDiscount3());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Discount4, productDetail.getDiscount4());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_DefaultDiscountLevel, productDetail.getDefaultDiscountLevel());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_DiscountType, productDetail.getDiscountType());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_CustomerPrice, productDetail.getCustomerPrice());
-
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_DataHash, productDetail.getDataHash());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_CreateDate, productDetail.getCreateDate());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_UpdateDate, productDetail.getUpdateDate());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_CreateSyncId, productDetail.getCreateSyncId());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_UpdateSyncId, productDetail.getUpdateSyncId());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_RowVersion, productDetail.getRowVersion());
-        initialvalue.put(DbSchema.ProductDetailSchema.COLUMN_Deleted, productDetail.isDeleted());
-
-        result = (mDb.update(DbSchema.ProductDetailSchema.TABLE_NAME, initialvalue, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + "=?", new String[]{String.valueOf(productDetail.getProductDetailId())})) > 0;
-        return result;
-    }
-
     public boolean UpdateOrAddProductDetail(List<ProductDetail> productDetails, long rowVersion) {
         boolean result = false;
         mDb.beginTransaction();
@@ -9312,9 +8836,9 @@ public class DbAdapter {
         double Sum2 = getProductAsset2(productDetailId) + count2;
         boolean result;
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DbSchema.ProductDetailSchema.COLUMN_Count1, Sum1);
-        contentValues.put(DbSchema.ProductDetailSchema.COLUMN_Count2, Sum2);
-        result = (mDb.update(DbSchema.ProductDetailSchema.TABLE_NAME, contentValues, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + " =? ", new String[]{productDetailId})) > 0;
+        contentValues.put(DbSchema.VisitorProductSchema.COLUMN_Count1, Sum1);
+        contentValues.put(DbSchema.VisitorProductSchema.COLUMN_Count2, Sum2);
+        result = (mDb.update(DbSchema.VisitorProductSchema.TABLE_NAME, contentValues, DbSchema.VisitorProductSchema.COLUMN_ProductDetailId + " =? ", new String[]{productDetailId})) > 0;
         return result;
 
     }
@@ -9695,6 +9219,7 @@ public class DbAdapter {
     public boolean DeleteCustomer(Long id) {
         return (mDb.delete(DbSchema.CustomerSchema.TABLE_NAME, DbSchema.CustomerSchema.COLUMN_ID + "=?", new String[]{String.valueOf(id)})) > 0;
     }
+
     public boolean DeleteClientCustomer(Long id) {
         return (mDb.delete(DbSchema.CustomerSchema.TABLE_NAME, DbSchema.CustomerSchema.COLUMN_PersonClientId + "=?", new String[]{String.valueOf(id)})) > 0;
     }
@@ -9995,7 +9520,7 @@ public class DbAdapter {
                 if (oldVersion < 7) {
                     db.execSQL("ALTER TABLE " + DbSchema.PromotionSchema.TABLE_NAME + " ADD " + DbSchema.PromotionSchema.COLUMN_Deleted + " INTEGER;");
                 }
-                if(oldVersion < 3450){
+                if(oldVersion < BuildConfig.VERSION_CODE){
                     db.execSQL(DbSchema.PersonCategorySchema.CREATE_TABLE);
                 }
             }
