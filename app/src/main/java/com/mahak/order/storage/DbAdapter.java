@@ -9318,9 +9318,7 @@ public class DbAdapter {
 
     public void upgradeDatabase() {
         if (mDb.getVersion() < DbSchema.DATABASE_VERSION) {
-            if(!isColumnExists("Promotion","Deleted")){
-                mDb.execSQL("ALTER TABLE " + DbSchema.PromotionSchema.TABLE_NAME + " ADD " + DbSchema.PromotionSchema.COLUMN_Deleted + " INTEGER;");
-            }
+
             mDb.setVersion(DbSchema.DATABASE_VERSION);
         }
     }
@@ -9520,8 +9518,9 @@ public class DbAdapter {
                 if (oldVersion < 7) {
                     db.execSQL("ALTER TABLE " + DbSchema.PromotionSchema.TABLE_NAME + " ADD " + DbSchema.PromotionSchema.COLUMN_Deleted + " INTEGER;");
                 }
-                if(oldVersion < BuildConfig.VERSION_CODE){
+                if(oldVersion < 3449){
                     db.execSQL(DbSchema.PersonCategorySchema.CREATE_TABLE);
+                   // db.execSQL("ALTER TABLE " + DbSchema.PromotionSchema.TABLE_NAME + " ADD " + DbSchema.PromotionSchema.COLUMN_Deleted + " INTEGER;");
                 }
             }
         }

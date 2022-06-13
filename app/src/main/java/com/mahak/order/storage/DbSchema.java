@@ -12,8 +12,8 @@ public class DbSchema {
     public static final String MAHAK_ORDER_DB = "DB_MahakOrder.db";
     public static final String RADARA_DB = "DB_Radara.db";
 
-    public static final int DATABASE_VERSION = BuildConfig.VERSION_CODE;
-    public static final int RADARA_DATABASE_VERSION = BuildConfig.VERSION_CODE;
+    public static final int DATABASE_VERSION = 3449;
+    public static final int RADARA_DATABASE_VERSION = 3449;
 
     public static class UserSchema implements BaseColumns {
 

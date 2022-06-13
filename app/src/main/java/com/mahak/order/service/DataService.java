@@ -372,7 +372,6 @@ public class DataService {
                     FirebaseCrashlytics.getInstance().recordException(e);
                     e.printStackTrace();
                 }
-                db.upgradeDatabase();
                 if(data.get(i).getDeleted() == 0)
                     db.AddPromotion(data.get(i), promotionOtherFields);
         }
