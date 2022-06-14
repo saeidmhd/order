@@ -894,6 +894,13 @@
     <string name="new_3_445_4">	برطرف شدن خطا در بروزرسانی در صورت sleep device</string>
     <string name="new_3_445_5">	برطرف شدن خطای سینک درارسال اطلاعات مشتری ویرایش شده</string>
 
+    <string name="new_3_450">نسخه ۳.۴۵۰</string>
+    <string name="new_3_450_1">اصلاح سینک اطلاعات در جهت تسریع دریافت و ذخیره اطلاعات</string>
+    <string name="new_3_450_2"> نمایش جزییات دریافتی در چاپ فاکتور و پیش فاکتور</string>
+    <string name="new_3_450_3">تغییر در نمایش دسته بندی کالاها</string>
+    <string name="new_3_450_4">پیاده سازی دسته بندی اشخاص</string>
+    <string name="new_3_450_5">بهبودهای مربوط به زیرساخت دیتابیس </string>
+
     <string name="PersonClientId">PersonClientId</string>
     <string name="array">array</string>
 

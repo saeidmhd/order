@@ -9379,6 +9379,7 @@ public class DbAdapter {
         mDb.delete(DbSchema.SettingSchema.TABLE_NAME, DbSchema.SettingSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(BaseActivity.getPrefUserId())});
         mDb.delete(DbSchema.CityZoneSchema.TABLE_NAME, null, null);
         mDb.delete(DbSchema.ProductCategorySchema.TABLE_NAME, null, null);
+        mDb.delete(DbSchema.PersonCategorySchema.TABLE_NAME, null, null);
         mDb.delete(DbSchema.CategorySchema.TABLE_NAME, null, null);
 
 
@@ -9400,13 +9401,10 @@ public class DbAdapter {
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
         private static final String INDEX_Product = "products_index";
-        private static final String INDEX_ProductDetail= "productDertail_index";
-        private final Context mcontext;
         private SQLiteDatabase Db;
 
         DatabaseHelper(Context context , String DatabaseName) {
             super(context, DatabaseName, null, DbSchema.DATABASE_VERSION);
-            this.mcontext = context;
             DB_PATH = Environment.getDataDirectory() + "/data/" + context.getPackageName() + "/databases/";
         }
 
@@ -9500,6 +9498,8 @@ public class DbAdapter {
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+            Log.e("TAG", "Updating table from " + oldVersion + " to " + newVersion);
+
             ServiceTools.writeLog("oldVersion is " + oldVersion + "newVersion" + newVersion);
 
             if (newVersion > oldVersion) {
@@ -9520,7 +9520,6 @@ public class DbAdapter {
                 }
                 if(oldVersion < 3449){
                     db.execSQL(DbSchema.PersonCategorySchema.CREATE_TABLE);
-                   // db.execSQL("ALTER TABLE " + DbSchema.PromotionSchema.TABLE_NAME + " ADD " + DbSchema.PromotionSchema.COLUMN_Deleted + " INTEGER;");
                 }
             }
         }

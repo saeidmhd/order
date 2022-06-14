@@ -1311,5 +1311,12 @@
     <string name="new_3_445_5">	برطرف شدن خطای سینک درارسال اطلاعات مشتری ویرایش شده</string>
     <string name="str_message_less_remain_credit_customer">با توجه به باقیمانده اعتبار مشتری ، دریافتی حذف نمیشود! </string>
 
+    <string name="new_3_450">نسخه ۳.۴۵۰</string>
+    <string name="new_3_450_1">اصلاح سینک اطلاعات در جهت تسریع دریافت و ذخیره اطلاعات</string>
+    <string name="new_3_450_2"> نمایش جزییات دریافتی در چاپ فاکتور و پیش فاکتور</string>
+    <string name="new_3_450_3">تغییر در نمایش دسته بندی کالاها</string>
+    <string name="new_3_450_4">پیاده سازی دسته بندی اشخاص</string>
+    <string name="new_3_450_5">بهبودهای مربوط به زیرساخت دیتابیس </string>
+
 
 </resources>

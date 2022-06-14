@@ -201,7 +201,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
     private File[] files;
 
 
-
     SendAsyncTask sendAsyncTask;
     ReceiveAsyncTask receiveAsyncTask;
     SaveAsyncTask saveAsyncTask;
@@ -1661,30 +1660,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
         if (Environment.MEDIA_MOUNTED.equals(state)) {
             files = SIGN_DIRECTORY.listFiles(filenameFilter);
         }
-    }
-
-    private void clearArraysForRecieve() {
-        bankLists.clear();
-        personGroupLists.clear();
-        customerLists.clear();
-        visitorLists.clear();
-        checkLists.clear();
-        transactionsLogs.clear();
-        orders.clear();
-        orderDetails.clear();
-        reasons.clear();
-        promotions.clear();
-        promotionDetails.clear();
-        promotionEntities.clear();
-        picturesProducts.clear();
-        extraData.clear();
-        propertyDescriptions.clear();
-        visitorProducts.clear();
-        productList.clear();
-        productDetails.clear();
-        productGroupLists.clear();
-        productPriceLevelNames.clear();
-        settings.clear();
     }
 
     private void showDialog(String msg) {
