@@ -1382,7 +1382,7 @@
     <string name="location_updated">Location Updated: </string>
     <string name="add_duplicate_product">افزودن کالای تکراری</string>
     <string name="nodata">اطلاعاتی برای نمایش وجود ندارد</string>
-    <string name="credit_alarm">با توجه به اعتبار مشتری نیاز به ثبت دریافتی می باشد!</string>
+    <string name="credit_alarm">با توجه به اعتبار مشتری و بدهی قبلی، نیاز به ثبت دریافتی می باشد!</string>
     <string name="check_new_person_activity">\" برای این مشتری عملیات ثبت شده ، امکان حذف وجود ندارد!\"</string>
 
 

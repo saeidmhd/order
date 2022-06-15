@@ -5511,8 +5511,8 @@ public class DbAdapter {
                     " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
                     " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
                     " ) and " + groupIdScript(groupId) +
-                    " Customers.UserId = ? and Customers.MahakId = ? and Customers.DatabaseId = ? and visitorpeople.Deleted = ?" +
-                    getCategoryString2(categoryCode)+ " order by " + orderBy + " LIMIT " + LIMIT, new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(0)});
+                    " Customers.UserId = ? and Customers.MahakId = ? and Customers.DatabaseId = ? and (visitorpeople.Deleted = 0 or visitorpeople.Deleted is NULL)" +
+                    getCategoryString2(categoryCode)+ " order by " + orderBy + " LIMIT " + LIMIT, new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId()});
             // cursor = mDb.query(DbSchema.Customerschema.TABLE_NAME, null, DbSchema.Customerschema.COLUMN_USER_ID + " =? and " + DbSchema.Customerschema.COLUMN_MAHAK_ID + "=? and " + DbSchema.Customerschema.COLUMN_DATABASE_ID + "=? and " + groupIdScript(groupId) + DbSchema.Customerschema.COLUMN_Deleted + "=?", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(0)}, null, null, orderBy, LIMIT);
             if (cursor != null) {
                 cursor.moveToFirst();

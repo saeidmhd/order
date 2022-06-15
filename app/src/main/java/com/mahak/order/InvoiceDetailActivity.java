@@ -370,14 +370,15 @@ public class InvoiceDetailActivity extends BaseActivity {
         return true;
     }
     public double calculateRemainCredit(double finalPrice) {
-        if(CustomerId == 0)
+        if(CustomerId == 0 )
             return -1;
         Customer customer = db.getCustomerWithPersonId(CustomerId);
         double customerCredit = customer.getCredit();
+        double customerBalance = customer.getBalance();
         if (customerCredit == NoLimit)
             return -1;
         else {
-            customerCreditValue =  customerCredit + db.getTotalCustomerReceiptWithId(CustomerId) - db.getTotalPriceInvoicePerPerson(CustomerId);
+            customerCreditValue =  customerCredit + db.getTotalCustomerReceiptWithId(CustomerId) + customerBalance - db.getTotalPriceInvoicePerPerson(CustomerId);
             return finalPrice - customerCreditValue;
         }
     }
