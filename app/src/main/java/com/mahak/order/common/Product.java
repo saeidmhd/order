@@ -139,6 +139,7 @@ public class Product implements Parcelable {
 
     private String pictureUrl;
     private int productDetailId;
+    private double discount;
 
     public Product() {
         this.Tags = "";
@@ -608,5 +609,13 @@ public class Product implements Parcelable {
 
     public int getProductDetailId() {
         return productDetailId;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
     }
 }

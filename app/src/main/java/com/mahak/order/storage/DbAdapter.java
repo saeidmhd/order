@@ -1674,6 +1674,7 @@ public class DbAdapter {
         product.setPrice(cursor.getDouble(cursor.getColumnIndex("price")));
         product.setPromotionId(cursor.getInt(cursor.getColumnIndex("PromotionId")));
         product.setProductDetailId(cursor.getInt(cursor.getColumnIndex(DbSchema.ProductDetailSchema.COLUMN_ProductDetailId)));
+        product.setDiscount(cursor.getDouble(cursor.getColumnIndex("discount")));
 
         return product;
     }
@@ -5145,7 +5146,7 @@ public class DbAdapter {
             searchStr = ServiceTools.replaceWithEnglish(searchStr);
         }
         cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName  , ProductDetail.productDetailId , pc.CategoryCode , " +
-                getPriceLevel(defPriceLevel) + " productdetail.Customerprice , sum(visitorproduct.Count1) as sumcount1 , sum(visitorproduct.Count2) as sumcount2 " +
+                getPriceLevel(defPriceLevel) + getDiscountLevel() + " productdetail.Customerprice , sum(visitorproduct.Count1) as sumcount1 , sum(visitorproduct.Count2) as sumcount2 " +
                 " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                 " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userid = products.userid" +
                 " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4" +
@@ -5182,6 +5183,14 @@ public class DbAdapter {
                     " when 9 then price9 " +
                     " when 10 then price10 end as price , ";
 
+    }
+
+    public String getDiscountLevel(){
+        return " case DefaultDiscountLevel "  +
+                " when 1 then Discount1 " +
+                " when 2 then Discount2 " +
+                " when 3 then Discount3 " +
+                " when 4 then Discount4 end as discount , ";
     }
 
 

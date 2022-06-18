@@ -932,7 +932,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     getAllDataBody.setFromVisitorPersonVersion(VisitorPersonMaxRowVersion);
                     break;
                 case 5:
-                    mScrollView.fullScroll(View.FOCUS_DOWN);
+                  //  mScrollView.fullScroll(View.FOCUS_DOWN);
                     CustomersGroupMaxRowVersion = db.getMaxRowVersion(DbSchema.CustomersGroupSchema.TABLE_NAME);
                     getAllDataBody.setFromPersonGroupVersion(CustomersGroupMaxRowVersion);
                     break;

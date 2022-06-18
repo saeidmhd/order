@@ -42,6 +42,8 @@ import com.mahak.order.common.ServiceTools;
 import com.mahak.order.storage.DbAdapter;
 
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -643,6 +645,66 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     productPickerListActivity.productGridGalleryFragment.dismissDialog();
             }
         }
+
+        if (BaseActivity.getPrefApplyRowDiscount().equals("1.00000000")) {
+            if (ProductPickerListActivity.HashMap_Product.get(product.getProductId()) != null){
+                    double percentOff = 0;
+                    double off;
+                    percentOff = product.getDiscount();
+                    if (sumCountBaJoz != 0)
+                        off = (percentOff * price * sumCountBaJoz) / 100;
+                    else
+                        off = (percentOff * price) / 100;
+
+                    if (ProductPickerListActivity.HashMap_Product.size() > 0)
+                        if (ProductPickerListActivity.HashMap_Product.get(product.getProductId()) != null)
+                            ProductPickerListActivity.HashMap_Product.get(product.getProductId()).setDiscount(roundDouble(off));
+
+            }
+        }
+    }
+
+    public double getPercentOff(Product product , double price , double sumCountBaJoz ){
+       /* double discount = ProductPickerListActivity.HashMap_Product.get(product.getProductId()).getDiscount();
+        if(discount != 0){
+            if (sumCountBaJoz != 0)
+                return roundDouble((discount * 100) / (price * sumCountBaJoz));
+            else
+                return roundDouble((discount * 100) / price);
+        }else {
+            return product.getDiscount();
+        }*/
+
+        return product.getDiscount();
+    }
+
+    private double roundDouble(double d) {
+        BigDecimal bd = null;
+        try {
+            bd = new BigDecimal(Double.toString(d));
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            e.printStackTrace();
+        }
+        if (bd != null) {
+            return bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
+        }
+        return 0;
+    }
+
+    private double getPercentOff(int defaultLevel, ProductDetail productDetail) {
+        switch (defaultLevel) {
+            case 1:
+                return productDetail.getDiscount1();
+            case 2:
+                return productDetail.getDiscount2();
+            case 3:
+                return productDetail.getDiscount3();
+            case 4:
+                return productDetail.getDiscount4();
+        }
+        return 0;
     }
 
     @Override

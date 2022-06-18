@@ -328,7 +328,7 @@ public class InvoiceDetailActivity extends BaseActivity {
                 intent.putExtra(CUSTOMERID_KEY, CustomerId);
                 intent.putExtra(CUSTOMER_CLIENT_ID_KEY, CustomerClientId);
                 intent.putExtra(PAYMENT_KEY, FinalPrice);
-                intent.putExtra(Force_Payment_KEY, remainCustomerCredit);
+                intent.putExtra(Force_Payment_KEY, ServiceTools.formatPrice(remainCustomerCredit));
                 intent.putExtra(PAGE, PAGE_Invoice_Detail_Activity);
                 startActivityForResult(intent, REQUEST_PAY_FACTOR);
             } else

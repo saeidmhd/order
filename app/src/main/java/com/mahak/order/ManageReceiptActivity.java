@@ -224,8 +224,9 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             Code = Extras.getString(CODE_KEY) != null ? Extras.getString(CODE_KEY) : ProjectInfo.DONT_CODE;
             Payment = Extras.getDouble(PAYMENT_KEY);
 
-            remainCustomerCredit = Extras.getDouble(Force_Payment_KEY);
-            txtAmount.setText(ServiceTools.formatPrice(remainCustomerCredit));
+            remainCustomerCredit = ServiceTools.toDouble(Extras.getString(Force_Payment_KEY));
+            String customer_remain= ServiceTools.formatPrice(remainCustomerCredit);
+            txtAmount.setText(customer_remain);
 
             ReceiptId = Extras.getLong(ID);
 
