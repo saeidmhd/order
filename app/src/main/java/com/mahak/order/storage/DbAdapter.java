@@ -1675,6 +1675,8 @@ public class DbAdapter {
         product.setPromotionId(cursor.getInt(cursor.getColumnIndex("PromotionId")));
         product.setProductDetailId(cursor.getInt(cursor.getColumnIndex(DbSchema.ProductDetailSchema.COLUMN_ProductDetailId)));
         product.setDiscount(cursor.getDouble(cursor.getColumnIndex("discount")));
+        product.setTaxPercent(cursor.getDouble(cursor.getColumnIndex(DbSchema.ProductSchema.COLUMN_TAX)));
+        product.setChargePercent(cursor.getDouble(cursor.getColumnIndex(DbSchema.ProductSchema.COLUMN_CHARGE)));
 
         return product;
     }
@@ -5145,7 +5147,7 @@ public class DbAdapter {
         if (ServiceTools.checkArabic(searchStr)) {
             searchStr = ServiceTools.replaceWithEnglish(searchStr);
         }
-        cursor = mDb.rawQuery(" SELECT Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName  , ProductDetail.productDetailId , pc.CategoryCode , " +
+        cursor = mDb.rawQuery(" SELECT Tax , Charge , Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName  , ProductDetail.productDetailId , pc.CategoryCode , " +
                 getPriceLevel(defPriceLevel) + getDiscountLevel() + " productdetail.Customerprice , sum(visitorproduct.Count1) as sumcount1 , sum(visitorproduct.Count2) as sumcount2 " +
                 " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                 " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userid = products.userid" +
