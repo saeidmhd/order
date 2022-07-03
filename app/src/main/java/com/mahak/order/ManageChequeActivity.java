@@ -104,11 +104,15 @@ public class ManageChequeActivity extends BaseActivity {
                     FillView();
                 } else if (Mode == MODE_NEW) {
                     dt = new Date();
-                    Type = ProjectInfo.CHEQUE_TYPE;
+                    Type = Extras.getInt(TYPE_KEY);
                     btnDelete.setVisibility(View.GONE);
                     LngDate = dt.getTime();
                     StrDate = getDateAndTimeForLong(LngDate);
                     tvDate.setText(StrDate);
+                    if (Type == ProjectInfo.CHEQUE_TYPE)
+                        spnChequeType.setSelection(0);
+                    else if (Type == ProjectInfo.CASHRECEIPT_TYPE)
+                        spnChequeType.setSelection(1);
                 }
                 Issaved = false;
             }
@@ -505,7 +509,6 @@ public class ManageChequeActivity extends BaseActivity {
      * Fill TextView
      */
     private void FillView() {
-        int type = ManageReceiptActivity.arrayCheque.get(PositionArray).getType();
         Type = ManageReceiptActivity.arrayCheque.get(PositionArray).getType();
         LngDate = ManageReceiptActivity.arrayCheque.get(PositionArray).getDate();
         bank = new Bank();
@@ -519,11 +522,11 @@ public class ManageChequeActivity extends BaseActivity {
         txtNumber.setText(ManageReceiptActivity.arrayCheque.get(PositionArray).getNumber());
         tvDate.setText(getDateAndTimeForLong(LngDate));
         //Check Type for spnChequeType________________________________________________
-        if (type == ProjectInfo.CHEQUE_TYPE) {
+        if (Type == ProjectInfo.CHEQUE_TYPE) {
             spnChequeType.setSelection(0);
             txtBranch.setVisibility(View.VISIBLE);
             tvBranch.setVisibility(View.VISIBLE);
-        } else if (type == ProjectInfo.CASHRECEIPT_TYPE) {
+        } else if (Type == ProjectInfo.CASHRECEIPT_TYPE) {
             spnChequeType.setSelection(1);
             txtBranch.setVisibility(View.INVISIBLE);
             tvBranch.setVisibility(View.INVISIBLE);

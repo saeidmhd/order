@@ -175,6 +175,11 @@ public class DbAdapter {
         ContentValues initialvalue = getOnlinePictureProduct(picturesProduct);
         return mDb.insert(DbSchema.PicturesProductSchema.TABLE_NAME, null, initialvalue);
     }
+    public void addSignPicture(PicturesProduct picturesProduct) {
+        ContentValues initValue = getSign(picturesProduct);
+        if(!(mDb.update(DbSchema.PicturesProductSchema.TABLE_NAME, initValue, DbSchema.PicturesProductSchema.COLUMN_ITEM_ID + " =? and " + DbSchema.PicturesProductSchema.COLUMN_ITEM_TYPE + " =? " , new String[]{String.valueOf(picturesProduct.getItemId()) , String.valueOf(2)}) > 0))
+            mDb.insert(DbSchema.PicturesProductSchema.TABLE_NAME, null, initValue);
+    }
 
     public long AddPropertyDescription(PropertyDescription propertyDescription) {
         boolean result;
@@ -1009,6 +1014,19 @@ public class DbAdapter {
         initialvalue.put(DbSchema.PicturesProductSchema.COLUMN_RowVersion, picturesProduct.getRowVersion());
 
 
+        return initialvalue;
+    }
+    private ContentValues getSign(PicturesProduct picturesProduct) {
+        ContentValues initialvalue = new ContentValues();
+        initialvalue.put(DbSchema.PicturesProductSchema.COLUMN_ITEM_TYPE, picturesProduct.getItemType());
+        initialvalue.put(DbSchema.PicturesProductSchema.COLUMN_ITEM_ID, picturesProduct.getItemId());
+        initialvalue.put(DbSchema.PicturesProductSchema.COLUMN_FILE_NAME, picturesProduct.getFileName());
+        initialvalue.put(DbSchema.PicturesProductSchema.COLUMN_TITLE, picturesProduct.getTitle());
+        initialvalue.put(DbSchema.PicturesProductSchema.COLUMN_DATABASE_ID, picturesProduct.getDataBaseId());
+        initialvalue.put(DbSchema.PicturesProductSchema.COLUMN_PictureClientId, picturesProduct.getPictureClientId());
+        initialvalue.put(DbSchema.PicturesProductSchema.COLUMN_Width, picturesProduct.getWidth());
+        initialvalue.put(DbSchema.PicturesProductSchema.COLUMN_Height, picturesProduct.getHeight());
+        initialvalue.put(DbSchema.PicturesProductSchema.COLUMN_Format, picturesProduct.getFormat());
         return initialvalue;
     }
 
@@ -4300,12 +4318,12 @@ public class DbAdapter {
         try {
             cursor = mDb.rawQuery(" select count(*) from Products " +
                     " inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                    " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userId = ProductDetail.UserId " +
-                    " LEFT join ProductCategory on products.ProductCode = ProductCategory.ProductCode and ProductCategory.UserId" + " = " + getPrefUserId() +
+                    " LEFT join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userid = products.userid " +
+                    " LEFT  join ( SELECT DISTINCT userid , productcode , CategoryCode from ProductCategory ) as pc on  products.ProductCode = pc.ProductCode  " +
                     " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) " +
                     " and visitorproduct.deleted = 0 "  +
                     " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                    getProductCategoryString(CategoryId) + getProductAssetStrnig(MODE_ASSET) + getCategoryString(categoryCode) +
+                    getProductCategoryString(CategoryId) + getProductAssetStrnig(MODE_ASSET) + getCategoryString2(categoryCode) +
                     " order by " + orderBy, null);
             if (cursor != null) {
                 cursor.moveToFirst();
@@ -4338,7 +4356,7 @@ public class DbAdapter {
                     "select count(*) from Customers " +
                             " INNER join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId and Customers.UserId = CustomersGroups.UserId " +
                             " left join visitorpeople on visitorpeople.personid = customers.personid and VisitorPeople.userId = Customers.userId " +
-                            " LEFT  join ( SELECT DISTINCT userid , Personcode , CategoryCode from PersonCategory ) as pc on  Customers.PersonCode = pc.PersonCode "  +
+                            getCategoryJoinString2(categoryCode) +
                             " where ( " + LikeStr +
                             " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
                             " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
@@ -5161,7 +5179,7 @@ public class DbAdapter {
 
     public String getPriceLevel(int defPriceLevel){
         if (defPriceLevel != 0) {
-            return " case  " + defPriceLevel +
+            return  " case  " + defPriceLevel +
                     " when 1 then Price1 " +
                     " when 2 then Price2 " +
                     " when 3 then price3 " +
@@ -5513,11 +5531,11 @@ public class DbAdapter {
         String LIMIT = String.valueOf(totalItemCount) + ",15";
         ArrayList<Customer> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select Customers.Organization, Customers.name, Customers.Address, Customers.PersonCode, PromotionId, Customers.PersonClientId, Customers.PersonId, Customers.PersonGroupId, Customers.Mobile, Customers.Phone, Customers.Id , Customers.balance  , pc.CategoryCode" +
+            cursor = mDb.rawQuery("select Customers.Organization, Customers.name, Customers.Address, Customers.PersonCode, PromotionId, Customers.PersonClientId, Customers.PersonId, Customers.PersonGroupId, Customers.Mobile, Customers.Phone, Customers.Id , Customers.balance " +
                     " from Customers inner join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId and CustomersGroups.userId = Customers.userId  " +
                     " LEFT join visitorpeople  on visitorpeople.personid = Customers.personid and VisitorPeople.userId = Customers.userId " +
                     " LEFT join PromotionEntity  on PromotionEntity.CodeEntity = Customers.PersonCode and EntityType = 2 " +
-                    " LEFT  join ( SELECT DISTINCT userid , Personcode , CategoryCode from PersonCategory ) as pc on  Customers.PersonCode = pc.PersonCode" +
+                     getCategoryJoinString2(categoryCode) +
                     " where ( " + LikeStr +
                     " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
                     " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
@@ -5615,11 +5633,11 @@ public class DbAdapter {
         String LikeStr = ServiceTools.anyPartOfPersonNameLikeString(searchString);
         ArrayList<Customer> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select Customers.Organization, Customers.name, Customers.Address, Customers.PersonCode, PromotionId, Customers.PersonClientId, Customers.PersonId, Customers.PersonGroupId, Customers.Mobile, Customers.Phone, Customers.Id, Customers.balance , pc.CategoryCode " +
+            cursor = mDb.rawQuery("select Customers.Organization, Customers.name, Customers.Address, Customers.PersonCode, PromotionId, Customers.PersonClientId, Customers.PersonId, Customers.PersonGroupId, Customers.Mobile, Customers.Phone, Customers.Id, Customers.balance " +
                     " from Customers inner join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId  and CustomersGroups.userId = Customers.userId  " +
                     " LEFT join PromotionEntity  on PromotionEntity.CodeEntity = Customers.PersonCode and EntityType = 2 " +
                     " LEFT join visitorpeople  on visitorpeople.personid = Customers.personid and VisitorPeople.userId = Customers.userId " +
-                    " LEFT join ( SELECT DISTINCT userid , Personcode , CategoryCode from PersonCategory ) as pc on  Customers.PersonCode = pc.PersonCode" +
+                    getCategoryJoinString2(categoryCode) +
                     " where ( " + LikeStr +
                     " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
                     " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
@@ -5664,6 +5682,11 @@ public class DbAdapter {
     private String getCategoryString2(long categoryCode) {
         if (categoryCode != 0)
             return " and " + "pc.CategoryCode" + " = " + categoryCode;
+        else return "";
+    }
+    private String getCategoryJoinString2(long categoryCode) {
+        if (categoryCode != 0)
+            return "LEFT  join ( SELECT DISTINCT userid , Personcode , CategoryCode from PersonCategory ) as pc on  Customers.PersonCode = pc.PersonCode ";
         else return "";
     }
 
@@ -9177,6 +9200,7 @@ public class DbAdapter {
         boolean result;
         ContentValues initialvalue = new ContentValues();
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderDetailId, orderDetail.getOrderDetailId());
+        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_RowVersion, orderDetail.getRowVersion());
 //        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderDetailClientId, orderDetail.getOrderDetailClientId());
 //        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderClientId, orderDetail.getOrderClientId());
 //        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderId, orderDetail.getOrderId());

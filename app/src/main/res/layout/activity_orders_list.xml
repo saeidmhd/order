@@ -87,7 +87,7 @@
             android:layout_height="fill_parent"
             android:divider="@android:color/transparent"
             android:dividerHeight="@dimen/NormalSize"
-            android:listSelector="@android:color/transparent"></ListView>
+            android:listSelector="@android:color/transparent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/empty"

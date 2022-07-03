@@ -40,6 +40,8 @@ import com.mahak.order.common.SharedPreferencesHelper;
 import com.mahak.order.common.VisitorProduct;
 import com.mahak.order.scan.SmallCaptureActivity;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.widget.DrawableClickListener;
+import com.mahak.order.widget.FontEditText;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -83,7 +85,7 @@ public class GoodDetailOneUnit extends BaseActivity {
     static TextView txtsumCount1;
     static TextView sumAsset;
     private TextView row;
-    private EditText txtSearch;
+    private FontEditText txtSearch;
     private ArrayList<OrderDetailProperty> orderDetailProperties = new ArrayList<>();
     OrderDetailProperty orderDetailProperty = new OrderDetailProperty();
 
@@ -158,12 +160,27 @@ public class GoodDetailOneUnit extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                txtSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_cancel_search, 0, R.drawable.ic_search_set_nav, 0);
                 getAdapterListProductDetail().getFilter().filter(s);
                 row.setText(String.valueOf(orderDetailProperties.size()));
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+            }
+        });
+
+        txtSearch.setDrawableClickListener(new DrawableClickListener() {
+            @Override
+            public void onClick(DrawablePosition target) {
+                switch (target) {
+                    case LEFT:
+                        txtSearch.setText("");
+                        txtSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search_set_nav,0 );
+                        break;
+                    default:
+                        break;
+                }
             }
         });
 
@@ -270,7 +287,7 @@ public class GoodDetailOneUnit extends BaseActivity {
         btnSave = (Button) findViewById(R.id.btnSave);
         txtsumCount1 = (TextView) findViewById(R.id.sumCount1);
         sumAsset = (TextView) findViewById(R.id.sumAsset);
-        txtSearch = (EditText) findViewById(R.id.txtSearch);
+        txtSearch = (FontEditText) findViewById(R.id.txtSearch);
 
         productDetailRecycler = (RecyclerView) findViewById(R.id.productDetailRecycler);
         propertyTitle = (TextView) findViewById(R.id.property_title);

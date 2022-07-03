@@ -118,13 +118,29 @@ public class ServiceTools {
             for (int i = 0; i < DecimalPointNumber; i++) {
                 sb.append("#");
             }
-            myFormatter.applyPattern("###,###." + sb.toString());
+            myFormatter.applyPattern("###,###." + sb);
         } else
-            myFormatter.applyPattern("###,###" + sb.toString());
+            myFormatter.applyPattern("###,###" + sb);
         if (Locale.getDefault().getDisplayLanguage().equals("Deutsch"))
             return getCurrency().getSymbol() + " " + myFormatter.format(value);
         else
             return myFormatter.format(value);
+    }
+    public static double formatDoublePrice(double value) {
+        int DecimalPointNumber = ServiceTools.toInt(BaseActivity.getPrefPriceDecimalPoint());
+        Locale locale = Locale.getDefault();
+        DecimalFormat myFormatter = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
+        myFormatter.setRoundingMode(RoundingMode.HALF_UP);
+        StringBuilder sb = new StringBuilder();
+        if (DecimalPointNumber > 0) {
+            for (int i = 0; i < DecimalPointNumber; i++) {
+                sb.append("#");
+            }
+            myFormatter.applyPattern("###,###." + sb);
+        } else
+            myFormatter.applyPattern("###,###" + sb);
+
+        return toDouble(myFormatter.format(value));
     }
 
     public static String formatPriceIgnorLocal(double value) {

@@ -29,6 +29,8 @@ import com.mahak.order.common.Person_Extra_Data;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.widget.DrawableClickListener;
+import com.mahak.order.widget.FontEditText;
 
 import java.util.ArrayList;
 
@@ -37,7 +39,7 @@ public class DeliveryOrdersListActivity extends BaseActivity {
     private static int REQUEST_CODE_DELIVERY_ORDER_DETAIL = 1;
     private Context mContext;
     private Activity mActivity;
-    private EditText txtSearch;
+    private FontEditText txtSearch;
     private ListView lstDeliveryOrder;
     private DbAdapter db;
     private ArrayList<Order> arrayDeliveryOrder;
@@ -69,8 +71,10 @@ public class DeliveryOrdersListActivity extends BaseActivity {
 
         txtSearch.addTextChangedListener(new TextWatcher() {
 
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                txtSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_cancel_search, 0, R.drawable.ic_search_set_nav, 0);
                 adDeliveryOrder.getFilter().filter(s, new FilterListener() {
 
                     @Override
@@ -95,6 +99,20 @@ public class DeliveryOrdersListActivity extends BaseActivity {
             }
         });
 
+        txtSearch.setDrawableClickListener(new DrawableClickListener() {
+            @Override
+            public void onClick(DrawablePosition target) {
+                switch (target) {
+                    case LEFT:
+                        txtSearch.setText("");
+                        txtSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search_set_nav,0 );
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
         lstDeliveryOrder.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
@@ -112,7 +130,7 @@ public class DeliveryOrdersListActivity extends BaseActivity {
      */
     private void initialise() {
 
-        txtSearch = (EditText) findViewById(R.id.txtSearch);
+        txtSearch = (FontEditText) findViewById(R.id.txtSearch);
         lstDeliveryOrder = (ListView) findViewById(R.id.lstDeliveryOrders);
         db = new DbAdapter(mContext);
 

@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -64,7 +65,9 @@ import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
 import com.mahak.order.service.DataService;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.DbSchema;
+import com.mahak.order.widget.DrawableClickListener;
 import com.mahak.order.widget.FontDialog;
+import com.mahak.order.widget.FontEditText;
 import com.mahak.order.widget.FontPopUp;
 import com.mahak.order.widget.FontProgressDialog;
 
@@ -100,7 +103,7 @@ public class OrdersListActivity extends BaseActivity {
     private long OrderId;
     private String Code;
     private int Position;
-    private EditText txtSearch;
+    private FontEditText txtSearch;
     private ConstraintLayout empty, emptyReceive;
     private Bundle Extras;
     private int Type, Page;
@@ -143,6 +146,7 @@ public class OrdersListActivity extends BaseActivity {
     public static long StoreCode = 0;
     private FontProgressDialog pd;
     private int sortType = ProjectInfo.SortDesc;
+    private String CUSTOMER_NAME = "";
 
 
     @Override
@@ -162,6 +166,7 @@ public class OrdersListActivity extends BaseActivity {
         if (Extras != null) {
             Page = Extras.getInt(PAGE);
             Type = Extras.getInt(TYPE_KEY);
+            CUSTOMER_NAME = Extras.getString(CUSTOMER_NAME_KEY);
         }
 
         //config actionbar___________________________________________
@@ -230,62 +235,15 @@ public class OrdersListActivity extends BaseActivity {
                 }
             }
         });
-
-        txtSearch.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if (Type == ProjectInfo.TYPE_RECEIVE_TRANSFERENCE) {
-                    if(adReceivedTransfer != null){
-                        adReceivedTransfer.getFilter().filter(s, new FilterListener() {
-
-                        @Override
-                        public void onFilterComplete(int count) {
-
-                            tvPageTitle.setText(getString(R.string.str_nav_transfer_list) + "(" + count + ")");
-                        }
-                    });
-                    }
-
-                } else {
-
-                    if(adOrder != null){
-                        adOrder.getFilter().filter(s, new FilterListener() {
-                        @Override
-                        public void onFilterComplete(int count) {
-
-                            if (Type == ProjectInfo.TYPE_ORDER)
-                                tvPageTitle.setText(getString(R.string.str_nav_order_list) + "(" + count + ")");
-                            else if (Type == ProjectInfo.TYPE_INVOCIE)
-                                tvPageTitle.setText(getString(R.string.str_nav_invoice_list) + "(" + count + ")");
-                            else if (Type == ProjectInfo.TYPE_SEND_TRANSFERENCE)
-                                tvPageTitle.setText(getString(R.string.str_nav_transfer_list) + "(" + count + ")");
-                        }
-                    });
-                    }
-                }
-            }
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
     }//End Of OnCreate
 
-    @Override
+    /*@Override
     public void onBackPressed() {
         Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         super.onBackPressed();
-    }
+    }*/
 
     /**
      * Initializing Variables
@@ -304,7 +262,8 @@ public class OrdersListActivity extends BaseActivity {
             lstOrder.setEmptyView(empty);
         }
 
-        txtSearch = (EditText) findViewById(R.id.txtSearch);
+        txtSearch = (FontEditText) findViewById(R.id.txtSearch);
+
         btnReceived = (Button) findViewById(R.id.btnReceived);
         btnSend = (Button) findViewById(R.id.btnSend);
         llReceived = (ConstraintLayout) findViewById(R.id.llReceived);
@@ -368,6 +327,69 @@ public class OrdersListActivity extends BaseActivity {
             tvPageTitle.setText(getString(R.string.str_nav_invoice_list) + "(" + lstOrder.getCount() + ")");
         else if (Type == ProjectInfo.TYPE_SEND_TRANSFERENCE)
             tvPageTitle.setText(getString(R.string.str_nav_transfer_list) + "(" + lstOrder.getCount() + ")");
+
+        txtSearch.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                txtSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_cancel_search, 0, R.drawable.ic_search_set_nav, 0);
+
+                if (Type == ProjectInfo.TYPE_RECEIVE_TRANSFERENCE) {
+                    if(adReceivedTransfer != null){
+                        adReceivedTransfer.getFilter().filter(s, new FilterListener() {
+                            @Override
+                            public void onFilterComplete(int count) {
+                                tvPageTitle.setText(getString(R.string.str_nav_transfer_list) + "(" + count + ")");
+                            }
+                        });
+                    }
+
+                } else {
+
+                    if(adOrder != null){
+                        adOrder.getFilter().filter(s, new FilterListener() {
+                            @Override
+                            public void onFilterComplete(int count) {
+
+                                if (Type == ProjectInfo.TYPE_ORDER)
+                                    tvPageTitle.setText(getString(R.string.str_nav_order_list) + "(" + count + ")");
+                                else if (Type == ProjectInfo.TYPE_INVOCIE)
+                                    tvPageTitle.setText(getString(R.string.str_nav_invoice_list) + "(" + count + ")");
+                                else if (Type == ProjectInfo.TYPE_SEND_TRANSFERENCE)
+                                    tvPageTitle.setText(getString(R.string.str_nav_transfer_list) + "(" + count + ")");
+                            }
+                        });
+                    }
+                }
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        if(!TextUtils.isEmpty(CUSTOMER_NAME))
+            txtSearch.setText(CUSTOMER_NAME);
+
+        txtSearch.setDrawableClickListener(new DrawableClickListener() {
+            @Override
+            public void onClick(DrawablePosition target) {
+                switch (target) {
+                    case LEFT:
+                        txtSearch.setText("");
+                        txtSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search_set_nav,0 );
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     public void btnReceived(View view) {
@@ -1466,9 +1488,11 @@ public class OrdersListActivity extends BaseActivity {
                 }
                 break;
             case android.R.id.home:
-                Intent intent2 = new Intent(getApplicationContext(), DashboardActivity.class);
+                /*Intent intent2 = new Intent(getApplicationContext(), DashboardActivity.class);
                 intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent2);
+                startActivity(intent2);*/
+                finish();
+
                 break;
             default:
                 break;

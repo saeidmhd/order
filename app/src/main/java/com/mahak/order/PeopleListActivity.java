@@ -67,7 +67,9 @@ import com.mahak.order.scan.SmallCaptureActivity;
 import com.mahak.order.service.DataService;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.DbSchema;
+import com.mahak.order.widget.DrawableClickListener;
 import com.mahak.order.widget.FontDialog;
+import com.mahak.order.widget.FontEditText;
 import com.mahak.order.widget.FontPopUp;
 import com.mahak.order.widget.FontProgressDialog;
 import com.mahak.order.widget.SortDialogActivity;
@@ -106,7 +108,7 @@ public class PeopleListActivity extends BaseActivity {
     private int Position;
     private Bundle Extras;
     private int Page;
-    private EditText txtSearch;
+    private FontEditText txtSearch;
     public static ArrayList<CustomerGroup> arrayGroup = new ArrayList<CustomerGroup>();
     private TextView tvPageTitle;
     public static int type = 0;
@@ -238,6 +240,7 @@ public class PeopleListActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                txtSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_cancel_search, 0, R.drawable.ic_search_set_nav, 0);
             }
 
             @Override
@@ -271,6 +274,20 @@ public class PeopleListActivity extends BaseActivity {
                                 });
                             }
                         },DELAY);
+            }
+        });
+
+        txtSearch.setDrawableClickListener(new DrawableClickListener() {
+            @Override
+            public void onClick(DrawablePosition target) {
+                switch (target) {
+                    case LEFT:
+                        txtSearch.setText("");
+                        txtSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search_set_nav,0 );
+                        break;
+                    default:
+                        break;
+                }
             }
         });
 
@@ -308,7 +325,7 @@ public class PeopleListActivity extends BaseActivity {
     private void initialise() {
         db = new DbAdapter(mContext);
         lstCustomer = (ListView) findViewById(R.id.lstCustomer);
-        txtSearch = (EditText) findViewById(R.id.txtSearch);
+        txtSearch = (FontEditText) findViewById(R.id.txtSearch);
         spnGroup = (Spinner) findViewById(R.id.spnGroup);
         // swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
         llprogressBar = (LinearLayout) findViewById(R.id.llprogressBar);

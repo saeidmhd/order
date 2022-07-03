@@ -38,7 +38,9 @@ import com.mahak.order.common.login.LoginResult;
 import com.mahak.order.common.request.SetAllDataBody;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.widget.DrawableClickListener;
 import com.mahak.order.widget.FontDialog;
+import com.mahak.order.widget.FontEditText;
 import com.mahak.order.widget.FontPopUp;
 import com.mahak.order.widget.FontProgressDialog;
 
@@ -63,7 +65,7 @@ public class PayableListActivity extends BaseActivity {
     private int REQUESTCODE_MANAGE_PAYABLE;
     private DbAdapter db;
     private ExpandListAdapter expandlistAdapter;
-    private EditText Search;
+    private FontEditText txtSearch;
     private long lngDate;
     private long PayableTransferId = 0;
     private int PositionArray;
@@ -92,10 +94,11 @@ public class PayableListActivity extends BaseActivity {
         db.open();
         FillView();
 
-        Search.addTextChangedListener(new TextWatcher() {
+        txtSearch.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void onTextChanged(CharSequence query, int arg1, int arg2, int arg3) {
+                txtSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_cancel_search, 0, R.drawable.ic_search_set_nav, 0);
                 expandlistAdapter.filterData(query.toString());
 
             }
@@ -114,6 +117,20 @@ public class PayableListActivity extends BaseActivity {
             }
         });
 
+        txtSearch.setDrawableClickListener(new DrawableClickListener() {
+            @Override
+            public void onClick(DrawablePosition target) {
+                switch (target) {
+                    case LEFT:
+                        txtSearch.setText("");
+                        txtSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search_set_nav,0 );
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
     }//end of onCreate
 
     /**
@@ -121,7 +138,7 @@ public class PayableListActivity extends BaseActivity {
      */
     private void initialise() {
         ExpandList = (ExpandableListView) findViewById(R.id.explistReceipt);
-        Search = (EditText) findViewById(R.id.txtSearch);
+        txtSearch = (FontEditText) findViewById(R.id.txtSearch);
         db = new DbAdapter(mContext);
         tvPageTitle.setText(getString(R.string.str_nav_payable_list) + "(" + ExpandList.getCount() + ")");
     }

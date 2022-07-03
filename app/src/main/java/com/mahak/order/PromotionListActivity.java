@@ -17,13 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mahak.order.adapter.PromotionAdapter;
 import com.mahak.order.common.Promotion;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.widget.DrawableClickListener;
+import com.mahak.order.widget.FontEditText;
 
 import java.util.ArrayList;
 
 public class PromotionListActivity extends BaseActivity {
 
     private RecyclerView mRecyclerView;
-    private EditText txtSearch;
+    private FontEditText txtSearch;
     private PromotionAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private DbAdapter db;
@@ -66,6 +68,7 @@ public class PromotionListActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                txtSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_cancel_search, 0, R.drawable.ic_search_set_nav, 0);
 
                 if (mAdapter != null)
                     mAdapter.getFilter().filter(s, new Filter.FilterListener() {
@@ -82,13 +85,27 @@ public class PromotionListActivity extends BaseActivity {
 
             }
         });
+
+        txtSearch.setDrawableClickListener(new DrawableClickListener() {
+            @Override
+            public void onClick(DrawablePosition target) {
+                switch (target) {
+                    case LEFT:
+                        txtSearch.setText("");
+                        txtSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search_set_nav,0 );
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     private void initialise() {
         db = new DbAdapter(mContext);
         db.open();
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        txtSearch = (EditText) findViewById(R.id.txtSearch);
+        txtSearch = (FontEditText) findViewById(R.id.txtSearch);
     }
 
 

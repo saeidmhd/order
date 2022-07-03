@@ -88,7 +88,7 @@
     <string name="str_username_en">Benutzername</string>
     <string name="str_password_en">Passwort</string>
     <string name="str_login">Einloggen</string>
-    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.451</string>
+    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.455</string>
     <string name="str_email">E-Mail</string>
     <string name="str_body">Text</string>
     <string name="str_message_content">Textnachricht</string>
@@ -1317,6 +1317,7 @@
     <string name="new_3_450_3">تغییر در نمایش دسته بندی کالاها</string>
     <string name="new_3_450_4">پیاده سازی دسته بندی اشخاص</string>
     <string name="new_3_450_5">بهبودهای مربوط به زیرساخت دیتابیس </string>
+    <string name="no_good">کالایی انتخاب نکرده اید!</string>
 
 
 </resources>

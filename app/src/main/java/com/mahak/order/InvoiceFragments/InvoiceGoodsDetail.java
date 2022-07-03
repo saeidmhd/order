@@ -905,6 +905,8 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                 FinalPrice = FinalPrice - dis;
             }
         }
+
+        FinalPrice = ServiceTools.formatDoublePrice(FinalPrice);
     }
 
     private void setCalculateResult() {

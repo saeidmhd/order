@@ -47,7 +47,9 @@ import com.mahak.order.common.login.LoginResult;
 import com.mahak.order.common.request.SetAllDataBody;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.widget.DrawableClickListener;
 import com.mahak.order.widget.FontDialog;
+import com.mahak.order.widget.FontEditText;
 import com.mahak.order.widget.FontPopUp;
 import com.mahak.order.widget.FontProgressDialog;
 
@@ -78,7 +80,7 @@ public class ReturnsListActivity extends BaseActivity {
     private AdapterListReturns returnAdapter;
     private long ReturnId;
     private int Position;
-    private EditText txtSearch;
+    private FontEditText txtSearch;
     private Bundle Extras;
     private int Type, Page;
     private static int REQUEST_EDIT = 1;
@@ -148,6 +150,7 @@ public class ReturnsListActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                txtSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_cancel_search, 0, R.drawable.ic_search_set_nav, 0);
 
 
                 {
@@ -177,6 +180,20 @@ public class ReturnsListActivity extends BaseActivity {
 
             }
         });
+
+        txtSearch.setDrawableClickListener(new DrawableClickListener() {
+            @Override
+            public void onClick(DrawablePosition target) {
+                switch (target) {
+                    case LEFT:
+                        txtSearch.setText("");
+                        txtSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search_set_nav,0 );
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }//End Of OnCreate
 
     /**
@@ -185,7 +202,7 @@ public class ReturnsListActivity extends BaseActivity {
     private void initialise() {
 
         lstReturn = (ListView) findViewById(R.id.lstOrder);
-        txtSearch = (EditText) findViewById(R.id.txtSearch);
+        txtSearch = (FontEditText) findViewById(R.id.txtSearch);
         db = new DbAdapter(mContext);
         tvPageTitle.setText(getString(R.string.str_nav_returnOfSale_list) + "(" + lstReturn.getCount() + ")");
     }

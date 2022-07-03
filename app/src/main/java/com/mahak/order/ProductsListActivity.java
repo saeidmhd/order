@@ -58,7 +58,9 @@ import com.mahak.order.fragment.ProductListFragment;
 import com.mahak.order.fragment.ProductPagerFragment;
 import com.mahak.order.fragment.RecyclerProductAdapter;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.widget.DrawableClickListener;
 import com.mahak.order.widget.FontAlertDialog;
+import com.mahak.order.widget.FontEditText;
 import com.mahak.order.widget.FontProgressDialog;
 import com.mahak.order.widget.SortDialogActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -94,7 +96,7 @@ public class ProductsListActivity extends BaseActivity {
     public static ArrayList<Product> arrayProductMain = new ArrayList<Product>();
     private static boolean FIRST_LOADE_SPN_CATEGORY = false;
     private static boolean FIRST_LOADE_SPN_ASSET = false;
-    public static TextView txtSearch;
+    public static FontEditText txtSearch;
     private static DbAdapter db;
     public static long CategoryId = DONT_CATEGORYID;
     public static boolean openCategory;
@@ -254,6 +256,7 @@ public class ProductsListActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(final CharSequence s, int start, int before, int count) {
+                txtSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_cancel_search, 0, R.drawable.ic_search_set_nav, 0);
             }
 
             @Override
@@ -319,6 +322,20 @@ public class ProductsListActivity extends BaseActivity {
             }
         });
 
+        txtSearch.setDrawableClickListener(new DrawableClickListener() {
+            @Override
+            public void onClick(DrawablePosition target) {
+                switch (target) {
+                    case LEFT:
+                        txtSearch.setText("");
+                        txtSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search_set_nav,0 );
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
     }// End of onCreate
 
     public void getProducts() {
@@ -341,7 +358,7 @@ public class ProductsListActivity extends BaseActivity {
         spnCategory = (Spinner) findViewById(R.id.spnCategory);
         spnAssetProduct = (Spinner) findViewById(R.id.spnAssetProduct);
         llprogressBar = (LinearLayout) findViewById(R.id.llprogressBar);
-        txtSearch = (EditText) findViewById(R.id.txtSearch);
+        txtSearch = (FontEditText) findViewById(R.id.txtSearch);
 
         ArrayAssetProduct = getResources().getStringArray(R.array.array_asset_product);
         multiLevelRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));

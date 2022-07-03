@@ -107,7 +107,7 @@ public class SignActivity extends BaseActivity {
                 db.open();
                 PicturesProduct picturesProduct = new PicturesProduct();
                 picturesProduct.setItemType(2);
-                picturesProduct.setItemId(new Random().nextInt(1000));
+                picturesProduct.setItemId(ServiceTools.toLong(OrderCode));
                 picturesProduct.setFileName(FileName);
                 picturesProduct.setTitle(FileName);
                 picturesProduct.setWidth(0);
@@ -115,7 +115,7 @@ public class SignActivity extends BaseActivity {
                 picturesProduct.setDataBaseId(BaseActivity.getPrefDatabaseId());
                 picturesProduct.setPictureClientId(ServiceTools.toLong(OrderCode));
                 picturesProduct.setFormat(".jpg");
-                db.addPicturesProductFromWeb(picturesProduct);
+                db.addSignPicture(picturesProduct);
                 finish();
             }
         });

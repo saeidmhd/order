@@ -102,7 +102,7 @@
     <string name="str_username_en">UserName</string>
     <string name="str_password_en">Password</string>
     <string name="str_login">ورود به سیستم</string>
-    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.451</string>
+    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.455</string>
     <string name="str_email">پست الکترونیک</string>
     <string name="str_body">متن پیام</string>
     <string name="str_message_content">متن پیام</string>
@@ -485,7 +485,7 @@
     <string name="str_tracking_description">سامانه رادارا غیر فعال است! </string>
     <string name="str_tracking_active">فعال است</string>
     <string name="str_tracking_inactive">غیر فعال است</string>
-    <string name="str_name_filter"> نام ، کد شخص و آدرس</string>
+    <string name="str_name_filter"> نام ، کد و آدرس</string>
     <string name="str_name_product_code_filter"> نام یا کد کالا</string>
     <string name="str_name_code_filter"> نام یا کد پیگیری</string>
     <string name="str_search_detail">کد کالا یا مشخصه مورد نظر خود را جستجو کنید …</string>
@@ -1384,6 +1384,7 @@
     <string name="nodata">اطلاعاتی برای نمایش وجود ندارد</string>
     <string name="credit_alarm">با توجه به اعتبار مشتری و بدهی قبلی، نیاز به ثبت دریافتی می باشد!</string>
     <string name="check_new_person_activity">\" برای این مشتری عملیات ثبت شده ، امکان حذف وجود ندارد!\"</string>
+    <string name="no_good">کالایی انتخاب نکرده اید!</string>
 
 
 </resources>

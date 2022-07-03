@@ -64,7 +64,9 @@ import com.mahak.order.fragment.ProductGridGalleryFragment;
 import com.mahak.order.fragment.ProductListFragment;
 import com.mahak.order.fragment.ProductPagerFragment;
 import com.mahak.order.storage.DbAdapter;
+import com.mahak.order.widget.DrawableClickListener;
 import com.mahak.order.widget.FontAlertDialog;
+import com.mahak.order.widget.FontEditText;
 import com.mahak.order.widget.SortDialogActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
@@ -101,7 +103,7 @@ public class ProductPickerListActivity extends BaseActivity {
     private static final int GALLERY_PAGE_STATE = 5;
     private static final long DONT_CATEGORYID = 0;
     private boolean FIRST_LOADE_SPN_CATEGORY = false, FIRST_LOADE_SPN_ASSET = false, RetuenAsset = false;
-    public static TextView txtSearch;
+    public static FontEditText txtSearch;
     private static DbAdapter db;
     public static long CategoryId;
 
@@ -315,6 +317,7 @@ public class ProductPickerListActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(final CharSequence s, int start, int before, int count) {
+                txtSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_cancel_search, 0, R.drawable.ic_search_set_nav, 0);
             }
 
             @Override
@@ -382,6 +385,20 @@ public class ProductPickerListActivity extends BaseActivity {
             }
         });
 
+        txtSearch.setDrawableClickListener(new DrawableClickListener() {
+            @Override
+            public void onClick(DrawablePosition target) {
+                switch (target) {
+                    case LEFT:
+                        txtSearch.setText("");
+                        txtSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search_set_nav,0 );
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
         btnAddCart.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -444,7 +461,7 @@ public class ProductPickerListActivity extends BaseActivity {
         ll_product_picker = (LinearLayout) findViewById(R.id.ll_product_picker);
         spnCategory = (Spinner) findViewById(R.id.spnCategory);
         spnAssetProduct = (Spinner) findViewById(R.id.spnAssetProduct);
-        txtSearch = (EditText) findViewById(R.id.txtSearch);
+        txtSearch = (FontEditText) findViewById(R.id.txtSearch);
         tvTotalCount = (TextView) findViewById(R.id.tvTotalCount);
         txtTotalCount = (TextView) findViewById(R.id.txtTotalCount);
         tvTotalPrice = (TextView) findViewById(R.id.tvTotalPrice);

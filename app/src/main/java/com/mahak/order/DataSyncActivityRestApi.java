@@ -622,10 +622,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 return "خطا در ارسال تنظیمات" + "\n" + objects.getSettings().getSettingsResults().get(0).getErrors().get(0).getError() + "\n" + objects.getSettings().getSettingsResults().get(0).getErrors().get(0).getProperty();
             if (objects.getExtraDatas().getResults().size() > 0)
                 return "خطا در ارسال اطلاعات بیشتر" + "\n" + objects.getExtraDatas().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getExtraDatas().getResults().get(0).getErrors().get(0).getProperty();
-            if (objects.getOrderDetails().getResults().size() > 0)
-                return "خطا در ارسال جزییات فاکتور" + "\n" + objects.getOrderDetails().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getOrderDetails().getResults().get(0).getErrors().get(0).getProperty();
             if (objects.getOrders().getResults().size() > 0)
                 return "خطا در ارسال فاکتور" + "\n" + objects.getOrders().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getOrders().getResults().get(0).getErrors().get(0).getProperty();
+            if (objects.getOrderDetails().getResults().size() > 0)
+                return "خطا در ارسال جزییات فاکتور" + "\n" + objects.getOrderDetails().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getOrderDetails().getResults().get(0).getErrors().get(0).getProperty();
             if (objects.getPersonGroups().getResults().size() > 0)
                 return "خطا در ارسال گروه اشخاص" + "\n" + objects.getPersonGroups().getResults().get(0).getErrors().get(0).getError() + "\n" + objects.getPersonGroups().getResults().get(0).getErrors().get(0).getProperty();
             if (objects.getPictures().getResults().size() > 0)
@@ -754,6 +754,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             int returnCount = 0;
                             for (int i = 0; i < arrayInvoice.size(); i++) {
                                 arrayInvoice.get(i).setOrderId(response.body().getData().getObjects().getOrders().getResults().get(i).getEntityID());
+                                arrayInvoice.get(i).setRowVersion(response.body().getData().getObjects().getOrders().getResults().get(i).getRowVersion());
                                 arrayInvoice.get(i).setPublish(ProjectInfo.PUBLISH);
                                 db.UpdateOrder(arrayInvoice.get(i));
                                 if (arrayInvoice.get(i).getOrderType() == ProjectInfo.TYPE_INVOCIE)
@@ -765,6 +766,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
                                 for (int j = 0; j < arrayInvoiceDetail.size(); j++) {
                                     arrayInvoiceDetail.get(j).setOrderDetailId(response.body().getData().getObjects().getOrderDetails().getResults().get(j).getEntityID());
+                                    arrayInvoiceDetail.get(j).setRowVersion(response.body().getData().getObjects().getOrderDetails().getResults().get(j).getRowVersion());
                                     db.UpdateOrderDetailSync(arrayInvoiceDetail.get(j));
                                 }
                             }

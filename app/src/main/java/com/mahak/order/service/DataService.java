@@ -58,7 +58,6 @@ public class DataService {
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
     }
 
-
     public static void InsertZone(RadaraDb db, Datum data) {
         
         db.AddZone(data);
@@ -266,6 +265,7 @@ public class DataService {
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
 
     }
+
     public static double InsertRegion(DbAdapter db, List<Region> data ,long rowVersion) {
 
         long startTime = System.nanoTime();
@@ -279,8 +279,6 @@ public class DataService {
 
     public static double InsertPropertyDescription(DbAdapter db, List<PropertyDescription> data) {
         long startTime = System.nanoTime();
-
-        
 
         for (int i = 0; i < data.size(); i++) {
             PropertyDescription propertyDescription = data.get(i);

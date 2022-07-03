@@ -301,13 +301,11 @@ public class InvoiceDetailActivity extends BaseActivity {
                 saveFactor();
             }
         });
-
-
     }
 
     private void saveFactor() {
-        double remainCustomerCredit = calculateRemainCredit(FinalPrice);
-        if(OrderType == ProjectInfo.TYPE_INVOCIE){
+        if(OrderType == ProjectInfo.TYPE_INVOCIE || OrderType == ProjectInfo.TYPE_ORDER){
+            double remainCustomerCredit = calculateRemainCredit(FinalPrice);
             if (!visitorHasCredit(FinalPrice))
                 SaveAndReceiptBasedOnOrder(FinalPrice);
             else if(remainCustomerCredit > 0)
@@ -316,7 +314,6 @@ public class InvoiceDetailActivity extends BaseActivity {
                 new AsyncSave(0, OrderType).execute();
         }else
             new AsyncSave(0, OrderType).execute();
-
     }
 
     private void SaveAndReceiptBasedOnOrder(double remainCustomerCredit) {
@@ -328,7 +325,7 @@ public class InvoiceDetailActivity extends BaseActivity {
                 intent.putExtra(CUSTOMERID_KEY, CustomerId);
                 intent.putExtra(CUSTOMER_CLIENT_ID_KEY, CustomerClientId);
                 intent.putExtra(PAYMENT_KEY, FinalPrice);
-                intent.putExtra(Force_Payment_KEY, ServiceTools.formatPrice(remainCustomerCredit));
+                intent.putExtra(Force_Payment_KEY, remainCustomerCredit);
                 intent.putExtra(PAGE, PAGE_Invoice_Detail_Activity);
                 startActivityForResult(intent, REQUEST_PAY_FACTOR);
             } else
@@ -684,7 +681,7 @@ public class InvoiceDetailActivity extends BaseActivity {
                 Clear();
 
             } else {
-                Toast.makeText(mContext, R.string.more_than_asset, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, R.string.no_good, Toast.LENGTH_SHORT).show();
             }
 
             pd.dismiss();

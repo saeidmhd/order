@@ -1781,8 +1781,10 @@ public class DbSchema {
         public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"PicturesProduct\" ( " +
                 " `_id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                 " `pictureId` INTEGER," +
-                " `productId` INTEGER, `ItemId` INTEGER, " +
-                " `ItemType` INTEGER, `PictureCode` INTEGER," +
+                " `productId` INTEGER, " +
+                " `ItemId` NUMERIC, " +
+                " `ItemType` INTEGER," +
+                " `PictureCode` INTEGER," +
                 " `PictureClientId` NUMERIC," +
                 " `fileName` TEXT," +
                 " `url` TEXT, " +

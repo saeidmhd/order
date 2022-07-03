@@ -87,17 +87,17 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
     private static int CustomerId;
     private static String Code = ProjectInfo.DONT_CODE;
     private static double Payment;
-    private double remainCustomerCredit;
-    public static ArrayList<Cheque> arrayCheque = new ArrayList<Cheque>();
+    private double remainCustomerCredit , CashAmount;
+    public static ArrayList<Cheque> arrayCheque = new ArrayList<>();
 
-    private EditText txtCustomerName, txtAmount, txtDescription, txtMarketName, txtTrackingCode, txtPayment;
+    private EditText txtCustomerName, txtAmount, txtDescription, txtMarketName, txtTrackingCode, txtPayment,txtSumReceipt , invoiceBalance,txtPosAmount;
     private TextView tvDate;
-    private Button btnAddCheque, btnSave, btnDatePicker, btnSelectCustomer, btnSelectInvoice, btnPayPos;
+    private Button btnAddCheque, btnSave, btnDatePicker, btnSelectCustomer, btnSelectInvoice, btnPayPos , btnAddReceipt;
     private ListView lstCheque;
-    private LinearLayout posLL;
+    private LinearLayout posLL , invoice_detail,ll_factor_balance;
     private Bundle Extras;
     private Date dt;
-    private String CustomerName, StrDate, CashAmount, Description, MarketName;
+    private String CustomerName, StrDate, Description, MarketName;
     private Context mContext;
     private Activity mActivity;
     private AdapterCheque adCheque;
@@ -131,7 +131,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_receipt);
+        setContentView(R.layout.activity_manage_receipt2);
 
         //config actionbar___________________________________________
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -224,9 +224,8 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             Code = Extras.getString(CODE_KEY) != null ? Extras.getString(CODE_KEY) : ProjectInfo.DONT_CODE;
             Payment = Extras.getDouble(PAYMENT_KEY);
 
-            remainCustomerCredit = ServiceTools.toDouble(Extras.getString(Force_Payment_KEY));
-            String customer_remain= ServiceTools.formatPrice(remainCustomerCredit);
-            txtAmount.setText(customer_remain);
+            remainCustomerCredit = Extras.getDouble(Force_Payment_KEY);
+            txtAmount.setText(ServiceTools.formatPrice(remainCustomerCredit));
 
             ReceiptId = Extras.getLong(ID);
 
@@ -248,8 +247,11 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
                 lngDate = dt.getTime();
                 StrDate = getDateAndTimeForLong(lngDate);
                 tvDate.setText(StrDate);
+                invoice_detail.setVisibility(View.VISIBLE);
+                ll_factor_balance.setVisibility(View.VISIBLE);
                 txtTrackingCode.setText(Code);
                 txtPayment.setText(ServiceTools.formatPrice(Payment));
+                txtPosAmount.setText(ServiceTools.formatPrice(Payment));
             } else if (Page == PAGE_RECEIPTLIST) {
                 if (Mode == MODE_EDIT) {
                     savedCashedAndCheque = db.getTotalReceiptWithId(ReceiptId);
@@ -268,8 +270,11 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
                     lngDate = dt.getTime();
                     StrDate = getDateAndTimeForLong(lngDate);
                     tvDate.setText(StrDate);
+                    invoice_detail.setVisibility(View.VISIBLE);
+                    ll_factor_balance.setVisibility(View.VISIBLE);
                     txtTrackingCode.setText(Code);
                     txtPayment.setText(ServiceTools.formatPrice(Payment));
+                    txtPosAmount.setText(ServiceTools.formatPrice(Payment));
                 }
             }
 
@@ -286,7 +291,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             CustomerName = savedInstanceState.getString(CUSTOMER_NAME_KEY);
             MarketName = savedInstanceState.getString(MARKET_KEY);
             StrDate = savedInstanceState.getString(STR_DATE_KEY);
-            CashAmount = savedInstanceState.getString(CASHAMOUNT_KEY);
+            CashAmount = savedInstanceState.getDouble(CASHAMOUNT_KEY);
             Description = savedInstanceState.getString(DESCRIPTION_KEY);
             Code = savedInstanceState.getString(CODE_KEY);
             Payment = savedInstanceState.getDouble(PAYMENT_KEY);
@@ -294,12 +299,14 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             txtCustomerName.setText(CustomerName);
             txtMarketName.setText(MarketName);
             tvDate.setText(StrDate);
-            txtAmount.setText(CashAmount);
+            txtAmount.setText(ServiceTools.formatPrice(CashAmount));
             txtDescription.setText(Description);
+            invoice_detail.setVisibility(View.VISIBLE);
+            ll_factor_balance.setVisibility(View.VISIBLE);
             txtTrackingCode.setText(Code);
             txtPayment.setText(ServiceTools.formatPrice(Payment));
+            txtPosAmount.setText(ServiceTools.formatPrice(Payment));
         }
-
 
         lstCheque.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -329,7 +336,8 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             @Override
             public void afterTextChanged(Editable s) {
 
-                CashAmount = ServiceTools.MoneyFormatToNumber(s.toString());
+                CashAmount = ServiceTools.toDouble(ServiceTools.MoneyFormatToNumber(s.toString()));
+                calculate_sum_receipt();
             }
         });
 
@@ -485,33 +493,24 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, ManageChequeActivity.class);
                 intent.putExtra(MODE_PAGE, MODE_NEW);
+                intent.putExtra(TYPE_KEY, ProjectInfo.CHEQUE_TYPE);
                 startActivityForResult(intent, REQUEST_MANAGE_CHEQUE);
 
             }
         });
-
-        btnSave.setOnClickListener(new View.OnClickListener() {
-
+        btnAddReceipt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(mContext, ManageChequeActivity.class);
+                intent.putExtra(MODE_PAGE, MODE_NEW);
+                intent.putExtra(TYPE_KEY, ProjectInfo.CASHRECEIPT_TYPE);
+                startActivityForResult(intent, REQUEST_MANAGE_CHEQUE);
+            }
+        });
 
-                /*//Validate____________________________________________
-                boolean ValidateCashAmount = false;
-                //Validate____________________________________________
-                Validate validateAmount = new Validate(txtAmount);
-                NotEmptyValidator ValidatorEmpty = new NotEmptyValidator(mContext ,R.string.str_valid_empty);
-                validateAmount.addValidator(ValidatorEmpty);
-                Form form = new Form();
-                form.addValidates(validateAmount);
-                if(arrayCheque.size() == 0)
-                    ValidateCashAmount = form.validate();
-
-                if(!TextUtils.isEmpty(txtPayment.getText().toString()))
-                    payment = ServiceTools.toLong(ServiceTools.MoneyFormatToNumber(txtPayment.getText().toString()));
-                else
-                    payment = 0L;*/
-                /*//باقیمانده اعتبار ویزیتور
-                remainCredit = mVisitorCredit - (payment + mSpentCredit);*/
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 saveReceipt();
             }
         });
@@ -523,6 +522,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
                 Intent intent = new Intent(getApplicationContext(), OrdersListActivity.class);
                 intent.putExtra(PAGE, PAGE_MANAGE_RECEIPT);
                 intent.putExtra(TYPE_KEY, ProjectInfo.TYPE_INVOCIE);
+                intent.putExtra(CUSTOMER_NAME_KEY, txtCustomerName.getText().toString());
                 startActivityForResult(intent, REQUEST_ORDER_LIST);
             }
         });
@@ -531,17 +531,41 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
 
             @Override
             public void onClick(View v) {
-                if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223)
-                    managePaySzzt();
-                else if (printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s)
-                    managePayUrovoI9000();
-                else if (printerBrand == ProjectInfo.SMART_POS_MoreFun)
-                    manageMoreFun();
+
+                String stringReceipt = txtPosAmount.getText().toString();
+                double amount =ServiceTools.toDouble(ServiceTools.MoneyFormatToNumber(stringReceipt)) ;
+
+                if(amount > 0){
+                    if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223)
+                        managePaySzzt(amount);
+                    else if (printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s)
+                        managePayUrovoI9000(amount);
+                    else if (printerBrand == ProjectInfo.SMART_POS_MoreFun)
+                        manageMoreFun(amount);
+                }
+
+
             }
         });
 
 
     }// End of OnCreate
+
+    private double calculate_sum_receipt() {
+        double sum_receipt = 0;
+        double balance = 0;
+        if(arrayCheque.size() > 0){
+            for(Cheque cheque : arrayCheque)
+                sum_receipt += cheque.getAmount();
+        }
+        sum_receipt += CashAmount;
+        txtSumReceipt.setText(ServiceTools.formatPrice(sum_receipt));
+        balance = Payment - sum_receipt;
+        if (balance < 0)
+            balance = 0;
+        invoiceBalance.setText(ServiceTools.formatPrice(balance));
+        return sum_receipt;
+    }
 
     public boolean customerHasCredit(Receipt receipt) {
         int customerId = receipt.getPersonId();
@@ -559,43 +583,40 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
 
 
     private void saveReceipt() {
-        if (mVisitorCredit == -1) {
-            Save();
+        double totalCashAndCheque = totalCashAndCheque();
+        if (Mode == MODE_NEW) {
+            if (mVisitorCredit != -1)
+                checkVisitorCredit(totalCashAndCheque);
+            else if(totalCashAndCheque < remainCustomerCredit)
+                Toast.makeText(mContext, "باید مجموع دریافتی نقد و چک از باقیمانده اعتبار مشتری بیشتر باشد!", Toast.LENGTH_SHORT).show();
+            else
+                Save();
         } else {
-            if (Mode == MODE_EDIT) {
-                //باقیمانده اعتبار ویزیتور
-                remainVisitorCreditValue = mVisitorCredit - mSpentCredit;
-                if (remainVisitorCreditValue + totalCashAndCheque() < 0) {
-                    Toast.makeText(mContext, "باید مجموع دریافتی نقد و چک از باقیمانده اعتبار ویزیتور بیشتر باشد!", Toast.LENGTH_SHORT).show();
-                } else if(!customerHasCredit(receipt))
-                    Toast.makeText(mContext, "باید مجموع دریافتی نقد و چک از باقیمانده اعتبار مشتری بیشتر باشد!", Toast.LENGTH_SHORT).show();
-                else{
-                    Save();
-                    //customer.setCredit();
-
-                }
-
-            } else {
-                if (Page == PAGE_Invoice_Detail_Activity) {
-                    //باقیمانده اعتبار ویزیتور با احتساب فاکتور فعلی
-                    remainVisitorCreditValue = mVisitorCredit - mSpentCredit - Payment;
-                    if (remainVisitorCreditValue + totalCashAndCheque() < 0)
-                        Toast.makeText(mContext, "باید مجموع دریافتی نقد و چک از باقیمانده اعتبار ویزیتور بیشتر باشد!", Toast.LENGTH_SHORT).show();
-                    else if(totalCashAndCheque() < remainCustomerCredit)
-                        Toast.makeText(mContext, "باید مجموع دریافتی نقد و چک از باقیمانده اعتبار مشتری بیشتر باشد!", Toast.LENGTH_SHORT).show();
-                    else
-                        Save();
-
-                } else
-                    Save();
-            }
+            //باقیمانده اعتبار ویزیتور
+            if (mVisitorCredit != -1)
+                checkVisitorCredit(totalCashAndCheque);
+            else if(!customerHasCredit(receipt))
+                Toast.makeText(mContext, "باید مجموع دریافتی نقد و چک از باقیمانده اعتبار مشتری بیشتر باشد!", Toast.LENGTH_SHORT).show();
+            else
+                Save();
         }
+
     }
 
-    private void managePaySzzt() {
+    private void checkVisitorCredit(double totalCashAndCheque) {
+        remainVisitorCreditValue = mVisitorCredit - mSpentCredit;
+        //باقیمانده اعتبار ویزیتور با احتساب فاکتور فعلی
+        if (Mode == MODE_NEW) {
+            remainVisitorCreditValue =- Payment;
+        }
+        if (remainVisitorCreditValue + totalCashAndCheque < 0)
+            Toast.makeText(mContext, "باید مجموع دریافتی نقد و چک از باقیمانده اعتبار ویزیتور بیشتر باشد!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void managePaySzzt(double receipt_amount) {
 
         String invoiceNumber = Code;
-        String amount = String.valueOf((int) Payment);
+        String amount = String.valueOf((int) receipt_amount);
         if (hostApp == HostApp.SEPEHR) {
             Tools.displaySafeDialog(ManageReceiptActivity.this, new SelectWayDialog(ManageReceiptActivity.this, data -> {
                 String paymentWay = "";
@@ -609,7 +630,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
 
                     @Override
                     public void onPaymentSucceed(String terminalNo, String merchantId, String posSerial, String reserveNumber, String traceNumber, String rrn, String ref, String amount, String txnDate, String txnTime, String maskedPan, String panHash) {
-                        saveReceipt(traceNumber, amount);
+                        saveSmartPosReceipt(traceNumber, amount);
                         startActivity(ResultActivity.getIntent(ManageReceiptActivity.this, "پرداخت با موفقیت انجام شد.",
                                 String.format(Locale.ENGLISH, "کد فاکتور: %s", reserveNumber),
                                 String.format(Locale.ENGLISH, "کد پیگیری: %s", traceNumber),
@@ -650,7 +671,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
 
                 @Override
                 public void onPaymentSucceed(String terminalNo, String merchantId, String posSerial, String reserveNumber, String traceNumber, String rrn, String ref, String amount, String txnDate, String txnTime, String maskedPan, String panHash) {
-                    saveReceipt(traceNumber, amount);
+                    saveSmartPosReceipt(traceNumber, amount);
                     startActivity(ResultActivity.getIntent(ManageReceiptActivity.this, "پرداخت با موفقیت انجام شد.",
                             String.format(Locale.ENGLISH, "کد فاکتور: %s", reserveNumber),
                             String.format(Locale.ENGLISH, "کد پیگیری: %s", traceNumber),
@@ -683,8 +704,8 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         }
     }
 
-    private void managePayUrovoI9000() {
-        String amount = String.valueOf((int) Payment);
+    private void managePayUrovoI9000(double receipt_amount) {
+        String amount = String.valueOf((int) receipt_amount);
         Intent intent = new Intent("ir.totan.pos.view.cart.TXN");
         intent.putExtra("type", 3);
         intent.putExtra("invoiceNumber", Code);
@@ -693,15 +714,14 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         startActivityForResult(intent, REQUEST_i9000s);
 
     }
-    private void manageMoreFun() {
-        String amount = String.valueOf((int) Payment);
+    private void manageMoreFun(double receipt_amount) {
+        String amount = String.valueOf((int) receipt_amount);
         if (amount.equals("0"))
         {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     Toast.makeText(getApplicationContext(),"INVALID AMOUNT",Toast.LENGTH_LONG).show();
-                    finish();
                 }
             });
             return;
@@ -731,20 +751,14 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         if (code == ThirdPartyManager.CODE_REQUEST_TXN) {
             ThirdPartyDTO response=  manager.receiveResponse(bundle);
             if (response.getResponseCode().equals("0")&&
-                    response.getResponseMessage().equalsIgnoreCase("SUCCESS"))//mean operation is successfully
+                    response.getResponseMessage().equalsIgnoreCase("SUCCESS"))
             {
-                saveReceipt(response.getTrace(), response.getAmount());
+                saveSmartPosReceipt(response.getTrace(), response.getAmount());
             }
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(),response.getResponseMessage(),Toast.LENGTH_LONG).show();
-                }
-            });
         }
     }
 
-    private void saveReceipt(String traceNumber, String amount) {
+    private void saveSmartPosReceipt(String traceNumber, String amount) {
         int posBankPosition = SharedPreferencesHelper.getPrefBankPos(mContext);
         Date date = new Date();
         Cheque cheque = new Cheque();
@@ -763,11 +777,10 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         if (adCheque == null) {
             adCheque = new AdapterCheque(mActivity, arrayCheque);
             lstCheque.setAdapter(adCheque);
-            ServiceTools.setListViewChequeHeightBasedOnChildren(lstCheque);
         } else {
             adCheque.notifyDataSetChanged();
-            ServiceTools.setListViewChequeHeightBasedOnChildren(lstCheque);
         }
+        ServiceTools.setListViewChequeHeightBasedOnChildren(lstCheque);
     }
 
 
@@ -827,7 +840,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
      */
     private void FillView() {
 
-        double Payment = 0;
         //Read From Database receipt_________________________
         receipt = db.GetReceipt(ReceiptId);
         CustomerId = receipt.getPersonId();
@@ -837,12 +849,16 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         StrDate = getDateAndTimeForLong(lngDate);
         txtDescription.setText(receipt.getDescription());
         txtAmount.setText(ServiceTools.formatPrice(receipt.getCashAmount()));
+        CashAmount = receipt.getCashAmount();
         tvDate.setText(StrDate);
         if (!receipt.getTrackingCode().equals(ProjectInfo.DONT_CODE)) {
             Code = receipt.getTrackingCode();
+            invoice_detail.setVisibility(View.VISIBLE);
+            ll_factor_balance.setVisibility(View.VISIBLE);
             txtTrackingCode.setText(receipt.getTrackingCode());
             Payment = CalculatePayment(receipt.getTrackingCode());
             txtPayment.setText(ServiceTools.formatPrice(Payment));
+            txtPosAmount.setText(ServiceTools.formatPrice(Payment));
         } else
             Code = ProjectInfo.DONT_CODE;
         //Read arrayCheque From Database And Set Adapter_______
@@ -850,6 +866,8 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         adCheque = new AdapterCheque(mActivity, arrayCheque);
         lstCheque.setAdapter(adCheque);
         ServiceTools.setListViewChequeHeightBasedOnChildren(lstCheque);
+
+        calculate_sum_receipt();
     }
 
     private double CalculatePayment(String code) {
@@ -873,16 +891,22 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
 
         txtCustomerName = (EditText) findViewById(R.id.txtCustomerName);
         txtAmount = (EditText) findViewById(R.id.txtCashAmount);
+        txtPosAmount = (EditText) findViewById(R.id.txtPosAmount);
         txtDescription = (EditText) findViewById(R.id.txtDescription);
         txtMarketName = (EditText) findViewById(R.id.txtMarketName);
         txtTrackingCode = (EditText) findViewById(R.id.txtTrackingCode);
         txtPayment = (EditText) findViewById(R.id.txtPayment);
+        txtSumReceipt = (EditText) findViewById(R.id.txtSumReceipt);
+        invoiceBalance = (EditText) findViewById(R.id.invoiceBalance);
         tvDate = (TextView) findViewById(R.id.tvDate);
         btnAddCheque = (Button) findViewById(R.id.btnAddCheque);
+        btnAddReceipt = (Button) findViewById(R.id.btnAddReceipt);
         btnSave = (Button) findViewById(R.id.btnSave);
         btnDatePicker = (Button) findViewById(R.id.btnDatePicker);
         btnSelectCustomer = (Button) findViewById(R.id.btnSelectCustomer);
         btnSelectInvoice = (Button) findViewById(R.id.btnSelectInvoice);
+        invoice_detail = (LinearLayout) findViewById(R.id.invoice_detail);
+        ll_factor_balance = (LinearLayout) findViewById(R.id.ll_factor_balance);
         lstCheque = (ListView) findViewById(R.id.lstCheque);
         btnPayPos = (Button) findViewById(R.id.btnPayPos);
         posLL = (LinearLayout) findViewById(R.id.posLL);
@@ -1015,7 +1039,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         arrayCheque.clear();
         CustomerName = "";
         StrDate = "";
-        CashAmount = "";
+        CashAmount = 0.0;
         Description = "";
         MarketName = "";
         Code = ProjectInfo.DONT_CODE;
@@ -1044,9 +1068,9 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
 
             public void Populate(Cheque cheque) {
                 if (cheque.getType() == ProjectInfo.CHEQUE_TYPE)
-                    tvType.setText(getResources().getString(R.string.str_cheque_type));
+                    tvType.setText("چک ");
                 else if (cheque.getType() == ProjectInfo.CASHRECEIPT_TYPE)
-                    tvType.setText(getResources().getString(R.string.str_cash_receipt_type));
+                    tvType.setText("حواله ");
 
                 tvBank.setText(cheque.getBankName());
                 tvAmount.setText(ServiceTools.formatPrice(cheque.getAmount()));
@@ -1061,7 +1085,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             Holder holder = null;
             LayoutInflater inflater = null;
             final Cheque cheque = getItem(position);
-
             if (rowview == null) {
                 inflater = mContext.getLayoutInflater();
                 rowview = inflater.inflate(R.layout.lst_cheque_item, null, false);
@@ -1085,7 +1108,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         outState.putString(MARKET_KEY, MarketName);
         outState.putString(STR_DATE_KEY, StrDate);
         outState.putLong(LNG_DATE_KEY, lngDate);
-        outState.putString(CASHAMOUNT_KEY, CashAmount);
+        outState.putDouble(CASHAMOUNT_KEY, CashAmount);
         outState.putString(DESCRIPTION_KEY, Description);
         outState.putDouble(PAYMENT_KEY, Payment);
         outState.putString(CODE_KEY, Code);
@@ -1101,7 +1124,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         MarketName = savedInstanceState.getString(MARKET_KEY);
         StrDate = savedInstanceState.getString(STR_DATE_KEY);
         lngDate = savedInstanceState.getLong(LNG_DATE_KEY);
-        CashAmount = savedInstanceState.getString(CashAmount);
+        CashAmount = savedInstanceState.getDouble(CASHAMOUNT_KEY);
         Description = savedInstanceState.getString(DESCRIPTION_KEY);
         Payment = savedInstanceState.getDouble(PAYMENT_KEY);
         Code = savedInstanceState.getString(CODE_KEY);
@@ -1113,18 +1136,17 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CUSTOMER_LIST) {
             if (resultCode == RESULT_OK) {
+                invoice_detail.setVisibility(View.GONE);
+                ll_factor_balance.setVisibility(View.GONE);
                 CustomerId = data.getIntExtra(CUSTOMERID_KEY, 0);
                 CustomerClientId = data.getLongExtra(CUSTOMER_CLIENT_ID_KEY, 0);
-
                 if (CustomerId != ProjectInfo.CUSTOMERID_GUEST) {
                     customer = db.getCustomerWithPersonId(CustomerId);
-                    txtCustomerName.setText(customer.getName());
-                    txtMarketName.setText(customer.getOrganization());
                 } else {
                     customer = db.getCustomerWithPersonClientId(CustomerClientId);
-                    txtCustomerName.setText(customer.getName());
-                    txtMarketName.setText(customer.getOrganization());
                 }
+                txtCustomerName.setText(customer.getName());
+                txtMarketName.setText(customer.getOrganization());
             }
 
         } else if (requestCode == REQUEST_MANAGE_CHEQUE) {
@@ -1133,11 +1155,11 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
                 if (adCheque == null) {
                     adCheque = new AdapterCheque(mActivity, arrayCheque);
                     lstCheque.setAdapter(adCheque);
-                    ServiceTools.setListViewChequeHeightBasedOnChildren(lstCheque);
                 } else {
                     adCheque.notifyDataSetChanged();
-                    ServiceTools.setListViewChequeHeightBasedOnChildren(lstCheque);
                 }
+                calculate_sum_receipt();
+                ServiceTools.setListViewChequeHeightBasedOnChildren(lstCheque);
                 //Check Validate________________________________________________________________
                 boolean cancel = false;
                 View focusView = null;
@@ -1160,17 +1182,20 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
                 Payment = data.getDoubleExtra(PAYMENT_KEY, 0);
                 CustomerId = data.getIntExtra(CUSTOMERID_KEY, 0);
                 CustomerClientId = data.getLongExtra(CUSTOMER_CLIENT_ID_KEY, 0);
+
+                invoice_detail.setVisibility(View.VISIBLE);
+                ll_factor_balance.setVisibility(View.VISIBLE);
                 txtTrackingCode.setText(Code);
+
                 txtPayment.setText(ServiceTools.formatPrice(Payment));
+                txtPosAmount.setText(ServiceTools.formatPrice(Payment));
                 if (CustomerId != ProjectInfo.CUSTOMERID_GUEST) {
                     customer = db.getCustomerWithPersonId(CustomerId);
-                    txtCustomerName.setText(customer.getName());
-                    txtMarketName.setText(customer.getOrganization());
                 } else {
                     customer = db.getCustomerWithPersonClientId(CustomerClientId);
-                    txtCustomerName.setText(customer.getName());
-                    txtMarketName.setText(customer.getOrganization());
                 }
+                txtCustomerName.setText(customer.getName());
+                txtMarketName.setText(customer.getOrganization());
             }
         } else if (requestCode == REQUEST_i9000s) {
             if (resultCode == RESULT_OK) {
@@ -1182,7 +1207,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
                     String result = b.getString("result", null);
                     if (result.equals("succeed")) {
                         if (trace != null && amount != null) {
-                            saveReceipt(trace, amount);
+                            saveSmartPosReceipt(trace, amount);
                         }
                     }
                 }
@@ -1248,8 +1273,12 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
 
     @Override
     public void onBackPressed() {
-        Clear();
-        finish();
+        if (arrayCheque.size() > 0)
+            onBackPressedStrategy();
+        else {
+            Clear();
+            finish();
+        }
     }
 
 }
