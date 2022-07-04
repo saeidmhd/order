@@ -54,10 +54,6 @@ public class LogReceiver extends BroadcastReceiver {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    if(statusLog.getValue() != null)
-                        if(statusLog.getValue().equals(jsonObject.toString()))
-                            return;
-                    statusLog.setValue(jsonObject.toString());
                 } else {
                     try {
                         jsonObject = new JSONObject();
@@ -65,11 +61,11 @@ public class LogReceiver extends BroadcastReceiver {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    if(statusLog.getValue() != null)
-                        if(statusLog.getValue().equals(jsonObject.toString()))
-                            return;
-                    statusLog.setValue(jsonObject.toString());
                 }
+                if(statusLog.getValue() != null)
+                    if(statusLog.getValue().equals(jsonObject.toString()))
+                        return;
+                statusLog.setValue(jsonObject.toString());
                 break;
             case LocationManager.PROVIDERS_CHANGED_ACTION:
                 if(statusLog == null) statusLog = new StatusLog();

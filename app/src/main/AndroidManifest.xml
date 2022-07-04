@@ -42,6 +42,7 @@
     <uses-permission android:name="android.permission.CPAYSDK_PRINTER_MODULE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
 
     <application
@@ -53,10 +54,20 @@
         android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <!--<activity
-            android:name=".CategoryActivity"
-            android:exported="false" />-->
+        <activity
+            android:name=".ActivityTransition"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!--
+        <activity
+            android:name=".CategoryActivity"
+            android:exported="false" />
+        -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -70,11 +81,7 @@
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -459,8 +466,8 @@
 
         <activity
             android:name=".SelectLanguage"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ThirdLevelGorup"/>
+            android:screenOrientation="portrait" />
+        <activity android:name=".ThirdLevelGorup" />
         <activity android:name=".szzt_pos.ResultActivity" />
 
         <meta-data
@@ -480,13 +487,19 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".log.BootCompleteReceiver" >
+        <receiver android:name=".log.BootCompleteReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
 
+        <service
+            android:name="tracking.ActivityDetectionIntentService"
+            android:enabled="true"/>
+
+        <service android:name=".tracking.DetectedActivitiesService"
+            android:enabled="true"/>
     </application>
 
 </manifest>

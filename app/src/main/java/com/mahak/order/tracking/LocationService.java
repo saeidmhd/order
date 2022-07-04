@@ -7,6 +7,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -27,6 +28,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.DetectedActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -162,6 +164,9 @@ public class LocationService extends Service  {
     Location lastStopLocation;
 
 
+    BroadcastReceiver broadcastReceiver;
+
+
     @Override
     public void onCreate() {
 
@@ -182,6 +187,60 @@ public class LocationService extends Service  {
                     new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
             mNotificationManager.createNotificationChannel(mChannel);
         }
+
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(intent.getAction().equals(Constants.BROADCAST_DETECTED_ACTIVITY)){
+                    int type = intent.getIntExtra("type", -1);
+                    int confidence = intent.getIntExtra("confidence", 0);
+                    provideUserStateOutput(type, confidence);
+                }
+            }
+        };
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
+                new IntentFilter(Constants.BROADCAST_DETECTED_ACTIVITY));
+    }
+
+    private void provideUserStateOutput(int type, int confidence) {
+        String lable = "";
+        switch (type){
+            case DetectedActivity.IN_VEHICLE:
+                Toast.makeText(mContext, "IN_VEHICLE", Toast.LENGTH_SHORT).show();
+                lable = "IN_VEHICLE";
+                break;
+            case DetectedActivity.ON_BICYCLE:
+                Toast.makeText(mContext, "ON_BICYCLE", Toast.LENGTH_SHORT).show();
+                lable = "ON_BICYCLE";
+                break;
+            case DetectedActivity.ON_FOOT:
+                Toast.makeText(mContext, "ON_FOOT", Toast.LENGTH_SHORT).show();
+                lable = "ON_FOOT";
+                break;
+            case DetectedActivity.RUNNING:
+                Toast.makeText(mContext, "RUNNING", Toast.LENGTH_SHORT).show();
+                lable = "RUNNING";
+                break;
+            case DetectedActivity.STILL:
+                Toast.makeText(mContext, "STILL", Toast.LENGTH_SHORT).show();
+                lable = "STILL";
+                break;
+            case DetectedActivity.TILTING:
+                Toast.makeText(mContext, "TILTING", Toast.LENGTH_SHORT).show();
+                lable = "TILTING";
+                break;
+            case DetectedActivity.WALKING:
+                Toast.makeText(mContext, "WALKING", Toast.LENGTH_SHORT).show();
+                lable = "WALKING";
+                break;
+            case DetectedActivity.UNKNOWN:
+                Toast.makeText(mContext, "UNKNOWN", Toast.LENGTH_SHORT).show();
+                lable = "UNKNOWN";
+                break;
+        }
+
+        Log.d("act_rect" , lable);
     }
 
     @Override
@@ -236,6 +295,7 @@ public class LocationService extends Service  {
     public void onDestroy() {
         Log.i(TAG, "onDestroy");
         mServiceHandler.removeCallbacksAndMessages(null);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
     }
 
     public LocationService(){}
@@ -254,6 +314,8 @@ public class LocationService extends Service  {
         createLocationRequest();
         buildLocationSettingsRequest();
         startLocationUpdates();
+        Intent intent = new Intent(mContext, DetectedActivitiesService.class);
+        mContext.startService(intent);
     }
 
     private void createLocationCallback() {
@@ -370,6 +432,8 @@ public class LocationService extends Service  {
 
     public void stopTracking() {
         removeLocationUpdates();
+        Intent intent = new Intent(this, DetectedActivitiesService.class);
+        stopService(intent);
     }
 
     private void saveAndSendStopLocation() {
