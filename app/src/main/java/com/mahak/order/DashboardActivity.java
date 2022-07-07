@@ -27,6 +27,7 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Browser;
@@ -61,6 +62,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.google.android.gms.location.DetectedActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -82,6 +84,7 @@ import com.mahak.order.common.User;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.log.LogReceiver;
 import com.mahak.order.storage.RadaraDb;
+import com.mahak.order.tracking.Constants;
 import com.mahak.order.tracking.LocationService;
 import com.mahak.order.tracking.MapPolygon;
 import com.mahak.order.tracking.ShowPersonCluster;
@@ -242,16 +245,13 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
         setContentView(R.layout.activity_dashboard);
+        requestActivityRecognitionPermission();
 
         mContext = this;
         mActivity = this;
 
         registerReceiverToCheckGpsOnOff();
-        //registerReceiver2(mContext);
-       // listenNetworkViaConnectivityManager(mContext);
 
         initUI();
 
@@ -489,6 +489,14 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         };
     }//end of onCreate
 
+    private void requestActivityRecognitionPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_DENIED){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACTIVITY_RECOGNITION},101);
+            }
+        }
+    }
+
     public static void setTackingServiceText(boolean isChecked) {
         if (isChecked) {
             tvTrackingService.setText(R.string.tracking_system_is_active);
@@ -566,19 +574,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         };
         this.getApplicationContext().registerReceiver(receiver, filter);
     }
-    private void registerReceiver2() {
-        br = new LogReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.location.PROVIDERS_CHANGED");
-        filter.addAction("android.intent.action.BATTERY_LOW");
-        filter.addAction("android.intent.action.BATTERY_OKAY");
-        filter.addAction("android.intent.action.BOOT_COMPLETED");
-        filter.addAction("android.intent.action.ACTION_SHUTDOWN");
-        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        filter.addAction("android.intent.action.AIRPLANE_MODE");
-        this.getApplicationContext().registerReceiver(br, filter);
-    }
-
 
     private void startLocationUpdate() {
         if(isRadaraActive()){
@@ -677,6 +672,9 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     showPermissionDialog();
                 }
             }
+        }else if (requestCode == 101) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                Toast.makeText(this, "granted", Toast.LENGTH_SHORT).show();
         }
     }
 

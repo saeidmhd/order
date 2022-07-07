@@ -1,10 +1,8 @@
 package com.mahak.order.tracking;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
@@ -47,7 +45,7 @@ public class DetectedActivitiesService extends Service {
 
     private void requestActivityUpdatesButtonHandler() {
         @SuppressLint("MissingPermission") Task<Void> task = ActivityRecognition.getClient(getApplicationContext())
-                .requestActivityUpdates(Constants.DETECTION_INTERVAL_IN_MILLISECONDS,
+                .requestActivityUpdates(Constants.DETECTION_INTERVAL,
                         mPendingIntent);
 
         task.addOnSuccessListener(

@@ -54,15 +54,6 @@
         android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".ActivityTransition"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <!--
         <activity
             android:name=".CategoryActivity"
@@ -81,7 +72,11 @@
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -495,7 +490,7 @@
         </receiver>
 
         <service
-            android:name="tracking.ActivityDetectionIntentService"
+            android:name=".tracking.ActivityDetectionIntentService"
             android:enabled="true"/>
 
         <service android:name=".tracking.DetectedActivitiesService"

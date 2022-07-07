@@ -66,7 +66,6 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
     }
 
     class HubConnectionTask extends AsyncTask<HubConnection, Void, Void> {
