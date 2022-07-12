@@ -146,7 +146,7 @@ public class LocationService extends Service  {
     /**
      * Callback for changes in location.
      */
-    private static LocationCallback mLocationCallback;
+    private LocationCallback mLocationCallback;
 
     private Handler mServiceHandler;
 
@@ -180,7 +180,7 @@ public class LocationService extends Service  {
 
         Log.i(TAG, "in onCreate()");
 
-        registerReceiver2();
+        registerLogReceiver();
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mSettingsClient = LocationServices.getSettingsClient(this);
@@ -205,43 +205,37 @@ public class LocationService extends Service  {
         if(confidence > Constants.CONFIDENCE){
             switch (type){
                 case DetectedActivity.WALKING:
+                    removeLocationUpdates2();
                     if(locationRequest == null)
                         locationRequest = LocationRequest.create();
-                    if(locationRequest.getPriority() != Priority.PRIORITY_HIGH_ACCURACY){
-                        removeLocationUpdates2();
-                        locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-                                .setInterval(10 * 1000)
-                                .setFastestInterval(10 * 1000);
-                        subscribeLocation();
-                        label = "WALKING : " + confidence;
-                        ServiceTools.writeLogRadara(label);
-                    }
+                    locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+                            .setInterval(5 * 1000)
+                            .setFastestInterval(5 * 1000);
+                    subscribeLocation();
+                    label = "WALKING : " + confidence ;
+                    ServiceTools.writeLogRadara(label);
                     break;
                 case DetectedActivity.IN_VEHICLE:
+                    removeLocationUpdates2();
                     if(locationRequest == null)
                         locationRequest = LocationRequest.create();
-                    if(locationRequest.getPriority() != Priority.PRIORITY_HIGH_ACCURACY){
-                        removeLocationUpdates2();
-                        locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-                                .setInterval(10 * 1000)
-                                .setFastestInterval(10 * 1000);
-                        subscribeLocation();
-                        label = "IN_VEHICLE : " + confidence ;
-                        ServiceTools.writeLogRadara(label);
-                    }
+                    locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+                            .setInterval(5 * 1000)
+                            .setFastestInterval(5 * 1000);
+                    subscribeLocation();
+                    label = "IN_VEHICLE : " + confidence ;
+                    ServiceTools.writeLogRadara(label);
                     break;
                 case DetectedActivity.STILL:
+                    removeLocationUpdates2();
                     if(locationRequest == null)
                         locationRequest = LocationRequest.create();
-                    if(locationRequest.getPriority() != Priority.PRIORITY_LOW_POWER){
-                        removeLocationUpdates2();
-                        locationRequest.setPriority(Priority.PRIORITY_LOW_POWER)
-                                .setInterval(3000 * 1000)
-                                .setFastestInterval(3000 * 1000);
-                        subscribeLocation();
-                        label = "STILL : " + confidence;
-                        ServiceTools.writeLogRadara(label);
-                    }
+                    locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+                            .setInterval(10 * 60 * 1000)
+                            .setFastestInterval(10 * 60 * 1000);
+                    subscribeLocation();
+                    label = "STILL : " + confidence;
+                    ServiceTools.writeLogRadara(label);
                     break;
             }
             Log.d("act_rect" , label);
@@ -338,11 +332,11 @@ public class LocationService extends Service  {
     }
 
     private void createLocationRequest() {
-        locationRequest = LocationRequest.create();
-        locationRequest.setPriority(Priority.PRIORITY_BALANCED_POWER_ACCURACY)
+        if(locationRequest == null)
+            locationRequest = LocationRequest.create();
+        locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY)
                 .setInterval(5 * 1000)
-                .setFastestInterval(5 * 1000)
-                .setSmallestDisplacement(100);
+                .setFastestInterval(5 * 1000);
     }
     private boolean compareWithLastLocation(Location currentLocation) {
 
@@ -374,7 +368,9 @@ public class LocationService extends Service  {
         lasLocation.setTime(obj.optLong(ProjectInfo._json_key_date));
         mDistance = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(), "K") * 1000;
         boolean hasSpeed = (int)currentLocation.getSpeed() > 0;
-        result = hasSpeed;
+        boolean hasAccuracy = currentLocation.hasAccuracy();
+        boolean accurateLocation = (int)currentLocation.getAccuracy() <= 20;
+        result = hasAccuracy && hasSpeed && accurateLocation;
         if(result){
             saveAndSendStopLocation();
             ServiceTools.writeLogRadara( "\n" + mDistance + "\n" + currentLocation.getSpeed() + "\n" + currentLocation.getAccuracy() + "\n" + currentLocation.getLatitude() + "\n" + currentLocation.getLongitude());
@@ -406,8 +402,6 @@ public class LocationService extends Service  {
                         mFusedLocationClient.requestLocationUpdates(locationRequest,mLocationCallback, Looper.myLooper());
                         if(timerHelper == null)
                             timerHelper =  new TimerHelper();
-                        updateUI();
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -432,7 +426,6 @@ public class LocationService extends Service  {
                                 //Log.e(TAG, errorMessage);
                                 ServiceTools.writeLogRadara(errorMessage);
                         }
-                        updateUI();
                     }
                 });
     }
@@ -806,11 +799,22 @@ public class LocationService extends Service  {
         try {
             if(mLocationCallback != null){
                 if(mFusedLocationClient != null){
-                    mFusedLocationClient.removeLocationUpdates(mLocationCallback);
-                    Utils.setRequestingLocationUpdates(mContext, false);
-                    stopSelf();
-                    if(realTimeLocation != null)
-                        realTimeLocation.stopRealTimeSend();
+                    mFusedLocationClient.removeLocationUpdates(mLocationCallback).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Log.d("remove","removelocation");
+                        }
+                    });
+
+                    mFusedLocationClient.removeLocationUpdates(mLocationCallback).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
+                            Utils.setRequestingLocationUpdates(mContext, false);
+                            stopSelf();
+                            if(realTimeLocation != null)
+                                realTimeLocation.stopRealTimeSend();
+                        }
+                    });
                 }
             }
         } catch (SecurityException unlikely) {
@@ -823,10 +827,18 @@ public class LocationService extends Service  {
         try {
             if(mLocationCallback != null){
                 if(mFusedLocationClient != null){
-                    mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+                    mFusedLocationClient.removeLocationUpdates(mLocationCallback).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Log.d("remove","removelocation");
+                        }
+                    });
                 }
             }
-        } catch (SecurityException unlikely){
+        } catch (SecurityException unlikely) {
+            ServiceTools.writeLogRadara(unlikely.getMessage());
+            Utils.setRequestingLocationUpdates(mContext, true);
+            Log.e(TAG, "Lost location permission. Could not remove updates. " + unlikely);
         }
     }
 
@@ -1011,7 +1023,7 @@ public class LocationService extends Service  {
         }
     }
 
-    private void registerReceiver2() {
+    private void registerLogReceiver() {
         LogReceiver br = new LogReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.location.PROVIDERS_CHANGED");

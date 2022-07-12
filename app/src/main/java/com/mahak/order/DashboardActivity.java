@@ -548,8 +548,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         }
         if(isRadaraActive())
             setTrackingConfig();
-
-
         super.onResume();
     }
 
@@ -577,7 +575,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
     private void startLocationUpdate() {
         if(isRadaraActive()){
-            if (locationService == null) locationService = new LocationService(mContext, DashboardActivity.this);
+            if (locationService == null)
+                locationService = new LocationService(mContext, DashboardActivity.this);
             if (!checkPermissions()) {
                 requestPermissions();
             }else {
