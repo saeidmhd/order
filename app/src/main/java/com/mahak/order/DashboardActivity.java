@@ -465,7 +465,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(getApplicationContext(), ReceiptsListActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MissionListActivity.class);
                 startActivity(intent);
 
             }
@@ -1041,7 +1041,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.btnNavReceiptList:
                 mDrawerLayout.closeDrawers();
-                intent = new Intent(getApplicationContext(), ReceiptsListActivity.class);
+                intent = new Intent(getApplicationContext(), MissionListActivity.class);
                 startActivity(intent);
                 break;
             case R.id.btnNavOrderList:

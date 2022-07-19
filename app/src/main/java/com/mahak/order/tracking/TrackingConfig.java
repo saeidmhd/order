@@ -19,6 +19,12 @@ import com.mahak.order.common.loginSignalr.SignalLoginBody;
 import com.mahak.order.common.loginSignalr.SignalLoginResult;
 import com.mahak.order.common.manageLog.ManageLog;
 import com.mahak.order.common.manageLog.StatusLog;
+import com.mahak.order.mission.AllMissionDetailBody;
+import com.mahak.order.mission.GetAllMission;
+import com.mahak.order.mission.AllMissionBody;
+import com.mahak.order.mission.GetAllMissionDetail;
+import com.mahak.order.mission.Mission;
+import com.mahak.order.mission.MissionDetail;
 import com.mahak.order.service.DataService;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.RadaraDb;
@@ -260,7 +266,6 @@ public class TrackingConfig {
 
     class sendStopLogAsync extends AsyncTask<String, String, Integer> {
 
-
         ArrayList<StopLog> stopLogs = new ArrayList<>();
 
         @Override
@@ -306,7 +311,7 @@ public class TrackingConfig {
                         }else
                             ServiceTools.writeLog("\n" + "error in sending points");
                     }
-                    new sendStatusLogAsync().execute();
+                    new getMissionAsync().execute();
                 }
                 @Override
                 public void onFailure(Call<StopLocationResponse> call, Throwable t) {
@@ -318,6 +323,200 @@ public class TrackingConfig {
             });
         }
     }
+
+    class getMissionAsync extends AsyncTask<String, String, Integer> {
+        List<Mission> missions = new ArrayList<>();
+        long rowVersion = 0;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Integer doInBackground(String... arg0) {
+            rowVersion = getRowVersion();
+            return 0;
+        }
+        private long getRowVersion() {
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            final String[] mMsg = {""};
+
+            AllMissionBody getAllMissionBody = new AllMissionBody();
+            getAllMissionBody.setFromMissionVersion(0l);
+            ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
+            pd.setMessage("در حال دریافت ماموریت ها");
+            pd.setCancelable(false);
+            pd.show();
+
+            Call<GetAllMission> call = apiService.GetAllMission(getPrefSignalUserToken(),getAllMissionBody);
+            call.enqueue(new Callback<GetAllMission>() {
+                @Override
+                public void onResponse(Call<GetAllMission> call, Response<GetAllMission> response) {
+                    dismissProgressDialog();
+                    if (response.body() != null) {
+                        if (response.body().getSucceeded()) {
+                            missions =  response.body().getData();
+                            if(missions.size() > 0){
+                                new SaveMissionAsyncTask(missions).execute();
+                            }
+                        }else {
+                            if (response.body() != null) {
+                                // mMsg[0] = response.body().getMessage();
+                            }
+                        }
+                    }
+
+                }
+                @Override
+                public void onFailure(Call<GetAllMission> call, Throwable t) {
+                    dismissProgressDialog();
+                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+                    FirebaseCrashlytics.getInstance().log(t.getMessage());
+                    mMsg[0] = t.toString();
+                }
+            });
+        }
+    }
+    class SaveMissionAsyncTask extends AsyncTask<String, String, Integer> {
+
+        List<Mission> missions;
+
+        public SaveMissionAsyncTask(List<Mission> data){
+            missions = data;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd.setMessage(mContext.getString(R.string.storing_info));
+            pd.setCancelable(false);
+            pd.show();
+        }
+
+        @Override
+        protected Integer doInBackground(String... arg0) {
+            radaraDb.open();
+            if (missions != null){
+                if (missions.size() > 0){
+                    for (Mission mission : missions){
+                        DataService.InsertMission(radaraDb, mission);
+                    }
+                }
+            }
+            radaraDb.close();
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            new getMissionDetailAsync().execute();
+            dismissProgressDialog();
+        }
+
+    }
+
+    class getMissionDetailAsync extends AsyncTask<String, String, Integer> {
+        List<MissionDetail> missionDetails = new ArrayList<>();
+        long rowVersion = 0;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Integer doInBackground(String... arg0) {
+            rowVersion = getRowVersion();
+            return 0;
+        }
+        private long getRowVersion() {
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            final String[] mMsg = {""};
+
+            AllMissionDetailBody allMissionDetailBody = new AllMissionDetailBody();
+            allMissionDetailBody.setFromMissionDetailVersion(rowVersion);
+            ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
+            pd.setMessage("در حال دریافت جزییات ماموریت ها");
+            pd.setCancelable(false);
+            pd.show();
+
+            Call<GetAllMissionDetail> call = apiService.GetAllMissionDetail(getPrefSignalUserToken(),allMissionDetailBody);
+            call.enqueue(new Callback<GetAllMissionDetail>() {
+                @Override
+                public void onResponse(Call<GetAllMissionDetail> call, Response<GetAllMissionDetail> response) {
+                    dismissProgressDialog();
+                    if (response.body() != null) {
+                        if (response.body().getSucceeded()) {
+                            missionDetails =  response.body().getData();
+                            if(missionDetails.size() > 0){
+                                new SaveMissionDetailAsyncTask(missionDetails).execute();
+                            }
+                        }else {
+                            if (response.body() != null) {
+                                // mMsg[0] = response.body().getMessage();
+                            }
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<GetAllMissionDetail> call, Throwable t) {
+                    dismissProgressDialog();
+                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+                    FirebaseCrashlytics.getInstance().log(t.getMessage());
+                    mMsg[0] = t.toString();
+                }
+            });
+        }
+    }
+
+    class SaveMissionDetailAsyncTask extends AsyncTask<String, String, Integer> {
+
+        List<MissionDetail> missionDetails;
+
+        public SaveMissionDetailAsyncTask(List<MissionDetail> data){
+            missionDetails = data;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd.setMessage(mContext.getString(R.string.storing_info));
+            pd.setCancelable(false);
+            pd.show();
+        }
+
+        @Override
+        protected Integer doInBackground(String... arg0) {
+            radaraDb.open();
+            if (missionDetails != null){
+                if (missionDetails.size() > 0){
+                    for (MissionDetail missionDetail : missionDetails){
+                        DataService.InsertMissionDetail(radaraDb, missionDetail);
+                    }
+                }
+            }
+            radaraDb.close();
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            new sendStatusLogAsync().execute();
+            dismissProgressDialog();
+        }
+
+    }
+
+
     class sendStatusLogAsync extends AsyncTask<String, String, Integer> {
 
 
@@ -379,6 +578,7 @@ public class TrackingConfig {
             });
         }
     }
+
 
     private void dismissProgressDialog() {
         if (pd != null && pd.isShowing()) {

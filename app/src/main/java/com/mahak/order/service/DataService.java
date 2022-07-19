@@ -37,6 +37,8 @@ import com.mahak.order.common.TransactionsLog;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.common.VisitorPeople;
 import com.mahak.order.common.VisitorProduct;
+import com.mahak.order.mission.Mission;
+import com.mahak.order.mission.MissionDetail;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.RadaraDb;
 import com.mahak.order.tracking.visitorZone.Datum;
@@ -62,6 +64,14 @@ public class DataService {
         
         db.AddZone(data);
        
+    }
+    public static void InsertMission(RadaraDb db, Mission mission) {
+
+        db.AddMission(mission);
+
+    }
+    public static void InsertMissionDetail(RadaraDb db, MissionDetail missionDetail) {
+        db.AddMissionDetail(missionDetail);
     }
 
     public static void InsertZoneLocation(RadaraDb db, List<ZoneLocation> data) {

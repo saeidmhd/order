@@ -2005,6 +2005,7 @@ public class DbSchema {
                 " `UserId` NUMERIC )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
+
     public static class ManageLogSchema implements BaseColumns {
 
         public static final String TABLE_NAME = "ManageLog";
@@ -2021,6 +2022,88 @@ public class DbSchema {
                 " `sent` INTEGER," +
                 " `Date_time` TEXT," +
                 " `UserId` NUMERIC )";
+        public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+    }
+    public static class MissionSchema implements BaseColumns {
+
+        public static final String TABLE_NAME = "Mission";
+        public static final String COLUMN_missionId = "missionId";
+        public static final String COLUMN_userId = "userId";
+        public static final String COLUMN_databaseId = "databaseId";
+        public static final String COLUMN_missionCode = "missionCode";
+        public static final String COLUMN_accountId= "accountId";
+        public static final String COLUMN_missionClientId = "missionClientId";
+        public static final String COLUMN_status = "status";
+        public static final String COLUMN_date = "date";
+        public static final String COLUMN_endDate = "endDate";
+        public static final String COLUMN_deleted = "deleted";
+        public static final String COLUMN_description = "description";
+        public static final String COLUMN_rowVersion = "rowVersion";
+
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"Mission\" ( " +
+                " `_id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                " `missionId` NUMERIC," +
+                " `userId` NUMERIC," +
+                " `databaseId` NUMERIC," +
+                " `missionCode` NUMERIC," +
+                " `accountId` NUMERIC," +
+                " `missionClientId` NUMERIC," +
+                " `status` NUMERIC," +
+                " `date` TEXT," +
+                " `endDate` TEXT," +
+                " `deleted` TEXT," +
+                " `description` TEXT," +
+                " `rowVersion` NUMERIC )";
+        public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+    }
+    public static class MissionDetailSchema implements BaseColumns {
+
+        public static final String TABLE_NAME = "MissionDetail";
+        public static final String COLUMN_missionDetailId = "missionDetailId";
+        public static final String COLUMN_databaseId = "databaseId";
+        public static final String COLUMN_missionDetailCode = "missionDetailCode";
+        public static final String COLUMN_status = "status";
+        public static final String COLUMN_priority= "priority";
+        public static final String COLUMN_date = "date";
+        public static final String COLUMN_type = "type";
+        public static final String COLUMN_personId = "personId";
+        public static final String COLUMN_accountId = "accountId";
+        public static final String COLUMN_description = "description";
+        public static final String COLUMN_activityID = "activityID";
+        public static final String COLUMN_missionId = "missionId";
+        public static final String COLUMN_deleted = "deleted";
+        public static final String COLUMN_dataHash = "dataHash";
+        public static final String COLUMN_createDate = "createDate";
+        public static final String COLUMN_rowVersion = "rowVersion";
+        public static final String COLUMN_firstName = "firstName";
+        public static final String COLUMN_lastName = "lastName";
+        public static final String COLUMN_personLatitude = "personLatitude";
+        public static final String COLUMN_personLongitude = "personLongitude";
+        public static final String COLUMN_userId = "userid";
+
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"MissionDetail\" ( " +
+                " `_id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                " `missionDetailId` NUMERIC," +
+                " `databaseId` NUMERIC," +
+                " `missionDetailCode` NUMERIC," +
+                " `status` NUMERIC," +
+                " `priority` NUMERIC," +
+                " `date` TEXT," +
+                " `type` NUMERIC," +
+                " `personId` NUMERIC," +
+                " `accountId` NUMERIC," +
+                " `description` TEXT," +
+                " `activityID` TEXT," +
+                " `missionId` NUMERIC," +
+                " `deleted` TEXT," +
+                " `dataHash` TEXT," +
+                " `createDate` TEXT," +
+                " `rowVersion` NUMERIC," +
+                " `firstName` TEXT," +
+                " `lastName` TEXT," +
+                " `userid` NUMERIC," +
+                " `personLatitude` NUMERIC," +
+                " `personLongitude` NUMERIC )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 

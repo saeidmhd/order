@@ -10,12 +10,15 @@ import com.mahak.order.common.login.LoginResult;
 import com.mahak.order.common.loginSignalr.SignalLoginBody;
 import com.mahak.order.common.loginSignalr.SignalLoginResult;
 import com.mahak.order.common.manageLog.ManageLog;
-import com.mahak.order.common.manageLog.StatusLog;
 import com.mahak.order.common.request.GetAllDataBody;
 import com.mahak.order.common.request.GetAllDataResult.GetDataResult;
 import com.mahak.order.common.request.SetAllDataBody;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
 import com.mahak.order.common.request.SetSign.setSignImage;
+import com.mahak.order.mission.AllMissionDetailBody;
+import com.mahak.order.mission.GetAllMission;
+import com.mahak.order.mission.AllMissionBody;
+import com.mahak.order.mission.GetAllMissionDetail;
 import com.mahak.order.tracking.setting.SettingBody;
 import com.mahak.order.tracking.setting.TrackingSetting;
 import com.mahak.order.tracking.visitorZone.VisitorZoneLocation;
@@ -42,6 +45,12 @@ public interface ApiInterface {
 
     @POST("zone/GetVisitorZoneLocations")
     Call<VisitorZoneLocation> GetZoneLocation(@Body ZoneBody body);
+
+    @POST("Mission/GetAll")
+    Call<GetAllMission> GetAllMission(@Header("token") String token,@Body AllMissionBody body);
+
+    @POST("Mission/GetAll")
+    Call<GetAllMissionDetail> GetAllMissionDetail(@Header("token") String token, @Body AllMissionDetailBody body);
 
     @POST("user/login")
     Call<SignalLoginResult> LoginSignalR(@Body SignalLoginBody body);

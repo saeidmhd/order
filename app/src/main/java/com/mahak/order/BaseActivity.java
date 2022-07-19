@@ -41,7 +41,7 @@ public class BaseActivity extends AppCompatActivity {
     //public static final String baseUrlApi = "https://mahakacc.mahaksoft.com/api/testv3/sync/";
     public static final String setDeviceTokenUrl = "https://mahakacc.mahaksoft.com/public/api/";
 
-    public static final String baseUrlTracking = "https://tracking.mahaksoft.com/api/";
+    public static final String baseUrlTracking = "https://tracking.mahaksoft.com:404/api/";
     public static final String baseUrlSignalR = "https://tracking.mahaksoft.com/TrackingHub?token=";
     public static final String baseUrlShowRouting = "https://tracking.mahaksoft.com/showrouting";
 
