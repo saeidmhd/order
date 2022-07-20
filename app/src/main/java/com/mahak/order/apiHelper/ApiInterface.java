@@ -49,7 +49,7 @@ public interface ApiInterface {
     @POST("Mission/GetAll")
     Call<GetAllMission> GetAllMission(@Header("token") String token,@Body AllMissionBody body);
 
-    @POST("Mission/GetAll")
+    @POST("Mission/GetAllMissionDetail")
     Call<GetAllMissionDetail> GetAllMissionDetail(@Header("token") String token, @Body AllMissionDetailBody body);
 
     @POST("user/login")

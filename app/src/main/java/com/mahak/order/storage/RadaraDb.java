@@ -657,22 +657,22 @@ public class RadaraDb {
         try {
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
-                    missionDetail.setMissionId(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_missionId)));
-                    missionDetail.setMissionDetailId(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_missionDetailId)));
-                    missionDetail.setDatabaseId(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_databaseId)));
-                    missionDetail.setMissionDetailCode(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_missionDetailCode)));
-                    missionDetail.setStatus(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_status)));
-                    missionDetail.setPriority(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_priority)));
+                    missionDetail.setMissionId(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_missionId)));
+                    missionDetail.setMissionDetailId(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_missionDetailId)));
+                    missionDetail.setDatabaseId(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_databaseId)));
+                    missionDetail.setMissionDetailCode(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_missionDetailCode)));
+                    missionDetail.setStatus(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_status)));
+                    missionDetail.setPriority(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_priority)));
                     missionDetail.setDate(cursor.getString(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_date)));
-                    missionDetail.setType(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_type)));
-                    missionDetail.setPersonId(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_personId)));
-                    missionDetail.setAccountId(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_accountId)));
+                    missionDetail.setType(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_type)));
+                    missionDetail.setPersonId(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_personId)));
+                    missionDetail.setAccountId(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_accountId)));
                     missionDetail.setDescription(cursor.getString(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_description)));
                     missionDetail.setActivityID(cursor.getString(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_activityID)));
-                    missionDetail.setDeleted(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_deleted)));
+                  //  missionDetail.setDeleted(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_deleted)));
                     missionDetail.setDataHash(cursor.getString(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_dataHash)));
                     missionDetail.setCreateDate(cursor.getString(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_createDate)));
-                    missionDetail.setRowVersion(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_rowVersion)));
+                    missionDetail.setRowVersion(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_rowVersion)));
                     missionDetail.setFirstName(cursor.getString(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_firstName)));
                     missionDetail.setLastName(cursor.getString(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_lastName)));
                     missionDetail.setPersonLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.MissionDetailSchema.COLUMN_personLatitude)));

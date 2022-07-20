@@ -8,31 +8,31 @@ public class MissionDetail {
 
     @SerializedName("missionDetailId")
     @Expose
-    private Long missionDetailId;
+    private int missionDetailId;
     @SerializedName("databaseId")
     @Expose
-    private Long databaseId;
+    private int databaseId;
     @SerializedName("missionDetailCode")
     @Expose
-    private Long missionDetailCode;
+    private int missionDetailCode;
     @SerializedName("status")
     @Expose
-    private Long status;
+    private int status;
     @SerializedName("priority")
     @Expose
-    private Long priority;
+    private int priority;
     @SerializedName("date")
     @Expose
     private String date;
     @SerializedName("type")
     @Expose
-    private Long type;
+    private int type;
     @SerializedName("personId")
     @Expose
-    private Long personId;
+    private int personId;
     @SerializedName("accountId")
     @Expose
-    private Long accountId;
+    private int accountId;
     @SerializedName("description")
     @Expose
     private String description;
@@ -41,10 +41,10 @@ public class MissionDetail {
     private String activityID;
     @SerializedName("missionId")
     @Expose
-    private Long missionId;
+    private int missionId;
     @SerializedName("deleted")
     @Expose
-    private Boolean deleted;
+    private boolean deleted;
     @SerializedName("dataHash")
     @Expose
     private String dataHash;
@@ -53,7 +53,7 @@ public class MissionDetail {
     private String createDate;
     @SerializedName("rowVersion")
     @Expose
-    private Long rowVersion;
+    private int rowVersion;
     @SerializedName("firstName")
     @Expose
     private String firstName;
@@ -67,43 +67,43 @@ public class MissionDetail {
     @Expose
     private Double personLongitude;
 
-    public Long getMissionDetailId() {
+    public int getMissionDetailId() {
         return missionDetailId;
     }
 
-    public void setMissionDetailId(Long missionDetailId) {
+    public void setMissionDetailId(int missionDetailId) {
         this.missionDetailId = missionDetailId;
     }
 
-    public Long getDatabaseId() {
+    public int getDatabaseId() {
         return databaseId;
     }
 
-    public void setDatabaseId(Long databaseId) {
+    public void setDatabaseId(int databaseId) {
         this.databaseId = databaseId;
     }
 
-    public Long getMissionDetailCode() {
+    public int getMissionDetailCode() {
         return missionDetailCode;
     }
 
-    public void setMissionDetailCode(Long missionDetailCode) {
+    public void setMissionDetailCode(int missionDetailCode) {
         this.missionDetailCode = missionDetailCode;
     }
 
-    public Long getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(Long status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
-    public Long getPriority() {
+    public int getPriority() {
         return priority;
     }
 
-    public void setPriority(Long priority) {
+    public void setPriority(int priority) {
         this.priority = priority;
     }
 
@@ -115,27 +115,27 @@ public class MissionDetail {
         this.date = date;
     }
 
-    public Long getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(Long type) {
+    public void setType(int type) {
         this.type = type;
     }
 
-    public Long getPersonId() {
+    public int getPersonId() {
         return personId;
     }
 
-    public void setPersonId(Long personId) {
+    public void setPersonId(int personId) {
         this.personId = personId;
     }
 
-    public Long getAccountId() {
+    public int getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(Long accountId) {
+    public void setAccountId(int accountId) {
         this.accountId = accountId;
     }
 
@@ -155,20 +155,20 @@ public class MissionDetail {
         this.activityID = activityID;
     }
 
-    public Long getMissionId() {
+    public int getMissionId() {
         return missionId;
     }
 
-    public void setMissionId(Long missionId) {
+    public void setMissionId(int missionId) {
         this.missionId = missionId;
     }
 
-    public int isDeleted() {
-        return deleted ? 1 : 0;
+    public boolean isDeleted() {
+        return deleted;
     }
 
-    public void setDeleted(int deleted) {
-        this.deleted = deleted == 1;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public String getDataHash() {
@@ -187,11 +187,11 @@ public class MissionDetail {
         this.createDate = createDate;
     }
 
-    public Long getRowVersion() {
+    public int getRowVersion() {
         return rowVersion;
     }
 
-    public void setRowVersion(Long rowVersion) {
+    public void setRowVersion(int rowVersion) {
         this.rowVersion = rowVersion;
     }
 
