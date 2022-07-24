@@ -19,6 +19,9 @@ import com.mahak.order.mission.AllMissionDetailBody;
 import com.mahak.order.mission.GetAllMission;
 import com.mahak.order.mission.AllMissionBody;
 import com.mahak.order.mission.GetAllMissionDetail;
+import com.mahak.order.mission.Mission;
+import com.mahak.order.mission.SendUpdate;
+import com.mahak.order.mission.updateResponse.MissionUpdateResponse;
 import com.mahak.order.tracking.setting.SettingBody;
 import com.mahak.order.tracking.setting.TrackingSetting;
 import com.mahak.order.tracking.visitorZone.VisitorZoneLocation;
@@ -48,6 +51,9 @@ public interface ApiInterface {
 
     @POST("Mission/GetAll")
     Call<GetAllMission> GetAllMission(@Header("token") String token,@Body AllMissionBody body);
+
+    @POST("Mission/CreateOrUpdate")
+    Call<MissionUpdateResponse> saveMissionStatus(@Header("token") String token, @Body SendUpdate body);
 
     @POST("Mission/GetAllMissionDetail")
     Call<GetAllMissionDetail> GetAllMissionDetail(@Header("token") String token, @Body AllMissionDetailBody body);

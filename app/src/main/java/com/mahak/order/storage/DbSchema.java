@@ -2038,6 +2038,7 @@ public class DbSchema {
         public static final String COLUMN_endDate = "endDate";
         public static final String COLUMN_deleted = "deleted";
         public static final String COLUMN_description = "description";
+        public static final String COLUMN_missionDetailCount = "missionDetailCount";
         public static final String COLUMN_rowVersion = "rowVersion";
 
         public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"Mission\" ( " +
@@ -2049,6 +2050,7 @@ public class DbSchema {
                 " `accountId` NUMERIC," +
                 " `missionClientId` NUMERIC," +
                 " `status` NUMERIC," +
+                " `missionDetailCount` NUMERIC," +
                 " `date` TEXT," +
                 " `endDate` TEXT," +
                 " `deleted` TEXT," +
@@ -2083,25 +2085,25 @@ public class DbSchema {
 
         public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"MissionDetail\" ( " +
                 " `_id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-                " `missionDetailId` NUMERIC," +
-                " `databaseId` NUMERIC," +
-                " `missionDetailCode` NUMERIC," +
-                " `status` NUMERIC," +
-                " `priority` NUMERIC," +
+                " `missionDetailId` INTEGER," +
+                " `databaseId` INTEGER," +
+                " `missionDetailCode` INTEGER," +
+                " `status` INTEGER," +
+                " `priority` INTEGER," +
                 " `date` TEXT," +
-                " `type` NUMERIC," +
-                " `personId` NUMERIC," +
-                " `accountId` NUMERIC," +
+                " `type` INTEGER," +
+                " `personId` INTEGER," +
+                " `accountId` INTEGER," +
                 " `description` TEXT," +
                 " `activityID` TEXT," +
-                " `missionId` NUMERIC," +
+                " `missionId` INTEGER," +
                 " `deleted` TEXT," +
                 " `dataHash` TEXT," +
                 " `createDate` TEXT," +
-                " `rowVersion` NUMERIC," +
+                " `rowVersion` INTEGER," +
                 " `firstName` TEXT," +
                 " `lastName` TEXT," +
-                " `userid` NUMERIC," +
+                " `userid` INTEGER," +
                 " `personLatitude` NUMERIC," +
                 " `personLongitude` NUMERIC )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;

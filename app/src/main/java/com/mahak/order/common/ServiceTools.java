@@ -1974,4 +1974,18 @@ FirebaseCrashlytics.getInstance().recordException(e);
         return simpleDateFormat.format(date);
 
     }
+
+    public static long getDate(String t_date) {
+        String pattern = "yyyy-MM-dd'T'HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
+        try {
+            java.util.Date date = simpleDateFormat.parse(t_date);
+            return date != null ? date.getTime() : 0;
+        } catch (ParseException e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            e.printStackTrace();
+        }
+        return -1;
+    }
 }

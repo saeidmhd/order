@@ -129,6 +129,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             btnAddNewReceipt,
             btnNavReceiptList,
             btnNavOrderList,
+            btnNavMissionList,
             btnWhatsNew,
             btnNavPayableList,
             btnNavTransferList,
@@ -465,7 +466,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(getApplicationContext(), MissionListActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ReceiptsListActivity.class);
                 startActivity(intent);
 
             }
@@ -773,7 +774,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnNavReportsList.setCompoundDrawables(null, null, new IconicsDrawable(mContext, FontAwesome.Icon.faw_chart_bar).color(Color.WHITE).sizeDp(30), null);
         btnNavPayableList = (Button) findViewById(R.id.btnNavPayableList);
         btnNavPayableList.setCompoundDrawables(null, null, new IconicsDrawable(mContext, Ionicons.Icon.ion_card).color(Color.WHITE).sizeDp(30), null);
-
+        btnNavMissionList = (Button) findViewById(R.id.btnNavMissionList);
+        btnNavMissionList.setCompoundDrawables(null, null, new IconicsDrawable(mContext, FontAwesome.Icon.faw_file).color(Color.WHITE).sizeDp(30), null);
         btnNavTransferList = (Button) findViewById(R.id.btnNavTransferList);
         btnNavTransferList.setCompoundDrawables(null, null, new IconicsDrawable(mContext, Ionicons.Icon.ion_arrow_swap).color(Color.WHITE).sizeDp(30), null);
 
@@ -793,6 +795,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnNavProductList.setOnClickListener(this);
         btnNavCustomerList.setOnClickListener(this);
         btnNavReceiptList.setOnClickListener(this);
+        btnNavMissionList.setOnClickListener(this);
         btnNavOrderList.setOnClickListener(this);
         btnNavDataSync.setOnClickListener(this);
         btnNavContact.setOnClickListener(this);
@@ -1040,6 +1043,11 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.btnNavReceiptList:
+                mDrawerLayout.closeDrawers();
+                intent = new Intent(getApplicationContext(), ReceiptsListActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btnNavMissionList:
                 mDrawerLayout.closeDrawers();
                 intent = new Intent(getApplicationContext(), MissionListActivity.class);
                 startActivity(intent);

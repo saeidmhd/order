@@ -9,39 +9,45 @@ import java.util.List;
 public class Mission {
 
     @SerializedName("missionId")
-    @Expose
+    @Expose(serialize = false)
     private Long missionId;
     @SerializedName("databaseId")
-    @Expose
+    @Expose(serialize = false)
     private Long databaseId;
     @SerializedName("missionCode")
-    @Expose
+    @Expose(serialize = false)
     private Long missionCode;
     @SerializedName("accountId")
-    @Expose
+    @Expose(serialize = false)
     private Long accountId;
     @SerializedName("missionClientId")
-    @Expose
+    @Expose(serialize = false)
     private Long missionClientId;
     @SerializedName("status")
-    @Expose
-    private Long status;
+    @Expose(serialize = false)
+    private Integer status;
     @SerializedName("date")
-    @Expose
+    @Expose(serialize = false)
     private String date;
     @SerializedName("endDate")
-    @Expose
+    @Expose(serialize = false)
     private String endDate;
     @SerializedName("deleted")
-    @Expose
+    @Expose(serialize = false)
     private Boolean deleted;
     @SerializedName("description")
-    @Expose
+    @Expose(serialize = false)
     private String description;
     @SerializedName("rowVersion")
-    @Expose
+    @Expose(serialize = false)
     private Long rowVersion;
-    private List<MissionDetail> items;
+    @SerializedName("missionDetailCount")
+    @Expose(serialize = false)
+    private Long missionDetailCount;
+    @SerializedName("missionDetails")
+    @Expose
+    private List<MissionDetail> missionDetails = null;
+
 
     public Long getMissionId() {
         return missionId;
@@ -83,11 +89,11 @@ public class Mission {
         this.missionClientId = missionClientId;
     }
 
-    public Long getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Long status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -115,12 +121,12 @@ public class Mission {
         this.deleted = deleted == 1;
     }
 
-    public void setItems(List<MissionDetail> items) {
-        this.items = items;
+    public void setMissionDetails(List<MissionDetail> items) {
+        this.missionDetails = items;
     }
 
-    public List<MissionDetail> getItems() {
-        return items;
+    public List<MissionDetail> getMissionDetails() {
+        return missionDetails;
     }
 
     public String getDescription() {
@@ -138,5 +144,14 @@ public class Mission {
     public void setRowVersion(Long rowVersion) {
         this.rowVersion = rowVersion;
     }
+
+    public Long getMissionDetailCount() {
+        return missionDetailCount;
+    }
+
+    public void setMissionDetailCount(Long missionDetailCount) {
+        this.missionDetailCount = missionDetailCount;
+    }
+
 
 }

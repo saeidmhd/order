@@ -535,6 +535,7 @@ public class RadaraDb {
             initialvalue.put(DbSchema.MissionSchema.COLUMN_deleted, mission.isDeleted());
             initialvalue.put(DbSchema.MissionSchema.COLUMN_description, mission.getDescription());
             initialvalue.put(DbSchema.MissionSchema.COLUMN_rowVersion, mission.getRowVersion());
+            initialvalue.put(DbSchema.MissionSchema.COLUMN_missionDetailCount, mission.getMissionDetailCount());
             initialvalue.put(DbSchema.MissionSchema.COLUMN_userId, getPrefUserId());
             boolean result = (mDb.update(DbSchema.MissionSchema.TABLE_NAME, initialvalue,"missionId =? and userId =? " , new String[]{String.valueOf(mission.getMissionId()), String.valueOf(getPrefUserId())})) > 0;
             if(!result)
@@ -612,12 +613,13 @@ public class RadaraDb {
                     mission.setMissionCode(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_missionCode)));
                     mission.setAccountId(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_accountId)));
                     mission.setMissionClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_missionClientId)));
-                    mission.setStatus(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_status)));
+                    mission.setStatus(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_status)));
                     mission.setDate(cursor.getString(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_date)));
                     mission.setEndDate(cursor.getString(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_endDate)));
                     mission.setDeleted(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_deleted)));
                     mission.setDescription(cursor.getString(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_description)));
                     mission.setRowVersion(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_rowVersion)));
+                    mission.setMissionDetailCount(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_missionDetailCount)));
                 }
             }
 
@@ -628,12 +630,36 @@ public class RadaraDb {
         }
         return mission;
     }
-    public ArrayList<MissionDetail> getAllMissionDetail(long missionId) {
+    public ArrayList<MissionDetail> getAllMissionDetailWithMissionId(long missionId) {
         MissionDetail missionDetail;
         Cursor cursor;
         ArrayList<MissionDetail> array = new ArrayList<>();
         try {
             cursor = mDb.rawQuery("select * from MissionDetail  where missionId = ? ", new String[]{String.valueOf(missionId)});
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    missionDetail = GetMissionDetail(cursor);
+                    if (missionDetail != null)
+                        array.add(missionDetail);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrAllCheque", e.getMessage());
+        }
+
+        return array;
+    }
+    public ArrayList<MissionDetail> getAllMissionDetail() {
+        MissionDetail missionDetail;
+        Cursor cursor;
+        ArrayList<MissionDetail> array = new ArrayList<>();
+        try {
+            cursor = mDb.rawQuery("select * from MissionDetail ", null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {

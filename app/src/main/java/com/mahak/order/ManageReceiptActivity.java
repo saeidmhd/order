@@ -1228,8 +1228,10 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (arrayCheque.size() > 0)
+                String amount = txtAmount.getText().toString();
+                if (!TextUtils.isEmpty(amount) || arrayCheque.size() != 0) {
                     onBackPressedStrategy();
+                }
                 else {
                     Clear();
                     finish();
@@ -1273,8 +1275,10 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
 
     @Override
     public void onBackPressed() {
-        if (arrayCheque.size() > 0)
+        String amount = txtAmount.getText().toString();
+        if (!TextUtils.isEmpty(amount) || arrayCheque.size() != 0) {
             onBackPressedStrategy();
+        }
         else {
             Clear();
             finish();

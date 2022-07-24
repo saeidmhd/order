@@ -10,61 +10,61 @@ public class MissionDetail {
     @Expose
     private int missionDetailId;
     @SerializedName("databaseId")
-    @Expose
+    @Expose(serialize = false)
     private int databaseId;
     @SerializedName("missionDetailCode")
-    @Expose
+    @Expose(serialize = false)
     private int missionDetailCode;
     @SerializedName("status")
     @Expose
     private int status;
     @SerializedName("priority")
-    @Expose
+    @Expose(serialize = false)
     private int priority;
     @SerializedName("date")
-    @Expose
+    @Expose(serialize = false)
     private String date;
     @SerializedName("type")
-    @Expose
+    @Expose(serialize = false)
     private int type;
     @SerializedName("personId")
-    @Expose
+    @Expose(serialize = false)
     private int personId;
     @SerializedName("accountId")
-    @Expose
+    @Expose(serialize = false)
     private int accountId;
     @SerializedName("description")
-    @Expose
+    @Expose(serialize = false)
     private String description;
     @SerializedName("activityID")
-    @Expose
+    @Expose(serialize = false)
     private String activityID;
     @SerializedName("missionId")
-    @Expose
+    @Expose(serialize = false)
     private int missionId;
     @SerializedName("deleted")
-    @Expose
+    @Expose(serialize = false)
     private boolean deleted;
     @SerializedName("dataHash")
-    @Expose
+    @Expose(serialize = false)
     private String dataHash;
     @SerializedName("createDate")
-    @Expose
+    @Expose(serialize = false)
     private String createDate;
     @SerializedName("rowVersion")
-    @Expose
+    @Expose(serialize = false)
     private int rowVersion;
     @SerializedName("firstName")
-    @Expose
+    @Expose(serialize = false)
     private String firstName;
     @SerializedName("lastName")
-    @Expose
+    @Expose(serialize = false)
     private String lastName;
     @SerializedName("personLatitude")
-    @Expose
+    @Expose(serialize = false)
     private Double personLatitude;
     @SerializedName("personLongitude")
-    @Expose
+    @Expose(serialize = false)
     private Double personLongitude;
 
     public int getMissionDetailId() {

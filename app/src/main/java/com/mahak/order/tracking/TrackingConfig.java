@@ -25,6 +25,8 @@ import com.mahak.order.mission.AllMissionBody;
 import com.mahak.order.mission.GetAllMissionDetail;
 import com.mahak.order.mission.Mission;
 import com.mahak.order.mission.MissionDetail;
+import com.mahak.order.mission.SendUpdate;
+import com.mahak.order.mission.updateResponse.MissionUpdateResponse;
 import com.mahak.order.service.DataService;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.RadaraDb;
@@ -147,7 +149,7 @@ public class TrackingConfig {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        new getTrackingZoneAsync().execute();
+                        new GetTrackingZoneAsync().execute();
 
                     }else {
                         Toast.makeText(context, response.body().getErrors().get(0).toString(), Toast.LENGTH_LONG).show();
@@ -162,7 +164,7 @@ public class TrackingConfig {
         });
     }
 
-    class getTrackingZoneAsync extends AsyncTask<String, String, Integer> {
+    class GetTrackingZoneAsync extends AsyncTask<String, String, Integer> {
 
         long visitorId;
 
@@ -258,13 +260,13 @@ public class TrackingConfig {
 
         @Override
         protected void onPostExecute(Integer result) {
-            new sendStopLogAsync().execute();
+            new SendStopLogAsync().execute();
             dismissProgressDialog();
         }
 
     }
 
-    class sendStopLogAsync extends AsyncTask<String, String, Integer> {
+    class SendStopLogAsync extends AsyncTask<String, String, Integer> {
 
         ArrayList<StopLog> stopLogs = new ArrayList<>();
 
@@ -311,7 +313,7 @@ public class TrackingConfig {
                         }else
                             ServiceTools.writeLog("\n" + "error in sending points");
                     }
-                    new getMissionAsync().execute();
+                    new SendMissionStatusAsync().execute();
                 }
                 @Override
                 public void onFailure(Call<StopLocationResponse> call, Throwable t) {
@@ -324,7 +326,73 @@ public class TrackingConfig {
         }
     }
 
-    class getMissionAsync extends AsyncTask<String, String, Integer> {
+    class SendMissionStatusAsync extends AsyncTask<String, String, Integer> {
+
+        ArrayList<Mission> missions = new ArrayList<>();
+        ArrayList<MissionDetail> missionDetails = new ArrayList<>();
+        SendUpdate sendUpdate = new SendUpdate();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Integer doInBackground(String... arg0) {
+            getAllStatusLogs();
+            return 0;
+        }
+        private void getAllStatusLogs() {
+            if (radaraDb == null) radaraDb = new RadaraDb(mContext);
+            radaraDb.open();
+            try {
+                missions = radaraDb.getAllMission();
+                for(Mission mission : missions){
+                    missionDetails = radaraDb.getAllMissionDetailWithMissionId(mission.getMissionId());
+                    mission.setMissionDetails(missionDetails);
+                }
+                sendUpdate.setMissions(missions);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                if(e.getMessage() != null)
+                    Log.e("saveInDb",e.getMessage());
+            }
+            radaraDb.close();
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            final String[] mMsg = {""};
+            pd.setMessage("در حال ارسال آپدیت وضعیت ماموریت ها");
+            pd.setCancelable(false);
+            pd.show();
+            ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
+            Call<MissionUpdateResponse> call = apiService.saveMissionStatus(getPrefSignalUserToken(),sendUpdate);
+            call.enqueue(new Callback<MissionUpdateResponse>() {
+                @Override
+                public void onResponse(Call<MissionUpdateResponse> call, Response<MissionUpdateResponse> response) {
+                    dismissProgressDialog();
+                    if (response.body() != null) {
+                        if (response.body().getSucceeded()) {
+                            Log.e("send","success");
+                        }else
+                            Log.e("send","error");
+                    }
+                    new GetMissionAsync().execute();
+                }
+                @Override
+                public void onFailure(Call<MissionUpdateResponse> call, Throwable t) {
+                    dismissProgressDialog();
+                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+                    FirebaseCrashlytics.getInstance().log(t.getMessage());
+                    mMsg[0] = t.toString();
+                }
+            });
+        }
+    }
+
+    class GetMissionAsync extends AsyncTask<String, String, Integer> {
         List<Mission> missions = new ArrayList<>();
         long rowVersion = 0;
 
@@ -382,6 +450,7 @@ public class TrackingConfig {
             });
         }
     }
+
     class SaveMissionAsyncTask extends AsyncTask<String, String, Integer> {
 
         List<Mission> missions;
@@ -414,13 +483,13 @@ public class TrackingConfig {
 
         @Override
         protected void onPostExecute(Integer result) {
-            new getMissionDetailAsync().execute();
+            new GetMissionDetailAsync().execute();
             dismissProgressDialog();
         }
 
     }
 
-    class getMissionDetailAsync extends AsyncTask<String, String, Integer> {
+    class GetMissionDetailAsync extends AsyncTask<String, String, Integer> {
         List<MissionDetail> missionDetails = new ArrayList<>();
         long rowVersion = 0;
 
@@ -510,15 +579,13 @@ public class TrackingConfig {
 
         @Override
         protected void onPostExecute(Integer result) {
-            new sendStatusLogAsync().execute();
+            new SendStatusLogAsync().execute();
             dismissProgressDialog();
         }
 
     }
 
-
-    class sendStatusLogAsync extends AsyncTask<String, String, Integer> {
-
+    class SendStatusLogAsync extends AsyncTask<String, String, Integer> {
 
         ArrayList<StatusLog> statusLogs = new ArrayList<>();
 
@@ -578,7 +645,6 @@ public class TrackingConfig {
             });
         }
     }
-
 
     private void dismissProgressDialog() {
         if (pd != null && pd.isShowing()) {

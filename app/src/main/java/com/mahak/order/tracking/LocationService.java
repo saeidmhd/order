@@ -231,8 +231,7 @@ public class LocationService extends Service  {
                     if(locationRequest == null)
                         locationRequest = LocationRequest.create();
                     locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-                            .setInterval(10 * 60 * 1000)
-                            .setFastestInterval(10 * 60 * 1000);
+                                    .setSmallestDisplacement(100);
                     subscribeLocation();
                     label = "STILL : " + confidence;
                     ServiceTools.writeLogRadara(label);
@@ -334,9 +333,7 @@ public class LocationService extends Service  {
     private void createLocationRequest() {
         if(locationRequest == null)
             locationRequest = LocationRequest.create();
-        locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-                .setInterval(5 * 1000)
-                .setFastestInterval(5 * 1000);
+        locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY).setSmallestDisplacement(100);
     }
     private boolean compareWithLastLocation(Location currentLocation) {
 

@@ -20,7 +20,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -264,14 +263,14 @@ public class ReceiptsListActivity extends BaseActivity {
             ImageView imgExpand, imgSync;
 
             HolderGroup(View view) {
-                tvCashAmount = (TextView) view.findViewById(R.id.tvCashAmount);
+                tvCashAmount = (TextView) view.findViewById(R.id.tvMissionStatus);
                 tvCustomerName = (TextView) view.findViewById(R.id.tvCustomerName);
                 tvDate = (TextView) view.findViewById(R.id.tvDate);
                 tvDescription = (TextView) view.findViewById(R.id.tvDescription);
                 tvCode = (TextView) view.findViewById(R.id.tvCode);
                 btnMenu = (LinearLayout) view.findViewById(R.id.btnmenu);
                 imgExpand = (ImageView) view.findViewById(R.id.imgExpandedList);
-                tvChequeAmount = (TextView) view.findViewById(R.id.tvChequeAmount);
+                tvChequeAmount = (TextView) view.findViewById(R.id.tvNumberOfCheckLists);
                 tvReceiptAmount = (TextView) view.findViewById(R.id.tvReceiptAmount);
                 tvTotalAmount = (TextView) view.findViewById(R.id.tvTotalAmount);
                 imgSync = (ImageView) view.findViewById(R.id.imgSync);

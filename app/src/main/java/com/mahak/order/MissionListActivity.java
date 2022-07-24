@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,16 +22,17 @@ import android.widget.TextView;
 
 
 import com.mahak.order.common.Customer;
-import com.mahak.order.common.ProjectInfo;
+import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.SharedPreferencesHelper;
 import com.mahak.order.mission.Mission;
 import com.mahak.order.mission.MissionDetail;
+import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.RadaraDb;
 import com.mahak.order.widget.DrawableClickListener;
+import com.mahak.order.widget.FontCheckBox;
 import com.mahak.order.widget.FontEditText;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -44,6 +46,7 @@ public class MissionListActivity extends BaseActivity {
     private ArrayList<Mission> missions;
     private List<MissionDetail> missionDetails;
     private RadaraDb radaraDb;
+    private DbAdapter db;
     private ExpandListAdapter expandlistAdapter;
     private FontEditText txtSearch;
     private long lngDate;
@@ -118,6 +121,7 @@ public class MissionListActivity extends BaseActivity {
         ExpandList = (ExpandableListView) findViewById(R.id.explistReceipt);
         txtSearch = (FontEditText) findViewById(R.id.txtSearch);
         radaraDb = new RadaraDb(mContext);
+        db = new DbAdapter(mContext);
         tvPageTitle.setText(getString(R.string.str_nav_receipt_list) + "(" + ExpandList.getCount() + ")");
     }
 
@@ -126,10 +130,13 @@ public class MissionListActivity extends BaseActivity {
      */
     private void FillView() {
         radaraDb.open();
+        db.open();
+        Customer customer;
+
         missions = radaraDb.getAllMission();
         for (Mission mission : missions) {
-            missionDetails = radaraDb.getAllMissionDetail(mission.getMissionId());
-            mission.setItems(missionDetails);
+            missionDetails = radaraDb.getAllMissionDetailWithMissionId(mission.getMissionId());
+            mission.setMissionDetails(missionDetails);
         }
         expandlistAdapter = new ExpandListAdapter(mContext, missions);
         ExpandList.setAdapter(expandlistAdapter);
@@ -142,59 +149,125 @@ public class MissionListActivity extends BaseActivity {
         private List<Mission> missionList;
         private List<Mission> originallist;
 
+
         private class HolderChild {
-            public TextView tvDate, tvChequeType, tvNumber, tvAmount, tvBank, tvDescription;
+            public TextView tvDate, tvChequeType, tvNumber, tvAmount ,txtStatus, tvBank, tvDescription;
+            public FontCheckBox checkListDone;
 
             HolderChild(View view) {
                 tvDate = (TextView) view.findViewById(R.id.tvDate);
                 tvNumber = (TextView) view.findViewById(R.id.tvNumber);
                 tvAmount = (TextView) view.findViewById(R.id.txtAmount);
+                txtStatus = (TextView) view.findViewById(R.id.txtStatus);
                 tvBank = (TextView) view.findViewById(R.id.tvBank);
                 tvChequeType = (TextView) view.findViewById(R.id.tvChequeType);
                 tvDescription = (TextView) view.findViewById(R.id.tvDescription);
+                checkListDone = (FontCheckBox) view.findViewById(R.id.checkListDone);
             }
 
-            public void Populate(MissionDetail item) {
-                tvNumber.setText(item.getActivityID());
-                tvAmount.setText(item.getActivityID());
-                tvBank.setText(item.getActivityID());
-                if (item.getType() == ProjectInfo.CHEQUE_TYPE)
-                    tvChequeType.setText(getResources().getString(R.string.str_cheque_type));
-                else if (item.getType() == ProjectInfo.CASHRECEIPT_TYPE)
-                    tvChequeType.setText(getResources().getString(R.string.str_cash_receipt_type));
-                tvDate.setText(item.getActivityID());
-                tvDescription.setText(item.getDescription());
+            public void Populate(MissionDetail missionDetail) {
+                String type ="";
+                Customer customer = db.getCustomerWithPersonId(missionDetail.getPersonId());
+                tvNumber.setText(customer.getName());
+                tvDate.setText(missionDetail.getCreateDate());
+                tvDescription.setText(missionDetail.getDescription());
+                switch (missionDetail.getType()){
+                    case 1 :
+                        type = "دریافت سفارش";
+                        break;
+                    case 2:
+                        type = "تحویل کالا";
+                        break;
+                    case 3:
+                        type = "وصول مطالبات";
+                        break;
+                    case 4:
+                        type = "برداشت کالا";
+                        break;
+                }
+
+                int status = missionDetail.getStatus();
+                String st = "";
+
+                switch (status){
+                    case 1:
+                        st = "انجام نشده";
+                        checkListDone.setChecked(false);
+                        break;
+                    case 2:
+                        st = "شروع شده در راه";
+                        break;
+                    case 3:
+                        st = "لغو شده توسط مدیر";
+                        break;
+                    case 4:
+                        checkListDone.setChecked(true);
+                        st = "انجام شده";
+                        break;
+                }
+
+                txtStatus.setText(st);
+                tvAmount.setText(type);
+                tvBank.setText(customer.getAddress());
+                tvChequeType.setText(customer.getMobile());
+
+                checkListDone.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        if(!b)
+                            missionDetail.setStatus(1);
+                        else
+                            missionDetail.setStatus(4);
+                        notifyDataSetChanged();
+                        radaraDb.AddMissionDetail(missionDetail);
+                    }
+                });
             }
         }
 
         private class HolderGroup {
-            public TextView tvCustomerName, tvDate, tvCashAmount, tvChequeAmount, tvReceiptAmount, tvTotalAmount, tvDescription, tvCode;
-            public LinearLayout btnMenu;
+            public TextView tvDate, tvMissionStatus, tvNumberOfCheckLists, tvDescription, tvCode;
             ImageView imgExpand, imgSync;
 
             HolderGroup(View view) {
-                tvCashAmount = (TextView) view.findViewById(R.id.tvCashAmount);
-                tvCustomerName = (TextView) view.findViewById(R.id.tvCustomerName);
+                tvMissionStatus = (TextView) view.findViewById(R.id.tvMissionStatus);
                 tvDate = (TextView) view.findViewById(R.id.tvDate);
                 tvDescription = (TextView) view.findViewById(R.id.tvDescription);
                 tvCode = (TextView) view.findViewById(R.id.tvCode);
-                btnMenu = (LinearLayout) view.findViewById(R.id.btnmenu);
                 imgExpand = (ImageView) view.findViewById(R.id.imgExpandedList);
-                tvChequeAmount = (TextView) view.findViewById(R.id.tvChequeAmount);
-                tvReceiptAmount = (TextView) view.findViewById(R.id.tvReceiptAmount);
-                tvTotalAmount = (TextView) view.findViewById(R.id.tvTotalAmount);
+                tvNumberOfCheckLists = (TextView) view.findViewById(R.id.tvNumberOfCheckLists);
                 imgSync = (ImageView) view.findViewById(R.id.imgSync);
 
             }
 
             public void Populate(final Mission mission, boolean isExpand, final int position) {
-                tvCustomerName.setText(mission.getEndDate());
-                tvCashAmount.setText(mission.getEndDate());
-                tvChequeAmount.setText(mission.getEndDate());
-                tvReceiptAmount.setText(mission.getEndDate());
-                tvTotalAmount.setText(mission.getEndDate());
-                tvDate.setText(mission.getDate());
-                tvDescription.setText(mission.getEndDate());
+                int status = mission.getStatus();
+                String st = "";
+
+                switch (status){
+                    case 1:
+                        st = "انجام نشده";
+                        break;
+                    case 2:
+                        st = "شروع شده در راه";
+                        break;
+                    case 3:
+                        st = "لغو شده توسط مدیر";
+                        break;
+                    case 4:
+                        st = "انجام شده";
+                        break;
+
+                }
+
+                long format_date =  ServiceTools.getDate(mission.getDate());
+                String date = ServiceTools.getDateAndTimeForLong(format_date);
+
+                tvMissionStatus.setText(st);
+                tvNumberOfCheckLists.setText(String.valueOf(mission.getMissionDetailCount()));
+                tvCode.setText(String.valueOf(mission.getAccountId()));
+                tvDate.setText(date);
+                tvDescription.setText(mission.getDescription());
 
                 //______________________________________________________________________________
                 if (isExpand)
@@ -202,13 +275,12 @@ public class MissionListActivity extends BaseActivity {
                 else
                     imgExpand.setImageResource(R.drawable.ic_expand_up);
 
-                if (mission.getItems().size() == 0)
+                if (mission.getMissionDetails().size() == 0)
                     imgExpand.setVisibility(View.INVISIBLE);
                 else
                     imgExpand.setVisibility(View.VISIBLE);
 
-                btnMenu.setFocusable(false);
-                btnMenu.setFocusableInTouchMode(false);
+
             }
         }
 
@@ -225,7 +297,7 @@ public class MissionListActivity extends BaseActivity {
 
         public Object getChild(int groupPosition, int childPosition) {
             // TODO Auto-generated method stub
-            List<MissionDetail> chList = missionList.get(groupPosition).getItems();
+            List<MissionDetail> chList = missionList.get(groupPosition).getMissionDetails();
             return chList.get(childPosition);
         }
 
@@ -253,7 +325,7 @@ public class MissionListActivity extends BaseActivity {
 
         public int getChildrenCount(int groupPosition) {
             // TODO Auto-generated method stub
-            List<MissionDetail> chList = missionList.get(groupPosition).getItems();
+            List<MissionDetail> chList = missionList.get(groupPosition).getMissionDetails();
 
             return chList.size();
 

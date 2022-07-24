@@ -13,10 +13,10 @@
         android:background="@drawable/card_ui_bg_selector"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/NormalSize"
         android:paddingLeft="@dimen/SmallSize"
+        android:paddingTop="@dimen/NormalSize"
         android:paddingRight="@dimen/SmallSize"
-        android:paddingTop="@dimen/NormalSize">
+        android:paddingBottom="@dimen/NormalSize">
 
         <ImageView
             android:id="@+id/imgExpandedList"
@@ -46,28 +46,6 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/SmallSize">
-
-                <com.mahak.order.widget.FontTextView
-                    android:id="@+id/tvCustomerName"
-                    style="@style/forms_label_default"
-                    android:gravity="right"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/sample_customer" />
-
-                <com.mahak.order.widget.FontTextView
-                    android:id="@+id/txtCustomerName"
-                    style="@style/forms_label_default"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/str_customer_name" />
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -87,7 +65,8 @@
 
                 <com.mahak.order.widget.FontTextView
                     style="@style/forms_label_default"
-                    android:layout_width="120dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="@string/str_date" />
             </LinearLayout>
@@ -109,7 +88,8 @@
 
                 <com.mahak.order.widget.FontTextView
                     style="@style/forms_label_default"
-                    android:layout_width="120dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="@string/str_tracking_code" />
             </LinearLayout>
@@ -117,12 +97,12 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:background="@color/forms_alter_row"
+                android:orientation="horizontal"
                 android:padding="@dimen/SmallSize">
 
                 <com.mahak.order.widget.FontTextView
-                    android:id="@+id/tvCashAmount"
+                    android:id="@+id/tvMissionStatus"
                     style="@style/forms_label_default"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
@@ -132,10 +112,11 @@
 
                 <com.mahak.order.widget.FontTextView
                     style="@style/forms_label_default"
-                    android:layout_width="120dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="fill_parent"
                     android:gravity="right"
-                    android:text="@string/str_cash_amount" />
+                    android:text="وضعیت ماموریت" />
             </LinearLayout>
 
             <LinearLayout
@@ -146,7 +127,7 @@
                 android:padding="@dimen/SmallSize">
 
                 <com.mahak.order.widget.FontTextView
-                    android:id="@+id/tvChequeAmount"
+                    android:id="@+id/tvNumberOfCheckLists"
                     style="@style/forms_label_default"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
@@ -155,55 +136,10 @@
 
                 <com.mahak.order.widget.FontTextView
                     style="@style/forms_label_default"
-                    android:layout_width="120dp"
-                    android:layout_height="fill_parent"
-                    android:text="@string/str_cheque_amount" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/forms_alter_row"
-                android:padding="@dimen/SmallSize">
-
-                <com.mahak.order.widget.FontTextView
-                    android:id="@+id/tvReceiptAmount"
-                    style="@style/forms_label_default"
                     android:layout_width="0dp"
-                    android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:gravity="right"
-                    android:text="@string/sample_number" />
-
-                <com.mahak.order.widget.FontTextView
-                    style="@style/forms_label_default"
-                    android:layout_width="120dp"
                     android:layout_height="fill_parent"
-                    android:gravity="right"
-                    android:text="@string/str_receipt_amount" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llTotalAmount"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/SmallSize">
-
-                <com.mahak.order.widget.FontTextView
-                    android:id="@+id/tvTotalAmount"
-                    style="@style/forms_label_default"
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="1"
-                    android:text="@string/sample_price" />
-
-                <com.mahak.order.widget.FontTextView
-                    style="@style/forms_label_default"
-                    android:layout_width="120dp"
-                    android:layout_height="fill_parent"
-                    android:text="@string/str_total_amount" />
+                    android:text="تعداد دستور کارها" />
             </LinearLayout>
 
             <LinearLayout
@@ -229,21 +165,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/btnmenu"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:scaleType="centerInside"
-                android:src="@drawable/forms_btn_menu_selector" />
-        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>
