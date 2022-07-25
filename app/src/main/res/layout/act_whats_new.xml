@@ -90,6 +90,12 @@
                             android:padding="3dp"
                             android:text="@string/new_3_455_5"
                             android:drawablePadding="@dimen/NormalSize" />
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="@string/new_3_455_6"
+                            android:drawablePadding="@dimen/NormalSize" />
                     </LinearLayout>
                 </ScrollView>
 
