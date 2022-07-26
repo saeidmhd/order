@@ -79,7 +79,6 @@ public class TrackingConfig {
         call.enqueue(new Callback<SignalLoginResult>() {
             @Override
             public void onResponse(Call<SignalLoginResult> call, Response<SignalLoginResult> response) {
-                dismissProgressDialog();
                 if (response.body() != null) {
                     if (response.body().isResult()) {
                         setPrefSignalUserToken(response.body().getUserToken());
@@ -103,12 +102,9 @@ public class TrackingConfig {
         settingBody.setVisitorId(0);
         Call<TrackingSetting> call = apiService.GetTrackingSetting(getPrefSignalUserToken(),settingBody);
         pd.setMessage("در حال دریافت تنظیمات رادارا");
-        pd.setCancelable(false);
-        pd.show();
         call.enqueue(new Callback<TrackingSetting>() {
             @Override
             public void onResponse(Call<TrackingSetting> call, Response<TrackingSetting> response) {
-                dismissProgressDialog();
                 if (response.body() != null) {
                     if (response.body().isSucceeded()) {
 
@@ -230,8 +226,6 @@ public class TrackingConfig {
         protected void onPreExecute() {
             super.onPreExecute();
             pd.setMessage(mContext.getString(R.string.storing_info));
-            pd.setCancelable(false);
-            pd.show();
         }
 
         @Override
@@ -253,7 +247,6 @@ public class TrackingConfig {
         @Override
         protected void onPostExecute(Integer result) {
             new sendStopLogAsync().execute();
-            dismissProgressDialog();
         }
 
     }
@@ -290,14 +283,11 @@ public class TrackingConfig {
         protected void onPostExecute(Integer result) {
             final String[] mMsg = {""};
             pd.setMessage("در حال ارسال نقاط توقف");
-            pd.setCancelable(false);
-            pd.show();
             ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
             Call<StopLocationResponse> call = apiService.SetStopLocation(stopLogs);
             call.enqueue(new Callback<StopLocationResponse>() {
                 @Override
                 public void onResponse(Call<StopLocationResponse> call, Response<StopLocationResponse> response) {
-                    dismissProgressDialog();
                     if (response.body() != null) {
                         if (response.body().isSucceeded()) {
                             for(StopLog stopLog : stopLogs)
@@ -350,8 +340,6 @@ public class TrackingConfig {
         protected void onPostExecute(Integer result) {
             final String[] mMsg = {""};
             pd.setMessage("در حال ارسال لاگ های مدیریت");
-            pd.setCancelable(false);
-            pd.show();
             ManageLog manageLog = new ManageLog();
             manageLog.setStatusLogs(statusLogs);
             ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
