@@ -764,7 +764,7 @@ public class OrdersListActivity extends BaseActivity {
                 if (Type == ProjectInfo.TYPE_SEND_TRANSFERENCE) {
                     rowview = inflater.inflate(R.layout.lst_order_send_item, null, false);
                 } else {
-                    rowview = inflater.inflate(R.layout.lst_order_item, null, false);
+                    rowview = inflater.inflate(R.layout.lst_order_item2, null, false);
                 }
 
                 holder = new Holder(rowview);

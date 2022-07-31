@@ -390,7 +390,7 @@
         android:layout_height="wrap_content"
         android:gravity="right|center_vertical"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -441,20 +441,16 @@
 
         </LinearLayout>
 
-
-
-
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/posLL"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="right|center_vertical"
         android:orientation="horizontal"
-        android:padding="8dp"
-        android:paddingTop="5dp">
+        android:padding="2dp">
 
         <LinearLayout
             android:layout_width="0dip"
@@ -468,7 +464,6 @@
                 style="@style/forms_btn_default"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/NormalSize"
                 android:text="@string/str_pay_pos" />
         </LinearLayout>
         <com.mahak.order.widget.MoneyEditText

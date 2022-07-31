@@ -781,6 +781,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             adCheque.notifyDataSetChanged();
         }
         ServiceTools.setListViewChequeHeightBasedOnChildren(lstCheque);
+        calculate_sum_receipt();
     }
 
 
