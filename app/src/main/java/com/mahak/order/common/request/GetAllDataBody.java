@@ -109,6 +109,14 @@ public class GetAllDataBody {
     @Expose
     private Long fromRegionVersion = null;
 
+    @SerializedName("fromMissionVersion")
+    @Expose
+    private Long fromMissionVersion = null;
+
+    @SerializedName("fromMissionDetailVersion")
+    @Expose
+    private Long fromMissionDetailVersion = null;
+
 
     public String getUserToken() {
         return userToken;
@@ -348,5 +356,21 @@ public class GetAllDataBody {
 
     public void setFromRegionVersion(Long fromRegionVersion) {
         this.fromRegionVersion = fromRegionVersion;
+    }
+
+    public Long getFromMissionVersion() {
+        return fromMissionVersion;
+    }
+
+    public void setFromMissionVersion(Long fromMissionVersion) {
+        this.fromMissionVersion = fromMissionVersion;
+    }
+
+    public Long getFromMissionDetailVersion() {
+        return fromMissionDetailVersion;
+    }
+
+    public void setFromMissionDetailVersion(Long fromMissionDetailVersion) {
+        this.fromMissionDetailVersion = fromMissionDetailVersion;
     }
 }

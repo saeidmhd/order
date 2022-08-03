@@ -8,46 +8,47 @@ import java.util.List;
 
 public class Mission {
 
-    @SerializedName("missionId")
-    @Expose(serialize = false)
-    private Long missionId;
-    @SerializedName("databaseId")
-    @Expose(serialize = false)
-    private Long databaseId;
-    @SerializedName("missionCode")
-    @Expose(serialize = false)
-    private Long missionCode;
-    @SerializedName("accountId")
-    @Expose(serialize = false)
-    private Long accountId;
-    @SerializedName("missionClientId")
-    @Expose(serialize = false)
-    private Long missionClientId;
-    @SerializedName("status")
-    @Expose(serialize = false)
-    private Integer status;
-    @SerializedName("date")
-    @Expose(serialize = false)
-    private String date;
-    @SerializedName("endDate")
-    @Expose(serialize = false)
-    private String endDate;
-    @SerializedName("deleted")
-    @Expose(serialize = false)
-    private Boolean deleted;
-    @SerializedName("description")
-    @Expose(serialize = false)
-    private String description;
-    @SerializedName("rowVersion")
-    @Expose(serialize = false)
-    private Long rowVersion;
-    @SerializedName("missionDetailCount")
-    @Expose(serialize = false)
-    private Long missionDetailCount;
-    @SerializedName("missionDetails")
+    @SerializedName("MissionId")
     @Expose
-    private List<MissionDetail> missionDetails = null;
+    private Long missionId;
+    @SerializedName("DatabaseId")
+    @Expose
+    private Long databaseId;
+    @SerializedName("MissionCode")
+    @Expose
+    private Long missionCode;
+    @SerializedName("VisitorId")
+    @Expose
+    private Long visitorId;
+    @SerializedName("MissionClientId")
+    @Expose
+    private Long missionClientId;
+    @SerializedName("Status")
+    @Expose
+    private int status;
+    @SerializedName("Date")
+    @Expose
+    private String date;
+    @SerializedName("EndDate")
+    @Expose
+    private String endDate;
+    @SerializedName("Deleted")
+    @Expose
+    private Boolean deleted;
+    @SerializedName("Description")
+    @Expose
+    private String description;
+    @SerializedName("RowVersion")
+    @Expose
+    private Long rowVersion;
+    @SerializedName("VisitorClientId")
+    @Expose
+    private Long visitorClientId;
+    @SerializedName("VisitorCode")
+    @Expose
+    private Long visitorCode;
 
+    private List<MissionDetail> missionDetails;
 
     public Long getMissionId() {
         return missionId;
@@ -73,12 +74,12 @@ public class Mission {
         this.missionCode = missionCode;
     }
 
-    public Long getAccountId() {
-        return accountId;
+    public Long getVisitorId() {
+        return visitorId;
     }
 
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
+    public void setVisitorId(Long visitorId) {
+        this.visitorId = visitorId;
     }
 
     public Long getMissionClientId() {
@@ -89,11 +90,11 @@ public class Mission {
         this.missionClientId = missionClientId;
     }
 
-    public Integer getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
@@ -121,14 +122,6 @@ public class Mission {
         this.deleted = deleted == 1;
     }
 
-    public void setMissionDetails(List<MissionDetail> items) {
-        this.missionDetails = items;
-    }
-
-    public List<MissionDetail> getMissionDetails() {
-        return missionDetails;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -145,13 +138,27 @@ public class Mission {
         this.rowVersion = rowVersion;
     }
 
-    public Long getMissionDetailCount() {
-        return missionDetailCount;
+    public Long getVisitorClientId() {
+        return visitorClientId;
     }
 
-    public void setMissionDetailCount(Long missionDetailCount) {
-        this.missionDetailCount = missionDetailCount;
+    public void setVisitorClientId(Long visitorClientId) {
+        this.visitorClientId = visitorClientId;
     }
 
+    public Long getVisitorCode() {
+        return visitorCode;
+    }
 
+    public void setVisitorCode(Long visitorCode) {
+        this.visitorCode = visitorCode;
+    }
+
+    public List<MissionDetail> getMissionDetails() {
+        return missionDetails;
+    }
+
+    public void setMissionDetails(List<MissionDetail> missionDetails) {
+        this.missionDetails = missionDetails;
+    }
 }

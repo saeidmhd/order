@@ -37,7 +37,7 @@ public class BaseActivity extends AppCompatActivity {
     //public static final String BaseUrl ="http://192.168.89.31/mds/sync/" ;
     //public static final String BaseUrl ="http://order.mahaksoft.com:8085/sync/" ;
     //public static final String BaseUrl = "https://bazaraservices.mahaksoft.com/v3/sync/";
-    public static final String baseUrlApi = "https://mahakacc.mahaksoft.com/api/v3/sync/";
+    public static final String baseUrlApi = "https://mahakacc.mahaksoft.com/api/testv3/sync/";
     //public static final String baseUrlApi = "https://mahakacc.mahaksoft.com/api/testv3/sync/";
     public static final String setDeviceTokenUrl = "https://mahakacc.mahaksoft.com/public/api/";
 

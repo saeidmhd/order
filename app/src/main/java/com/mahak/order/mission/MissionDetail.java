@@ -6,104 +6,126 @@ import com.google.gson.annotations.SerializedName;
 
 public class MissionDetail {
 
-    @SerializedName("missionDetailId")
+    @SerializedName("MissionDetailId")
     @Expose
-    private int missionDetailId;
-    @SerializedName("databaseId")
-    @Expose(serialize = false)
-    private int databaseId;
-    @SerializedName("missionDetailCode")
-    @Expose(serialize = false)
-    private int missionDetailCode;
-    @SerializedName("status")
+    private Integer missionDetailId;
+    @SerializedName("VisitorId")
     @Expose
-    private int status;
-    @SerializedName("priority")
-    @Expose(serialize = false)
-    private int priority;
-    @SerializedName("date")
-    @Expose(serialize = false)
+    private Integer visitorId;
+    @SerializedName("DatabaseId")
+    @Expose
+    private Integer databaseId;
+    @SerializedName("MissionDetailCode")
+    @Expose
+    private Integer missionDetailCode;
+    @SerializedName("MissionDetailClientId")
+    @Expose
+    private Integer missionDetailClientId;
+    @SerializedName("Status")
+    @Expose
+    private Integer status;
+    @SerializedName("Priority")
+    @Expose
+    private Integer priority;
+    @SerializedName("Date")
+    @Expose
     private String date;
-    @SerializedName("type")
-    @Expose(serialize = false)
-    private int type;
-    @SerializedName("personId")
-    @Expose(serialize = false)
-    private int personId;
-    @SerializedName("accountId")
-    @Expose(serialize = false)
-    private int accountId;
-    @SerializedName("description")
-    @Expose(serialize = false)
+    @SerializedName("Type")
+    @Expose
+    private Integer type;
+    @SerializedName("PersonId")
+    @Expose
+    private Integer personId;
+    @SerializedName("PersonAddressId")
+    @Expose
+    private Integer personAddressId;
+    @SerializedName("Description")
+    @Expose
     private String description;
-    @SerializedName("activityID")
-    @Expose(serialize = false)
+    @SerializedName("ActivityID")
+    @Expose
     private String activityID;
-    @SerializedName("missionId")
-    @Expose(serialize = false)
-    private int missionId;
-    @SerializedName("deleted")
-    @Expose(serialize = false)
-    private boolean deleted;
-    @SerializedName("dataHash")
-    @Expose(serialize = false)
-    private String dataHash;
-    @SerializedName("createDate")
-    @Expose(serialize = false)
-    private String createDate;
-    @SerializedName("rowVersion")
-    @Expose(serialize = false)
-    private int rowVersion;
-    @SerializedName("firstName")
-    @Expose(serialize = false)
-    private String firstName;
-    @SerializedName("lastName")
-    @Expose(serialize = false)
-    private String lastName;
-    @SerializedName("personLatitude")
-    @Expose(serialize = false)
-    private Double personLatitude;
-    @SerializedName("personLongitude")
-    @Expose(serialize = false)
-    private Double personLongitude;
+    @SerializedName("MissionId")
+    @Expose
+    private Integer missionId;
+    @SerializedName("Deleted")
+    @Expose
+    private Boolean deleted;
+    @SerializedName("RowVersion")
+    @Expose
+    private Integer rowVersion;
+    @SerializedName("PersonClientId")
+    @Expose
+    private Integer personClientId;
+    @SerializedName("PersonCode")
+    @Expose
+    private Integer personCode;
+    @SerializedName("VisitorClientId")
+    @Expose
+    private Integer visitorClientId;
+    @SerializedName("VisitorCode")
+    @Expose
+    private Integer visitorCode;
+    @SerializedName("MissionClientId")
+    @Expose
+    private Integer missionClientId;
+    @SerializedName("MissionCode")
+    @Expose
+    private Integer missionCode;
 
-    public int getMissionDetailId() {
+    public Integer getMissionDetailId() {
         return missionDetailId;
     }
 
-    public void setMissionDetailId(int missionDetailId) {
+    public void setMissionDetailId(Integer missionDetailId) {
         this.missionDetailId = missionDetailId;
     }
 
-    public int getDatabaseId() {
+    public Integer getVisitorId() {
+        return visitorId;
+    }
+
+    public void setVisitorId(Integer visitorId) {
+        this.visitorId = visitorId;
+    }
+
+    public Integer getDatabaseId() {
         return databaseId;
     }
 
-    public void setDatabaseId(int databaseId) {
+    public void setDatabaseId(Integer databaseId) {
         this.databaseId = databaseId;
     }
 
-    public int getMissionDetailCode() {
+    public Integer getMissionDetailCode() {
         return missionDetailCode;
     }
 
-    public void setMissionDetailCode(int missionDetailCode) {
+    public void setMissionDetailCode(Integer missionDetailCode) {
         this.missionDetailCode = missionDetailCode;
     }
 
-    public int getStatus() {
+    public Integer getMissionDetailClientId() {
+        return missionDetailClientId;
+    }
+
+    public void setMissionDetailClientId(Integer missionDetailClientId) {
+        this.missionDetailClientId = missionDetailClientId;
+    }
+
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    public int getPriority() {
+    public Integer getPriority() {
         return priority;
     }
 
-    public void setPriority(int priority) {
+    public void setPriority(Integer priority) {
         this.priority = priority;
     }
 
@@ -115,28 +137,28 @@ public class MissionDetail {
         this.date = date;
     }
 
-    public int getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
-    public int getPersonId() {
+    public Integer getPersonId() {
         return personId;
     }
 
-    public void setPersonId(int personId) {
+    public void setPersonId(Integer personId) {
         this.personId = personId;
     }
 
-    public int getAccountId() {
-        return accountId;
+    public Integer getPersonAddressId() {
+        return personAddressId;
     }
 
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
+    public void setPersonAddressId(Integer personAddressId) {
+        this.personAddressId = personAddressId;
     }
 
     public String getDescription() {
@@ -155,76 +177,76 @@ public class MissionDetail {
         this.activityID = activityID;
     }
 
-    public int getMissionId() {
+    public Integer getMissionId() {
         return missionId;
     }
 
-    public void setMissionId(int missionId) {
+    public void setMissionId(Integer missionId) {
         this.missionId = missionId;
     }
 
-    public boolean isDeleted() {
-        return deleted;
+    public int isDeleted() {
+        return deleted ? 1 : 0;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public void setDeleted(int deleted) {
+        this.deleted = deleted == 1;
     }
 
-    public String getDataHash() {
-        return dataHash;
-    }
-
-    public void setDataHash(String dataHash) {
-        this.dataHash = dataHash;
-    }
-
-    public String getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(String createDate) {
-        this.createDate = createDate;
-    }
-
-    public int getRowVersion() {
+    public Integer getRowVersion() {
         return rowVersion;
     }
 
-    public void setRowVersion(int rowVersion) {
+    public void setRowVersion(Integer rowVersion) {
         this.rowVersion = rowVersion;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public Integer getPersonClientId() {
+        return personClientId;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setPersonClientId(Integer personClientId) {
+        this.personClientId = personClientId;
     }
 
-    public String getLastName() {
-        return lastName;
+    public Integer getPersonCode() {
+        return personCode;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setPersonCode(Integer personCode) {
+        this.personCode = personCode;
     }
 
-    public Double getPersonLatitude() {
-        return personLatitude;
+    public Integer getVisitorClientId() {
+        return visitorClientId;
     }
 
-    public void setPersonLatitude(Double personLatitude) {
-        this.personLatitude = personLatitude;
+    public void setVisitorClientId(Integer visitorClientId) {
+        this.visitorClientId = visitorClientId;
     }
 
-    public Double getPersonLongitude() {
-        return personLongitude;
+    public Integer getVisitorCode() {
+        return visitorCode;
     }
 
-    public void setPersonLongitude(Double personLongitude) {
-        this.personLongitude = personLongitude;
+    public void setVisitorCode(Integer visitorCode) {
+        this.visitorCode = visitorCode;
+    }
+
+    public Integer getMissionClientId() {
+        return missionClientId;
+    }
+
+    public void setMissionClientId(Integer missionClientId) {
+        this.missionClientId = missionClientId;
+    }
+
+    public Integer getMissionCode() {
+        return missionCode;
+    }
+
+    public void setMissionCode(Integer missionCode) {
+        this.missionCode = missionCode;
     }
 
 }

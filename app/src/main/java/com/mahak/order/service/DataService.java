@@ -65,14 +65,6 @@ public class DataService {
         db.AddZone(data);
        
     }
-    public static void InsertMission(RadaraDb db, Mission mission) {
-
-        db.AddMission(mission);
-
-    }
-    public static void InsertMissionDetail(RadaraDb db, MissionDetail missionDetail) {
-        db.AddMissionDetail(missionDetail);
-    }
 
     public static void InsertZoneLocation(RadaraDb db, List<ZoneLocation> data) {
         
@@ -190,6 +182,30 @@ public class DataService {
             db.AddSetting(setting);
         }
        
+        ServiceTools.setSettingPreferences(db, mContext);
+        long endTime = System.nanoTime();
+        return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
+    }
+    public static double InsertMissions(DbAdapter db, List<Mission> data, Context mContext) {
+        long startTime = System.nanoTime();
+
+        for (int i = 0; i < data.size(); i++) {
+            Mission mission = data.get(i);
+            db.AddMission(mission);
+        }
+
+        ServiceTools.setSettingPreferences(db, mContext);
+        long endTime = System.nanoTime();
+        return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
+    }
+    public static double InsertMissionDetails(DbAdapter db, List<MissionDetail> data, Context mContext) {
+        long startTime = System.nanoTime();
+
+        for (int i = 0; i < data.size(); i++) {
+            MissionDetail missionDetail = data.get(i);
+            db.AddMissionDetail(missionDetail);
+        }
+
         ServiceTools.setSettingPreferences(db, mContext);
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;

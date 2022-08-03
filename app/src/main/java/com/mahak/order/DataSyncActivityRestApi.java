@@ -66,6 +66,8 @@ import com.mahak.order.common.request.SetAllDataBody;
 import com.mahak.order.common.request.SetAllDataResult.Objects;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
 import com.mahak.order.common.request.SetSign.setSignImage;
+import com.mahak.order.mission.Mission;
+import com.mahak.order.mission.MissionDetail;
 import com.mahak.order.service.DataService;
 import com.mahak.order.service.ReadOfflinePicturesProducts;
 import com.mahak.order.storage.DbAdapter;
@@ -167,6 +169,8 @@ public class DataSyncActivityRestApi extends BaseActivity {
     List<ProductPriceLevelName> productPriceLevelNames = new ArrayList<>();
 
     List<Setting> settings = new ArrayList<>();
+    List<Mission> missions = new ArrayList<>();
+    List<MissionDetail> missionDetailes = new ArrayList<>();
     List<PhotoGallery> photoGalleries = new ArrayList<>();
     List<Region> regions = new ArrayList<>();
 
@@ -198,6 +202,8 @@ public class DataSyncActivityRestApi extends BaseActivity {
     private long SettingMaxRowVersion;
     private long PhotoGalleryMaxRowVersion;
     private long RegionMaxRowVersion;
+    private long MissionMaxRowVersion;
+    private long MissionDetailMaxRowVersion;
     private File[] files;
 
 
@@ -670,6 +676,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
         List<Customer> Customers = new ArrayList<>();
         List<Customer> newCustomers = new ArrayList<>();
         List<VisitorLocation> visitorLocation = new ArrayList<>();
+        List<MissionDetail> missionDetails = new ArrayList<>();
 
         @Override
         protected void onPreExecute() {
@@ -716,6 +723,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             Customers.addAll(newCustomers);
             payableTransfers = db.getAllPayableNotPublish(BaseActivity.getPrefUserId());
             checkLists = db.getAllDoneChecklistNotPublish();
+            missionDetailes = db.getAllMissionDetail();
 
             visitorLocation = radaraDb.getAllGpsPointsForSending();
 
@@ -1004,6 +1012,14 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     SettingMaxRowVersion = db.getMaxRowVersion(DbSchema.SettingSchema.TABLE_NAME);
                     getAllDataBody.setFromSettingVersion(SettingMaxRowVersion);
                     break;
+                case 22:
+                    MissionMaxRowVersion = db.getMaxRowVersion(DbSchema.MissionSchema.TABLE_NAME);
+                    getAllDataBody.setFromMissionVersion(MissionMaxRowVersion);
+                    break;
+                case 23:
+                    MissionDetailMaxRowVersion = db.getMaxRowVersion(DbSchema.MissionDetailSchema.TABLE_NAME);
+                    getAllDataBody.setFromMissionDetailVersion(MissionDetailMaxRowVersion);
+                    break;
             }
 
             return 0;
@@ -1130,6 +1146,18 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                     saveAsyncTask =  new SaveAsyncTask(whichUpdate);
                                     saveAsyncTask.execute();
                                     break;
+                                case 22:
+                                    missions= response.body().getData().getObjects().getMissions();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+                                case 23:
+                                    missionDetailes= response.body().getData().getObjects().getMissionDetails();
+                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask.execute();
+                                    break;
+
+
                             }
                         }
                     } else if (response.body() != null) {
@@ -1306,6 +1334,18 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             arrayTime[18] = DataService.InsertSettings(db, settings, mContext);
                         }
                     break;
+                case 22:
+                    if (missions != null)
+                        if (missions.size() > 0) {
+                            arrayTime[19] = DataService.InsertMissions(db, missions, mContext);
+                        }
+                    break;
+                case 23:
+                    if (missionDetailes != null)
+                        if (missionDetailes.size() > 0) {
+                            arrayTime[20] = DataService.InsertMissionDetails(db, missionDetailes, mContext);
+                        }
+                    break;
             }
 
             return 0;
@@ -1480,7 +1520,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     break;
             }
 
-            if(whichUpdate < 21 ){
+            if(whichUpdate < 23 ){
                 whichUpdate++;
                 new ReceiveAsyncTask(whichUpdate).execute();
             }else{

@@ -32,6 +32,8 @@ import com.mahak.order.common.TransactionsLog;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.common.VisitorPeople;
 import com.mahak.order.common.VisitorProduct;
+import com.mahak.order.mission.Mission;
+import com.mahak.order.mission.MissionDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -136,6 +138,14 @@ public class Objects {
     @SerializedName("VisitorPeople")
     @Expose
     private List<VisitorPeople> visitorPeople = new ArrayList<>();
+
+    @SerializedName("Missions")
+    @Expose
+    private List<Mission> missions = new ArrayList<>();
+
+    @SerializedName("MissionDetails")
+    @Expose
+    private List<MissionDetail> missionDetails = new ArrayList<>();
 
 
     public List<Bank> getBanks() {
@@ -362,5 +372,21 @@ public class Objects {
 
     public void setRegions(List<Region> regions) {
         this.regions = regions;
+    }
+
+    public List<Mission> getMissions() {
+        return missions;
+    }
+
+    public void setMissions(List<Mission> missions) {
+        this.missions = missions;
+    }
+
+    public List<MissionDetail> getMissionDetails() {
+        return missionDetails;
+    }
+
+    public void setMissionDetails(List<MissionDetail> missionDetails) {
+        this.missionDetails = missionDetails;
     }
 }

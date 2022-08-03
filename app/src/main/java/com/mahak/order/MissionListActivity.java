@@ -45,7 +45,6 @@ public class MissionListActivity extends BaseActivity {
     private ExpandableListView ExpandList;
     private ArrayList<Mission> missions;
     private List<MissionDetail> missionDetails;
-    private RadaraDb radaraDb;
     private DbAdapter db;
     private ExpandListAdapter expandlistAdapter;
     private FontEditText txtSearch;
@@ -120,7 +119,6 @@ public class MissionListActivity extends BaseActivity {
     private void initialise() {
         ExpandList = (ExpandableListView) findViewById(R.id.explistReceipt);
         txtSearch = (FontEditText) findViewById(R.id.txtSearch);
-        radaraDb = new RadaraDb(mContext);
         db = new DbAdapter(mContext);
         tvPageTitle.setText(getString(R.string.str_nav_receipt_list) + "(" + ExpandList.getCount() + ")");
     }
@@ -129,13 +127,12 @@ public class MissionListActivity extends BaseActivity {
      * Read Receipts From Database And Fill Adapter
      */
     private void FillView() {
-        radaraDb.open();
         db.open();
         Customer customer;
 
-        missions = radaraDb.getAllMission();
+        missions = db.getAllMission();
         for (Mission mission : missions) {
-            missionDetails = radaraDb.getAllMissionDetailWithMissionId(mission.getMissionId());
+            missionDetails = db.getAllMissionDetailWithMissionId(mission.getMissionId());
             mission.setMissionDetails(missionDetails);
         }
         expandlistAdapter = new ExpandListAdapter(mContext, missions);
@@ -169,7 +166,7 @@ public class MissionListActivity extends BaseActivity {
                 String type ="";
                 Customer customer = db.getCustomerWithPersonId(missionDetail.getPersonId());
                 tvNumber.setText(customer.getName());
-                tvDate.setText(missionDetail.getCreateDate());
+                tvDate.setText(missionDetail.getDate());
                 tvDescription.setText(missionDetail.getDescription());
                 switch (missionDetail.getType()){
                     case 1 :
@@ -219,7 +216,7 @@ public class MissionListActivity extends BaseActivity {
                         else
                             missionDetail.setStatus(4);
                         notifyDataSetChanged();
-                        radaraDb.AddMissionDetail(missionDetail);
+                        db.AddMissionDetail(missionDetail);
                     }
                 });
             }
@@ -264,8 +261,8 @@ public class MissionListActivity extends BaseActivity {
                 String date = ServiceTools.getDateAndTimeForLong(format_date);
 
                 tvMissionStatus.setText(st);
-                tvNumberOfCheckLists.setText(String.valueOf(mission.getMissionDetailCount()));
-                tvCode.setText(String.valueOf(mission.getAccountId()));
+                /*tvNumberOfCheckLists.setText(String.valueOf(mission.getMissionDetailCount()));
+                tvCode.setText(String.valueOf(mission.getAccountId()));*/
                 tvDate.setText(date);
                 tvDescription.setText(mission.getDescription());
 
