@@ -249,12 +249,8 @@ public class MissionListActivity extends BaseActivity {
                         st = "شروع شده در راه";
                         break;
                     case 3:
-                        st = "لغو شده توسط مدیر";
-                        break;
-                    case 4:
                         st = "انجام شده";
                         break;
-
                 }
 
                 long format_date =  ServiceTools.getDate(mission.getDate());
