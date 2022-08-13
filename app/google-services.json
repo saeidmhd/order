@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "181085492969-4f4sfu85krds98nvv53hj0mlcee3a6k6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mahak.order",
+            "certificate_hash": "bd65889adfe9c7e979fc3a3c6e19db284d5c2387"
+          }
+        },
+        {
           "client_id": "181085492969-3g0i8tb682f3ok2303ichr0bboun3rnh.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -2,6 +2,7 @@ package com.mahak.order;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -87,14 +89,14 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
     private static int CustomerId;
     private static String Code = ProjectInfo.DONT_CODE;
     private static double Payment;
-    private double remainCustomerCredit , CashAmount;
+    private double remainCustomerCredit , CashAmount , lastBalance;
     public static ArrayList<Cheque> arrayCheque = new ArrayList<>();
 
-    private EditText txtCustomerName, txtAmount, txtDescription, txtMarketName, txtTrackingCode, txtPayment,txtSumReceipt , invoiceBalance,txtPosAmount;
+    private EditText txtCustomerName, txtAmount, txtDescription, txtMarketName, txtTrackingCode, txtPayment,txtSumReceipt , invoiceBalance;
     private TextView tvDate;
     private Button btnAddCheque, btnSave, btnDatePicker, btnSelectCustomer, btnSelectInvoice, btnPayPos , btnAddReceipt;
     private ListView lstCheque;
-    private LinearLayout posLL , invoice_detail,ll_factor_balance;
+    private LinearLayout invoice_detail,ll_factor_balance;
     private Bundle Extras;
     private Date dt;
     private String CustomerName, StrDate, Description, MarketName;
@@ -124,6 +126,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
     int printerBrand;
     Order order;
     private long OrderId;
+    String posDescription;
 
     protected ThirdPartyManager manager;
 
@@ -225,8 +228,14 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             Payment = Extras.getDouble(PAYMENT_KEY);
 
             remainCustomerCredit = Extras.getDouble(Force_Payment_KEY);
-            txtAmount.setText(ServiceTools.formatPrice(remainCustomerCredit));
 
+
+            lastBalance = calculateRemainCredit(Payment);
+            if(lastBalance > 0){
+                txtAmount.setText(ServiceTools.formatPrice(lastBalance));
+                invoiceBalance.setText(ServiceTools.formatPrice(lastBalance));
+                txtSumReceipt.setText(ServiceTools.formatPrice(lastBalance));
+            }
             ReceiptId = Extras.getLong(ID);
 
             visitorHasCredit(Payment);
@@ -251,7 +260,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
                 ll_factor_balance.setVisibility(View.VISIBLE);
                 txtTrackingCode.setText(Code);
                 txtPayment.setText(ServiceTools.formatPrice(Payment));
-                txtPosAmount.setText(ServiceTools.formatPrice(Payment));
             } else if (Page == PAGE_RECEIPTLIST) {
                 if (Mode == MODE_EDIT) {
                     savedCashedAndCheque = db.getTotalReceiptWithId(ReceiptId);
@@ -274,7 +282,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
                     ll_factor_balance.setVisibility(View.VISIBLE);
                     txtTrackingCode.setText(Code);
                     txtPayment.setText(ServiceTools.formatPrice(Payment));
-                    txtPosAmount.setText(ServiceTools.formatPrice(Payment));
                 }
             }
 
@@ -305,7 +312,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             ll_factor_balance.setVisibility(View.VISIBLE);
             txtTrackingCode.setText(Code);
             txtPayment.setText(ServiceTools.formatPrice(Payment));
-            txtPosAmount.setText(ServiceTools.formatPrice(Payment));
         }
 
         lstCheque.setOnItemClickListener(new OnItemClickListener() {
@@ -532,38 +538,68 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             @Override
             public void onClick(View v) {
 
-                String stringReceipt = txtPosAmount.getText().toString();
-                double amount =ServiceTools.toDouble(ServiceTools.MoneyFormatToNumber(stringReceipt)) ;
+                String stringReceipt = txtAmount.getText().toString();
+                final Dialog dialog = new Dialog(mContext);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setCancelable(false);
+                dialog.setContentView(R.layout.dialog_smart_pos);
 
-                if(amount > 0){
-                    if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223)
-                        managePaySzzt(amount);
-                    else if (printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s)
-                        managePayUrovoI9000(amount);
-                    else if (printerBrand == ProjectInfo.SMART_POS_MoreFun)
-                        manageMoreFun(amount);
-                }
+                TextView text = (TextView) dialog.findViewById(R.id.txtPosPrice);
+                TextView description = (TextView) dialog.findViewById(R.id.txtDescription);
+                text.setText(stringReceipt);
 
-
+                Button ok = (Button) dialog.findViewById(R.id.ok_btn);
+                Button cancel = (Button) dialog.findViewById(R.id.cancel_btn);
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        posDescription = description.getText().toString();
+                        String receiptValue = text.getText().toString();
+                        double amount = ServiceTools.toDouble(ServiceTools.MoneyFormatToNumber(receiptValue)) ;
+                        if(amount > 0){
+                            if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223)
+                                managePaySzzt(amount);
+                            else if (printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s)
+                                managePayUrovoI9000(amount);
+                            else if (printerBrand == ProjectInfo.SMART_POS_MoreFun)
+                                manageMoreFun(amount);
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
             }
         });
 
 
     }// End of OnCreate
 
+    private double getLastBalance() {
+
+        double TotalPriceInvoice = 0;
+        double TotalPriceReceipt = 0;
+        double lastBalance = 0;
+       // customer.getBalance();
+        if (Code.equals("-1"))
+        TotalPriceReceipt = db.getTotalPriceReceiptPerInvoice(Code);
+        lastBalance = remainCustomerCredit;
+        return lastBalance;
+    }
+
     private double calculate_sum_receipt() {
         double sum_receipt = 0;
-        double balance = 0;
         if(arrayCheque.size() > 0){
             for(Cheque cheque : arrayCheque)
                 sum_receipt += cheque.getAmount();
         }
         sum_receipt += CashAmount;
         txtSumReceipt.setText(ServiceTools.formatPrice(sum_receipt));
-        balance = Payment - sum_receipt;
-        if (balance < 0)
-            balance = 0;
-        invoiceBalance.setText(ServiceTools.formatPrice(balance));
         return sum_receipt;
     }
 
@@ -764,7 +800,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         Cheque cheque = new Cheque();
         cheque.setAmount(ServiceTools.toDouble(amount));
         cheque.setBranch("");
-        cheque.setDescription(getString(R.string.smart_pos_payment_desc));
+        cheque.setDescription(posDescription);
         cheque.setNumber(traceNumber);
         cheque.setModifyDate(date.getTime());
         cheque.setDate(date.getTime());
@@ -859,7 +895,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             txtTrackingCode.setText(receipt.getTrackingCode());
             Payment = CalculatePayment(receipt.getTrackingCode());
             txtPayment.setText(ServiceTools.formatPrice(Payment));
-            txtPosAmount.setText(ServiceTools.formatPrice(Payment));
         } else
             Code = ProjectInfo.DONT_CODE;
         //Read arrayCheque From Database And Set Adapter_______
@@ -892,7 +927,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
 
         txtCustomerName = (EditText) findViewById(R.id.txtCustomerName);
         txtAmount = (EditText) findViewById(R.id.txtCashAmount);
-        txtPosAmount = (EditText) findViewById(R.id.txtPosAmount);
         txtDescription = (EditText) findViewById(R.id.txtDescription);
         txtMarketName = (EditText) findViewById(R.id.txtMarketName);
         txtTrackingCode = (EditText) findViewById(R.id.txtTrackingCode);
@@ -910,12 +944,11 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         ll_factor_balance = (LinearLayout) findViewById(R.id.ll_factor_balance);
         lstCheque = (ListView) findViewById(R.id.lstCheque);
         btnPayPos = (Button) findViewById(R.id.btnPayPos);
-        posLL = (LinearLayout) findViewById(R.id.posLL);
         lstCheque = (ListView) findViewById(R.id.lstCheque);
 
         printerBrand = SharedPreferencesHelper.getPrefPrinterBrand(mContext);
         if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223 || printerBrand == ProjectInfo.SMART_POS_UROVO_i9000s || printerBrand == ProjectInfo.SMART_POS_MoreFun)
-            posLL.setVisibility(View.VISIBLE);
+            btnPayPos.setVisibility(View.VISIBLE);
 
         db = new DbAdapter(mContext);
         db.open();
@@ -1189,7 +1222,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
                 txtTrackingCode.setText(Code);
 
                 txtPayment.setText(ServiceTools.formatPrice(Payment));
-                txtPosAmount.setText(ServiceTools.formatPrice(Payment));
                 if (CustomerId != ProjectInfo.CUSTOMERID_GUEST) {
                     customer = db.getCustomerWithPersonId(CustomerId);
                 } else {
@@ -1229,8 +1261,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                String amount = txtAmount.getText().toString();
-                if (!TextUtils.isEmpty(amount) || arrayCheque.size() != 0) {
+                if (totalCashAndCheque() != 0) {
                     onBackPressedStrategy();
                 }
                 else {
@@ -1274,10 +1305,21 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
 
     }
 
+    public double calculateRemainCredit(double finalPrice) {
+        if(CustomerId == 0 )
+            return 0;
+        Customer customer = db.getCustomerWithPersonId(CustomerId);
+        double customerCredit = customer.getCredit();
+        if(customerCredit == -1 )
+            customerCredit = 0;
+        double customerBalance = customer.getBalance();
+        double customerCreditValue = customerCredit + db.getTotalCustomerReceiptWithId(CustomerId) + customerBalance - db.getTotalPriceInvoicePerPerson(CustomerId);
+        return finalPrice - customerCreditValue;
+    }
+
     @Override
     public void onBackPressed() {
-        String amount = txtAmount.getText().toString();
-        if (!TextUtils.isEmpty(amount) || arrayCheque.size() != 0) {
+        if (totalCashAndCheque() != 0 ) {
             onBackPressedStrategy();
         }
         else {

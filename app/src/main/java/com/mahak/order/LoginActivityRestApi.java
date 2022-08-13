@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -304,6 +305,10 @@ public class LoginActivityRestApi extends BaseActivity {
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    Log.w("Fetching FCM", "Fetching FCM registration token failed", task.getException());
+                    return;
+                }
                 try {
                     String token = task.getResult();
                     Intent intent = new Intent(LoginActivityRestApi.this, RegistrationIntentService.class);

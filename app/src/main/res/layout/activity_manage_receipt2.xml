@@ -342,44 +342,6 @@
                         android:divider="@android:color/transparent"
                         android:listSelector="@android:color/transparent"/>
 
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right|center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingBottom="@dimen/NormalSize"
-                        android:paddingTop="@dimen/NormalSize">
-
-                        <LinearLayout
-                            android:id="@+id/ll_factor_balance"
-                            android:visibility="gone"
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="right"
-                            android:orientation="vertical">
-
-                            <com.mahak.order.widget.FontTextView
-                                android:id="@+id/factor_balance"
-                                style="@style/forms_label_default"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="right"
-                                android:layout_margin="@dimen/SmallSize"
-                                android:text="مانده فاکتور" />
-
-                            <com.mahak.order.widget.FontEditText
-                                android:id="@+id/invoiceBalance"
-                                style="@style/forms_edittext_default"
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
-                                android:enabled="false"
-                                android:gravity="right|center_vertical"
-                                android:singleLine="true" />
-                        </LinearLayout>
-                    </LinearLayout>
-
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -394,29 +356,83 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-            <com.mahak.order.widget.FontTextView
-                style="@style/forms_label_default"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_margin="@dimen/SmallSize"
-                android:text="جمع دریافتی" />
-
-            <com.mahak.order.widget.MoneyEditText
-                android:id="@+id/txtSumReceipt"
-                style="@style/forms_edittext_default"
+            <LinearLayout
+                android:id="@+id/ll_factor_balance"
+                android:visibility="visible"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="0"
-                android:digits="0123456789.,"
-                android:enabled="false"
-                android:inputType="numberDecimal"
-                android:singleLine="true" />
+                android:gravity="right|center_vertical"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+
+                <LinearLayout
+
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:orientation="vertical">
+
+                    <com.mahak.order.widget.FontTextView
+                        android:id="@+id/factor_balance"
+                        style="@style/forms_label_default"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_margin="@dimen/SmallSize"
+                        android:text="جمع مانده" />
+
+                    <com.mahak.order.widget.FontEditText
+                        android:id="@+id/invoiceBalance"
+                        style="@style/forms_edittext_default"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:text="0"
+                        android:gravity="left|center_vertical"
+                        android:singleLine="true" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right|center_vertical"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical"
+                    android:orientation="vertical">
+
+                    <com.mahak.order.widget.FontTextView
+                        style="@style/forms_label_default"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_margin="@dimen/SmallSize"
+                        android:text="جمع دریافتی" />
+
+                    <com.mahak.order.widget.MoneyEditText
+                        android:id="@+id/txtSumReceipt"
+                        style="@style/forms_edittext_default"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:digits="0123456789.,"
+                        android:enabled="false"
+                        android:inputType="numberDecimal"
+                        android:singleLine="true" />
+                </LinearLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -429,52 +445,26 @@
                 style="@style/forms_btn_default"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:text="افزودن چک" />
             <com.mahak.order.widget.FontButtonView
                 android:id="@+id/btnAddReceipt"
                 style="@style/forms_btn_default"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:text="افزودن حواله" />
 
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/posLL"
-        android:visibility="visible"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right|center_vertical"
-        android:orientation="horizontal"
-        android:padding="2dp">
-
-        <LinearLayout
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
             <com.mahak.order.widget.FontButtonView
+                android:visibility="gone"
                 android:id="@+id/btnPayPos"
                 style="@style/forms_btn_default"
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/str_pay_pos" />
+
         </LinearLayout>
-        <com.mahak.order.widget.MoneyEditText
-            style="@style/forms_edittext_default"
-            android:id="@+id/txtPosAmount"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:digits="0123456789.,"
-            android:inputType="numberDecimal"
-            android:singleLine="true" />
 
     </LinearLayout>
 

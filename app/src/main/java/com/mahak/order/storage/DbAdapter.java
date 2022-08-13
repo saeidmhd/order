@@ -3710,7 +3710,7 @@ public class DbAdapter {
                 cursor1.moveToFirst();
                 while (!cursor1.isAfterLast()) {
                     id = cursor1.getLong(cursor1.getColumnIndex(DbSchema.OrderSchema.COLUMN_ID));
-                    cursor2 = mDb.rawQuery("select  sum(" + DbSchema.OrderDetailSchema.COLUMN_Price + "*" + DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz + ")  from " + DbSchema.OrderDetailSchema.TABLE_NAME + " where " + DbSchema.OrderDetailSchema.COLUMN_OrderId + "=" + id, null);
+                    cursor2 = mDb.rawQuery("select sum((Price*SumCountBaJoz - Discount) + (Price*SumCountBaJoz *(TaxPercent + ChargePercent) / 100))  from " + DbSchema.OrderDetailSchema.TABLE_NAME + " where " + DbSchema.OrderDetailSchema.COLUMN_OrderId + "=" + id, null);
                     if (cursor2 != null) {
                         cursor2.moveToFirst();
                         if (cursor2.getCount() > 0) {
@@ -3810,6 +3810,74 @@ public class DbAdapter {
         long Id;
         try {
             cursor1 = mDb.query(DbSchema.ReceiptSchema.TABLE_NAME, null, DbSchema.ReceiptSchema.COLUMN_USER_ID + "=? AND " + DbSchema.ReceiptSchema.COLUMN_MAHAK_ID + "=? AND " + DbSchema.ReceiptSchema.COLUMN_DATABASE_ID + "=?", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId()}, null, null, null);
+            if (cursor1 != null) {
+                cursor1.moveToFirst();
+                while (!cursor1.isAfterLast()) {
+                    Id = cursor1.getLong(cursor1.getColumnIndex(DbSchema.ReceiptSchema.COLUMN_ID));
+                    CashAmount = cursor1.getDouble(cursor1.getColumnIndex(DbSchema.ReceiptSchema.COLUMN_CASHAMOUNT));
+                    cursor2 = mDb.rawQuery("select  sum(" + DbSchema.ChequeSchema.COLUMN_AMOUNT + ")  from " + DbSchema.ReceiptSchema.TABLE_NAME + " inner join " + DbSchema.ChequeSchema.TABLE_NAME + " on " + DbSchema.ChequeSchema.TABLE_NAME + "." + DbSchema.ChequeSchema.COLUMN_RECEIPTID + "=" + DbSchema.ReceiptSchema.TABLE_NAME + "." + DbSchema.ReceiptSchema.COLUMN_ID + " where " + DbSchema.ReceiptSchema.TABLE_NAME + "." + DbSchema.ReceiptSchema.COLUMN_ID + "=" + Id, null);
+                    if (cursor2 != null) {
+                        cursor2.moveToFirst();
+                        if (cursor2.getCount() > 0) {
+                            TotalPrice = TotalPrice + cursor2.getDouble(0);
+                            cursor2.close();
+                        }
+                    }
+                    TotalPrice = TotalPrice + CashAmount;
+                    cursor1.moveToNext();
+                }
+                cursor1.close();
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("Errorget", e.getMessage());
+        }
+        return TotalPrice;
+
+    }
+    public double getTotalPriceReceiptPerInvoice(String code) {
+        Cursor cursor1;
+        Cursor cursor2;
+        double CashAmount;
+        double TotalPrice = 0;
+        long Id;
+        try {
+            cursor1 = mDb.query(DbSchema.ReceiptSchema.TABLE_NAME, null, DbSchema.ReceiptSchema.COLUMN_USER_ID + "=? AND " + DbSchema.ReceiptSchema.COLUMN_MAHAK_ID + "=? AND " + DbSchema.ReceiptSchema.COLUMN_CODE + "=? AND " + DbSchema.ReceiptSchema.COLUMN_DATABASE_ID + "=?", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), code ,BaseActivity.getPrefDatabaseId()}, null, null, null);
+            if (cursor1 != null) {
+                cursor1.moveToFirst();
+                while (!cursor1.isAfterLast()) {
+                    Id = cursor1.getLong(cursor1.getColumnIndex(DbSchema.ReceiptSchema.COLUMN_ID));
+                    CashAmount = cursor1.getDouble(cursor1.getColumnIndex(DbSchema.ReceiptSchema.COLUMN_CASHAMOUNT));
+                    cursor2 = mDb.rawQuery("select  sum(" + DbSchema.ChequeSchema.COLUMN_AMOUNT + ")  from " + DbSchema.ReceiptSchema.TABLE_NAME + " inner join " + DbSchema.ChequeSchema.TABLE_NAME + " on " + DbSchema.ChequeSchema.TABLE_NAME + "." + DbSchema.ChequeSchema.COLUMN_RECEIPTID + "=" + DbSchema.ReceiptSchema.TABLE_NAME + "." + DbSchema.ReceiptSchema.COLUMN_ID + " where " + DbSchema.ReceiptSchema.TABLE_NAME + "." + DbSchema.ReceiptSchema.COLUMN_ID + "=" + Id, null);
+                    if (cursor2 != null) {
+                        cursor2.moveToFirst();
+                        if (cursor2.getCount() > 0) {
+                            TotalPrice = TotalPrice + cursor2.getDouble(0);
+                            cursor2.close();
+                        }
+                    }
+                    TotalPrice = TotalPrice + CashAmount;
+                    cursor1.moveToNext();
+                }
+                cursor1.close();
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("Errorget", e.getMessage());
+        }
+        return TotalPrice;
+
+    }
+    public double getTotalPriceReceiptPerPerson(long personId) {
+        Cursor cursor1;
+        Cursor cursor2;
+        double CashAmount;
+        double TotalPrice = 0;
+        long Id;
+        try {
+            cursor1 = mDb.query(DbSchema.ReceiptSchema.TABLE_NAME, null, DbSchema.ReceiptSchema.COLUMN_USER_ID + "=? AND " + DbSchema.ReceiptSchema.COLUMN_MAHAK_ID + "=? AND " + DbSchema.ReceiptSchema.PERSON_ID + "=? AND " + DbSchema.ReceiptSchema.COLUMN_DATABASE_ID + "=?", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), String.valueOf(personId) ,BaseActivity.getPrefDatabaseId()}, null, null, null);
             if (cursor1 != null) {
                 cursor1.moveToFirst();
                 while (!cursor1.isAfterLast()) {
