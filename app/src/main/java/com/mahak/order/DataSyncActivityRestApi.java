@@ -170,7 +170,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
     List<Setting> settings = new ArrayList<>();
     List<Mission> missions = new ArrayList<>();
-    List<MissionDetail> missionDetailes = new ArrayList<>();
+    List<MissionDetail> missionDetails = new ArrayList<>();
     List<PhotoGallery> photoGalleries = new ArrayList<>();
     List<Region> regions = new ArrayList<>();
 
@@ -504,11 +504,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 .setMessage(msg)
                 .setCancelable(true)
                 .setPositiveButton(getString(R.string.str_ok), new DialogInterface.OnClickListener() {
-
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-
                     }
                 });
 
@@ -723,7 +721,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             Customers.addAll(newCustomers);
             payableTransfers = db.getAllPayableNotPublish(BaseActivity.getPrefUserId());
             checkLists = db.getAllDoneChecklistNotPublish();
-            missionDetailes = db.getAllMissionDetail();
+            missionDetails = db.getAllMissionDetail();
 
             visitorLocation = radaraDb.getAllGpsPointsForSending();
 
@@ -749,6 +747,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             setAllDataBody.setPayableTransfers(payableTransfers);
             setAllDataBody.setChecklists(checkLists);
             setAllDataBody.setVisitorLocations(visitorLocation);
+            setAllDataBody.setMissionDetails(missionDetails);
             Call<SaveAllDataResult> saveAllDataResultCall = apiService.SaveAllData(setAllDataBody);
             saveAllDataResultCall.enqueue(new Callback<SaveAllDataResult>() {
                 @Override
@@ -1152,7 +1151,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                     saveAsyncTask.execute();
                                     break;
                                 case 23:
-                                    missionDetailes= response.body().getData().getObjects().getMissionDetails();
+                                    missionDetails= response.body().getData().getObjects().getMissionDetails();
                                     saveAsyncTask =  new SaveAsyncTask(whichUpdate);
                                     saveAsyncTask.execute();
                                     break;
@@ -1162,8 +1161,8 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         }
                     } else if (response.body() != null) {
                         mMsg[0] = response.body().getMessage();
-                        //showDialog(mMsg[0]);
-                        setTextGetErrorResult();
+                        dismissProgressDialog();
+                        showDialog(mMsg[0]);
                     }
                 }
 
@@ -1173,8 +1172,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     FirebaseCrashlytics.getInstance().log(t.getMessage());
                     dismissProgressDialog();
                     mMsg[0] = t.toString();
-                    //showDialog(mMsg[0]);
-                    setTextGetErrorResult();
+                    showDialog(mMsg[0]);
                 }
             });
 
@@ -1341,9 +1339,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         }
                     break;
                 case 23:
-                    if (missionDetailes != null)
-                        if (missionDetailes.size() > 0) {
-                            arrayTime[20] = DataService.InsertMissionDetails(db, missionDetailes, mContext);
+                    if (missionDetails != null)
+                        if (missionDetails.size() > 0) {
+                            arrayTime[20] = DataService.InsertMissionDetails(db, missionDetails, mContext);
                         }
                     break;
             }
@@ -1581,7 +1579,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
                         } else if (response.body() != null) {
                             mMsg[0] = getString(R.string.send_error);
-                            //showDialog(response.body().getMessage());
+                            showDialog(response.body().getMessage());
 
                             FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
                             FirebaseCrashlytics.getInstance().log(response.body().getMessage());
@@ -1594,7 +1592,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         FirebaseCrashlytics.getInstance().log(t.getMessage());
                         dismissProgressDialog();
                         mMsg[0] = t.toString();
-                        //showDialog(mMsg[0]);
+                        showDialog(mMsg[0]);
                     }
                 });
             }else {
@@ -1656,7 +1654,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                 FirebaseCrashlytics.getInstance().log(t.getMessage());
                                 dismissProgressDialog();
                                 mMsg[0] = t.toString();
-                                //showDialog(mMsg[0]);
+                                showDialog(mMsg[0]);
                             }
                         });
                     }
