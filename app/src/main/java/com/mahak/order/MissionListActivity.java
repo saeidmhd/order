@@ -33,6 +33,7 @@ import com.mahak.order.widget.FontCheckBox;
 import com.mahak.order.widget.FontEditText;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -149,7 +150,7 @@ public class MissionListActivity extends BaseActivity {
 
         private class HolderChild {
             public TextView tvDate, tvChequeType, tvNumber, tvAmount ,txtStatus, tvBank, tvDescription;
-            public FontCheckBox checkListDone;
+            public FontCheckBox checkListSucceed , checkListNotStarted , checkListFail , checkListInWay;
 
             HolderChild(View view) {
                 tvDate = (TextView) view.findViewById(R.id.tvDate);
@@ -159,7 +160,11 @@ public class MissionListActivity extends BaseActivity {
                 tvBank = (TextView) view.findViewById(R.id.tvBank);
                 tvChequeType = (TextView) view.findViewById(R.id.tvChequeType);
                 tvDescription = (TextView) view.findViewById(R.id.tvDescription);
-                checkListDone = (FontCheckBox) view.findViewById(R.id.checkListDone);
+
+                checkListSucceed = (FontCheckBox) view.findViewById(R.id.checkListSucceed);
+                checkListNotStarted = (FontCheckBox) view.findViewById(R.id.checkListNotStarted);
+                checkListFail = (FontCheckBox) view.findViewById(R.id.checkListFail);
+                checkListInWay = (FontCheckBox) view.findViewById(R.id.checkListInWay);
             }
 
             public void Populate(MissionDetail missionDetail) {
@@ -188,18 +193,32 @@ public class MissionListActivity extends BaseActivity {
 
                 switch (status){
                     case 1:
-                        st = "انجام نشده";
-                        checkListDone.setChecked(false);
+                        st = "شروع نشده";
+                        checkListNotStarted.setChecked(true);
+                        checkListInWay.setChecked(false);
+                        checkListSucceed.setChecked(false);
+                        checkListFail.setChecked(false);
                         break;
                     case 2:
-                        st = "شروع شده در راه";
+                        st = "در مسیر";
+                        checkListInWay.setChecked(true);
+                        checkListNotStarted.setChecked(false);
+                        checkListSucceed.setChecked(false);
+                        checkListFail.setChecked(false);
                         break;
                     case 3:
-                        st = "لغو شده توسط مدیر";
+                        st = "انجام شده موفق";
+                        checkListSucceed.setChecked(true);
+                        checkListNotStarted.setChecked(false);
+                        checkListInWay.setChecked(false);
+                        checkListFail.setChecked(false);
                         break;
                     case 4:
-                        checkListDone.setChecked(true);
-                        st = "انجام شده";
+                        checkListFail.setChecked(true);
+                        checkListNotStarted.setChecked(false);
+                        checkListInWay.setChecked(false);
+                        checkListSucceed.setChecked(false);
+                        st = "انجام شده ناموفق";
                         break;
                 }
 
@@ -208,15 +227,48 @@ public class MissionListActivity extends BaseActivity {
                 tvBank.setText(customer.getAddress());
                 tvChequeType.setText(customer.getMobile());
 
-                checkListDone.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                checkListNotStarted.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        if(!b)
+                        if(b){
                             missionDetail.setStatus(1);
-                        else
+                            missionDetail.setDate(ServiceTools.getFormattedDate(new Date().getTime()));
+                            notifyDataSetChanged();
+                            db.AddMissionDetail(missionDetail);
+                        }
+                    }
+                });
+                checkListInWay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        if(b){
+                            missionDetail.setStatus(2);
+                            missionDetail.setDate(ServiceTools.getFormattedDate(new Date().getTime()));
+                            notifyDataSetChanged();
+                            db.AddMissionDetail(missionDetail);
+                        }
+                    }
+                });
+                checkListSucceed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        if(b){
+                            missionDetail.setStatus(3);
+                            missionDetail.setDate(ServiceTools.getFormattedDate(new Date().getTime()));
+                            notifyDataSetChanged();
+                            db.AddMissionDetail(missionDetail);
+                        }
+                    }
+                });
+                checkListFail.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        if(b){
                             missionDetail.setStatus(4);
-                        notifyDataSetChanged();
-                        db.AddMissionDetail(missionDetail);
+                            missionDetail.setDate(ServiceTools.getFormattedDate(new Date().getTime()));
+                            notifyDataSetChanged();
+                            db.AddMissionDetail(missionDetail);
+                        }
                     }
                 });
             }
@@ -246,7 +298,7 @@ public class MissionListActivity extends BaseActivity {
                         st = "انجام نشده";
                         break;
                     case 2:
-                        st = "شروع شده در راه";
+                        st = "در جریان";
                         break;
                     case 3:
                         st = "انجام شده";
@@ -257,6 +309,10 @@ public class MissionListActivity extends BaseActivity {
                 String date = ServiceTools.getDateAndTimeForLong(format_date);
 
                 tvMissionStatus.setText(st);
+                tvNumberOfCheckLists.setText(String.valueOf(missionDetails.size()));
+                if(allMissionDetailHasDone()){
+                    mission.setStatus(3);
+                }
                 /*tvNumberOfCheckLists.setText(String.valueOf(mission.getMissionDetailCount()));
                 tvCode.setText(String.valueOf(mission.getAccountId()));*/
                 tvDate.setText(date);
@@ -375,6 +431,13 @@ public class MissionListActivity extends BaseActivity {
 
     }
 
+    private boolean allMissionDetailHasDone() {
+        for (MissionDetail missionDetail : missionDetails){
+            if(missionDetail.getStatus() != 3)
+                return false;
+        }
+        return true;
+    }
 
 
     public ExpandListAdapter getExpandlistAdapter() {

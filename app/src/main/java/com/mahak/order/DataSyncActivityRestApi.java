@@ -1156,7 +1156,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                     saveAsyncTask.execute();
                                     break;
 
-
                             }
                         }
                     } else if (response.body() != null) {

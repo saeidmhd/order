@@ -6,18 +6,18 @@
     android:orientation="vertical"
     android:paddingBottom="@dimen/ThinSize"
     android:paddingLeft="@dimen/NormalSize"
-    android:paddingRight="@dimen/NormalSize"
+    android:paddingRight="@dimen/VeryVeryLargeSize"
     android:paddingTop="@dimen/ThinSize">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/card_ui_bg_selector"
+        android:background="@color/gray"
         android:orientation="vertical"
+        android:paddingBottom="@dimen/NormalSize"
         android:paddingLeft="@dimen/SmallSize"
-        android:paddingTop="@dimen/NormalSize"
         android:paddingRight="@dimen/SmallSize"
-        android:paddingBottom="@dimen/NormalSize">
+        android:paddingTop="@dimen/NormalSize">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -184,23 +184,104 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center|right"
             android:orientation="horizontal"
             android:padding="@dimen/SmallSize">
 
-            <com.mahak.order.widget.FontTextView
-                android:gravity="center"
-                style="@style/forms_label_default"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:text="انجام دستور کار"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center|right">
 
-            <com.mahak.order.widget.FontCheckBox
-                android:id="@+id/checkListDone"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent" />
+                <com.mahak.order.widget.FontTextView
+                    android:gravity="center"
+                    style="@style/forms_label_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:text="در مسیر"/>
+
+                <com.mahak.order.widget.FontCheckBox
+                    android:id="@+id/checkListInWay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center|right">
+
+                <com.mahak.order.widget.FontTextView
+                    android:gravity="center"
+                    style="@style/forms_label_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:text="شروع نشده"/>
+
+                <com.mahak.order.widget.FontCheckBox
+                    android:id="@+id/checkListNotStarted"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent" />
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/SmallSize">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center|right">
+
+                <com.mahak.order.widget.FontTextView
+                    android:gravity="center"
+                    style="@style/forms_label_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:text="انجام شده ناموفق"/>
+
+                <com.mahak.order.widget.FontCheckBox
+                    android:id="@+id/checkListFail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center|right">
+
+                <com.mahak.order.widget.FontTextView
+                    android:gravity="center"
+                    style="@style/forms_label_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:text="انجام شده موفق"/>
+
+                <com.mahak.order.widget.FontCheckBox
+                    android:id="@+id/checkListSucceed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent" />
+
+            </LinearLayout>
+
+
 
         </LinearLayout>
 
