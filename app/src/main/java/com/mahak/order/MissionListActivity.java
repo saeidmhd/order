@@ -27,7 +27,6 @@ import com.mahak.order.common.SharedPreferencesHelper;
 import com.mahak.order.mission.Mission;
 import com.mahak.order.mission.MissionDetail;
 import com.mahak.order.storage.DbAdapter;
-import com.mahak.order.storage.RadaraDb;
 import com.mahak.order.widget.DrawableClickListener;
 import com.mahak.order.widget.FontCheckBox;
 import com.mahak.order.widget.FontEditText;
@@ -310,9 +309,9 @@ public class MissionListActivity extends BaseActivity {
 
                 tvMissionStatus.setText(st);
                 tvNumberOfCheckLists.setText(String.valueOf(missionDetails.size()));
-                if(allMissionDetailHasDone()){
-                    mission.setStatus(3);
-                }
+
+                setMissionStatus(mission , getChilds(position));
+
                 /*tvNumberOfCheckLists.setText(String.valueOf(mission.getMissionDetailCount()));
                 tvCode.setText(String.valueOf(mission.getAccountId()));*/
                 tvDate.setText(date);
@@ -344,10 +343,13 @@ public class MissionListActivity extends BaseActivity {
         }
 
 
-        public Object getChild(int groupPosition, int childPosition) {
+        public MissionDetail getChild(int groupPosition, int childPosition) {
             // TODO Auto-generated method stub
             List<MissionDetail> chList = missionList.get(groupPosition).getMissionDetails();
             return chList.get(childPosition);
+        }
+        public List<MissionDetail> getChilds(int groupPosition) {
+            return missionList.get(groupPosition).getMissionDetails();
         }
 
         public long getChildId(int groupPosition, int childPosition) {
@@ -380,7 +382,7 @@ public class MissionListActivity extends BaseActivity {
 
         }
 
-        public Object getGroup(int groupPosition) {
+        public Mission getGroup(int groupPosition) {
             // TODO Auto-generated method stub
             return missionList.get(groupPosition);
         }
@@ -427,17 +429,33 @@ public class MissionListActivity extends BaseActivity {
             // TODO Auto-generated method stub
             super.onGroupExpanded(groupPosition);
         }
-
-
     }
 
-    private boolean allMissionDetailHasDone() {
+    private void setMissionStatus(Mission mission, List<MissionDetail> missionDetails) {
         for (MissionDetail missionDetail : missionDetails){
-            if(missionDetail.getStatus() != 3)
-                return false;
+            switch (missionDetail.getStatus()){
+                case 1:
+                    // st = "شروع نشده";
+                    mission.setStatus(1);
+                    break;
+                case 2:
+                    // st = "در مسیر";
+                    //st = "در جریان";
+                    mission.setStatus(2);
+                    break;
+                case 3:
+                case 4:
+                    // st = "انجام شده ناموفق";
+                    // st = "انجام شده موفق";
+                    mission.setStatus(3);
+                    break;
+            }
         }
-        return true;
+
+        db.AddMission(mission);
+        getExpandlistAdapter().notifyDataSetChanged();
     }
+
 
 
     public ExpandListAdapter getExpandlistAdapter() {

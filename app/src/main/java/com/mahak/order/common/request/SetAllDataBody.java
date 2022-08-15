@@ -24,6 +24,7 @@ import com.mahak.order.common.Setting;
 import com.mahak.order.common.TransactionsLog;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.common.VisitorPeople;
+import com.mahak.order.mission.Mission;
 import com.mahak.order.mission.MissionDetail;
 
 import java.util.ArrayList;
@@ -111,6 +112,10 @@ public class SetAllDataBody {
     @SerializedName("missionDetails")
     @Expose
     private List<MissionDetail> missionDetails = new ArrayList<>();
+
+    @SerializedName("missions")
+    @Expose
+    private List<Mission> missions = new ArrayList<>();
 
 
     public String getUserToken() {
@@ -303,5 +308,13 @@ public class SetAllDataBody {
 
     public void setMissionDetails(List<MissionDetail> missionDetails) {
         this.missionDetails = missionDetails;
+    }
+
+    public List<Mission> getMissions() {
+        return missions;
+    }
+
+    public void setMissions(List<Mission> missions) {
+        this.missions = missions;
     }
 }

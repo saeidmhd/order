@@ -675,6 +675,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
         List<Customer> newCustomers = new ArrayList<>();
         List<VisitorLocation> visitorLocation = new ArrayList<>();
         List<MissionDetail> missionDetails = new ArrayList<>();
+        List<Mission> missions = new ArrayList<>();
 
         @Override
         protected void onPreExecute() {
@@ -722,6 +723,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             payableTransfers = db.getAllPayableNotPublish(BaseActivity.getPrefUserId());
             checkLists = db.getAllDoneChecklistNotPublish();
             missionDetails = db.getAllMissionDetail();
+            missions = db.getAllMission();
 
             visitorLocation = radaraDb.getAllGpsPointsForSending();
 
@@ -748,6 +750,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             setAllDataBody.setChecklists(checkLists);
             setAllDataBody.setVisitorLocations(visitorLocation);
             setAllDataBody.setMissionDetails(missionDetails);
+            setAllDataBody.setMissions(missions);
             Call<SaveAllDataResult> saveAllDataResultCall = apiService.SaveAllData(setAllDataBody);
             saveAllDataResultCall.enqueue(new Callback<SaveAllDataResult>() {
                 @Override
