@@ -6,11 +6,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Filter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +54,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.mahak.order.BaseActivity.Mode_DoVahedi;
 import static com.mahak.order.BaseActivity.getPrefReduceAsset;
 import static com.mahak.order.common.ServiceTools.MoneyFormatToNumber;
 import static com.mahak.order.common.ServiceTools.formatCount;
@@ -92,6 +96,8 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
 
     int eshantion_dasti;
     int duplicate_product;
+    private boolean txtCountEdit;
+    private boolean txtCount2Edit;
 
 
     public RecyclerProductAdapter(
@@ -214,7 +220,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         }
 
         Boolean res = false;
-        if (BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz || BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.Mode_DoVahedi ) {
+        if (BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz || BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi ) {
             holder.panelTotalAsset.setVisibility(View.VISIBLE);
             if (productPickerListActivity != null)
                 holder.panelTotalCount.setVisibility(View.VISIBLE);
@@ -275,12 +281,11 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             }
         });
 
-
-
         holder.plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi)
+                    handleTwoUnit(holder, product);
                 if(hasProductDetail(product)){
                     gotoPriceCount(holder,position);
                 }else {
@@ -300,7 +305,6 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     String total2 = holder.txtTotalCount.getText().toString();
                     String asset2 = holder.tvAsset2.getText().toString();
 
-
                     total_count1 = ServiceTools.toDouble(total1);
                     asset_count1 = ServiceTools.toDouble(asset1);
 
@@ -309,7 +313,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
 
                     total_count1 ++;
 
-                    if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz || BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.Mode_DoVahedi)
+                    if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)
                         sum = total_count1 + (total_count2 * product.getUnitRatio());
                     else
                         sum = total_count1;
@@ -326,13 +330,16 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                         return_value_recycler2(String.valueOf(total_count2) , String.valueOf(total_count1) , product.getPrice(), position, sum);
                     }
                 }
-
-
             }
         });
+
+
         holder.minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if(BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi)
+                    handleTwoUnit(holder, product);
 
                 if(hasProductDetail(product)){
                     gotoPriceCount(holder,position);
@@ -345,7 +352,6 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     String total2 = holder.txtTotalCount.getText().toString();
                     String asset2 = holder.tvAsset2.getText().toString();
 
-
                     total_count1 = ServiceTools.toDouble(total1);
                     asset_count1 = ServiceTools.toDouble(asset1);
 
@@ -354,7 +360,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
 
                     if(total_count1 > 0){
                         total_count1--;
-                        if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz || BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.Mode_DoVahedi)
+                        if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)
                             sum = total_count1 + (total_count2 * product.getUnitRatio());
                         else
                             sum = total_count1;
@@ -371,90 +377,101 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             @Override
             public void onClick(View view) {
 
-                if(hasProductDetail(product)){
-                    gotoPriceCount(holder,position);
-                }else {
-                    double sum = 0;
-                    double check_sum = 0;
-                    double count2_sabad_kharid = 0;
+                if(BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi)
+                    handleTwoUnit(holder, product);
 
-                    ArrayList<OrderDetail> orderDetails =  InvoiceDetailActivity.orderDetails;
-                    if(orderDetails != null){
-                        for (OrderDetail orderDetail : orderDetails)
-                            if(orderDetail.getProductId() == product.getProductId())
-                                count2_sabad_kharid += orderDetail.getCount2();
-                    }
+                if (product.getUnitRatio() > 0){
+                    if(hasProductDetail(product)){
+                        gotoPriceCount(holder,position);
+                    }else {
+                        double sum = 0;
+                        double check_sum = 0;
+                        double count2_sabad_kharid = 0;
 
-                    String total1 = holder.txtCount.getText().toString();
-                    String asset1 = holder.tvAsset.getText().toString();
-
-                    String total2 = holder.txtTotalCount.getText().toString();
-                    String asset2 = holder.tvAsset2.getText().toString();
-
-
-                    total_count1 = ServiceTools.toDouble(total1);
-                    asset_count1 = ServiceTools.toDouble(asset1);
-
-                    total_count2 = ServiceTools.toDouble(total2);
-                    asset_count2 = ServiceTools.toDouble(asset2);
-
-                    if(asset_count2 > 0){
-                        total_count2++;
-
-                        if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz || BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.Mode_DoVahedi)
-                            sum = total_count1 + (total_count2 * product.getUnitRatio());
-                        else
-                            sum = total_count1;
-
-                        if(duplicate_product == 1 || eshantion_dasti == 1){
-                            check_sum = sum + count2_sabad_kharid;
-                        }else
-                            check_sum = sum;
-
-                        if(check_sum > asset_count1 && type == ProjectInfo.TYPE_INVOCIE){
-                            Toast.makeText(mContext, "موجودی کالا منفی می شود، ادامه عملیات امکان پذیر نیست!", Toast.LENGTH_SHORT).show();
-                        }else {
-                            holder.txtTotalCount.setText(ServiceTools.formatCount(total_count2));
-                            return_value_recycler2(String.valueOf(total_count2),String.valueOf(total_count1) , product.getPrice(), position, sum);
+                        ArrayList<OrderDetail> orderDetails =  InvoiceDetailActivity.orderDetails;
+                        if(orderDetails != null){
+                            for (OrderDetail orderDetail : orderDetails)
+                                if(orderDetail.getProductId() == product.getProductId())
+                                    count2_sabad_kharid += orderDetail.getCount2();
                         }
-                    }else
-                        Toast.makeText(mContext, "موجودی کالا منفی می شود، ادامه عملیات امکان پذیر نیست!", Toast.LENGTH_SHORT).show();
+
+                        String total1 = holder.txtCount.getText().toString();
+                        String asset1 = holder.tvAsset.getText().toString();
+
+                        String total2 = holder.txtTotalCount.getText().toString();
+                        String asset2 = holder.tvAsset2.getText().toString();
+
+
+                        total_count1 = ServiceTools.toDouble(total1);
+                        asset_count1 = ServiceTools.toDouble(asset1);
+
+                        total_count2 = ServiceTools.toDouble(total2);
+                        asset_count2 = ServiceTools.toDouble(asset2);
+
+                        if(asset_count2 > 0){
+                            total_count2++;
+
+                            if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)
+                                sum = total_count1 + (total_count2 * product.getUnitRatio());
+                            else
+                                sum = total_count2 * product.getUnitRatio();
+
+                            if(duplicate_product == 1 || eshantion_dasti == 1){
+                                check_sum = sum + count2_sabad_kharid;
+                            }else
+                                check_sum = sum;
+
+                            if(check_sum > asset_count1 && type == ProjectInfo.TYPE_INVOCIE){
+                                Toast.makeText(mContext, "موجودی کالا منفی می شود، ادامه عملیات امکان پذیر نیست!", Toast.LENGTH_SHORT).show();
+                            }else {
+                                holder.txtTotalCount.setText(ServiceTools.formatCount(total_count2));
+                                return_value_recycler2(String.valueOf(total_count2),String.valueOf(total_count1) , product.getPrice(), position, sum);
+                            }
+                        }else
+                            Toast.makeText(mContext, "موجودی کالا منفی می شود، ادامه عملیات امکان پذیر نیست!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
         holder.minus_count2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(hasProductDetail(product)){
-                    gotoPriceCount(holder,position);
-                }else {
-                    double sum =0;
-                    String total1 = holder.txtCount.getText().toString();
-                    String asset1 = holder.tvAsset.getText().toString();
+                if(BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi)
+                    handleTwoUnit(holder, product);
 
-                    String total2 = holder.txtTotalCount.getText().toString();
-                    String asset2 = holder.tvAsset2.getText().toString();
+                if (product.getUnitRatio() > 0){
+                    if(hasProductDetail(product)){
+                        gotoPriceCount(holder,position);
+                    }else {
+                        double sum =0;
+                        String total1 = holder.txtCount.getText().toString();
+                        String asset1 = holder.tvAsset.getText().toString();
 
-                    total_count1 = ServiceTools.toDouble(total1);
-                    asset_count1 = ServiceTools.toDouble(asset1);
+                        String total2 = holder.txtTotalCount.getText().toString();
+                        String asset2 = holder.tvAsset2.getText().toString();
 
-                    total_count2 = ServiceTools.toDouble(total2);
-                    asset_count2 = ServiceTools.toDouble(asset2);
+                        total_count1 = ServiceTools.toDouble(total1);
+                        asset_count1 = ServiceTools.toDouble(asset1);
 
-                    if(total_count2 > 0){
-                        total_count2--;
+                        total_count2 = ServiceTools.toDouble(total2);
+                        asset_count2 = ServiceTools.toDouble(asset2);
 
-                        if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz || BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.Mode_DoVahedi)
-                            sum = total_count1 + (total_count2 * product.getUnitRatio());
-                        else
-                            sum = total_count1;
+                        if(total_count2 > 0){
+                            total_count2--;
 
-                        holder.txtTotalCount.setText(ServiceTools.formatCount(total_count2));
-                        return_value_recycler2(String.valueOf(total_count2),String.valueOf(total_count1) , product.getPrice(), position, sum);
+                            if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)
+                                sum = total_count1 + (total_count2 * product.getUnitRatio());
+                            else
+                                sum = total_count1;
+
+                            holder.txtTotalCount.setText(ServiceTools.formatCount(total_count2));
+                            return_value_recycler2(String.valueOf(total_count2),String.valueOf(total_count1) , product.getPrice(), position, sum);
+                        }
                     }
                 }
             }
         });
+        
 
         if (productPickerListActivity != null) {
             Set mapSet = ProductPickerListActivity.HashMap_Product.entrySet();
@@ -500,6 +517,66 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         holder.txtTotalCount.setTag(R.id.Product, product);
         holder.txtTotalGift.setTag(R.id.ProductId, product.getProductId());
         holder.txtTotalGift.setTag(R.id.Product, product);
+    }
+
+    private void handleTwoUnit(ProductHolder holder, Product product) {
+        holder.txtCount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                txtCountEdit = false;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (!txtCount2Edit) {
+                    txtCountEdit = true;
+                    double toDouble;
+                    try {
+                        toDouble = ServiceTools.toDouble(s.toString());
+                        if (product.getUnitRatio() > 0) {
+                            holder.txtTotalCount.setText(formatCount(toDouble / product.getUnitRatio()));
+                        } else
+                            holder.txtTotalCount.setText(ServiceTools.formatCount(0));
+                    } catch (NumberFormatException e) {
+                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+                        FirebaseCrashlytics.getInstance().recordException(e);
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                txtCountEdit = false;
+            }
+        });
+        holder.txtTotalCount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                txtCount2Edit = false;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!txtCountEdit) {
+                    txtCount2Edit = true;
+                    double toDouble;
+                    try {
+                        toDouble = ServiceTools.toDouble(s.toString());
+                        if (BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi)
+                            holder.txtCount.setText(ServiceTools.formatCount(toDouble * product.getUnitRatio()));
+                    } catch (NumberFormatException e) {
+                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+                        FirebaseCrashlytics.getInstance().recordException(e);
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                txtCount2Edit = false;
+            }
+        });
     }
 
     @Override

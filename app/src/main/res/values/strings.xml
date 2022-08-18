@@ -102,7 +102,7 @@
     <string name="str_username_en">UserName</string>
     <string name="str_password_en">Password</string>
     <string name="str_login">ورود به سیستم</string>
-    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.455</string>
+    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.460</string>
     <string name="str_email">پست الکترونیک</string>
     <string name="str_body">متن پیام</string>
     <string name="str_message_content">متن پیام</string>
@@ -907,7 +907,11 @@
     <string name="new_3_455_3">رفع خطای مربوط به نمایش مشتری یا کالای تکراری در صورت دسته بندی تکراری</string>
     <string name="new_3_455_4">تغییر در نمایش فرم جستجو در تمامی فرم ها</string>
     <string name="new_3_455_5">نمایش تخفیف سطری در چاپ ها</string>
-    <string name="new_3_455_6">رفع خطای اجرای در اندروید ۴.۴.۴ </string>
+    <string name="new_3_455_6">رفع خطای اجرای در اندروید ۴.۴.۴</string>
+
+    <string name="new_3_460">نسخه ۳.۴۶۰</string>
+    <string name="new_3_460_1">رفع خطای مربوط به نمایش موجودی اشتباه در انتخاب دسته بندی</string>
+    <string name="new_3_460_2">رفع خطای مربوط به ارسال تعداد صفر در کالای دو واحده</string>
 
     <string name="PersonClientId">PersonClientId</string>
     <string name="array">array</string>

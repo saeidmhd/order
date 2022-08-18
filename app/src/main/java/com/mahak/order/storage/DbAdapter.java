@@ -17,7 +17,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.mahak.order.BaseActivity;
-import com.mahak.order.BuildConfig;
 import com.mahak.order.common.Bank;
 import com.mahak.order.common.Category;
 import com.mahak.order.common.CheckList;
@@ -4386,12 +4385,11 @@ public class DbAdapter {
         try {
             cursor = mDb.rawQuery(" select count(*) from Products " +
                     " inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
-                    " LEFT join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userid = products.userid " +
-                    " LEFT  join ( SELECT DISTINCT userid , productcode , CategoryCode from ProductCategory ) as pc on  products.ProductCode = pc.ProductCode  " +
+                    " LEFT join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userid = products.userid " + getProductCategoryJoin(categoryCode) +
                     " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) " +
                     " and visitorproduct.deleted = 0 "  +
                     " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
-                    getProductCategoryString(CategoryId) + getProductAssetStrnig(MODE_ASSET) + getCategoryString2(categoryCode) +
+                    getProductCategoryString(CategoryId) + getProductAssetStrnig(MODE_ASSET) + checkCategoryQuery(categoryCode) +
                     " order by " + orderBy, null);
             if (cursor != null) {
                 cursor.moveToFirst();
@@ -4424,11 +4422,11 @@ public class DbAdapter {
                     "select count(*) from Customers " +
                             " INNER join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId and Customers.UserId = CustomersGroups.UserId " +
                             " left join visitorpeople on visitorpeople.personid = customers.personid and VisitorPeople.userId = Customers.userId " +
-                            getCategoryJoinString2(categoryCode) +
+                            getPersonCategoryJoin(categoryCode) +
                             " where ( " + LikeStr +
                             " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
                             " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
-                            " ) and " + groupIdScript(groupId) + " visitorpeople.deleted = 0 " + getCategoryString2(categoryCode)
+                            " ) and " + groupIdScript(groupId) + " visitorpeople.deleted = 0 " + checkCategoryQuery(categoryCode)
                             + " and " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_MAHAK_ID + " = '" + BaseActivity.getPrefMahakId()
                             + "' and " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + " = " + BaseActivity.getPrefDatabaseId()
                             + " and " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_USER_ID + " = " + getPrefUserId()
@@ -5233,14 +5231,13 @@ public class DbAdapter {
         if (ServiceTools.checkArabic(searchStr)) {
             searchStr = ServiceTools.replaceWithEnglish(searchStr);
         }
-        cursor = mDb.rawQuery(" SELECT Tax , Charge , Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName  , ProductDetail.productDetailId , pc.CategoryCode , " +
+        cursor = mDb.rawQuery(" SELECT Tax , Charge , Products.ProductId , Products.productcode , products.name , UnitRatio , DefaultSellPriceLevel, PromotionId , UnitName2 , UnitName  , ProductDetail.productDetailId , " +
                 getPriceLevel(defPriceLevel) + getDiscountLevel() + " productdetail.Customerprice , sum(visitorproduct.Count1) as sumcount1 , sum(visitorproduct.Count2) as sumcount2 " +
                 " from Products inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                 " left join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userid = products.userid" +
-                " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4" +
-                " LEFT  join ( SELECT DISTINCT userid , productcode , CategoryCode from ProductCategory ) as pc on  products.ProductCode = pc.ProductCode " +
+                " LEFT join PromotionEntity on products.ProductCode = PromotionEntity.CodeEntity and PromotionEntity.entitytype = 4" + getProductCategoryJoin(categoryCode) +
                 " where " +  getSearchString(searchStr) + DbSchema.ProductSchema.TABLE_NAME + " . " + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId()
-                + getProductAssetStrnig(mode_asset) + getProductCategoryString(categoryId) + getCategoryString2(categoryCode)
+                + getProductAssetStrnig(mode_asset) + getProductCategoryString(categoryId) + checkCategoryQuery(categoryCode)
                 + " and visitorproduct.deleted = 0 " + " GROUP by Products.productId " + " order by " + orderBy  + " LIMIT " + LIMIT, null);
         return cursor;
     }
@@ -5603,13 +5600,13 @@ public class DbAdapter {
                     " from Customers inner join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId and CustomersGroups.userId = Customers.userId  " +
                     " LEFT join visitorpeople  on visitorpeople.personid = Customers.personid and VisitorPeople.userId = Customers.userId " +
                     " LEFT join PromotionEntity  on PromotionEntity.CodeEntity = Customers.PersonCode and EntityType = 2 " +
-                     getCategoryJoinString2(categoryCode) +
+                     getPersonCategoryJoin(categoryCode) +
                     " where ( " + LikeStr +
                     " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
                     " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
                     " ) and " + groupIdScript(groupId) +
                     " Customers.UserId = ? and Customers.MahakId = ? and Customers.DatabaseId = ? and (visitorpeople.Deleted = 0 or visitorpeople.Deleted is NULL)" +
-                    getCategoryString2(categoryCode)+ " order by " + orderBy + " LIMIT " + LIMIT, new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId()});
+                    checkCategoryQuery(categoryCode)+ " order by " + orderBy + " LIMIT " + LIMIT, new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId()});
             // cursor = mDb.query(DbSchema.Customerschema.TABLE_NAME, null, DbSchema.Customerschema.COLUMN_USER_ID + " =? and " + DbSchema.Customerschema.COLUMN_MAHAK_ID + "=? and " + DbSchema.Customerschema.COLUMN_DATABASE_ID + "=? and " + groupIdScript(groupId) + DbSchema.Customerschema.COLUMN_Deleted + "=?", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(0)}, null, null, orderBy, LIMIT);
             if (cursor != null) {
                 cursor.moveToFirst();
@@ -5705,12 +5702,12 @@ public class DbAdapter {
                     " from Customers inner join CustomersGroups on Customers.PersonGroupId = CustomersGroups.PersonGroupId  and CustomersGroups.userId = Customers.userId  " +
                     " LEFT join PromotionEntity  on PromotionEntity.CodeEntity = Customers.PersonCode and EntityType = 2 " +
                     " LEFT join visitorpeople  on visitorpeople.personid = Customers.personid and VisitorPeople.userId = Customers.userId " +
-                    getCategoryJoinString2(categoryCode) +
+                    getPersonCategoryJoin(categoryCode) +
                     " where ( " + LikeStr +
                     " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PersonCode + " LIKE " + "'%" + searchString + "%'" +
                     " or " + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_ADDRESS + " LIKE " + "'%" + searchString + "%'" +
                     " ) and " + groupIdScript(groupId)  +
-                    " Customers.UserId = ? and Customers.MahakId = ? and Customers.DatabaseId = ? and visitorpeople.Deleted = ?" + getCategoryString2(categoryCode) +
+                    " Customers.UserId = ? and Customers.MahakId = ? and Customers.DatabaseId = ? and visitorpeople.Deleted = ?" + checkCategoryQuery(categoryCode) +
                     " order by " + orderBy, new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(0)});
             if (cursor != null) {
                 cursor.moveToFirst();
@@ -5741,18 +5738,17 @@ public class DbAdapter {
         else return "";
     }
 
-    private String getCategoryString(long categoryCode) {
-        if (categoryCode != 0)
-            return " and " + DbSchema.ProductCategorySchema.TABLE_NAME + "." + DbSchema.ProductCategorySchema.COLUMN_CategoryCode + " = " + categoryCode;
-        else return "";
-    }
-
-    private String getCategoryString2(long categoryCode) {
+    private String checkCategoryQuery(long categoryCode) {
         if (categoryCode != 0)
             return " and " + "pc.CategoryCode" + " = " + categoryCode;
         else return "";
     }
-    private String getCategoryJoinString2(long categoryCode) {
+    private String getProductCategoryJoin(long categoryCode) {
+        if (categoryCode != 0)
+            return " LEFT  join ( SELECT DISTINCT userid , productcode , CategoryCode from ProductCategory ) as pc on  products.ProductCode = pc.ProductCode ";
+        else return "";
+    }
+    private String getPersonCategoryJoin(long categoryCode) {
         if (categoryCode != 0)
             return "LEFT  join ( SELECT DISTINCT userid , Personcode , CategoryCode from PersonCategory ) as pc on  Customers.PersonCode = pc.PersonCode ";
         else return "";
