@@ -238,7 +238,7 @@ public class AutoSyncService extends IntentService {
             Set<OrderDetail> set = new LinkedHashSet<>();
             for (int i = 0; i < arrayInvoice.size(); i++) {
                 arrayInvoice.get(i).setOrderId(0);
-                orderDetails = db.getAllOrderDetailForSend(arrayInvoice.get(i).getId());
+                orderDetails = db.getAllOrderDetails(arrayInvoice.get(i).getId());
                 for (OrderDetail orderDetail : orderDetails) {
                     orderDetailProperties = db.getAllOrderDetailProperty(orderDetail.getOrderId(), orderDetail.getProductId());
                     if (orderDetailProperties.size() > 0) {

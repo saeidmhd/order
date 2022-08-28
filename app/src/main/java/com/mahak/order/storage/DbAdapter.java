@@ -73,7 +73,7 @@ import java.util.List;
 
 import io.reactivex.annotations.NonNull;
 
-import static com.mahak.order.BaseActivity.MODE_MeghdarJoz;
+import static com.mahak.order.BaseActivity.MODE_YekVahedi;
 import static com.mahak.order.BaseActivity.baseUrlImage;
 import static com.mahak.order.BaseActivity.getPrefUserId;
 import static com.mahak.order.BaseActivity.getPrefUserMasterId;
@@ -174,6 +174,7 @@ public class DbAdapter {
         ContentValues initialvalue = getOnlinePictureProduct(picturesProduct);
         return mDb.insert(DbSchema.PicturesProductSchema.TABLE_NAME, null, initialvalue);
     }
+
     public void addSignPicture(PicturesProduct picturesProduct) {
         ContentValues initValue = getSign(picturesProduct);
         if(!(mDb.update(DbSchema.PicturesProductSchema.TABLE_NAME, initValue, DbSchema.PicturesProductSchema.COLUMN_ITEM_ID + " =? and " + DbSchema.PicturesProductSchema.COLUMN_ITEM_TYPE + " =? " , new String[]{String.valueOf(picturesProduct.getItemId()) , String.valueOf(2)}) > 0))
@@ -1015,6 +1016,7 @@ public class DbAdapter {
 
         return initialvalue;
     }
+
     private ContentValues getSign(PicturesProduct picturesProduct) {
         ContentValues initialvalue = new ContentValues();
         initialvalue.put(DbSchema.PicturesProductSchema.COLUMN_ITEM_TYPE, picturesProduct.getItemType());
@@ -1481,7 +1483,7 @@ public class DbAdapter {
         return product;
     }
 
-    public Product getProductWithProductCode(int productCode) {
+    public Product getProductWithProductCode(long productCode) {
         Product product = new Product();
         Cursor cursor;
         try {
@@ -1542,28 +1544,6 @@ public class DbAdapter {
         return asset2;
     }
 
-    public ProductDetail getProductDetailForState(long masterId) {
-
-        ProductDetail productDetail = new ProductDetail();
-        Cursor cursor;
-        try {
-            cursor = mDb.query(DbSchema.ProductDetailSchema.TABLE_NAME, null, DbSchema.ProductDetailSchema.COLUMN_ProductDetailId + " =? and " + DbSchema.ProductDetailSchema.COLUMN_USER_ID + " =? ", new String[]{String.valueOf(masterId),String.valueOf(getPrefUserId())}, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                if (cursor.getCount() > 0) {
-                    productDetail = getProductDetailForUpdate(cursor);
-                }
-                cursor.close();
-            }
-
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorProductDetail11", e.getMessage());
-        }
-        return productDetail;
-    }
-
     public ProductDetail getProductDetail(long masterId) {
 
         ProductDetail productDetail = new ProductDetail();
@@ -1585,6 +1565,7 @@ public class DbAdapter {
         }
         return productDetail;
     }
+
     public VisitorProduct getVisitorProduct(long masterId) {
 
         VisitorProduct visitorProduct = new VisitorProduct();
@@ -2556,7 +2537,7 @@ public class DbAdapter {
 
     public OrderDetail GetOrderDetailWithId(long id) {
 
-        double d = ServiceTools.RegulartoDouble(BaseActivity.getPrefRowDiscountIsActive());
+        double discoutType = ServiceTools.RegulartoDouble(BaseActivity.getRowDiscountType());
 
         OrderDetail orderDetail = new OrderDetail();
         Cursor cursor;
@@ -2572,7 +2553,56 @@ public class DbAdapter {
                     orderDetail.setOrderClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_OrderClientId)));
                     orderDetail.setProductDetailId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ProductDetailId)));
                     orderDetail.setProductId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ProductId)));
-                    if (BaseActivity.getPrefUnit2Setting(mContext) == MODE_MeghdarJoz)
+                    orderDetail.setCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Count1)));
+                    orderDetail.setCount2(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Count2)));
+                    orderDetail.setSumCountBaJoz(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz)));
+                    // orderDetail.setCount2(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PackageCount)));
+                    orderDetail.setPrice(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Price)));
+                    orderDetail.setGiftType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftType)));
+                    orderDetail.setDescription(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Description)));
+                    //orderDetail.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PUBLISH)));
+                    orderDetail.setTaxPercent(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_TaxPercent)));
+                    orderDetail.setChargePercent(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ChargePercent)));
+                    orderDetail.setDiscount(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Discount)));
+                    if (discoutType == BaseActivity.darsadi)
+                        orderDetail.setDiscount(ServiceTools.getRowOffPercent(orderDetail.getDiscount(), orderDetail.getPrice(), orderDetail.getSumCountBaJoz()));
+                    orderDetail.setDiscountType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_DiscountType)));
+                    orderDetail.setCostLevel(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_CostLevel)));
+                    // orderDetail.setFixedOff(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Fixed_Off)));
+                    // orderDetail.setCostLevel(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Price_LEVEL)));
+                    orderDetail.setPromotionCode(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PROMOTION_CODE)));
+                    //   orderDetail.setGiftType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GIFT_TYPE)));
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorGetProductInOrder", e.getMessage());
+        }
+        return orderDetail;
+    }
+
+    public OrderDetail GetOrderDetailWithIdForSend(long id) {
+
+        double d = ServiceTools.RegulartoDouble(BaseActivity.getRowDiscountType());
+
+        OrderDetail orderDetail = new OrderDetail();
+        Cursor cursor;
+        try {
+            cursor = mDb.query(DbSchema.OrderDetailSchema.TABLE_NAME, null, DbSchema.OrderDetailSchema.COLUMN_ID + "=?", new String[]{String.valueOf(id)}, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                if (cursor.getCount() > 0) {
+                    orderDetail.setId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ID)));
+                    orderDetail.setOrderId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_OrderId)));
+                    orderDetail.setOrderDetailId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_OrderDetailId)));
+                    orderDetail.setOrderDetailClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_OrderDetailClientId)));
+                    orderDetail.setOrderClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_OrderClientId)));
+                    orderDetail.setProductDetailId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ProductDetailId)));
+                    orderDetail.setProductId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ProductId)));
+                    if (BaseActivity.getPrefUnit2Setting(mContext) != MODE_YekVahedi)
                         orderDetail.setCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz)));
                     else
                         orderDetail.setCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Count1)));
@@ -2586,7 +2616,7 @@ public class DbAdapter {
                     orderDetail.setTaxPercent(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_TaxPercent)));
                     orderDetail.setChargePercent(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ChargePercent)));
                     orderDetail.setDiscount(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Discount)));
-                    if (d == 1)
+                    if (d == BaseActivity.darsadi)
                         orderDetail.setDiscount(ServiceTools.getRowOffPercent(orderDetail.getDiscount(), orderDetail.getPrice(), orderDetail.getSumCountBaJoz()));
                     orderDetail.setDiscountType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_DiscountType)));
                     orderDetail.setCostLevel(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_CostLevel)));
@@ -4854,23 +4884,6 @@ public class DbAdapter {
         return promotion;
     }
 
-    public Promotion getPromotion2(Cursor cursor) {
-        Promotion promotion = new Promotion();
-        try {
-            if (cursor != null) {
-                promotion.setAccordingTo(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_AccordingTo)));
-                promotion.setIsCalcLinear(cursor.getInt(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_IsCalcLinear)));
-                promotion.setPromotionCode(cursor.getString(cursor.getColumnIndex(DbSchema.PromotionSchema.COLUMN_PromotionCode)));
-            }
-
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorGetUser", e.getMessage());
-        }
-        return promotion;
-    }
-
     public Promotion getPromotionByCode(String codePromotion) {
 
         Promotion promotion = new Promotion();
@@ -5743,11 +5756,13 @@ public class DbAdapter {
             return " and " + "pc.CategoryCode" + " = " + categoryCode;
         else return "";
     }
+
     private String getProductCategoryJoin(long categoryCode) {
         if (categoryCode != 0)
             return " LEFT  join ( SELECT DISTINCT userid , productcode , CategoryCode from ProductCategory ) as pc on  products.ProductCode = pc.ProductCode ";
         else return "";
     }
+
     private String getPersonCategoryJoin(long categoryCode) {
         if (categoryCode != 0)
             return "LEFT  join ( SELECT DISTINCT userid , Personcode , CategoryCode from PersonCategory ) as pc on  Customers.PersonCode = pc.PersonCode ";
@@ -6146,7 +6161,7 @@ public class DbAdapter {
         return array;
     }
 
-    public ArrayList<OrderDetail> getAllOrderDetailForSend(long orderId) {
+    public ArrayList<OrderDetail> getAllOrderDetails(long orderId) {
         OrderDetail orderDetail;
         Cursor cursor;
         ArrayList<OrderDetail> array = new ArrayList<>();
@@ -6156,6 +6171,31 @@ public class DbAdapter {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     orderDetail = GetOrderDetailWithId(cursor.getLong(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ID)));
+                    if (orderDetail != null)
+                        array.add(orderDetail);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            e.printStackTrace();
+        }
+
+        return array;
+    }
+    public ArrayList<OrderDetail> getAllOrderDetailForSend(long orderId) {
+        OrderDetail orderDetail;
+        Cursor cursor;
+        ArrayList<OrderDetail> array = new ArrayList<>();
+        try {
+            cursor = mDb.query(DbSchema.OrderDetailSchema.TABLE_NAME, null, DbSchema.OrderDetailSchema.COLUMN_OrderId + "=?", new String[]{String.valueOf(orderId)}, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    orderDetail = GetOrderDetailWithIdForSend(cursor.getLong(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ID)));
                     if (orderDetail != null)
                         array.add(orderDetail);
                     cursor.moveToNext();
@@ -9483,7 +9523,7 @@ public class DbAdapter {
         BaseActivity.setPrefTaxAndChargeIsActive(BaseActivity.InActive);
         BaseActivity.setPrefTaxPercent(BaseActivity.InActive);
         BaseActivity.setPrefChargePercent(BaseActivity.InActive);
-        BaseActivity.setPrefRowDiscountIsActive(BaseActivity.invisible);
+        BaseActivity.setRowDiscountType(BaseActivity.invisible);
         BaseActivity.setPrefAutoSyncValue(BaseActivity.InActive);
 
         // BaseActivity.setPrefCustomerMaxRowVersion(0);

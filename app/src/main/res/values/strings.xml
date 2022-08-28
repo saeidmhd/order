@@ -1397,6 +1397,7 @@
     <string name="credit_alarm">با توجه به اعتبار مشتری و بدهی قبلی، نیاز به ثبت دریافتی می باشد!</string>
     <string name="check_new_person_activity">\" برای این مشتری عملیات ثبت شده ، امکان حذف وجود ندارد!\"</string>
     <string name="no_good">کالایی انتخاب نکرده اید!</string>
+    <string name="negative_asset">عدم موجودی برای ثبت اشانتیون</string>
 
 
 </resources>

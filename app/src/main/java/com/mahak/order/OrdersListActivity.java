@@ -1,7 +1,5 @@
 package com.mahak.order;
 
-import static com.mahak.order.BaseActivity.mContext;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -24,7 +22,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filter.FilterListener;
 import android.widget.ImageView;
@@ -1224,7 +1221,7 @@ public class OrdersListActivity extends BaseActivity {
             Set<OrderDetail> set = new LinkedHashSet<>();
             for (int i = 0; i < arrayInvoice.size(); i++) {
                 arrayInvoice.get(i).setOrderId(0);
-                orderDetails = db.getAllOrderDetailForSend(arrayInvoice.get(i).getId());
+                orderDetails = db.getAllOrderDetails(arrayInvoice.get(i).getId());
                 for (OrderDetail orderDetail : orderDetails) {
                     orderDetailProperties = db.getAllOrderDetailProperty(orderDetail.getOrderId(), orderDetail.getProductId());
                     if (orderDetailProperties.size() > 0) {
@@ -1626,7 +1623,7 @@ public class OrdersListActivity extends BaseActivity {
         Set<OrderDetail> set = new LinkedHashSet<>();
         for (int i = 0; i < arrayInvoice.size(); i++) {
             arrayInvoice.get(i).setOrderId(0);
-            orderDetails = db.getAllOrderDetailForSend(arrayInvoice.get(i).getId());
+            orderDetails = db.getAllOrderDetails(arrayInvoice.get(i).getId());
             for (OrderDetail orderDetail : orderDetails) {
                 orderDetailProperties = db.getAllOrderDetailProperty(orderDetail.getOrderId(), orderDetail.getProductId());
                 if (orderDetailProperties.size() > 0) {

@@ -27,7 +27,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.mahak.order.InvoiceFragments.InvoiceGoodsDetail;
 import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
 import com.mahak.order.common.Cheque;
@@ -50,7 +49,6 @@ import com.mahak.order.common.User;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.common.request.SetAllDataBody;
 import com.mahak.order.common.request.SetAllDataResult.SaveAllDataResult;
-import com.mahak.order.fragment.RecyclerProductAdapter;
 import com.mahak.order.storage.DbAdapter;
 
 import java.util.ArrayList;
@@ -315,7 +313,7 @@ public class OrderDetailActivity extends BaseActivity {
         Set<OrderDetail> set = new LinkedHashSet<>();
         for (int i = 0; i < arrayInvoice.size(); i++) {
             arrayInvoice.get(i).setOrderId(0);
-            orderDetails = db.getAllOrderDetailForSend(arrayInvoice.get(i).getId());
+            orderDetails = db.getAllOrderDetails(arrayInvoice.get(i).getId());
             for (OrderDetail orderDetail : orderDetails) {
                 orderDetailProperties = db.getAllOrderDetailProperty(orderDetail.getOrderId(), orderDetail.getProductId());
                 if (orderDetailProperties.size() > 0) {

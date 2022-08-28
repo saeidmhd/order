@@ -76,7 +76,7 @@ public class Customer {
     private BigDecimal Balance;
 
     @SerializedName("Credit")
-    @Expose(serialize = false)
+    @Expose
     private BigDecimal Credit;
 
     @SerializedName("PersonGroupId")

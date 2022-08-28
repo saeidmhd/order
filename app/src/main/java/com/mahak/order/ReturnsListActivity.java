@@ -19,7 +19,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filter.FilterListener;
 import android.widget.ImageView;
@@ -37,7 +36,6 @@ import com.mahak.order.common.Customer;
 import com.mahak.order.common.Order;
 import com.mahak.order.common.OrderDetail;
 import com.mahak.order.common.OrderDetailProperty;
-import com.mahak.order.common.Person_Extra_Data;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.User;
@@ -680,7 +678,7 @@ public class ReturnsListActivity extends BaseActivity {
             Set<OrderDetail> set = new LinkedHashSet<>();
             for (int i = 0; i < arrayInvoice.size(); i++) {
                 arrayInvoice.get(i).setOrderId(0);
-                orderDetails = db.getAllOrderDetailForSend(arrayInvoice.get(i).getId());
+                orderDetails = db.getAllOrderDetails(arrayInvoice.get(i).getId());
                 for (OrderDetail orderDetail : orderDetails) {
                     orderDetailProperties = db.getAllOrderDetailProperty(orderDetail.getOrderId(), orderDetail.getProductId());
                     if (orderDetailProperties.size() > 0) {

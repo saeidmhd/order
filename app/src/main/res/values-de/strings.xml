@@ -1330,5 +1330,6 @@
     <string name="new_3_460">نسخه ۳.۴۶۰</string>
     <string name="new_3_460_1">رفع خطای مربوط به نمایش موجودی اشتباه در انتخاب دسته بندی</string>
     <string name="new_3_460_2">رفع خطای مربوط به ارسال تعداد صفر در صورت دو واحده</string>
+    <string name="negative_asset">عدم موجودی برای ثبت اشانتیون</string>
 
 </resources>

@@ -126,6 +126,7 @@ public class ServiceTools {
         else
             return myFormatter.format(value);
     }
+
     public static double formatDoublePrice(double value) {
         int DecimalPointNumber = ServiceTools.toInt(BaseActivity.getPrefPriceDecimalPoint());
         Locale locale = Locale.getDefault();
@@ -767,7 +768,7 @@ public class ServiceTools {
         BaseActivity.setPrefTaxAndChargeIsActive(BaseActivity.InActive);
         BaseActivity.setPrefTaxPercent(BaseActivity.InActive);
         BaseActivity.setPrefChargePercent(BaseActivity.InActive);
-        BaseActivity.setPrefRowDiscountIsActive(BaseActivity.invisible);
+        BaseActivity.setRowDiscountType(BaseActivity.invisible);
         BaseActivity.setPrefAutoSyncValue(BaseActivity.InActive);
         BaseActivity.setPrefApplyRowDiscount(BaseActivity.InActive);
 
@@ -788,8 +789,8 @@ public class ServiceTools {
                     if ( settings.get(i).getValue().equals(BaseActivity.Active))
                         BaseActivity.setPrefUnit2Setting(BaseActivity.MODE_YekVahedi);
                     break;
-                case BaseActivity.SHOW_ROW_DISCOUNT:
-                    BaseActivity.setPrefRowDiscountIsActive(settings.get(i).getValue());
+                case BaseActivity.Row_Discount_Type:
+                    BaseActivity.setRowDiscountType(settings.get(i).getValue());
                     break;
                 case BaseActivity.APPLY_DISCOUNT:
                     BaseActivity.setPrefApplyRowDiscount(settings.get(i).getValue());

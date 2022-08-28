@@ -54,6 +54,7 @@ import com.mahak.order.common.PromotionDetail;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.SharedPreferencesHelper;
 import com.mahak.order.common.Visitor;
+import com.mahak.order.common.VisitorProduct;
 import com.mahak.order.interfaces.FragmentLifecycle;
 import com.mahak.order.scan.SmallCaptureActivity;
 import com.mahak.order.storage.DbAdapter;
@@ -73,6 +74,7 @@ import io.reactivex.annotations.NonNull;
 import static android.app.Activity.RESULT_OK;
 import static com.mahak.order.BaseActivity.CUSTOMERID_KEY;
 import static com.mahak.order.BaseActivity.CUSTOMER_GROUP_KEY;
+import static com.mahak.order.BaseActivity.MODE_EDIT;
 import static com.mahak.order.BaseActivity.MODE_NEW;
 import static com.mahak.order.BaseActivity.MODE_PAGE;
 import static com.mahak.order.BaseActivity.PAGE;
@@ -133,7 +135,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
     public double TotalWeightWithoutGift;
     public double TotalPrice;
 
-    public OrderDetail mPromoObject;
     public TextView tvPageTitle;
 
     public Customer customer;
@@ -149,7 +150,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
     private ListView _lstGroupedTax;
     private int printerBrand;
 
-    int promoKalaCode = 0;
+    long promoKalaCode = 0;
 
     private static boolean promotionAvailable = false;
 
@@ -468,8 +469,8 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                 object.setCount1(count);
                 object.setCount2(count2);
                 object.setSumCountBaJoz(sumCountBaJoz);
-                if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible)) {
-                    double d = ServiceTools.RegulartoDouble(BaseActivity.getPrefRowDiscountIsActive());
+                if (!BaseActivity.getRowDiscountType().equals(BaseActivity.invisible)) {
+                    double d = ServiceTools.RegulartoDouble(BaseActivity.getRowDiscountType());
                     object.setDiscountType((long) d);
                 }
                 object.setProductDetailId(productDetail.getProductDetailId());
@@ -478,7 +479,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                 object.setPrice(String.valueOf(price));
                 object.setMin((int) product.getMin());
 
-                if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible))
+                if (!BaseActivity.getRowDiscountType().equals(BaseActivity.invisible))
                     object.setDiscount(ServiceTools.toDouble(discount));
 
                 object.setDescription(description);
@@ -966,9 +967,9 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         int mPromoCode;
         int zarib = 1;
         ArrayList<PromotionDetail> arrayPromotionDetail;
-        int mGiftCount1 = 0;
-        int mGiftCount2 = 0;
-        int KalaCode;
+        double mGiftCount1 = 0;
+        double mGiftCount2 = 0;
+        long KalaCode;
         int fixedOff;
         double offPercent;
         double fixedDiscount;
@@ -1036,12 +1037,12 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 KalaCode = (int) (product.getProductCode());
                                                 if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
                                                     zarib = (int) (final_price / arrayPromotionDetail.get(0).getToPayment());
-                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                                mGiftCount1 = (arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                                mGiftCount2 = (arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 addPromoCode(mPromoCode);
-                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, TotalCountWithoutGift);
                                                 break;
                                             case Promotion.eshantion_Az_kalahaye_digar:
                                                 //gift az kalaye digar.
@@ -1050,12 +1051,12 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 productDetail = db.getProductDetailWithProductId(product1.getProductId());
                                                 if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
                                                     zarib = (int) (final_price / arrayPromotionDetail.get(0).getToPayment());
-                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                                mGiftCount1 = (arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                                mGiftCount2 = (arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 addPromoCode(mPromoCode);
-                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, TotalCountWithoutGift);
                                                 break;
                                         }
                                     }
@@ -1109,12 +1110,12 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 KalaCode = (int) (product.getProductCode());
                                                 if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
                                                     zarib = (int) (TotalCountWithoutGift / arrayPromotionDetail.get(0).getToPayment());
-                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                                mGiftCount1 = (arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                                mGiftCount2 = (arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 addPromoCode(mPromoCode);
-                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode,TotalCountWithoutGift);
                                                 break;
                                             case Promotion.eshantion_Az_kalahaye_digar:
                                                 //gift az kalaye digar.
@@ -1123,12 +1124,12 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 productDetail = db.getProductDetailWithProductId(product1.getProductId());
                                                 if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
                                                     zarib = (int) (TotalCountWithoutGift / arrayPromotionDetail.get(0).getToPayment());
-                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                                mGiftCount1 = (arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                                mGiftCount2 = (arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 addPromoCode(mPromoCode);
-                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, TotalCountWithoutGift);
                                                 break;
                                         }
                                     }
@@ -1179,12 +1180,12 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 KalaCode = (int) (product.getProductCode());
                                                 if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
                                                     zarib = roundDoubleToInt(TotalWeightWithoutGift / arrayPromotionDetail.get(0).getToPayment());
-                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                                mGiftCount1 = (arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                                mGiftCount2 = (arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 addPromoCode(mPromoCode);
-                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, TotalCountWithoutGift);
                                                 break;
                                             case Promotion.eshantion_Az_kalahaye_digar:
                                                 //gift az kalaye digar.
@@ -1193,12 +1194,12 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 productDetail = db.getProductDetailWithProductId(product1.getProductId());
                                                 if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
                                                     zarib = roundDoubleToInt(TotalWeightWithoutGift / arrayPromotionDetail.get(0).getToPayment());
-                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                                mGiftCount1 = (arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                                mGiftCount2 = (arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 addPromoCode(mPromoCode);
-                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, TotalCountWithoutGift);
                                                 break;
                                         }
                                     }
@@ -1256,12 +1257,12 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 KalaCode = (int) (product.getProductCode());
                                                 if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
                                                     zarib = roundDoubleToInt(jameTedadAghlam / arrayPromotionDetail.get(0).getToPayment());
-                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                                mGiftCount1 = (arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                                mGiftCount2 = (arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 addPromoCode(mPromoCode);
-                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, TotalCountWithoutGift);
                                                 break;
                                             case Promotion.eshantion_Az_kalahaye_digar:
                                                 //gift az kalaye digar.
@@ -1270,12 +1271,12 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 productDetail = db.getProductDetailWithProductId(product1.getProductId());
                                                 if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
                                                     zarib = roundDoubleToInt(jameTedadAghlam / arrayPromotionDetail.get(0).getToPayment());
-                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                                mGiftCount1 = (arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                                mGiftCount2 = (arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 addPromoCode(mPromoCode);
-                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, TotalCountWithoutGift);
                                                 break;
                                         }
                                     }
@@ -1328,24 +1329,24 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 KalaCode = (int) (product.getProductCode());
                                                 if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
                                                     zarib = roundDoubleToInt(totalPrice / arrayPromotionDetail.get(0).getToPayment());
-                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                                mGiftCount1 = (arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                                mGiftCount2 = (arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 addPromoCode(mPromoCode);
-                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, TotalCountWithoutGift);
                                                 break;
                                             case Promotion.eshantion_Az_kalahaye_digar:
                                                 //gift az kalaye digar.
                                                 KalaCode = (arrayPromotionDetail.get(0).getCodeGood());
                                                 if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
                                                     zarib = roundDoubleToInt(totalPrice / arrayPromotionDetail.get(0).getToPayment());
-                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                                mGiftCount1 = (arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                                mGiftCount2 = (arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 addPromoCode(mPromoCode);
-                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, TotalCountWithoutGift);
                                                 break;
                                         }
                                     }
@@ -1390,24 +1391,24 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                                                 KalaCode = (int) (product.getProductCode());
                                                 if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
                                                     zarib = roundDoubleToInt(orderDetail.getSumCountBaJoz() / arrayPromotionDetail.get(0).getToPayment());
-                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                                mGiftCount1 = (arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                                mGiftCount2 = (arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 addPromoCode(mPromoCode);
-                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, TotalCountWithoutGift);
                                                 break;
                                             case Promotion.eshantion_Az_kalahaye_digar:
                                                 //gift az kalaye digar.
                                                 KalaCode = (arrayPromotionDetail.get(0).getCodeGood());
                                                 if (arrayPromotionDetail.get(0).getIsCalcAdditive() == 1)
                                                     zarib = roundDoubleToInt(orderDetail.getSumCountBaJoz() / arrayPromotionDetail.get(0).getToPayment());
-                                                mGiftCount1 = ((int) arrayPromotionDetail.get(0).getMeghdar() * zarib);
-                                                mGiftCount2 = ((int) arrayPromotionDetail.get(0).getMeghdar2() * zarib);
+                                                mGiftCount1 = (arrayPromotionDetail.get(0).getMeghdar() * zarib);
+                                                mGiftCount2 = (arrayPromotionDetail.get(0).getMeghdar2() * zarib);
                                                 mPromoCode = ServiceTools.toInt(arrayPromotionDetail.get(0).getPromotionCode());
                                                 howToPromotion = 2;
                                                 addPromoCode(mPromoCode);
-                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, productDetail);
+                                                productGift(mGiftCount1, mGiftCount2, KalaCode, mPromoCode, TotalCountWithoutGift);
                                                 break;
                                         }
                                     }
@@ -1460,30 +1461,38 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         return customerPromotions;
     }
 
-    private void productGift(int mGiftCount1, int mGiftCount2, int kalaCode, int mPromoCode, ProductDetail productDetail) {
+    private void productGift(double mGiftCount1, double mGiftCount2, long kalaCode, int mPromoCode, double count) {
         if (promoKalaCode != kalaCode) {
             promoKalaCode = kalaCode;
             Product promoProduct;
             promoProduct = db.getProductWithProductCode(kalaCode);
             ProductDetail promoProductDetail = db.getProductDetailWithProductId(promoProduct.getProductId());
-            mPromoObject.setGiftType(Promotion.Eshantion_Tarhi);
-            mPromoObject.setProductDetailId( promoProductDetail.getProductDetailId());
-            mPromoObject.setProductId(promoProduct.getProductId());
-            mPromoObject.setProductName(promoProduct.getName());
-            mPromoObject.setMin((int) promoProduct.getMin());
-            mPromoObject.setPrice("0");
-            mPromoObject.setCount1(mGiftCount1);
-            mPromoObject.setSumCountBaJoz(mGiftCount1);
-            mPromoObject.setCount2(mGiftCount2);
-            mPromoObject.setPromotionCode(mPromoCode);
-            InvoiceDetailActivity.orderDetails.add(mPromoObject);
+            VisitorProduct visitorProduct = db.getVisitorProduct(promoProductDetail.getProductDetailId());
+            double asset = visitorProduct.getCount1();
+            if(Mode == MODE_EDIT)
+                asset += count;
+            if(mGiftCount1 + count <= asset){
+                OrderDetail mPromoObject = new OrderDetail();
+                mPromoObject.setGiftType(Promotion.Eshantion_Tarhi);
+                mPromoObject.setProductDetailId( promoProductDetail.getProductDetailId());
+                mPromoObject.setProductId(promoProduct.getProductId());
+                mPromoObject.setProductName(promoProduct.getName());
+                mPromoObject.setMin((int) promoProduct.getMin());
+                mPromoObject.setPrice("0");
+                mPromoObject.setCount1(mGiftCount1);
+                mPromoObject.setSumCountBaJoz(mGiftCount1);
+                mPromoObject.setCount2(mGiftCount2);
+                mPromoObject.setPromotionCode(mPromoCode);
+                InvoiceDetailActivity.orderDetails.add(mPromoObject);
+            }else
+                Toast.makeText(getActivity(), R.string.negative_asset, Toast.LENGTH_LONG).show();
         }
     }
 
 
     private void rowPercentOff(double offPercent, int mPromoCode, Product product) {
         OrderDetail orderDetail = ProductPickerListActivity.HashMap_Product.get(product.getProductId());
-        double d = ServiceTools.RegulartoDouble(BaseActivity.getPrefRowDiscountIsActive());
+        double d = ServiceTools.RegulartoDouble(BaseActivity.getRowDiscountType());
         if(orderDetail != null){
             if (offPercent != 0) {
                 orderDetail.setPromotionCode(mPromoCode);
@@ -1501,7 +1510,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
     private void rowFixedOff(float fixedOff, int mPromoCode, Product product) {
         if (fixedOff != 0) {
 
-            double d = ServiceTools.RegulartoDouble(BaseActivity.getPrefRowDiscountIsActive());
+            double d = ServiceTools.RegulartoDouble(BaseActivity.getRowDiscountType());
 
             ProductPickerListActivity.HashMap_Product.get(product.getProductId()).setPromotionCode(mPromoCode);
             ProductPickerListActivity.HashMap_Product.get(product.getProductId()).setGiftType(Promotion.Takhfif_Satri);
@@ -1571,7 +1580,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             ClearAllGift();
             ArrayList<OrderDetail> tempOrderDetails = new ArrayList<>();
             CommitPromoCode.clear();
-            mPromoObject = new OrderDetail();
             if (InvoiceDetailActivity.orderDetails.size() != 0) {
                 tempOrderDetails.addAll(InvoiceDetailActivity.orderDetails);
                 validPromotionList(tempOrderDetails);

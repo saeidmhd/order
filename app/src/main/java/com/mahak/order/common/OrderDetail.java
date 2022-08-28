@@ -432,7 +432,6 @@ public class OrderDetail implements Parcelable {
         productId = in.readInt();
     }
 
-
     public long getDiscountType() {
         return discountType;
     }

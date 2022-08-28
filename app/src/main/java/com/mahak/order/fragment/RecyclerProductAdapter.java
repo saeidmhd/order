@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Filter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -520,6 +519,38 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
     }
 
     private void handleTwoUnit(ProductHolder holder, Product product) {
+        holder.txtTotalCount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                txtCount2Edit = false;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!txtCountEdit) {
+                    txtCount2Edit = true;
+                    double toDouble;
+                    try {
+                        toDouble = ServiceTools.toDouble(s.toString());
+                        if (BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi)
+                            if (product.getUnitRatio() > 0) {
+                                holder.txtCount.setText(ServiceTools.formatCount(toDouble * product.getUnitRatio()));
+                            }else
+                                holder.txtCount.setText(ServiceTools.formatCount(toDouble));
+
+
+                    } catch (NumberFormatException e) {
+                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+                        FirebaseCrashlytics.getInstance().recordException(e);
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                txtCount2Edit = false;
+            }
+        });
         holder.txtCount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -550,33 +581,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                 txtCountEdit = false;
             }
         });
-        holder.txtTotalCount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                txtCount2Edit = false;
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!txtCountEdit) {
-                    txtCount2Edit = true;
-                    double toDouble;
-                    try {
-                        toDouble = ServiceTools.toDouble(s.toString());
-                        if (BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi)
-                            holder.txtCount.setText(ServiceTools.formatCount(toDouble * product.getUnitRatio()));
-                    } catch (NumberFormatException e) {
-                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                        FirebaseCrashlytics.getInstance().recordException(e);
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                txtCount2Edit = false;
-            }
-        });
     }
 
     @Override
@@ -632,8 +637,8 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                 }
                 item.setProductName(product.getName());
 
-                if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible)) {
-                    double d = ServiceTools.RegulartoDouble(BaseActivity.getPrefRowDiscountIsActive());
+                if (!BaseActivity.getRowDiscountType().equals(BaseActivity.invisible)) {
+                    double d = ServiceTools.RegulartoDouble(BaseActivity.getRowDiscountType());
                     item.setDiscountType((long) d);
                 }
 
@@ -681,8 +686,8 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                 }
                 object.setProductName(product.getName());
 
-                if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible)) {
-                    double d = ServiceTools.RegulartoDouble(BaseActivity.getPrefRowDiscountIsActive());
+                if (!BaseActivity.getRowDiscountType().equals(BaseActivity.invisible)) {
+                    double d = ServiceTools.RegulartoDouble(BaseActivity.getRowDiscountType());
                     object.setDiscountType((long) d);
                 }
                 object.setProductDetailId(product.getProductDetailId());
@@ -837,12 +842,12 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                 }
                 item.setProductName(product.getName());
 
-                if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible)) {
-                    double d = ServiceTools.RegulartoDouble(BaseActivity.getPrefRowDiscountIsActive());
+                if (!BaseActivity.getRowDiscountType().equals(BaseActivity.invisible)) {
+                    double d = ServiceTools.RegulartoDouble(BaseActivity.getRowDiscountType());
                     item.setDiscountType((long) d);
                 }
 
-                if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible))
+                if (!BaseActivity.getRowDiscountType().equals(BaseActivity.invisible))
                     item.setDiscount(ServiceTools.toDouble(discount));
 
                 item.setCostLevel(selectedItemPosition);
@@ -878,8 +883,8 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                 object.setSumCountBaJoz(sumCountBaJoz);
                 //object.setDiscountType(productDetail.getDiscountType());
 
-                if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible)) {
-                    double d = ServiceTools.RegulartoDouble(BaseActivity.getPrefRowDiscountIsActive());
+                if (!BaseActivity.getRowDiscountType().equals(BaseActivity.invisible)) {
+                    double d = ServiceTools.RegulartoDouble(BaseActivity.getRowDiscountType());
                     object.setDiscountType((long) d);
                 }
                 object.setProductDetailId(productDetail.getProductDetailId());
@@ -895,7 +900,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
 
                 object.setMin((int) product.getMin());
 
-                if (!BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible))
+                if (!BaseActivity.getRowDiscountType().equals(BaseActivity.invisible))
                     object.setDiscount(ServiceTools.toDouble(discount));
 
                 object.setDescription(description);

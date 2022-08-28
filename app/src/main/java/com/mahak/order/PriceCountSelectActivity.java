@@ -35,9 +35,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.mahak.order.common.CountInputFilterMinMax;
-import com.mahak.order.common.Customer;
-import com.mahak.order.common.CustomerGroup;
 import com.mahak.order.common.OrderDetail;
 import com.mahak.order.common.OrderDetailProperty;
 import com.mahak.order.common.PriceInputFilterMinMax;
@@ -68,7 +65,6 @@ import java.util.List;
 
 import static com.mahak.order.common.ServiceTools.MoneyFormatToNumber;
 import static com.mahak.order.common.ServiceTools.formatCount;
-import static com.mahak.order.common.ServiceTools.formatOff;
 import static com.mahak.order.common.ServiceTools.formatPrice;
 import static com.mahak.order.common.ServiceTools.formatPriceWithoutSymbol;
 
@@ -589,7 +585,7 @@ public class PriceCountSelectActivity extends BaseActivity {
     }
 
     private void setOff(double price) {
-        double d = ServiceTools.RegulartoDouble(BaseActivity.getPrefRowDiscountIsActive());
+        double d = ServiceTools.RegulartoDouble(BaseActivity.getRowDiscountType());
         switch (BaseActivity.getPrefUnit2Setting(context)) {
             case MODE_YekVahedi:
                 count1 = txtCount.getText().toString();
@@ -1090,7 +1086,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                 intent.putExtra("spnPriceLevel", spnPriceLevel.getSelectedItemPosition());
                 intent.putExtra("discount", discount);
                 intent.putExtra("sumCountBaJoz", sumCountBaJoz);
-                double d = ServiceTools.RegulartoDouble(BaseActivity.getPrefRowDiscountIsActive());
+                double d = ServiceTools.RegulartoDouble(BaseActivity.getRowDiscountType());
                 intent.putExtra("discountType", (int) d);
                 intent.putParcelableArrayListExtra("orderDetailProperties", orderDetailProperties);
                 setResult(Activity.RESULT_OK, intent);
@@ -1200,7 +1196,7 @@ public class PriceCountSelectActivity extends BaseActivity {
 
     private void showHideOffTaxCharge() {
 
-        if (BaseActivity.getPrefRowDiscountIsActive().equals(BaseActivity.invisible))
+        if (BaseActivity.getRowDiscountType().equals(BaseActivity.invisible))
             llOff.setVisibility(View.GONE);
         else
             llOff.setVisibility(View.VISIBLE);
@@ -1349,7 +1345,7 @@ public class PriceCountSelectActivity extends BaseActivity {
     public void handle_price_discount_tax_charge() {
         if (description != null)
             txtDescription.setText(description);
-        if (!BaseActivity.getPrefRowDiscountIsActive().equals(invisible)) {
+        if (!BaseActivity.getRowDiscountType().equals(invisible)) {
             if (!hasRowDiscountPermission) {
                 txtOffPercent.setEnabled(false);
                 txtOff.setEnabled(false);

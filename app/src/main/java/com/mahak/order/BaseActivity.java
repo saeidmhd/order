@@ -84,6 +84,9 @@ public class BaseActivity extends AppCompatActivity {
     public static int MODE_EDIT = 1;
     public static int MODE_NEW = 2;
 
+    public static int darsadi = 1;
+    public static int mablaghi = 0;
+
     public static int PAGE_DASHBORD = 4;
     public static int PAGE_CHECKLIST = 5;
     public static int PAGE_MANAGE_RECEIPT = 6;
@@ -298,7 +301,7 @@ public class BaseActivity extends AppCompatActivity {
     public final static int CountDecimalPointCode = 1032;
     public final static int PriceDecimalPointCode = 1033;
 
-    public final static int SHOW_ROW_DISCOUNT = 1042;
+    public final static int Row_Discount_Type = 1042;
     public final static int APPLY_DISCOUNT = 26008;
 
     public final static int ChargePercentCode = 14000;
@@ -518,11 +521,11 @@ public class BaseActivity extends AppCompatActivity {
         sh.edit().putString(_Key_ChargePercent, value).commit();
     }
 
-    public static String getPrefRowDiscountIsActive() {
+    public static String getRowDiscountType() {
         return sh.getString(_Key_RowDiscountIsActive, DefaultRowDiscountIsActive);
     }
 
-    public static void setPrefRowDiscountIsActive(String value) {
+    public static void setRowDiscountType(String value) {
         sh.edit().putString(_Key_RowDiscountIsActive, value).commit();
     }
 
