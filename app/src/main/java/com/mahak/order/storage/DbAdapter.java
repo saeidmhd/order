@@ -9433,7 +9433,31 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<Mission> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select * from Mission where userid = ? and deleted = 0 ", new String[]{String.valueOf(getPrefUserId())});
+            cursor = mDb.rawQuery("select * from Mission where userid = ? and deleted = 0 order by missionId desc ", new String[]{String.valueOf(getPrefUserId())});
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    mission = GetMission(cursor);
+                    if (mission != null)
+                        array.add(mission);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrAllReceipt", e.getMessage());
+        }
+
+        return array;
+    }
+    public ArrayList<Mission> getAllMissionWithMissionId(long missionId) {
+        Mission mission;
+        Cursor cursor;
+        ArrayList<Mission> array = new ArrayList<>();
+        try {
+            cursor = mDb.rawQuery("select * from Mission where userid = ? and missionId = ? and deleted = 0 ", new String[]{String.valueOf(getPrefUserId())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -9457,7 +9481,7 @@ public class DbAdapter {
         try {
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
-                    mission.setMissionId(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_missionId)));
+                    mission.setMissionId(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_missionId)));
                     mission.setDatabaseId(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_databaseId)));
                     mission.setMissionCode(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_missionCode)));
                     mission.setMissionClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_missionClientId)));
@@ -9477,7 +9501,7 @@ public class DbAdapter {
         }
         return mission;
     }
-    public ArrayList<MissionDetail> getAllMissionDetailWithMissionId(long missionId) {
+    public ArrayList<MissionDetail> getAllMissionDetailWithMissionId(int missionId) {
         MissionDetail missionDetail;
         Cursor cursor;
         ArrayList<MissionDetail> array = new ArrayList<>();

@@ -8,17 +8,6 @@
     tools:context="com.mahak.order.PeopleListActivity"
     tools:ignore="MergeRootFrame">
 
-    <com.mahak.order.widget.FontEditText
-        android:id="@+id/txtSearch"
-        style="@style/forms_edittext_default"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/NormalSize"
-        android:drawableRight="@drawable/ic_search_set_nav"
-        android:gravity="right|center_vertical"
-        android:singleLine="true"
-        android:hint="@string/str_name_code_filter" />
-
     <LinearLayout
         android:id="@+id/llprogressBar"
         android:layout_width="match_parent"
@@ -34,13 +23,13 @@
     </LinearLayout>
 
 
-    <ExpandableListView
-        android:id="@+id/explistReceipt"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/missionDetailList"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:divider="@null"
         android:dividerHeight="0dip"
         android:groupIndicator="@null"
-        android:listSelector="@android:color/transparent"></ExpandableListView>
+        android:listSelector="@android:color/transparent"></androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

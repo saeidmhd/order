@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|top"
+        android:orientation="vertical"
+        android:gravity="right"
+        android:background="@color/white"
+        android:layout_marginBottom="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:background="@color/white">
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/organization"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/baac2"
+                android:text="(هایپر مارکت رز)"/>
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/customerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:text="هایپر مارکت رز"/>
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/rowOfMissionDetail"
+                android:layout_width="48dp"
+                android:layout_height="32dp"
+                android:gravity="center"
+                android:layout_gravity="center|top"
+                android:text="۱"
+                android:background="@color/baac">
+            </com.mahak.order.widget.FontTextView>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:orientation="horizontal"
+            android:gravity="right|center"
+            android:background="@color/white">
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/customerAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:paddingRight="56dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/baac2"
+                android:text="میدان دبستان ، نبش ضریح آفتاب ، کوچه دوم کوچه دوم کوچه دوم کوچه دوم کوچه دوم"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="56dp"
+            android:layout_gravity="right|top"
+            android:orientation="horizontal"
+            android:gravity="right|center"
+            android:background="@color/white">
+
+            <com.mahak.order.widget.FontTextView
+                android:id="@+id/missionDetailType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/baac2"
+                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="پیش فاکتور"/>
+
+            <ImageView
+                android:id="@+id/missionDetailIcon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_recieve_ico"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/changeStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:padding="16dp"
+            android:orientation="horizontal"
+            android:gravity="right|center"
+            android:background="@color/white">
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/changeStatusBtn"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/forms_btn_default"
+                android:text="تعیین وضعیت">
+            </com.mahak.order.widget.FontButtonView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:padding="16dp"
+            android:orientation="horizontal"
+            android:gravity="right|center"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:id="@+id/changeStatusMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="right|center"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@color/white">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_baseline_more_vert_24"/>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_gravity="right|top"
+                android:backgroundTint="@color/baac3"
+                android:layout_margin="16dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@color/white">
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/txtStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="8dp"
+                    android:text="موفق"/>
+
+                <ImageView
+                    android:id="@+id/missionDetailStatusIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_done_successful_ico"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -10,7 +10,7 @@ public class Mission {
 
     @SerializedName("MissionId")
     @Expose
-    private Long missionId;
+    private Integer missionId;
     @SerializedName("DatabaseId")
     @Expose
     private Long databaseId;
@@ -50,11 +50,11 @@ public class Mission {
 
     private List<MissionDetail> missionDetails;
 
-    public Long getMissionId() {
+    public Integer getMissionId() {
         return missionId;
     }
 
-    public void setMissionId(Long missionId) {
+    public void setMissionId(Integer missionId) {
         this.missionId = missionId;
     }
 

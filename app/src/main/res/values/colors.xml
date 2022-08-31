@@ -41,12 +41,18 @@
     <color name="dark_gray">#BBBBBB</color>
     <color name="darker_gray">#787878</color>
     <color name="white">#ffffff</color>
+    <color name="background">#ECECEC</color>
     <color name="print_gray_box">#dadada</color>
     <color name="print_white_box">#ffffff</color>
     <color name="forms_page_title_label_default380">#000000</color>
     <color name="reject">#f43e35</color>
     <color name="accept2">#40b58a</color>
     <color name="detail">#edf8ff</color>
+    <color name="baac">#EBF8F3</color>
+    <color name="baac2">#A7A7A7</color>
+    <color name="baac3">#F7F7F7</color>
+    <color name="line">#D4D4D4</color>
+    <color name="back_mission">#FFF7F7F7</color>
 
 
     <!-- colored -->

@@ -310,7 +310,6 @@ public class ReceiptsListActivity extends BaseActivity {
                 btnMenu.setFocusable(false);
                 btnMenu.setFocusableInTouchMode(false);
                 btnMenu.setOnClickListener(new View.OnClickListener() {
-
                     @Override
                     public void onClick(View v) {
 
