@@ -2,39 +2,30 @@ package com.mahak.order.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.mahak.order.BuildConfig;
-import com.mahak.order.PromotionDetailActivity;
 import com.mahak.order.R;
 import com.mahak.order.common.Customer;
-import com.mahak.order.common.Promotion;
-import com.mahak.order.common.ServiceTools;
+import com.mahak.order.mission.Mission;
 import com.mahak.order.mission.MissionDetail;
 import com.mahak.order.storage.DbAdapter;
-import com.mahak.order.storage.RadaraDb;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdapter.ViewHolder> {
 
     private ArrayList<MissionDetail> missionDetails;
+    private Mission mission;
     private LayoutInflater mInflater;
     private ArrayList<MissionDetail> arrayOriginal = new ArrayList<>();
     private Context mContext;
@@ -45,7 +36,7 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
 
         public TextView  customerName , customerAddress , missionDetailType , txtStatus , organization , rowOfMissionDetail;
         public ImageView missionDetailIcon , missionDetailStatusIcon ;
-        public LinearLayout changeStatus , status ,changeStatusMenu;
+        public LinearLayout changeStatus , status ,changeStatusMenu , mission_item;
         public Button changeStatusBtn;
 
         ViewHolder(View view) {
@@ -61,12 +52,14 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
             organization = (TextView) view.findViewById(R.id.organization);
             changeStatus = (LinearLayout) view.findViewById(R.id.changeStatus);
             status = (LinearLayout) view.findViewById(R.id.status);
+            mission_item = (LinearLayout) view.findViewById(R.id.mission_item);
             changeStatusBtn = (Button) view.findViewById(R.id.changeStatusBtn);
         }
     }
 
-    public MissionDetailAdapter(ArrayList<MissionDetail> missionDetails, Context context) {
+    public MissionDetailAdapter(ArrayList<MissionDetail> missionDetails, Mission mission, Context context) {
         this.missionDetails = missionDetails;
+        this.mission = mission;
         this.mInflater = LayoutInflater.from(context);
         arrayOriginal.addAll(missionDetails);
         mContext = context;
@@ -151,9 +144,61 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
 
             }
         });
-        holder.changeStatusMenu.setOnClickListener(new View.OnClickListener() {
+        holder.mission_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showChangeStatusDialog(missionDetail , position);
+
+            }
+        });
+        holder.changeStatusMenu.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+
+                /*PopupMenu popup = new PopupMenu(mContext,holder.changeStatusMenu);
+                try {
+                    Field[] fields = popup.getClass().getDeclaredFields();
+                    for (Field field : fields) {
+                        if ("mPopup".equals(field.getName())) {
+                            field.setAccessible(true);
+                            Object menuPopupHelper = field.get(popup);
+                            Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                            Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon",boolean.class);
+                            setForceIcons.invoke(menuPopupHelper, true);
+                            break;
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+                popup.inflate(R.menu.change_missiondetail_status);
+
+                *//*MenuPopupHelper menuPopupHelper = new MenuPopupHelper(mContext, (MenuBuilder) popup.getMenu() , holder.changeStatusMenu);
+                menuPopupHelper.setForceShowIcon(true);*//*
+
+                *//*@SuppressLint("RestrictedApi") MenuPopupHelper menuHelper = new MenuPopupHelper(mContext, (MenuBuilder) popup.getMenu(), holder.changeStatusMenu);
+                menuHelper.setForceShowIcon(true);*//*
+
+                *//*popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        missionTitle.setText(menuItem.getTitle());
+                        missionIndex = menuItem.getItemId();
+                        missionDetails.clear();
+                        missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
+                        calcAndSetCheckListStat();
+                        return false;
+                    }
+                });*//*
+
+                popup.show();
+                Menu menu = popup.getMenu();
+                for (int i = 0; i < menu.size(); i++) {
+                    MenuItem mi = menu.getItem(i);
+                    FontPopUp.applyFontToMenuItem(mi, mContext);
+                }*/
+
                 showChangeStatusDialog(missionDetail , position);
 
             }
@@ -164,35 +209,34 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
     public void showChangeStatusDialog(MissionDetail missionDetail, int position) {
         Dialog dialog = new Dialog(mContext);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.checklist_status_dialog);
+        dialog.setContentView(R.layout.mission_detail_dialog);
 
-        Button dialog_btn_data = dialog.findViewById(R.id.dialog_btn_ok);
-        RadioButton inWay = dialog.findViewById(R.id.inWay);
-        RadioButton unsuccessful = dialog.findViewById(R.id.unsuccessful);
-        RadioButton successful = dialog.findViewById(R.id.successful);
-        RadioGroup checkListGroup = dialog.findViewById(R.id.checkListGroup);
+        LinearLayout notـstarted = dialog.findViewById(R.id.notـstarted);
+        LinearLayout inWay = dialog.findViewById(R.id.inWay);
+        LinearLayout unsuccessful = dialog.findViewById(R.id.unsuccessful);
+        LinearLayout successful = dialog.findViewById(R.id.successful);
 
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
 
-        switch (missionDetail.getStatus()){
-            case 2:
-                inWay.setChecked(true);
-                break;
-            case 3:
-                successful.setChecked(true);
-                break;
-            case 4:
-                unsuccessful.setChecked(true);
-                break;
-        }
 
+        notـstarted.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                missionDetail.setStatus(1);
+                notifyItemChanged(position);
+                db.AddMissionDetail(missionDetail);
+                setMissionStatus();
+                dialog.dismiss();
+            }
+        });
         inWay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 missionDetail.setStatus(2);
                 notifyItemChanged(position);
                 db.AddMissionDetail(missionDetail);
+                setMissionStatus();
                 dialog.dismiss();
             }
         });
@@ -202,6 +246,7 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
                 missionDetail.setStatus(3);
                 notifyItemChanged(position);
                 db.AddMissionDetail(missionDetail);
+                setMissionStatus();
                 dialog.dismiss();
             }
         });
@@ -211,10 +256,34 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
                 missionDetail.setStatus(4);
                 notifyItemChanged(position);
                 db.AddMissionDetail(missionDetail);
+                setMissionStatus();
                 dialog.dismiss();
             }
         });
         dialog.show();
+    }
+
+    private void setMissionStatus() {
+        for (MissionDetail missionDetail : missionDetails){
+            switch (missionDetail.getStatus()){
+                case 1:
+                    // st = "شروع نشده";
+                    mission.setStatus(1);
+                    break;
+                case 2:
+                    // st = "در مسیر";
+                    //st = "در جریان";
+                    mission.setStatus(2);
+                    break;
+                case 3:
+                case 4:
+                    // st = "انجام شده ناموفق";
+                    // st = "انجام شده موفق";
+                    mission.setStatus(3);
+                    break;
+            }
+        }
+        db.AddMission(mission);
     }
 
     @Override

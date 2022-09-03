@@ -1,59 +1,29 @@
 package com.mahak.order;
 
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.CompoundButton;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mahak.order.adapter.MissionDetailAdapter;
-import com.mahak.order.adapter.PromotionAdapter;
-import com.mahak.order.common.Customer;
-import com.mahak.order.common.ProjectInfo;
-import com.mahak.order.common.ServiceTools;
-import com.mahak.order.common.SharedPreferencesHelper;
 import com.mahak.order.mission.Mission;
 import com.mahak.order.mission.MissionDetail;
 import com.mahak.order.storage.DbAdapter;
-import com.mahak.order.widget.DrawableClickListener;
-import com.mahak.order.widget.FontCheckBox;
-import com.mahak.order.widget.FontEditText;
 import com.mahak.order.widget.FontPopUp;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -61,6 +31,7 @@ public class MissionListActivity extends BaseActivity {
 
     private Context mContext;
     private ArrayList<Mission> missions;
+    private Mission mission;
     private ArrayList<MissionDetail> missionDetails = new ArrayList<>();
     private DbAdapter db;
     private TextView tvPageTitle;
@@ -102,9 +73,10 @@ public class MissionListActivity extends BaseActivity {
         if (Extras != null) {
             missionIndex = Extras.getInt("missionIndex");
             missionDetails.clear();
+            mission = missions.get(missionIndex);
             missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
             tvPageTitle.setText("شناسه ماموریت : " + missionIndex);
-            missionDetailAdapter = new MissionDetailAdapter(missionDetails, mContext);
+            missionDetailAdapter = new MissionDetailAdapter(missionDetails , mission, mContext);
             missionDetailList.setAdapter(missionDetailAdapter);
         }
 
@@ -125,9 +97,10 @@ public class MissionListActivity extends BaseActivity {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         tvPageTitle.setText(menuItem.getTitle());
                         int missionIndex = menuItem.getItemId();
+                        mission = missions.get(missionIndex);
                         missionDetails.clear();
                         missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
-                        missionDetailAdapter = new MissionDetailAdapter(missionDetails, mContext);
+                        missionDetailAdapter = new MissionDetailAdapter(missionDetails, mission, mContext);
                         missionDetailList.setAdapter(missionDetailAdapter);
                         return false;
                     }
@@ -159,8 +132,9 @@ public class MissionListActivity extends BaseActivity {
     private void FillView() {
         db.open();
         missions = db.getAllMission();
+        mission = missions.get(0);
         missionDetails.addAll(db.getAllMissionDetailWithMissionId(missions.get(0).getMissionId()));
-        missionDetailAdapter = new MissionDetailAdapter(missionDetails, mContext);
+        missionDetailAdapter = new MissionDetailAdapter(missionDetails, mission, mContext);
         missionDetailList.setAdapter(missionDetailAdapter);
     }
 

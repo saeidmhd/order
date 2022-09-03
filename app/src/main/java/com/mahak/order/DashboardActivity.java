@@ -176,7 +176,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
 
     public static ImageView show_mission;
-    public static ImageView show_missionDetail;
+    public static RelativeLayout show_missionDetail;
     public static RelativeLayout row;
 
 
@@ -264,7 +264,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
     private int successCount;
     private int unSuccessCount;
-    private int missionIndex;
+    private static int missionIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -281,9 +281,13 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         initUI();
 
         missions = db.getAllMission();
-        missionIndex = missions.get(0).getMissionId();
-        missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
 
+        if(missions.size() > 0){
+            if(missionIndex == 0){
+                missionIndex = missions.get(0).getMissionId();
+            }
+            missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
+        }
         calcAndSetCheckListStat();
 
         missionTitle.setText("شناسه ماموریت : " + missionIndex);
@@ -291,9 +295,12 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         show_missionDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MissionListActivity.class);
-                intent.putExtra("missionIndex", missionIndex);
-                startActivity(intent);
+                if(missionIndex != 0){
+                    Intent intent = new Intent(getApplicationContext(), MissionListActivity.class);
+                    intent.putExtra("missionIndex", missionIndex);
+                    startActivity(intent);
+                }else
+                    Toast.makeText(mActivity, "ماموریتی وجود ندارد", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -940,7 +947,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         btnTrackingService = (SwitchCompat) findViewById(R.id.btnTrackingService);
         show_mission = (ImageView) findViewById(R.id.show_mission);
-        show_missionDetail = (ImageView) findViewById(R.id.show_missionDetail);
+        show_missionDetail = (RelativeLayout) findViewById(R.id.show_missionDetail);
         row = (RelativeLayout) findViewById(R.id.row);
 
         //Version/////////////////////////////////////////////////////
@@ -1178,8 +1185,12 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.btnNavMissionList:
                 mDrawerLayout.closeDrawers();
-                intent = new Intent(getApplicationContext(), MissionListActivity.class);
-                startActivity(intent);
+                if(missionIndex != 0){
+                    intent = new Intent(getApplicationContext(), MissionListActivity.class);
+                    intent.putExtra("missionIndex", missionIndex);
+                    startActivity(intent);
+                }else
+                    Toast.makeText(mActivity, "ماموریتی وجود ندارد", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnNavOrderList:
                 mDrawerLayout.closeDrawers();

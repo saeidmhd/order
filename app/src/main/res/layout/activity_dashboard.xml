@@ -94,7 +94,7 @@
                 <ImageView
                     android:id="@+id/show_mission"
                     android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_height="36dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:gravity="right"
@@ -103,17 +103,18 @@
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/missionTitle"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="36dp"
                     android:layout_toLeftOf="@+id/show_mission"
                     android:gravity="right|center"
                     android:text="شناسه ماموریت : ماموریتی تعیین نشده"
-                    android:textColor="@color/black"
+                    android:textColor="@color/txt_color"
                     android:textSize="16sp" />
             </RelativeLayout>
 
 
 
             <RelativeLayout
+                android:id="@+id/show_missionDetail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
@@ -129,7 +130,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="@dimen/LargeSize">
+                        android:padding="12dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -141,14 +142,13 @@
                             android:padding="2dp">
 
                             <ImageView
-                                android:id="@+id/show_missionDetail"
-                                style="@style/forms_btn_default"
+                                android:background="@drawable/background_corner_green"
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
                                 android:layout_gravity="center"
                                 android:layout_margin="8dp"
                                 android:scaleType="center"
-                                android:src="@drawable/ic_arrow_back" />
+                                android:src="@drawable/chevron_left" />
 
                         </LinearLayout>
 
@@ -164,7 +164,6 @@
                                 android:id="@+id/getDeliverGoodsCountTxT"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="8dp"
                                 android:text="۰"
                                 android:textSize="15sp" />
 
@@ -189,9 +188,8 @@
                                 android:id="@+id/getReceiveCountTxT"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="8dp"
                                 android:text="۰"
-                                android:textSize="18sp" />
+                                android:textSize="15sp" />
 
                             <ImageView
                                 android:layout_width="32dp"
@@ -214,7 +212,6 @@
                                 android:id="@+id/getOrderCountTxT"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="8dp"
                                 android:text="۰"
                                 android:textSize="15sp" />
 
@@ -239,7 +236,6 @@
                                 android:id="@+id/getGoodsCountTxT"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="8dp"
                                 android:text="۰"
                                 android:textSize="15sp" />
 
@@ -257,43 +253,9 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="8dp"
+                        android:layout_margin="4dp"
                         android:background="@color/back_mission"
                         android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="horizontal"
-                            android:padding="2dp">
-
-                            <com.mahak.order.widget.FontTextView
-                                android:id="@+id/successfulCount"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="2dp"
-                                android:text="۰"
-                                android:textSize="15sp" />
-
-                            <com.mahak.order.widget.FontTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="8dp"
-                                android:text="موفق :"
-                                android:textSize="15sp" />
-
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
-                            android:background="@color/line"
-                            android:orientation="horizontal" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -308,6 +270,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="2dp"
+                                android:textColor="@color/txt_color"
                                 android:text="۰"
                                 android:textSize="15sp" />
 
@@ -315,6 +278,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="8dp"
+                                android:textColor="@color/txt_color"
                                 android:text="ناموفق :"
                                 android:textSize="15sp" />
 
@@ -338,10 +302,48 @@
                             android:padding="2dp">
 
                             <com.mahak.order.widget.FontTextView
-                                android:id="@+id/statOfChecklist"
+                                android:id="@+id/successfulCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="2dp"
+                                android:text="۰"
+                                android:textColor="@color/txt_color"
+                                android:textSize="15sp" />
+
+                            <com.mahak.order.widget.FontTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="8dp"
+                                android:textColor="@color/txt_color"
+                                android:text="موفق :"
+                                android:textSize="15sp" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:background="@color/line"
+                            android:orientation="horizontal" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="2dp">
+
+                            <com.mahak.order.widget.FontTextView
+                                android:id="@+id/statOfChecklist"
+                                android:textStyle="bold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="8dp"
+                                android:textColor="@color/txt_color"
                                 android:text="۰/۰"
                                 android:textSize="15sp" />
 
@@ -597,7 +599,7 @@
                         android:layout_weight="1"
                         android:gravity="center|right"
                         android:text="@string/str_sum_of_orders"
-                        android:textSize="@dimen/txtSizeSmall" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <LinearLayout
