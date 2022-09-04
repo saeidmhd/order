@@ -230,7 +230,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             remainCustomerCredit = Extras.getDouble(Force_Payment_KEY);
 
 
-            lastBalance = calculateRemainCredit(Payment);
+            lastBalance = calculatePaymentAmount(Payment);
             if(lastBalance > 0){
                 txtAmount.setText(ServiceTools.formatPrice(lastBalance));
                 invoiceBalance.setText(ServiceTools.formatPrice(lastBalance));
@@ -1305,7 +1305,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
 
     }
 
-    public double calculateRemainCredit(double finalPrice) {
+    public double calculatePaymentAmount(double finalPrice) {
         if(CustomerId == 0 )
             return 0;
         Customer customer = db.getCustomerWithPersonId(CustomerId);
@@ -1313,7 +1313,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         if(customerCredit == -1 )
             customerCredit = 0;
         double customerBalance = customer.getBalance();
-        double customerCreditValue = customerCredit + db.getTotalCustomerReceiptWithId(CustomerId) + customerBalance - db.getTotalPriceInvoicePerPerson(CustomerId);
+        double customerCreditValue = customerCredit + db.getTotalCustomerReceiptWithId(CustomerId) + customerBalance - db.getTotalPriceInvoicePerPerson(CustomerId) + db.getTotalPriceInvoiceOrderId(OrderId);
         return finalPrice - customerCreditValue;
     }
 

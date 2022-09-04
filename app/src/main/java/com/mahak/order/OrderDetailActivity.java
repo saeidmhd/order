@@ -873,6 +873,10 @@ public class OrderDetailActivity extends BaseActivity {
                     RemainedCustomer = customer.getBalance();
                 if (extraData.getRemainStatus() == 1)
                     RemainedCustomer = RemainedCustomer * -1;
+
+                //RemainedCustomer += db.getTotalCustomerReceiptWithId(customer.getPersonId());
+
+
             }
 
             tvDescription.setText(Description);

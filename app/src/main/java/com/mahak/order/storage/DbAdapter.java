@@ -3758,6 +3758,35 @@ public class DbAdapter {
         }
         return TotalPrice;
     }
+    public double getTotalPriceInvoiceOrderId(long orderId) {
+        Cursor cursor1, cursor2;
+        double TotalPrice = 0;
+        long id;
+        try {
+            cursor1 = mDb.query(DbSchema.OrderSchema.TABLE_NAME, null, DbSchema.OrderSchema.COLUMN_USER_ID + "=? AND " + DbSchema.OrderSchema.COLUMN_MAHAK_ID + "=? AND " + DbSchema.OrderSchema.COLUMN_DATABASE_ID + "=? AND " + DbSchema.OrderSchema.COLUMN_TYPE + "=? AND " + DbSchema.OrderSchema.COLUMN_ID + " =? ", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefMahakId(), BaseActivity.getPrefDatabaseId(), String.valueOf(ProjectInfo.TYPE_INVOCIE) , String.valueOf(orderId)}, null, null, null);
+            if (cursor1 != null) {
+                cursor1.moveToFirst();
+                while (!cursor1.isAfterLast()) {
+                    id = cursor1.getLong(cursor1.getColumnIndex(DbSchema.OrderSchema.COLUMN_ID));
+                    cursor2 = mDb.rawQuery("select sum((Price*SumCountBaJoz - Discount) + (Price*SumCountBaJoz *(TaxPercent + ChargePercent) / 100))  from " + DbSchema.OrderDetailSchema.TABLE_NAME + " where " + DbSchema.OrderDetailSchema.COLUMN_OrderId + "=" + id, null);
+                    if (cursor2 != null) {
+                        cursor2.moveToFirst();
+                        if (cursor2.getCount() > 0) {
+                            TotalPrice = TotalPrice + cursor2.getDouble(0);
+                        }
+                        cursor2.close();
+                    }
+                    cursor1.moveToNext();
+                }// End of While
+                cursor1.close();
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorGetTotalPriceOrder", e.getMessage());
+        }
+        return TotalPrice;
+    }
 
     public double getTotalReceiveTransfer() {
         Cursor cursor;
