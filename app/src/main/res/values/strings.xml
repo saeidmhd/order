@@ -913,6 +913,13 @@
     <string name="new_3_460_1">رفع خطای مربوط به نمایش موجودی اشتباه در انتخاب دسته بندی</string>
     <string name="new_3_460_2">رفع خطای مربوط به ارسال تعداد صفر در کالای دو واحده</string>
 
+
+    <string name="new_3_465">نسخه ۳.۴۶۵</string>
+    <string name="new_3_465_1">رفع خطای مربوط مقدار پیشنهادی دو برابری دریافتی</string>
+    <string name="new_3_465_2">رفع خطای نمایش باکس نقدی دریافتی</string>
+    <string name="new_3_465_3">رفع خطای مربوط به اعتبار مشتری میهمان</string>
+    <string name="new_3_465_4">رفع خطای مربوط به طرح تشویقی سطری از همان کالا</string>
+
     <string name="PersonClientId">PersonClientId</string>
     <string name="array">array</string>
 

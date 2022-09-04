@@ -1332,4 +1332,10 @@
     <string name="new_3_460_2">رفع خطای مربوط به ارسال تعداد صفر در صورت دو واحده</string>
     <string name="negative_asset">عدم موجودی برای ثبت اشانتیون</string>
 
+    <string name="new_3_465">نسخه ۳.۴۶۵</string>
+    <string name="new_3_465_1">رفع خطای مربوط مقدار پیشنهادی دو برابری دریافتی</string>
+    <string name="new_3_465_2">رفع خطای نمایش باکس نقدی دریافتی</string>
+    <string name="new_3_465_3">رفع خطای مربوط به اعتبار مشتری میهمان</string>
+    <string name="new_3_465_4">رفع خطای مربوط به طرح تشویقی سطری از همان کالا</string>
+
 </resources>
