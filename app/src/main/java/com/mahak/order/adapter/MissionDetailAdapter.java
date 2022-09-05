@@ -153,54 +153,7 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
         });
         holder.changeStatusMenu.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-
-                /*PopupMenu popup = new PopupMenu(mContext,holder.changeStatusMenu);
-                try {
-                    Field[] fields = popup.getClass().getDeclaredFields();
-                    for (Field field : fields) {
-                        if ("mPopup".equals(field.getName())) {
-                            field.setAccessible(true);
-                            Object menuPopupHelper = field.get(popup);
-                            Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
-                            Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon",boolean.class);
-                            setForceIcons.invoke(menuPopupHelper, true);
-                            break;
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-                popup.inflate(R.menu.change_missiondetail_status);
-
-                *//*MenuPopupHelper menuPopupHelper = new MenuPopupHelper(mContext, (MenuBuilder) popup.getMenu() , holder.changeStatusMenu);
-                menuPopupHelper.setForceShowIcon(true);*//*
-
-                *//*@SuppressLint("RestrictedApi") MenuPopupHelper menuHelper = new MenuPopupHelper(mContext, (MenuBuilder) popup.getMenu(), holder.changeStatusMenu);
-                menuHelper.setForceShowIcon(true);*//*
-
-                *//*popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        missionTitle.setText(menuItem.getTitle());
-                        missionIndex = menuItem.getItemId();
-                        missionDetails.clear();
-                        missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
-                        calcAndSetCheckListStat();
-                        return false;
-                    }
-                });*//*
-
-                popup.show();
-                Menu menu = popup.getMenu();
-                for (int i = 0; i < menu.size(); i++) {
-                    MenuItem mi = menu.getItem(i);
-                    FontPopUp.applyFontToMenuItem(mi, mContext);
-                }*/
-
                 showChangeStatusDialog(missionDetail , position);
-
             }
         });
 

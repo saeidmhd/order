@@ -73,7 +73,9 @@ public class MissionListActivity extends BaseActivity {
         if (Extras != null) {
             missionIndex = Extras.getInt("missionIndex");
             missionDetails.clear();
-            mission = missions.get(missionIndex);
+            for(Mission mMission : missions)
+                if (mMission.getMissionId() == missionIndex)
+                    mission = mMission;
             missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
             tvPageTitle.setText("شناسه ماموریت : " + missionIndex);
             missionDetailAdapter = new MissionDetailAdapter(missionDetails , mission, mContext);
@@ -97,7 +99,9 @@ public class MissionListActivity extends BaseActivity {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         tvPageTitle.setText(menuItem.getTitle());
                         int missionIndex = menuItem.getItemId();
-                        mission = missions.get(missionIndex);
+                        for(Mission mMission : missions)
+                            if (mMission.getMissionId() == missionIndex)
+                                mission = mMission;
                         missionDetails.clear();
                         missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
                         missionDetailAdapter = new MissionDetailAdapter(missionDetails, mission, mContext);
@@ -114,8 +118,6 @@ public class MissionListActivity extends BaseActivity {
                 }
             }
         });
-
-
     }//end of onCreate
 
     /**
