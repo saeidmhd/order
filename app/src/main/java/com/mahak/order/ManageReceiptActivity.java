@@ -89,7 +89,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
     private static int CustomerId;
     private static String Code = ProjectInfo.DONT_CODE;
     private static double Payment;
-    private double remainCustomerCredit , CashAmount , lastBalance;
+    private double  CashAmount , debtOfInvoce;
     public static ArrayList<Cheque> arrayCheque = new ArrayList<>();
 
     private EditText txtCustomerName, txtAmount, txtDescription, txtMarketName, txtTrackingCode, txtPayment,txtSumReceipt , invoiceBalance;
@@ -120,6 +120,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
     private static final long NoLimit = -1;
     private static double visitorCreditValue;
     private ArrayList<Bank> arrayBank;
+    double sum_receipt = 0;
 
     private HostApp hostApp;
     private androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder;
@@ -129,7 +130,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
     String posDescription;
 
     protected ThirdPartyManager manager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,17 +227,10 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             Code = Extras.getString(CODE_KEY) != null ? Extras.getString(CODE_KEY) : ProjectInfo.DONT_CODE;
             Payment = Extras.getDouble(PAYMENT_KEY);
 
-            remainCustomerCredit = Extras.getDouble(Force_Payment_KEY);
 
+            //lastBalance = calculatePaymentAmount(Payment);
 
-            lastBalance = calculatePaymentAmount(Payment);
-            if(lastBalance > 0){
-                txtAmount.setText(ServiceTools.formatPrice(lastBalance));
-                invoiceBalance.setText(ServiceTools.formatPrice(lastBalance));
-                txtSumReceipt.setText(ServiceTools.formatPrice(lastBalance));
-            }
             ReceiptId = Extras.getLong(ID);
-
             visitorHasCredit(Payment);
             currentVisitorCredit = remainVisitorCredit(Payment);
 
@@ -313,6 +306,12 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             txtTrackingCode.setText(Code);
             txtPayment.setText(ServiceTools.formatPrice(Payment));
         }
+
+        debtOfInvoce = calculateDebtOfInvoice();
+        sum_receipt = debtOfInvoce;
+        txtAmount.setText(ServiceTools.formatPrice(debtOfInvoce));
+        invoiceBalance.setText(ServiceTools.formatPrice(debtOfInvoce));
+        txtSumReceipt.setText(ServiceTools.formatPrice(debtOfInvoce));
 
         lstCheque.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -580,20 +579,8 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
 
     }// End of OnCreate
 
-    private double getLastBalance() {
-
-        double TotalPriceInvoice = 0;
-        double TotalPriceReceipt = 0;
-        double lastBalance = 0;
-       // customer.getBalance();
-        if (Code.equals("-1"))
-        TotalPriceReceipt = db.getTotalPriceReceiptPerInvoice(Code);
-        lastBalance = remainCustomerCredit;
-        return lastBalance;
-    }
-
     private double calculate_sum_receipt() {
-        double sum_receipt = 0;
+        sum_receipt = 0;
         if(arrayCheque.size() > 0){
             for(Cheque cheque : arrayCheque)
                 sum_receipt += cheque.getAmount();
@@ -603,40 +590,32 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         return sum_receipt;
     }
 
-    public boolean customerHasCredit(Receipt receipt) {
-        int customerId = receipt.getPersonId();
+    public boolean canSaveBaseOnCustomerCredit() {
+        int customerId;
+        if (Mode == MODE_NEW){
+            customerId = CustomerId;
+        }else
+            customerId = receipt.getPersonId();
         if(customerId == 0)
             return true;
         Customer customer = db.getCustomerWithPersonId(customerId);
         double customerCredit = customer.getCredit();
+        double customerBalance = customer.getBalance();
         if (customerCredit == -1)
             return true;
         else {
-            double customerCreditValue = (customerCredit + db.getTotalCustomerReceiptWithId(customerId) - savedCashedAndCheque + totalCashAndCheque()) - db.getTotalPriceInvoicePerPerson(customerId);
-            return customerCreditValue >= 0;
+            return sum_receipt - debtOfInvoce + customerCredit + customerBalance  >= 0 ;
         }
     }
 
-
     private void saveReceipt() {
         double totalCashAndCheque = totalCashAndCheque();
-        if (Mode == MODE_NEW) {
-            if (mVisitorCredit != -1)
-                checkVisitorCredit(totalCashAndCheque);
-            else if(totalCashAndCheque < remainCustomerCredit)
-                Toast.makeText(mContext, "باید مجموع دریافتی نقد و چک از باقیمانده اعتبار مشتری بیشتر باشد!", Toast.LENGTH_SHORT).show();
-            else
-                Save();
-        } else {
-            //باقیمانده اعتبار ویزیتور
-            if (mVisitorCredit != -1)
-                checkVisitorCredit(totalCashAndCheque);
-            else if(!customerHasCredit(receipt))
-                Toast.makeText(mContext, "باید مجموع دریافتی نقد و چک از باقیمانده اعتبار مشتری بیشتر باشد!", Toast.LENGTH_SHORT).show();
-            else
-                Save();
-        }
-
+        if (mVisitorCredit != -1)
+            checkVisitorCredit(totalCashAndCheque);
+        else if(!canSaveBaseOnCustomerCredit())
+            Toast.makeText(mContext, "باید مجموع دریافتی نقد و چک از باقیمانده اعتبار مشتری بیشتر باشد!", Toast.LENGTH_LONG).show();
+        else
+            Save();
     }
 
     private void checkVisitorCredit(double totalCashAndCheque) {
@@ -750,6 +729,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         startActivityForResult(intent, REQUEST_i9000s);
 
     }
+
     private void manageMoreFun(double receipt_amount) {
         String amount = String.valueOf((int) receipt_amount);
         if (amount.equals("0"))
@@ -820,7 +800,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         calculate_sum_receipt();
     }
 
-
     public boolean visitorHasCredit(double finalPrice) {
 
         mSpentCredit = 0;
@@ -854,7 +833,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         return true;
     }
 
-    //اعتبار باقیمانده ویزیتور
     private double remainVisitorCredit(double finalPrice) {
         return (visitorCreditValue - (finalPrice + mSpentCredit));
     }
@@ -872,9 +850,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         return totalCheque + totalReceipt;
     }
 
-    /**
-     * Read From Database And Fill AdapterCheque And Edittext
-     */
     private void FillView() {
 
         //Read From Database receipt_________________________
@@ -920,9 +895,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         return FinalPrice;
     }
 
-    /**
-     * Initializing Variables
-     */
     private void initialise() {
 
         txtCustomerName = (EditText) findViewById(R.id.txtCustomerName);
@@ -956,9 +928,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         lstCheque.setAdapter(adCheque);
     }
 
-    /**
-     * Save Information In database
-     */
     private void Save() {
         Visitor visitor;
         visitor = db.getVisitor();
@@ -1066,9 +1035,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         }
     }
 
-    /**
-     * Reset Values
-     */
     private void Clear() {
         arrayCheque.clear();
         CustomerName = "";
@@ -1131,7 +1097,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
             return rowview;
         }
     }
-
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -1256,7 +1221,6 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
         super.onResume();
     }
 
-    //back events
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -1305,16 +1269,12 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
 
     }
 
-    public double calculatePaymentAmount(double finalPrice) {
-        if(CustomerId == 0 )
-            return 0;
-        Customer customer = db.getCustomerWithPersonId(CustomerId);
-        double customerCredit = customer.getCredit();
-        if(customerCredit == -1 )
-            customerCredit = 0;
-        double customerBalance = customer.getBalance();
-        double customerCreditValue = customerCredit + db.getTotalCustomerReceiptWithId(CustomerId) + customerBalance - db.getTotalPriceInvoicePerPerson(CustomerId) + db.getTotalPriceInvoiceOrderId(OrderId);
-        return finalPrice - customerCreditValue;
+    public double calculateDebtOfInvoice() {
+        double invoiceReceipt = db.getTotalPriceReceiptPerInvoice(Code);
+        if(Mode == MODE_NEW)
+            return Payment - invoiceReceipt;
+        else
+            return Payment;
     }
 
     @Override

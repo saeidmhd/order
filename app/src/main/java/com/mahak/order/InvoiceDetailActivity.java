@@ -305,18 +305,15 @@ public class InvoiceDetailActivity extends BaseActivity {
 
     private void saveFactor() {
         if(OrderType == ProjectInfo.TYPE_INVOCIE || OrderType == ProjectInfo.TYPE_ORDER){
-            double remainCustomerCredit = calculateRemainCredit(FinalPrice);
-            if (!visitorHasCredit(FinalPrice))
-                SaveAndReceiptBasedOnOrder(FinalPrice);
-            else if(remainCustomerCredit > 0)
-                SaveAndReceiptBasedOnOrder(remainCustomerCredit);
+            if (!visitorHasCredit() || !canSaveBasedOnCustomerCredit())
+                SaveAndReceiptBasedOnOrder();
             else
                 new AsyncSave(0, OrderType).execute();
         }else
             new AsyncSave(0, OrderType).execute();
     }
 
-    private void SaveAndReceiptBasedOnOrder(double remainCustomerCredit) {
+    private void SaveAndReceiptBasedOnOrder() {
             if (orderDetails.size() > 0) {
                 Toast.makeText(mContext, R.string.credit_alarm, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(mContext, ManageReceiptActivity.class);
@@ -325,14 +322,13 @@ public class InvoiceDetailActivity extends BaseActivity {
                 intent.putExtra(CUSTOMERID_KEY, CustomerId);
                 intent.putExtra(CUSTOMER_CLIENT_ID_KEY, CustomerClientId);
                 intent.putExtra(PAYMENT_KEY, FinalPrice);
-                intent.putExtra(Force_Payment_KEY, remainCustomerCredit);
                 intent.putExtra(PAGE, PAGE_Invoice_Detail_Activity);
                 startActivityForResult(intent, REQUEST_PAY_FACTOR);
             } else
                 Toast.makeText(mContext, String.valueOf(getResources().getString(R.string.str_message_no_product)), Toast.LENGTH_SHORT).show();
     }
 
-    public static boolean visitorHasCredit(double finalPrice) {
+    public static boolean visitorHasCredit() {
 
         mSpentCredit = 0;
         long invoicesWithoutReciept = 0;
@@ -359,35 +355,25 @@ public class InvoiceDetailActivity extends BaseActivity {
             mSpentCredit = mSpentCredit - mCurrentPrice;
 
         //اگر مجموع اعتبار مصرف شده و  فاکتور فعلی بیشتر از اعتبار باشد باید برای ثبت فاکتور دریافتی ثبت کند
-        if ((finalPrice + mSpentCredit) > visitorCreditValue) {
-            double mMinimumReceipt = (finalPrice + mSpentCredit) - visitorCreditValue;
+        if ((FinalPrice + mSpentCredit) > visitorCreditValue) {
+            double mMinimumReceipt = (FinalPrice + mSpentCredit) - visitorCreditValue;
             return false;
         }
         ///////////////////////////////
         return true;
     }
-    public double calculateRemainCredit(double finalPrice) {
+    public boolean canSaveBasedOnCustomerCredit() {
         if(CustomerId == 0 )
-            return -1;
+            return true;
         Customer customer = db.getCustomerWithPersonId(CustomerId);
         double customerCredit = customer.getCredit();
-        double customerBalance = customer.getBalance();
         if (customerCredit == NoLimit)
-            return -1;
+            return true;
         else {
-            customerCreditValue =  customerCredit + db.getTotalCustomerReceiptWithId(CustomerId) + customerBalance - db.getTotalPriceInvoicePerPerson(CustomerId);
-            return finalPrice - customerCreditValue;
+            return customerCredit > FinalPrice - db.getTotalPriceReceiptPerInvoice(InvoiceCode);
         }
     }
 
-    //اعتبار باقیمانده ویزیتور
-    private double remainVisitorCredit(double finalPrice) {
-        return (visitorCreditValue - (finalPrice + mSpentCredit));
-    }
-
-    /**
-     * Initializing Variables
-     */
     private void initialise() {
 
         db = new DbAdapter(mContext);

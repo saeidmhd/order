@@ -391,8 +391,7 @@ public class ReceiptsListActivity extends BaseActivity {
             if (customerCredit == -1)
                 return true;
             else {
-                double customerCreditValue = customerCredit + db.getTotalCustomerReceiptWithId(customerId) - db.getTotalPriceInvoicePerPerson(customerId);
-                return customerCreditValue - savedCashedAndCheque >= 0;
+                return customerCredit - savedCashedAndCheque >= 0;
             }
         }
 
