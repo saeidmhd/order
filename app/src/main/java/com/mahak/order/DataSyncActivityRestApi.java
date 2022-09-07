@@ -1469,7 +1469,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             tvProductGroup.setText(R.string.no_new_item_for_receive);
                     break;
                 case 21:
-                    tvCheckList.requestFocus();
+                    //tvCheckList.requestFocus();
                     if (settings != null)
                         if (settings.size() > 0) {
                             tvSetting.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + settings.size() );

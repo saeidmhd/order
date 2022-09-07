@@ -1462,10 +1462,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
     }
 
     private void productGift(double mGiftCount1, double mGiftCount2, long kalaCode, int mPromoCode, double count) {
-        if (promoKalaCode != kalaCode) {
-            promoKalaCode = kalaCode;
-            Product promoProduct;
-            promoProduct = db.getProductWithProductCode(kalaCode);
+            Product promoProduct = db.getProductWithProductCode(kalaCode);
             ProductDetail promoProductDetail = db.getProductDetailWithProductId(promoProduct.getProductId());
             VisitorProduct visitorProduct = db.getVisitorProduct(promoProductDetail.getProductDetailId());
             double asset = visitorProduct.getCount1();
@@ -1486,7 +1483,6 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                 InvoiceDetailActivity.orderDetails.add(mPromoObject);
             }else
                 Toast.makeText(getActivity(), R.string.negative_asset, Toast.LENGTH_LONG).show();
-        }
     }
 
 

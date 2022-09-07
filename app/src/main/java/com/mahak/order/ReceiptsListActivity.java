@@ -20,7 +20,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,6 +32,8 @@ import com.mahak.order.apiHelper.ApiClient;
 import com.mahak.order.apiHelper.ApiInterface;
 import com.mahak.order.common.Cheque;
 import com.mahak.order.common.Customer;
+import com.mahak.order.common.Order;
+import com.mahak.order.common.OrderDetail;
 import com.mahak.order.common.Printer;
 import com.mahak.order.common.ProjectInfo;
 import com.mahak.order.common.Receipt;
@@ -60,6 +61,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.mahak.order.InvoiceDetailActivity.Mode;
 import static com.mahak.order.common.ProjectInfo.Woosim_WSP_R341;
 import static com.mahak.order.common.ServiceTools.getDateAndTimeForLong;
 import static com.mahak.order.common.ServiceTools.getDateAndTimeMiladi;
@@ -329,7 +331,7 @@ public class ReceiptsListActivity extends BaseActivity {
                                         if (receipt.getPublish() == ProjectInfo.DONT_PUBLISH) {
                                             if(!visitorHasCredit())
                                                 Toast.makeText(mContext, getResources().getString(R.string.str_message_less_remain_credit), Toast.LENGTH_SHORT).show();
-                                            else if(!customerHasCredit(receipt))
+                                            else if(!canRemoveThisReceipt(receipt))
                                                 Toast.makeText(mContext, getResources().getString(R.string.str_message_less_remain_credit_customer), Toast.LENGTH_SHORT).show();
                                             else
                                                 Dialogdelete();
@@ -381,18 +383,35 @@ public class ReceiptsListActivity extends BaseActivity {
             }
         }
 
-        public boolean customerHasCredit(Receipt receipt) {
-            savedCashedAndCheque = db.getTotalReceiptWithId(ReceiptId);
+        public boolean canRemoveThisReceipt(Receipt receipt) {
+            double totalReceiptForThisFactor = db.getTotalPriceReceiptPerInvoice(receipt.getTrackingCode());
+            double debtOfInvoice = CalculatePayment(receipt.getTrackingCode());
+            double thisReceiptAmount = db.getTotalReceiptWithId(ReceiptId);
             int customerId = receipt.getPersonId();
             if(customerId == 0)
                 return true;
             Customer customer = db.getCustomerWithPersonId(customerId);
             double customerCredit = customer.getCredit();
+            double customerBalance = customer.getBalance();
             if (customerCredit == -1)
                 return true;
             else {
-                return customerCredit - savedCashedAndCheque >= 0;
+                return totalReceiptForThisFactor - thisReceiptAmount  >= debtOfInvoice - customerCredit + customerBalance ;
             }
+        }
+
+        private double CalculatePayment(String code) {
+            Order order = db.GetOrder(code);
+            ArrayList<OrderDetail> array;
+            double Price = 0, Discount = 0, FinalPrice = 0;
+            //calculate FinalPrice________________________________________________________
+            array = db.getAllOrderDetailWithOrderId(order.getId());
+            for (OrderDetail item : array) {
+                Price += ServiceTools.getCalculateFinalPrice(item, mContext);
+            }
+            Discount = order.getDiscount();
+            FinalPrice = Price - Discount;
+            return FinalPrice;
         }
 
         private class PreparePrinterData extends AsyncTask<String, Integer, Boolean> {
