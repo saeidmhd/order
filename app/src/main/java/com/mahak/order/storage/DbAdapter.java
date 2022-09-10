@@ -9506,7 +9506,7 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<MissionDetail> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select * from MissionDetail  where missionId = ? order by priority ", new String[]{String.valueOf(missionId)});
+            cursor = mDb.rawQuery("select * from MissionDetail  where missionId =? and userid =? order by priority ", new String[]{String.valueOf(missionId),String.valueOf(getPrefUserId())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
