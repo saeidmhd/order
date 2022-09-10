@@ -48,9 +48,6 @@
     <color name="reject">#f43e35</color>
     <color name="accept2">#40b58a</color>
     <color name="detail">#edf8ff</color>
-    <color name="baac">#EBF8F3</color>
-    <color name="baac2">#A7A7A7</color>
-    <color name="baac3">#F7F7F7</color>
     <color name="line">#D4D4D4</color>
     <color name="back_mission">#FFF7F7F7</color>
 
@@ -89,4 +86,20 @@
     <color name="btn_clickable">#1C1C1C</color>
     <color name="sp_bg">#EEEEEE</color>
     <color name="notification_color">#ffa00a</color>
+
+
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#378E6E</color>
+    <color name="purple_5010">#46B48B</color>
+    <color name="le_500">#378E6E</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="progress_back">#FF378E6E</color>
+    <color name="baac">#EBF8F3</color>
+    <color name="baac2">#A7A7A7</color>
+    <color name="baac3">#F7F7F7</color>
+    <color name="back4">#6AC3A2</color>
+    <color name="back5">#6AC3A2</color>
+
 </resources>

@@ -35,6 +35,7 @@ public class MissionListActivity extends BaseActivity {
     private ArrayList<MissionDetail> missionDetails = new ArrayList<>();
     private DbAdapter db;
     private TextView tvPageTitle;
+    private TextView description;
     private ImageView show_mission;
     private RelativeLayout llPageTitle;
     int printerBrand;
@@ -47,7 +48,7 @@ public class MissionListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mission_list);
+        setContentView(R.layout.main2);
 
         //config actionbar___________________________________________
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -67,6 +68,7 @@ public class MissionListActivity extends BaseActivity {
         missionIndex = missions.get(0).getMissionId();
 
         tvPageTitle.setText("شناسه ماموریت : " + missions.get(0).getMissionId());
+        description.setText(missions.get(0).getDescription());
 
         Extras = getIntent().getExtras();
 
@@ -76,6 +78,7 @@ public class MissionListActivity extends BaseActivity {
             for(Mission mMission : missions)
                 if (mMission.getMissionId() == missionIndex)
                     mission = mMission;
+            description.setText(mission.getDescription());
             missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
             tvPageTitle.setText("شناسه ماموریت : " + missionIndex);
             missionDetailAdapter = new MissionDetailAdapter(missionDetails , mission, mContext);
@@ -102,6 +105,7 @@ public class MissionListActivity extends BaseActivity {
                         for(Mission mMission : missions)
                             if (mMission.getMissionId() == missionIndex)
                                 mission = mMission;
+                        description.setText(mission.getDescription());
                         missionDetails.clear();
                         missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
                         missionDetailAdapter = new MissionDetailAdapter(missionDetails, mission, mContext);
@@ -125,6 +129,7 @@ public class MissionListActivity extends BaseActivity {
      */
     private void initialise() {
         missionDetailList = (RecyclerView) findViewById(R.id.missionDetailList);
+        description = (TextView) findViewById(R.id.description);
         db = new DbAdapter(mContext);
     }
 

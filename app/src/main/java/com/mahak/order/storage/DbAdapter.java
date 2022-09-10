@@ -9530,7 +9530,7 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<MissionDetail> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select * from MissionDetail ", null);
+            cursor = mDb.rawQuery("select * from MissionDetail where userid =? ", new String[]{String.valueOf(getPrefUserId())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
