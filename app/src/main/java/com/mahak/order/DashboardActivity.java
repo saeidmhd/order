@@ -576,7 +576,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         getReceiveCountTxT.setText(String.valueOf(recieveCount));
         getDeliverGoodsCountTxT.setText(String.valueOf(delivergoodsCount));
     }
-
     private void calcNumberOfChecklist() {
         getOrderCount = delivergoodsCount = recieveCount = getgoodsCount = 0;
         for (MissionDetail missionDetail : missionDetails){

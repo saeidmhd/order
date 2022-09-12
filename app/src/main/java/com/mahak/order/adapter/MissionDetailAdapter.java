@@ -20,7 +20,6 @@ import com.mahak.order.mission.MissionDetail;
 import com.mahak.order.storage.DbAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdapter.ViewHolder> {
 
@@ -70,14 +69,14 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent,
                                          int viewType) {
-        View view = mInflater.inflate(R.layout.mission_item, parent, false);
+        View view = mInflater.inflate(R.layout.mission_detail_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        MissionDetail  missionDetail = missionDetails.get(position);
+        MissionDetail missionDetail = missionDetails.get(position);
 
         String type ="";
         Customer customer = db.getCustomerWithPersonId(missionDetail.getPersonId());

@@ -89,7 +89,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_below="@+id/show_mission"
-                    android:background="@color/baac2"/>
+                    android:background="@color/mission_gray"/>
 
                 <ImageView
                     android:id="@+id/show_mission"

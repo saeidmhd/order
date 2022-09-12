@@ -57,7 +57,6 @@ public class PrintDemo extends Activity {
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
         }
         try {
-
             btnSendDraw = (Button) this.findViewById(R.id.btn_test);
             btnSendDraw.setOnClickListener(new ClickEvent());
             btnSearch = (Button) this.findViewById(R.id.btnSearch);

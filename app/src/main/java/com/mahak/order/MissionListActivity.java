@@ -12,12 +12,15 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.mahak.order.adapter.MissionDetailAdapter;
+import com.mahak.order.common.ServiceTools;
 import com.mahak.order.mission.Mission;
 import com.mahak.order.mission.MissionDetail;
 import com.mahak.order.storage.DbAdapter;
@@ -34,21 +37,44 @@ public class MissionListActivity extends BaseActivity {
     private Mission mission;
     private ArrayList<MissionDetail> missionDetails = new ArrayList<>();
     private DbAdapter db;
+
     private TextView tvPageTitle;
     private TextView description;
+
+    private TextView missionDetailStat;
+    private TextView successCount;
+    private TextView failCount;
+    private TextView unDo;
+
+    private TextView getGoodsCountTxT;
+    private TextView getOrderCountTxT;
+    private TextView getReceiveCountTxT;
+    private TextView getDeliverGoodsCountTxT;
+
+    private CircularProgressIndicator successProgressBar;
+    private CircularProgressIndicator failProgressBar;
+
     private ImageView show_mission;
     private RelativeLayout llPageTitle;
-    int printerBrand;
     private MissionDetailAdapter missionDetailAdapter;
     private RecyclerView missionDetailList;
     private RecyclerView.LayoutManager mLayoutManager;
     private Bundle Extras;
     private int missionIndex;
 
+    double successMissionDetailCount ;
+    double failMissionDetailCount = 0;
+    double missionDetailCount = 0;
+
+    private int getOrderCount;
+    private int delivergoodsCount;
+    private int recieveCount;
+    private int getgoodsCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main2);
+        setContentView(R.layout.mission_list_activity);
 
         //config actionbar___________________________________________
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -65,6 +91,10 @@ public class MissionListActivity extends BaseActivity {
         initialise();
         FillView();
 
+        missionDetailList.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        missionDetailList.setLayoutManager(mLayoutManager);
+
         missionIndex = missions.get(0).getMissionId();
 
         tvPageTitle.setText("شناسه ماموریت : " + missions.get(0).getMissionId());
@@ -74,26 +104,14 @@ public class MissionListActivity extends BaseActivity {
 
         if (Extras != null) {
             missionIndex = Extras.getInt("missionIndex");
-            missionDetails.clear();
-            for(Mission mMission : missions)
-                if (mMission.getMissionId() == missionIndex)
-                    mission = mMission;
-            description.setText(mission.getDescription());
-            missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
             tvPageTitle.setText("شناسه ماموریت : " + missionIndex);
-            missionDetailAdapter = new MissionDetailAdapter(missionDetails , mission, mContext);
-            missionDetailList.setAdapter(missionDetailAdapter);
+            refreshList();
         }
-
-        missionDetailList.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        missionDetailList.setLayoutManager(mLayoutManager);
 
         llPageTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PopupMenu popup = new PopupMenu(mContext,show_mission);
-
                 for (Mission mission : missions) {
                     popup.getMenu().add(mission.getMissionId(),mission.getMissionId(),mission.getMissionId(), "شناسه ماموریت : " + mission.getMissionId());
                 }
@@ -101,19 +119,11 @@ public class MissionListActivity extends BaseActivity {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         tvPageTitle.setText(menuItem.getTitle());
-                        int missionIndex = menuItem.getItemId();
-                        for(Mission mMission : missions)
-                            if (mMission.getMissionId() == missionIndex)
-                                mission = mMission;
-                        description.setText(mission.getDescription());
-                        missionDetails.clear();
-                        missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
-                        missionDetailAdapter = new MissionDetailAdapter(missionDetails, mission, mContext);
-                        missionDetailList.setAdapter(missionDetailAdapter);
+                        missionIndex = menuItem.getItemId();
+                        refreshList();
                         return false;
                     }
                 });
-
                 popup.show();
                 Menu menu = popup.getMenu();
                 for (int i = 0; i < menu.size(); i++) {
@@ -124,12 +134,44 @@ public class MissionListActivity extends BaseActivity {
         });
     }//end of onCreate
 
+    private void refreshList() {
+        missionDetails.clear();
+        for(Mission mMission : missions)
+            if (mMission.getMissionId() == missionIndex)
+                mission = mMission;
+        description.setText(mission.getDescription());
+        missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
+        missionDetailAdapter = new MissionDetailAdapter(missionDetails , mission, mContext);
+        missionDetailList.setAdapter(missionDetailAdapter);
+        setStat();
+        setMissionStatus();
+        calcAndSetCheckListStat();
+    }
+
+    private void setStat() {
+    }
+
     /**
      * Initializing Variables
      */
     private void initialise() {
+
         missionDetailList = (RecyclerView) findViewById(R.id.missionDetailList);
         description = (TextView) findViewById(R.id.description);
+
+        missionDetailStat = (TextView) findViewById(R.id.missionDetailStat);
+        successCount = (TextView) findViewById(R.id.successCount);
+        failCount = (TextView) findViewById(R.id.failCount);
+        unDo = (TextView) findViewById(R.id.unDo);
+
+        getGoodsCountTxT = (TextView) findViewById(R.id.getGoodsCountTxT);
+        getOrderCountTxT = (TextView) findViewById(R.id.getOrderCountTxT);
+        getReceiveCountTxT = (TextView) findViewById(R.id.getReceiveCountTxT);
+        getDeliverGoodsCountTxT = (TextView) findViewById(R.id.getDeliverGoodsCountTxT);
+
+        successProgressBar = (CircularProgressIndicator) findViewById(R.id.successProgressBar);
+        failProgressBar = (CircularProgressIndicator) findViewById(R.id.failProgressBar);
+
         db = new DbAdapter(mContext);
     }
 
@@ -145,42 +187,36 @@ public class MissionListActivity extends BaseActivity {
         missionDetailList.setAdapter(missionDetailAdapter);
     }
 
-    public MissionDetailAdapter getMissionDetailAdapter() {
-        return missionDetailAdapter;
-    }
+    private void setMissionStatus() {
 
-    private void setMissionStatus(Mission mission, List<MissionDetail> missionDetails) {
+        successMissionDetailCount = 0;
+        failMissionDetailCount = 0;
+        missionDetailCount = missionDetails.size();
         for (MissionDetail missionDetail : missionDetails){
             switch (missionDetail.getStatus()){
-                case 1:
-                    // st = "شروع نشده";
-                    mission.setStatus(1);
-                    break;
-                case 2:
-                    // st = "در مسیر";
-                    //st = "در جریان";
-                    mission.setStatus(2);
-                    break;
                 case 3:
+                    successMissionDetailCount++;
+                    break;
                 case 4:
-                    // st = "انجام شده ناموفق";
-                    // st = "انجام شده موفق";
-                    mission.setStatus(3);
+                    failMissionDetailCount++;
                     break;
             }
         }
-        db.AddMission(mission);
+
+        double sumDone = successMissionDetailCount + failMissionDetailCount;
+        double undo = missionDetailCount - sumDone;
+        double successRatio = 70 * ((successMissionDetailCount) / missionDetailCount);
+        double failRatio = 70 * ((failMissionDetailCount + successMissionDetailCount) / missionDetailCount);
+
+        successCount.setText((int)successMissionDetailCount + " موفق");
+        failCount.setText((int)failMissionDetailCount + " ناموفق");
+        unDo.setText((int)undo + " انجام نشده");
+
+        missionDetailStat.setText((int)missionDetailCount + "/" + (int)sumDone);
+        successProgressBar.setProgress((int) successRatio);
+        failProgressBar.setProgress((int) failRatio);
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        /*Drawable exit = ContextCompat.getDrawable(mContext, R.drawable.arrow_drop_down);
-        menu.add(0, 0, 0, R.string.str_exit_app)
-                .setIcon(exit)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);*/
-        return super.onCreateOptionsMenu(menu);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -206,5 +242,37 @@ public class MissionListActivity extends BaseActivity {
         Intent intent2 = new Intent(getApplicationContext(), DashboardActivity.class);
         intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent2);
+    }
+
+    private void calcAndSetCheckListStat() {
+        calcNumberOfChecklist();
+        setCountToUi();;
+    }
+
+    private void setCountToUi() {
+        getGoodsCountTxT.setText(String.valueOf(getgoodsCount));
+        getOrderCountTxT.setText(String.valueOf(getOrderCount));
+        getReceiveCountTxT.setText(String.valueOf(recieveCount));
+        getDeliverGoodsCountTxT.setText(String.valueOf(delivergoodsCount));
+    }
+    private void calcNumberOfChecklist() {
+        getOrderCount = delivergoodsCount = recieveCount = getgoodsCount = 0;
+        for (MissionDetail missionDetail : missionDetails){
+            switch (missionDetail.getType()){
+                case 1 :
+                    getOrderCount++;
+                    break;
+                case 2:
+                    delivergoodsCount++;
+                    break;
+                case 3:
+                    recieveCount++;
+                    break;
+                case 4:
+                    getgoodsCount++;
+                    break;
+            }
+        }
+
     }
 }

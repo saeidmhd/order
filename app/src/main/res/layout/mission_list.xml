@@ -6,7 +6,7 @@
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/main2"
+    tools:showIn="@layout/mission_list_activity"
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView

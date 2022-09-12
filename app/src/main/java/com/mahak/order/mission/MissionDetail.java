@@ -248,5 +248,4 @@ public class MissionDetail {
     public void setMissionCode(Integer missionCode) {
         this.missionCode = missionCode;
     }
-
 }
