@@ -432,7 +432,7 @@
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <com.mahak.order.widget.FontTextView
                     android:layout_width="wrap_content"

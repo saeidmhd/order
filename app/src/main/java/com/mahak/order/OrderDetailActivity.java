@@ -541,7 +541,7 @@ public class OrderDetailActivity extends BaseActivity {
         if (SharedPreferencesHelper.get_chk_show_consumer_fee(mContext)) {
             if(ll_consumer_fee_box != null && ll_consumer_price_box != null ) {
                 ll_consumer_fee_box.setVisibility(View.VISIBLE);
-                ll_consumer_price_box.setVisibility(View.VISIBLE);
+                //ll_consumer_price_box.setVisibility(View.VISIBLE);
             }
         }
         if (SharedPreferencesHelper.get_chk_show_receipt_detail(mContext)) {
@@ -1222,7 +1222,7 @@ public class OrderDetailActivity extends BaseActivity {
                 if (SharedPreferencesHelper.get_chk_show_consumer_fee(mContext)) {
                     if(ll_consumer_fee != null && ll_consumer_price != null ) {
                         ll_consumer_fee.setVisibility(View.VISIBLE);
-                        ll_consumer_price.setVisibility(View.VISIBLE);
+                       // ll_consumer_price.setVisibility(View.VISIBLE);
                     }
                 }
 

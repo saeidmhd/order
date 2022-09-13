@@ -263,7 +263,15 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:layout_weight="1"
-                        android:text="@string/str_price"
+                        android:text="مبلغ نهایی"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/print_text_size"/>
+                    <com.mahak.order.widget.PrintTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:text="(با تخفیف و مالیات)"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/print_text_size"/>
 
@@ -551,7 +559,7 @@
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <com.mahak.order.widget.PrintTextView
                     android:id="@+id/_tvTotalChargeAndTax"

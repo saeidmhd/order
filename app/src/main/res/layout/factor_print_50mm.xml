@@ -488,7 +488,7 @@
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <com.mahak.order.widget.PrintTextView
                     android:id="@+id/_tvTotalChargeAndTax"
