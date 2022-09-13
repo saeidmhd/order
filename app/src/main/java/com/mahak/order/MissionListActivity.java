@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -94,6 +95,7 @@ public class MissionListActivity extends BaseActivity {
         missionDetailList.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         missionDetailList.setLayoutManager(mLayoutManager);
+        missionDetailList.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
 
         missionIndex = missions.get(0).getMissionId();
 
@@ -212,7 +214,7 @@ public class MissionListActivity extends BaseActivity {
         failCount.setText((int)failMissionDetailCount + " ناموفق");
         unDo.setText((int)undo + " انجام نشده");
 
-        missionDetailStat.setText((int)missionDetailCount + "/" + (int)sumDone);
+        missionDetailStat.setText( "" + (int)missionDetailCount);
         successProgressBar.setProgress((int) successRatio);
         failProgressBar.setProgress((int) failRatio);
     }

@@ -12,8 +12,7 @@
         android:layout_gravity="right|top"
         android:orientation="vertical"
         android:gravity="right"
-        android:background="@color/white"
-        android:layout_marginBottom="8dp">
+        android:background="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,7 +37,7 @@
                 android:padding="8dp"
                 android:textSize="18sp"
                 android:gravity="center"
-                android:textColor="@color/black"
+                android:textColor="@color/mission_text_color"
                 android:text="هایپر مارکت رز"/>
 
             <com.mahak.order.widget.FontTextView
@@ -64,10 +63,10 @@
                 android:id="@+id/customerAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:paddingRight="56dp"
                 android:paddingBottom="8dp"
-                android:textColor="@color/mission_gray"
+                android:textColor="@color/mission_text_color"
                 android:text="میدان دبستان ، نبش ضریح آفتاب ، کوچه دوم کوچه دوم کوچه دوم کوچه دوم کوچه دوم"/>
 
 
@@ -86,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="@color/mission_gray"
+                android:textColor="@color/mission_text_color"
                 android:layout_marginRight="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="پیش فاکتور"/>

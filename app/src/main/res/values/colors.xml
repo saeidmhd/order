@@ -97,5 +97,6 @@
     <color name="success_back2">#FFFFFF</color>
     <color name="fail_back">#FFFFFF</color>
     <color name="fail_back2">#FEDB5C</color>
+    <color name="mission_text_color">#363636</color>
 
 </resources>
