@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -21,14 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.mahak.order.adapter.MissionDetailAdapter;
-import com.mahak.order.common.ServiceTools;
 import com.mahak.order.mission.Mission;
 import com.mahak.order.mission.MissionDetail;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.widget.FontPopUp;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MissionListActivity extends BaseActivity {

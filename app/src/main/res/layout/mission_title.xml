@@ -6,12 +6,11 @@
 
     <ImageView
         android:id="@+id/show_mission"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
         android:gravity="right"
         android:src="@drawable/arrow_drop_down" />
 
