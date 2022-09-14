@@ -2602,17 +2602,12 @@ public class DbAdapter {
                     orderDetail.setOrderClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_OrderClientId)));
                     orderDetail.setProductDetailId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ProductDetailId)));
                     orderDetail.setProductId(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ProductId)));
-                    if (BaseActivity.getPrefUnit2Setting(mContext) != MODE_YekVahedi)
-                        orderDetail.setCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz)));
-                    else
-                        orderDetail.setCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Count1)));
+                    orderDetail.setCount1(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz)));
                     orderDetail.setCount2(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Count2)));
                     orderDetail.setSumCountBaJoz(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz)));
-                    // orderDetail.setCount2(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PackageCount)));
                     orderDetail.setPrice(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Price)));
                     orderDetail.setGiftType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GiftType)));
                     orderDetail.setDescription(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Description)));
-                    //orderDetail.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PUBLISH)));
                     orderDetail.setTaxPercent(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_TaxPercent)));
                     orderDetail.setChargePercent(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_ChargePercent)));
                     orderDetail.setDiscount(cursor.getDouble(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Discount)));
@@ -2620,10 +2615,7 @@ public class DbAdapter {
                         orderDetail.setDiscount(ServiceTools.getRowOffPercent(orderDetail.getDiscount(), orderDetail.getPrice(), orderDetail.getSumCountBaJoz()));
                     orderDetail.setDiscountType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_DiscountType)));
                     orderDetail.setCostLevel(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_CostLevel)));
-                    // orderDetail.setFixedOff(cursor.getString(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Fixed_Off)));
-                    // orderDetail.setCostLevel(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_Price_LEVEL)));
                     orderDetail.setPromotionCode(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PROMOTION_CODE)));
-                    //   orderDetail.setGiftType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_GIFT_TYPE)));
                 }
                 cursor.close();
             }
