@@ -11,68 +11,89 @@ public class MissionDetail extends Observable {
     @SerializedName("MissionDetailId")
     @Expose
     private Integer missionDetailId;
+
     @SerializedName("VisitorId")
-    @Expose
+    @Expose(serialize = false)
     private Integer visitorId;
+
     @SerializedName("DatabaseId")
-    @Expose
+    @Expose(serialize = false)
     private Integer databaseId;
+
     @SerializedName("MissionDetailCode")
-    @Expose
+    @Expose(serialize = false)
     private Integer missionDetailCode;
+
     @SerializedName("MissionDetailClientId")
-    @Expose
+    @Expose(serialize = false)
     private Integer missionDetailClientId;
+
     @SerializedName("Status")
     @Expose
     private int status;
+
     @SerializedName("Priority")
-    @Expose
+    @Expose(serialize = false)
     private Integer priority;
+
     @SerializedName("Date")
     @Expose
     private String date;
+
     @SerializedName("Type")
-    @Expose
+    @Expose(serialize = false)
     private Integer type;
+
     @SerializedName("PersonId")
-    @Expose
+    @Expose(serialize = false)
     private Integer personId;
+
     @SerializedName("PersonAddressId")
-    @Expose
+    @Expose(serialize = false)
     private Integer personAddressId;
+
     @SerializedName("Description")
-    @Expose
+    @Expose(serialize = false)
     private String description;
+
     @SerializedName("ActivityID")
-    @Expose
+    @Expose(serialize = false)
     private String activityID;
+
     @SerializedName("MissionId")
     @Expose
     private Integer missionId;
+
     @SerializedName("Deleted")
-    @Expose
+    @Expose(serialize = false)
     private Boolean deleted;
+
     @SerializedName("RowVersion")
-    @Expose
+    @Expose(serialize = false)
     private Integer rowVersion;
+
     @SerializedName("PersonClientId")
-    @Expose
+    @Expose(serialize = false)
     private Integer personClientId;
+
     @SerializedName("PersonCode")
-    @Expose
+    @Expose(serialize = false)
     private Integer personCode;
+
     @SerializedName("VisitorClientId")
-    @Expose
+    @Expose(serialize = false)
     private Integer visitorClientId;
+
     @SerializedName("VisitorCode")
-    @Expose
+    @Expose(serialize = false)
     private Integer visitorCode;
+
     @SerializedName("MissionClientId")
-    @Expose
+    @Expose(serialize = false)
     private Integer missionClientId;
+
     @SerializedName("MissionCode")
-    @Expose
+    @Expose(serialize = false)
     private Integer missionCode;
 
     public int getMissionDetailId() {

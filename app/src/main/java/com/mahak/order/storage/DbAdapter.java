@@ -9452,30 +9452,6 @@ public class DbAdapter {
 
         return array;
     }
-    public ArrayList<Mission> getAllMissionWithMissionId(long missionId) {
-        Mission mission;
-        Cursor cursor;
-        ArrayList<Mission> array = new ArrayList<>();
-        try {
-            cursor = mDb.rawQuery("select * from Mission where userid = ? and missionId = ? and deleted = 0 ", new String[]{String.valueOf(getPrefUserId())});
-            if (cursor != null) {
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    mission = GetMission(cursor);
-                    if (mission != null)
-                        array.add(mission);
-                    cursor.moveToNext();
-                }
-                cursor.close();
-            }
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrAllReceipt", e.getMessage());
-        }
-
-        return array;
-    }
     public Mission GetMission(Cursor cursor) {
         Mission mission = new Mission();
         try {
@@ -9506,7 +9482,7 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<MissionDetail> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select * from MissionDetail  where missionId =? and userid =? order by priority ", new String[]{String.valueOf(missionId),String.valueOf(getPrefUserId())});
+            cursor = mDb.rawQuery("select * from MissionDetail  where missionId =? and userid =? and deleted = 0 order by priority ", new String[]{String.valueOf(missionId),String.valueOf(getPrefUserId())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -9530,7 +9506,7 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<MissionDetail> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select * from MissionDetail where userid =? ", new String[]{String.valueOf(getPrefUserId())});
+            cursor = mDb.rawQuery("select * from MissionDetail where userid =? and deleted = 0 ", new String[]{String.valueOf(getPrefUserId())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -9616,6 +9592,8 @@ public class DbAdapter {
         mDb.delete(DbSchema.ProductCategorySchema.TABLE_NAME, null, null);
         mDb.delete(DbSchema.PersonCategorySchema.TABLE_NAME, null, null);
         mDb.delete(DbSchema.CategorySchema.TABLE_NAME, null, null);
+        mDb.delete(DbSchema.MissionSchema.TABLE_NAME, null, null);
+        mDb.delete(DbSchema.MissionDetailSchema.TABLE_NAME, null, null);
 
 
         BaseActivity.setPrefAdminControl(false);

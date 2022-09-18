@@ -11,39 +11,51 @@ public class Mission {
     @SerializedName("MissionId")
     @Expose
     private Integer missionId;
+
     @SerializedName("DatabaseId")
-    @Expose
+    @Expose(serialize = false)
     private Long databaseId;
+
     @SerializedName("MissionCode")
-    @Expose
+    @Expose(serialize = false)
     private Long missionCode;
+
     @SerializedName("VisitorId")
-    @Expose
+    @Expose(serialize = false)
     private Long visitorId;
+
     @SerializedName("MissionClientId")
-    @Expose
+    @Expose(serialize = false)
     private Long missionClientId;
+
     @SerializedName("Status")
     @Expose
     private int status;
+
     @SerializedName("Date")
     @Expose
     private String date;
+
     @SerializedName("EndDate")
     @Expose
     private String endDate;
+
     @SerializedName("Deleted")
     @Expose(serialize = false)
     private Boolean deleted;
+
     @SerializedName("Description")
     @Expose(serialize = false)
     private String description;
+
     @SerializedName("RowVersion")
     @Expose(serialize = false)
     private Long rowVersion;
+
     @SerializedName("VisitorClientId")
     @Expose(serialize = false)
     private Long visitorClientId;
+
     @SerializedName("VisitorCode")
     @Expose(serialize = false)
     private Long visitorCode;

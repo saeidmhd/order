@@ -16,11 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mahak.order.MissionListActivity;
 import com.mahak.order.R;
 import com.mahak.order.common.Customer;
+import com.mahak.order.common.ServiceTools;
 import com.mahak.order.mission.Mission;
 import com.mahak.order.mission.MissionDetail;
 import com.mahak.order.storage.DbAdapter;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdapter.ViewHolder> {
 
@@ -182,6 +184,7 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
             @Override
             public void onClick(View view) {
                 missionDetail.setStatus(1);
+                missionDetail.setDate(ServiceTools.getFormattedDate(new Date().getTime()));
                 missionDetail.addObserver(missionListActivity);
                 missionDetail.setChangeAndNotify();
                 notifyItemChanged(position);
@@ -194,6 +197,7 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
             @Override
             public void onClick(View view) {
                 missionDetail.setStatus(2);
+                missionDetail.setDate(ServiceTools.getFormattedDate(new Date().getTime()));
                 missionDetail.addObserver(missionListActivity);
                 missionDetail.setChangeAndNotify();
                 notifyItemChanged(position);
@@ -206,6 +210,7 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
             @Override
             public void onClick(View view) {
                 missionDetail.setStatus(3);
+                missionDetail.setDate(ServiceTools.getFormattedDate(new Date().getTime()));
                 missionDetail.addObserver(missionListActivity);
                 missionDetail.setChangeAndNotify();
                 notifyItemChanged(position);
@@ -218,6 +223,7 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
             @Override
             public void onClick(View view) {
                 missionDetail.setStatus(4);
+                missionDetail.setDate(ServiceTools.getFormattedDate(new Date().getTime()));
                 missionDetail.addObserver(missionListActivity);
                 missionDetail.setChangeAndNotify();
                 notifyItemChanged(position);
@@ -230,24 +236,30 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
     }
 
     private void setMissionStatus() {
+
+        int done_count = 0;
+        int non_started = 0;
+
         for (MissionDetail missionDetail : missionDetails){
             switch (missionDetail.getStatus()){
                 case 1:
-                    // st = "شروع نشده";
-                    mission.setStatus(1);
-                    break;
-                case 2:
-                    // st = "در مسیر";
-                    //st = "در جریان";
-                    mission.setStatus(2);
+                    non_started++;
                     break;
                 case 3:
                 case 4:
-                    // st = "انجام شده ناموفق";
-                    // st = "انجام شده موفق";
-                    mission.setStatus(3);
+                    done_count++;
                     break;
             }
+
+            if(missionDetails.size() == done_count){
+                mission.setEndDate(ServiceTools.getFormattedDate(new Date().getTime()));
+                mission.setStatus(3);
+            }
+            else if(missionDetails.size() == non_started)
+                mission.setStatus(1);
+            else
+                mission.setStatus(2);
+
         }
         db.AddMission(mission);
     }

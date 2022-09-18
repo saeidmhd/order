@@ -722,6 +722,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             Customers.addAll(newCustomers);
             payableTransfers = db.getAllPayableNotPublish(BaseActivity.getPrefUserId());
             checkLists = db.getAllDoneChecklistNotPublish();
+
             missionDetails = db.getAllMissionDetail();
             missions = db.getAllMission();
 

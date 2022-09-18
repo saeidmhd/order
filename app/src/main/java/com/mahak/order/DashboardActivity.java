@@ -287,7 +287,9 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 missionIndex = missions.get(0).getMissionId();
             }
             missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
-        }
+        }else
+            missionIndex = 0;
+
         calcAndSetCheckListStat();
 
         missionTitle.setText("شناسه ماموریت : " + missionIndex);
@@ -1444,6 +1446,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                         stopLocationUpdate();
                         RefreshPreferenceUser();
                         setPrefSignalUserToken("");
+                        missionIndex = 0;
                         dialog.dismiss();
                         Intent intent = new Intent(DashboardActivity.this, LoginActivityRestApi.class);
                         startActivity(intent);
