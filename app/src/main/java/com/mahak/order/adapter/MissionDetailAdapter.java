@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mahak.order.MissionListActivity;
 import com.mahak.order.R;
 import com.mahak.order.common.Customer;
 import com.mahak.order.mission.Mission;
@@ -26,6 +27,7 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
     private ArrayList<MissionDetail> missionDetails;
     private Mission mission;
     private LayoutInflater mInflater;
+    private MissionListActivity missionListActivity;
     private ArrayList<MissionDetail> arrayOriginal = new ArrayList<>();
     private Context mContext;
     private DbAdapter db;
@@ -60,6 +62,7 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
         this.missionDetails = missionDetails;
         this.mission = mission;
         this.mInflater = LayoutInflater.from(context);
+        missionListActivity = (MissionListActivity) context;
         arrayOriginal.addAll(missionDetails);
         mContext = context;
         db = new DbAdapter(mContext);
@@ -76,12 +79,15 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        MissionDetail missionDetail = missionDetails.get(position);
+        int mPosition = holder.getAbsoluteAdapterPosition();
+
+        MissionDetail missionDetail = missionDetails.get(mPosition);
 
         String type ="";
         Customer customer = db.getCustomerWithPersonId(missionDetail.getPersonId());
         holder.customerName.setText(customer.getName());
-        holder.organization.setText(customer.getOrganization());
+        if(customer.getOrganization() != null)
+            holder.organization.setText( "(" + customer.getOrganization() + ")");
         switch (missionDetail.getType()){
             case 1 :
                 type = "دریافت سفارش";
@@ -134,25 +140,25 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
         holder.txtStatus.setText(st);
         holder.missionDetailType.setText(type);
         holder.customerAddress.setText(customer.getAddress());
-        holder.rowOfMissionDetail.setText(String.valueOf(position + 1));
+        holder.rowOfMissionDetail.setText(String.valueOf(mPosition + 1));
 
         holder.changeStatusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showChangeStatusDialog(missionDetail , position);
+                showChangeStatusDialog(missionDetail , mPosition);
 
             }
         });
         holder.mission_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showChangeStatusDialog(missionDetail , position);
+                showChangeStatusDialog(missionDetail , mPosition);
 
             }
         });
         holder.changeStatusMenu.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                showChangeStatusDialog(missionDetail , position);
+                showChangeStatusDialog(missionDetail , mPosition);
             }
         });
 
@@ -163,7 +169,7 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.mission_detail_dialog);
 
-        LinearLayout notـstarted = dialog.findViewById(R.id.notـstarted);
+        LinearLayout not_started = dialog.findViewById(R.id.notـstarted);
         LinearLayout inWay = dialog.findViewById(R.id.inWay);
         LinearLayout unsuccessful = dialog.findViewById(R.id.unsuccessful);
         LinearLayout successful = dialog.findViewById(R.id.successful);
@@ -172,10 +178,12 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogTheme;
 
 
-        notـstarted.setOnClickListener(new View.OnClickListener() {
+        not_started.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 missionDetail.setStatus(1);
+                missionDetail.addObserver(missionListActivity);
+                missionDetail.setChangeAndNotify();
                 notifyItemChanged(position);
                 db.AddMissionDetail(missionDetail);
                 setMissionStatus();
@@ -186,6 +194,8 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
             @Override
             public void onClick(View view) {
                 missionDetail.setStatus(2);
+                missionDetail.addObserver(missionListActivity);
+                missionDetail.setChangeAndNotify();
                 notifyItemChanged(position);
                 db.AddMissionDetail(missionDetail);
                 setMissionStatus();
@@ -196,6 +206,8 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
             @Override
             public void onClick(View view) {
                 missionDetail.setStatus(3);
+                missionDetail.addObserver(missionListActivity);
+                missionDetail.setChangeAndNotify();
                 notifyItemChanged(position);
                 db.AddMissionDetail(missionDetail);
                 setMissionStatus();
@@ -206,6 +218,8 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
             @Override
             public void onClick(View view) {
                 missionDetail.setStatus(4);
+                missionDetail.addObserver(missionListActivity);
+                missionDetail.setChangeAndNotify();
                 notifyItemChanged(position);
                 db.AddMissionDetail(missionDetail);
                 setMissionStatus();

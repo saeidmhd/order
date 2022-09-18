@@ -33,19 +33,19 @@ public class Mission {
     @Expose
     private String endDate;
     @SerializedName("Deleted")
-    @Expose
+    @Expose(serialize = false)
     private Boolean deleted;
     @SerializedName("Description")
-    @Expose
+    @Expose(serialize = false)
     private String description;
     @SerializedName("RowVersion")
-    @Expose
+    @Expose(serialize = false)
     private Long rowVersion;
     @SerializedName("VisitorClientId")
-    @Expose
+    @Expose(serialize = false)
     private Long visitorClientId;
     @SerializedName("VisitorCode")
-    @Expose
+    @Expose(serialize = false)
     private Long visitorCode;
 
     private List<MissionDetail> missionDetails;

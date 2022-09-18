@@ -4,7 +4,9 @@ package com.mahak.order.mission;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class MissionDetail {
+import java.util.Observable;
+
+public class MissionDetail extends Observable {
 
     @SerializedName("MissionDetailId")
     @Expose
@@ -23,7 +25,7 @@ public class MissionDetail {
     private Integer missionDetailClientId;
     @SerializedName("Status")
     @Expose
-    private Integer status;
+    private int status;
     @SerializedName("Priority")
     @Expose
     private Integer priority;
@@ -73,7 +75,7 @@ public class MissionDetail {
     @Expose
     private Integer missionCode;
 
-    public Integer getMissionDetailId() {
+    public int getMissionDetailId() {
         return missionDetailId;
     }
 
@@ -113,11 +115,11 @@ public class MissionDetail {
         this.missionDetailClientId = missionDetailClientId;
     }
 
-    public Integer getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
@@ -247,5 +249,11 @@ public class MissionDetail {
 
     public void setMissionCode(Integer missionCode) {
         this.missionCode = missionCode;
+    }
+
+    public void setChangeAndNotify()
+    {
+        setChanged();
+        notifyObservers();
     }
 }

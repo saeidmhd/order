@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -26,31 +27,35 @@ import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.widget.FontPopUp;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 
-public class MissionListActivity extends BaseActivity {
+public class MissionListActivity extends BaseActivity implements Observer {
 
     private Context mContext;
     private ArrayList<Mission> missions;
     private Mission mission;
-    private ArrayList<MissionDetail> missionDetails = new ArrayList<>();
+    private static ArrayList<MissionDetail> missionDetails = new ArrayList<>();
     private DbAdapter db;
 
     private TextView tvPageTitle;
     private TextView description;
 
-    private TextView missionDetailStat;
-    private TextView successCount;
-    private TextView failCount;
-    private TextView unDo;
+    private static TextView missionDetailStat;
+
+    private static TextView successCount;
+    private static TextView failCount;
+    private static TextView unDo;
+    private static CircularProgressIndicator successProgressBar;
+    private static CircularProgressIndicator failProgressBar;
 
     private TextView getGoodsCountTxT;
     private TextView getOrderCountTxT;
     private TextView getReceiveCountTxT;
     private TextView getDeliverGoodsCountTxT;
 
-    private CircularProgressIndicator successProgressBar;
-    private CircularProgressIndicator failProgressBar;
+
 
     private ImageView show_mission;
     private RelativeLayout llPageTitle;
@@ -60,8 +65,8 @@ public class MissionListActivity extends BaseActivity {
     private Bundle Extras;
     private int missionIndex;
 
-    double successMissionDetailCount ;
-    double failMissionDetailCount = 0;
+    static double successMissionDetailCount = 0 ;
+    static double failMissionDetailCount = 0;
     double missionDetailCount = 0;
 
     private int getOrderCount;
@@ -142,12 +147,8 @@ public class MissionListActivity extends BaseActivity {
         missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
         missionDetailAdapter = new MissionDetailAdapter(missionDetails , mission, mContext);
         missionDetailList.setAdapter(missionDetailAdapter);
-        setStat();
         setMissionStatus();
         calcAndSetCheckListStat();
-    }
-
-    private void setStat() {
     }
 
     /**
@@ -159,17 +160,19 @@ public class MissionListActivity extends BaseActivity {
         description = (TextView) findViewById(R.id.description);
 
         missionDetailStat = (TextView) findViewById(R.id.missionDetailStat);
+
         successCount = (TextView) findViewById(R.id.successCount);
         failCount = (TextView) findViewById(R.id.failCount);
         unDo = (TextView) findViewById(R.id.unDo);
+        successProgressBar = (CircularProgressIndicator) findViewById(R.id.successProgressBar);
+        failProgressBar = (CircularProgressIndicator) findViewById(R.id.failProgressBar);
 
         getGoodsCountTxT = (TextView) findViewById(R.id.getGoodsCountTxT);
         getOrderCountTxT = (TextView) findViewById(R.id.getOrderCountTxT);
         getReceiveCountTxT = (TextView) findViewById(R.id.getReceiveCountTxT);
         getDeliverGoodsCountTxT = (TextView) findViewById(R.id.getDeliverGoodsCountTxT);
 
-        successProgressBar = (CircularProgressIndicator) findViewById(R.id.successProgressBar);
-        failProgressBar = (CircularProgressIndicator) findViewById(R.id.failProgressBar);
+
 
         db = new DbAdapter(mContext);
     }
@@ -190,7 +193,7 @@ public class MissionListActivity extends BaseActivity {
 
         successMissionDetailCount = 0;
         failMissionDetailCount = 0;
-        missionDetailCount = missionDetails.size();
+        double missionDetailCount = missionDetails.size();
         for (MissionDetail missionDetail : missionDetails){
             switch (missionDetail.getStatus()){
                 case 3:
@@ -215,7 +218,6 @@ public class MissionListActivity extends BaseActivity {
         successProgressBar.setProgress((int) successRatio);
         failProgressBar.setProgress((int) failRatio);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -245,7 +247,7 @@ public class MissionListActivity extends BaseActivity {
 
     private void calcAndSetCheckListStat() {
         calcNumberOfChecklist();
-        setCountToUi();;
+        setCountToUi();
     }
 
     private void setCountToUi() {
@@ -274,4 +276,10 @@ public class MissionListActivity extends BaseActivity {
         }
 
     }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        setMissionStatus();
+    }
+
 }
