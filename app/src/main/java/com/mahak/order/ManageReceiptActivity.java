@@ -309,9 +309,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
 
         debtOfInvoce = calculateDebtOfInvoice();
         sum_receipt = debtOfInvoce;
-        txtAmount.setText(ServiceTools.formatPrice(debtOfInvoce));
         invoiceBalance.setText(ServiceTools.formatPrice(debtOfInvoce));
-        txtSumReceipt.setText(ServiceTools.formatPrice(debtOfInvoce));
 
         lstCheque.setOnItemClickListener(new OnItemClickListener() {
             @Override

@@ -12,15 +12,7 @@ import java.util.List;
 
 public class Product implements Parcelable {
 
-    //TAG
-    public static String TAG_ID = "Id";
-    public static String TAG_NAME = "Name";
-    public static String TAG_MAHAK_ID = "MahakId";
-    public static String TAG_MASTER_ID = "productCode";
-    public static String TAG_DATABASE_ID = "DatabaseId";
 
-
-    ////////////////////////////
 
     private long Id;
     private long ModifyDate;

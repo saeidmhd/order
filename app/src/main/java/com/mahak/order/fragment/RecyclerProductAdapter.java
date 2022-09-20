@@ -407,7 +407,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                         total_count2 = ServiceTools.toDouble(total2);
                         asset_count2 = ServiceTools.toDouble(asset2);
 
-                        if(asset_count2 > 0){
+                        if(asset_count2 > 0 || type == ProjectInfo.TYPE_ORDER){
                             total_count2++;
 
                             if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)
