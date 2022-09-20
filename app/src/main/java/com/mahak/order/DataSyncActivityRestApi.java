@@ -1756,7 +1756,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
             case 21:
                 return "گروه بندی کالاها";
             case 22:
-                return "تنظیمات";
+                return "ماموریت ها";
+            case 23:
+                return "دستور کارها";
         }
         return "";
     }

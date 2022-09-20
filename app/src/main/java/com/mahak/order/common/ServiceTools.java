@@ -1512,22 +1512,6 @@ public class ServiceTools {
         return 0;
     }
 
-    /*public static double toDouble(String value) {
-        if(value!=null){
-            value = MoneyFormatToNumber(value);
-            NumberFormat numberFormat = NumberFormat.getInstance();
-            try {
-                Number number = numberFormat.parse(value);
-                return number.doubleValue();
-            } catch (ParseException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell",BaseActivity.getPrefname() +"_"+ BaseActivity.getPrefTell());
-FirebaseCrashlytics.getInstance().recordException(e);
-                e.printStackTrace();
-            }
-        }
-        return 0;
-    }*/
-
     public static String toString(double value) {
         double tmp = value % 1;
         if (tmp > 0)
@@ -1965,11 +1949,20 @@ FirebaseCrashlytics.getInstance().recordException(e);
         return persian.getYear() + "/" + persian.getMonth() + "/" + persian.getDayOfMonth();
     }
 
-    public static String getFormattedDate(long milisecond) {
+    public static String getFormattedDateAndTime(long milisecond) {
 
         Date date = new Date();
         date.setTime(milisecond);
         String pattern = "yyyy-MM-dd'T'HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
+        return simpleDateFormat.format(date);
+
+    }
+    public static String getFormattedDate(long milisecond) {
+
+        Date date = new Date();
+        date.setTime(milisecond);
+        String pattern = "yyyy-MM-dd'T'00:00:00";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
         return simpleDateFormat.format(date);
 

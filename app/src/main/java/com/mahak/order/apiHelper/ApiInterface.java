@@ -49,15 +49,6 @@ public interface ApiInterface {
     @POST("zone/GetVisitorZoneLocations")
     Call<VisitorZoneLocation> GetZoneLocation(@Body ZoneBody body);
 
-    @POST("Mission/GetAll")
-    Call<GetAllMission> GetAllMission(@Header("token") String token,@Body AllMissionBody body);
-
-    @POST("Mission/CreateOrUpdate")
-    Call<MissionUpdateResponse> saveMissionStatus(@Header("token") String token, @Body SendUpdate body);
-
-    @POST("Mission/GetAllMissionDetail")
-    Call<GetAllMissionDetail> GetAllMissionDetail(@Header("token") String token, @Body AllMissionDetailBody body);
-
     @POST("user/login")
     Call<SignalLoginResult> LoginSignalR(@Body SignalLoginBody body);
 

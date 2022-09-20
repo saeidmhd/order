@@ -1,14 +1,10 @@
 package com.mahak.order.log;
 
-import static android.content.Context.LOCATION_SERVICE;
-
 import static com.mahak.order.BaseActivity.isRadaraActive;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.location.LocationManager;
-import android.net.ConnectivityManager;
 import android.util.Log;
 
 import com.mahak.order.BaseActivity;
@@ -61,7 +57,7 @@ public class BootCompleteReceiver extends BroadcastReceiver {
                 statusLog.setValue(jsonObject.toString());
             }
             if(statusLog != null){
-                statusLog.setCreated(ServiceTools.getFormattedDate(currentTime));
+                statusLog.setCreated(ServiceTools.getFormattedDateAndTime(currentTime));
                 statusLog.setVisitorId(BaseActivity.getPrefUserId());
                 statusLogs.add(statusLog);
                 manageLog.setStatusLogs(statusLogs);

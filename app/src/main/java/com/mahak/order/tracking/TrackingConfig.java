@@ -39,6 +39,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.mahak.order.BaseActivity.getPrefDatabaseId;
 import static com.mahak.order.BaseActivity.getPrefSignalUserToken;
 import static com.mahak.order.BaseActivity.getPrefUserMasterId;
 import static com.mahak.order.BaseActivity.setPrefSignalUserToken;
@@ -79,12 +80,12 @@ public class TrackingConfig {
         call.enqueue(new Callback<SignalLoginResult>() {
             @Override
             public void onResponse(Call<SignalLoginResult> call, Response<SignalLoginResult> response) {
-                dismissProgressDialog();
                 if (response.body() != null) {
                     if (response.body().isResult()) {
                         setPrefSignalUserToken(response.body().getUserToken());
                         getSetting(mContext);
                     }else {
+                        dismissProgressDialog();
                         Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -108,7 +109,6 @@ public class TrackingConfig {
         call.enqueue(new Callback<TrackingSetting>() {
             @Override
             public void onResponse(Call<TrackingSetting> call, Response<TrackingSetting> response) {
-                dismissProgressDialog();
                 if (response.body() != null) {
                     if (response.body().isSucceeded()) {
 
@@ -139,11 +139,13 @@ public class TrackingConfig {
                             ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_gps_config, gpsData.toString());
 
                         } catch (JSONException e) {
+                            dismissProgressDialog();
                             e.printStackTrace();
                         }
                         new GetTrackingZoneAsync().execute();
 
                     }else {
+                        dismissProgressDialog();
                         Toast.makeText(context, response.body().getErrors().get(0).toString(), Toast.LENGTH_LONG).show();
                     }
                 }
@@ -186,7 +188,6 @@ public class TrackingConfig {
             call.enqueue(new Callback<VisitorZoneLocation>() {
                 @Override
                 public void onResponse(Call<VisitorZoneLocation> call, Response<VisitorZoneLocation> response) {
-                    dismissProgressDialog();
                     if (response.body() != null) {
                         if (response.body().isSucceeded()) {
                             List<Datum> data =  response.body().getData();
@@ -201,6 +202,7 @@ public class TrackingConfig {
                             new SaveTrackingZoneAsyncTask(data).execute();
 
                         }else {
+                            dismissProgressDialog();
                             if (response.body() != null) {
                                 mMsg[0] = response.body().getMessage();
                             }
@@ -253,7 +255,6 @@ public class TrackingConfig {
         @Override
         protected void onPostExecute(Integer result) {
             new SendStopLogAsync().execute();
-            dismissProgressDialog();
         }
 
     }
@@ -264,6 +265,9 @@ public class TrackingConfig {
 
         @Override
         protected void onPreExecute() {
+            pd.setMessage("در حال ارسال نقاط توقف");
+            pd.setCancelable(false);
+            pd.show();
             super.onPreExecute();
         }
 
@@ -288,22 +292,20 @@ public class TrackingConfig {
         @Override
         protected void onPostExecute(Integer result) {
             final String[] mMsg = {""};
-            pd.setMessage("در حال ارسال نقاط توقف");
-            pd.setCancelable(false);
-            pd.show();
             ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
             Call<StopLocationResponse> call = apiService.SetStopLocation(stopLogs);
             call.enqueue(new Callback<StopLocationResponse>() {
                 @Override
                 public void onResponse(Call<StopLocationResponse> call, Response<StopLocationResponse> response) {
-                    dismissProgressDialog();
                     if (response.body() != null) {
                         if (response.body().isSucceeded()) {
                             for(StopLog stopLog : stopLogs)
                                 stopLog.setSent(1);
                             UpdateOrInsertStopLogToDb(stopLogs);
-                        }else
+                        }else{
+                            dismissProgressDialog();
                             ServiceTools.writeLog("\n" + "error in sending points");
+                        }
                     }
                     new SendStatusLogAsync().execute();
                 }
@@ -324,6 +326,9 @@ public class TrackingConfig {
 
         @Override
         protected void onPreExecute() {
+            pd.setMessage("در حال ارسال لاگ های مدیریت");
+            pd.setCancelable(false);
+            pd.show();
             super.onPreExecute();
         }
 
@@ -348,9 +353,6 @@ public class TrackingConfig {
         @Override
         protected void onPostExecute(Integer result) {
             final String[] mMsg = {""};
-            pd.setMessage("در حال ارسال لاگ های مدیریت");
-            pd.setCancelable(false);
-            pd.show();
             ManageLog manageLog = new ManageLog();
             manageLog.setStatusLogs(statusLogs);
             ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);

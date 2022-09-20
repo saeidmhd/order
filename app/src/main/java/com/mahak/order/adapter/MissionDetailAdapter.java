@@ -74,6 +74,7 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent,
                                          int viewType) {
+        setMissionStatus();
         View view = mInflater.inflate(R.layout.mission_detail_item, parent, false);
         return new ViewHolder(view);
     }
@@ -184,7 +185,7 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
             @Override
             public void onClick(View view) {
                 missionDetail.setStatus(1);
-                missionDetail.setDate(ServiceTools.getFormattedDate(new Date().getTime()));
+                missionDetail.setDate(ServiceTools.getFormattedDateAndTime(new Date().getTime()));
                 missionDetail.addObserver(missionListActivity);
                 missionDetail.setChangeAndNotify();
                 notifyItemChanged(position);
@@ -197,7 +198,7 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
             @Override
             public void onClick(View view) {
                 missionDetail.setStatus(2);
-                missionDetail.setDate(ServiceTools.getFormattedDate(new Date().getTime()));
+                missionDetail.setDate(ServiceTools.getFormattedDateAndTime(new Date().getTime()));
                 missionDetail.addObserver(missionListActivity);
                 missionDetail.setChangeAndNotify();
                 notifyItemChanged(position);
@@ -210,7 +211,7 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
             @Override
             public void onClick(View view) {
                 missionDetail.setStatus(3);
-                missionDetail.setDate(ServiceTools.getFormattedDate(new Date().getTime()));
+                missionDetail.setDate(ServiceTools.getFormattedDateAndTime(new Date().getTime()));
                 missionDetail.addObserver(missionListActivity);
                 missionDetail.setChangeAndNotify();
                 notifyItemChanged(position);
@@ -223,7 +224,7 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
             @Override
             public void onClick(View view) {
                 missionDetail.setStatus(4);
-                missionDetail.setDate(ServiceTools.getFormattedDate(new Date().getTime()));
+                missionDetail.setDate(ServiceTools.getFormattedDateAndTime(new Date().getTime()));
                 missionDetail.addObserver(missionListActivity);
                 missionDetail.setChangeAndNotify();
                 notifyItemChanged(position);
@@ -252,14 +253,18 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
             }
 
             if(missionDetails.size() == done_count){
-                mission.setEndDate(ServiceTools.getFormattedDate(new Date().getTime()));
+                mission.setEndDate(ServiceTools.getFormattedDateAndTime(new Date().getTime()));
                 mission.setStatus(3);
             }
-            else if(missionDetails.size() == non_started)
+            else if(missionDetails.size() == non_started){
+                mission.setEndDate(null);
                 mission.setStatus(1);
-            else
-                mission.setStatus(2);
+            }
 
+            else{
+                mission.setEndDate(null);
+                mission.setStatus(2);
+            }
         }
         db.AddMission(mission);
     }

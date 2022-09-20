@@ -283,9 +283,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         missions = db.getAllMission();
 
         if(missions.size() > 0){
-            if(missionIndex == 0){
-                missionIndex = missions.get(0).getMissionId();
-            }
+            missionIndex = missions.get(0).getMissionId();
             missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
         }else
             missionIndex = 0;

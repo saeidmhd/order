@@ -17,7 +17,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.mahak.order.BaseActivity;
-import com.mahak.order.BuildConfig;
 import com.mahak.order.common.Bank;
 import com.mahak.order.common.Category;
 import com.mahak.order.common.CheckList;
@@ -71,6 +70,7 @@ import com.mahak.order.mission.MissionDetail;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9378,6 +9378,7 @@ public class DbAdapter {
 
 
     //................ Mission log
+
     public void AddMission(Mission mission) {
         mDb.beginTransaction();
         try {
@@ -9428,12 +9429,13 @@ public class DbAdapter {
             mDb.endTransaction();
         }
     }
+
     public ArrayList<Mission> getAllMission() {
         Mission mission;
         Cursor cursor;
         ArrayList<Mission> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select * from Mission where userid = ? and deleted = 0 order by missionId desc ", new String[]{String.valueOf(getPrefUserId())});
+            cursor = mDb.rawQuery("select * from Mission where userid = ? and deleted = 0 and date >= ? order by missionId desc ", new String[]{String.valueOf(getPrefUserId()),ServiceTools.getFormattedDate(new Date().getTime())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {

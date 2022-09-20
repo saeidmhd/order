@@ -444,8 +444,8 @@ public class LocationService extends Service  {
                 tracking_client_id = ServiceTools.toLong(ServiceTools.getStopLocationId(lastStopLocation.getTime()));
                 stopLog.setDuration(stop_time / 1000);
                 stopLog.setStopLocationClientId(tracking_client_id);
-                stopLog.setEndDate(ServiceTools.getFormattedDate(currentTime));
-                stopLog.setEntryDate(ServiceTools.getFormattedDate(lastStopLocation.getTime()));
+                stopLog.setEndDate(ServiceTools.getFormattedDateAndTime(currentTime));
+                stopLog.setEntryDate(ServiceTools.getFormattedDateAndTime(lastStopLocation.getTime()));
                 stopLog.setLat(lastStopLocation.getLatitude());
                 stopLog.setLng(lastStopLocation.getLongitude());
                 stopLog.setVisitorId(getPrefUserId());
