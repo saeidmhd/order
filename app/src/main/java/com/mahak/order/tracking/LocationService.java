@@ -7,7 +7,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -21,13 +20,13 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.DetectedActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -36,7 +35,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.location.Priority;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -146,7 +144,7 @@ public class LocationService extends Service  {
     /**
      * Callback for changes in location.
      */
-    private LocationCallback mLocationCallback;
+    private static LocationCallback mLocationCallback;
 
     private Handler mServiceHandler;
 
@@ -162,25 +160,14 @@ public class LocationService extends Service  {
 
     long stop_time;
     Location lastStopLocation;
-    int lastState = -1;
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(Constants.BROADCAST_DETECTED_ACTIVITY)){
-                int type = intent.getIntExtra("type", -1);
-                int confidence = intent.getIntExtra("confidence", 0);
-                provideUserStateOutput(type, confidence);
-            }
-        }
-    };
 
     @Override
     public void onCreate() {
 
         Log.i(TAG, "in onCreate()");
 
-        registerLogReceiver();
+        registerReceiver2();
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mSettingsClient = LocationServices.getSettingsClient(this);
@@ -195,50 +182,6 @@ public class LocationService extends Service  {
                     new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
             mNotificationManager.createNotificationChannel(mChannel);
         }
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
-                new IntentFilter(Constants.BROADCAST_DETECTED_ACTIVITY));
-    }
-
-    private void provideUserStateOutput(int type, int confidence) {
-        String label = "";
-        if(confidence > Constants.CONFIDENCE){
-            switch (type){
-                case DetectedActivity.WALKING:
-                    removeLocationUpdates2();
-                    if(locationRequest == null)
-                        locationRequest = LocationRequest.create();
-                    locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-                            .setInterval(5 * 1000)
-                            .setFastestInterval(5 * 1000);
-                    subscribeLocation();
-                    label = "WALKING : " + confidence ;
-                    ServiceTools.writeLogRadara(label);
-                    break;
-                case DetectedActivity.IN_VEHICLE:
-                    removeLocationUpdates2();
-                    if(locationRequest == null)
-                        locationRequest = LocationRequest.create();
-                    locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-                            .setInterval(5 * 1000)
-                            .setFastestInterval(5 * 1000);
-                    subscribeLocation();
-                    label = "IN_VEHICLE : " + confidence ;
-                    ServiceTools.writeLogRadara(label);
-                    break;
-                case DetectedActivity.STILL:
-                    removeLocationUpdates2();
-                    if(locationRequest == null)
-                        locationRequest = LocationRequest.create();
-                    locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-                                    .setSmallestDisplacement(100);
-                    subscribeLocation();
-                    label = "STILL : " + confidence;
-                    ServiceTools.writeLogRadara(label);
-                    break;
-            }
-            Log.d("act_rect" , label);
-        }
     }
 
     @Override
@@ -250,7 +193,9 @@ public class LocationService extends Service  {
             removeLocationUpdates();
             stopSelf();
         }
+
         getLastLocation();
+
         return START_NOT_STICKY;
     }
 
@@ -291,7 +236,6 @@ public class LocationService extends Service  {
     public void onDestroy() {
         Log.i(TAG, "onDestroy");
         mServiceHandler.removeCallbacksAndMessages(null);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
     }
 
     public LocationService(){}
@@ -306,18 +250,13 @@ public class LocationService extends Service  {
     }
 
     public void startTracking() {
+        createLocationCallback();
         createLocationRequest();
-        subscribeLocation();
-        mContext.startService(new Intent(mContext, DetectedActivitiesService.class));
-    }
-
-    private void subscribeLocation() {
-        makeLocationCallback();
         buildLocationSettingsRequest();
         startLocationUpdates();
     }
 
-    private void makeLocationCallback() {
+    private void createLocationCallback() {
         mLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
@@ -331,9 +270,11 @@ public class LocationService extends Service  {
     }
 
     private void createLocationRequest() {
-        if(locationRequest == null)
-            locationRequest = LocationRequest.create();
-        locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY).setSmallestDisplacement(100);
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10 * 1000)
+                .setFastestInterval(10 * 1000)
+                .setSmallestDisplacement(100);
     }
     private boolean compareWithLastLocation(Location currentLocation) {
 
@@ -365,9 +306,7 @@ public class LocationService extends Service  {
         lasLocation.setTime(obj.optLong(ProjectInfo._json_key_date));
         mDistance = distance(lasLocation.getLatitude(), lasLocation.getLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(), "K") * 1000;
         boolean hasSpeed = (int)currentLocation.getSpeed() > 0;
-        boolean hasAccuracy = currentLocation.hasAccuracy();
-        boolean accurateLocation = (int)currentLocation.getAccuracy() <= 20;
-        result = hasAccuracy && hasSpeed && accurateLocation;
+        result = mDistance <= 350 && mDistance > 10 && hasSpeed;
         if(result){
             saveAndSendStopLocation();
             ServiceTools.writeLogRadara( "\n" + mDistance + "\n" + currentLocation.getSpeed() + "\n" + currentLocation.getAccuracy() + "\n" + currentLocation.getLatitude() + "\n" + currentLocation.getLongitude());
@@ -399,12 +338,13 @@ public class LocationService extends Service  {
                         mFusedLocationClient.requestLocationUpdates(locationRequest,mLocationCallback, Looper.myLooper());
                         if(timerHelper == null)
                             timerHelper =  new TimerHelper();
+                        updateUI();
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        ServiceTools.writeLogRadara("onFailure" + e.getMessage());
                         int statusCode = ((ApiException) e).getStatusCode();
                         switch (statusCode) {
                             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
@@ -414,22 +354,22 @@ public class LocationService extends Service  {
                                     if(activity != null)
                                         rae.startResolutionForResult(activity, REQUEST_Location_ON);
                                 } catch (IntentSender.SendIntentException sie) {
-                                    ServiceTools.writeLogRadara(sie.getMessage());
+                                    //Log.i(TAG, "PendingIntent unable to execute request.");
                                 }
                                 break;
                             case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                                 String errorMessage = "Location settings are inadequate, and cannot be " +
                                         "fixed here. Fix in Settings.";
                                 //Log.e(TAG, errorMessage);
-                                ServiceTools.writeLogRadara(errorMessage);
+                                Toast.makeText(mContext, errorMessage, Toast.LENGTH_LONG).show();
                         }
+                        updateUI();
                     }
                 });
     }
 
     public void stopTracking() {
         removeLocationUpdates();
-        stopService(new Intent( mContext, DetectedActivitiesService.class ));
     }
 
     private void saveAndSendStopLocation() {
@@ -444,8 +384,8 @@ public class LocationService extends Service  {
                 tracking_client_id = ServiceTools.toLong(ServiceTools.getStopLocationId(lastStopLocation.getTime()));
                 stopLog.setDuration(stop_time / 1000);
                 stopLog.setStopLocationClientId(tracking_client_id);
-                stopLog.setEndDate(ServiceTools.getFormattedDateAndTime(currentTime));
-                stopLog.setEntryDate(ServiceTools.getFormattedDateAndTime(lastStopLocation.getTime()));
+                stopLog.setEndDate(ServiceTools.getFormattedDate(currentTime));
+                stopLog.setEntryDate(ServiceTools.getFormattedDate(lastStopLocation.getTime()));
                 stopLog.setLat(lastStopLocation.getLatitude());
                 stopLog.setLng(lastStopLocation.getLongitude());
                 stopLog.setVisitorId(getPrefUserId());
@@ -487,7 +427,6 @@ public class LocationService extends Service  {
             radaraDb.updateStopLogs(stopLogs);
         } catch (Exception e) {
             e.printStackTrace();
-            ServiceTools.writeLogRadara(e.getMessage());
             if(e.getMessage() != null)
                 Log.e("saveInDb",e.getMessage());
         }
@@ -529,7 +468,6 @@ public class LocationService extends Service  {
         try {
             return new JSONObject(lastLocation);
         } catch (JSONException e) {
-            ServiceTools.writeLogRadara(e.getMessage());
             return null;
         }
     }
@@ -540,7 +478,6 @@ public class LocationService extends Service  {
         try {
             return new JSONObject(lastLocation);
         } catch (JSONException e) {
-            ServiceTools.writeLogRadara(e.getMessage());
             return null;
         }
     }
@@ -574,7 +511,6 @@ public class LocationService extends Service  {
             obj.put(ProjectInfo._json_key_date, System.currentTimeMillis());
             ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_last_location, obj.toString());
         } catch (JSONException e) {
-            ServiceTools.writeLogRadara(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -586,7 +522,6 @@ public class LocationService extends Service  {
             obj.put(ProjectInfo._json_key_stop_date, System.currentTimeMillis());
             ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_last_stop_location, obj.toString());
         } catch (JSONException e) {
-            ServiceTools.writeLogRadara(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -649,13 +584,13 @@ public class LocationService extends Service  {
                         getUserTokenAndSendAgain(visitorLocations);
                     }
                 } else
-                    ServiceTools.writeLogRadara("خطا در ارسال نقاط به سرور");
+                    Toast.makeText(mContext, R.string.send_error, Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
             public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
-                ServiceTools.writeLogRadara(t.toString());
+                Toast.makeText(mContext, t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -683,7 +618,7 @@ public class LocationService extends Service  {
 
             @Override
             public void onFailure(Call<LoginResult> call, Throwable t) {
-                ServiceTools.writeLogRadara(t.getMessage());
+                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -695,7 +630,6 @@ public class LocationService extends Service  {
         try {
             result = radaraDb.AddGpsTracking(VisitorLocations);
         } catch (Exception e) {
-            ServiceTools.writeLogRadara(e.getMessage());
             e.printStackTrace();
             if(e.getMessage() != null)
                 Log.e("saveInDb",e.getMessage());
@@ -710,7 +644,6 @@ public class LocationService extends Service  {
         try {
             radaraDb.updateGpsTrackingForSending(visitorLocation);
         } catch (Exception e) {
-            ServiceTools.writeLogRadara(e.getMessage());
             Log.e("saveInDb",e.getMessage());
         }
         radaraDb.close();
@@ -722,7 +655,6 @@ public class LocationService extends Service  {
             try {
                 Thread.sleep(200);
             } catch (Exception e) {
-                ServiceTools.writeLogRadara(e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -796,44 +728,14 @@ public class LocationService extends Service  {
         try {
             if(mLocationCallback != null){
                 if(mFusedLocationClient != null){
-                    mFusedLocationClient.removeLocationUpdates(mLocationCallback).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Log.d("remove","removelocation");
-                        }
-                    });
-
-                    mFusedLocationClient.removeLocationUpdates(mLocationCallback).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
-                            Utils.setRequestingLocationUpdates(mContext, false);
-                            stopSelf();
-                            if(realTimeLocation != null)
-                                realTimeLocation.stopRealTimeSend();
-                        }
-                    });
+                    mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+                    Utils.setRequestingLocationUpdates(mContext, false);
+                    stopSelf();
+                    if(realTimeLocation != null)
+                        realTimeLocation.stopRealTimeSend();
                 }
             }
         } catch (SecurityException unlikely) {
-            ServiceTools.writeLogRadara(unlikely.getMessage());
-            Utils.setRequestingLocationUpdates(mContext, true);
-            Log.e(TAG, "Lost location permission. Could not remove updates. " + unlikely);
-        }
-    }
-    public void removeLocationUpdates2() {
-        try {
-            if(mLocationCallback != null){
-                if(mFusedLocationClient != null){
-                    mFusedLocationClient.removeLocationUpdates(mLocationCallback).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Log.d("remove","removelocation");
-                        }
-                    });
-                }
-            }
-        } catch (SecurityException unlikely) {
-            ServiceTools.writeLogRadara(unlikely.getMessage());
             Utils.setRequestingLocationUpdates(mContext, true);
             Log.e(TAG, "Lost location permission. Could not remove updates. " + unlikely);
         }
@@ -879,7 +781,6 @@ public class LocationService extends Service  {
                             }
                         });
             } catch (SecurityException unlikely) {
-                ServiceTools.writeLogRadara(unlikely.getMessage());
                 Log.e(TAG, "Lost location permission." + unlikely);
             }
         }
@@ -953,14 +854,14 @@ public class LocationService extends Service  {
                         isLogging = false;
                         performSignalOperation(mCurrentLocation);
                     }else {
-                        ServiceTools.writeLogRadara(response.body().getMessage());
+                        Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                         isLogging = false;
                     }
                 }
             }
             @Override
             public void onFailure(Call<SignalLoginResult> call, Throwable t) {
-                ServiceTools.writeLogRadara(t.getMessage());
+                Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT).show();
                 isLogging = false;
             }
         });
@@ -977,7 +878,6 @@ public class LocationService extends Service  {
                 StartTime = obj.getInt(ProjectInfo._json_key_startTime);
                 EndTime = obj.getInt(ProjectInfo._json_key_endTime);
             } catch (Exception e) {
-                ServiceTools.writeLogRadara(e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -1020,7 +920,7 @@ public class LocationService extends Service  {
         }
     }
 
-    private void registerLogReceiver() {
+    private void registerReceiver2() {
         LogReceiver br = new LogReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.location.PROVIDERS_CHANGED");
