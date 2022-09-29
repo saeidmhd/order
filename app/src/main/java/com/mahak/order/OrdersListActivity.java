@@ -1221,7 +1221,7 @@ public class OrdersListActivity extends BaseActivity {
             Set<OrderDetail> set = new LinkedHashSet<>();
             for (int i = 0; i < arrayInvoice.size(); i++) {
                 arrayInvoice.get(i).setOrderId(0);
-                orderDetails = db.getAllOrderDetails(arrayInvoice.get(i).getId());
+                orderDetails = db.getAllOrderDetailForSend(arrayInvoice.get(i).getId());
                 for (OrderDetail orderDetail : orderDetails) {
                     orderDetailProperties = db.getAllOrderDetailProperty(orderDetail.getOrderId(), orderDetail.getProductId());
                     if (orderDetailProperties.size() > 0) {
@@ -1281,10 +1281,12 @@ public class OrdersListActivity extends BaseActivity {
                         if (arrayInvoice.size() > 0) {
                             for (int i = 0; i < arrayInvoice.size(); i++) {
                                 arrayInvoice.get(i).setOrderId(response.body().getData().getObjects().getOrders().getResults().get(i).getEntityID());
+                                arrayInvoice.get(i).setRowVersion(response.body().getData().getObjects().getOrders().getResults().get(i).getRowVersion());
                                 arrayInvoice.get(i).setPublish(ProjectInfo.PUBLISH);
                                 db.UpdateOrder(arrayInvoice.get(i));
                                 for (int j = 0; j < arrayInvoiceDetail.size(); j++) {
                                     arrayInvoiceDetail.get(j).setOrderDetailId(response.body().getData().getObjects().getOrderDetails().getResults().get(j).getEntityID());
+                                    arrayInvoiceDetail.get(j).setRowVersion(response.body().getData().getObjects().getOrderDetails().getResults().get(j).getRowVersion());
                                     db.UpdateOrderDetail(arrayInvoiceDetail.get(j));
                                 }
                             }
@@ -1781,3 +1783,4 @@ public class OrdersListActivity extends BaseActivity {
         super.onResume();
     }
 }
+

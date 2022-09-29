@@ -88,7 +88,7 @@
     <string name="str_username_en">Benutzername</string>
     <string name="str_password_en">Passwort</string>
     <string name="str_login">Einloggen</string>
-    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.472</string>
+    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.473</string>
     <string name="str_email">E-Mail</string>
     <string name="str_body">Text</string>
     <string name="str_message_content">Textnachricht</string>
@@ -1341,5 +1341,8 @@
     <string name="new_3_472">نسخه ۳.۴۷۲</string>
     <string name="new_3_472_1">رفع خطای مربوط طرح تشویقی وزنی و حجمی</string>
     <string name="new_3_472_2">برداشتن پیشنهاد نقدی از فرم دریافتی</string>
+
+    <string name="new_3_473">نسخه ۳.۴۷۳</string>
+    <string name="new_3_473_1">رفع خطای مربوط ارسال فاکتور به سرور از لیست فاکتورها</string>
 
 </resources>

@@ -102,7 +102,7 @@
     <string name="str_username_en">UserName</string>
     <string name="str_password_en">Password</string>
     <string name="str_login">ورود به سیستم</string>
-    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.472</string>
+    <string name="str_forms_footer_mahak">Mahak Order App. All Right Reserved\nCopyright 2022 - Version 3.473</string>
     <string name="str_email">پست الکترونیک</string>
     <string name="str_body">متن پیام</string>
     <string name="str_message_content">متن پیام</string>
@@ -815,7 +815,7 @@
     <string name="new_3_275_3">جستجوی کالا با استفاده از هر قسمت نام کالا</string>
 
     <string name="new_3_295">نسخه ۳.۲۹۵</string>
-    <string name="new_3_295_1">افزوده شدن علامت گیفت به کالایی دارای طرح تشویقی  </string>
+    <string name="new_3_295_1">افزوده شدن علامت گیفت به کالاهای دارای طرح تشویقی  </string>
     <string name="new_3_295_2">	افزوده شدن فیلتر طرحهای تشویقی به لیست اشخاص و کالاها</string>
     <string name="new_3_295_3">افزوده شدن فی به چاپ در پرینتر i9000s </string>
     <string name="new_3_295_4">	رفع خطای جستجوی فاکتور ها</string>
@@ -857,25 +857,25 @@
 
     <string name="new_3_420">نسخه ۳.۴۲۰</string>
     <string name="new_3_420_1">	برطرف شدن مشکل گزارشات داشبورد</string>
-    <string name="new_3_420_2">نمایش دکمه اضافه و منها در لیست کالاها </string>
+    <string name="new_3_420_2">افزوده شدن دکمه اضافه و منها در لیست کالاها </string>
     <string name="new_3_420_3">رفع خطای تصاویر آفلاین کالاها </string>
     <string name="new_3_420_4">	نمایش مسیر یابی مشتریان بر روی نقشه زوم</string>
     <string name="new_3_420_5">	رفع مشکل ثبت چک در دریافتی</string>
-    <string name="new_3_420_6">	رفع مشکل دریافتی urovo </string>
-    <string name="new_3_420_7">	تغییر در نمایش طرح های تشویقی </string>
-    <string name="new_3_420_8">	بهبود رابط کاربری برای گوشی های کوچک </string>
-    <string name="new_3_420_9">	افزایش سرعت لود کالاها و اسکرول کالاها </string>
+    <string name="new_3_420_6">رفع مشکل دریافتی urovo </string>
+    <string name="new_3_420_7">تغییر در نمایش طرح های تشویقی </string>
+    <string name="new_3_420_8">	بهبود رابط کاربری برای گوشی های کوچک</string>
+    <string name="new_3_420_9">افزایش سرعت لود کالاها و اسکرول کالاها</string>
 
     <string name="new_3_430">نسخه ۳.۴۳۰</string>
-    <string name="new_3_430_1">	افزوده شدن قابلیت توقف رادارا</string>
-    <string name="new_3_430_2">بررسی اعتبار مشتری برای ثبت فاکتور </string>
+    <string name="new_3_430_1">افزوده شدن قابلیت توقف رادارا</string>
+    <string name="new_3_430_2">بررسی اعتبار مشتری برای ثبت فاکتور</string>
     <string name="new_3_430_3">اشانتیون دستی (بر اساس تنظیمات محک)</string>
-    <string name="new_3_430_4">	ثبت کالای تکراری (بر اساس تنظیمات محک)</string>
-    <string name="new_3_430_5">	برطرف شدن خطای موجودی دو برابر</string>
-    <string name="new_3_430_6">	نمایش فی مصرف کننده در چاپ </string>
-    <string name="new_3_430_7">	بهبود عملکرد رادارا </string>
-    <string name="new_3_430_8">	بهبود رابط کاربری برای گوشی های کوچک </string>
-    <string name="new_3_430_9">	افزایش سرعت لود کالاها و اسکرول کالاها </string>
+    <string name="new_3_430_4">ثبت کالای تکراری (بر اساس تنظیمات محک)</string>
+    <string name="new_3_430_5">برطرف شدن خطای موجودی دو برابر</string>
+    <string name="new_3_430_6">نمایش فی مصرف کننده در چاپ</string>
+    <string name="new_3_430_7">بهبود عملکرد رادارا</string>
+    <string name="new_3_430_8">بهبود رابط کاربری برای گوشی های کوچک</string>
+    <string name="new_3_430_9">افزایش سرعت لود کالاها و اسکرول کالاها</string>
 
 
     <string name="new_3_440">نسخه ۳.۴۴۰</string>
@@ -892,7 +892,7 @@
     <string name="new_3_445_2">ثبت مجدد تنظیمات با لاگین کاربر جدید </string>
     <string name="new_3_445_3">رفع خطای نمایش طرح های تکراری در تب طرح های تشویقی</string>
     <string name="new_3_445_4">	برطرف شدن خطا در بروزرسانی در صورت sleep device</string>
-    <string name="new_3_445_5">	برطرف شدن خطای سینک درارسال اطلاعات مشتری ویرایش شده</string>
+    <string name="new_3_445_5">	برطرف شدن خطای سینک در ارسال اطلاعات مشتری ویرایش شده</string>
 
     <string name="new_3_450">نسخه ۳.۴۵۰</string>
     <string name="new_3_450_1">اصلاح سینک اطلاعات در جهت تسریع دریافت و ذخیره اطلاعات</string>
@@ -903,27 +903,30 @@
 
     <string name="new_3_455">نسخه ۳.۴۵۵</string>
     <string name="new_3_455_1">تغییر در رابط کاربری ثبت دریافتی</string>
-    <string name="new_3_455_2"> فعال شدن اسمارت پوز MoreFun</string>
-    <string name="new_3_455_3">رفع خطای مربوط به نمایش مشتری یا کالای تکراری در صورت دسته بندی تکراری</string>
+    <string name="new_3_455_2"> سازگاری با اسمارت پوز MoreFun</string>
+    <string name="new_3_455_3">رفع خطای نمایش مشتری یا کالای تکراری در صورت دسته بندی تکراری</string>
     <string name="new_3_455_4">تغییر در نمایش فرم جستجو در تمامی فرم ها</string>
     <string name="new_3_455_5">نمایش تخفیف سطری در چاپ ها</string>
-    <string name="new_3_455_6">رفع خطای اجرای در اندروید ۴.۴.۴</string>
+    <string name="new_3_455_6">رفع خطای اجرا در اندروید ۴.۴.۴</string>
 
     <string name="new_3_460">نسخه ۳.۴۶۰</string>
-    <string name="new_3_460_1">رفع خطای مربوط به نمایش موجودی اشتباه در انتخاب دسته بندی</string>
-    <string name="new_3_460_2">رفع خطای مربوط به ارسال تعداد صفر در کالای دو واحده</string>
+    <string name="new_3_460_1">رفع خطای نمایش موجودی اشتباه در انتخاب دسته بندی</string>
+    <string name="new_3_460_2">رفع خطای ارسال تعداد صفر در کالای دو واحده</string>
 
 
     <string name="new_3_465">نسخه ۳.۴۶۵</string>
-    <string name="new_3_465_1">رفع خطای مربوط مقدار پیشنهادی دو برابری دریافتی</string>
+    <string name="new_3_465_1">رفع خطای مقدار پیشنهادی دو برابری دریافتی</string>
     <string name="new_3_465_2">رفع خطای نمایش باکس نقدی دریافتی</string>
-    <string name="new_3_465_3">رفع خطای مربوط به اعتبار مشتری میهمان</string>
-    <string name="new_3_465_4">رفع خطای مربوط به طرح تشویقی سطری از همان کالا</string>
+    <string name="new_3_465_3">رفع خطای اعتبار مشتری میهمان</string>
+    <string name="new_3_465_4">رفع خطای طرح تشویقی سطری از همان کالا</string>
 
 
     <string name="new_3_472">نسخه ۳.۴۷۲</string>
-    <string name="new_3_472_1">رفع خطای مربوط طرح تشویقی وزنی و حجمی</string>
+    <string name="new_3_472_1">رفع خطای طرح تشویقی وزنی و حجمی</string>
     <string name="new_3_472_2">برداشتن پیشنهاد نقدی از فرم دریافتی</string>
+
+    <string name="new_3_473">نسخه ۳.۴۷۳</string>
+    <string name="new_3_473_1">رفع خطای ارسال فاکتور به سرور از لیست فاکتورها</string>
 
     <string name="PersonClientId">PersonClientId</string>
     <string name="array">array</string>
