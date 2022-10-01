@@ -271,9 +271,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:layout_weight="1"
-                        android:text="(با تخفیف و مالیات)"
+                        android:text="@string/with_discount_tax"
                         android:textColor="@android:color/black"
-                        android:textSize="9sp"/>
+                        android:textSize="8sp"/>
 
                     <LinearLayout
                         android:id="@+id/ll_consumer_price_box"

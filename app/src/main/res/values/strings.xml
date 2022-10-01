@@ -1413,6 +1413,7 @@
     <string name="check_new_person_activity">\" برای این مشتری عملیات ثبت شده ، امکان حذف وجود ندارد!\"</string>
     <string name="no_good">کالایی انتخاب نکرده اید!</string>
     <string name="negative_asset">عدم موجودی برای ثبت اشانتیون</string>
+    <string name="with_discount_tax">(با تخفیف و مالیات)</string>
 
 
 </resources>
