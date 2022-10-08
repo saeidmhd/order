@@ -13,6 +13,7 @@
         android:background="@color/forms_page_footer_line_light" />
 
     <com.mahak.order.widget.FontTextView
+        android:id="@+id/version_footer_mahak"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

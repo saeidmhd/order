@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -45,6 +46,7 @@ public class LoginActivityRestApi extends BaseActivity {
 
     private EditText txtUsername, txtPassword;
     private Button btnLogin;
+    private TextView version_footer_mahak;
 
     private Context mContext;
     private Activity mActivity;
@@ -152,7 +154,9 @@ public class LoginActivityRestApi extends BaseActivity {
 
         txtUsername = (EditText) findViewById(R.id.txtUsername);
         txtPassword = (EditText) findViewById(R.id.txtPassword);
+        version_footer_mahak = (TextView) findViewById(R.id.version_footer_mahak);
         btnLogin = (Button) findViewById(R.id.btnLogin);
+        version_footer_mahak.setText(getString(R.string.str_forms_footer_mahak) +  " " + ServiceTools.getVersionName(LoginActivityRestApi.this));
         mDb = new DbAdapter(mContext);
 
     }

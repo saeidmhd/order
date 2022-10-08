@@ -331,7 +331,7 @@ public class ReceiptsListActivity extends BaseActivity {
                                         if (receipt.getPublish() == ProjectInfo.DONT_PUBLISH) {
                                             if(!visitorHasCredit())
                                                 Toast.makeText(mContext, getResources().getString(R.string.str_message_less_remain_credit), Toast.LENGTH_SHORT).show();
-                                            else if(!canRemoveThisReceipt(receipt))
+                                            else if(!receipt.getTrackingCode().equals(ProjectInfo.DONT_CODE) && canRemoveThisReceipt(receipt))
                                                 Toast.makeText(mContext, getResources().getString(R.string.str_message_less_remain_credit_customer), Toast.LENGTH_SHORT).show();
                                             else
                                                 Dialogdelete();
