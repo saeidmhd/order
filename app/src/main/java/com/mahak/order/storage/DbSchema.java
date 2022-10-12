@@ -55,6 +55,18 @@ public class DbSchema {
                 "PRIMARY KEY(`Id`) )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
+    public static class ExceptionSchema implements BaseColumns {
+
+        public static final String TABLE_NAME = "ExceptionLog";
+        public static final String COLUMN_ID = "Id";
+        public static final String COLUMN_Exception = "Exception";
+
+        public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"ExceptionLog\" ( " +
+                " \"Id\" INTEGER," +
+                " \"Exception\" TEXT," +
+                " PRIMARY KEY(Id))";
+        public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+    }
 
     public static class CustomerSchema implements BaseColumns {
 
@@ -2023,5 +2035,4 @@ public class DbSchema {
                 " `UserId` NUMERIC )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
-
 }

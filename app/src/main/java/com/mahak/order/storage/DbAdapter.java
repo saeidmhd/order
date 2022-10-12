@@ -103,6 +103,13 @@ public class DbAdapter {
     }
 
     //QUERIES ADD
+
+    /*public void AddException(ExceptionLog exceptionLog) {
+        ContentValues initialvalue = new ContentValues();
+        initialvalue.put(DbSchema.ExceptionSchema.COLUMN_Exception, exceptionLog.getException());
+        mDb.insert(DbSchema.CustomerSchema.TABLE_NAME, null, initialvalue);
+    }*/
+
     public void AddOrUpdateCustomer(Customer customer) {
         if (customer.getFirstName() == null)
             customer.setFirstName("");
@@ -9643,6 +9650,7 @@ public class DbAdapter {
             
             db.execSQL(DbSchema.PhotoGallerySchema.CREATE_TABLE);
             db.execSQL(DbSchema.RegionSchema.CREATE_TABLE);
+            db.execSQL(DbSchema.ExceptionSchema.CREATE_TABLE);
 
             db.execSQL("CREATE INDEX " + INDEX_Product + " ON " + DbSchema.ProductSchema.TABLE_NAME + "(" + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + ")");
 
