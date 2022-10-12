@@ -82,6 +82,29 @@
                         android:orientation="horizontal">
 
                         <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvSendCustomerList"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/NormalSize" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:padding="@dimen/NormalSize"
+                            android:text="@string/str_send_customer_list" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
                             android:id="@+id/tvInvoiceList"
                             android:layout_width="0dp"
                             android:layout_height="fill_parent"
@@ -174,6 +197,29 @@
                         android:orientation="horizontal">
 
                         <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvSendNonRegister"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/NormalSize" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:padding="@dimen/NormalSize"
+                            android:text="@string/str_none_register_list" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <com.mahak.order.widget.FontTextView
                             android:id="@+id/tvPayableList"
                             android:layout_width="0dp"
                             android:layout_height="fill_parent"
@@ -213,51 +259,7 @@
                             android:text="@string/str_done_check_list" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:orientation="horizontal">
 
-                        <com.mahak.order.widget.FontTextView
-                            android:id="@+id/tvSendNonRegister"
-                            android:layout_width="0dp"
-                            android:layout_height="fill_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical|left"
-                            android:paddingLeft="@dimen/NormalSize" />
-
-                        <com.mahak.order.widget.FontTextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:layout_weight="1"
-                            android:padding="@dimen/NormalSize"
-                            android:text="@string/str_none_register_list" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:orientation="horizontal">
-
-                        <com.mahak.order.widget.FontTextView
-                            android:id="@+id/tvSendCustomerList"
-                            android:layout_width="0dp"
-                            android:layout_height="fill_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical|left"
-                            android:paddingLeft="@dimen/NormalSize" />
-
-                        <com.mahak.order.widget.FontTextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:layout_weight="1"
-                            android:padding="@dimen/NormalSize"
-                            android:text="@string/str_send_customer_list" />
-                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="fill_parent"
@@ -304,6 +306,7 @@
                             android:padding="@dimen/NormalSize"
                             android:text="دریافت کالاهای ویزیتور" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -441,6 +444,7 @@
                             android:padding="@dimen/NormalSize"
                             android:text="دریافت بانکها" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
