@@ -24,6 +24,7 @@ import com.mahak.order.common.Cheque;
 import com.mahak.order.common.CityZone_Extra_Data;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.CustomerGroup;
+import com.mahak.order.common.ExceptionLog;
 import com.mahak.order.common.ExtraData;
 import com.mahak.order.common.PersonCategory;
 import com.mahak.order.common.PhotoGallery;
@@ -104,11 +105,11 @@ public class DbAdapter {
 
     //QUERIES ADD
 
-    /*public void AddException(ExceptionLog exceptionLog) {
+    public void AddException(ExceptionLog exceptionLog) {
         ContentValues initialvalue = new ContentValues();
         initialvalue.put(DbSchema.ExceptionSchema.COLUMN_Exception, exceptionLog.getException());
         mDb.insert(DbSchema.CustomerSchema.TABLE_NAME, null, initialvalue);
-    }*/
+    }
 
     public void AddOrUpdateCustomer(Customer customer) {
         if (customer.getFirstName() == null)
