@@ -8,6 +8,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
 
+import com.mahak.order.common.ServiceTools;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -188,7 +190,8 @@ public class BluetoothPrinter implements PrinterInterface {
         try {
             myOutStream.write(Data);
             return true;
-        } catch (IOException var2) {
+        } catch (IOException e) {
+            ServiceTools.logToFireBase(e);
             return false;
         }
     }
@@ -210,14 +213,16 @@ public class BluetoothPrinter implements PrinterInterface {
                     try {
                         myInStream.read(Data, 0, DataLen);
                         return true;
-                    } catch (IOException var5) {
+                    } catch (IOException e) {
+                        ServiceTools.logToFireBase(e);
                         return false;
                     }
                 }
 
                 try {
                     Thread.sleep(5L);
-                } catch (InterruptedException var6) {
+                } catch (InterruptedException e) {
+                    ServiceTools.logToFireBase(e);
                     return false;
                 }
             } catch (IOException var7) {

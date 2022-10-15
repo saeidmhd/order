@@ -221,8 +221,7 @@ public class ServiceTools {
         try {
             bd = new BigDecimal(Double.toString(d));
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
         if (bd != null) {
@@ -616,8 +615,7 @@ public class ServiceTools {
         try {
             DeviceId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.getMessage();
         }
         return DeviceId;
@@ -646,8 +644,7 @@ public class ServiceTools {
                 check = calLogin.get(Calendar.DAY_OF_YEAR) == calNow.get(Calendar.DAY_OF_YEAR);
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
         }
         db.close();
 
@@ -876,8 +873,7 @@ public class ServiceTools {
                 try {
                     diff = timeDf.parse(arrayServerTimeZone[0]).getTime() - timeDf.parse(arrayNowTimeZone[0]).getTime();
                 } catch (ParseException e) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                    FirebaseCrashlytics.getInstance().recordException(e);
+                    ServiceTools.logToFireBase(e);
                     e.printStackTrace();
                 }
                 if (ServiceTools.toInt(arrayServerTime[1]) == ServiceTools.toInt(arrayNowTime[1]))
@@ -1298,8 +1294,7 @@ public class ServiceTools {
             PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
             return pi.versionCode;
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             // TODO: handle exception
         }
         return 1;
@@ -1418,8 +1413,7 @@ public class ServiceTools {
             try {
                 return Long.parseLong(value);
             } catch (NumberFormatException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 return 0;
             }
         }
@@ -1434,8 +1428,7 @@ public class ServiceTools {
             try {
                 return Integer.parseInt(value);
             } catch (NumberFormatException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 return 0;
             }
         }
@@ -1450,8 +1443,7 @@ public class ServiceTools {
             try {
                 return Double.parseDouble(value);
             } catch (NumberFormatException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 return 0;
             }
         }
@@ -1466,8 +1458,7 @@ public class ServiceTools {
             try {
                 return Float.parseFloat(value);
             } catch (NumberFormatException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 return 0;
             }
         }
@@ -1488,13 +1479,11 @@ public class ServiceTools {
                         return number.doubleValue();*/
                         return Double.parseDouble(value);
                     } catch (Exception e) {
-                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                        FirebaseCrashlytics.getInstance().recordException(e);
+                        ServiceTools.logToFireBase(e);
                         e.printStackTrace();
                     }
                 } catch (NumberFormatException e) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                    FirebaseCrashlytics.getInstance().recordException(e);
+                    ServiceTools.logToFireBase(e);
                     return 0;
                 }
             } else {
@@ -1504,8 +1493,7 @@ public class ServiceTools {
                     }
                     return Double.parseDouble(value);
                 } catch (NumberFormatException e) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                    FirebaseCrashlytics.getInstance().recordException(e);
+                    ServiceTools.logToFireBase(e);
                     return 0;
                 }
             }
@@ -1546,8 +1534,7 @@ FirebaseCrashlytics.getInstance().recordException(e);
             NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
             return activeNetworkInfo != null && activeNetworkInfo.isConnected();
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
         }
         return false;
     }
@@ -1692,8 +1679,7 @@ FirebaseCrashlytics.getInstance().recordException(e);
             destination.close();
             return true;
         } catch (IOException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
             Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
             return false;
@@ -1967,12 +1953,16 @@ FirebaseCrashlytics.getInstance().recordException(e);
     }
 
     public static String getFormattedDate(long milisecond) {
-
         Date date = new Date();
         date.setTime(milisecond);
         String pattern = "yyyy-MM-dd'T'HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
         return simpleDateFormat.format(date);
 
+    }
+
+    public static void logToFireBase(Throwable throwable){
+        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+        FirebaseCrashlytics.getInstance().recordException(throwable);
     }
 }

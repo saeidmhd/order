@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.mahak.order.common.ServiceTools;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -98,9 +99,9 @@ public class DeviceListActivity extends Activity {
         try {
             pairedListView.setOnItemClickListener(mDeviceClickListener);
             newDevicesListView.setOnItemClickListener(mDeviceClickListener);
-        } catch (Exception excpt) {
-            FirebaseCrashlytics.getInstance().recordException(excpt);
-            Toast.makeText(this, thisCon.getString(R.string.get_device_err) + excpt, Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            ServiceTools.logToFireBase(e);
+            Toast.makeText(this, thisCon.getString(R.string.get_device_err) + e, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -149,9 +150,7 @@ public class DeviceListActivity extends Activity {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
         }
@@ -182,9 +181,7 @@ public class DeviceListActivity extends Activity {
                 setResult(10, intent);
                 finish();
             } catch (Exception e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             } finally {
                 finish();
@@ -241,8 +238,7 @@ public class DeviceListActivity extends Activity {
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
 
@@ -288,8 +284,7 @@ FirebaseCrashlytics.getInstance().recordException(e);
             bRet = GetIOInterface();
             return bRet;
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             try {
                 Method m;
                 m = mmDevice.getClass().getMethod("createRfcommSocket", int.class);
@@ -309,7 +304,7 @@ FirebaseCrashlytics.getInstance().recordException(e);
                 bRet = GetIOInterface();
                 return bRet;
             } catch (Exception e1) {
-                FirebaseCrashlytics.getInstance().recordException(e1);
+                ServiceTools.logToFireBase(e);
                 if (mmDevice.getBondState() == BluetoothDevice.BOND_NONE) {
                     Toast.makeText(thisCon, R.string.BondError, Toast.LENGTH_LONG).show();
                 }
@@ -335,8 +330,7 @@ FirebaseCrashlytics.getInstance().recordException(e);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
         try {
@@ -352,8 +346,7 @@ FirebaseCrashlytics.getInstance().recordException(e);
             mmSocket = null;
             mmDevice = null;
         } catch (IOException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             System.out.println((new StringBuilder(
                     "BTO_ConnectDevice close ")).append(e.getMessage())
                     .toString());
@@ -368,8 +361,7 @@ FirebaseCrashlytics.getInstance().recordException(e);
             mmInStream = mmSocket.getInputStream();
             mmOutStream = mmSocket.getOutputStream();
         } catch (IOException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             Log.d("PRTLIB", (new StringBuilder("BTO_GetIOInterface ")).append(e.getMessage()).toString());
             return false;
         }

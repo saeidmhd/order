@@ -540,8 +540,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
 
 
                     } catch (NumberFormatException e) {
-                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                        FirebaseCrashlytics.getInstance().recordException(e);
+                        ServiceTools.logToFireBase(e);
                     }
                 }
             }
@@ -570,8 +569,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                         } else
                             holder.txtTotalCount.setText(ServiceTools.formatCount(0));
                     } catch (NumberFormatException e) {
-                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                        FirebaseCrashlytics.getInstance().recordException(e);
+                        ServiceTools.logToFireBase(e);
                     }
                 }
             }
@@ -765,8 +763,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         try {
             bd = new BigDecimal(Double.toString(d));
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
         if (bd != null) {
@@ -964,8 +961,7 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             try {
                 propertiesList = gson.fromJson(productDetail.getProperties(), property);
             } catch (JsonSyntaxException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
             if (propertiesList != null) {

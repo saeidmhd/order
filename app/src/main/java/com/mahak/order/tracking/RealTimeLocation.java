@@ -50,6 +50,7 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
         try {
             new HubConnectionTask().execute(hubConnection);
         } catch (Exception e) {
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
     }
@@ -64,6 +65,7 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
                 if(hubConnection.getConnectionState().toString().equals("CONNECTED"))
                     hubConnection.stop();
             } catch (Exception e) {
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
 
@@ -81,6 +83,7 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
                 hubConnection.start().blockingAwait();
 
             } catch (Exception e) {
+                ServiceTools.logToFireBase(e);
                 ServiceTools.writeLog(e.getMessage());
                 e.printStackTrace();
             }
@@ -136,6 +139,7 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
                     hubConnection.send("SendNewLocation", gpsPointSignalR);
                     Log.d("SendNewLocation", location.getLatitude() + " " + location.getLongitude());
                 } catch (Exception e) {
+                    ServiceTools.logToFireBase(e);
                     setPrefSignalUserToken("");
                     Log.d("SendNewLocation", "SendNewLocation_exception");
                     e.printStackTrace();

@@ -336,8 +336,7 @@ public class Customer {
         try {
             Latitude = new BigDecimal(latitude);
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             Latitude = new BigDecimal("0.0");
         }
 
@@ -354,8 +353,7 @@ public class Customer {
         try {
             Longitude = new BigDecimal(longitude);
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             Longitude = new BigDecimal("0.0");
         }
 

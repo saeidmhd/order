@@ -254,8 +254,7 @@ public class ProductPagerFragment extends Fragment {
             viewPager.getAdapter().notifyDataSetChanged();
             tvPagerCounter.setText(((products.size() > 0) ? (viewPager.getCurrentItem() + 1) : 0) + " / " + products.size());
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
     }

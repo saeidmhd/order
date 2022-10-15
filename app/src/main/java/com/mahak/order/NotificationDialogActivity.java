@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.mahak.order.common.Notification;
+import com.mahak.order.common.ServiceTools;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.RadaraDb;
 
@@ -63,8 +64,8 @@ public class NotificationDialogActivity extends Activity {
                     intent.setData(Uri.parse(bundle.getString("url")));
                     startActivity(intent);
                     finish();
-                } catch (ActivityNotFoundException localActivityNotFoundException) {
-                    FirebaseCrashlytics.getInstance().recordException(localActivityNotFoundException);
+                } catch (ActivityNotFoundException e) {
+                    ServiceTools.logToFireBase(e);
                 }
             }
         });

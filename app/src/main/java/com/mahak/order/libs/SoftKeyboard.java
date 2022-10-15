@@ -9,6 +9,7 @@ import android.widget.EditText;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.mahak.order.BaseActivity;
+import com.mahak.order.common.ServiceTools;
 import com.mahak.order.widget.FontEditText;
 
 import java.util.ArrayList;
@@ -156,8 +157,7 @@ public class SoftKeyboard implements View.OnFocusChangeListener {
                     try {
                         wait();
                     } catch (InterruptedException e) {
-                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                        FirebaseCrashlytics.getInstance().recordException(e);
+                        ServiceTools.logToFireBase(e);
                         e.printStackTrace();
                     }
                 }
@@ -185,8 +185,7 @@ public class SoftKeyboard implements View.OnFocusChangeListener {
                         try {
                             wait(500);
                         } catch (InterruptedException e) {
-                            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                            FirebaseCrashlytics.getInstance().recordException(e);
+                            ServiceTools.logToFireBase(e);
                             e.printStackTrace();
                         }
                     }

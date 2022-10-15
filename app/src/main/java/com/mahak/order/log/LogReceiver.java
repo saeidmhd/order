@@ -52,6 +52,7 @@ public class LogReceiver extends BroadcastReceiver {
                         jsonObject = new JSONObject();
                         jsonObject.put("internet","Off");
                     } catch (JSONException e) {
+                        ServiceTools.logToFireBase(e);
                         e.printStackTrace();
                     }
                     if(statusLog.getValue() != null)

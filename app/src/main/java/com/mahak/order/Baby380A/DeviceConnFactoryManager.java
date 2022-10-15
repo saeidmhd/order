@@ -14,6 +14,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.mahak.order.AnalyticsTrackers;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.R;
+import com.mahak.order.common.ServiceTools;
 import com.printer.io.BluetoothPort;
 import com.printer.io.EthernetPort;
 import com.printer.io.PortManager;
@@ -426,8 +427,7 @@ public class DeviceConnFactoryManager {
 
             this.mPort.writeDataImmediately(data, 0, data.size());
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
     }
@@ -633,8 +633,7 @@ public class DeviceConnFactoryManager {
                     }
                 }
             } catch (Exception e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 if (deviceConnFactoryManagers[id] != null) {
                     closePort(id);
                 }

@@ -327,8 +327,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                             txtSumCount12.setText(formatCount((kol + joz)));
 
                         } catch (NumberFormatException e) {
-                            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                            FirebaseCrashlytics.getInstance().recordException(e);
+                            ServiceTools.logToFireBase(e);
                             txtCountKol.setError(getString(R.string.illegal));
                         }
 
@@ -366,8 +365,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                             txtSumCount12.setText(formatCount((kol + joz)));
 
                         } catch (NumberFormatException e) {
-                            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                            FirebaseCrashlytics.getInstance().recordException(e);
+                            ServiceTools.logToFireBase(e);
                             txtCountJoz.setError(getString(R.string.illegal));
                         }
 
@@ -416,8 +414,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                             txtCountJoz.setText(formatCount(joz));
 
                         } catch (NumberFormatException e) {
-                            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                            FirebaseCrashlytics.getInstance().recordException(e);
+                            ServiceTools.logToFireBase(e);
                             txtCountJoz.setError(getString(R.string.illegal));
                         }
 
@@ -501,8 +498,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                         } else
                             txtCount2.setText(ServiceTools.formatCount(0));
                     } catch (NumberFormatException e) {
-                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                        FirebaseCrashlytics.getInstance().recordException(e);
+                        ServiceTools.logToFireBase(e);
                         txtCount1.setError(getString(R.string.no_valid));
                         btnSave.setEnabled(false);
                     }
@@ -533,8 +529,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                         if (BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi)
                             txtCount1.setText(ServiceTools.formatCount(toDouble * product.getUnitRatio()));
                     } catch (NumberFormatException e) {
-                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                        FirebaseCrashlytics.getInstance().recordException(e);
+                        ServiceTools.logToFireBase(e);
                         txtCount1.setError(getString(R.string.error_not_valid));
                         btnSave.setEnabled(false);
                     }
@@ -560,8 +555,7 @@ public class PriceCountSelectActivity extends BaseActivity {
             try {
                 propertiesList = gson.fromJson(productDetail.getProperties(), property);
             } catch (JsonSyntaxException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
             if (propertiesList != null) {
@@ -592,8 +586,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                 try {
                     sumCountBaJoz = ServiceTools.toDouble(count1);
                 } catch (NumberFormatException e) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                    FirebaseCrashlytics.getInstance().recordException(e);
+                    ServiceTools.logToFireBase(e);
                     e.printStackTrace();
                 }
                 break;
@@ -603,8 +596,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                 try {
                     sumCountBaJoz = ServiceTools.toDouble(txtSumCount12.getText().toString());
                 } catch (NumberFormatException e) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                    FirebaseCrashlytics.getInstance().recordException(e);
+                    ServiceTools.logToFireBase(e);
                     e.printStackTrace();
                 }
                 break;
@@ -614,8 +606,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                 try {
                     sumCountBaJoz = ServiceTools.toDouble(count1);
                 } catch (NumberFormatException e) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                    FirebaseCrashlytics.getInstance().recordException(e);
+                    ServiceTools.logToFireBase(e);
                     e.printStackTrace();
                 }
                 break;
@@ -736,8 +727,7 @@ public class PriceCountSelectActivity extends BaseActivity {
         try {
             bd = new BigDecimal(Double.toString(d));
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
         if (bd != null) {
@@ -871,8 +861,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                     try {
                         index = ServiceTools.toInt(myList.get(i));
                     } catch (NumberFormatException e) {
-                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                        FirebaseCrashlytics.getInstance().recordException(e);
+                        ServiceTools.logToFireBase(e);
                         e.printStackTrace();
                     }
                     for (int j = 0; j < levelNameArrayList.size(); j++) {
@@ -996,8 +985,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                     grantedVisitorLevel = grantedVisitorLevel.substring(1);
                 }
             } catch (Exception e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
         //convert a string to array list
@@ -1025,8 +1013,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                 try {
                     sumCountBaJoz = ServiceTools.toDouble(txtSumCount12.getText().toString());
                 } catch (NumberFormatException e) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                    FirebaseCrashlytics.getInstance().recordException(e);
+                    ServiceTools.logToFireBase(e);
                     e.printStackTrace();
                 }
                 if (TextUtils.isEmpty(count1)) {
@@ -1041,8 +1028,7 @@ public class PriceCountSelectActivity extends BaseActivity {
                 try {
                     sumCountBaJoz = ServiceTools.toDouble(count1);
                 } catch (NumberFormatException e) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                    FirebaseCrashlytics.getInstance().recordException(e);
+                    ServiceTools.logToFireBase(e);
                     e.printStackTrace();
                 }
                 break;

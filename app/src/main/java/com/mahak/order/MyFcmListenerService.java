@@ -18,6 +18,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.mahak.order.common.Notification;
+import com.mahak.order.common.ServiceTools;
 import com.mahak.order.service.NotificationService;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.RadaraDb;
@@ -143,8 +144,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                 else if (resId == 0)
                     ResSound = false;
             } catch (Exception e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 ResSound = false;
             }
 

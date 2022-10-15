@@ -6,6 +6,7 @@ import android.widget.ProgressBar;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.mahak.order.BaseActivity;
+import com.mahak.order.common.ServiceTools;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -77,8 +78,7 @@ public class ZipManager extends AsyncTask<Void, Integer, Integer> {
             zin.close();
             onPostExecute();
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             Log.e("Decompress", "unzip", e);
             onError(e);
         }
@@ -86,8 +86,7 @@ public class ZipManager extends AsyncTask<Void, Integer, Integer> {
     }
 
     protected void onError(Exception e) {
-        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-        FirebaseCrashlytics.getInstance().recordException(e);
+        ServiceTools.logToFireBase(e);
     }
 
     protected void onProgressUpdate(Integer... progress) {

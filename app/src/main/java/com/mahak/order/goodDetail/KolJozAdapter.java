@@ -276,8 +276,7 @@ public class KolJozAdapter extends RecyclerView.Adapter<KolJozAdapter.ViewHolder
                                 holder.txtCount.setText(ServiceTools.formatCount((int) (kol + joz)));
 
                             } catch (NumberFormatException e) {
-                                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                                FirebaseCrashlytics.getInstance().recordException(e);
+                                ServiceTools.logToFireBase(e);
                                 holder.txtCountJoz.setError(context.getString(R.string.illegal));
                             }
                         }
@@ -361,8 +360,7 @@ public class KolJozAdapter extends RecyclerView.Adapter<KolJozAdapter.ViewHolder
             setSum();
 
         } catch (NumberFormatException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
     }
@@ -396,8 +394,7 @@ public class KolJozAdapter extends RecyclerView.Adapter<KolJozAdapter.ViewHolder
                 propertiesList = gson.fromJson(productDetails.get(position).getProperties(), property);
 
         } catch (JsonSyntaxException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
         if (propertiesList != null) {
@@ -465,8 +462,7 @@ public class KolJozAdapter extends RecyclerView.Adapter<KolJozAdapter.ViewHolder
             try {
                 kol = new BigDecimal(txtKol);
             } catch (NumberFormatException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
         }
@@ -475,8 +471,7 @@ public class KolJozAdapter extends RecyclerView.Adapter<KolJozAdapter.ViewHolder
             try {
                 joz = ServiceTools.toDouble(txtJoz);
             } catch (NumberFormatException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
         }
@@ -485,8 +480,7 @@ public class KolJozAdapter extends RecyclerView.Adapter<KolJozAdapter.ViewHolder
             try {
                 sum = ServiceTools.toDouble(txtSum);
             } catch (NumberFormatException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
         }

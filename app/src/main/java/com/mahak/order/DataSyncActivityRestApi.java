@@ -335,8 +335,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             @Override
             public void onFailure(Call<LoginResult> call, Throwable t) {
                 Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().log(t.getMessage());
+                ServiceTools.logToFireBase(t);
                 dismissProgressDialog();
             }
         });
@@ -936,8 +935,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 @Override
                 public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
                     dismissProgressDialog();
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                    FirebaseCrashlytics.getInstance().log(t.getMessage());
+                    ServiceTools.logToFireBase(t);
                     mMsg[0] = t.toString();
                     showDialog(mMsg[0]);
                     setTextSendErrorResult();
@@ -1195,8 +1193,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
                 @Override
                 public void onFailure(Call<GetDataResult> call, Throwable t) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                    FirebaseCrashlytics.getInstance().log(t.getMessage());
+                    ServiceTools.logToFireBase(t);
                     dismissProgressDialog();
                     mMsg[0] = t.toString();
                     //showDialog(mMsg[0]);
@@ -1595,17 +1592,12 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
                         } else if (response.body() != null) {
                             mMsg[0] = getString(R.string.send_error);
-                            //showDialog(response.body().getMessage());
-
-                            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                            FirebaseCrashlytics.getInstance().log(response.body().getMessage());
                         }
                     }
 
                     @Override
                     public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
-                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                        FirebaseCrashlytics.getInstance().log(t.getMessage());
+                        ServiceTools.logToFireBase(t);
                         dismissProgressDialog();
                         mMsg[0] = t.toString();
                         //showDialog(mMsg[0]);
@@ -1658,16 +1650,12 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
                                 } else if (response.body() != null) {
                                     mMsg[0] = getString(R.string.send_error);
-
-                                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                                    FirebaseCrashlytics.getInstance().log(response.body().toString());
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<setSignImage> call, Throwable t) {
-                                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                                FirebaseCrashlytics.getInstance().log(t.getMessage());
+                                ServiceTools.logToFireBase(t);
                                 dismissProgressDialog();
                                 mMsg[0] = t.toString();
                                 //showDialog(mMsg[0]);

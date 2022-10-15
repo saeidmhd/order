@@ -133,8 +133,7 @@ public class RadaraDb {
             }
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             Log.e("ErrorGetTransfer", e.getMessage());
         }
         return array;

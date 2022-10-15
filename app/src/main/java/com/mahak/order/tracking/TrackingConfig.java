@@ -204,11 +204,10 @@ public class TrackingConfig {
                     }
                 }
                 @Override
-                public void onFailure(Call<VisitorZoneLocation> call, Throwable t) {
+                public void onFailure(Call<VisitorZoneLocation> call, Throwable e) {
                     dismissProgressDialog();
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                    FirebaseCrashlytics.getInstance().log(t.getMessage());
-                    mMsg[0] = t.toString();
+                    ServiceTools.logToFireBase(e);
+                    mMsg[0] = e.toString();
                 }
             });
         }
@@ -299,11 +298,10 @@ public class TrackingConfig {
                     new sendStatusLogAsync().execute();
                 }
                 @Override
-                public void onFailure(Call<StopLocationResponse> call, Throwable t) {
+                public void onFailure(Call<StopLocationResponse> call, Throwable e) {
                     dismissProgressDialog();
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                    FirebaseCrashlytics.getInstance().log(t.getMessage());
-                    mMsg[0] = t.toString();
+                    ServiceTools.logToFireBase(e);
+                    mMsg[0] = e.toString();
                 }
             });
         }
@@ -360,8 +358,7 @@ public class TrackingConfig {
                 @Override
                 public void onFailure(Call<StopLocationResponse> call, Throwable t) {
                     dismissProgressDialog();
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                    FirebaseCrashlytics.getInstance().log(t.getMessage());
+                    ServiceTools.logToFireBase(t);
                     mMsg[0] = t.toString();
                 }
             });

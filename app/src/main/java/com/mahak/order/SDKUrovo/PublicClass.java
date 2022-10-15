@@ -8,6 +8,7 @@ import android.graphics.Matrix;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.R;
+import com.mahak.order.common.ServiceTools;
 import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
@@ -79,8 +80,7 @@ public class PublicClass {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
 //         zpSDK.disconnect();

@@ -34,7 +34,6 @@
         <entry key="app/src/main/res/layout-de/act_whats_new.xml" value="0.2734375" />
         <entry key="app/src/main/res/layout-de/activity_dashboard.xml" value="0.21" />
         <entry key="app/src/main/res/layout-de/activity_invoice_detail.xml" value="0.33489583333333334" />
-        <entry key="app/src/main/res/layout-de/activity_login.xml" value="0.27704147071398033" />
         <entry key="app/src/main/res/layout-de/activity_manage_customer.xml" value="0.30416666666666664" />
         <entry key="app/src/main/res/layout-de/activity_manage_receipt.xml" value="0.1859375" />
         <entry key="app/src/main/res/layout-de/detail_select2new.xml" value="0.1359375" />
@@ -44,7 +43,7 @@
         <entry key="app/src/main/res/layout/activity_add_person.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_category.xml" value="0.23958333333333334" />
         <entry key="app/src/main/res/layout/activity_customers_list.xml" value="0.246875" />
-        <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.5056022408963585" />
+        <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_data_sync.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_good_detail_count.xml" value="0.2171875" />
         <entry key="app/src/main/res/layout/activity_good_detail_count_1_2.xml" value="0.2171875" />
@@ -80,7 +79,6 @@
         <entry key="app/src/main/res/layout/factor_print_50mm.xml" value="0.1859375" />
         <entry key="app/src/main/res/layout/factor_print_szzt.xml" value="0.5" />
         <entry key="app/src/main/res/layout/factor_print_template.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/footer_mahak.xml" value="0.27704147071398033" />
         <entry key="app/src/main/res/layout/fragment_invoice_goods_detail.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/fragment_products_list.xml" value="0.18" />
         <entry key="app/src/main/res/layout/item_layout.xml" value="0.33" />

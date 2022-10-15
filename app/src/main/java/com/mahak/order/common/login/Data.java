@@ -4,6 +4,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.mahak.order.BaseActivity;
+import com.mahak.order.common.ServiceTools;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -93,8 +94,7 @@ public class Data {
             Date date = simpleDateFormat.parse(serverTime);
             return date.getTime();
         } catch (ParseException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
         return -1;

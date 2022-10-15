@@ -366,8 +366,7 @@ public class DataService {
                 try {
                     promotionOtherFields = gson.fromJson(data.get(i).getPromotionOtherFields(), PromotionOtherFields.class);
                 } catch (JsonSyntaxException e) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                    FirebaseCrashlytics.getInstance().recordException(e);
+                    ServiceTools.logToFireBase(e);
                     e.printStackTrace();
                 }
                 if(data.get(i).getDeleted() == 0)
@@ -391,8 +390,7 @@ public class DataService {
             try {
                 promotionDetailOtherFields = gson.fromJson(data.get(i).getPromotionDetailOtherFields(), PromotionDetailOtherFields.class);
             } catch (JsonSyntaxException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
             //if item is new add then to database
@@ -419,8 +417,7 @@ public class DataService {
             try {
                 promotionEntityOtherFields = gson.fromJson(data.get(i).getPromotionEntityOtherFields(), PromotionEntityOtherFields.class);
             } catch (JsonSyntaxException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
             //if item is new add then to database

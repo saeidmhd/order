@@ -69,9 +69,9 @@ public class MoneyEditText extends androidx.appcompat.widget.AppCompatEditText {
                         }
                     }
                     addTextChangedListener(this);
-                } catch (Exception ex) {
-                    FirebaseCrashlytics.getInstance().recordException(ex);
-                    ex.printStackTrace();
+                } catch (Exception e) {
+                    ServiceTools.logToFireBase(e);
+                    e.printStackTrace();
                     addTextChangedListener(this);
                 }
             }

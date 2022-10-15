@@ -242,8 +242,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
         setContentView(R.layout.activity_dashboard);
 
         mContext = this;
@@ -510,6 +508,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 JSONObject obj = new JSONObject(config);
                 canRegister = obj.getBoolean(ProjectInfo._json_key_isRestricted);
             } catch (Exception e) {
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
         }
@@ -820,6 +819,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             String version = pInfo.versionName;
             tvVersion.setText(version);
         } catch (NameNotFoundException e) {
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
 
@@ -949,7 +949,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(positions.get(positions.size() - 1), 14));
 
         } catch (Exception e) {
-
+            ServiceTools.logToFireBase(e);
         }
     }
 

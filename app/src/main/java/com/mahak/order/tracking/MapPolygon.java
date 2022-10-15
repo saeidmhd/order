@@ -97,6 +97,7 @@ public class MapPolygon implements GoogleMap.OnPolygonClickListener {
                 JSONObject obj = new JSONObject(config);
                 radius = obj.getInt(ProjectInfo._json_key_radius);
             } catch (Exception e) {
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
         }

@@ -184,9 +184,9 @@ public class BackupListActivity extends BaseActivity {
                             ///////////////////////
                         }//end of if exist file
                         boolCopyDatabase = true;
-                    } catch (Exception ex) {
-                        FirebaseCrashlytics.getInstance().recordException(ex);
-                        Log.e("Tag SCHEME_CONTENT", ex.getMessage().toString());
+                    } catch (Exception e) {
+                        ServiceTools.logToFireBase(e);
+                        Log.e("Tag SCHEME_CONTENT", e.getMessage().toString());
                     }
                 } else if (scheme.compareTo(ContentResolver.SCHEME_FILE) == 0) {
 
@@ -213,9 +213,9 @@ public class BackupListActivity extends BaseActivity {
                         }
                         boolCopyDatabase = true;
 
-                    } catch (Exception ex) {
-                        FirebaseCrashlytics.getInstance().recordException(ex);
-                        Log.e("Tag SCHEME_FILE", ex.getMessage().toString());
+                    } catch (Exception e) {
+                        ServiceTools.logToFireBase(e);
+                        Log.e("Tag SCHEME_FILE", e.getMessage().toString());
                     }
                 } else if (scheme.compareTo("http") == 0) {
                     // TODO Import from HTTP!
@@ -334,8 +334,7 @@ public class BackupListActivity extends BaseActivity {
             pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             version = pInfo.versionName;
         } catch (PackageManager.NameNotFoundException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
         return version;
@@ -443,8 +442,7 @@ public class BackupListActivity extends BaseActivity {
         try {
             startActivity(Intent.createChooser(share, ""));
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             Toast.makeText(BackupListActivity.this, getString(R.string.MSG_NotSuccess), Toast.LENGTH_LONG).show();
         }
     }
@@ -459,8 +457,7 @@ public class BackupListActivity extends BaseActivity {
             DELETE_FILE.delete();
             Toast.makeText(BackupListActivity.this, R.string.successful_delete, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             // TODO: handle exception
         }
     }
@@ -492,8 +489,7 @@ public class BackupListActivity extends BaseActivity {
                 startActivity(intent);
                 finish();
             } catch (IOException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
         }else
@@ -583,9 +579,9 @@ public class BackupListActivity extends BaseActivity {
                         ///////////////////////
                     }//end of if exist file
                 }
-            } catch (Exception ex) {
-                FirebaseCrashlytics.getInstance().recordException(ex);
-                Log.e("Tag SCHEME_CONTENT", ex.getMessage().toString());
+            } catch (Exception e) {
+                ServiceTools.logToFireBase(e);
+                Log.e("Tag SCHEME_CONTENT", e.getMessage().toString());
             }
         }
 

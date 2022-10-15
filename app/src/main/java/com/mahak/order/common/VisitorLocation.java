@@ -45,6 +45,7 @@ public class VisitorLocation {
             obj.put(ProjectInfo._json_key_longitude, getLongitude());
             return obj;
         } catch (JSONException e) {
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
         return null;

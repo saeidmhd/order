@@ -1,8 +1,8 @@
 package com.mahak.order;
 
 
-import android.app.Application;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Environment;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -13,9 +13,10 @@ import com.google.android.gms.analytics.ExceptionReporter;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.mahak.order.common.ExceptionLog;
 import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.SharedPreferencesHelper;
+import com.mahak.order.storage.DbAdapter;
 import com.yariksoffice.lingver.Lingver;
 
 import java.io.File;
@@ -35,6 +36,8 @@ public final class AnalyticsTrackers extends MultiDexApplication {
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
+
+    private DbAdapter db;
 
     synchronized public Tracker getDefaultTracker() {
         if (mTracker == null) {
@@ -59,21 +62,21 @@ public final class AnalyticsTrackers extends MultiDexApplication {
 
         FirebaseApp.initializeApp(mContext);
 
-        Thread.UncaughtExceptionHandler handler = new ExceptionReporter(getDefaultTracker(), Thread.getDefaultUncaughtExceptionHandler(), this) {
+        /*Thread.UncaughtExceptionHandler handler = new ExceptionReporter(getDefaultTracker(), Thread.getDefaultUncaughtExceptionHandler(), this) {
             @Override
             public void uncaughtException(Thread t, Throwable e) {
                 exceptionLog(e);
-                FirebaseCrashlytics.getInstance().setUserId(BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
+                logToDbFile logToDbFile = new logToDbFile(e.getMessage());
+                logToDbFile.execute();
                 super.uncaughtException(t, e);
             }
-        };
-        Thread.setDefaultUncaughtExceptionHandler(handler);
+        };*/
+
+        Thread.setDefaultUncaughtExceptionHandler(new ManageException(mContext));
     }
 
     public void exceptionLog(Throwable ex) {
-        // String version = String.format(getString(R.string.))
         new StringBuffer();
         try {
             Calendar calendar = Calendar.getInstance();
@@ -101,9 +104,9 @@ public final class AnalyticsTrackers extends MultiDexApplication {
             raf.writeUTF(sw.toString());
             raf.close();
 
-        } catch (Exception var10) {
-            FirebaseCrashlytics.getInstance().recordException(var10);
-            var10.printStackTrace();
+        } catch (Exception e) {
+            ServiceTools.logToFireBase(e);
+            e.printStackTrace();
         }
 
     }
@@ -112,4 +115,36 @@ public final class AnalyticsTrackers extends MultiDexApplication {
         return mContext;
     }
 
+    private class logToDbFile extends AsyncTask<String, Integer, Boolean> {
+
+        String exception;
+
+        logToDbFile(String exceptionLog){
+            exception = exceptionLog;
+        }
+
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            logToDb(exception);
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+        }
+    }
+
+    private void logToDb(String exc) {
+        ExceptionLog exceptionLog = new ExceptionLog();
+        exceptionLog.setException(exc);
+        db = new DbAdapter(getApplicationContext());
+        db.open();
+        db.AddException(exceptionLog);
+    }
 }

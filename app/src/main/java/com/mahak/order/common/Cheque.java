@@ -171,8 +171,7 @@ public class Cheque {
             java.util.Date date = simpleDateFormat.parse(Date);
             return date != null ? date.getTime() : 0;
         } catch (ParseException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
         return -1;

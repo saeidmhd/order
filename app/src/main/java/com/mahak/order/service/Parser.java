@@ -6,6 +6,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.common.Contact;
 import com.mahak.order.common.Department;
+import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.TrackingConfig;
 
 import org.json.JSONArray;
@@ -39,8 +40,7 @@ public class Parser {
             }//End of for
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             // TODO: handle exception
         }
         return arrayConfig;
@@ -66,8 +66,7 @@ public class Parser {
             }//end of for
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             // TODO: handle exception
         }
         return array;

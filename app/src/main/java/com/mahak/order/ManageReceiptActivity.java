@@ -752,6 +752,7 @@ public class ManageReceiptActivity extends BaseActivity implements ResultListene
                 try {
                     request.setReturnTimeout(6);//automatically return to third party app after timeout is must be over 5 sec
                 } catch (Exception e) {
+                    ServiceTools.logToFireBase(e);
                     e.printStackTrace();
                 }
                 manager.sendRequestSale(request, ManageReceiptActivity.this);

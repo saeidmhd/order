@@ -241,8 +241,7 @@ public class GoodDetailOneUnit extends BaseActivity {
             try {
                 propertiesList = gson.fromJson(productDetail.getProperties(), property);
             } catch (JsonSyntaxException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
             if (propertiesList != null) {
@@ -305,8 +304,7 @@ public class GoodDetailOneUnit extends BaseActivity {
         try {
             propertiesList = gson.fromJson(productDetail.getProperties(), property);
         } catch (JsonSyntaxException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
         if (propertiesList != null) {

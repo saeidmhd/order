@@ -266,16 +266,14 @@ public class PrintActivity extends BaseActivity implements ResultListener {
                                 refreshStatus();
                                 //showMessage(getString(R.string.printer_init_success));
                             } catch (Exception e) {
-                                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                                FirebaseCrashlytics.getInstance().recordException(e);
+                                ServiceTools.logToFireBase(e);
                                 e.printStackTrace();
                                 //showMessage(getString(R.string.printer_init_exception));
                             }
                         }
                     }).start();
                 } catch (RemoteException e) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                    FirebaseCrashlytics.getInstance().recordException(e);
+                    ServiceTools.logToFireBase(e);
                     e.printStackTrace();
                 }
             }
@@ -505,8 +503,7 @@ public class PrintActivity extends BaseActivity implements ResultListener {
                                 new Thread(runnablePrint).start();
                             }
                         } catch (Exception e) {
-                            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                            FirebaseCrashlytics.getInstance().recordException(e);
+                            ServiceTools.logToFireBase(e);
                             e.printStackTrace();
                             Toast.makeText(PrintActivity.this, getString(R.string.error) + "\n" + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
@@ -1033,8 +1030,7 @@ public class PrintActivity extends BaseActivity implements ResultListener {
                     try {
                         mess = publicclass.PrintBitmapCPCL(bPrint, bPrint.getWidth(), bPrint.getHeight());
                     } catch (IOException e) {
-                        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                        FirebaseCrashlytics.getInstance().recordException(e);
+                        ServiceTools.logToFireBase(e);
                         e.printStackTrace();
                         mess = e.getMessage();
                     }
@@ -1054,8 +1050,7 @@ public class PrintActivity extends BaseActivity implements ResultListener {
                     }
                 });
             } catch (Exception e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
         } else if (printerBrand == ProjectInfo.PRINTER_SZZT_KS8223) {
@@ -1234,8 +1229,7 @@ public class PrintActivity extends BaseActivity implements ResultListener {
                 status = PrintUtils.printImage(bitmap, mPrinter, false);
 
             } catch (Exception e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 status = false;
                 Toast.makeText(mContext, "error", Toast.LENGTH_SHORT).show();
             }
@@ -1473,8 +1467,7 @@ public class PrintActivity extends BaseActivity implements ResultListener {
 
             }
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
 
@@ -1643,8 +1636,7 @@ public class PrintActivity extends BaseActivity implements ResultListener {
                 Toast.makeText(PrintActivity.this, R.string.signature_deleted_successfully, Toast.LENGTH_SHORT).show();
 
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             // TODO: handle exception
         }
     }
@@ -1681,8 +1673,7 @@ public class PrintActivity extends BaseActivity implements ResultListener {
         try {
             startActivity(intent);
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
     }
@@ -1706,12 +1697,10 @@ public class PrintActivity extends BaseActivity implements ResultListener {
         try {
             PdfWriter.getInstance(document, new FileOutputStream(filepath));
         } catch (DocumentException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         } catch (FileNotFoundException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
 
@@ -1726,12 +1715,10 @@ public class PrintActivity extends BaseActivity implements ResultListener {
             image = Image.getInstance(byteArray);
             // image.scalePercent(1);
         } catch (BadElementException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         } catch (IOException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
 
@@ -1743,8 +1730,7 @@ public class PrintActivity extends BaseActivity implements ResultListener {
         try {
             document.add(image);
         } catch (DocumentException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
         document.close();
@@ -1759,8 +1745,7 @@ public class PrintActivity extends BaseActivity implements ResultListener {
             if (!Directory.exists())
                 Directory.mkdirs();
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
     }
@@ -2093,15 +2078,13 @@ public class PrintActivity extends BaseActivity implements ResultListener {
             printDev.printBmpFast(bmp, Constant.ALIGN.CENTER, callback);
             printDev.spitPaper(60);
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         } finally {
             try {
                 printDev.setPrintQueue(false);
             } catch (RemoteException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
         }
@@ -2231,8 +2214,7 @@ public class PrintActivity extends BaseActivity implements ResultListener {
             try {
                 mPrinterManager.open();
             } catch (Exception e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
@@ -2257,8 +2239,7 @@ public class PrintActivity extends BaseActivity implements ResultListener {
                                     String fileName = OrderCode + ".pdf";
                                     ServiceTools.openFile(mContext, new File(DIRECTORY_PDF, fileName));
                                 } catch (Exception e) {
-                                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                                    FirebaseCrashlytics.getInstance().recordException(e);
+                                    ServiceTools.logToFireBase(e);
                                     Log.d("TAG", "run: ERror");
                                 }
                             }

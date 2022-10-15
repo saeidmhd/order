@@ -426,6 +426,7 @@ public class LocationService extends Service  {
         try {
             radaraDb.updateStopLogs(stopLogs);
         } catch (Exception e) {
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
             if(e.getMessage() != null)
                 Log.e("saveInDb",e.getMessage());
@@ -468,6 +469,7 @@ public class LocationService extends Service  {
         try {
             return new JSONObject(lastLocation);
         } catch (JSONException e) {
+            ServiceTools.logToFireBase(e);
             return null;
         }
     }
@@ -478,6 +480,7 @@ public class LocationService extends Service  {
         try {
             return new JSONObject(lastLocation);
         } catch (JSONException e) {
+            ServiceTools.logToFireBase(e);
             return null;
         }
     }
@@ -511,6 +514,7 @@ public class LocationService extends Service  {
             obj.put(ProjectInfo._json_key_date, System.currentTimeMillis());
             ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_last_location, obj.toString());
         } catch (JSONException e) {
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
     }
@@ -522,6 +526,7 @@ public class LocationService extends Service  {
             obj.put(ProjectInfo._json_key_stop_date, System.currentTimeMillis());
             ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_last_stop_location, obj.toString());
         } catch (JSONException e) {
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
         }
     }
@@ -630,6 +635,7 @@ public class LocationService extends Service  {
         try {
             result = radaraDb.AddGpsTracking(VisitorLocations);
         } catch (Exception e) {
+            ServiceTools.logToFireBase(e);
             e.printStackTrace();
             if(e.getMessage() != null)
                 Log.e("saveInDb",e.getMessage());
@@ -644,6 +650,7 @@ public class LocationService extends Service  {
         try {
             radaraDb.updateGpsTrackingForSending(visitorLocation);
         } catch (Exception e) {
+            ServiceTools.logToFireBase(e);
             Log.e("saveInDb",e.getMessage());
         }
         radaraDb.close();
@@ -655,6 +662,7 @@ public class LocationService extends Service  {
             try {
                 Thread.sleep(200);
             } catch (Exception e) {
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
         }
@@ -735,9 +743,10 @@ public class LocationService extends Service  {
                         realTimeLocation.stopRealTimeSend();
                 }
             }
-        } catch (SecurityException unlikely) {
+        } catch (SecurityException e) {
+            ServiceTools.logToFireBase(e);
             Utils.setRequestingLocationUpdates(mContext, true);
-            Log.e(TAG, "Lost location permission. Could not remove updates. " + unlikely);
+            Log.e(TAG, "Lost location permission. Could not remove updates. " + e);
         }
     }
 
@@ -780,8 +789,9 @@ public class LocationService extends Service  {
                                 }
                             }
                         });
-            } catch (SecurityException unlikely) {
-                Log.e(TAG, "Lost location permission." + unlikely);
+            } catch (SecurityException e) {
+                ServiceTools.logToFireBase(e);
+                Log.e(TAG, "Lost location permission." + e);
             }
         }
     }
@@ -878,6 +888,7 @@ public class LocationService extends Service  {
                 StartTime = obj.getInt(ProjectInfo._json_key_startTime);
                 EndTime = obj.getInt(ProjectInfo._json_key_endTime);
             } catch (Exception e) {
+                ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
         }

@@ -108,7 +108,8 @@ public class DbAdapter {
     public void AddException(ExceptionLog exceptionLog) {
         ContentValues initialvalue = new ContentValues();
         initialvalue.put(DbSchema.ExceptionSchema.COLUMN_Exception, exceptionLog.getException());
-        mDb.insert(DbSchema.CustomerSchema.TABLE_NAME, null, initialvalue);
+        long i = mDb.insert(DbSchema.ExceptionSchema.TABLE_NAME, null, initialvalue);
+        i++;
     }
 
     public void AddOrUpdateCustomer(Customer customer) {

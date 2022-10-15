@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.mahak.order.BaseActivity;
+import com.mahak.order.common.ServiceTools;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -272,8 +273,7 @@ public class BluetoothPrintService {
                     tmp = device.createInsecureRfcommSocketToServiceRecord(SPP_UUID);
 
             } catch (IOException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 Log.e(TAG, "Socket Type: " + mSocketType + "create() failed", e);
             }
 
@@ -292,11 +292,11 @@ public class BluetoothPrintService {
                 // This is a blocking call and will only return on a successful connection or an exception
                 mmSocket.connect();
             } catch (IOException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 try {
                     mmSocket.close();
                 } catch (IOException e2) {
+                    ServiceTools.logToFireBase(e2);
                     Log.e(TAG, "unable to close() " + mSocketType + " socket during connection failure", e2);
                 }
 
@@ -317,8 +317,7 @@ public class BluetoothPrintService {
             try {
                 mmSocket.close();
             } catch (IOException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 Log.e(TAG, "unable to close() " + mSocketType + " socket", e);
             }
         }
@@ -345,8 +344,7 @@ public class BluetoothPrintService {
                 tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
             } catch (IOException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 Log.e(TAG, "temp sockets are not created", e);
             }
 
@@ -370,8 +368,7 @@ public class BluetoothPrintService {
                     // Send the obtained bytes to the UI Activity
                     // mHandler.obtainMessage(MainActivity.MESSAGE_READ, bytes, -1, rcvData).sendToTarget();
                 } catch (IOException e) {
-                    FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                    FirebaseCrashlytics.getInstance().recordException(e);
+                    ServiceTools.logToFireBase(e);
                     if (D) Log.w(TAG, "disconnected");
                     connectionLost();
                     break;
@@ -388,8 +385,7 @@ public class BluetoothPrintService {
             try {
                 mmOutStream.write(buffer);
             } catch (IOException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 Log.e(TAG, "Exception during write", e);
             }
         }
@@ -400,8 +396,7 @@ public class BluetoothPrintService {
                 mmOutStream.close();
                 mmSocket.close();
             } catch (IOException e) {
-                FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-                FirebaseCrashlytics.getInstance().recordException(e);
+                ServiceTools.logToFireBase(e);
                 Log.e(TAG, "close() of socket failed", e);
             }
         }
