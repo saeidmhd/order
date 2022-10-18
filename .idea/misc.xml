@@ -32,12 +32,21 @@
         <entry key="app/src/main/res/drawable/oval_corner_green.xml" value="0.2815" />
         <entry key="app/src/main/res/drawable/oval_corner_yellow.xml" value="0.2815" />
         <entry key="app/src/main/res/layout-de/act_whats_new.xml" value="0.2734375" />
-        <entry key="app/src/main/res/layout-de/activity_dashboard.xml" value="0.21" />
+        <entry key="app/src/main/res/layout-de/actionbar_title.xml" value="0.24112868747327917" />
+        <entry key="app/src/main/res/layout-de/activity_category.xml" value="0.24112868747327917" />
+        <entry key="app/src/main/res/layout-de/activity_customers_list.xml" value="0.24112868747327917" />
+        <entry key="app/src/main/res/layout-de/activity_dashboard.xml" value="0.33" />
         <entry key="app/src/main/res/layout-de/activity_invoice_detail.xml" value="0.33489583333333334" />
-        <entry key="app/src/main/res/layout-de/activity_login.xml" value="0.27704147071398033" />
         <entry key="app/src/main/res/layout-de/activity_manage_customer.xml" value="0.30416666666666664" />
         <entry key="app/src/main/res/layout-de/activity_manage_receipt.xml" value="0.1859375" />
+        <entry key="app/src/main/res/layout-de/activity_product_picker_list.xml" value="0.24112868747327917" />
         <entry key="app/src/main/res/layout-de/detail_select2new.xml" value="0.1359375" />
+        <entry key="app/src/main/res/layout-de/factor_print_50mm.xml" value="0.24112868747327917" />
+        <entry key="app/src/main/res/layout-de/pj.xml" value="0.24112868747327917" />
+        <entry key="app/src/main/res/layout-de/row_first.xml" value="0.24112868747327917" />
+        <entry key="app/src/main/res/layout-de/row_second.xml" value="0.24112868747327917" />
+        <entry key="app/src/main/res/layout-de/select_language.xml" value="0.24112868747327917" />
+        <entry key="app/src/main/res/layout-de/spinner_list_item.xml" value="0.24112868747327917" />
         <entry key="app/src/main/res/layout-v21/mission_list_activity.xml" value="0.25416666666666665" />
         <entry key="app/src/main/res/layout/act_whats_new.xml" value="0.33" />
         <entry key="app/src/main/res/layout/actionbar_title.xml" value="0.3375" />
@@ -80,7 +89,6 @@
         <entry key="app/src/main/res/layout/factor_print_50mm.xml" value="0.1859375" />
         <entry key="app/src/main/res/layout/factor_print_szzt.xml" value="0.5" />
         <entry key="app/src/main/res/layout/factor_print_template.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/footer_mahak.xml" value="0.27704147071398033" />
         <entry key="app/src/main/res/layout/fragment_invoice_goods_detail.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/fragment_products_list.xml" value="0.18" />
         <entry key="app/src/main/res/layout/item_layout.xml" value="0.33" />
