@@ -357,7 +357,9 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     total_count2 = ServiceTools.toDouble(total2);
                     asset_count2 = ServiceTools.toDouble(asset2);
 
-                    if(total_count1 > 0){
+
+                    if(total_count1 - 1 >= 0){
+
                         total_count1--;
                         if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)
                             sum = total_count1 + (total_count2 * product.getUnitRatio());
@@ -455,7 +457,10 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                         total_count2 = ServiceTools.toDouble(total2);
                         asset_count2 = ServiceTools.toDouble(asset2);
 
-                        if(total_count2 > 0){
+
+
+                        if(total_count2 - 1 >= 0) {
+
                             total_count2--;
 
                             if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)

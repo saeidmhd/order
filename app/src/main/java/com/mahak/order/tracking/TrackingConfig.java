@@ -210,7 +210,7 @@ public class TrackingConfig {
                 @Override
                 public void onFailure(Call<VisitorZoneLocation> call, Throwable e) {
                     dismissProgressDialog();
-                    ServiceTools.logToFireBase(e);
+                    //ServiceTools.logToFireBase(e);
                     mMsg[0] = e.toString();
                 }
             });
@@ -307,7 +307,7 @@ public class TrackingConfig {
                 @Override
                 public void onFailure(Call<StopLocationResponse> call, Throwable e) {
                     dismissProgressDialog();
-                    ServiceTools.logToFireBase(e);
+                    //ServiceTools.logToFireBase(e);
                     mMsg[0] = e.toString();
                 }
             });
@@ -365,7 +365,7 @@ public class TrackingConfig {
                 @Override
                 public void onFailure(Call<StopLocationResponse> call, Throwable t) {
                     dismissProgressDialog();
-                    ServiceTools.logToFireBase(t);
+                    //ServiceTools.logToFireBase(t);
                     mMsg[0] = t.toString();
                 }
             });

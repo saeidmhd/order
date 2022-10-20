@@ -28,7 +28,7 @@ public class ManageException implements Thread.UncaughtExceptionHandler{
     @Override
     public void uncaughtException(@NonNull Thread thread, @NonNull Throwable e) {
         exceptionLog(e);
-        ServiceTools.logToFireBase(e);
+       // ServiceTools.logToFireBase(e);
         logToDb("e.getMessage()");
         System.exit(0);
     }

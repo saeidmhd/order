@@ -341,7 +341,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             @Override
             public void onFailure(Call<LoginResult> call, Throwable t) {
                 Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
-                ServiceTools.logToFireBase(t);
+                //ServiceTools.logToFireBase(t.);
                 dismissProgressDialog();
             }
         });
@@ -743,6 +743,13 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 case 9:
                     visitorLocation = radaraDb.getAllGpsPointsForSending();
                     break;
+                case 10:
+                    missions = db.getAllMission();
+                    break;
+                case 11:
+                    for (Mission mission:missions)
+                        missionDetails.addAll(db.getAllMissionDetail(mission.getMissionId()));
+                    break;
             }
             return 0;
         }
@@ -779,6 +786,12 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     break;
                 case 9:
                     setAllDataBody.setVisitorLocations(visitorLocation);
+                    break;
+                case 10:
+                    setAllDataBody.setMissions(missions);
+                    break;
+                case 11:
+                    setAllDataBody.setMissionDetails(missionDetails);
                     break;
             }
 
@@ -906,6 +919,18 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                     }
                                 }
                                 break;
+                            case 10:
+                                if (missions.size() > 0) {
+                                    for (int i = 0; i < missions.size(); i++) {
+                                    }
+                                }
+                                break;
+                            case 11:
+                                if (missionDetails.size() > 0) {
+                                    for (int i = 0; i < visitorLocation.size(); i++) {
+                                    }
+                                }
+                                break;
                         }
 
                         picturesProducts = db.getAllSignWithoutUrl();
@@ -916,7 +941,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             db.UpdatePicturesProductWithClientId(picturesProduct);
                         }
 
-                        if(whichSendUpdate < 9 ){
+                        if(whichSendUpdate < 11 ){
                             whichSendUpdate++;
                             new SendAsyncTask(whichSendUpdate).execute();
                         }else{
@@ -939,7 +964,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 @Override
                 public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
                     dismissProgressDialog();
-                    ServiceTools.logToFireBase(t);
+                   // ServiceTools.logToFireBase(t);
                     mMsg[0] = t.toString();
                     showDialog(mMsg[0]);
                     setTextSendErrorResult();
@@ -1196,12 +1221,12 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                     break;
                                 case 22:
                                     missions= response.body().getData().getObjects().getMissions();
-                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask =  new SaveAsyncTask(whichReceiveUpdate);
                                     saveAsyncTask.execute();
                                     break;
                                 case 23:
                                     missionDetails= response.body().getData().getObjects().getMissionDetails();
-                                    saveAsyncTask =  new SaveAsyncTask(whichUpdate);
+                                    saveAsyncTask =  new SaveAsyncTask(whichReceiveUpdate);
                                     saveAsyncTask.execute();
                                     break;
 
@@ -1216,7 +1241,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
                 @Override
                 public void onFailure(Call<GetDataResult> call, Throwable t) {
-                    ServiceTools.logToFireBase(t);
+                    //ServiceTools.logToFireBase(t);
                     dismissProgressDialog();
                     mMsg[0] = t.toString();
                     //showDialog(mMsg[0]);
@@ -1632,7 +1657,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
                     @Override
                     public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
-                        ServiceTools.logToFireBase(t);
+                       // ServiceTools.logToFireBase(t);
                         dismissProgressDialog();
                         mMsg[0] = t.toString();
                         //showDialog(mMsg[0]);
@@ -1690,7 +1715,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
                             @Override
                             public void onFailure(Call<setSignImage> call, Throwable t) {
-                                ServiceTools.logToFireBase(t);
+                              //  ServiceTools.logToFireBase(t);
                                 dismissProgressDialog();
                                 mMsg[0] = t.toString();
                                 showDialog(mMsg[0]);
@@ -1818,6 +1843,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
                 return "چک لیستها";
             case 9:
                 return "موقعیت جغرافیایی ویزیتورها";
+            case 10:
+                return "ماموریت ها";
+            case 11:
+                return "جزییات ماموریت ها";
         }
         return "";
     }

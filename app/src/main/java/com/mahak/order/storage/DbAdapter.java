@@ -77,7 +77,6 @@ import java.util.List;
 
 import io.reactivex.annotations.NonNull;
 
-import static com.mahak.order.BaseActivity.MODE_YekVahedi;
 import static com.mahak.order.BaseActivity.baseUrlImage;
 import static com.mahak.order.BaseActivity.getPrefUserId;
 import static com.mahak.order.BaseActivity.getPrefUserMasterId;
@@ -9570,7 +9569,7 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<Mission> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select * from Mission where userid = ? and deleted = 0 and date >= ? order by missionId desc ", new String[]{String.valueOf(getPrefUserId()),ServiceTools.getFormattedDate(new Date().getTime())});
+            cursor = mDb.rawQuery("select * from Mission where userid = ? and deleted = 0 and date >= ? order by missionId desc ", new String[]{String.valueOf(getPrefUserId()),ServiceTools.getFormattedDateAndTime(new Date().getTime())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {

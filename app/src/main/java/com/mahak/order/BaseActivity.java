@@ -362,7 +362,7 @@ public class BaseActivity extends AppCompatActivity {
 
         //font_yekan = Typeface.createFromAsset(getAssets(), "fonts/IRANYekanRegularMobile(FaNum).ttf");
         font_yekan = Typeface.createFromAsset(getAssets(), "fonts/IRANYekanBold(FaNum).ttf");
-        font_openSans = Typeface.createFromAsset(getAssets(), "fonts/OpenSans-Regular.ttf");
+        font_openSans = Typeface.createFromAsset(getAssets(), "fonts/OpenSans-Semibold.ttf");
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {

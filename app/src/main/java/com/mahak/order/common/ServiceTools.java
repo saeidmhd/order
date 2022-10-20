@@ -1501,6 +1501,11 @@ public class ServiceTools {
         return 0;
     }
 
+    public static void logToFireBase(Exception e) {
+        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+        FirebaseCrashlytics.getInstance().recordException(e);
+    }
+
     public static String toString(double value) {
         double tmp = value % 1;
         if (tmp > 0)
@@ -1936,17 +1941,27 @@ public class ServiceTools {
         return persian.getYear() + "/" + persian.getMonth() + "/" + persian.getDayOfMonth();
     }
 
-    public static String getFormattedDate(long milisecond) {
+    public static String getFormattedDateAndTime(long milisecond) {
+
         Date date = new Date();
         date.setTime(milisecond);
-        String pattern = "yyyy-MM-dd'T'HH:mm:ss";
+        String pattern = "yyyy-MM-dd'T'00:00:00";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
         return simpleDateFormat.format(date);
 
     }
 
-    public static void logToFireBase(Throwable throwable){
-        FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-        FirebaseCrashlytics.getInstance().recordException(throwable);
+    public static long getDate(String t_date) {
+        String pattern = "yyyy-MM-dd'T'HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
+        try {
+            java.util.Date date = simpleDateFormat.parse(t_date);
+            return date != null ? date.getTime() : 0;
+        } catch (ParseException e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            e.printStackTrace();
+        }
+        return -1;
     }
 }
