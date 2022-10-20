@@ -86,7 +86,7 @@
                         android:layout_marginRight="8dp"
                         android:layout_weight="1"
                         android:padding="@dimen/NormalSize"
-                        android:text="Deutsch" />
+                        android:text="German" />
 
                     <View
                         android:layout_width="match_parent"

@@ -43,7 +43,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:checked="false" />
+                    android:checked="false"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp" />
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/tvReduceAsset"
@@ -77,7 +79,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:checked="false" />
+                    android:checked="false"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp" />
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/tvBelowPrice"
@@ -111,7 +115,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:checked="false" />
+                    android:checked="false"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp" />
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/tvShowField"
@@ -180,6 +186,7 @@
                     android:layout_toRightOf="@id/tvChargePercent"
                     android:enabled="false"
                     android:gravity="center"
+                    android:minHeight="48dp"
                     android:singleLine="true"
                     android:text="@string/sample_number" />
             </RelativeLayout>
@@ -262,6 +269,7 @@
                     android:enabled="false"
                     android:entries="@array/array_hour"
                     android:gravity="center"
+                    android:minHeight="48dp"
                     android:singleLine="true"
                     android:text="@string/sample_number"
                     android:textAlignment="center" />
@@ -283,6 +291,7 @@
                     android:enabled="false"
                     android:entries="@array/array_minute"
                     android:gravity="center|right"
+                    android:minHeight="48dp"
                     android:singleLine="true"
                     android:text="@string/sample_number"
                     android:textAlignment="center" />
@@ -316,6 +325,7 @@
                     android:layout_height="wrap_content"
                     android:entries="@array/array_hour"
                     android:gravity="center"
+                    android:minHeight="48dp"
                     android:singleLine="true"
                     android:text="@string/sample_number"
                     android:textAlignment="center" />
@@ -337,6 +347,7 @@
                     android:enabled="false"
                     android:entries="@array/array_minute"
                     android:gravity="center"
+                    android:minHeight="48dp"
                     android:singleLine="true"
                     android:text="@string/sample_number"
                     android:textAlignment="center" />
@@ -464,6 +475,32 @@
                     android:dropDownVerticalOffset="@dimen/spinner_dropdown_offset"
                     android:entries="@array/array_printer_brand"
                     android:spinnerMode="dropdown" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.mahak.order.widget.FontCheckBox
+                        android:id="@+id/chk_fee_print"
+                        style="@style/forms_checkbox_default"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="نمایش فی مصرف کننده در چاپ" />
+
+                    <com.mahak.order.widget.FontCheckBox
+                        android:id="@+id/chk_receipt_detail_print"
+                        style="@style/forms_checkbox_default"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="نمایش جزییات دریافتی" />
+
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -687,6 +724,11 @@
                     android:textSize="11sp"
                     android:layout_margin="@dimen/SmallSize" />
 
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="fill_parent"
+                    android:background="@color/setting_line_separator" />
+
                 <RadioButton
                     android:id="@+id/deutsch"
                     android:layout_width="match_parent"
@@ -730,7 +772,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="@string/small"
-                    android:textSize="11sp"
+                    android:textSize="12sp"
                     android:layout_margin="@dimen/SmallSize" />
 
                 <RadioButton
@@ -739,7 +781,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="@string/medium"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:layout_margin="@dimen/SmallSize" />
 
                 <RadioButton
@@ -748,7 +790,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="@string/large"
-                    android:textSize="13sp"
+                    android:textSize="16sp"
                     android:layout_margin="@dimen/SmallSize" />
             </LinearLayout>
 
