@@ -68,7 +68,6 @@ public class RealTimeLocation implements Thread.UncaughtExceptionHandler {
                 ServiceTools.logToFireBase(e);
                 e.printStackTrace();
             }
-
     }
 
     class HubConnectionTask extends AsyncTask<HubConnection, Void, Void> {

@@ -471,7 +471,7 @@ public class OrderDetailActivity extends BaseActivity {
         lltvDiscount = (LinearLayout) findViewById(R.id.lltvDiscount);
         llMarketName = (LinearLayout) findViewById(R.id.llMarketName);
         llFinalPrice = (LinearLayout) findViewById(R.id.llFinalPrice);
-        pbLoading = (ProgressBar) findViewById(R.id.progressBar2);
+        pbLoading = (ProgressBar) findViewById(R.id.successProgressBar);
 
         btnPrint = (Button) findViewById(R.id.btnPrint);
         btnAddReceipt = (Button) findViewById(R.id.btnAddReceipt);

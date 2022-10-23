@@ -161,8 +161,8 @@ public class CustomerReportActivity extends BaseActivity {
                 tvDiscount = (TextView) convertView.findViewById(R.id.tvDiscount);
                 tvNetSale = (TextView) convertView.findViewById(R.id.tvNetSale);
                 tvTaxCharge = (TextView) convertView.findViewById(R.id.tvTaxCharge);
-                tvCashAmount = (TextView) convertView.findViewById(R.id.tvCashAmount);
-                tvChequeAmount = (TextView) convertView.findViewById(R.id.tvChequeAmount);
+                tvCashAmount = (TextView) convertView.findViewById(R.id.tvMissionStatus);
+                tvChequeAmount = (TextView) convertView.findViewById(R.id.tvNumberOfCheckLists);
                 tvCashReceiptAmount = (TextView) convertView.findViewById(R.id.tvCashReceiptAmount);
                 tvFinalSum = (TextView) convertView.findViewById(R.id.tvFinalSum);
             }

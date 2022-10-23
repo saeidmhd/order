@@ -27,6 +27,7 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Browser;
@@ -47,6 +48,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +63,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.google.android.gms.location.DetectedActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -74,6 +77,7 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.android.PolyUtil;
+import com.mahak.order.adapter.MissionDetailAdapter;
 import com.mahak.order.common.CheckList;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.ProjectInfo;
@@ -81,7 +85,10 @@ import com.mahak.order.common.ServiceTools;
 import com.mahak.order.common.User;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.log.LogReceiver;
+import com.mahak.order.mission.Mission;
+import com.mahak.order.mission.MissionDetail;
 import com.mahak.order.storage.RadaraDb;
+import com.mahak.order.tracking.Constants;
 import com.mahak.order.tracking.LocationService;
 import com.mahak.order.tracking.MapPolygon;
 import com.mahak.order.tracking.ShowPersonCluster;
@@ -89,6 +96,7 @@ import com.mahak.order.tracking.Utils;
 import com.mahak.order.service.ReadOfflinePicturesProducts;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.widget.FontAlertDialog;
+import com.mahak.order.widget.FontPopUp;
 import com.mahak.order.widget.FontProgressDialog;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -126,6 +134,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             btnAddNewReceipt,
             btnNavReceiptList,
             btnNavOrderList,
+            btnNavMissionList,
             btnWhatsNew,
             btnNavPayableList,
             btnNavTransferList,
@@ -159,9 +168,18 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             tvVersion;
 
     public static TextView tvTrackingService;
+    public static TextView getGoodsCountTxT,getOrderCountTxT,getReceiveCountTxT,getDeliverGoodsCountTxT;
+    public static TextView unsuccessfulCount,successfulCount;
+    public static TextView missionTitle;
+
+    public static TextView statOfChecklist;
 
 
-    private ListView lstCheckList;
+    public static ImageView show_mission;
+    public static RelativeLayout show_missionDetail;
+    public static RelativeLayout row;
+
+
 
     private LinearLayout
             llInvoice,
@@ -237,21 +255,82 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     private FontProgressDialog pd;
     private static LatLng lastPosition;
     private int fromActivityResult;
+    private ArrayList<Mission> missions = new ArrayList<>();
+    private ArrayList<MissionDetail> missionDetails = new ArrayList<>();
+    private int getOrderCount;
+    private int delivergoodsCount;
+    private int recieveCount;
+    private int getgoodsCount;
+
+    private int successCount;
+    private int unSuccessCount;
+    private static int missionIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_dashboard);
+        requestActivityRecognitionPermission();
 
         mContext = this;
         mActivity = this;
 
         registerReceiverToCheckGpsOnOff();
-        //registerReceiver2(mContext);
-       // listenNetworkViaConnectivityManager(mContext);
 
         initUI();
+
+        missions = db.getAllMission();
+
+        if(missions.size() > 0){
+            missionIndex = missions.get(0).getMissionId();
+            missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
+        }else
+            missionIndex = 0;
+
+        calcAndSetCheckListStat();
+
+        missionTitle.setText("شناسه ماموریت : " + missionIndex);
+
+        show_missionDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(missionIndex != 0){
+                    Intent intent = new Intent(getApplicationContext(), MissionListActivity.class);
+                    intent.putExtra("missionIndex", missionIndex);
+                    startActivity(intent);
+                }else
+                    Toast.makeText(mActivity, "ماموریتی وجود ندارد", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popup = new PopupMenu(mContext,show_mission);
+                for (Mission mission : missions) {
+                    popup.getMenu().add(mission.getMissionId(),mission.getMissionId(),mission.getMissionId(), "شناسه ماموریت : " + mission.getMissionId());
+                }
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        missionTitle.setText(menuItem.getTitle());
+                        missionIndex = menuItem.getItemId();
+                        missionDetails.clear();
+                        missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
+                        calcAndSetCheckListStat();
+                        return false;
+                    }
+                });
+
+                popup.show();
+                Menu menu = popup.getMenu();
+                for (int i = 0; i < menu.size(); i++) {
+                    MenuItem mi = menu.getItem(i);
+                    FontPopUp.applyFontToMenuItem(mi, mContext);
+                }
+            }
+        });
 
         if (Utils.requestingLocationUpdates(this)) {
             if (!checkPermissions()) {
@@ -421,18 +500,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             }
         });
 
-        lstCheckList.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                if (customer != null) {
-                    Intent intent = new Intent(mContext, CheckListDetailActivity.class);
-                    intent.putExtra(POSITION_KEY, position);
-                    startActivity(intent);
-                }
-            }
-        });
 
         llOrder.setOnClickListener(new View.OnClickListener() {
 
@@ -487,6 +554,71 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         };
     }//end of onCreate
 
+    private void calcAndSetCheckListStat() {
+        calcNumberOfChecklist();
+        calcNumberOfStatusChecklist();
+        setCountToUi();
+        setCountStatusToUi();
+        setStatToUi();
+    }
+
+    private void setCountStatusToUi() {
+        successfulCount.setText(String.valueOf(successCount));
+        unsuccessfulCount.setText(String.valueOf(unSuccessCount));
+    }
+    private void setStatToUi() {
+        statOfChecklist.setText(successCount+unSuccessCount + "/" + missionDetails.size());
+    }
+
+    private void setCountToUi() {
+        getGoodsCountTxT.setText(String.valueOf(getgoodsCount));
+        getOrderCountTxT.setText(String.valueOf(getOrderCount));
+        getReceiveCountTxT.setText(String.valueOf(recieveCount));
+        getDeliverGoodsCountTxT.setText(String.valueOf(delivergoodsCount));
+    }
+    private void calcNumberOfChecklist() {
+        getOrderCount = delivergoodsCount = recieveCount = getgoodsCount = 0;
+        for (MissionDetail missionDetail : missionDetails){
+            switch (missionDetail.getType()){
+                case 1 :
+                    getOrderCount++;
+                    break;
+                case 2:
+                    delivergoodsCount++;
+                    break;
+                case 3:
+                    recieveCount++;
+                    break;
+                case 4:
+                    getgoodsCount++;
+                    break;
+            }
+        }
+
+    }
+    private void calcNumberOfStatusChecklist() {
+        successCount = unSuccessCount = 0;
+        for (MissionDetail missionDetail : missionDetails){
+            switch (missionDetail.getStatus()){
+                case 3:
+                    successCount++;
+                    break;
+                case 4:
+                    unSuccessCount++;
+                    break;
+            }
+        }
+
+    }
+
+    private void requestActivityRecognitionPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_DENIED){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACTIVITY_RECOGNITION},101);
+            }
+        }
+    }
+
     public static void setTackingServiceText(boolean isChecked) {
         if (isChecked) {
             tvTrackingService.setText(R.string.tracking_system_is_active);
@@ -539,8 +671,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         }
         if(isRadaraActive())
             setTrackingConfig();
-
-
         super.onResume();
     }
 
@@ -565,23 +695,11 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         };
         this.getApplicationContext().registerReceiver(receiver, filter);
     }
-    private void registerReceiver2() {
-        br = new LogReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.location.PROVIDERS_CHANGED");
-        filter.addAction("android.intent.action.BATTERY_LOW");
-        filter.addAction("android.intent.action.BATTERY_OKAY");
-        filter.addAction("android.intent.action.BOOT_COMPLETED");
-        filter.addAction("android.intent.action.ACTION_SHUTDOWN");
-        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        filter.addAction("android.intent.action.AIRPLANE_MODE");
-        this.getApplicationContext().registerReceiver(br, filter);
-    }
-
 
     private void startLocationUpdate() {
         if(isRadaraActive()){
-            if (locationService == null) locationService = new LocationService(mContext, DashboardActivity.this);
+            if (locationService == null)
+                locationService = new LocationService(mContext, DashboardActivity.this);
             if (!checkPermissions()) {
                 requestPermissions();
             }else {
@@ -676,6 +794,9 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     showPermissionDialog();
                 }
             }
+        }else if (requestCode == 101) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                Toast.makeText(this, "granted", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -722,7 +843,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         tvSumOfOrders = (TextView) findViewById(R.id.tvSumOfOrders);
         tvSumOfReceipts = (TextView) findViewById(R.id.tvSumOfReceipts);
-        lstCheckList = (ListView) findViewById(R.id.lstCheckList);
         mDrawerLeft = (RelativeLayout) findViewById(R.id.left_drawer);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -747,6 +867,19 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         tvSumOfChargeAndTaxOrder = (TextView) findViewById(R.id.tvSumOfChargeAndTaxOrder);
         tvSumOffChargeAndTaxInvoice = (TextView) findViewById(R.id.tvSumOfChargeAndTaxInvoice);
         tvVersion = (TextView) findViewById(R.id.tvVersion);
+
+        getGoodsCountTxT = (TextView) findViewById(R.id.getGoodsCountTxT);
+        getOrderCountTxT = (TextView) findViewById(R.id.getOrderCountTxT);
+        getReceiveCountTxT = (TextView) findViewById(R.id.getReceiveCountTxT);
+        getDeliverGoodsCountTxT = (TextView) findViewById(R.id.getDeliverGoodsCountTxT);
+
+        unsuccessfulCount = (TextView) findViewById(R.id.unsuccessfulCount);
+        successfulCount = (TextView) findViewById(R.id.successfulCount);
+
+        missionTitle = (TextView) findViewById(R.id.missionTitle);
+
+        statOfChecklist = (TextView) findViewById(R.id.statOfChecklist);
+
         llReceipt = (LinearLayout) findViewById(R.id.llReceipt);
         llOrder = (LinearLayout) findViewById(R.id.llOrder);
         llInvoice = (LinearLayout) findViewById(R.id.llInvoice);
@@ -775,7 +908,8 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnNavReportsList.setCompoundDrawables(null, null, new IconicsDrawable(mContext, FontAwesome.Icon.faw_chart_bar).color(Color.WHITE).sizeDp(30), null);
         btnNavPayableList = (Button) findViewById(R.id.btnNavPayableList);
         btnNavPayableList.setCompoundDrawables(null, null, new IconicsDrawable(mContext, Ionicons.Icon.ion_card).color(Color.WHITE).sizeDp(30), null);
-
+        btnNavMissionList = (Button) findViewById(R.id.btnNavMissionList);
+        btnNavMissionList.setCompoundDrawables(null, null, new IconicsDrawable(mContext, FontAwesome.Icon.faw_file).color(Color.WHITE).sizeDp(30), null);
         btnNavTransferList = (Button) findViewById(R.id.btnNavTransferList);
         btnNavTransferList.setCompoundDrawables(null, null, new IconicsDrawable(mContext, Ionicons.Icon.ion_arrow_swap).color(Color.WHITE).sizeDp(30), null);
 
@@ -795,6 +929,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnNavProductList.setOnClickListener(this);
         btnNavCustomerList.setOnClickListener(this);
         btnNavReceiptList.setOnClickListener(this);
+        btnNavMissionList.setOnClickListener(this);
         btnNavOrderList.setOnClickListener(this);
         btnNavDataSync.setOnClickListener(this);
         btnNavContact.setOnClickListener(this);
@@ -811,6 +946,9 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         btnNavPromotionList.setOnClickListener(this);
 
         btnTrackingService = (SwitchCompat) findViewById(R.id.btnTrackingService);
+        show_mission = (ImageView) findViewById(R.id.show_mission);
+        show_missionDetail = (RelativeLayout) findViewById(R.id.show_missionDetail);
+        row = (RelativeLayout) findViewById(R.id.row);
 
         //Version/////////////////////////////////////////////////////
         PackageInfo pInfo;
@@ -869,7 +1007,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
         //Fill Adapter
         adChecklist = new ShowCheckListArrayAdapter(mActivity, R.layout.lst_check_list_item, arrayChecklist);
-        lstCheckList.setAdapter(adChecklist);
 
 
         //Fill Map_______________________________________________________________________________
@@ -1046,6 +1183,15 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 mDrawerLayout.closeDrawers();
                 intent = new Intent(getApplicationContext(), ReceiptsListActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.btnNavMissionList:
+                mDrawerLayout.closeDrawers();
+                if(missionIndex != 0){
+                    intent = new Intent(getApplicationContext(), MissionListActivity.class);
+                    intent.putExtra("missionIndex", missionIndex);
+                    startActivity(intent);
+                }else
+                    Toast.makeText(mActivity, "ماموریتی وجود ندارد", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnNavOrderList:
                 mDrawerLayout.closeDrawers();
@@ -1300,6 +1446,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                         stopLocationUpdate();
                         RefreshPreferenceUser();
                         setPrefSignalUserToken("");
+                        missionIndex = 0;
                         dialog.dismiss();
                         Intent intent = new Intent(DashboardActivity.this, LoginActivityRestApi.class);
                         startActivity(intent);

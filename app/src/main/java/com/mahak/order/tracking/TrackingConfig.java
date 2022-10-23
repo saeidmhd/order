@@ -39,6 +39,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.mahak.order.BaseActivity.getPrefDatabaseId;
 import static com.mahak.order.BaseActivity.getPrefSignalUserToken;
 import static com.mahak.order.BaseActivity.getPrefUserMasterId;
 import static com.mahak.order.BaseActivity.setPrefSignalUserToken;
@@ -84,6 +85,7 @@ public class TrackingConfig {
                         setPrefSignalUserToken(response.body().getUserToken());
                         getSetting(mContext);
                     }else {
+                        dismissProgressDialog();
                         Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -135,6 +137,7 @@ public class TrackingConfig {
                             ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_gps_config, gpsData.toString());
 
                         } catch (JSONException e) {
+                            dismissProgressDialog();
                             e.printStackTrace();
                         }
                         new getTrackingZoneAsync().execute();
@@ -197,6 +200,7 @@ public class TrackingConfig {
                             new SaveTrackingZoneAsyncTask(data).execute();
 
                         }else {
+                            dismissProgressDialog();
                             if (response.body() != null) {
                                 mMsg[0] = response.body().getMessage();
                             }
@@ -257,6 +261,9 @@ public class TrackingConfig {
 
         @Override
         protected void onPreExecute() {
+            pd.setMessage("در حال ارسال نقاط توقف");
+            pd.setCancelable(false);
+            pd.show();
             super.onPreExecute();
         }
 

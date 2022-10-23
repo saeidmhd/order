@@ -515,6 +515,7 @@ public class RadaraDb {
         }
     }
 
+
     public void DeleteAllData() {
 
         mDb.delete(DbSchema.ZoneLocationSchema.TABLE_NAME, null, null);

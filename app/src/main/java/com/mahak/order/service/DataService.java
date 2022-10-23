@@ -37,6 +37,8 @@ import com.mahak.order.common.TransactionsLog;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.common.VisitorPeople;
 import com.mahak.order.common.VisitorProduct;
+import com.mahak.order.mission.Mission;
+import com.mahak.order.mission.MissionDetail;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.RadaraDb;
 import com.mahak.order.tracking.visitorZone.Datum;
@@ -180,6 +182,30 @@ public class DataService {
             db.AddSetting(setting);
         }
        
+        ServiceTools.setSettingPreferences(db, mContext);
+        long endTime = System.nanoTime();
+        return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
+    }
+    public static double InsertMissions(DbAdapter db, List<Mission> data, Context mContext) {
+        long startTime = System.nanoTime();
+
+        for (int i = 0; i < data.size(); i++) {
+            Mission mission = data.get(i);
+            db.AddMission(mission);
+        }
+
+        ServiceTools.setSettingPreferences(db, mContext);
+        long endTime = System.nanoTime();
+        return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
+    }
+    public static double InsertMissionDetails(DbAdapter db, List<MissionDetail> data, Context mContext) {
+        long startTime = System.nanoTime();
+
+        for (int i = 0; i < data.size(); i++) {
+            MissionDetail missionDetail = data.get(i);
+            db.AddMissionDetail(missionDetail);
+        }
+
         ServiceTools.setSettingPreferences(db, mContext);
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;

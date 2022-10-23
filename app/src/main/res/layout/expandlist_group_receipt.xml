@@ -122,7 +122,7 @@
                 android:padding="@dimen/SmallSize">
 
                 <com.mahak.order.widget.FontTextView
-                    android:id="@+id/tvCashAmount"
+                    android:id="@+id/tvMissionStatus"
                     style="@style/forms_label_default"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
@@ -146,7 +146,7 @@
                 android:padding="@dimen/SmallSize">
 
                 <com.mahak.order.widget.FontTextView
-                    android:id="@+id/tvChequeAmount"
+                    android:id="@+id/tvNumberOfCheckLists"
                     style="@style/forms_label_default"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
