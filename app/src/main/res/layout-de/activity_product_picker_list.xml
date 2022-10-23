@@ -11,8 +11,8 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/SmallSize"
         android:layout_marginLeft="@dimen/SmallSize"
+        android:layout_marginRight="@dimen/SmallSize"
         android:descendantFocusability="beforeDescendants"
         android:focusableInTouchMode="true"
         android:orientation="horizontal">
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
             android:drawableRight="@drawable/ic_search_set_nav"
-            android:gravity="left|center_vertical"
+            android:gravity="right|center_vertical"
             android:hint="@string/str_name_product_code_filter"
             android:minHeight="48dp"
             android:singleLine="true" />
@@ -32,8 +32,8 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/SmallSize"
         android:layout_marginLeft="@dimen/SmallSize"
+        android:layout_marginRight="@dimen/SmallSize"
         android:descendantFocusability="beforeDescendants"
         android:focusableInTouchMode="true"
         android:orientation="horizontal">
@@ -61,6 +61,7 @@
             tools:ignore="SpeakableTextPresentCheck" />
 
         <LinearLayout
+            android:id="@+id/category_layout"
             android:layout_width="32dp"
             android:layout_height="match_parent"
             android:layout_weight="0"
@@ -94,10 +95,34 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <FrameLayout
-            android:id="@+id/flContent"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/flContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"/>
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/ll_category"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -106,7 +131,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/NormalSize"
         android:background="@drawable/panel_bg"
-        android:gravity="left|center_vertical"
+        android:gravity="right|center_vertical"
         android:orientation="horizontal"
         android:padding="@dimen/SmallSize">
 
@@ -159,7 +184,7 @@
         android:layout_marginLeft="@dimen/NormalSize"
         android:layout_marginBottom="@dimen/NormalSize"
         android:background="@drawable/panel_bg"
-        android:gravity="left|center_vertical"
+        android:gravity="right|center_vertical"
         android:orientation="horizontal"
         android:padding="@dimen/SmallSize"
         android:visibility="gone">
