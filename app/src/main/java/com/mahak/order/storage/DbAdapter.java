@@ -9503,12 +9503,12 @@ public class DbAdapter {
 
         return array;
     }
-    public ArrayList<MissionDetail> getAllMissionDetail() {
+    public ArrayList<MissionDetail> getAllMissionDetail(Integer missionId) {
         MissionDetail missionDetail;
         Cursor cursor;
         ArrayList<MissionDetail> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select * from MissionDetail where userid =? and deleted = 0 ", new String[]{String.valueOf(getPrefUserId())});
+            cursor = mDb.rawQuery("select * from MissionDetail where userid =? and missionId = ? and deleted = 0 ", new String[]{String.valueOf(getPrefUserId()),String.valueOf(missionId)});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {

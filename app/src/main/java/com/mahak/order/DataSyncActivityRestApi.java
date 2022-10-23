@@ -723,8 +723,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
             payableTransfers = db.getAllPayableNotPublish(BaseActivity.getPrefUserId());
             checkLists = db.getAllDoneChecklistNotPublish();
 
-            missionDetails = db.getAllMissionDetail();
             missions = db.getAllMission();
+
+            for(Mission mission : missions)
+                missionDetails.addAll(db.getAllMissionDetail(mission.getMissionId()));
 
             visitorLocation = radaraDb.getAllGpsPointsForSending();
 
