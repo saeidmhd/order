@@ -1501,7 +1501,7 @@ public class ServiceTools {
         return 0;
     }
 
-    public static void logToFireBase(Exception e) {
+    public static void logToFireBase(Throwable e) {
         FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
         FirebaseCrashlytics.getInstance().recordException(e);
     }
@@ -1942,6 +1942,16 @@ public class ServiceTools {
     }
 
     public static String getFormattedDateAndTime(long milisecond) {
+
+        Date date = new Date();
+        date.setTime(milisecond);
+        String pattern = "yyyy-MM-dd'T'HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
+        return simpleDateFormat.format(date);
+
+    }
+
+    public static String getFormattedDate(long milisecond) {
 
         Date date = new Date();
         date.setTime(milisecond);

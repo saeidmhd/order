@@ -38,17 +38,17 @@ public class BaseActivity extends AppCompatActivity {
     //public static final String BaseUrl ="http://192.168.89.31/mds/sync/" ;
     //public static final String BaseUrl ="http://order.mahaksoft.com:8085/sync/" ;
     //public static final String BaseUrl = "https://bazaraservices.mahaksoft.com/v3/sync/";
-    public static final String baseUrlApi = "https://mahakacc.mahaksoft.com/api/testv3/sync/";
-    //public static final String baseUrlApi = "https://mahakacc.mahaksoft.com/api/testv3/sync/";
+    //public static final String baseUrlApi = "https://mahakacc.mahaksoft.com/api/v3/sync/";
+    public static final String baseUrlApi = "https://mahakacc.mahaksoft.com/api/v3/sync/";
     public static final String setDeviceTokenUrl = "https://mahakacc.mahaksoft.com/public/api/";
 
     /*public static final String baseUrlTracking = "https://tracking.mahaksoft.com:404/api/";
     public static final String baseUrlSignalR = "https://tracking.mahaksoft.com/TrackingHub?token=";
     public static final String baseUrlShowRouting = "https://tracking.mahaksoft.com/showrouting";*/
 
-    public static final String baseUrlTracking = "https://tracking.mahaksoft.com:404/api/";
-    public static final String baseUrlSignalR = "https://tracking.mahaksoft.com:404/TrackingHub?token=";
-    public static final String baseUrlShowRouting = "https://tracking.mahaksoft.com:404/showrouting";
+    public static final String baseUrlTracking = "https://tracking.mahaksoft.com/api/";
+    public static final String baseUrlSignalR = "https://tracking.mahaksoft.com/TrackingHub?token=";
+    public static final String baseUrlShowRouting = "https://tracking.mahaksoft.com/showrouting";
 
 
     //public static final String BaseUrl ="http://bazaraservices.mahaksoft.com:444/sync/" ;

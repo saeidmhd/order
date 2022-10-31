@@ -89,7 +89,7 @@
     <string name="str_receipt_list">ارسال دریافتی ها</string>
     <string name="str_returnOfSale_list">ارسال برگشتی ها</string>
     <string name="str_payable_list">ارسال پرداختی ها</string>
-    <string name="str_done_check_list">ارسال دستور کارها</string>
+    <string name="str_done_check_list">ارسال جزییات ماموریت ها</string>
     <string name="str_none_register_list">ارسال عدم ثبت سفارش ها</string>
     <string name="str_send_customer_list">ارسال لیست مشتریان</string>
     <string name="str_product_images">تصاویر کالاها</string>
@@ -208,7 +208,7 @@
     <string name="str_shift1">شیفت صبح</string>
     <string name="str_shift2">شیفت عصر</string>
     <string name="str_geographical_address">آدرس جغرافیایی</string>
-    <string name="str_get_geographical_location">دریافت موقعیت</string>
+    <string name="str_get_geographical_location">دریافت موقعیت جغرافیایی</string>
     <string name="str_show_geographical_location">نمایش موقعیت</string>
     <string name="str_longitude">طول جغرافیایی</string>
     <string name="str_latitude">عرض جغرافیایی</string>
@@ -256,7 +256,7 @@
     <string name="str_search">جستجو</string>
     <string name="str_customer_price">فی مصرف کننده</string>
     <string name="str_title_product">مشخصات محصول</string>
-    <string name="str_add_shoppingcart">افزودن به سبد خرید</string>
+    <string name="str_add_shoppingcart">افزودن به سبد</string>
     <string name="str_code">شماره فاکتور</string>
     <string name="str_immediate">فوری</string>
     <string name="str_settlement_type">نوع تسویه</string>

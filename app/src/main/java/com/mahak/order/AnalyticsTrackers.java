@@ -62,18 +62,18 @@ public final class AnalyticsTrackers extends MultiDexApplication {
 
         FirebaseApp.initializeApp(mContext);
 
-        /*Thread.UncaughtExceptionHandler handler = new ExceptionReporter(getDefaultTracker(), Thread.getDefaultUncaughtExceptionHandler(), this) {
+        Thread.UncaughtExceptionHandler handler = new ExceptionReporter(getDefaultTracker(), Thread.getDefaultUncaughtExceptionHandler(), this) {
             @Override
             public void uncaughtException(Thread t, Throwable e) {
                 exceptionLog(e);
-                ServiceTools.logToFireBase(e);
-                logToDbFile logToDbFile = new logToDbFile(e.getMessage());
+                logToDbFile logToDbFile = new logToDbFile(removeNonAlphanumeric(e));
                 logToDbFile.execute();
+                ServiceTools.logToFireBase(e);
                 super.uncaughtException(t, e);
             }
-        };*/
+        };
 
-        Thread.setDefaultUncaughtExceptionHandler(new ManageException(mContext));
+        Thread.setDefaultUncaughtExceptionHandler(handler);
     }
 
     public void exceptionLog(Throwable ex) {
@@ -111,10 +111,6 @@ public final class AnalyticsTrackers extends MultiDexApplication {
 
     }
 
-    public static Context getContext() {
-        return mContext;
-    }
-
     private class logToDbFile extends AsyncTask<String, Integer, Boolean> {
 
         String exception;
@@ -147,4 +143,17 @@ public final class AnalyticsTrackers extends MultiDexApplication {
         db.open();
         db.AddException(exceptionLog);
     }
+
+    private String removeNonAlphanumeric(Throwable message) {
+        StringWriter sw = new StringWriter();
+        message.printStackTrace(new PrintWriter(sw));
+        String exceptionAsString = sw.toString();
+        return exceptionAsString;
+
+    }
+
+    public static Context getContext() {
+        return mContext;
+    }
+
 }

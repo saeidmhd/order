@@ -24,7 +24,6 @@ public class Customer {
     public static String TAG_ZONE = "Zone";
     public static String TAG_TELL = "Tell";
     public static String TAG_MOBILE = "Mobile";
-    public static String TAG_SHIFT = "Shift";
     public static String TAG_LATITUDE = "Latitude";
     public static String TAG_LONGITUDE = "Longitude";
     public static String TAG_IS_DELETE = "IsDelete";
@@ -46,7 +45,6 @@ public class Customer {
     private long UserId;
     private String Name;
     private String Group;
-    private String Shift;
 
     private int orderCount;
     private int promotionId;
@@ -315,14 +313,6 @@ public class Customer {
 
     public void setMobile(String mobile) {
         Mobile = mobile;
-    }
-
-    public String getShift() {
-        return Shift;
-    }
-
-    public void setShift(String shift) {
-        Shift = shift;
     }
 
     public double getLatitude() {

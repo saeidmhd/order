@@ -145,7 +145,7 @@ public class MissionListActivity extends BaseActivity implements Observer {
                 mission = mMission;
         description.setText(mission.getDescription());
         missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
-        missionDetailAdapter = new MissionDetailAdapter(missionDetails , mission, mContext);
+        missionDetailAdapter = new MissionDetailAdapter(missionDetails , mContext);
         missionDetailList.setAdapter(missionDetailAdapter);
         setMissionStatus();
         calcAndSetCheckListStat();
@@ -185,7 +185,7 @@ public class MissionListActivity extends BaseActivity implements Observer {
         missions = db.getAllMission();
         mission = missions.get(0);
         missionDetails.addAll(db.getAllMissionDetailWithMissionId(missions.get(0).getMissionId()));
-        missionDetailAdapter = new MissionDetailAdapter(missionDetails, mission, mContext);
+        missionDetailAdapter = new MissionDetailAdapter(missionDetails, mContext);
         missionDetailList.setAdapter(missionDetailAdapter);
     }
 

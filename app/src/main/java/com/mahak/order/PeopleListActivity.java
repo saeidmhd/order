@@ -249,6 +249,9 @@ public class PeopleListActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s.toString())) {
+                    txtSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search_set_nav,0 );
+                }
                 timer.cancel();
                 timer = new Timer();
                 timer.schedule(

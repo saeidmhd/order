@@ -27,7 +27,6 @@ import java.util.Date;
 public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdapter.ViewHolder> {
 
     private ArrayList<MissionDetail> missionDetails;
-    private Mission mission;
     private LayoutInflater mInflater;
     private MissionListActivity missionListActivity;
     private ArrayList<MissionDetail> arrayOriginal = new ArrayList<>();
@@ -60,9 +59,8 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
         }
     }
 
-    public MissionDetailAdapter(ArrayList<MissionDetail> missionDetails, Mission mission, Context context) {
+    public MissionDetailAdapter(ArrayList<MissionDetail> missionDetails, Context context) {
         this.missionDetails = missionDetails;
-        this.mission = mission;
         this.mInflater = LayoutInflater.from(context);
         missionListActivity = (MissionListActivity) context;
         arrayOriginal.addAll(missionDetails);
@@ -74,7 +72,6 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent,
                                          int viewType) {
-        setMissionStatus();
         View view = mInflater.inflate(R.layout.mission_detail_item, parent, false);
         return new ViewHolder(view);
     }
@@ -190,7 +187,6 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
                 missionDetail.setChangeAndNotify();
                 notifyItemChanged(position);
                 db.AddMissionDetail(missionDetail);
-                setMissionStatus();
                 dialog.dismiss();
             }
         });
@@ -203,7 +199,6 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
                 missionDetail.setChangeAndNotify();
                 notifyItemChanged(position);
                 db.AddMissionDetail(missionDetail);
-                setMissionStatus();
                 dialog.dismiss();
             }
         });
@@ -216,7 +211,6 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
                 missionDetail.setChangeAndNotify();
                 notifyItemChanged(position);
                 db.AddMissionDetail(missionDetail);
-                setMissionStatus();
                 dialog.dismiss();
             }
         });
@@ -229,44 +223,10 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
                 missionDetail.setChangeAndNotify();
                 notifyItemChanged(position);
                 db.AddMissionDetail(missionDetail);
-                setMissionStatus();
                 dialog.dismiss();
             }
         });
         dialog.show();
-    }
-
-    private void setMissionStatus() {
-
-        int done_count = 0;
-        int non_started = 0;
-
-        for (MissionDetail missionDetail : missionDetails){
-            switch (missionDetail.getStatus()){
-                case 1:
-                    non_started++;
-                    break;
-                case 3:
-                case 4:
-                    done_count++;
-                    break;
-            }
-
-            if(missionDetails.size() == done_count){
-                mission.setEndDate(ServiceTools.getFormattedDateAndTime(new Date().getTime()));
-                mission.setStatus(3);
-            }
-            else if(missionDetails.size() == non_started){
-                mission.setEndDate(null);
-                mission.setStatus(1);
-            }
-
-            else{
-                mission.setEndDate(null);
-                mission.setStatus(2);
-            }
-        }
-        db.AddMission(mission);
     }
 
     @Override

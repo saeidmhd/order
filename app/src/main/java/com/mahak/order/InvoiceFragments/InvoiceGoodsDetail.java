@@ -112,7 +112,8 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             llTotalOff,
             llTotalChargeAndTax,
             llTotalPrice,
-            llFinalPrice;
+            llFinalPrice,
+            llDiscount;
     private TextView tvCurrency;
     private TextView text_view_fee;
     private EditText txtDiscount, txtDiscountPercent;
@@ -202,6 +203,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
             llTotalOff.setVisibility(View.GONE);
             llFinalPrice.setVisibility(View.GONE);
             llTotalChargeAndTax.setVisibility(View.GONE);
+            llDiscount.setVisibility(View.GONE);
         }
 
 
@@ -832,6 +834,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
         llTotalChargeAndTax = (LinearLayout) v.findViewById(R.id.llTotalChargeAndTax);
         llTotalPrice = (LinearLayout) v.findViewById(R.id.llTotalPrice);
         llFinalPrice = (LinearLayout) v.findViewById(R.id.llFinalPrice);
+        llDiscount = (LinearLayout) v.findViewById(R.id.llDiscount);
 
         txtDiscount = (EditText) v.findViewById(R.id.txtDiscount);
 

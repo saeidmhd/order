@@ -794,10 +794,10 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                     showPermissionDialog();
                 }
             }
-        }else if (requestCode == 101) {
+        }/*else if (requestCode == 101) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 Toast.makeText(this, "granted", Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 
     private LatLng getLastPoint(){

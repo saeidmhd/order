@@ -632,7 +632,7 @@ public class InvoiceDetailActivity extends BaseActivity {
             }
             //save in db___________________________________
 
-            if (FinalResult) {
+            if (FinalResult && orderType != TYPE_SEND_TRANSFERENCE) {
              //   Toast.makeText(mContext, R.string.save_success, Toast.LENGTH_SHORT).show();
                 int count = customer.getOrderCount();
                 count += 1;

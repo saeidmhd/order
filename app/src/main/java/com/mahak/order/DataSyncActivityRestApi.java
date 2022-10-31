@@ -99,6 +99,8 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
     final boolean[] send_result = {false};
 
+    private TextView version_footer_mahak;
+
     private TextView
             tvOrderList,
             tvReceiptList,
@@ -398,28 +400,14 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
     }
 
-    private void setTextSendErrorResult() {
-        tvInvoiceList.setText(getString(R.string.str_message_error));
-        tvOrderList.setText(getString(R.string.str_message_error));
-        tvReceiptList.setText(getString(R.string.str_message_error));
-        tvReturnOfSaleList.setText(getString(R.string.str_message_error));
-        tvPayableList.setText(getString(R.string.str_message_error));
-        tvSendDoneCheckList.setText(getString(R.string.str_message_error));
-        tvSendNonRegister.setText(getString(R.string.str_message_error));
-        tvSendCustomerList.setText(getString(R.string.str_message_error));
-    }
-
-    private void setTextGetErrorResult() {
-        tvTransaction.setText(getString(R.string.str_message_error));
-        tvProductList.setText(getString(R.string.str_message_error));
-        tvVisitorٰList.setText(getString(R.string.str_message_error));
-    }
-
     /**
      * Initialize Variable
      */
 
     private void init() {
+
+        version_footer_mahak = (TextView) findViewById(R.id.version_footer_mahak);
+        version_footer_mahak.setText(getString(R.string.str_forms_footer_mahak) +  " " + ServiceTools.getVersionName(DataSyncActivityRestApi.this));
 
         tvOrderList = (TextView) findViewById(R.id.tvOrderList);
         tvInvoiceList = (TextView) findViewById(R.id.tvInvoiceList);
@@ -744,11 +732,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     visitorLocation = radaraDb.getAllGpsPointsForSending();
                     break;
                 case 10:
-                    missions = db.getAllMission();
-                    break;
-                case 11:
-                    for (Mission mission:missions)
-                        missionDetails.addAll(db.getAllMissionDetail(mission.getMissionId()));
+                    missionDetails.addAll(db.getAllMissionDetail());
                     break;
             }
             return 0;
@@ -788,11 +772,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     setAllDataBody.setVisitorLocations(visitorLocation);
                     break;
                 case 10:
-                    setAllDataBody.setMissions(missions);
-                    break;
-                case 11:
                     setAllDataBody.setMissionDetails(missionDetails);
                     break;
+
             }
 
             Call<SaveAllDataResult> saveAllDataResultCall = apiService.SaveAllData(setAllDataBody);
@@ -900,7 +882,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                     tvPayableList.setText(getString(R.string.str_message_no_need));
                                 break;
                             case 8:
-                                if (checkLists.size() > 0) {
+                                /*if (checkLists.size() > 0) {
                                     for (int i = 0; i < checkLists.size(); i++) {
                                         checkLists.get(i).setChecklistId(response.body().getData().getObjects().getChecklists().getResults().get(i).getEntityID());
                                         checkLists.get(i).setPublish(ProjectInfo.PUBLISH);
@@ -908,7 +890,13 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                     }
                                     tvSendDoneCheckList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + checkLists.size());
                                 } else
-                                    tvSendDoneCheckList.setText(getString(R.string.str_message_no_need));
+                                    tvSendDoneCheckList.setText(getString(R.string.str_message_no_need));*/
+
+                                /*if (missionDetails.size() > 0) {
+                                    tvSendDoneCheckList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + checkLists.size());
+                                } else
+                                    tvSendDoneCheckList.setText(getString(R.string.str_message_no_need));*/
+
                                 break;
                             case 9:
                                 if (visitorLocation.size() > 0) {
@@ -920,28 +908,15 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                 }
                                 break;
                             case 10:
-                                if (missions.size() > 0) {
-                                    for (int i = 0; i < missions.size(); i++) {
-                                    }
-                                }
-                                break;
-                            case 11:
                                 if (missionDetails.size() > 0) {
-                                    for (int i = 0; i < visitorLocation.size(); i++) {
-                                    }
-                                }
+                                    tvSendDoneCheckList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + checkLists.size());
+                                } else
+                                    tvSendDoneCheckList.setText(getString(R.string.str_message_no_need));
                                 break;
+
                         }
 
-                        picturesProducts = db.getAllSignWithoutUrl();
-
-                        for (PicturesProduct picturesProduct : picturesProducts) {
-                            Order order = db.GetOrderWithOrderClientId(picturesProduct.getPictureClientId());
-                            picturesProduct.setItemId(order.getOrderId());
-                            db.UpdatePicturesProductWithClientId(picturesProduct);
-                        }
-
-                        if(whichSendUpdate < 11 ){
+                        if(whichSendUpdate < 10 ){
                             whichSendUpdate++;
                             new SendAsyncTask(whichSendUpdate).execute();
                         }else{
@@ -949,25 +924,23 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         }
 
                     } else if (response.body() != null) {
+                        dismissProgressDialog();
                         // mMsg[0] = response.body().getData().getObjects().getOrders().getResults().get(0).getErrors().get(0).getError();
                         mMsg[0] = getString(R.string.send_error);
 
                         if (response.body().getData().getObjects() != null)
                             showDialog(getResponseError(response.body().getData().getObjects()));
-                        else
+                        else if(response.body().getMessage() != null)
                             showDialog(response.body().getMessage());
 
-                        setTextSendErrorResult();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
                     dismissProgressDialog();
-                   // ServiceTools.logToFireBase(t);
                     mMsg[0] = t.toString();
                     showDialog(mMsg[0]);
-                    setTextSendErrorResult();
                 }
             });
         }
@@ -1233,9 +1206,8 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             }
                         }
                     } else if (response.body() != null) {
+                        dismissProgressDialog();
                         mMsg[0] = response.body().getMessage();
-                        //showDialog(mMsg[0]);
-                        setTextGetErrorResult();
                     }
                 }
 
@@ -1244,8 +1216,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     //ServiceTools.logToFireBase(t);
                     dismissProgressDialog();
                     mMsg[0] = t.toString();
-                    //showDialog(mMsg[0]);
-                    setTextGetErrorResult();
                 }
             });
 
@@ -1618,6 +1588,11 @@ public class DataSyncActivityRestApi extends BaseActivity {
         protected Integer doInBackground(String... arg0) {
 
             picturesProducts = db.getAllSignWithoutUrl();
+            for (PicturesProduct picturesProduct : picturesProducts) {
+                Order order = db.GetOrderWithOrderClientId(picturesProduct.getPictureClientId());
+                picturesProduct.setItemId(order.getOrderId());
+                db.UpdatePicturesProductWithClientId(picturesProduct);
+            }
             return 0;
         }
 
@@ -1651,16 +1626,15 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             sendSignImageAsyncTask.execute();
 
                         } else if (response.body() != null) {
+                            dismissProgressDialog();
                             mMsg[0] = getString(R.string.send_error);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<SaveAllDataResult> call, Throwable t) {
-                       // ServiceTools.logToFireBase(t);
                         dismissProgressDialog();
                         mMsg[0] = t.toString();
-                        //showDialog(mMsg[0]);
                     }
                 });
             }else {
@@ -1709,6 +1683,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                     db.UpdatePicturesProductWithClientId(picturesProduct);
 
                                 } else if (response.body() != null) {
+                                    dismissProgressDialog();
                                     mMsg[0] = getString(R.string.send_error);
                                 }
                             }
@@ -1767,6 +1742,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
     }
 
     private void showDialog(String msg) {
+        dismissProgressDialog();
         if (!isFinishing()) {
             Dialog(msg).show();
         }
@@ -1819,7 +1795,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             case 22:
                 return "ماموریت ها";
             case 23:
-                return "دستور کارها";
+                return "جزییات ماموریت ها";
         }
         return "";
     }
@@ -1844,8 +1820,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
             case 9:
                 return "موقعیت جغرافیایی ویزیتورها";
             case 10:
-                return "ماموریت ها";
-            case 11:
                 return "جزییات ماموریت ها";
         }
         return "";

@@ -72,6 +72,26 @@
                 android:background="@color/nav_item_line_dark"
                 android:visibility="visible" />
 
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark" />
+
+            <com.mahak.order.widget.FontButtonView
+                android:id="@+id/btnNavMissionList"
+                style="@style/nav_item_default"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
+                android:gravity="left|center"
+                android:layout_marginLeft="@dimen/SmallSize"
+                android:text="لیست ماموریت ها" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="@color/nav_item_line_dark"
+                android:visibility="visible" />
+
             <com.mahak.order.widget.FontButtonView
                 android:id="@+id/btnNavPayableList"
                 style="@style/nav_item_default"

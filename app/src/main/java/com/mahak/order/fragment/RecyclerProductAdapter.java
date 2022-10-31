@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.google.firebase.inappmessaging.dagger.multibindings.ElementsIntoSet;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -53,6 +54,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.mahak.order.BaseActivity.MODE_MeghdarJoz;
 import static com.mahak.order.BaseActivity.Mode_DoVahedi;
 import static com.mahak.order.BaseActivity.getPrefReduceAsset;
 import static com.mahak.order.common.ServiceTools.MoneyFormatToNumber;
@@ -283,8 +285,8 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         holder.plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi)
-                    handleTwoUnit(holder, product);
+               /* if(BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi)
+                    handleTwoUnit(holder, product);*/
                 if(hasProductDetail(product)){
                     gotoPriceCount(holder,position);
                 }else {
@@ -311,21 +313,24 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     asset_count2 = ServiceTools.toDouble(asset2);
 
                     total_count1 ++;
+                    sum = total_count1;
+                    if(BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi){
+                        if(product.getUnitRatio() > 0){
+                            total_count2 = total_count1 / product.getUnitRatio();
+                            sum = total_count2 * product.getUnitRatio();
+                        }
 
-                    if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)
+                    }else if(BaseActivity.getPrefUnit2Setting(mContext) == MODE_MeghdarJoz)
                         sum = total_count1 + (total_count2 * product.getUnitRatio());
-                    else
-                        sum = total_count1;
 
                     if(duplicate_product == 1 || eshantion_dasti == 1){
                         check_sum = sum + count1_sabad_kharid;
                     }else
                         check_sum = sum;
 
-                    if(check_sum > asset_count1 && type == ProjectInfo.TYPE_INVOCIE){
-                        Toast.makeText(mContext, "موجودی کالا منفی می شود، ادامه عملیات امکان پذیر نیست!", Toast.LENGTH_SHORT).show();
-                    }else {
+                    if(check_sum <= asset_count1 || type == ProjectInfo.TYPE_ORDER){
                         holder.txtCount.setText(ServiceTools.formatCount(total_count1));
+                        holder.txtTotalCount.setText(formatCount(total_count2));
                         return_value_recycler2(String.valueOf(total_count2) , String.valueOf(total_count1) , product.getPrice(), position, sum);
                     }
                 }
@@ -337,8 +342,8 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             @Override
             public void onClick(View view) {
 
-                if(BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi)
-                    handleTwoUnit(holder, product);
+                /*if(BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi)
+                    handleTwoUnit(holder, product);*/
 
                 if(hasProductDetail(product)){
                     gotoPriceCount(holder,position);
@@ -361,12 +366,18 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                     if(total_count1 - 1 >= 0){
 
                         total_count1--;
-                        if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)
+                        if (BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi && product.getUnitRatio() > 0){
+                            total_count2 = total_count1 / product.getUnitRatio();
+                        }
+                        if(BaseActivity.getPrefUnit2Setting(mContext) == MODE_MeghdarJoz)
                             sum = total_count1 + (total_count2 * product.getUnitRatio());
+                        else if (product.getUnitRatio() > 0)
+                            sum = total_count2 * product.getUnitRatio();
                         else
                             sum = total_count1;
 
                         holder.txtCount.setText(ServiceTools.formatCount(total_count1));
+                        holder.txtTotalCount.setText(formatCount(total_count2));
                         return_value_recycler2(String.valueOf(total_count2),String.valueOf(total_count1) , product.getPrice(), position, sum);
                     }
                 }
@@ -378,8 +389,8 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
             @Override
             public void onClick(View view) {
 
-                if(BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi)
-                    handleTwoUnit(holder, product);
+                /*if(BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi)
+                    handleTwoUnit(holder, product);*/
 
                 if (product.getUnitRatio() > 0){
                     if(hasProductDetail(product)){
@@ -410,9 +421,12 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                         asset_count2 = ServiceTools.toDouble(asset2);
 
                         if(asset_count2 > 0 || type == ProjectInfo.TYPE_ORDER){
-                            total_count2++;
 
-                            if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)
+                            total_count2++;
+                            if (BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi){
+                                total_count1 = total_count2 * product.getUnitRatio();
+                            }
+                            if(BaseActivity.getPrefUnit2Setting(mContext) == MODE_MeghdarJoz)
                                 sum = total_count1 + (total_count2 * product.getUnitRatio());
                             else
                                 sum = total_count2 * product.getUnitRatio();
@@ -422,14 +436,14 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                             }else
                                 check_sum = sum;
 
-                            if(check_sum > asset_count1 && type == ProjectInfo.TYPE_INVOCIE){
-                                Toast.makeText(mContext, "موجودی کالا منفی می شود، ادامه عملیات امکان پذیر نیست!", Toast.LENGTH_SHORT).show();
-                            }else {
+                            if(check_sum <= asset_count1 || type == ProjectInfo.TYPE_ORDER){
+                                if (BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi){
+                                    holder.txtCount.setText(ServiceTools.formatCount(total_count1));
+                                }
                                 holder.txtTotalCount.setText(ServiceTools.formatCount(total_count2));
                                 return_value_recycler2(String.valueOf(total_count2),String.valueOf(total_count1) , product.getPrice(), position, sum);
                             }
-                        }else
-                            Toast.makeText(mContext, "موجودی کالا منفی می شود، ادامه عملیات امکان پذیر نیست!", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }
@@ -437,8 +451,8 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
         holder.minus_count2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi)
-                    handleTwoUnit(holder, product);
+                /*if(BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi)
+                    handleTwoUnit(holder, product);*/
 
                 if (product.getUnitRatio() > 0){
                     if(hasProductDetail(product)){
@@ -457,17 +471,18 @@ public class RecyclerProductAdapter extends RecyclerView.Adapter<ProductHolder> 
                         total_count2 = ServiceTools.toDouble(total2);
                         asset_count2 = ServiceTools.toDouble(asset2);
 
-
-
                         if(total_count2 - 1 >= 0) {
-
-                            total_count2--;
-
-                            if(BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.MODE_MeghdarJoz)
+                            total_count2 --;
+                            if (BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi){
+                                total_count1 = total_count2 * product.getUnitRatio();
+                            }
+                            if(BaseActivity.getPrefUnit2Setting(mContext) == MODE_MeghdarJoz)
                                 sum = total_count1 + (total_count2 * product.getUnitRatio());
                             else
-                                sum = total_count1;
+                                sum = total_count2 * product.getUnitRatio();
 
+                            if (BaseActivity.getPrefUnit2Setting(mContext) == Mode_DoVahedi)
+                                holder.txtCount.setText(ServiceTools.formatCount(total_count1));
                             holder.txtTotalCount.setText(ServiceTools.formatCount(total_count2));
                             return_value_recycler2(String.valueOf(total_count2),String.valueOf(total_count1) , product.getPrice(), position, sum);
                         }

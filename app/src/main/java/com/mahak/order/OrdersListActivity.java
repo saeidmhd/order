@@ -108,7 +108,7 @@ public class OrdersListActivity extends BaseActivity {
     private String Description = "";
     private TextView tvPageTitle;
     private Button btnSend, btnReceived;
-    private ConstraintLayout llReceived;
+    private LinearLayout llReceived;
     private Visitor visitor;
 
     public static int OrderType = 0;
@@ -263,7 +263,7 @@ public class OrdersListActivity extends BaseActivity {
 
         btnReceived = (Button) findViewById(R.id.btnReceived);
         btnSend = (Button) findViewById(R.id.btnSend);
-        llReceived = (ConstraintLayout) findViewById(R.id.llReceived);
+        llReceived = (LinearLayout) findViewById(R.id.llReceived);
 
 
         db = new DbAdapter(mContext);
@@ -366,7 +366,9 @@ public class OrdersListActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (TextUtils.isEmpty(s.toString())) {
+                    txtSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search_set_nav,0 );
+                }
             }
         });
 

@@ -10,58 +10,39 @@
     tools:context="com.mahak.order.OrdersListActivity"
     tools:ignore="MergeRootFrame">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/llReceived"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/forms_edittext_default"
-        tools:layout_editor_absoluteY="20dp"
-        tools:layout_editor_absoluteX="5dp"
         android:background="#56a1d0"
         android:visibility="gone">
 
         <com.mahak.order.widget.FontButtonView
             android:id="@+id/btnReceived"
             style="@android:style/Widget.DeviceDefault.Button.Borderless"
-            android:layout_width="176dp"
+            android:layout_width="match_parent"
             android:layout_height="42dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="8dp"
             android:onClick="btnReceived"
             android:text="@string/recieved_transfer"
+            android:layout_weight="1"
             android:textColor="#ffffff"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.285" />
+            android:layout_margin="@dimen/SmallSize"/>
 
         <com.mahak.order.widget.FontButtonView
             android:id="@+id/btnSend"
             style="@android:style/Widget.DeviceDefault.Button.Borderless"
-            android:layout_width="176dp"
+            android:layout_width="match_parent"
             android:layout_height="42dp"
-            android:layout_alignBaseline="@+id/btnReceived"
-            android:layout_alignBottom="@+id/btnReceived"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="8dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginTop="8dp"
+            android:layout_weight="1"
             android:background="@drawable/roundedbutton"
             android:onClick="btnSendTransferList"
             android:text="@string/sent_transfer"
             android:textColor="#ffffff"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.285" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_margin="@dimen/SmallSize"/>
+    </LinearLayout>
 
     <com.mahak.order.widget.FontEditText
         android:id="@+id/txtSearch"
@@ -105,8 +86,8 @@
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="196dp"
-                android:layout_height="309dp"
+                android:layout_width="150dp"
+                android:layout_height="160dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.555"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -178,8 +159,8 @@
 
             <ImageView
                 android:id="@+id/imageView4"
-                android:layout_width="196dp"
-                android:layout_height="309dp"
+                android:layout_width="150dp"
+                android:layout_height="160dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.555"
                 app:layout_constraintLeft_toLeftOf="parent"

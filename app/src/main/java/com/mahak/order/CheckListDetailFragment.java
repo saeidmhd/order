@@ -53,7 +53,6 @@ public class CheckListDetailFragment extends Fragment {
     public MapController mapcontroller;
     public static int MAP_DEFAULT_ZOOM = 14;
     double amount = 0;
-    String Shift = "";
     String Mobile = "";
     String Tell = "";
     /**
@@ -100,7 +99,6 @@ public class CheckListDetailFragment extends Fragment {
         TextView tvName = (TextView) rootView.findViewById(R.id.tvName);
         TextView tvMarketName = (TextView) rootView.findViewById(R.id.tvMarketName);
         TextView tvAddress = (TextView) rootView.findViewById(R.id.tvAddress);
-        TextView tvShift = (TextView) rootView.findViewById(R.id.tvShift);
         TextView tvRemained = (TextView) rootView.findViewById(R.id.tvRemained);
         TextView tvStatus = (TextView) rootView.findViewById(R.id.tvStatus);
 
@@ -164,7 +162,6 @@ public class CheckListDetailFragment extends Fragment {
 
                 amount = customer.getBalance();
 
-                Shift = customer.getShift();
                 Mobile = customer.getMobile();
                 Tell = customer.getTell();
             }
@@ -184,7 +181,6 @@ public class CheckListDetailFragment extends Fragment {
             tvMarketName.setVisibility(View.GONE);
 
         tvAddress.setText(checklist.getAddress());
-        tvShift.setText(Shift);
 
 
         if (amount == 0) {

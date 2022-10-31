@@ -85,7 +85,6 @@ public class ManageCustomerActivity extends BaseActivity {
             txtMobile,
             txtAddress,
             txtZone,
-            txtShift,
             txtLongitude,
             txtLatitude,
             txtCredit,
@@ -361,7 +360,6 @@ public class ManageCustomerActivity extends BaseActivity {
         txtCredit =  findViewById(R.id.txtCredit);
         txtAddress =  findViewById(R.id.txtAddress);
         txtZone =  findViewById(R.id.txtZone);
-        txtShift =  findViewById(R.id.txtShift);
 
         txtInvoiceAVGAmount =  findViewById(R.id.txtInvoiceAVGAmount);
         txtInvoiceAVGDiscount =  findViewById(R.id.txtInvoiceAVGDiscount);
@@ -463,7 +461,6 @@ public class ManageCustomerActivity extends BaseActivity {
             txtAddress.setText(customer.getAddress());
             txtTell.setText(customer.getTell());
 
-            txtShift.setText(customer.getShift());
             txtLatitude.setText(String.valueOf(customer.getLatitude()));
             txtLongitude.setText(String.valueOf(customer.getLongitude()));
 
@@ -546,7 +543,6 @@ public class ManageCustomerActivity extends BaseActivity {
         txtTell.setText("");
         txtMobile.setText("");
         txtAddress.setText("");
-        txtShift.setText("");
         txtLatitude.setText("");
         txtLongitude.setText("");
     }

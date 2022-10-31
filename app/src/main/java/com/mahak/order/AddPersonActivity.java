@@ -89,9 +89,10 @@ public class AddPersonActivity extends BaseActivity {
             txtTell,
             txtMobile,
             txtAddress,
-            txtZone,
-            txtLongitude,
+            txtZone;
+    private TextView txtLongitude,
             txtLatitude;
+
 
     private Spinner spnCustomerGroup, spnCity, spnState;
     private Button btnGetLoction, btnSave, btnContact;
@@ -382,8 +383,8 @@ public class AddPersonActivity extends BaseActivity {
         txtAddress = (EditText) findViewById(R.id.txtAddress);
         txtZone = (EditText) findViewById(R.id.txtZone);
 
-        txtLatitude = (EditText) findViewById(R.id.txtLatitude);
-        txtLongitude = (EditText) findViewById(R.id.txtLongitude);
+        txtLatitude = (TextView) findViewById(R.id.txtLatitude);
+        txtLongitude = (TextView) findViewById(R.id.txtLongitude);
 
         btnGetLoction = (Button) findViewById(R.id.btnGetGeographicallocation);
         spnCustomerGroup = (Spinner) findViewById(R.id.spnCustomerGroup);

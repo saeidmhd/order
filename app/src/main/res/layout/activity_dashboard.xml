@@ -111,7 +111,7 @@
                     android:gravity="right|center"
                     android:text="شناسه ماموریت : ماموریتی تعیین نشده"
                     android:textColor="@color/txt_color"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
             </RelativeLayout>
 
 

@@ -103,7 +103,6 @@ public class DbSchema {
         public static final String COLUMN_PHONE = "Phone";
         public static final String COLUMN_Fax = "Fax";
         public static final String COLUMN_MOBILE = "Mobile";
-        public static final String COLUMN_SHIFT = "Shift";
         public static final String COLUMN_Deleted = "Deleted";
 
         public static final String COLUMN_MODIFYDATE = "ModifyDate";
@@ -146,7 +145,6 @@ public class DbSchema {
                 "`ModifyDate` NUMERIC, " +
                 "`Longitude` TEXT, " +
                 "`Latitude` TEXT, " +
-                "`Shift` TEXT, " +
                 "`Name` TEXT, " +
                 "`State` TEXT, " +
                 "`City` TEXT, " +

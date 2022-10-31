@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -174,7 +175,9 @@ public class ReturnsListActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
+                if (TextUtils.isEmpty(s.toString())) {
+                    txtSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search_set_nav,0 );
+                }
 
             }
         });

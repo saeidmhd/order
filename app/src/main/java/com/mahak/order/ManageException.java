@@ -28,9 +28,20 @@ public class ManageException implements Thread.UncaughtExceptionHandler{
     @Override
     public void uncaughtException(@NonNull Thread thread, @NonNull Throwable e) {
         exceptionLog(e);
-       // ServiceTools.logToFireBase(e);
-        logToDb("e.getMessage()");
+        logToDb(removeNonAlphanumeric(e));
         System.exit(0);
+    }
+
+    private String removeNonAlphanumeric(Throwable message) {
+        /*message = message.replaceAll("[^.a-zA-Z0-9\\s]","");
+        return message;*/
+
+        StringWriter sw = new StringWriter();
+        message.printStackTrace(new PrintWriter(sw));
+        String exceptionAsString = sw.toString();
+        return exceptionAsString;
+      //  return exceptionAsString.replaceAll("[^.a-zA-Z0-9\\s]","");
+
     }
 
 

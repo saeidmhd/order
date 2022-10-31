@@ -133,7 +133,7 @@
         android:background="@drawable/panel_bg"
         android:gravity="right|center_vertical"
         android:orientation="horizontal"
-        android:padding="@dimen/SmallSize">
+        android:padding="5dp">
 
         <com.mahak.order.widget.FontButtonView
             android:id="@+id/btnAddCart"

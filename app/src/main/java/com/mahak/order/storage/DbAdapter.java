@@ -140,7 +140,6 @@ public class DbAdapter {
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_MOBILE, customer.getMobile());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_LATITUDE, customer.getLatitude());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_LONGITUDE, customer.getLongitude());
-        initialvalue.put(DbSchema.CustomerSchema.COLUMN_SHIFT, customer.getShift());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_MODIFYDATE, customer.getModifyDate());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_PUBLISH, customer.getPublish());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_MAHAK_ID, customer.getMahakId());
@@ -1156,7 +1155,6 @@ public class DbAdapter {
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_MOBILE + " as " + DbSchema.CustomerSchema.COLUMN_MOBILE +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_LATITUDE + " as " + DbSchema.CustomerSchema.COLUMN_LATITUDE +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_LONGITUDE + " as " + DbSchema.CustomerSchema.COLUMN_LONGITUDE +
-                "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_SHIFT + " as " + DbSchema.CustomerSchema.COLUMN_SHIFT +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_SellPriceLevel + " as " + DbSchema.CustomerSchema.COLUMN_SellPriceLevel +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_MODIFYDATE + " as " + DbSchema.CustomerSchema.COLUMN_MODIFYDATE +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PUBLISH + " as " + DbSchema.CustomerSchema.COLUMN_PUBLISH +
@@ -1195,7 +1193,6 @@ public class DbAdapter {
                 customer.setMobile(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_MOBILE)));
                 customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LATITUDE)));
                 customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LONGITUDE)));
-                customer.setShift(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_SHIFT)));
                 customer.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_MODIFYDATE)));
                 customer.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PUBLISH)));
                 customer.setDiscountPercent(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_DiscountPercent)));
@@ -1243,7 +1240,6 @@ public class DbAdapter {
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_MOBILE + " as " + DbSchema.CustomerSchema.COLUMN_MOBILE +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_LATITUDE + " as " + DbSchema.CustomerSchema.COLUMN_LATITUDE +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_LONGITUDE + " as " + DbSchema.CustomerSchema.COLUMN_LONGITUDE +
-                "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_SHIFT + " as " + DbSchema.CustomerSchema.COLUMN_SHIFT +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_SellPriceLevel + " as " + DbSchema.CustomerSchema.COLUMN_SellPriceLevel +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_MODIFYDATE + " as " + DbSchema.CustomerSchema.COLUMN_MODIFYDATE +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PUBLISH + " as " + DbSchema.CustomerSchema.COLUMN_PUBLISH +
@@ -1283,7 +1279,6 @@ public class DbAdapter {
                 customer.setMobile(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_MOBILE)));
                 customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LATITUDE)));
                 customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LONGITUDE)));
-                customer.setShift(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_SHIFT)));
                 customer.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_MODIFYDATE)));
                 customer.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PUBLISH)));
                 customer.setDiscountPercent(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_DiscountPercent)));
@@ -1332,7 +1327,6 @@ public class DbAdapter {
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_MOBILE + " as " + DbSchema.CustomerSchema.COLUMN_MOBILE +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_LATITUDE + " as " + DbSchema.CustomerSchema.COLUMN_LATITUDE +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_LONGITUDE + " as " + DbSchema.CustomerSchema.COLUMN_LONGITUDE +
-                "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_SHIFT + " as " + DbSchema.CustomerSchema.COLUMN_SHIFT +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_SellPriceLevel + " as " + DbSchema.CustomerSchema.COLUMN_SellPriceLevel +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_MODIFYDATE + " as " + DbSchema.CustomerSchema.COLUMN_MODIFYDATE +
                 "," + DbSchema.CustomerSchema.TABLE_NAME + "." + DbSchema.CustomerSchema.COLUMN_PUBLISH + " as " + DbSchema.CustomerSchema.COLUMN_PUBLISH +
@@ -1371,7 +1365,6 @@ public class DbAdapter {
                 customer.setMobile(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_MOBILE)));
                 customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LATITUDE)));
                 customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LONGITUDE)));
-                customer.setShift(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_SHIFT)));
                 customer.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_MODIFYDATE)));
                 customer.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PUBLISH)));
                 customer.setDiscountPercent(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_DiscountPercent)));
@@ -1739,7 +1732,6 @@ public class DbAdapter {
         customer.setMobile(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_MOBILE)));
         customer.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LATITUDE)));
         customer.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_LONGITUDE)));
-        customer.setShift(cursor.getString(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_SHIFT)));
         customer.setModifyDate(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_MODIFYDATE)));
         customer.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_PUBLISH)));
         customer.setRowVersion(cursor.getLong(cursor.getColumnIndex(DbSchema.CustomerSchema.COLUMN_RowVersion)));
@@ -5610,7 +5602,7 @@ public class DbAdapter {
         ArrayList<Visitor> array = new ArrayList<>();
         try {
             cursor = mDb.query(DbSchema.VisitorSchema.TABLE_NAME, null,
-                    DbSchema.VisitorSchema.COLUMN_VisitorId + " !=? and " + DbSchema.CustomerSchema.COLUMN_DATABASE_ID + "=?", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefDatabaseId()}, null, null, null);
+                    DbSchema.VisitorSchema.COLUMN_VisitorId + " !=? and " + DbSchema.VisitorSchema.COLUMN_DatabaseId + "=?", new String[]{String.valueOf(getPrefUserId()), BaseActivity.getPrefDatabaseId()}, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -8222,7 +8214,6 @@ public class DbAdapter {
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_MOBILE, customer.getMobile());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_LATITUDE, customer.getLatitude());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_LONGITUDE, customer.getLongitude());
-        initialvalue.put(DbSchema.CustomerSchema.COLUMN_SHIFT, customer.getShift());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_MODIFYDATE, customer.getModifyDate());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_PUBLISH, customer.getPublish());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_RowVersion, customer.getRowVersion());
@@ -8259,7 +8250,6 @@ public class DbAdapter {
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_MOBILE, customer.getMobile());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_LATITUDE, customer.getLatitude());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_LONGITUDE, customer.getLongitude());
-        initialvalue.put(DbSchema.CustomerSchema.COLUMN_SHIFT, customer.getShift());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_MODIFYDATE, customer.getModifyDate());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_PUBLISH, customer.getPublish());
         initialvalue.put(DbSchema.CustomerSchema.COLUMN_RowVersion, customer.getRowVersion());
@@ -8300,7 +8290,6 @@ public class DbAdapter {
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_MOBILE, customer.getMobile());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_LATITUDE, customer.getLatitude());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_LONGITUDE, customer.getLongitude());
-                initialvalue.put(DbSchema.CustomerSchema.COLUMN_SHIFT, customer.getShift());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_MODIFYDATE, customer.getModifyDate());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_MAHAK_ID, customer.getMahakId());
                 initialvalue.put(DbSchema.CustomerSchema.COLUMN_PersonCode, customer.getPersonCode());
@@ -9569,7 +9558,7 @@ public class DbAdapter {
         Cursor cursor;
         ArrayList<Mission> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select * from Mission where userid = ? and deleted = 0 and date >= ? order by missionId desc ", new String[]{String.valueOf(getPrefUserId()),ServiceTools.getFormattedDateAndTime(new Date().getTime())});
+            cursor = mDb.rawQuery("select * from Mission where userid = ? and deleted = 0 and date >= ? order by missionId desc ", new String[]{String.valueOf(getPrefUserId()),ServiceTools.getFormattedDate(new Date().getTime())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -9637,12 +9626,12 @@ public class DbAdapter {
 
         return array;
     }
-    public ArrayList<MissionDetail> getAllMissionDetail(Integer missionId) {
+    public ArrayList<MissionDetail> getAllMissionDetail() {
         MissionDetail missionDetail;
         Cursor cursor;
         ArrayList<MissionDetail> array = new ArrayList<>();
         try {
-            cursor = mDb.rawQuery("select * from MissionDetail where userid =? and missionId = ? and deleted = 0 ", new String[]{String.valueOf(getPrefUserId()),String.valueOf(missionId)});
+            cursor = mDb.rawQuery("select * from MissionDetail where userid =? and deleted = 0 ", new String[]{String.valueOf(getPrefUserId())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
