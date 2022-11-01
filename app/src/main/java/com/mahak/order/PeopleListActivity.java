@@ -28,7 +28,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filter.FilterListener;
 import android.widget.ImageView;
@@ -39,6 +38,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -143,6 +143,7 @@ public class PeopleListActivity extends BaseActivity {
     private RecyclerView multiLevelRecyclerView;
     public static int selectedCategory = 0;
     static int row_index;
+    boolean hasPhonePermission;
 
 
     @Override
@@ -153,21 +154,10 @@ public class PeopleListActivity extends BaseActivity {
         setContentView(R.layout.activity_customers_list);
 
 
-        boolean hasPhonePermission = (ContextCompat.checkSelfPermission(this,
+        hasPhonePermission = (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED);
 
-        if (!hasPhonePermission) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.CALL_PHONE)) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.CALL_PHONE},
-                        REQUEST_PHONE_PERMISSION);
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.CALL_PHONE},
-                        REQUEST_PHONE_PERMISSION);
-            }
-        }
+
 
         setSupportProgressBarIndeterminateVisibility(false);
         //config actionbar___________________________________________
@@ -378,7 +368,7 @@ public class PeopleListActivity extends BaseActivity {
         categories.add(category);
         categories.addAll(db.getAllCategorizedPeople());
         multiLevelRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        CategoryAdapter2 myAdapter = new CategoryAdapter2(categories, mContext);
+        CategoryAdapter myAdapter = new CategoryAdapter(categories, mContext);
         multiLevelRecyclerView.setAdapter(myAdapter);
     }
 
@@ -481,12 +471,13 @@ public class PeopleListActivity extends BaseActivity {
 
         private class Holder {
 
-            public TextView tvMarketName, tvRemained, tvCustomerStatus, tvAddress, tvCustomerName;
+            public TextView tvMarketName, tvRemained, tvCustomerStatus, tvAddress, tvCustomerName,person_code;
             public LinearLayout btnMenu;
 
             public Holder(View view) {
 
                 tvMarketName = (TextView) view.findViewById(R.id.tvMarketName);
+                person_code = (TextView) view.findViewById(R.id.person_code);
                 tvRemained = (TextView) view.findViewById(R.id.tvRemained);
                 tvCustomerStatus = (TextView) view.findViewById(R.id.tvCustomerStatus);
                 tvAddress = (TextView) view.findViewById(R.id.tvAddress);
@@ -516,6 +507,7 @@ public class PeopleListActivity extends BaseActivity {
                 tvMarketName.setText(customer.getOrganization());
                 tvCustomerName.setText(customer.getName());
                 tvAddress.setText(customer.getAddress());
+                person_code.setText( "(" + customer.getPersonCode()+ ")");
 
             }
         }// End of Holder
@@ -622,20 +614,21 @@ public class PeopleListActivity extends BaseActivity {
                                     Dialogdelete();
                                     break;
                                 case R.id.mnuCall:
-                                    Intent intent = new Intent(Intent.ACTION_CALL);
-                                    if (Mobile.equals("") && Tell.equals(""))
-                                        Toast.makeText(mContext, getResources().getString(R.string.str_message_call), Toast.LENGTH_SHORT).show();
-                                    else {
-                                        if (!Mobile.equals(""))
-                                            intent.setData(Uri.parse("tel:" + customer.getMobile().trim()));
-                                        else
-                                            intent.setData(Uri.parse("tel:" + customer.getTell().trim()));
-                                        if (ActivityCompat.checkSelfPermission(PeopleListActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                            ActivityCompat.requestPermissions(PeopleListActivity.this,
-                                                    new String[]{Manifest.permission.CALL_PHONE},
-                                                    ACCESS_CALL);
+                                    if (!hasPhonePermission) {
+                                        ActivityCompat.requestPermissions(PeopleListActivity.this,
+                                                new String[]{Manifest.permission.CALL_PHONE},
+                                                REQUEST_PHONE_PERMISSION);
+                                    }else {
+                                        Intent intent = new Intent(Intent.ACTION_CALL);
+                                        if (Mobile.equals("") && Tell.equals(""))
+                                            Toast.makeText(mContext, getResources().getString(R.string.str_message_call), Toast.LENGTH_SHORT).show();
+                                        else {
+                                            if (!Mobile.equals(""))
+                                                intent.setData(Uri.parse("tel:" + customer.getMobile().trim()));
+                                            else
+                                                intent.setData(Uri.parse("tel:" + customer.getTell().trim()));
+                                            startActivity(intent);
                                         }
-                                        startActivity(intent);
                                     }
                                     break;
                                 case R.id.mnuSms:
@@ -969,7 +962,6 @@ public class PeopleListActivity extends BaseActivity {
         } else
             Toast.makeText(mContext, R.string.there_is_no_customer, Toast.LENGTH_SHORT).show();
     }
-
 
     private class PreparePrinterData extends AsyncTask<String, Integer, Boolean> {
 
@@ -1343,7 +1335,7 @@ public class PeopleListActivity extends BaseActivity {
 
     }
 
-    public class CategoryAdapter2 extends RecyclerView.Adapter<CategoryAdapter2.ViewHolder> {
+    public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
         private ArrayList<Category> categories;
         private LayoutInflater mInflater;
@@ -1363,7 +1355,7 @@ public class PeopleListActivity extends BaseActivity {
             }
         }
 
-        public CategoryAdapter2( ArrayList<Category> categories, Context context) {
+        public CategoryAdapter(ArrayList<Category> categories, Context context) {
 
             this.categories = categories;
             this.mInflater = LayoutInflater.from(context);
@@ -1371,13 +1363,13 @@ public class PeopleListActivity extends BaseActivity {
         }
 
         @Override
-        public CategoryAdapter2.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public CategoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = mInflater.inflate(R.layout.item_layout2, parent, false);
-            return new CategoryAdapter2.ViewHolder(view);
+            return new CategoryAdapter.ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(CategoryAdapter2.ViewHolder holder, final int position) {
+        public void onBindViewHolder(CategoryAdapter.ViewHolder holder, final int position) {
             holder.mTitle.setText(categories.get(position).getCategoryName());
 
             holder.item_category.setOnClickListener(new View.OnClickListener() {
@@ -1402,6 +1394,18 @@ public class PeopleListActivity extends BaseActivity {
         @Override
         public int getItemCount() {
             return categories.size();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case REQUEST_PHONE_PERMISSION:
+                if (grantResults.length > 0 &&  grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    hasPhonePermission = true;
+                }
+                break;
         }
     }
 

@@ -40,6 +40,7 @@ import com.mahak.order.common.CustomerGroup;
 import com.mahak.order.common.GPSTracker;
 import com.mahak.order.common.Region;
 import com.mahak.order.common.ServiceTools;
+import com.mahak.order.common.VisitorPeople;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.widget.FontAlertDialog;
 
@@ -116,6 +117,7 @@ public class AddPersonActivity extends BaseActivity {
     private Region customerRegion;
     private int personId;
     private long personClientId;
+    private List<VisitorPeople> visitorPeopleArrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,18 +126,6 @@ public class AddPersonActivity extends BaseActivity {
 
         hasContactPermission = (ContextCompat.checkSelfPermission(this,
                 android.Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED);
-        if (!hasContactPermission) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    android.Manifest.permission.READ_CONTACTS)) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{android.Manifest.permission.READ_CONTACTS},
-                        REQUEST_CONTACT);
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{android.Manifest.permission.READ_CONTACTS},
-                        REQUEST_CONTACT);
-            }
-        }
 
         //config actionbar___________________________________________
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -202,10 +192,7 @@ public class AddPersonActivity extends BaseActivity {
                     }else {
                         Toast.makeText(mContext, "به علت عدم وجود گروه مشتری،امکان ثبت مشتری جدید وجود ندارد", Toast.LENGTH_SHORT).show();
                     }
-                    
                 }
-
-
             }
         });
         btnGetLoction.setOnClickListener(new View.OnClickListener() {
@@ -228,7 +215,6 @@ public class AddPersonActivity extends BaseActivity {
                 CustomerGroup customergoup = (CustomerGroup) parent.getItemAtPosition(position);
                 CustomerGroupId = customergoup.getPersonGroupId();
                 CustomerGroupCode = customergoup.getPersonGroupCode();
-
             }
 
             @Override
@@ -275,8 +261,14 @@ public class AddPersonActivity extends BaseActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK, URI);
-                startActivityForResult(intent, PICK_CONTACT_REQUEST);
+                if (!hasContactPermission) {
+                    ActivityCompat.requestPermissions(AddPersonActivity.this,
+                            new String[]{Manifest.permission.READ_CONTACTS},
+                            REQUEST_CONTACT);
+                }else {
+                    Intent intent = new Intent(Intent.ACTION_PICK, URI);
+                    startActivityForResult(intent, PICK_CONTACT_REQUEST);
+                }
             }
         });
     }//End of OnCreate
@@ -342,29 +334,38 @@ public class AddPersonActivity extends BaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
-            if (grantResults.length > 0 &&  grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getLatLang();
-            } else {
-                Snackbar.make(
-                        findViewById(R.id.drawer_layout),
-                        R.string.permission_denied_explanation,
-                        Snackbar.LENGTH_INDEFINITE)
-                        .setAction(R.string.settings, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                // Build intent that displays the App settings screen.
-                                Intent intent = new Intent();
-                                intent.setAction(
-                                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                Uri uri = Uri.fromParts("package",
-                                        BuildConfig.APPLICATION_ID, null);
-                                intent.setData(uri);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            }
-                        }).show();
-            }
+
+        switch (requestCode){
+            case REQUEST_PERMISSIONS_REQUEST_CODE:
+                if (grantResults.length > 0 &&  grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getLatLang();
+                } else {
+                    Snackbar.make(
+                                    findViewById(R.id.drawer_layout),
+                                    R.string.permission_denied_explanation,
+                                    Snackbar.LENGTH_INDEFINITE)
+                            .setAction(R.string.settings, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    // Build intent that displays the App settings screen.
+                                    Intent intent = new Intent();
+                                    intent.setAction(
+                                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    Uri uri = Uri.fromParts("package",
+                                            BuildConfig.APPLICATION_ID, null);
+                                    intent.setData(uri);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                }
+                            }).show();
+                }
+                break;
+            case REQUEST_CONTACT:
+                if (grantResults.length > 0 &&  grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(Intent.ACTION_PICK, URI);
+                    startActivityForResult(intent, PICK_CONTACT_REQUEST);
+                }
+                break;
         }
     }
 
@@ -595,6 +596,15 @@ public class AddPersonActivity extends BaseActivity {
         customer.setDeleted(false);
 
         db.AddOrUpdateCustomer(customer);
+
+
+       /* VisitorPeople visitorPeople = new VisitorPeople();
+        visitorPeople.setPersonClientId(customer.getPersonClientId());
+        visitorPeople.setVisitorId(customer.getUserId());
+        visitorPeopleArrayList.add(visitorPeople);
+
+        db.UpdateOrAddVisitorPeopleFast(visitorPeopleArrayList,0);*/
+
         return customer;
 
     }

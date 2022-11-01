@@ -70,6 +70,52 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:orientation="horizontal">
+
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/tvCustomerName"
+                            style="@style/forms_label_default"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="right"
+                            android:singleLine="true"
+                            android:text="@string/person_name" />
+
+                        <com.mahak.order.widget.FontTextView
+                            android:id="@+id/person_code"
+                            style="@style/forms_label_default"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="@dimen/SmallSize"
+                            android:singleLine="true"
+                            android:text="(23)" />
+
+
+                    </LinearLayout>
+
+                    <com.mahak.order.widget.FontTextView
+                        android:id="@+id/tvCustomerStatus"
+                        style="@style/forms_label_default"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:singleLine="true"
+                        android:text="@string/debtor" />
+
+
+                </LinearLayout>
+
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/tvCustomerName"
                     style="@style/forms_label_default"

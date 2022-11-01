@@ -271,7 +271,6 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_dashboard);
-        requestActivityRecognitionPermission();
 
         mContext = this;
         mActivity = this;
@@ -335,6 +334,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         if (Utils.requestingLocationUpdates(this)) {
             if (!checkPermissions()) {
                 requestPermissions();
+                //requestActivityRecognitionPermission();
             }
         }
 
@@ -702,6 +702,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
                 locationService = new LocationService(mContext, DashboardActivity.this);
             if (!checkPermissions()) {
                 requestPermissions();
+                //requestActivityRecognitionPermission();
             }else {
                 if(!btnTrackingService.isChecked()){
                     btnTrackingService.setChecked(true);
