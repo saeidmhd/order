@@ -873,9 +873,8 @@ public class OrdersListActivity extends BaseActivity {
                 if (Type == ProjectInfo.TYPE_SEND_TRANSFERENCE) {
                     Calendar cal = Calendar.getInstance();
                     cal.setTimeInMillis((order.getDeliveryDate()));
-                    tvDate.setText(ServiceTools.getDateAndTimeForLong((order.getDeliveryDate())) +
-                            "  " + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE));
-                    tvCustomerName.setText(getString(R.string.to) + order.getCustomerName());
+                    tvDate.setText(ServiceTools.getDateAndTimeForLong((order.getDeliveryDate())));
+                    tvCustomerName.setText(getString(R.string.to)+ " " + order.getCustomerName());
                     txtAmount.setText(R.string.str_total_count);
                     orderDetails = db.getAllOrderDetailWithOrderId(order.getId());
                     for (OrderDetail item : orderDetails) {

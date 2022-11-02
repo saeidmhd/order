@@ -56,15 +56,11 @@ public class RadaraDb {
         try {
             ContentValues initialvalue = new ContentValues();
             for (ZoneLocation zoneLocation : data) {
-                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_id, zoneLocation.getId());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_id, zoneLocation.getZoneLocationId());
                 initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_zoneId, zoneLocation.getZoneId());
                 initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_latitude, zoneLocation.getLatitude());
                 initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_longitude, zoneLocation.getLongitude());
-                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_createdBy, zoneLocation.getCreatedBy());
-                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_created, zoneLocation.getCreated());
-                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_lastModifiedBy, zoneLocation.getLastModifiedBy());
-                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_lastModified, zoneLocation.getLastModified());
-                boolean result = (mDb.update(DbSchema.ZoneLocationSchema.TABLE_NAME, initialvalue,"id =?" , new String[]{String.valueOf(zoneLocation.getId())})) > 0;
+                boolean result = (mDb.update(DbSchema.ZoneLocationSchema.TABLE_NAME, initialvalue,"id =?" , new String[]{String.valueOf(zoneLocation.getZoneLocationId())})) > 0;
                 if(!result)
                     mDb.insert(DbSchema.ZoneLocationSchema.TABLE_NAME, null, initialvalue);
             }
@@ -77,14 +73,12 @@ public class RadaraDb {
         mDb.beginTransaction();
         try {
             ContentValues initialvalue = new ContentValues();
-            initialvalue.put(DbSchema.ZoneSchema.COLUMN_zoneId, datum.getId());
-            initialvalue.put(DbSchema.ZoneSchema.COLUMN_title, datum.getTitle());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_zoneId, datum.getZoneId());
             initialvalue.put(DbSchema.ZoneSchema.COLUMN_visitorId, getPrefUserId());
             initialvalue.put(DbSchema.ZoneSchema.COLUMN_createdBy, datum.getCreatedBy());
-            initialvalue.put(DbSchema.ZoneSchema.COLUMN_created, datum.getCreated());
-            initialvalue.put(DbSchema.ZoneSchema.COLUMN_lastModifiedBy, datum.getLastModified());
-            initialvalue.put(DbSchema.ZoneSchema.COLUMN_lastModified, datum.getLastModifiedBy());
-            boolean result = (mDb.update(DbSchema.ZoneSchema.TABLE_NAME, initialvalue,"zoneId =? and visitorId =? " , new String[]{String.valueOf(datum.getId()), String.valueOf(getPrefUserId())})) > 0;
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_created, datum.getCreatedDate());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_lastModified, datum.getModifiedBy());
+            boolean result = (mDb.update(DbSchema.ZoneSchema.TABLE_NAME, initialvalue,"zoneId =? and visitorId =? " , new String[]{String.valueOf(datum.getZoneId()), String.valueOf(getPrefUserId())})) > 0;
             if(!result)
                 mDb.insert(DbSchema.ZoneSchema.TABLE_NAME, null, initialvalue);
             mDb.setTransactionSuccessful();
@@ -95,25 +89,20 @@ public class RadaraDb {
     private Datum getZoneFromCursor(Cursor cursor) {
         Datum datum;
         datum = new Datum();
-        datum.setId(cursor.getInt(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_zoneId)));
-        datum.setTitle(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_title)));
+        datum.setZoneId(cursor.getLong(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_zoneId)));
         datum.setCreatedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_createdBy)));
-        datum.setCreated(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_created)));
-        datum.setLastModified(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_lastModifiedBy)));
-        datum.setLastModifiedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_lastModified)));
+        datum.setCreatedDate(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_created)));
+        datum.setModifiedDate(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_lastModifiedBy)));
+        datum.setModifiedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_lastModified)));
         return datum;
     }
     private ZoneLocation getZoneLocationFromCursor(Cursor cursor) {
         ZoneLocation zoneLocation;
         zoneLocation = new ZoneLocation();
-        zoneLocation.setId(cursor.getInt(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_id)));
-        zoneLocation.setZoneId(cursor.getInt(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_zoneId)));
+        zoneLocation.setZoneLocationId(cursor.getLong(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_id)));
+        zoneLocation.setZoneId(cursor.getLong(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_zoneId)));
         zoneLocation.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_latitude)));
         zoneLocation.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_longitude)));
-        zoneLocation.setCreatedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_createdBy)));
-        zoneLocation.setCreated(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_created)));
-        zoneLocation.setLastModified(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_lastModifiedBy)));
-        zoneLocation.setLastModifiedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_lastModified)));
         return zoneLocation;
     }
     public ArrayList<Datum> getAllZone() {
@@ -138,7 +127,7 @@ public class RadaraDb {
         }
         return array;
     }
-    public ArrayList<ZoneLocation> getAllZoneLocation(int id) {
+    public ArrayList<ZoneLocation> getAllZoneLocation(long id) {
         ArrayList<ZoneLocation> array = new ArrayList<>();
         ZoneLocation zoneLocation = new ZoneLocation();
         Cursor cursor;

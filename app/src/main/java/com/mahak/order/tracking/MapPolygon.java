@@ -65,7 +65,7 @@ public class MapPolygon implements GoogleMap.OnPolygonClickListener {
 
     public List<LatLng> getPolygonPoints(Datum datum){
         List<LatLng> polygonPoints = new ArrayList<>();
-        ArrayList<ZoneLocation> zoneLocations = radaraDb.getAllZoneLocation(datum.getId());
+        ArrayList<ZoneLocation> zoneLocations = radaraDb.getAllZoneLocation(datum.getZoneId());
         for (ZoneLocation zoneLocation : zoneLocations){
             polygonPoints.add(new LatLng(zoneLocation.getLatitude(), zoneLocation.getLongitude()));
         }
@@ -83,7 +83,7 @@ public class MapPolygon implements GoogleMap.OnPolygonClickListener {
                         .addAll(polygonPoints));
                 polygon.setClickable(true);
                 polygons.add(polygon);
-                polygon.setTag(datum.getTitle());
+               // polygon.setTag(datum.getTitle());
                 stylePolygon(polygon);
             }
         }

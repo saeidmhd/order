@@ -1,89 +1,112 @@
 
 package com.mahak.order.tracking.visitorZone;
 
-import java.util.List;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+
 public class Datum {
 
-    @SerializedName("id")
+    @SerializedName("accountZoneLocationId")
     @Expose
-    private int id;
-    @SerializedName("mahakId")
+    private Long accountZoneLocationId;
+    @SerializedName("databaseId")
     @Expose
-    private String mahakId;
-    @SerializedName("title")
+    private Long databaseId;
+    @SerializedName("accountId")
     @Expose
-    private String title;
-    @SerializedName("zoneLocations")
+    private Long accountId;
+    @SerializedName("zoneId")
     @Expose
-    private List<ZoneLocation> zoneLocations = null;
-    @SerializedName("visitorZoneLocations")
-    @Expose
-    private List<Object> visitorZoneLocations = null;
+    private Long zoneId;
     @SerializedName("factorRegistrationOutRange")
     @Expose
-    private boolean factorRegistrationOutRange;
+    private Boolean factorRegistrationOutRange;
+    @SerializedName("zone")
+    @Expose
+    private Zone zone;
+    @SerializedName("visitor")
+    @Expose
+    private String visitor;
+    @SerializedName("database")
+    @Expose
+    private String database;
     @SerializedName("createdBy")
     @Expose
     private String createdBy;
-    @SerializedName("created")
+    @SerializedName("createdDate")
     @Expose
-    private String created;
-    @SerializedName("lastModifiedBy")
+    private String createdDate;
+    @SerializedName("modifiedBy")
     @Expose
-    private String lastModifiedBy;
-    @SerializedName("lastModified")
+    private String modifiedBy;
+    @SerializedName("modifiedDate")
     @Expose
-    private String lastModified;
+    private String modifiedDate;
 
-    public int getId() {
-        return id;
+    public Long getAccountZoneLocationId() {
+        return accountZoneLocationId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setAccountZoneLocationId(Long accountZoneLocationId) {
+        this.accountZoneLocationId = accountZoneLocationId;
     }
 
-    public String getMahakId() {
-        return mahakId;
+    public Long getDatabaseId() {
+        return databaseId;
     }
 
-    public void setMahakId(String mahakId) {
-        this.mahakId = mahakId;
+    public void setDatabaseId(Long databaseId) {
+        this.databaseId = databaseId;
     }
 
-    public String getTitle() {
-        return title;
+    public Long getAccountId() {
+        return accountId;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 
-    public List<ZoneLocation> getZoneLocations() {
-        return zoneLocations;
+    public Long getZoneId() {
+        return zoneId;
     }
 
-    public void setZoneLocations(List<ZoneLocation> zoneLocations) {
-        this.zoneLocations = zoneLocations;
+    public void setZoneId(Long zoneId) {
+        this.zoneId = zoneId;
     }
 
-    public List<Object> getVisitorZoneLocations() {
-        return visitorZoneLocations;
-    }
-
-    public void setVisitorZoneLocations(List<Object> visitorZoneLocations) {
-        this.visitorZoneLocations = visitorZoneLocations;
-    }
-
-    public boolean isFactorRegistrationOutRange() {
+    public Boolean getFactorRegistrationOutRange() {
         return factorRegistrationOutRange;
     }
 
-    public void setFactorRegistrationOutRange(boolean factorRegistrationOutRange) {
+    public void setFactorRegistrationOutRange(Boolean factorRegistrationOutRange) {
         this.factorRegistrationOutRange = factorRegistrationOutRange;
+    }
+
+    public Zone getZone() {
+        return zone;
+    }
+
+    public void setZone(Zone zone) {
+        this.zone = zone;
+    }
+
+    public String getVisitor() {
+        return visitor;
+    }
+
+    public void setVisitor(String visitor) {
+        this.visitor = visitor;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(String database) {
+        this.database = database;
     }
 
     public String getCreatedBy() {
@@ -94,28 +117,28 @@ public class Datum {
         this.createdBy = createdBy;
     }
 
-    public String getCreated() {
-        return created;
+    public String getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreated(String created) {
-        this.created = created;
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
     }
 
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
+    public String getModifiedBy() {
+        return modifiedBy;
     }
 
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
     }
 
-    public String getLastModified() {
-        return lastModified;
+    public String getModifiedDate() {
+        return modifiedDate;
     }
 
-    public void setLastModified(String lastModified) {
-        this.lastModified = lastModified;
+    public void setModifiedDate(String modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 
 }

@@ -6,93 +6,60 @@ import com.google.gson.annotations.SerializedName;
 
 public class ZoneLocation {
 
-    @SerializedName("id")
+    @SerializedName("zoneLocationId")
     @Expose
-    private int id;
+    private Long zoneLocationId;
     @SerializedName("zoneId")
     @Expose
-    private int zoneId;
+    private Long zoneId;
     @SerializedName("latitude")
     @Expose
-    private double latitude;
+    private Double latitude;
     @SerializedName("longitude")
     @Expose
-    private double longitude;
-    @SerializedName("createdBy")
+    private Double longitude;
+    @SerializedName("index")
     @Expose
-    private String createdBy;
-    @SerializedName("created")
-    @Expose
-    private String created;
-    @SerializedName("lastModifiedBy")
-    @Expose
-    private String lastModifiedBy;
-    @SerializedName("lastModified")
-    @Expose
-    private String lastModified;
+    private Long index;
 
-    public int getId() {
-        return id;
+    public Long getZoneLocationId() {
+        return zoneLocationId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setZoneLocationId(Long zoneLocationId) {
+        this.zoneLocationId = zoneLocationId;
     }
 
-    public int getZoneId() {
+    public Long getZoneId() {
         return zoneId;
     }
 
-    public void setZoneId(int zoneId) {
+    public void setZoneId(Long zoneId) {
         this.zoneId = zoneId;
     }
 
-    public double getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public Long getIndex() {
+        return index;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public String getCreated() {
-        return created;
-    }
-
-    public void setCreated(String created) {
-        this.created = created;
-    }
-
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
-    }
-
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
-
-    public String getLastModified() {
-        return lastModified;
-    }
-
-    public void setLastModified(String lastModified) {
-        this.lastModified = lastModified;
+    public void setIndex(Long index) {
+        this.index = index;
     }
 
 }

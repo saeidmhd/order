@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.mahak.order.BaseActivity;
 import com.mahak.order.R;
 import com.mahak.order.apiHelper.ApiClient;
@@ -24,6 +23,7 @@ import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.RadaraDb;
 import com.mahak.order.tracking.setting.SettingBody;
 import com.mahak.order.tracking.setting.TrackingSetting;
+import com.mahak.order.tracking.visitorZone.AccountZoneLocation;
 import com.mahak.order.tracking.visitorZone.Datum;
 import com.mahak.order.tracking.visitorZone.VisitorZoneLocation;
 import com.mahak.order.tracking.visitorZone.ZoneBody;
@@ -175,23 +175,23 @@ public class TrackingConfig {
             final String[] mMsg = {""};
 
             ZoneBody zoneBody = new ZoneBody();
-            zoneBody.setVisitorId(visitorId);
+            zoneBody.setAccountId(visitorId);
             ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
             pd.setMessage("در حال دریافت محدوده ها");
             pd.setCancelable(false);
             pd.show();
 
-            Call<VisitorZoneLocation> call = apiService.GetZoneLocation(zoneBody);
-            call.enqueue(new Callback<VisitorZoneLocation>() {
+            Call<AccountZoneLocation> call = apiService.GetZoneLocation(zoneBody);
+            call.enqueue(new Callback<AccountZoneLocation>() {
                 @Override
-                public void onResponse(Call<VisitorZoneLocation> call, Response<VisitorZoneLocation> response) {
+                public void onResponse(Call<AccountZoneLocation> call, Response<AccountZoneLocation> response) {
                     dismissProgressDialog();
                     if (response.body() != null) {
-                        if (response.body().isSucceeded()) {
+                        if (response.body().getSucceeded()) {
                             List<Datum> data =  response.body().getData();
                             try {
                                 if(data.size()>0){
-                                    gpsData.put(ProjectInfo._json_key_isRestricted, data.get(0).isFactorRegistrationOutRange());
+                                    gpsData.put(ProjectInfo._json_key_isRestricted, data.get(0).getFactorRegistrationOutRange());
                                     ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_gps_config, gpsData.toString());
                                 }
                             } catch (JSONException e) {
@@ -208,7 +208,7 @@ public class TrackingConfig {
                     }
                 }
                 @Override
-                public void onFailure(Call<VisitorZoneLocation> call, Throwable e) {
+                public void onFailure(Call<AccountZoneLocation> call, Throwable e) {
                     dismissProgressDialog();
                     //ServiceTools.logToFireBase(e);
                     mMsg[0] = e.toString();
@@ -239,7 +239,7 @@ public class TrackingConfig {
                 if (trackingZoneData.size() > 0){
                     for (Datum datum : trackingZoneData){
                         DataService.InsertZone(radaraDb, datum);
-                        DataService.InsertZoneLocation(radaraDb,datum.getZoneLocations());
+                        DataService.InsertZoneLocation(radaraDb,datum.getZone().getZoneLocations());
                     }
                 }
             }

@@ -4,15 +4,15 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class ZoneBody {
-    @SerializedName("visitorId")
+    @SerializedName("accountId")
     @Expose
-    private long visitorId;
+    private long accountId;
 
-    public long getVisitorId() {
-        return visitorId;
+    public long getAccountId() {
+        return accountId;
     }
 
-    public void setVisitorId(long visitorId) {
-        this.visitorId = visitorId;
+    public void setAccountId(long accountId) {
+        this.accountId = accountId;
     }
 }

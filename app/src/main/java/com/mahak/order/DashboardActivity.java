@@ -717,16 +717,18 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void stopLocationUpdate() {
-        if(locationService.isRunService(mContext)){
-            locationService.stopTracking();
-            locationService.stopNotificationServiceTracking();
+        if(locationService != null){
+            if(locationService.isRunService(mContext)){
+                locationService.stopTracking();
+                locationService.stopNotificationServiceTracking();
+            }
+            if(btnTrackingService.isChecked()){
+                btnTrackingService.setChecked(false);
+            }
+            setTackingServiceText(false);
+            locationService.setTrackingPrefOff("0");
+            ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_last_location, null);
         }
-        if(btnTrackingService.isChecked()){
-            btnTrackingService.setChecked(false);
-        }
-        setTackingServiceText(false);
-        locationService.setTrackingPrefOff("0");
-        ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_last_location, null);
     }
 
     private boolean checkPermissions() {
