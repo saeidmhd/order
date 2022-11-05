@@ -29,11 +29,11 @@ import retrofit2.Response;
 
 public class LogReceiver extends BroadcastReceiver {
     RadaraDb radaraDb;
-    StatusLog statusLog;
+    static StatusLog statusLog;
     
     @Override
     public void onReceive(Context context, Intent intent) {
-        long currentTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         if(radaraDb == null) radaraDb = new RadaraDb(context);
         radaraDb.open();
 
@@ -123,16 +123,16 @@ public class LogReceiver extends BroadcastReceiver {
                 break;
         }
         if(statusLog != null){
-            statusLog.setCreated(ServiceTools.getFormattedDateAndTime(currentTime));
-            statusLog.setVisitorId(BaseActivity.getPrefUserId());
-            statusLogs.add(statusLog);
-            manageLog.setStatusLogs(statusLogs);
-            if(ServiceTools.isOnline(context)){
-                sendManageLogToServer(manageLog,context);
-            }else {
-                statusLogs.get(0).setSent(-1);
-                updateManageLogToDb(statusLogs, context);
-            }
+                statusLog.setDate(ServiceTools.getFormattedDateAndTime(startTime));
+                statusLog.setAccountid(BaseActivity.getPrefUserId());
+                statusLogs.add(statusLog);
+                manageLog.setStatusLogs(statusLogs);
+                if(ServiceTools.isOnline(context)){
+                    sendManageLogToServer(manageLog,context);
+                }else {
+                    statusLogs.get(0).setSent(-1);
+                    updateManageLogToDb(statusLogs, context);
+                }
         }
     }
 

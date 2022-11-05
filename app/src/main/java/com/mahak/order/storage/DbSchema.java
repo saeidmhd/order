@@ -1916,11 +1916,13 @@ public class DbSchema {
         public static final String COLUMN_created = "created";
         public static final String COLUMN_lastModifiedBy = "lastModifiedBy";
         public static final String COLUMN_lastModified = "lastModified";
+        public static final String COLUMN_ZONE_INDEX = "zone_index";
 
         public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"ZoneLocation\" ( " +
-                "\"id\" INTEGER," +
+                " \"id\" INTEGER," +
                 " \"zoneId\" INTEGER," +
                 " \"visitorId\" INTEGER," +
+                " \"zone_index\" INTEGER," +
                 " \"latitude\" TEXT," +
                 " \"longitude\" TEXT," +
                 " \"createdBy\" TEXT," +

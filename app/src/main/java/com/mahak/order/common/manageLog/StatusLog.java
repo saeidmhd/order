@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class StatusLog {
 
-    @SerializedName("visitorId")
+    @SerializedName("accountid")
     @Expose
-    private long visitorId;
+    private long accountid;
 
     @SerializedName("type")
     @Expose
@@ -17,18 +17,18 @@ public class StatusLog {
     @Expose
     private String value;
 
-    @SerializedName("created")
+    @SerializedName("date")
     @Expose
-    private String created;
+    private String date;
 
     private int sent;
 
-    public long getVisitorId() {
-        return visitorId;
+    public long getAccountid() {
+        return accountid;
     }
 
-    public void setVisitorId(long visitorId) {
-        this.visitorId = visitorId;
+    public void setAccountid(long accountid) {
+        this.accountid = accountid;
     }
 
     public int getType() {
@@ -47,12 +47,12 @@ public class StatusLog {
         this.value = value;
     }
 
-    public String getCreated() {
-        return created;
+    public String getDate() {
+        return date;
     }
 
-    public void setCreated(String created) {
-        this.created = created;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public int getSent() {

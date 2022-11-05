@@ -56,10 +56,15 @@ public class RadaraDb {
         try {
             ContentValues initialvalue = new ContentValues();
             for (ZoneLocation zoneLocation : data) {
-                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_id, zoneLocation.getZoneLocationId());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_id, zoneLocation.getId());
                 initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_zoneId, zoneLocation.getZoneId());
                 initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_latitude, zoneLocation.getLatitude());
                 initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_longitude, zoneLocation.getLongitude());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_createdBy, zoneLocation.getCreatedBy());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_created, zoneLocation.getCreated());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_lastModifiedBy, zoneLocation.getLastModifiedBy());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_lastModified, zoneLocation.getLastModified());
+                initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_ZONE_INDEX, zoneLocation.getIndex());
                 initialvalue.put(DbSchema.ZoneLocationSchema.COLUMN_visitorId, getPrefUserId());
                 mDb.insert(DbSchema.ZoneLocationSchema.TABLE_NAME, null, initialvalue);
             }
@@ -72,11 +77,13 @@ public class RadaraDb {
         mDb.beginTransaction();
         try {
             ContentValues initialvalue = new ContentValues();
-            initialvalue.put(DbSchema.ZoneSchema.COLUMN_zoneId, datum.getZoneId());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_zoneId, datum.getId());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_title, datum.getTitle());
             initialvalue.put(DbSchema.ZoneSchema.COLUMN_visitorId, getPrefUserId());
             initialvalue.put(DbSchema.ZoneSchema.COLUMN_createdBy, datum.getCreatedBy());
-            initialvalue.put(DbSchema.ZoneSchema.COLUMN_created, datum.getCreatedDate());
-            initialvalue.put(DbSchema.ZoneSchema.COLUMN_lastModified, datum.getModifiedBy());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_created, datum.getCreated());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_lastModifiedBy, datum.getLastModified());
+            initialvalue.put(DbSchema.ZoneSchema.COLUMN_lastModified, datum.getLastModifiedBy());
             mDb.insert(DbSchema.ZoneSchema.TABLE_NAME, null, initialvalue);
             mDb.setTransactionSuccessful();
         } finally {
@@ -86,20 +93,26 @@ public class RadaraDb {
     private Datum getZoneFromCursor(Cursor cursor) {
         Datum datum;
         datum = new Datum();
-        datum.setZoneId(cursor.getLong(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_zoneId)));
+        datum.setId(cursor.getInt(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_zoneId)));
+        datum.setTitle(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_title)));
         datum.setCreatedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_createdBy)));
-        datum.setCreatedDate(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_created)));
-        datum.setModifiedDate(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_lastModifiedBy)));
-        datum.setModifiedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_lastModified)));
+        datum.setCreated(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_created)));
+        datum.setLastModified(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_lastModifiedBy)));
+        datum.setLastModifiedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneSchema.COLUMN_lastModified)));
         return datum;
     }
     private ZoneLocation getZoneLocationFromCursor(Cursor cursor) {
         ZoneLocation zoneLocation;
         zoneLocation = new ZoneLocation();
-        zoneLocation.setZoneLocationId(cursor.getLong(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_id)));
-        zoneLocation.setZoneId(cursor.getLong(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_zoneId)));
+        zoneLocation.setId(cursor.getInt(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_id)));
+        zoneLocation.setZoneId(cursor.getInt(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_zoneId)));
         zoneLocation.setLatitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_latitude)));
         zoneLocation.setLongitude(cursor.getDouble(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_longitude)));
+        zoneLocation.setCreatedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_createdBy)));
+        zoneLocation.setCreated(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_created)));
+        zoneLocation.setLastModified(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_lastModifiedBy)));
+        zoneLocation.setLastModifiedBy(cursor.getString(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_lastModified)));
+        zoneLocation.setIndex(cursor.getLong(cursor.getColumnIndex(DbSchema.ZoneLocationSchema.COLUMN_ZONE_INDEX)));
         return zoneLocation;
     }
     public ArrayList<Datum> getAllZone() {
@@ -119,17 +132,18 @@ public class RadaraDb {
             }
 
         } catch (Exception e) {
-            ServiceTools.logToFireBase(e);
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+            FirebaseCrashlytics.getInstance().recordException(e);
             Log.e("ErrorGetTransfer", e.getMessage());
         }
         return array;
     }
-    public ArrayList<ZoneLocation> getAllZoneLocation(long id) {
+    public ArrayList<ZoneLocation> getAllZoneLocation(int id) {
         ArrayList<ZoneLocation> array = new ArrayList<>();
         ZoneLocation zoneLocation = new ZoneLocation();
         Cursor cursor;
         try {
-            cursor = mDb.query(DbSchema.ZoneLocationSchema.TABLE_NAME,null,DbSchema.ZoneLocationSchema.COLUMN_zoneId + " =? ", new String[]{String.valueOf(id)},null, null, null);
+            cursor = mDb.rawQuery("select * from ZoneLocation where zoneid =? order by zone_index" , new String[]{String.valueOf(id)});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -452,8 +466,8 @@ public class RadaraDb {
     }
     private StatusLog getManageLogFromCursor(Cursor cursor) {
         StatusLog statusLog = new StatusLog();
-        statusLog.setCreated(cursor.getString(cursor.getColumnIndex(DbSchema.ManageLogSchema.COLUMN_Date_time)));
-        statusLog.setVisitorId(cursor.getLong(cursor.getColumnIndex(DbSchema.ManageLogSchema.COLUMN_UserId)));
+        statusLog.setDate(cursor.getString(cursor.getColumnIndex(DbSchema.ManageLogSchema.COLUMN_Date_time)));
+        statusLog.setAccountid(cursor.getLong(cursor.getColumnIndex(DbSchema.ManageLogSchema.COLUMN_UserId)));
         statusLog.setValue(cursor.getString(cursor.getColumnIndex(DbSchema.ManageLogSchema.COLUMN_Log_value)));
         statusLog.setType(cursor.getInt(cursor.getColumnIndex(DbSchema.ManageLogSchema.COLUMN_Log_type)));
         statusLog.setSent(cursor.getInt(cursor.getColumnIndex(DbSchema.ManageLogSchema.COLUMN_sent)));
@@ -489,9 +503,9 @@ public class RadaraDb {
                 contentValues.put(DbSchema.ManageLogSchema.COLUMN_Log_type, statusLog.getType());
                 contentValues.put(DbSchema.ManageLogSchema.COLUMN_Log_value, statusLog.getValue());
                 contentValues.put(DbSchema.ManageLogSchema.COLUMN_sent, statusLog.getSent());
-                contentValues.put(DbSchema.ManageLogSchema.COLUMN_Date_time, statusLog.getCreated());
+                contentValues.put(DbSchema.ManageLogSchema.COLUMN_Date_time, statusLog.getDate());
                 contentValues.put(DbSchema.ManageLogSchema.COLUMN_UserId, getPrefUserId());
-                int numOfRows = mDb.update(DbSchema.ManageLogSchema.TABLE_NAME, contentValues,  DbSchema.ManageLogSchema.COLUMN_UserId + "=? and " + DbSchema.ManageLogSchema.COLUMN_Date_time + "=? " , new String[]{String.valueOf(statusLog.getVisitorId()) , String.valueOf(statusLog.getCreated())});
+                int numOfRows = mDb.update(DbSchema.ManageLogSchema.TABLE_NAME, contentValues,  DbSchema.ManageLogSchema.COLUMN_UserId + "=? and " + DbSchema.ManageLogSchema.COLUMN_Date_time + "=? " , new String[]{String.valueOf(statusLog.getAccountid()) , String.valueOf(statusLog.getDate())});
                 if(numOfRows == 0)
                     mDb.insert(DbSchema.ManageLogSchema.TABLE_NAME, null, contentValues);
             }

@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Dash;
-import com.google.android.gms.maps.model.Dot;
 import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PatternItem;
@@ -65,7 +64,7 @@ public class MapPolygon implements GoogleMap.OnPolygonClickListener {
 
     public List<LatLng> getPolygonPoints(Datum datum){
         List<LatLng> polygonPoints = new ArrayList<>();
-        ArrayList<ZoneLocation> zoneLocations = radaraDb.getAllZoneLocation(datum.getZoneId());
+        ArrayList<ZoneLocation> zoneLocations = radaraDb.getAllZoneLocation(datum.getId());
         for (ZoneLocation zoneLocation : zoneLocations){
             polygonPoints.add(new LatLng(zoneLocation.getLatitude(), zoneLocation.getLongitude()));
         }
@@ -83,7 +82,7 @@ public class MapPolygon implements GoogleMap.OnPolygonClickListener {
                         .addAll(polygonPoints));
                 polygon.setClickable(true);
                 polygons.add(polygon);
-               // polygon.setTag(datum.getTitle());
+                polygon.setTag(datum.getTitle());
                 stylePolygon(polygon);
             }
         }

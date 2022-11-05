@@ -24,7 +24,6 @@ import com.mahak.order.mission.SendUpdate;
 import com.mahak.order.mission.updateResponse.MissionUpdateResponse;
 import com.mahak.order.tracking.setting.SettingBody;
 import com.mahak.order.tracking.setting.TrackingSetting;
-import com.mahak.order.tracking.visitorZone.AccountZoneLocation;
 import com.mahak.order.tracking.visitorZone.VisitorZoneLocation;
 import com.mahak.order.tracking.visitorZone.ZoneBody;
 
@@ -47,8 +46,8 @@ public interface ApiInterface {
     @POST("Setting/Get")
     Call<TrackingSetting> GetTrackingSetting(@Header("token") String token, @Body SettingBody body);
 
-    @POST("zone/GetAccountZoneLocations")
-    Call<AccountZoneLocation> GetZoneLocation(@Body ZoneBody body);
+    @POST("zone/GetVisitorZoneLocations")
+    Call<VisitorZoneLocation> GetZoneLocation(@Body ZoneBody body);
 
     @POST("user/login")
     Call<SignalLoginResult> LoginSignalR(@Body SignalLoginBody body);

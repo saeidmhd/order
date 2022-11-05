@@ -23,7 +23,6 @@ import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.RadaraDb;
 import com.mahak.order.tracking.setting.SettingBody;
 import com.mahak.order.tracking.setting.TrackingSetting;
-import com.mahak.order.tracking.visitorZone.AccountZoneLocation;
 import com.mahak.order.tracking.visitorZone.Datum;
 import com.mahak.order.tracking.visitorZone.VisitorZoneLocation;
 import com.mahak.order.tracking.visitorZone.ZoneBody;
@@ -39,7 +38,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.mahak.order.BaseActivity.getPrefDatabaseId;
 import static com.mahak.order.BaseActivity.getPrefSignalUserToken;
 import static com.mahak.order.BaseActivity.getPrefUserMasterId;
 import static com.mahak.order.BaseActivity.setPrefSignalUserToken;
@@ -175,23 +173,23 @@ public class TrackingConfig {
             final String[] mMsg = {""};
 
             ZoneBody zoneBody = new ZoneBody();
-            zoneBody.setAccountId(visitorId);
+            zoneBody.setVisitorId(visitorId);
             ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
             pd.setMessage("در حال دریافت محدوده ها");
             pd.setCancelable(false);
             pd.show();
 
-            Call<AccountZoneLocation> call = apiService.GetZoneLocation(zoneBody);
-            call.enqueue(new Callback<AccountZoneLocation>() {
+            Call<VisitorZoneLocation> call = apiService.GetZoneLocation(zoneBody);
+            call.enqueue(new Callback<VisitorZoneLocation>() {
                 @Override
-                public void onResponse(Call<AccountZoneLocation> call, Response<AccountZoneLocation> response) {
+                public void onResponse(Call<VisitorZoneLocation> call, Response<VisitorZoneLocation> response) {
                     dismissProgressDialog();
                     if (response.body() != null) {
-                        if (response.body().getSucceeded()) {
+                        if (response.body().isSucceeded()) {
                             List<Datum> data =  response.body().getData();
                             try {
                                 if(data.size()>0){
-                                    gpsData.put(ProjectInfo._json_key_isRestricted, data.get(0).getFactorRegistrationOutRange());
+                                    gpsData.put(ProjectInfo._json_key_isRestricted, data.get(0).isFactorRegistrationOutRange());
                                     ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_gps_config, gpsData.toString());
                                 }
                             } catch (JSONException e) {
@@ -208,7 +206,7 @@ public class TrackingConfig {
                     }
                 }
                 @Override
-                public void onFailure(Call<AccountZoneLocation> call, Throwable e) {
+                public void onFailure(Call<VisitorZoneLocation> call, Throwable e) {
                     dismissProgressDialog();
                     //ServiceTools.logToFireBase(e);
                     mMsg[0] = e.toString();
@@ -239,7 +237,7 @@ public class TrackingConfig {
                 if (trackingZoneData.size() > 0){
                     for (Datum datum : trackingZoneData){
                         DataService.InsertZone(radaraDb, datum);
-                        DataService.InsertZoneLocation(radaraDb,datum.getZone().getZoneLocations());
+                        DataService.InsertZoneLocation(radaraDb,datum.getZoneLocations());
                     }
                 }
             }

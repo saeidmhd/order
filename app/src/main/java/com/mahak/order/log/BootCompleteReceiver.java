@@ -57,8 +57,8 @@ public class BootCompleteReceiver extends BroadcastReceiver {
                 statusLog.setValue(jsonObject.toString());
             }
             if(statusLog != null){
-                statusLog.setCreated(ServiceTools.getFormattedDateAndTime(currentTime));
-                statusLog.setVisitorId(BaseActivity.getPrefUserId());
+                statusLog.setDate(ServiceTools.getFormattedDateAndTime(currentTime));
+                statusLog.setAccountid(BaseActivity.getPrefUserId());
                 statusLogs.add(statusLog);
                 manageLog.setStatusLogs(statusLogs);
                 if(ServiceTools.isOnline(context)){
