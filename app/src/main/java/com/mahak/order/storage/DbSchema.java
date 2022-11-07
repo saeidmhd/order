@@ -103,6 +103,7 @@ public class DbSchema {
         public static final String COLUMN_PHONE = "Phone";
         public static final String COLUMN_Fax = "Fax";
         public static final String COLUMN_MOBILE = "Mobile";
+        public static final String COLUMN_SHIFT = "Shift";
         public static final String COLUMN_Deleted = "Deleted";
 
         public static final String COLUMN_MODIFYDATE = "ModifyDate";
@@ -145,6 +146,7 @@ public class DbSchema {
                 "`ModifyDate` NUMERIC, " +
                 "`Longitude` TEXT, " +
                 "`Latitude` TEXT, " +
+                "`Shift` TEXT, " +
                 "`Name` TEXT, " +
                 "`State` TEXT, " +
                 "`City` TEXT, " +
@@ -1919,7 +1921,7 @@ public class DbSchema {
         public static final String COLUMN_ZONE_INDEX = "zone_index";
 
         public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"ZoneLocation\" ( " +
-                " \"id\" INTEGER," +
+                "\"id\" INTEGER," +
                 " \"zoneId\" INTEGER," +
                 " \"visitorId\" INTEGER," +
                 " \"zone_index\" INTEGER," +
@@ -2017,7 +2019,6 @@ public class DbSchema {
                 " `UserId` NUMERIC )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
-
     public static class ManageLogSchema implements BaseColumns {
 
         public static final String TABLE_NAME = "ManageLog";

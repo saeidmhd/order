@@ -928,6 +928,18 @@
     <string name="new_3_473">نسخه ۳.۴۷۳</string>
     <string name="new_3_473_1">رفع خطای ارسال فاکتور به سرور از لیست فاکتورها</string>
 
+    <string name="new_3_475">نسخه ۳.۴۷۵</string>
+    <string name="new_3_475_1">افزوده شدن امکان ماموریت ها به جای دستور کارها</string>
+    <string name="new_3_475_2">رسم صحیح محدوده ها در نقشه (بر طرف شدن مشکل زیگزاگی بودن)</string>
+    <string name="new_3_475_3">برطرف شدن مشکلات در پیاده سازی دکمه + و - فرم لیست کالاها</string>
+    <string name="new_3_475_4">نمایش کد مشتری در جلوی نام مشتری در داخل پرانتز</string>
+    <string name="new_3_475_5">نمایش کامل آدرس مشتری در فرم اطلاعات بیشتر مشتری</string>
+    <string name="new_3_475_6">تغییر در ارسال موارد به سرور</string>
+    <string name="new_3_475_7">برطرف شدن مشکل ارسال لاگ های مدیریتی به سرور</string>
+    <string name="new_3_475_8">تغییر در دریافت مجوز ها (دریافت در زمان نیاز)</string>
+    <string name="new_3_475_9">افزوده شدن لاگ خطاها در دیتابیس</string>
+    <string name="new_3_475_10">رفع بعضی از موارد رابط کاربری</string>
+
     <string name="PersonClientId">PersonClientId</string>
     <string name="array">array</string>
 

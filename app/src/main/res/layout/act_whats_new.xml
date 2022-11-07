@@ -46,6 +46,92 @@
                     android:layout_marginTop="@dimen/LargeSize"
                     android:layout_marginLeft="@dimen/LargeSize"
                     android:layout_marginRight="@dimen/LargeSize"
+                    android:text="@string/new_3_475"/>
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/LargeSize"
+                    android:layout_marginRight="@dimen/LargeSize"
+                    android:overScrollMode="never"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/NormalSize"
+                        android:orientation="vertical">
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="@string/new_3_475_1"
+                            android:drawablePadding="@dimen/NormalSize" />
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="@string/new_3_475_2"
+                            android:drawablePadding="@dimen/NormalSize" />
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="@string/new_3_475_3"
+                            android:drawablePadding="@dimen/NormalSize" />
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="@string/new_3_475_4"
+                            android:drawablePadding="@dimen/NormalSize" />
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="@string/new_3_475_5"
+                            android:drawablePadding="@dimen/NormalSize" />
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="@string/new_3_475_6"
+                            android:drawablePadding="@dimen/NormalSize" />
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="@string/new_3_475_7"
+                            android:drawablePadding="@dimen/NormalSize" />
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="@string/new_3_475_8"
+                            android:drawablePadding="@dimen/NormalSize" />
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="@string/new_3_475_9"
+                            android:drawablePadding="@dimen/NormalSize" />
+                        <com.mahak.order.widget.FontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="@string/new_3_475_10"
+                            android:drawablePadding="@dimen/NormalSize" />
+
+                    </LinearLayout>
+                </ScrollView>
+
+                <com.mahak.order.widget.FontTextView
+                    android:id="@+id/tv_new20"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/NormalSize"
+                    android:layout_marginTop="@dimen/LargeSize"
+                    android:layout_marginLeft="@dimen/LargeSize"
+                    android:layout_marginRight="@dimen/LargeSize"
                     android:text="@string/new_3_473"/>
                 <ScrollView
                     android:layout_width="match_parent"

@@ -9853,15 +9853,21 @@ public class DbAdapter {
                     db.execSQL(DbSchema.PayableSchema.CREATE_TABLE);
                     db.execSQL(DbSchema.ReceivedTransfersSchema.CREATE_TABLE);
                     db.execSQL(DbSchema.ReceivedTransferProductsSchema.CREATE_TABLE);
-                    db.execSQL("ALTER TABLE " + DbSchema.CustomerSchema.TABLE_NAME + " ADD " + DbSchema.CustomerSchema.COLUMN_DiscountPercent + " NUMERIC;");
-                    db.execSQL("ALTER TABLE " + DbSchema.ProductSchema.TABLE_NAME + " ADD " + DbSchema.ProductSchema.COLUMN_DiscountPercent + " TEXT;");
+                    db.execSQL("ALTER TABLE " + DbSchema.CustomerSchema.TABLE_NAME + " ADD COLUMN " + DbSchema.CustomerSchema.COLUMN_DiscountPercent + " NUMERIC;");
+                    db.execSQL("ALTER TABLE " + DbSchema.ProductSchema.TABLE_NAME + " ADD COLUMN " + DbSchema.ProductSchema.COLUMN_DiscountPercent + " TEXT;");
 
                 }
                 if (oldVersion < 7) {
-                    db.execSQL("ALTER TABLE " + DbSchema.PromotionSchema.TABLE_NAME + " ADD " + DbSchema.PromotionSchema.COLUMN_Deleted + " INTEGER;");
+                    db.execSQL("ALTER TABLE " + DbSchema.PromotionSchema.TABLE_NAME + " ADD COLUMN " + DbSchema.PromotionSchema.COLUMN_Deleted + " INTEGER;");
                 }
                 if (oldVersion < 3450){
                     db.execSQL(DbSchema.PersonCategorySchema.CREATE_TABLE);
+                }
+                if(oldVersion < 3475){
+                    db.execSQL(DbSchema.ExceptionSchema.CREATE_TABLE);
+                    db.execSQL(DbSchema.MissionSchema.CREATE_TABLE);
+                    db.execSQL(DbSchema.MissionDetailSchema.CREATE_TABLE);
+                    db.execSQL("ALTER TABLE " + DbSchema.ZoneLocationSchema.TABLE_NAME + " ADD COLUMN " + DbSchema.ZoneLocationSchema.COLUMN_ZONE_INDEX + " INTEGER;");
                 }
             }
         }
