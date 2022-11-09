@@ -110,6 +110,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textImeMultiLine"
+                android:text="پرداخت با پوز"
                 android:selectAllOnFocus="true">
 
             </com.mahak.order.widget.FontEditText>

@@ -589,6 +589,8 @@ public class RadaraDb {
             ServiceTools.writeLog("oldVersion is " + oldVersion + "newVersion" + newVersion);
 
             if (newVersion > oldVersion) {
+                if(oldVersion < 3475)
+                    db.execSQL("ALTER TABLE " + DbSchema.ZoneLocationSchema.TABLE_NAME + " ADD COLUMN " + DbSchema.ZoneLocationSchema.COLUMN_ZONE_INDEX + " INTEGER;");
             }
         }
 

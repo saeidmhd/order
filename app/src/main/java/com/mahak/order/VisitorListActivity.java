@@ -303,12 +303,13 @@ public class VisitorListActivity extends BaseActivity {
 
         private class Holder {
 
-            public TextView tvMarketName, tvRemained, tvCustomerStatus, tvAddress, tvCustomerName;
+            public TextView tvMarketName, tvRemained, tvCustomerStatus, tvAddress, tvCustomerName,person_code;
             public LinearLayout btnMenu;
 
             public Holder(View view) {
 
                 tvMarketName = (TextView) view.findViewById(R.id.tvMarketName);
+                person_code = (TextView) view.findViewById(R.id.person_code);
                 tvRemained = (TextView) view.findViewById(R.id.tvRemained);
                 tvCustomerStatus = (TextView) view.findViewById(R.id.tvCustomerStatus);
                 tvAddress = (TextView) view.findViewById(R.id.tvAddress);
@@ -321,6 +322,7 @@ public class VisitorListActivity extends BaseActivity {
             public void Populate(Visitor visitor) {
 
                 tvCustomerName.setText(visitor.getName());
+                person_code.setText( "(" + visitor.getPersonCode()+ ")");
 
                 if (visitor.getId() == ProjectInfo.CUSTOMERID_GUEST)
                     btnMenu.setVisibility(View.INVISIBLE);

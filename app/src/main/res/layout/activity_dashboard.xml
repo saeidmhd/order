@@ -602,7 +602,7 @@
                         android:layout_weight="1"
                         android:gravity="center|right"
                         android:text="@string/str_sum_of_orders"
-                        android:textSize="11sp" />
+                        android:textSize="10sp" />
                 </LinearLayout>
 
                 <LinearLayout
