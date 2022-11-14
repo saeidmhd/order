@@ -2,22 +2,24 @@ package com.mahak.order.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mahak.order.MissionDetailMoreInfo;
 import com.mahak.order.MissionListActivity;
 import com.mahak.order.R;
 import com.mahak.order.common.Customer;
 import com.mahak.order.common.ServiceTools;
-import com.mahak.order.mission.Mission;
 import com.mahak.order.mission.MissionDetail;
 import com.mahak.order.storage.DbAdapter;
 
@@ -40,6 +42,7 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
         public ImageView missionDetailIcon , missionDetailStatusIcon ;
         public LinearLayout changeStatus , status ,changeStatusMenu , mission_item;
         public Button changeStatusBtn;
+        public ImageButton more_info;
 
         ViewHolder(View view) {
             super(view);
@@ -56,6 +59,7 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
             status = (LinearLayout) view.findViewById(R.id.status);
             mission_item = (LinearLayout) view.findViewById(R.id.mission_item);
             changeStatusBtn = (Button) view.findViewById(R.id.changeStatusBtn);
+            more_info = (ImageButton) view.findViewById(R.id.more_info);
         }
     }
 
@@ -146,17 +150,34 @@ public class MissionDetailAdapter extends RecyclerView.Adapter<MissionDetailAdap
             @Override
             public void onClick(View view) {
                 showChangeStatusDialog(missionDetail , mPosition);
-
             }
         });
         holder.mission_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showChangeStatusDialog(missionDetail , mPosition);
+                Intent intent = new Intent(mContext, MissionDetailMoreInfo.class);
+                intent.putExtra("missionDetailId",missionDetail.getMissionDetailId());
+                mContext.startActivity(intent);
+                //showChangeStatusDialog(missionDetail , mPosition);
+
+            }
+        });
+        holder.more_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, MissionDetailMoreInfo.class);
+                intent.putExtra("missionDetailId",missionDetail.getMissionDetailId());
+                mContext.startActivity(intent);
+                //showChangeStatusDialog(missionDetail , mPosition);
 
             }
         });
         holder.changeStatusMenu.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                showChangeStatusDialog(missionDetail , mPosition);
+            }
+        });
+        holder.status.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 showChangeStatusDialog(missionDetail , mPosition);
             }

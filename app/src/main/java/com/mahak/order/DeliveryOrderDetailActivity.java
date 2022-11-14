@@ -137,6 +137,9 @@ public class DeliveryOrderDetailActivity extends BaseActivity {
         orderDetails = db.getAllProductDeliveryOrderDetail(deliveryorder.getOrderId());
 
         for (OrderDetail item : orderDetails) {
+
+            ProductPickerListActivity.HashMap_Product.put(item.getProductId(), item);
+
             double Price = 0;
             if (item.getCount1() != 0 || item.getCount2() != 0)
                 Price = (item.getPrice() * item.getSumCountBaJoz());

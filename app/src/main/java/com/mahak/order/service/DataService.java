@@ -37,6 +37,7 @@ import com.mahak.order.common.TransactionsLog;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.common.VisitorPeople;
 import com.mahak.order.common.VisitorProduct;
+import com.mahak.order.common.request.SetAllDataResult.OrderDetails.OrderDetails;
 import com.mahak.order.mission.Mission;
 import com.mahak.order.mission.MissionDetail;
 import com.mahak.order.storage.DbAdapter;
@@ -505,11 +506,14 @@ public class DataService {
                 if (!db.UpdateDeliveryOrderDetail(orderDetails.get(i))) {
                     productDetail = db.getProductDetail(orderDetails.get(i).getProductDetailId());
                     product = db.GetProductWithProductId(productDetail.getProductId());
+                    sumCountBaJoz = orderDetails.get(i).getCount1();
                     if (product.getProductId() != 0) {
-                        if (BaseActivity.getPrefUnit2Setting(mContext) == BaseActivity.Mode_DoVahedi)
-                            sumCountBaJoz = orderDetails.get(i).getCount1() + (product.getUnitRatio() * orderDetails.get(i).getCount2());
-                        else
-                            sumCountBaJoz = orderDetails.get(i).getCount1();
+                        if (BaseActivity.getPrefUnit2Setting(mContext) != BaseActivity.MODE_YekVahedi){
+                            if(product.getUnitRatio() > 0){
+                                double count1 = orderDetails.get(i).getCount1() - (orderDetails.get(i).getCount2() * product.getUnitRatio());
+                                orderDetails.get(i).setCount1(count1);
+                            }
+                        }
                         orderDetails.get(i).setSumCountBaJoz(sumCountBaJoz);
                         orderDetails.get(i).setProductId(product.getProductId());
                         if (orderDetails.get(i).getDescription() == null)

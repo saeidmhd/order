@@ -160,6 +160,10 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
+            android:name=".MissionDetailMoreInfo"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
             android:name=".PayableListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />

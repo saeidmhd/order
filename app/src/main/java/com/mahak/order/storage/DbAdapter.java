@@ -9650,6 +9650,26 @@ public class DbAdapter {
 
         return array;
     }
+    public MissionDetail getMissionDetail(int missionDetailId) {
+        MissionDetail missionDetail = new MissionDetail();
+        Cursor cursor;
+        try {
+            cursor = mDb.rawQuery("select * from MissionDetail where userid =? and missionDetailId =? and deleted = 0 ", new String[]{String.valueOf(getPrefUserId()),String.valueOf(missionDetailId)});
+            if (cursor != null) {
+                cursor.moveToFirst();
+                if (cursor.getCount() > 0) {
+                    missionDetail = GetMissionDetail(cursor);
+                    cursor.close();
+                }
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrAllCheque", e.getMessage());
+        }
+
+        return missionDetail;
+    }
     public MissionDetail GetMissionDetail(Cursor cursor) {
         MissionDetail missionDetail = new MissionDetail();
         try {

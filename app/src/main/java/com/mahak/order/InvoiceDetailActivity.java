@@ -426,8 +426,6 @@ public class InvoiceDetailActivity extends BaseActivity {
         for (OrderDetail item : orderDetailArrayList) {
             mCurrentPrice = ServiceTools.getCalculateFinalPrice(item, mContext);
             item.setFinalPrice(String.valueOf(mCurrentPrice));
-            if (order.getOrderType() == TYPE_SEND_TRANSFERENCE || order.getOrderType() == ProjectInfo.TYPE_INVOCIE || order.getOrderType() == ProjectInfo.TYPE_RETURN_OF_SALE || (order.getOrderType() == ProjectInfo.TYPE_ORDER && getPrefReduceAsset(mContext)))
-
             ProductPickerListActivity.HashMap_Product.put(item.getProductId(), item);
         }
         //________________________________________________________

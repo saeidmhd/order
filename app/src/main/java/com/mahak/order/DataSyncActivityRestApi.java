@@ -800,7 +800,8 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                     int returnCount = 0;
                                     for (int i = 0; i < arrayInvoice.size(); i++) {
                                         arrayInvoice.get(i).setOrderId(response.body().getData().getObjects().getOrders().getResults().get(i).getEntityID());
-                                        arrayInvoice.get(i).setRowVersion(response.body().getData().getObjects().getOrders().getResults().get(i).getRowVersion());
+                                        if(arrayInvoice.get(i).getOrderCode() != 0)
+                                            arrayInvoice.get(i).setRowVersion(response.body().getData().getObjects().getOrders().getResults().get(i).getRowVersion());
                                         arrayInvoice.get(i).setPublish(ProjectInfo.PUBLISH);
                                         db.UpdateOrder(arrayInvoice.get(i));
                                         if (arrayInvoice.get(i).getOrderType() == ProjectInfo.TYPE_INVOCIE)
@@ -812,7 +813,8 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
                                         for (int j = 0; j < arrayInvoiceDetail.size(); j++) {
                                             arrayInvoiceDetail.get(j).setOrderDetailId(response.body().getData().getObjects().getOrderDetails().getResults().get(j).getEntityID());
-                                            arrayInvoiceDetail.get(j).setRowVersion(response.body().getData().getObjects().getOrderDetails().getResults().get(j).getRowVersion());
+                                            if(arrayInvoiceDetail.get(i).getOrderDetailId() != 0)
+                                                arrayInvoice.get(i).setRowVersion(response.body().getData().getObjects().getOrders().getResults().get(i).getRowVersion());
                                             db.UpdateOrderDetailSync(arrayInvoiceDetail.get(j));
                                         }
                                     }
@@ -1009,13 +1011,8 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     getAllDataBody.setFromTransactionVersion(TransactionslogMaxRowVersion);
                     break;
                 case 10:
-                    ArrayList<Integer> orderTypes = new ArrayList<>();
-                    orderTypes.add(ProjectInfo.TYPE_Delivery);
-                    getAllDataBody.setOrderTypes(orderTypes);
-                    OrderRowMaxVersion = db.getMaxRowVersion(DbSchema.OrderSchema.TABLE_NAME);
-                    getAllDataBody.setFromOrderVersion(OrderRowMaxVersion);
-                    OrderDetailMaxRowVersion = db.getMaxRowVersion(DbSchema.OrderDetailSchema.TABLE_NAME);
-                    getAllDataBody.setFromOrderDetailVersion(OrderDetailMaxRowVersion);
+                    SettingMaxRowVersion = db.getMaxRowVersion(DbSchema.SettingSchema.TABLE_NAME);
+                    getAllDataBody.setFromSettingVersion(SettingMaxRowVersion);
                     break;
                 case 11:
                     getAllDataBody.setFromPromotionVersion(0L);
@@ -1055,8 +1052,13 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     getAllDataBody.setFromProductCategoryVersion(CategoryMaxRowVersion);
                     break;
                 case 21:
-                    SettingMaxRowVersion = db.getMaxRowVersion(DbSchema.SettingSchema.TABLE_NAME);
-                    getAllDataBody.setFromSettingVersion(SettingMaxRowVersion);
+                    ArrayList<Integer> orderTypes = new ArrayList<>();
+                    orderTypes.add(ProjectInfo.TYPE_Delivery);
+                    getAllDataBody.setOrderTypes(orderTypes);
+                    OrderRowMaxVersion = db.getMaxRowVersion(DbSchema.OrderSchema.TABLE_NAME);
+                    getAllDataBody.setFromOrderVersion(OrderRowMaxVersion);
+                    OrderDetailMaxRowVersion = db.getMaxRowVersion(DbSchema.OrderDetailSchema.TABLE_NAME);
+                    getAllDataBody.setFromOrderDetailVersion(OrderDetailMaxRowVersion);
                     break;
                 case 22:
                     MissionMaxRowVersion = db.getMaxRowVersion(DbSchema.MissionSchema.TABLE_NAME);
@@ -1132,8 +1134,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                     saveAsyncTask.execute();
                                     break;
                                 case 10:
-                                    orders = response.body().getData().getObjects().getOrders();
-                                    orderDetails = response.body().getData().getObjects().getOrderDetails();
+                                    settings = response.body().getData().getObjects().getSettings();
                                     saveAsyncTask =  new SaveAsyncTask(whichReceiveUpdate);
                                     saveAsyncTask.execute();
                                     break;
@@ -1188,7 +1189,8 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                     saveAsyncTask.execute();
                                     break;
                                 case 21:
-                                    settings = response.body().getData().getObjects().getSettings();
+                                    orders = response.body().getData().getObjects().getOrders();
+                                    orderDetails = response.body().getData().getObjects().getOrderDetails();
                                     saveAsyncTask =  new SaveAsyncTask(whichReceiveUpdate);
                                     saveAsyncTask.execute();
                                     break;
@@ -1299,13 +1301,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             arrayTime[11] = DataService.InsertTransactionsLog(db, transactionsLogs);
                     break;
                 case 10:
-                    if (orders != null)
-                        if (orders.size() > 0) {
-                            arrayTime[16] = DataService.InsertDeliveryOrder(db, orders);
-                            if (orderDetails != null)
-                                if (orderDetails.size() > 0) {
-                                    arrayTime[17] = DataService.InsertDeliveryOrderDetail(db, orderDetails, mContext);
-                                }
+                    if (settings != null)
+                        if (settings.size() > 0) {
+                            arrayTime[18] = DataService.InsertSettings(db, settings, mContext);
                         }
                     break;
                 case 11:
@@ -1370,9 +1368,13 @@ public class DataSyncActivityRestApi extends BaseActivity {
                         }
                     break;
                 case 21:
-                    if (settings != null)
-                        if (settings.size() > 0) {
-                            arrayTime[18] = DataService.InsertSettings(db, settings, mContext);
+                    if (orders != null)
+                        if (orders.size() > 0) {
+                            arrayTime[16] = DataService.InsertDeliveryOrder(db, orders);
+                            if (orderDetails != null)
+                                if (orderDetails.size() > 0) {
+                                    arrayTime[17] = DataService.InsertDeliveryOrderDetail(db, orderDetails, mContext);
+                                }
                         }
                     break;
                 case 22:
@@ -1470,16 +1472,11 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             tvTransaction.setText(R.string.no_new_item_for_receive);
                     break;
                 case 10:
-                    if (orders != null)
-                        if (orders.size() > 0) {
-                            tvDelivery.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + orders.size() );
+                    if (settings != null)
+                        if (settings.size() > 0) {
+                            tvSetting.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + settings.size() );
                         }else
-                            tvDelivery.setText(R.string.no_new_item_for_receive);
-                    if (orderDetails != null)
-                        if (orderDetails.size() > 0) {
-                            tvDeliveryDetail.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + orderDetails.size() );
-                        }else
-                            tvDeliveryDetail.setText(R.string.no_new_item_for_receive);
+                            tvSetting.setText(R.string.no_new_item_for_receive);
                     break;
                 case 11:
                     if (promotions != null)
@@ -1552,13 +1549,18 @@ public class DataSyncActivityRestApi extends BaseActivity {
                             tvProductGroup.setText(R.string.no_new_item_for_receive);
                     break;
                 case 21:
-                    tvCheckList.requestFocus();
-                    if (settings != null)
-                        if (settings.size() > 0) {
-                            tvSetting.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + settings.size() );
+                    if (orders != null)
+                        if (orders.size() > 0) {
+                            tvDelivery.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + orders.size() );
                         }else
-                            tvSetting.setText(R.string.no_new_item_for_receive);
+                            tvDelivery.setText(R.string.no_new_item_for_receive);
+                    if (orderDetails != null)
+                        if (orderDetails.size() > 0) {
+                            tvDeliveryDetail.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + orderDetails.size() );
+                        }else
+                            tvDeliveryDetail.setText(R.string.no_new_item_for_receive);
                     break;
+
             }
 
             if(whichUpdate < 23 ){
