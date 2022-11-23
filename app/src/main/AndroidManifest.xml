@@ -231,7 +231,6 @@
         <activity
             android:name=".NotificationDialogActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Dialog"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ReportMonthlyActivity"

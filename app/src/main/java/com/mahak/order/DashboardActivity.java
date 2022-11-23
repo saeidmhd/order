@@ -33,6 +33,7 @@ import android.os.IBinder;
 import android.provider.Browser;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,6 +56,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.ActivityCompat;
@@ -284,12 +286,13 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         if(missions.size() > 0){
             missionIndex = missions.get(0).getMissionId();
             missionDetails.addAll(db.getAllMissionDetailWithMissionId(missionIndex));
+            missionTitle.setText("شناسه ماموریت :" + missions.get(0).getMissionId() + "  |  " + ServiceTools.getPersianDate(missions.get(0).getDate()));
         }else
             missionIndex = 0;
 
         calcAndSetCheckListStat();
 
-        missionTitle.setText("شناسه ماموریت : " + missionIndex);
+
 
         show_missionDetail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -306,9 +309,11 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PopupMenu popup = new PopupMenu(mContext,show_mission);
-                for (Mission mission : missions) {
-                    popup.getMenu().add(mission.getMissionId(),mission.getMissionId(),mission.getMissionId(), "شناسه ماموریت : " + mission.getMissionId());
+                Context wrapper = new ContextThemeWrapper(mContext, R.style.MyPopupMenu);
+                PopupMenu popup = new PopupMenu(wrapper,show_mission);
+                for (int i = 0; i < missions.size(); i++) {
+                    Mission mission = missions.get(i);
+                    popup.getMenu().add(i,mission.getMissionId(),mission.getMissionId(),    "شناسه ماموریت :" + mission.getMissionId() + "  |  "  + ServiceTools.getPersianDate(mission.getDate()));
                 }
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override

@@ -9510,14 +9510,18 @@ public class DbAdapter {
             initialvalue.put(DbSchema.MissionSchema.COLUMN_databaseId, mission.getDatabaseId());
             initialvalue.put(DbSchema.MissionSchema.COLUMN_missionCode, mission.getMissionCode());
             initialvalue.put(DbSchema.MissionSchema.COLUMN_missionClientId, mission.getMissionClientId());
-            initialvalue.put(DbSchema.MissionSchema.COLUMN_status, mission.getStatus());
             initialvalue.put(DbSchema.MissionSchema.COLUMN_date, mission.getDate());
-            initialvalue.put(DbSchema.MissionSchema.COLUMN_endDate, mission.getEndDate());
+            initialvalue.put(DbSchema.MissionSchema.COLUMN_statusDate, mission.getStatusDate());
             initialvalue.put(DbSchema.MissionSchema.COLUMN_deleted, mission.isDeleted());
             initialvalue.put(DbSchema.MissionSchema.COLUMN_description, mission.getDescription());
             initialvalue.put(DbSchema.MissionSchema.COLUMN_rowVersion, mission.getRowVersion());
-            initialvalue.put(DbSchema.MissionSchema.COLUMN_userId, getPrefUserId());
-            boolean result = (mDb.update(DbSchema.MissionSchema.TABLE_NAME, initialvalue,"missionId =? and userId =? " , new String[]{String.valueOf(mission.getMissionId()), String.valueOf(getPrefUserId())})) > 0;
+            initialvalue.put(DbSchema.MissionSchema.COLUMN_updateDate, mission.getUpdateDate());
+            initialvalue.put(DbSchema.MissionSchema.COLUMN_createDate, mission.getCreateDate());
+            initialvalue.put(DbSchema.MissionSchema.COLUMN_statusAdmin, mission.getStatusAdmin());
+            initialvalue.put(DbSchema.MissionSchema.COLUMN_status, mission.getStatus());
+            initialvalue.put(DbSchema.MissionSchema.COLUMN_publish, mission.getPublish());
+            initialvalue.put(DbSchema.MissionSchema.COLUMN_UserId, getPrefUserId());
+            boolean result = (mDb.update(DbSchema.MissionSchema.TABLE_NAME, initialvalue," missionId =? and UserId =? " , new String[]{String.valueOf(mission.getMissionId()), String.valueOf(getPrefUserId())})) > 0;
             if(!result)
                 mDb.insert(DbSchema.MissionSchema.TABLE_NAME, null, initialvalue);
             mDb.setTransactionSuccessful();
@@ -9525,6 +9529,88 @@ public class DbAdapter {
             mDb.endTransaction();
         }
     }
+    public ArrayList<Mission> getAllMission() {
+        Mission mission;
+        Cursor cursor;
+        String today = ServiceTools.getFormattedDate(new Date().getTime());
+        ArrayList<Mission> array = new ArrayList<>();
+        try {
+            cursor = mDb.rawQuery(" select * from Mission where UserId = ? and deleted = 0  and (date >= ? or ( date < ?  and  status != 3 )) order by missionId desc  ", new String[]{String.valueOf(getPrefUserId()) , today , today});
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    mission = GetMission(cursor);
+                    if (mission != null)
+                        array.add(mission);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrAllReceipt", e.getMessage());
+        }
+
+        return array;
+    }
+    public ArrayList<Mission> getAllMission2() {
+        Mission mission;
+        Cursor cursor;
+        String today = ServiceTools.getFormattedDate(new Date().getTime());
+        ArrayList<Mission> array = new ArrayList<>();
+        try {
+            cursor = mDb.rawQuery(" select * from Mission where UserId = ? and deleted = 0 ", new String[]{String.valueOf(getPrefUserId())});
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    mission = GetMission(cursor);
+                    if (mission != null)
+                        array.add(mission);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrAllReceipt", e.getMessage());
+        }
+
+        return array;
+    }
+    public Mission GetMission(Cursor cursor) {
+        Mission mission = new Mission();
+        try {
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    mission.setMissionId(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_missionId)));
+                    mission.setDatabaseId(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_databaseId)));
+                    mission.setMissionCode(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_missionCode)));
+                    mission.setAccountId(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_UserId)));
+                    mission.setStatusAdmin(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_statusAdmin)));
+                    mission.setMissionClientId(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_missionClientId)));
+                    mission.setDate(cursor.getString(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_date)));
+                    mission.setStatusDate(cursor.getString(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_statusDate)));
+                    mission.setCreateDate(cursor.getString(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_createDate)));
+                    mission.setUpdateDate(cursor.getString(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_updateDate)));
+                    mission.setDeleted(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_deleted)));
+                    mission.setDescription(cursor.getString(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_description)));
+                    mission.setStatus(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_status)));
+                    mission.setPublish(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_publish)));
+                    mission.setRowVersion(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_rowVersion)));
+                }
+            }
+
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorGetReceipt", e.getMessage());
+        }
+        return mission;
+    }
+
+    //................ MissionDetail log
     public void AddMissionDetail(MissionDetail missionDetail) {
         mDb.beginTransaction();
         try {
@@ -9551,56 +9637,6 @@ public class DbAdapter {
         } finally {
             mDb.endTransaction();
         }
-    }
-
-    public ArrayList<Mission> getAllMission() {
-        Mission mission;
-        Cursor cursor;
-        ArrayList<Mission> array = new ArrayList<>();
-        try {
-            cursor = mDb.rawQuery("select * from Mission where userid = ? and deleted = 0 and date >= ? order by missionId desc ", new String[]{String.valueOf(getPrefUserId()),ServiceTools.getFormattedDate(new Date().getTime())});
-            if (cursor != null) {
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    mission = GetMission(cursor);
-                    if (mission != null)
-                        array.add(mission);
-                    cursor.moveToNext();
-                }
-                cursor.close();
-            }
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrAllReceipt", e.getMessage());
-        }
-
-        return array;
-    }
-    public Mission GetMission(Cursor cursor) {
-        Mission mission = new Mission();
-        try {
-            if (cursor != null) {
-                if (cursor.getCount() > 0) {
-                    mission.setMissionId(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_missionId)));
-                    mission.setDatabaseId(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_databaseId)));
-                    mission.setMissionCode(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_missionCode)));
-                    mission.setMissionClientId(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_missionClientId)));
-                    mission.setStatus(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_status)));
-                    mission.setDate(cursor.getString(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_date)));
-                    mission.setEndDate(cursor.getString(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_endDate)));
-                    mission.setDeleted(cursor.getInt(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_deleted)));
-                    mission.setDescription(cursor.getString(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_description)));
-                    mission.setRowVersion(cursor.getLong(cursor.getColumnIndex(DbSchema.MissionSchema.COLUMN_rowVersion)));
-                }
-            }
-
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            Log.e("ErrorGetReceipt", e.getMessage());
-        }
-        return mission;
     }
     public ArrayList<MissionDetail> getAllMissionDetailWithMissionId(int missionId) {
         MissionDetail missionDetail;
@@ -9698,8 +9734,6 @@ public class DbAdapter {
         }
         return missionDetail;
     }
-
-
 
     public void DeleteAllData() {
 

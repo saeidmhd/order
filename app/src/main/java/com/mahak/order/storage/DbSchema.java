@@ -2037,37 +2037,51 @@ public class DbSchema {
                 " `UserId` NUMERIC )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
+
+
+
+
+
+
+
+
+
+
     public static class MissionSchema implements BaseColumns {
 
         public static final String TABLE_NAME = "Mission";
         public static final String COLUMN_missionId = "missionId";
-        public static final String COLUMN_userId = "userId";
         public static final String COLUMN_databaseId = "databaseId";
         public static final String COLUMN_missionCode = "missionCode";
-        public static final String COLUMN_accountId= "accountId";
+        public static final String COLUMN_UserId = "UserId";
+        public static final String COLUMN_statusAdmin= "statusAdmin";
         public static final String COLUMN_missionClientId = "missionClientId";
         public static final String COLUMN_status = "status";
         public static final String COLUMN_date = "date";
-        public static final String COLUMN_endDate = "endDate";
+        public static final String COLUMN_createDate = "createDate";
+        public static final String COLUMN_updateDate = "updateDate";
+        public static final String COLUMN_statusDate = "statusDate";
         public static final String COLUMN_deleted = "deleted";
         public static final String COLUMN_description = "description";
-        public static final String COLUMN_missionDetailCount = "missionDetailCount";
         public static final String COLUMN_rowVersion = "rowVersion";
+        public static final String COLUMN_publish = "publish";
 
         public static final String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS \"Mission\" ( " +
                 " `_id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                 " `missionId` NUMERIC," +
-                " `userId` NUMERIC," +
                 " `databaseId` NUMERIC," +
                 " `missionCode` NUMERIC," +
-                " `accountId` NUMERIC," +
-                " `missionClientId` NUMERIC," +
+                " `UserId` NUMERIC," +
+                " `statusAdmin` NUMERIC," +
                 " `status` NUMERIC," +
-                " `missionDetailCount` NUMERIC," +
+                " `missionClientId` NUMERIC," +
                 " `date` TEXT," +
-                " `endDate` TEXT," +
+                " `createDate` TEXT," +
+                " `updateDate` TEXT," +
+                " `statusDate` TEXT," +
                 " `deleted` TEXT," +
                 " `description` TEXT," +
+                " `publish` NUMERIC," +
                 " `rowVersion` NUMERIC )";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }

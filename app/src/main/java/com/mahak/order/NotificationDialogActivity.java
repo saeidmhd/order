@@ -2,9 +2,11 @@ package com.mahak.order;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.service.quicksettings.Tile;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,7 +18,7 @@ import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.RadaraDb;
 
 
-public class NotificationDialogActivity extends Activity {
+public class NotificationDialogActivity extends BaseActivity {
 
     private TextView tvTitle, tvMessage;
     private Button btnCancel, btnOK;
@@ -24,24 +26,29 @@ public class NotificationDialogActivity extends Activity {
     private Intent intent;
     private long NotifiId;
     private RadaraDb db;
+    String title,message;
+    Context mContext;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTheme(android.R.style.Theme_Holo_Light_Dialog);
         setContentView(R.layout.activity_dialog_notification);
+        mContext = this;
 
         initialise();
 
         bundle = this.getIntent().getExtras();
         if (bundle != null) {
             NotifiId = bundle.getLong("Id");
+            title = bundle.getString("title");
+            message = bundle.getString("message");
         }
         /////////////////////////////////////////////////////////
         ////////////////////////////////////////////////
-        setTitle(bundle.getString("title"));
-        tvMessage.setText(bundle.getString("message"));
+        tvMessage.setText(message);
+        tvTitle.setText(title);
         if (bundle.getString("url") == null)
             btnOK.setVisibility(View.GONE);
         else

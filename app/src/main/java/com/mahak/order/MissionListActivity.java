@@ -15,12 +15,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.mahak.order.adapter.MissionDetailAdapter;
+import com.mahak.order.common.ServiceTools;
 import com.mahak.order.mission.Mission;
 import com.mahak.order.mission.MissionDetail;
 import com.mahak.order.storage.DbAdapter;
@@ -99,25 +101,20 @@ public class MissionListActivity extends BaseActivity implements Observer {
         missionDetailList.setLayoutManager(mLayoutManager);
         missionDetailList.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
 
-        missionIndex = missions.get(0).getMissionId();
-
-        tvPageTitle.setText("شناسه ماموریت : " + missions.get(0).getMissionId());
-        description.setText(missions.get(0).getDescription());
-
         Extras = getIntent().getExtras();
-
         if (Extras != null) {
             missionIndex = Extras.getInt("missionIndex");
-            tvPageTitle.setText("شناسه ماموریت : " + missionIndex);
             refreshList();
         }
 
         llPageTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PopupMenu popup = new PopupMenu(mContext,show_mission);
-                for (Mission mission : missions) {
-                    popup.getMenu().add(mission.getMissionId(),mission.getMissionId(),mission.getMissionId(), "شناسه ماموریت : " + mission.getMissionId());
+                Context wrapper = new ContextThemeWrapper(mContext, R.style.MyPopupMenu);
+                PopupMenu popup = new PopupMenu(wrapper,show_mission);
+                for (int i = 0; i < missions.size(); i++) {
+                    Mission mission = missions.get(i);
+                    popup.getMenu().add(i,mission.getMissionId(),mission.getMissionId(),    "شناسه ماموریت :" + mission.getMissionId() + "  |  "  + ServiceTools.getPersianDate(mission.getDate()));
                 }
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -149,6 +146,7 @@ public class MissionListActivity extends BaseActivity implements Observer {
         missionDetailList.setAdapter(missionDetailAdapter);
         setMissionStatus();
         calcAndSetCheckListStat();
+        tvPageTitle.setText("شناسه ماموریت :" + mission.getMissionId() + "  |  "  + ServiceTools.getPersianDate(mission.getDate()));
     }
 
     /**
@@ -184,7 +182,7 @@ public class MissionListActivity extends BaseActivity implements Observer {
         db.open();
         missions = db.getAllMission();
         mission = missions.get(0);
-        missionDetails.addAll(db.getAllMissionDetailWithMissionId(missions.get(0).getMissionId()));
+        missionDetails.addAll(db.getAllMissionDetailWithMissionId(mission.getMissionId()));
         missionDetailAdapter = new MissionDetailAdapter(missionDetails, mContext);
         missionDetailList.setAdapter(missionDetailAdapter);
     }

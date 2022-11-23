@@ -4,8 +4,6 @@ package com.mahak.order.mission;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 public class Mission {
 
     @SerializedName("MissionId")
@@ -14,31 +12,31 @@ public class Mission {
 
     @SerializedName("DatabaseId")
     @Expose(serialize = false)
-    private Long databaseId;
+    private Integer databaseId;
 
     @SerializedName("MissionCode")
     @Expose(serialize = false)
-    private Long missionCode;
+    private Integer missionCode;
 
-    @SerializedName("VisitorId")
+    @SerializedName("AccountId")
     @Expose(serialize = false)
-    private Long visitorId;
+    private Integer accountId;
 
     @SerializedName("MissionClientId")
     @Expose(serialize = false)
-    private Long missionClientId;
+    private Integer missionClientId;
 
-    @SerializedName("Status")
-    @Expose
-    private int status;
+    @SerializedName("StatusAdmin")
+    @Expose(serialize = false)
+    private Integer statusAdmin;
 
     @SerializedName("Date")
     @Expose
     private String date;
 
-    @SerializedName("EndDate")
+    @SerializedName("StatusDate")
     @Expose
-    private String endDate;
+    private String statusDate;
 
     @SerializedName("Deleted")
     @Expose(serialize = false)
@@ -50,17 +48,18 @@ public class Mission {
 
     @SerializedName("RowVersion")
     @Expose(serialize = false)
-    private Long rowVersion;
+    private Integer rowVersion;
 
-    @SerializedName("VisitorClientId")
+    @SerializedName("CreateDate")
     @Expose(serialize = false)
-    private Long visitorClientId;
+    private String createDate;
 
-    @SerializedName("VisitorCode")
+    @SerializedName("UpdateDate")
     @Expose(serialize = false)
-    private Long visitorCode;
+    private String updateDate;
 
-    private List<MissionDetail> missionDetails;
+    private Integer status;
+    private Integer publish;
 
     public Integer getMissionId() {
         return missionId;
@@ -70,44 +69,44 @@ public class Mission {
         this.missionId = missionId;
     }
 
-    public Long getDatabaseId() {
+    public Integer getDatabaseId() {
         return databaseId;
     }
 
-    public void setDatabaseId(Long databaseId) {
+    public void setDatabaseId(Integer databaseId) {
         this.databaseId = databaseId;
     }
 
-    public Long getMissionCode() {
+    public Integer getMissionCode() {
         return missionCode;
     }
 
-    public void setMissionCode(Long missionCode) {
+    public void setMissionCode(Integer missionCode) {
         this.missionCode = missionCode;
     }
 
-    public Long getVisitorId() {
-        return visitorId;
+    public Integer getAccountId() {
+        return accountId;
     }
 
-    public void setVisitorId(Long visitorId) {
-        this.visitorId = visitorId;
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
     }
 
-    public Long getMissionClientId() {
+    public Integer getMissionClientId() {
         return missionClientId;
     }
 
-    public void setMissionClientId(Long missionClientId) {
+    public void setMissionClientId(Integer missionClientId) {
         this.missionClientId = missionClientId;
     }
 
-    public int getStatus() {
-        return status;
+    public Integer getStatusAdmin() {
+        return statusAdmin;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setStatusAdmin(Integer statusAdmin) {
+        this.statusAdmin = statusAdmin;
     }
 
     public String getDate() {
@@ -118,12 +117,12 @@ public class Mission {
         this.date = date;
     }
 
-    public String getEndDate() {
-        return endDate;
+    public String getStatusDate() {
+        return statusDate;
     }
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
+    public void setStatusDate(String statusDate) {
+        this.statusDate = statusDate;
     }
 
     public int isDeleted() {
@@ -142,35 +141,43 @@ public class Mission {
         this.description = description;
     }
 
-    public Long getRowVersion() {
+    public Integer getRowVersion() {
         return rowVersion;
     }
 
-    public void setRowVersion(Long rowVersion) {
+    public void setRowVersion(Integer rowVersion) {
         this.rowVersion = rowVersion;
     }
 
-    public Long getVisitorClientId() {
-        return visitorClientId;
+    public String getCreateDate() {
+        return createDate;
     }
 
-    public void setVisitorClientId(Long visitorClientId) {
-        this.visitorClientId = visitorClientId;
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
     }
 
-    public Long getVisitorCode() {
-        return visitorCode;
+    public String getUpdateDate() {
+        return updateDate;
     }
 
-    public void setVisitorCode(Long visitorCode) {
-        this.visitorCode = visitorCode;
+    public void setUpdateDate(String updateDate) {
+        this.updateDate = updateDate;
     }
 
-    public List<MissionDetail> getMissionDetails() {
-        return missionDetails;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setMissionDetails(List<MissionDetail> missionDetails) {
-        this.missionDetails = missionDetails;
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getPublish() {
+        return publish;
+    }
+
+    public void setPublish(Integer publish) {
+        this.publish = publish;
     }
 }

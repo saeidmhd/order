@@ -1,9 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/parentPanel"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="8dip"
-    android:layout_marginStart="8dip"
     android:orientation="vertical">
 
     <LinearLayout
@@ -11,58 +9,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
-
-        <View
-            android:id="@+id/titleDividerTop"
-            android:layout_width="match_parent"
-            android:layout_height="2dip"
-            android:background="@android:color/holo_blue_light"
-            android:visibility="gone" />
+        android:visibility="visible">
 
         <LinearLayout
+            android:background="@color/gray"
             android:id="@+id/title_template"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dip"
-            android:layout_marginStart="16dip"
-            android:gravity="center_vertical|start"
-            android:minHeight="64dip"
-            android:orientation="horizontal">
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:minHeight="64dip">
 
-            <ImageView
-                android:id="@+id/icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="8dip"
-                android:src="@null" />
-
-            <com.android.internal.widget.DialogTitle
+            <com.mahak.order.widget.FontTextView
                 android:id="@+id/alertTitle"
-                style="?android:attr/windowTitleStyle"
+                android:textSize="16sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:textAlignment="viewStart"
-                android:gravity="start" />
+                android:text="@string/app_name"
+                android:gravity="center"
+                android:layout_gravity="center"/>
         </LinearLayout>
 
-        <View
-            android:id="@+id/titleDivider"
-            android:layout_width="match_parent"
-            android:layout_height="2dip"
-            android:background="@android:color/holo_blue_light"
-            android:visibility="gone" />
-        <!-- If the client uses a customTitle, it will be added here. -->
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/contentPanel"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:minHeight="64dp"
+        android:layout_gravity="right"
         android:orientation="vertical">
 
         <ScrollView
@@ -74,15 +52,16 @@
 
             <com.mahak.order.widget.FontTextView
                 android:id="@+id/message"
-                style="?android:attr/textAppearanceMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="8dip"
                 android:paddingEnd="8dip"
                 android:paddingStart="8dip"
+                android:text = "شسیشسی"
                 android:paddingTop="8dip"
                 android:textColor="@android:color/darker_gray"
-                android:gravity="right" />
+                android:gravity="right"
+                android:layout_gravity="right"/>
         </ScrollView>
     </LinearLayout>
 
@@ -111,7 +90,6 @@
         android:showDividers="beginning">
 
         <LinearLayout
-            style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layoutDirection="locale"
@@ -120,7 +98,6 @@
 
             <com.mahak.order.widget.FontButtonView
                 android:id="@+id/btnCancel"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -128,17 +105,18 @@
                 android:maxLines="2"
                 android:minHeight="48dip"
                 android:text="@string/str_ok"
+                style="@style/forms_btn_default"
                 android:textSize="14sp" />
 
             <com.mahak.order.widget.FontButtonView
                 android:id="@+id/btnOK"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_weight="1"
                 android:maxLines="2"
                 android:minHeight="48dip"
+                style="@style/forms_btn_default"
                 android:text="@string/str_moreThan"
                 android:textSize="14sp" />
         </LinearLayout>

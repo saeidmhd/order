@@ -191,10 +191,12 @@
                         android:paddingTop="@dimen/NormalSize">
 
                         <LinearLayout
+                            android:id="@+id/ll_branch"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
+                            android:visibility="gone"
                             android:orientation="vertical">
 
                             <com.mahak.order.widget.FontTextView

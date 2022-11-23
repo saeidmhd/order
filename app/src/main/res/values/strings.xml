@@ -940,6 +940,13 @@
     <string name="new_3_475_9">افزوده شدن لاگ خطاها در دیتابیس</string>
     <string name="new_3_475_10">رفع بعضی از موارد رابط کاربری</string>
 
+
+    <string name="new_3_480">نسخه ۳.۴۸۰</string>
+    <string name="new_3_480_1">تغییرات در دریافت تحویلی ها از سرور و ویرایش آنها</string>
+    <string name="new_3_480_2">تغییرات مربوط به افزوده شدن اطلاعات بیشتر جزییات ماموریت</string>
+    <string name="new_3_480_3">نمایش ماموریت های روز قبل در صورتی که آیتمی تعیین تکلیف نشده داشته باشد</string>
+    <string name="new_3_480_4">تغییرات در نمایش تاریخ ماموریت </string>
+
     <string name="PersonClientId">PersonClientId</string>
     <string name="array">array</string>
 

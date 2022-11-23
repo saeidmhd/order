@@ -1940,15 +1940,33 @@ public class ServiceTools {
         PersianDate persian = DateConverter.civilToPersian(cv);
         return persian.getYear() + "/" + persian.getMonth() + "/" + persian.getDayOfMonth();
     }
+    public static String getPersianDate(String t_date) {
+        Calendar calendar = Calendar.getInstance();
+        String pattern = "yyyy-MM-dd'T'HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
+        try {
+            java.util.Date date = simpleDateFormat.parse(t_date);
+            if (date != null) {
+                calendar.setTime(date);
+            }
+            CivilDate cv = new CivilDate();
+            cv.setCalendar(calendar);
+            PersianDate persian = DateConverter.civilToPersian(cv);
+            return persian.getYear() + "/" + persian.getMonth() + "/" + persian.getDayOfMonth();
+        } catch (ParseException e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            e.printStackTrace();
+        }
+        return "تاریخ نامشخص";
+    }
 
     public static String getFormattedDateAndTime(long milisecond) {
-
         Date date = new Date();
         date.setTime(milisecond);
         String pattern = "yyyy-MM-dd'T'HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.US);
         return simpleDateFormat.format(date);
-
     }
 
     public static String getFormattedDate(long milisecond) {

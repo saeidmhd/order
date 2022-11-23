@@ -2,7 +2,6 @@ package com.mahak.order.service;
 
 import android.content.Context;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.mahak.order.BaseActivity;
@@ -37,7 +36,6 @@ import com.mahak.order.common.TransactionsLog;
 import com.mahak.order.common.Visitor;
 import com.mahak.order.common.VisitorPeople;
 import com.mahak.order.common.VisitorProduct;
-import com.mahak.order.common.request.SetAllDataResult.OrderDetails.OrderDetails;
 import com.mahak.order.mission.Mission;
 import com.mahak.order.mission.MissionDetail;
 import com.mahak.order.storage.DbAdapter;
@@ -45,6 +43,7 @@ import com.mahak.order.storage.RadaraDb;
 import com.mahak.order.tracking.visitorZone.Datum;
 import com.mahak.order.tracking.visitorZone.ZoneLocation;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -201,15 +200,49 @@ public class DataService {
     }
     public static double InsertMissionDetails(DbAdapter db, List<MissionDetail> data, Context mContext) {
         long startTime = System.nanoTime();
-
         for (int i = 0; i < data.size(); i++) {
             MissionDetail missionDetail = data.get(i);
             db.AddMissionDetail(missionDetail);
         }
-
+        ArrayList<Mission> missions = new ArrayList<>();
+        ArrayList<MissionDetail> missionDetails = new ArrayList<>();
+        missions = db.getAllMission2();
+        for (Mission mission : missions){
+            missionDetails = db.getAllMissionDetailWithMissionId(mission.getMissionId());
+            setMissionStatus(missionDetails,mission,db);
+        }
         ServiceTools.setSettingPreferences(db, mContext);
         long endTime = System.nanoTime();
         return (double) (TimeUnit.NANOSECONDS.toMillis((endTime - startTime))) / 1000;
+    }
+
+    public static void setMissionStatus(ArrayList<MissionDetail> missionDetails, Mission mission, DbAdapter db) {
+        int done_count = 0;
+        int non_started = 0;
+        for (MissionDetail missionDetail : missionDetails){
+            switch (missionDetail.getStatus()){
+                case 1:
+                    non_started++;
+                    break;
+                case 3:
+                case 4:
+                    done_count++;
+                    break;
+            }
+        }
+        if(missionDetails.size() == done_count){
+            mission.setStatusDate(ServiceTools.getFormattedDateAndTime(new Date().getTime()));
+            mission.setStatus(3);
+        }
+        else if(missionDetails.size() == non_started){
+            mission.setStatusDate(null);
+            mission.setStatus(1);
+        }
+        else{
+            mission.setStatusDate(null);
+            mission.setStatus(2);
+        }
+        db.AddMission(mission);
     }
 
     public static double InsertCheckList(DbAdapter db, List<CheckList> data) {

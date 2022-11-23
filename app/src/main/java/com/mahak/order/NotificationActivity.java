@@ -1,6 +1,7 @@
 package com.mahak.order;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,11 +33,13 @@ public class NotificationActivity extends BaseActivity {
     private ArrayList<Notification> notifications;
     private RadaraDb db;
     private RecyclerView listTransactions;
+    Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
+        mContext = this;
 
         db = new RadaraDb(this);
 

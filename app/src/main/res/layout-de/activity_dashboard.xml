@@ -85,7 +85,7 @@
 
             <RelativeLayout
                 android:id="@+id/row"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <LinearLayout
@@ -105,13 +105,15 @@
 
                 <com.mahak.order.widget.FontTextView
                     android:id="@+id/missionTitle"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="36dp"
                     android:layout_toLeftOf="@+id/show_mission"
                     android:gravity="right|center"
+                    android:padding="@dimen/SmallSize"
                     android:text="شناسه ماموریت : ماموریتی تعیین نشده"
                     android:textColor="@color/txt_color"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
+
             </RelativeLayout>
 
 
@@ -602,7 +604,7 @@
                         android:layout_weight="1"
                         android:gravity="center|right"
                         android:text="@string/str_sum_of_orders"
-                        android:textSize="11sp" />
+                        android:textSize="10sp" />
                 </LinearLayout>
 
                 <LinearLayout

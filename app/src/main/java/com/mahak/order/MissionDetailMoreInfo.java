@@ -118,18 +118,22 @@ public class MissionDetailMoreInfo extends BaseActivity {
      */
     private void FillView() {
         db.open();
+        double balance = 0;
         missionDetail = db.getMissionDetail(missionDetailId);
         Customer customer = db.getCustomerWithPersonId(missionDetail.getPersonId());
         tvName.setText(customer.getName());
         tvMarketName.setText(customer.getOrganization());
         tvAddress.setText(customer.getAddress());
-        tvRemained.setText(ServiceTools.formatPrice(customer.getBalance()));
-        if(customer.getBalance() > 0)
+        balance = customer.getBalance();
+        if(balance > 0)
             tvStatus.setText("بستانکار");
-        else if (customer.getBalance() < 0)
+        else if (balance < 0){
             tvStatus.setText("بدهکار");
+            balance *= -1;
+        }
         else
             tvStatus.setText("بی حساب");
+        tvRemained.setText(ServiceTools.formatPrice(balance));
 
         try {
             SupportMapFragment mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));

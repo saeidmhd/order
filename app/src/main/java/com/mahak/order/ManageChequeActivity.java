@@ -72,6 +72,7 @@ public class ManageChequeActivity extends BaseActivity {
     private AutoCompleteTextView acBank;
     private EditText txtNumber, txtCashAmount, txtBranch, txtDescription;
     private Button btnDatePicker, btnSave, btnDelete;
+    private LinearLayout ll_branch;
     private DbAdapter db;
     private Context mContext;
     private Bank bank;
@@ -113,6 +114,12 @@ public class ManageChequeActivity extends BaseActivity {
                         spnChequeType.setSelection(0);
                     else if (Type == ProjectInfo.CASHRECEIPT_TYPE)
                         spnChequeType.setSelection(1);
+
+                    if (Type == ProjectInfo.CASHRECEIPT_TYPE) {
+                        ll_branch.setVisibility(View.GONE);
+                    } else if (Type == ProjectInfo.CHEQUE_TYPE) {
+                        ll_branch.setVisibility(View.VISIBLE);
+                    }
                 }
                 Issaved = false;
             }
@@ -413,11 +420,9 @@ public class ManageChequeActivity extends BaseActivity {
                         bank = arrayBank.get(0);
 
                     if (Type == ProjectInfo.CASHRECEIPT_TYPE) {
-                        txtBranch.setVisibility(View.INVISIBLE);
-                        tvBranch.setVisibility(View.INVISIBLE);
+                        ll_branch.setVisibility(View.GONE);
                     } else if (Type == ProjectInfo.CHEQUE_TYPE) {
-                        txtBranch.setVisibility(View.VISIBLE);
-                        tvBranch.setVisibility(View.VISIBLE);
+                        ll_branch.setVisibility(View.VISIBLE);
                     }
                 }
                 ClickSpinnerChequeType++;
@@ -461,6 +466,7 @@ public class ManageChequeActivity extends BaseActivity {
         txtCashAmount = (EditText) findViewById(R.id.tvAmount);
         txtNumber = (EditText) findViewById(R.id.txtNumber);
         txtBranch = (EditText) findViewById(R.id.txtBranch);
+        ll_branch = (LinearLayout) findViewById(R.id.ll_branch);
         txtDescription = (EditText) findViewById(R.id.txtDescription);
         spnBank = (Spinner) findViewById(R.id.spnBank);
         acBank = (AutoCompleteTextView) findViewById(R.id.acBank);
@@ -479,11 +485,9 @@ public class ManageChequeActivity extends BaseActivity {
         ClickSpinnerChequeType = 0;
 
         if (Type == ProjectInfo.CASHRECEIPT_TYPE) {
-            txtBranch.setVisibility(View.INVISIBLE);
-            tvBranch.setVisibility(View.INVISIBLE);
+            ll_branch.setVisibility(View.GONE);
         } else if (Type == ProjectInfo.CHEQUE_TYPE) {
-            txtBranch.setVisibility(View.VISIBLE);
-            tvBranch.setVisibility(View.VISIBLE);
+            ll_branch.setVisibility(View.VISIBLE);
         }
 
         //setBankName();
@@ -523,12 +527,10 @@ public class ManageChequeActivity extends BaseActivity {
         //Check Type for spnChequeType________________________________________________
         if (Type == ProjectInfo.CHEQUE_TYPE) {
             spnChequeType.setSelection(0);
-            txtBranch.setVisibility(View.VISIBLE);
-            tvBranch.setVisibility(View.VISIBLE);
+            ll_branch.setVisibility(View.VISIBLE);
         } else if (Type == ProjectInfo.CASHRECEIPT_TYPE) {
             spnChequeType.setSelection(1);
-            txtBranch.setVisibility(View.INVISIBLE);
-            tvBranch.setVisibility(View.INVISIBLE);
+            ll_branch.setVisibility(View.GONE);
         }
     }
 
