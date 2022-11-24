@@ -85,7 +85,7 @@
         <entry key="app/src/main/res/layout/activity_manage_receipt3.xml" value="0.3170289855072464" />
         <entry key="app/src/main/res/layout/activity_mission_list.xml" value="0.3594890510948905" />
         <entry key="app/src/main/res/layout/activity_non_register.xml" value="0.24711415134672937" />
-        <entry key="app/src/main/res/layout/activity_notification.xml" value="0.3395784543325527" />
+        <entry key="app/src/main/res/layout/activity_notification.xml" value="0.9" />
         <entry key="app/src/main/res/layout/activity_order_detail.xml" value="0.27704147071398033" />
         <entry key="app/src/main/res/layout/activity_orders_list.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_print.xml" value="0.5" />
