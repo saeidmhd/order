@@ -5389,7 +5389,7 @@ public class DbAdapter {
         return personCategories;
     }
 
-    public ArrayList<Category> getAllRootCategories() {
+    public ArrayList<Category> getAllRootCategories2() {
         Category category;
         Cursor cursor;
         ArrayList<Category> categories = new ArrayList<>();
@@ -5400,6 +5400,28 @@ public class DbAdapter {
                     " LEFT  join ( SELECT DISTINCT userid , productcode , CategoryCode from ProductCategory ) as pc on  products.ProductCode = pc.ProductCode \n" +
                     " where Products . UserId = ?  and visitorproduct.deleted = 0 \n" +
                     " GROUP by Products.productId  order by Products.ProductCode Asc LIMIT 0,100)", new String[]{String.valueOf(getPrefUserId()), String.valueOf(getPrefUserId())});
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    category = categoryFromCursor(cursor);
+                    categories.add(category);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+        } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().setCustomKey("user_tell_databaseid", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell() + "_" + BaseActivity.getPrefDatabaseId());
+            FirebaseCrashlytics.getInstance().recordException(e);
+            Log.e("ErrorReasonByTypet", e.getMessage());
+        }
+        return categories;
+    }
+    public ArrayList<Category> getAllRootCategories() {
+        Category category;
+        Cursor cursor;
+        ArrayList<Category> categories = new ArrayList<>();
+        try {
+            cursor = mDb.rawQuery("   select * from Category where  userId = ? and  CategoryCode in (SELECT CategoryCode from ProductCategory where UserId = ? )", new String[]{String.valueOf(getPrefUserId()) , String.valueOf(getPrefUserId())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
