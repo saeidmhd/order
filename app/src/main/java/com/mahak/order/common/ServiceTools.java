@@ -34,6 +34,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
+import androidx.collection.ArraySet;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -48,6 +49,7 @@ import com.mahak.order.BuildConfig;
 import com.mahak.order.R;
 import com.mahak.order.autoSync.SyncAlarmReceiver;
 import com.mahak.order.libs.BadgeDrawable;
+import com.mahak.order.mission.MissionDetail;
 import com.mahak.order.storage.DbAdapter;
 import com.mahak.order.storage.DbSchema;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -80,13 +82,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.mahak.order.BaseActivity.getPrefUsername;
 import static com.mahak.order.BaseActivity.mContext;
+import static com.mahak.order.ManageReceiptActivity.arrayCheque;
 import static com.mahak.order.common.ProjectInfo.DIRECTORY_ORDER_SIGNS;
 
 public class ServiceTools {
@@ -1610,38 +1615,53 @@ public class ServiceTools {
     }
 
     public static boolean Backup(Context mActivity) {
-
-        String format = "HH_mm_ss";
-        SimpleDateFormat simpleDate = new SimpleDateFormat(format, Locale.US);
-        String strTime = simpleDate.format(new Date().getTime());
-        String date = getBackUpDate(new Date().getTime());
-        File sd = Environment.getExternalStorageDirectory();
-        File data = Environment.getDataDirectory();
-        FileChannel source = null;
-        FileChannel destination = null;
-        String backupDBPath = ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_BACKUPS;
-        File backupDB = new File(sd, backupDBPath);
-        if (!backupDB.exists())
-            backupDB.mkdirs();
-        String currentDBPath = "/data/" + "com.mahak.order" + "/databases/" + DbSchema.MAHAK_ORDER_DB;
-        String orderDBPath = ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_BACKUPS + "/" + "MahakOrder_" + BuildConfig.VERSION_CODE + "_" + getPrefUsername() + "_" + date + ".db";
-        File currentDB = new File(data, currentDBPath);
-        File backup = new File(sd, orderDBPath);
-        try {
-            source = new FileInputStream(currentDB).getChannel();
-            destination = new FileOutputStream(backup).getChannel();
-            destination.transferFrom(source, 0, source.size());
-            source.close();
-            destination.close();
-            return true;
-        } catch (IOException e) {
-            FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
-            FirebaseCrashlytics.getInstance().recordException(e);
-            e.printStackTrace();
-            Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
-            return false;
+        if(checkItemNotSend(mActivity)){
+            String format = "HH_mm_ss";
+            SimpleDateFormat simpleDate = new SimpleDateFormat(format, Locale.US);
+            String strTime = simpleDate.format(new Date().getTime());
+            String date = getBackUpDate(new Date().getTime());
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+            FileChannel source = null;
+            FileChannel destination = null;
+            String backupDBPath = ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_BACKUPS;
+            File backupDB = new File(sd, backupDBPath);
+            if (!backupDB.exists())
+                backupDB.mkdirs();
+            String currentDBPath = "/data/" + "com.mahak.order" + "/databases/" + DbSchema.MAHAK_ORDER_DB;
+            String orderDBPath = ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_BACKUPS + "/" + "MahakOrder_" + BuildConfig.VERSION_CODE + "_" + getPrefUsername() + "_" + date + ".db";
+            File currentDB = new File(data, currentDBPath);
+            File backup = new File(sd, orderDBPath);
+            try {
+                source = new FileInputStream(currentDB).getChannel();
+                destination = new FileOutputStream(backup).getChannel();
+                destination.transferFrom(source, 0, source.size());
+                source.close();
+                destination.close();
+                return true;
+            } catch (IOException e) {
+                FirebaseCrashlytics.getInstance().setCustomKey("user_tell", BaseActivity.getPrefname() + "_" + BaseActivity.getPrefTell());
+                FirebaseCrashlytics.getInstance().recordException(e);
+                e.printStackTrace();
+                Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
+        return false;
     }
+
+    private static boolean checkItemNotSend(Context mActivity) {
+        DbAdapter db = new DbAdapter(mActivity);
+        db.open();
+        ArrayList<Customer> newCustomers = new ArrayList<>(db.getAllNewCustomer());
+        ArrayList<Order> arrayInvoice = db.getAllOrderForSend();
+        ArrayList<Receipt> arrayReceipt = db.getAllReceiptNotPublish(BaseActivity.getPrefUserId());
+        ArrayList<NonRegister> arrayNonRegister = db.getAllNonRegisterNotPublish(BaseActivity.getPrefUserId());
+        ArrayList<PayableTransfer> payableTransfers = db.getAllPayableNotPublish(BaseActivity.getPrefUserId());
+        ArrayList<MissionDetail> missionDetails = db.getAllMissionDetail();
+        return newCustomers.size() <= 0 && arrayInvoice.size() <= 0 && arrayReceipt.size() <= 0 && arrayNonRegister.size() <= 0 && payableTransfers.size() <= 0 && missionDetails.size() <= 0;
+    }
+
     public static boolean RadaraBackup(Context mActivity) {
 
         String format = "HH_mm_ss";

@@ -234,7 +234,7 @@ public class AutoSyncService extends IntentService {
         @Override
         protected Integer doInBackground(String... arg0) {
             db.open();
-            arrayInvoice = db.getAllOrderFamily(BaseActivity.getPrefUserId());
+            arrayInvoice = db.getAllOrderForSend();
             Set<OrderDetail> set = new LinkedHashSet<>();
             for (int i = 0; i < arrayInvoice.size(); i++) {
                 arrayInvoice.get(i).setOrderId(0);

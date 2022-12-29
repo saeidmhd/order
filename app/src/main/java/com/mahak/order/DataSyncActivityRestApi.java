@@ -225,6 +225,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
     SaveAsyncTask saveAsyncTask;
     SendSignInfoAsyncTask sendSignInfoAsyncTask;
     SendSignImageAsyncTask sendSignImageAsyncTask;
+    private int invoiceCount;
+    private int orderCount;
+    private int returnCount;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -689,12 +693,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     Customers.addAll(newCustomers);
                     break;
                 case 2:
-                    arrayInvoice = db.getAllOrderFamily(BaseActivity.getPrefUserId());
-                    break;
-                case 3:
+                    arrayInvoice = db.getAllOrderForSend();
                     Set<OrderDetail> set = new LinkedHashSet<>();
                     for (int i = 0; i < arrayInvoice.size(); i++) {
-                        arrayInvoice.get(i).setOrderId(0);
                         orderDetails = db.getAllOrderDetailForSend(arrayInvoice.get(i).getId());
                         for (OrderDetail orderDetail : orderDetails) {
                             orderDetailProperties = db.getAllOrderDetailProperty(orderDetail.getOrderId(), orderDetail.getProductId());
@@ -711,28 +712,25 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     }
                     arrayInvoiceDetail = new ArrayList<>(set);
                     break;
-                case 4:
+                case 3:
                     arrayReceipt = db.getAllReceiptNotPublish(BaseActivity.getPrefUserId());
                     break;
-                case 5:
+                case 4:
                     arrayCheque = new ArrayList<>();
                     for (int i = 0; i < arrayReceipt.size(); i++) {
                         arrayCheque.addAll(db.getAllCheque(arrayReceipt.get(i).getReceiptClientId()));
                     }
-                case 6:
+                case 5:
                     arrayNonRegister = db.getAllNonRegisterNotPublish(BaseActivity.getPrefUserId());
                     break;
-                case 7:
+                case 6:
                     payableTransfers = db.getAllPayableNotPublish(BaseActivity.getPrefUserId());
                     break;
-                case 8:
-                    checkLists = db.getAllDoneChecklistNotPublish();
-                    break;
-                case 9:
-                    visitorLocation = radaraDb.getAllGpsPointsForSending();
-                    break;
-                case 10:
+                case 7:
                     missionDetails.addAll(db.getAllMissionDetail());
+                    break;
+                case 8:
+                    visitorLocation = radaraDb.getAllGpsPointsForSending();
                     break;
             }
             return 0;
@@ -740,6 +738,8 @@ public class DataSyncActivityRestApi extends BaseActivity {
 
         @Override
         protected void onPostExecute(Integer result) {
+
+
             final String[] mMsg = {""};
             ApiInterface apiService = ApiClient.orderRetrofitClient().create(ApiInterface.class);
             SetAllDataBody setAllDataBody = new SetAllDataBody();
@@ -750,29 +750,24 @@ public class DataSyncActivityRestApi extends BaseActivity {
                     break;
                 case 2:
                     setAllDataBody.setOrders(arrayInvoice);
-                    break;
-                case 3:
                     setAllDataBody.setOrderDetails(arrayInvoiceDetail);
                     break;
-                case 4:
+                case 3:
                     setAllDataBody.setReceipts(arrayReceipt);
                     break;
-                case 5:
+                case 4:
                     setAllDataBody.setCheques(arrayCheque);
-                case 6:
+                case 5:
                     setAllDataBody.setNonRegisters(arrayNonRegister);
                     break;
-                case 7:
+                case 6:
                     setAllDataBody.setPayableTransfers(payableTransfers);
                     break;
-                case 8:
-                    setAllDataBody.setChecklists(checkLists);
-                    break;
-                case 9:
-                    setAllDataBody.setVisitorLocations(visitorLocation);
-                    break;
-                case 10:
+                case 7:
                     setAllDataBody.setMissionDetails(missionDetails);
+                    break;
+                case 8:
+                    setAllDataBody.setVisitorLocations(visitorLocation);
                     break;
 
             }
@@ -795,29 +790,30 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                 break;
                             case 2:
                                 if (arrayInvoice.size() > 0) {
-                                    int invoiceCount = 0;
-                                    int orderCount = 0;
-                                    int returnCount = 0;
                                     for (int i = 0; i < arrayInvoice.size(); i++) {
-                                        arrayInvoice.get(i).setOrderId(response.body().getData().getObjects().getOrders().getResults().get(i).getEntityID());
-                                        if(arrayInvoice.get(i).getOrderCode() != 0)
-                                            arrayInvoice.get(i).setRowVersion(response.body().getData().getObjects().getOrders().getResults().get(i).getRowVersion());
-                                        arrayInvoice.get(i).setPublish(ProjectInfo.PUBLISH);
-                                        db.UpdateOrder(arrayInvoice.get(i));
-                                        if (arrayInvoice.get(i).getOrderType() == ProjectInfo.TYPE_INVOCIE)
-                                            invoiceCount++;
-                                        else if (arrayInvoice.get(i).getOrderType() == ProjectInfo.TYPE_ORDER)
-                                            orderCount++;
-                                        else if (arrayInvoice.get(i).getOrderType() == ProjectInfo.TYPE_RETURN_OF_SALE)
-                                            returnCount++;
-
-                                        for (int j = 0; j < arrayInvoiceDetail.size(); j++) {
-                                            arrayInvoiceDetail.get(j).setOrderDetailId(response.body().getData().getObjects().getOrderDetails().getResults().get(j).getEntityID());
-                                            if(arrayInvoiceDetail.get(i).getOrderDetailId() != 0)
+                                        if(response.body().getData().getObjects().getOrders().getResults().get(i).isResult()){
+                                            arrayInvoice.get(i).setOrderId(response.body().getData().getObjects().getOrders().getResults().get(i).getEntityID());
+                                            if(arrayInvoice.get(i).getOrderCode() != 0)
                                                 arrayInvoice.get(i).setRowVersion(response.body().getData().getObjects().getOrders().getResults().get(i).getRowVersion());
-                                            db.UpdateOrderDetailSync(arrayInvoiceDetail.get(j));
+                                            arrayInvoice.get(i).setPublish(ProjectInfo.PUBLISH);
+                                            db.UpdateOrder(arrayInvoice.get(i));
+                                            if (arrayInvoice.get(i).getOrderType() == ProjectInfo.TYPE_INVOCIE)
+                                                invoiceCount++;
+                                            else if (arrayInvoice.get(i).getOrderType() == ProjectInfo.TYPE_ORDER)
+                                                orderCount++;
+                                            else if (arrayInvoice.get(i).getOrderType() == ProjectInfo.TYPE_RETURN_OF_SALE)
+                                                returnCount++;
                                         }
                                     }
+                                    for (int i = 0; i < arrayInvoiceDetail.size(); i++) {
+                                        if(response.body().getData().getObjects().getOrderDetails().getResults().get(i).isResult()){
+                                            arrayInvoiceDetail.get(i).setOrderDetailId(response.body().getData().getObjects().getOrderDetails().getResults().get(i).getEntityID());
+                                            if(arrayInvoiceDetail.get(i).getOrderDetailId() != 0)
+                                                arrayInvoiceDetail.get(i).setRowVersion(response.body().getData().getObjects().getOrderDetails().getResults().get(i).getRowVersion());
+                                            db.UpdateOrderDetailSync(arrayInvoiceDetail.get(i));
+                                        }
+                                    }
+
                                     if (invoiceCount > 0)
                                         tvInvoiceList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + invoiceCount);
                                     else
@@ -832,17 +828,13 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                         tvReturnOfSaleList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + returnCount);
                                     else
                                         tvReturnOfSaleList.setText(getString(R.string.str_message_no_need));
-
-                                } else {
-                                    tvOrderList.setText(getString(R.string.str_message_no_need));
+                                }else{
                                     tvInvoiceList.setText(getString(R.string.str_message_no_need));
+                                    tvOrderList.setText(getString(R.string.str_message_no_need));
                                     tvReturnOfSaleList.setText(getString(R.string.str_message_no_need));
                                 }
                                 break;
                             case 3:
-                                // setAllDataBody.setOrderDetails(arrayInvoiceDetail);
-                                break;
-                            case 4:
                                 if (arrayReceipt.size() > 0) {
                                     for (int i = 0; i < arrayReceipt.size(); i++) {
                                         arrayReceipt.get(i).setReceiptId(response.body().getData().getObjects().getReceipts().getResults().get(i).getEntityID());
@@ -858,9 +850,9 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                 } else
                                     tvReceiptList.setText(getString(R.string.str_message_no_need));
                                 break;
-                            case 5:
+                            case 4:
                                 setAllDataBody.setCheques(arrayCheque);
-                            case 6:
+                            case 5:
                                 if (arrayNonRegister.size() > 0) {
                                     for (int i = 0; i < arrayNonRegister.size(); i++) {
                                         arrayNonRegister.get(i).setNotRegisterId(response.body().getData().getObjects().getNotRegisters().getResults().get(i).getEntityID());
@@ -871,7 +863,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                 } else
                                     tvSendNonRegister.setText(getString(R.string.str_message_no_need));
                                 break;
-                            case 7:
+                            case 6:
                                 if (payableTransfers.size() > 0) {
                                     for (int i = 0; i < payableTransfers.size(); i++) {
                                         payableTransfers.get(i).setTransferAccountId(response.body().getData().getObjects().getPayableTransfers().getResults().get(i).getEntityID());
@@ -883,24 +875,13 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                 } else
                                     tvPayableList.setText(getString(R.string.str_message_no_need));
                                 break;
-                            case 8:
-                                /*if (checkLists.size() > 0) {
-                                    for (int i = 0; i < checkLists.size(); i++) {
-                                        checkLists.get(i).setChecklistId(response.body().getData().getObjects().getChecklists().getResults().get(i).getEntityID());
-                                        checkLists.get(i).setPublish(ProjectInfo.PUBLISH);
-                                        db.UpdateCheckList(checkLists.get(i));
-                                    }
-                                    tvSendDoneCheckList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + checkLists.size());
+                            case 7:
+                                if (missionDetails.size() > 0) {
+                                    tvSendDoneCheckList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + missions.size());
                                 } else
-                                    tvSendDoneCheckList.setText(getString(R.string.str_message_no_need));*/
-
-                                /*if (missionDetails.size() > 0) {
-                                    tvSendDoneCheckList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + checkLists.size());
-                                } else
-                                    tvSendDoneCheckList.setText(getString(R.string.str_message_no_need));*/
-
+                                    tvSendDoneCheckList.setText(getString(R.string.str_message_no_need));
                                 break;
-                            case 9:
+                            case 8:
                                 if (visitorLocation.size() > 0) {
                                     for (int i = 0; i < visitorLocation.size(); i++) {
                                         visitorLocation.get(i).setVisitorLocationId(response.body().getData().getObjects().getVisitorLocations().getResults().get(i).getEntityID());
@@ -909,16 +890,10 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                     }
                                 }
                                 break;
-                            case 10:
-                                if (missionDetails.size() > 0) {
-                                    tvSendDoneCheckList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + checkLists.size());
-                                } else
-                                    tvSendDoneCheckList.setText(getString(R.string.str_message_no_need));
-                                break;
 
                         }
 
-                        if(whichSendUpdate < 10 ){
+                        if(whichSendUpdate < 8 ){
                             whichSendUpdate++;
                             new SendAsyncTask(whichSendUpdate).execute();
                         }else{
@@ -947,6 +922,7 @@ public class DataSyncActivityRestApi extends BaseActivity {
             });
         }
     }
+
 
     class ReceiveAsyncTask extends AsyncTask<String, String, Integer> {
         GetAllDataBody getAllDataBody;

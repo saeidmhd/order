@@ -2619,6 +2619,7 @@ public class DbAdapter {
                     orderDetail.setDiscountType(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_DiscountType)));
                     orderDetail.setCostLevel(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_CostLevel)));
                     orderDetail.setPromotionCode(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_PROMOTION_CODE)));
+                    orderDetail.setRowVersion(cursor.getInt(cursor.getColumnIndex(DbSchema.OrderDetailSchema.COLUMN_RowVersion)));
                 }
                 cursor.close();
             }
@@ -6867,12 +6868,12 @@ public class DbAdapter {
         return array;
     }
 
-    public ArrayList<Order> getAllOrderFamily(long userId) {
+    public ArrayList<Order> getAllOrderForSend() {
         Order order;
         Cursor cursor;
         ArrayList<Order> array = new ArrayList<>();
         try {
-            cursor = mDb.query(DbSchema.OrderSchema.TABLE_NAME, null, DbSchema.OrderSchema.COLUMN_USER_ID + " =? AND " + DbSchema.OrderSchema.COLUMN_PUBLISH + " =? AND " + " ( " + DbSchema.OrderSchema.COLUMN_TYPE + " =? or " + DbSchema.OrderSchema.COLUMN_TYPE + " =? or " + DbSchema.OrderSchema.COLUMN_TYPE + " =? " + " ) ", new String[]{String.valueOf(userId), String.valueOf(ProjectInfo.DONT_PUBLISH), String.valueOf(ProjectInfo.TYPE_INVOCIE), String.valueOf(ProjectInfo.TYPE_ORDER), String.valueOf(ProjectInfo.TYPE_RETURN_OF_SALE)}, null, null, null);
+            cursor = mDb.rawQuery("select * from orders where ( type = 201 or type = 202 or type = 203 ) and publish = -1 and userid =? " , new String[]{ String.valueOf(BaseActivity.getPrefUserId())});
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
@@ -9348,29 +9349,6 @@ public class DbAdapter {
         ContentValues initialvalue = new ContentValues();
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderDetailId, orderDetail.getOrderDetailId());
         initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_RowVersion, orderDetail.getRowVersion());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderDetailClientId, orderDetail.getOrderDetailClientId());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderClientId, orderDetail.getOrderClientId());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_OrderId, orderDetail.getOrderId());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_ProductDetailId, orderDetail.getProductDetailId());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_USER_ID, BaseActivity.getPrefUserId());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_ProductId, orderDetail.getProductId());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Price, orderDetail.getPrice());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Count1, orderDetail.getCount1());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_SumCountBaJoz, orderDetail.getSumCountBaJoz());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Count2, orderDetail.getCount2());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_GiftType, orderDetail.getGiftType());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_Description, orderDetail.getDescription());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_TaxPercent, orderDetail.getTaxPercent());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_ChargePercent, orderDetail.getChargePercent());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_DiscountType, orderDetail.getDiscountType());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_DataHash, orderDetail.getDataHash());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_CreateDate, orderDetail.getCreateDate());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_UpdateDate, orderDetail.getUpdateDate());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_CreateSyncId, orderDetail.getCreateSyncId());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_UpdateSyncId, orderDetail.getUpdateSyncId());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_RowVersion, orderDetail.getRowVersion());
-//        initialvalue.put(DbSchema.OrderDetailSchema.COLUMN_CostLevel, orderDetail.getCostLevel());
-
         result = (mDb.update(DbSchema.OrderDetailSchema.TABLE_NAME, initialvalue, DbSchema.OrderDetailSchema.COLUMN_ID + "=?", new String[]{String.valueOf(orderDetail.getId())})) > 0;
         return result;
     }
