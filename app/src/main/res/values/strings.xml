@@ -50,9 +50,9 @@
     <string name="_returnOfSale">برگشت از فروش</string>
     <string name="str_nav_version">نسخه</string>
 
-    <string name="str_general_promo_spec">مشخصات کلی طرح</string>
-    <string name="str_promo_terms">شرایط طرح</string>
-    <string name="str_promo_details">جزییات نحوه تشویق</string>
+    <string name="str_general_promo_spec">مشخصات</string>
+    <string name="str_promo_terms">شرایط</string>
+    <string name="str_promo_details">جزییات</string>
 
 
     <string name="str_invoice_spec">مشخصات فاکتور</string>
@@ -960,7 +960,8 @@
     <string name="last_price_buy">قیمت آخرین خرید:</string>
     <string name="new_2_1_8_7">تغییر رابط کاربری ثبت فاکتور و ثبت پیش فاکتور و ثبت برگشتی و ثبت حواله کالا</string>
     <string name="please_for_create_backup">لطفا برای ایجاد فایل پشتیبان</string>
-    <string name="create_backup_file">ایجاد فایل پشتیبان</string>
+    <string name="create_backup_radara">پشتیبان رادارا</string>
+    <string name="create_backup_order">پشتیبان سفارش گیر</string>
     <string name="click_on_icon">بر روی آیکون</string>
     <string name="click_konid">کلیک کنید!</string>
     <string name="date">تاریخ</string>
@@ -1057,7 +1058,7 @@
     <string name="title">عنوان</string>
     <string name="to_date">تا تاریخ</string>
     <string name="from_date">از تاریخ</string>
-    <string name="range">بازه زمانی اعتبار طرح</string>
+    <string name="range">بازه زمانی</string>
     <string name="plan_base">مبنای طرح</string>
     <string name="does_not_aggregate">تجمیع نمی شود.</string>
     <string name="this_plan_with_other_plan">این طرح با سایر طرح ها</string>

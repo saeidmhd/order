@@ -1615,7 +1615,6 @@ public class ServiceTools {
     }
 
     public static boolean Backup(Context mActivity) {
-        if(checkItemNotSend(mActivity)){
             String format = "HH_mm_ss";
             SimpleDateFormat simpleDate = new SimpleDateFormat(format, Locale.US);
             String strTime = simpleDate.format(new Date().getTime());
@@ -1646,20 +1645,16 @@ public class ServiceTools {
                 Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
                 return false;
             }
-        }
-        return false;
     }
 
-    private static boolean checkItemNotSend(Context mActivity) {
+    public static boolean checkItemNotSend(Context mActivity) {
         DbAdapter db = new DbAdapter(mActivity);
         db.open();
         ArrayList<Customer> newCustomers = new ArrayList<>(db.getAllNewCustomer());
-        ArrayList<Order> arrayInvoice = db.getAllOrderForSend();
-        ArrayList<Receipt> arrayReceipt = db.getAllReceiptNotPublish(BaseActivity.getPrefUserId());
-        ArrayList<NonRegister> arrayNonRegister = db.getAllNonRegisterNotPublish(BaseActivity.getPrefUserId());
+        ArrayList<Order> orders = db.getAllOrderForSend();
+        ArrayList<Receipt> receipts = db.getAllReceiptNotPublish(BaseActivity.getPrefUserId());
         ArrayList<PayableTransfer> payableTransfers = db.getAllPayableNotPublish(BaseActivity.getPrefUserId());
-        ArrayList<MissionDetail> missionDetails = db.getAllMissionDetail();
-        return newCustomers.size() <= 0 && arrayInvoice.size() <= 0 && arrayReceipt.size() <= 0 && arrayNonRegister.size() <= 0 && payableTransfers.size() <= 0 && missionDetails.size() <= 0;
+        return newCustomers.size() <= 0 && orders.size() <= 0 && receipts.size() <= 0 && payableTransfers.size() <= 0;
     }
 
     public static boolean RadaraBackup(Context mActivity) {

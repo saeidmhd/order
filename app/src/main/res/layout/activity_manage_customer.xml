@@ -401,6 +401,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:gravity="right"
+                        android:padding="@dimen/SmallSize"
                         android:orientation="vertical">
 
                         <com.mahak.order.widget.FontTextView

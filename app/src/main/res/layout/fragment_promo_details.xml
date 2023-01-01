@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/will_be_applied"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <com.mahak.order.widget.FontTextView
                 android:id="@+id/stair_linear"
@@ -36,13 +36,13 @@
                 android:background="@color/green_promo"
                 android:textColor="@color/white"
                 android:padding="8dp"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <com.mahak.order.widget.FontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/set_promotion"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:textColor="@color/white"
                 android:text="@string/product" />
 
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:textColor="@color/white"
                 android:text="@string/value_3" />
 
@@ -78,7 +78,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:text="@string/promotion_type" />
 
             <com.mahak.order.widget.FontTextView
@@ -88,7 +88,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:text="@string/total_invoice_than" />
 
         </LinearLayout>

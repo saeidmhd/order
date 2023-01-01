@@ -41,7 +41,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/customers"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         app:srcCompat="@drawable/ic_chevron_down" />
                 </LinearLayout>
 
@@ -69,7 +69,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/defined"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <com.mahak.order.widget.FontTextView
                         android:layout_width="wrap_content"
@@ -78,14 +78,14 @@
                         android:layout_marginRight="4dp"
                         android:text="@string/special_customer"
                         android:textColor="@color/yellow"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <com.mahak.order.widget.FontTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="32dp"
                         android:text="@string/this_plan_for_some"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -100,7 +100,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/included_in_this_plan"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <com.mahak.order.widget.FontTextView
                         android:layout_width="wrap_content"
@@ -108,7 +108,7 @@
                         android:layout_marginLeft="2dp"
                         android:text="@string/all_customer"
                         android:textColor="@color/green_promo"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -120,7 +120,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/customers"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -190,7 +190,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/visitors"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         app:srcCompat="@drawable/ic_chevron_down" />
                 </LinearLayout>
 
@@ -218,7 +218,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/defined"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <com.mahak.order.widget.FontTextView
                         android:layout_width="wrap_content"
@@ -227,14 +227,14 @@
                         android:layout_marginRight="4dp"
                         android:text="@string/special_visitors"
                         android:textColor="@color/yellow"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <com.mahak.order.widget.FontTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="32dp"
                         android:text="@string/this_plan_for_some"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -249,7 +249,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/included_in_this_plan"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <com.mahak.order.widget.FontTextView
                         android:layout_width="wrap_content"
@@ -257,7 +257,7 @@
                         android:layout_marginRight="32dp"
                         android:text="@string/all_visitors"
                         android:textColor="@color/green_promo"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -269,7 +269,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/visitors"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -342,7 +342,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/products"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         app:srcCompat="@drawable/ic_chevron_down" />
                 </LinearLayout>
 
@@ -370,7 +370,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/defined"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <com.mahak.order.widget.FontTextView
                         android:layout_width="wrap_content"
@@ -379,14 +379,14 @@
                         android:layout_marginRight="4dp"
                         android:text="@string/special_products"
                         android:textColor="@color/yellow"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <com.mahak.order.widget.FontTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="32dp"
                         android:text="@string/this_plan_for_some"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -401,7 +401,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/included_in_this_plan"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <com.mahak.order.widget.FontTextView
                         android:layout_width="wrap_content"
@@ -409,7 +409,7 @@
                         android:layout_marginLeft="2dp"
                         android:text="@string/all_products"
                         android:textColor="@color/green_promo"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -421,7 +421,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/products"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -519,7 +519,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/defined"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <com.mahak.order.widget.FontTextView
                         android:layout_width="wrap_content"
@@ -528,14 +528,14 @@
                         android:layout_marginRight="4dp"
                         android:text="@string/special_store"
                         android:textColor="@color/yellow"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <com.mahak.order.widget.FontTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="32dp"
                         android:text="@string/this_plan_for_some"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -550,7 +550,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/included_in_this_plan"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <com.mahak.order.widget.FontTextView
                         android:layout_width="wrap_content"
@@ -558,7 +558,7 @@
                         android:layout_marginRight="32dp"
                         android:text="@string/all_stores"
                         android:textColor="@color/green_promo"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -570,7 +570,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/stores"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -649,7 +649,7 @@
                     <com.mahak.order.widget.FontTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         android:text="@string/clear_effect"
                         android:layout_marginRight="32dp" />
                 </LinearLayout>
@@ -674,7 +674,7 @@
                     <com.mahak.order.widget.FontTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         android:text="@string/settelment_state"
                         android:layout_marginRight="32dp" />
                 </LinearLayout>
@@ -688,7 +688,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/settelment_type"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 

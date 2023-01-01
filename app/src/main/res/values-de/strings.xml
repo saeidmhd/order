@@ -695,7 +695,8 @@
     <string name="last_price_buy">Letzter Kaufpreis:</string>
     <string name="new_2_1_8_7">Ändern der Benutzeroberfläche zum Registrieren einer Rechnung und Registrieren einer Vorrechnung sowie zum Registrieren einer Rücksendung und zum Registrieren einer Überweisung</string>
     <string name="please_for_create_backup">Bitte für Erstellung der Sicherungsdatei</string>
-    <string name="create_backup_file">Klicken Auf Erstellen die Sicherungsdateien-Symbol</string>
+    <string name="create_backup_order">Sicherungsdateien-Order</string>
+    <string name="create_backup_radara">Sicherungsdateien-Radara</string>
     <string name="click_on_icon">Auf das Symbol</string>
     <string name="click_konid">Klicken</string>
     <string name="date">Datum</string>

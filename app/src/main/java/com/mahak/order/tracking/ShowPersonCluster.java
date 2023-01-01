@@ -68,7 +68,7 @@ public class ShowPersonCluster {
             }else {
                 snippet = mContext.getString(R.string.order_has_not_been_registered);
             }
-            ClusterPoint offsetItem = new ClusterPoint(customer.getLatitude(), customer.getLongitude(), customer.getName(), snippet);
+            ClusterPoint offsetItem = new ClusterPoint(customer.getLatitude(), customer.getLongitude(), customer.getName() + " ( " + customer.getPersonCode() + " ) " , snippet);
             clusterManager.addItem(offsetItem);
         }
     }

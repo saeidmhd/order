@@ -4441,7 +4441,7 @@ public class DbAdapter {
             cursor = mDb.rawQuery(" select count(*) from Products " +
                     " inner join ProductDetail on Products.productId = ProductDetail.productId and Products.UserId = ProductDetail.UserId " +
                     " LEFT join visitorproduct on visitorproduct.productdetailid = productdetail.productdetailid and visitorproduct.userid = products.userid " + getProductCategoryJoin(categoryCode) +
-                    " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " ) " +
+                    " where ( " + LikeStr + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchStr + "%'" + " or " + "ProductDetail.Barcode" + " LIKE " + "'%" + searchStr + "%'" + " ) " +
                     " and visitorproduct.deleted = 0 "  +
                     " and " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_USER_ID + " = " + getPrefUserId() +
                     getProductCategoryString(CategoryId) + getProductAssetStrnig(MODE_ASSET) + checkCategoryQuery(categoryCode) +
@@ -5794,7 +5794,7 @@ public class DbAdapter {
 
     private String getSearchString(String searchString) {
         if (!TextUtils.isEmpty(searchString))
-            return " ( " + getLikeString(searchString) + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchString + "%'" + " ) " + " and ";
+            return " ( " + getLikeString(searchString) + " or " + DbSchema.ProductSchema.TABLE_NAME + "." + DbSchema.ProductSchema.COLUMN_PRODUCT_CODE + " LIKE " + "'%" + searchString + "%'" + " or " + "ProductDetail.Barcode" + " LIKE " + "'%" + searchString + "%'" + " ) " + " and ";
         else return "";
     }
 

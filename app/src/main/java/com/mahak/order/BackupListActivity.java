@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -57,6 +58,7 @@ public class BackupListActivity extends BaseActivity {
     private static File[] files;
     private static List<String> lstFilesArray = new ArrayList<String>();
     TextView tvPageTitle;
+    Button btnBackUpRadara;
     private ListView lstShowBackup;
     private Activity mActivity;
     public static final File DATABASE_DIRECTORY = new File(Environment.getExternalStorageDirectory(), ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_BACKUPS);
@@ -65,7 +67,7 @@ public class BackupListActivity extends BaseActivity {
     String BackupFileName = "";
     private ShowBackupsArrayAdapter adapter;
     private int Position;
-    private ConstraintLayout empty;
+    private LinearLayout empty;
     Dialog mDialog;
 
     @Override
@@ -248,11 +250,14 @@ public class BackupListActivity extends BaseActivity {
 
     public void init() {
         lstShowBackup = (ListView) findViewById(R.id.lstShowBackup);
-        empty = (ConstraintLayout) findViewById(R.id.empty);
+        btnBackUpRadara = findViewById(R.id.btnBackUpRadara);
+        empty =  findViewById(R.id.empty);
         if (empty != null) {
             empty.setVisibility(View.VISIBLE);
             lstShowBackup.setEmptyView(empty);
         }
+        if(BaseActivity.isRadaraActive())
+            btnBackUpRadara.setVisibility(View.VISIBLE);
     }
 
     public void RefreshView() {
@@ -284,46 +289,47 @@ public class BackupListActivity extends BaseActivity {
 
     }
 
-    public void Backup(View view) {
+    public void OrderBackup(View view) {
+        if(ServiceTools.checkItemNotSend(mActivity)){
+            if (ServiceTools.Backup(mContext))
+                Toast.makeText(mActivity, R.string.str_backup_was_created, Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(mActivity, R.string.error_in_create_db_file, Toast.LENGTH_SHORT).show();
+            RefreshView();
+        }else
+            showWarnDialogBackup();
 
-        if (ServiceTools.Backup(mContext))
-            Toast.makeText(mActivity, R.string.str_backup_was_created, Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(mActivity, R.string.error_in_create_db_file, Toast.LENGTH_SHORT).show();
+    }
 
+    private void showWarnDialogBackup() {
+        FontDialog fontDialog = new FontDialog();
+        final AlertDialog dialog = fontDialog.CustomeDialog(mContext,"سفارشات ارسال نشده وجود دارد، بازیابی این بک آپ باعث خطا خواهد شد!");
+        fontDialog.getPositive().setText("گرفتن بک آپ");
+        fontDialog.getPositive().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ServiceTools.Backup(mContext))
+                    Toast.makeText(mActivity, R.string.str_backup_was_created, Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(mActivity, R.string.error_in_create_db_file, Toast.LENGTH_SHORT).show();
+                RefreshView();
+                dialog.dismiss();
+            }
+        });
+        fontDialog.getNegative().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    public void RadaraBackup(View view) {
         if (ServiceTools.RadaraBackup(mContext))
             Toast.makeText(mActivity, "بک آپ رادارا ساخته شد", Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(mActivity, R.string.error_in_create_db_file, Toast.LENGTH_SHORT).show();
-
-
-        /*String format = "HH_mm_ss";
-        SimpleDateFormat simpleDate = new SimpleDateFormat(format, Locale.US);
-        String strTime = simpleDate.format(new Date().getTime());
-        String date = getBackUpDate(new Date().getTime());
-        File sd = Environment.getExternalStorageDirectory();
-        File data = Environment.getDataDirectory();
-        FileChannel source=null;
-        FileChannel destination=null;
-        String backupDBPath = ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_BACKUPS ;
-        File backupDB = new File(sd, backupDBPath);
-        if(!backupDB.exists())
-            backupDB.mkdirs();
-        String currentDBPath = "/data/"+ "com.mahak.order" +"/databases/"+DbSchema.DATABASE_NAME;
-        String backDBPath = ProjectInfo.DIRECTORY_MAHAKORDER + "/" + ProjectInfo.DIRECTORY_BACKUPS +  "/" + "MahakOrder" + getVersion() + "_" + getPrefUsername() + "_" + date +".db" ;
-        File currentDB = new File(data, currentDBPath);
-        File backup = new File(sd, backDBPath);
-        try {
-            source = new FileInputStream(currentDB).getChannel();
-            destination = new FileOutputStream(backup).getChannel();
-            destination.transferFrom(source, 0, source.size());
-            source.close();
-            destination.close();
-        } catch(IOException e) {
-            e.printStackTrace();
-            Toast.makeText(mActivity, R.string.error_in_create_db_file, Toast.LENGTH_SHORT).show();
-        }*/
-
         RefreshView();
     }
 

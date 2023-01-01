@@ -26,14 +26,15 @@
                 android:layout_height="wrap_content"
                 android:text="@string/sample_milion"
                 android:textColor="#262626"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <com.mahak.order.widget.FontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/title"
                 android:layout_marginLeft="16dp"
-                android:textSize="14sp" />
+                android:layout_marginRight="2dp"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -58,24 +59,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/title"
-                android:layout_marginRight="32dp"
+                android:layout_marginRight="8dp"
                 android:textColor="#262626"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <com.mahak.order.widget.FontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/to_date"
-                android:layout_marginRight="64dp"
-                android:textSize="14sp" />
+                android:layout_marginRight="16dp"
+                android:textSize="12sp" />
 
             <com.mahak.order.widget.FontTextView
                 android:id="@+id/dateStart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/title"
-                android:layout_marginRight="32dp"
-                android:textSize="14sp"
+                android:layout_marginRight="8dp"
+                android:textSize="12sp"
                 android:textColor="#262626" />
 
             <com.mahak.order.widget.FontTextView
@@ -83,14 +84,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/from_date"
                 android:layout_marginRight="2dp"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <com.mahak.order.widget.FontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/range"
                 android:layout_marginLeft="2dp"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -117,14 +118,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/total_invoice_value"
                 android:textColor="#262626"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <com.mahak.order.widget.FontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/plan_base"
                 android:layout_marginLeft="16dp"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -149,7 +150,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/does_not_aggregate"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:layout_marginRight="2dp"
                 android:textColor="#e77d7d" />
 
@@ -157,7 +158,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/this_plan_with_other_plan"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <com.mahak.order.widget.FontCheckBox
                 android:id="@+id/aggregateBox"
@@ -168,20 +169,19 @@
 
             <com.mahak.order.widget.FontTextView
                 android:id="@+id/priorityPromotion"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                style="@style/forms_edittext_default"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginRight="2dp"
+                android:layout_margin="10dp"
                 android:textColor="#262626"
-                android:text="@string/sample_number" />
+                android:text="0"/>
 
             <com.mahak.order.widget.FontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/priority"
-                android:layout_marginLeft="2dp"
-                android:textSize="14sp" />
+                android:layout_marginRight="16dp"
+                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -207,7 +207,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/this_plan_is_active"
                 android:layout_marginLeft="16dp"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <com.mahak.order.widget.FontCheckBox
                 android:layout_width="wrap_content"

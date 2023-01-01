@@ -870,7 +870,6 @@ public class DataSyncActivityRestApi extends BaseActivity {
                                         payableTransfers.get(i).setPublish(ProjectInfo.PUBLISH);
                                         db.UpdatePayable(payableTransfers.get(i));
                                     }
-
                                     tvPayableList.setText(getString(R.string.str_message_ok) + getString(R.string.in_numbers) + " : " + payableTransfers.size());
                                 } else
                                     tvPayableList.setText(getString(R.string.str_message_no_need));
