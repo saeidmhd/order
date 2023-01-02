@@ -947,6 +947,14 @@
     <string name="new_3_480_3">نمایش ماموریت های روز قبل در صورتی که آیتمی تعیین تکلیف نشده داشته باشد</string>
     <string name="new_3_480_4">تغییرات در نمایش تاریخ ماموریت </string>
 
+    <string name="new_3_485">نسخه ۳.۴۸۵</string>
+    <string name="new_3_485_1">امکان جستجو کالاها بر اساس بارکد</string>
+    <string name="new_3_485_2">نمایش کد شخص در مارکر شخص بر روی نقشه</string>
+    <string name="new_3_485_3">تغییر در نحوه ارسال اطلاعات فاکتورها به سرور</string>
+    <string name="new_3_485_4">بهبود نمایش فرم طرح تشویقی</string>
+    <string name="new_3_485_5">اخطار به کاربر برای تهیه بک آپ زمانی که سفارش ارسال نشده دارد</string>
+    <string name="new_3_485_6">برطرف شدن خطای نمایش دسته بندی کالاها</string>
+
     <string name="PersonClientId">PersonClientId</string>
     <string name="array">array</string>
 
