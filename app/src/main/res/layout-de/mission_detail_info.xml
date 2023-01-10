@@ -1,5 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -94,7 +96,7 @@
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_marginLeft="@dimen/NormalSize"
-                            android:src="@drawable/ic_contact_default" />
+                            app:srcCompat="@drawable/ic_contact_default" />
                     </LinearLayout>
 
                     <com.mahak.order.widget.FontTextView

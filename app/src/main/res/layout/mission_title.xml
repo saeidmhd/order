@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/llPageTitle"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -12,7 +13,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerInParent="true"
         android:gravity="right"
-        android:src="@drawable/arrow_drop_down" />
+        app:srcCompat="@drawable/arrow_drop_down" />
 
     <com.mahak.order.widget.FontTextView
         android:id="@+id/actionbar_title"

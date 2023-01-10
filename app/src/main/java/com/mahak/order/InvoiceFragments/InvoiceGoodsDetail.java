@@ -1481,8 +1481,7 @@ public class InvoiceGoodsDetail extends Fragment implements FragmentLifecycle {
                 mPromoObject.setCount2(mGiftCount2);
                 mPromoObject.setPromotionCode(mPromoCode);
                 InvoiceDetailActivity.orderDetails.add(mPromoObject);
-            }else
-                Toast.makeText(getActivity(), R.string.negative_asset, Toast.LENGTH_LONG).show();
+            }
     }
 
 

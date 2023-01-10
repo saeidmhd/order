@@ -46,9 +46,9 @@ public class BaseActivity extends AppCompatActivity {
     public static final String baseUrlSignalR = "https://tracking.mahaksoft.com/TrackingHub?token=";
     public static final String baseUrlShowRouting = "https://tracking.mahaksoft.com/showrouting";
 
-    /*public static final String baseUrlTracking = "https://tracking.mahaksoft.com/api/";
-    public static final String baseUrlSignalR = "https://tracking.mahaksoft.com/TrackingHub?token=";
-    public static final String baseUrlShowRouting = "https://tracking.mahaksoft.com/showrouting";*/
+    /*public static final String baseUrlTracking = "https://tracking.mahaksoft.com:404/api/";
+    public static final String baseUrlSignalR = "https://tracking.mahaksoft.com:404/TrackingHub?token=";
+    public static final String baseUrlShowRouting = "https://tracking.mahaksoft.com:404/showrouting";*/
 
 
     //public static final String BaseUrl ="http://bazaraservices.mahaksoft.com:444/sync/" ;

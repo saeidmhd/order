@@ -486,7 +486,7 @@
     <string name="str_tracking_active">فعال است</string>
     <string name="str_tracking_inactive">غیر فعال است</string>
     <string name="str_name_filter"> نام ، کد و آدرس</string>
-    <string name="str_name_product_code_filter"> نام یا کد کالا</string>
+    <string name="str_name_product_code_filter"> نام ، کد یا بارکد کالا</string>
     <string name="str_name_code_filter"> نام یا کد پیگیری</string>
     <string name="str_search_detail">کد کالا یا مشخصه مورد نظر خود را جستجو کنید …</string>
 
