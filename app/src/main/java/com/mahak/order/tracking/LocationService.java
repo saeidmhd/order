@@ -107,7 +107,7 @@ public class LocationService extends Service  {
     private static final String PACKAGE_NAME =
             "com.mahak.order.gpsTracking";
 
-    private static final String TAG = LocationService.class.getSimpleName();
+    private static final String TAG = "LocationService";
 
     /**
      * The name of the channel for notifications.
@@ -156,7 +156,7 @@ public class LocationService extends Service  {
     long tracking_client_id = 0;
 
 
-    private TimerHelper timerHelper;
+    private static TimerHelper timerHelper;
 
     long stop_time;
     Location lastStopLocation;
@@ -167,7 +167,7 @@ public class LocationService extends Service  {
 
         Log.i(TAG, "in onCreate()");
 
-        registerReceiver2();
+        registerLogReceiver();
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mSettingsClient = LocationServices.getSettingsClient(this);
@@ -241,6 +241,7 @@ public class LocationService extends Service  {
     public LocationService(){}
 
     public LocationService(Context context , Activity activity) {
+        Log.i(TAG, "LocationService_instance");
         this.mContext = context;
         this.activity = activity;
     }
@@ -250,6 +251,7 @@ public class LocationService extends Service  {
     }
 
     public void startTracking() {
+        Log.i(TAG, "startTracking");
         createLocationCallback();
         createLocationRequest();
         buildLocationSettingsRequest();
@@ -257,6 +259,7 @@ public class LocationService extends Service  {
     }
 
     private void createLocationCallback() {
+        Log.i(TAG, "createLocationCallback");
         mLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
@@ -270,6 +273,7 @@ public class LocationService extends Service  {
     }
 
     private void createLocationRequest() {
+        Log.i(TAG, "createLocationRequest");
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)
@@ -277,7 +281,7 @@ public class LocationService extends Service  {
                 .setSmallestDisplacement(100);
     }
     private boolean compareWithLastLocation(Location currentLocation) {
-
+        Log.i(TAG, "compareWithLastLocation");
         boolean result;
         double mDistance;
 
@@ -317,12 +321,15 @@ public class LocationService extends Service  {
     }
 
     private void buildLocationSettingsRequest() {
+        Log.i(TAG, "buildLocationSettingsRequest");
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
         builder.addLocationRequest(locationRequest);
         mLocationSettingsRequest = builder.build();
     }
 
     private void startLocationUpdates() {
+        sendLocationBroadcast("On");
+        Log.i(TAG, "startLocationUpdates");
         // Begin by checking if the device has the necessary location settings.
         Utils.setRequestingLocationUpdates(mContext, true);
         mContext.startService(new Intent(mContext , LocationService.class));
@@ -348,7 +355,6 @@ public class LocationService extends Service  {
                         int statusCode = ((ApiException) e).getStatusCode();
                         switch (statusCode) {
                             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                                // Log.i(TAG, "Location settings are not satisfied. Attempting to upgrade " + "location settings ");
                                 try {
                                     ResolvableApiException rae = (ResolvableApiException) e;
                                     if(activity != null)
@@ -369,10 +375,12 @@ public class LocationService extends Service  {
     }
 
     public void stopTracking() {
+        Log.i(TAG, "stopTracking");
         removeLocationUpdates();
     }
 
     private void saveAndSendStopLocation() {
+        Log.i(TAG, "saveAndSendStopLocation");
         long currentTime = System.currentTimeMillis();
         lastStopLocation = LastStopLocation();
         if(checkStartTimeEndTime(mContext , lastStopLocation)){
@@ -400,6 +408,7 @@ public class LocationService extends Service  {
         }
     }
     public void sendStopLocationToServer(ArrayList<StopLog> stopLog) {
+        Log.i(TAG, "sendStopLocationToServer");
         ApiInterface apiService = ApiClient.trackingRetrofitClient().create(ApiInterface.class);
         Call<StopLocationResponse> call = apiService.SetStopLocation(stopLog);
         call.enqueue(new Callback<StopLocationResponse>() {
@@ -421,6 +430,7 @@ public class LocationService extends Service  {
     }
 
     private void updateStopLogToDb(ArrayList<StopLog> stopLogs) {
+        Log.i(TAG, "updateStopLogToDb");
         if (radaraDb == null) radaraDb = new RadaraDb(mContext);
         radaraDb.open();
         try {
@@ -436,6 +446,7 @@ public class LocationService extends Service  {
 
 
     private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
+        Log.i(TAG, "distance");
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2))
                 + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
@@ -455,14 +466,17 @@ public class LocationService extends Service  {
     }
 
     private static double deg2rad(double deg) {
+        Log.i(TAG, "deg2rad");
         return (deg * Math.PI / 180.0);
     }
 
     private static double rad2deg(double rad) {
+        Log.i(TAG, "rad2deg");
         return (rad * 180 / Math.PI);
     }
 
     public JSONObject getLastLocationJson(Context context) {
+        Log.i(TAG, "getLastLocationJson");
         String lastLocation = ServiceTools.getKeyFromSharedPreferences(context, ProjectInfo.pre_last_location);
         if (ServiceTools.isNull(lastLocation))
             return null;
@@ -474,6 +488,7 @@ public class LocationService extends Service  {
         }
     }
     public JSONObject getLastStopLocationJson(Context context) {
+        Log.i(TAG, "getLastStopLocationJson");
         String lastLocation = ServiceTools.getKeyFromSharedPreferences(context, ProjectInfo.pre_last_stop_location);
         if (ServiceTools.isNull(lastLocation))
             return null;
@@ -496,6 +511,7 @@ public class LocationService extends Service  {
         return lastLocation;
     }
     private Location LastStopLocation(){
+        Log.i(TAG, "LastStopLocation");
         Location lastLocation = new Location("");
         JSONObject obj = getLastStopLocationJson(mContext);
         if (obj != null) {
@@ -507,6 +523,7 @@ public class LocationService extends Service  {
     }
 
     private void saveInJsonFile(Location location) {
+        Log.i(TAG, "saveInJsonFile");
         JSONObject obj = new JSONObject();
         try {
             obj.put(ProjectInfo._json_key_latitude, location.getLatitude());
@@ -519,6 +536,7 @@ public class LocationService extends Service  {
         }
     }
     private void saveStopLocationJsonFile(Location location) {
+        Log.i(TAG, "saveStopLocationJsonFile");
         JSONObject obj = new JSONObject();
         try {
             obj.put(ProjectInfo._json_key_stop_latitude, location.getLatitude());
@@ -532,17 +550,20 @@ public class LocationService extends Service  {
     }
 
     public boolean isRunService(Context mContext) {
+        Log.i(TAG, "isRunService");
         long masterUserId = BaseActivity.getPrefUserMasterId(mContext);
         String sharedPreferences = ServiceTools.getKeyFromSharedPreferences(mContext, ProjectInfo.pre_is_tracking + masterUserId);
         return !ServiceTools.isNull(sharedPreferences) && sharedPreferences.equals("1");
     }
 
     public void setTrackingPrefOff(String s) {
+        Log.i(TAG, "setTrackingPrefOff");
         long masterUserId = BaseActivity.getPrefUserMasterId(mContext);
         ServiceTools.setKeyInSharedPreferences(mContext, ProjectInfo.pre_is_tracking + masterUserId, s);
     }
 
     private void sendLocation(Location correctLocation) {
+        Log.i(TAG, "sendLocation");
         boolean saveInDb = false;
         long userId = BaseActivity.getPrefUserMasterId(mContext);
         VisitorLocation visitorLocation = new VisitorLocation();
@@ -565,6 +586,7 @@ public class LocationService extends Service  {
     }
 
     private void sendToServer(final List<VisitorLocation> visitorLocations) {
+        Log.i(TAG, "sendToServer");
         SetAllDataBody setAllDataBody;
         final ApiInterface apiService;
         Call<SaveAllDataResult> saveAllDataResultCall;
@@ -601,6 +623,7 @@ public class LocationService extends Service  {
     }
 
     private void getUserTokenAndSendAgain(List<VisitorLocation> VisitorLocations) {
+        Log.i(TAG, "getUserTokenAndSendAgain");
         if (dba == null) dba = new DbAdapter(mContext);
         dba.open();
         User user = dba.getUser();
@@ -629,6 +652,7 @@ public class LocationService extends Service  {
     }
 
     private boolean saveInDb(List<VisitorLocation> VisitorLocations) {
+        Log.i(TAG, "saveInDb");
         boolean result = false;
         if (radaraDb == null) radaraDb = new RadaraDb(mContext);
         radaraDb.open();
@@ -645,6 +669,7 @@ public class LocationService extends Service  {
     }
 
     private void updateDb(VisitorLocation visitorLocation) {
+        Log.i(TAG, "updateDb");
         if (radaraDb == null) radaraDb = new RadaraDb(mContext);
         radaraDb.open();
         try {
@@ -670,6 +695,7 @@ public class LocationService extends Service  {
     }
 
     public void stopNotificationServiceTracking() {
+        Log.i(TAG, "stopNotificationServiceTracking");
         NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         if (mNotificationManager != null) {
             mNotificationManager.cancel(ID_NOTIFICATION_TRACKING);
@@ -678,10 +704,12 @@ public class LocationService extends Service  {
 
     //region interface Event location
     public static void addEventLocation(String key, EventLocation eventLocation) {
+        Log.i(TAG, "addEventLocation");
         eventLocations.put(key, eventLocation);
     }
 
     public static void removeEventLocation(String key) {
+        Log.i(TAG, "removeEventLocation");
         eventLocations.remove(key);
     }
 
@@ -695,6 +723,7 @@ public class LocationService extends Service  {
     }
 
     private void updateUI() {
+        Log.i(TAG, "updateUI");
         if (mCurrentLocation != null) {
             if(isRadaraActive()){
                 if((int)mCurrentLocation.getSpeed() > 0)
@@ -707,6 +736,7 @@ public class LocationService extends Service  {
 
 
     public void performSignalOperation(Location location) {
+        Log.i(TAG, "performSignalOperation");
         if(location != null){
             if(ServiceTools.isOnline(mContext)){
                 if(isLogging)
@@ -729,10 +759,13 @@ public class LocationService extends Service  {
      * {@link SecurityException}.
      */
     public void removeLocationUpdates() {
+        sendLocationBroadcast("Off");
+        Log.i(TAG, "removeLocationUpdates");
         ServiceTools.writeLogRadara("Removing location updates");
-        Log.i(TAG, "Removing location updates");
-        if(timerHelper != null)
+        if(timerHelper != null){
             timerHelper.stopTimer();
+            Log.i(TAG, "stopTimer");
+        }
         try {
             if(mLocationCallback != null){
                 if(mFusedLocationClient != null){
@@ -750,12 +783,22 @@ public class LocationService extends Service  {
         }
     }
 
-
+    public void sendLocationBroadcast(String status){
+        try {
+            Intent intent = new Intent();
+            intent.setAction("com.mahak.order.tracking.LocationService");
+            intent.putExtra("status", status);
+            sendBroadcast(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Returns the {@link NotificationCompat} used as part of the foreground service.
      */
     private Notification getNotification() {
+        Log.i(TAG, "getNotification");
         Intent intent = new Intent(mContext, LocationService.class);
         CharSequence text = Utils.getLocationText(mLocation);
         intent.putExtra(EXTRA_STARTED_FROM_NOTIFICATION, true);
@@ -776,6 +819,7 @@ public class LocationService extends Service  {
     }
 
     private void getLastLocation() {
+        Log.i(TAG, "getLastLocation");
         if(mFusedLocationClient!=null){
             try {
                 mFusedLocationClient.getLastLocation()
@@ -797,6 +841,7 @@ public class LocationService extends Service  {
     }
 
     private void onNewLocation(Location location) {
+        Log.i(TAG, "onNewLocation");
         Log.i(TAG, "New location: " + location);
         mLocation = location;
         Intent intent = new Intent(ACTION_BROADCAST);
@@ -813,6 +858,7 @@ public class LocationService extends Service  {
      */
     public class LocalBinder extends Binder {
         public LocationService getService(Context context, Activity mActivity) {
+            Log.i(TAG, "getService");
             mContext = context;
             activity = mActivity;
             return LocationService.this;
@@ -825,6 +871,7 @@ public class LocationService extends Service  {
      * @param context The {@link Context}.
      */
     public boolean serviceIsRunningInForeground(Context context) {
+        Log.i(TAG, "serviceIsRunningInForeground");
         ActivityManager manager = (ActivityManager) context.getSystemService(
                 Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(
@@ -839,6 +886,7 @@ public class LocationService extends Service  {
     }
 
     public void getSignalToken(Context context) {
+        Log.i(TAG, "getSignalToken");
         isLogging = true;
         DbAdapter mDb = new DbAdapter(context);
         mDb.open();
@@ -879,6 +927,7 @@ public class LocationService extends Service  {
 
 
     public boolean checkStartTimeEndTime(Context context , Location lastStopLocation) {
+        Log.i(TAG, "checkStartTimeEndTime");
         int StartTime = 8;
         int EndTime = 22;
         String config = ServiceTools.getKeyFromSharedPreferences(context, ProjectInfo.pre_gps_config);
@@ -931,7 +980,8 @@ public class LocationService extends Service  {
         }
     }
 
-    private void registerReceiver2() {
+    private void registerLogReceiver() {
+        Log.i(TAG, "registerReceiver2");
         LogReceiver br = new LogReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.location.PROVIDERS_CHANGED");
@@ -941,6 +991,7 @@ public class LocationService extends Service  {
         filter.addAction("android.intent.action.ACTION_SHUTDOWN");
         filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         filter.addAction("android.intent.action.AIRPLANE_MODE");
+        filter.addAction("com.mahak.order.tracking.LocationService");
         this.getApplicationContext().registerReceiver(br, filter);
     }
 }
